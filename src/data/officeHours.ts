@@ -10,7 +10,7 @@
  * below. Each slot can be booked by one person, and anyone can cancel any slot.
  */
 export const OFFICE_HOURS_API_URL =
-  'https://script.google.com/a/macros/ethz.ch/s/AKfycbxsNttNHoB2B1cPc3FKe29fY0j579JK1uQ5bwRSHphiT0EKUUmdXEHO2JN4XSbpkwi7Lw/exec';
+  'https://script.google.com/macros/s/AKfycbxsNttNHoB2B1cPc3FKe29fY0j579JK1uQ5bwRSHphiT0EKUUmdXEHO2JN4XSbpkwi7Lw/exec';
 
 /** Weekdays offered each week (0 = Sunday … 6 = Saturday). Tue/Wed/Thu. */
 export const officeHourWeekdays: number[] = [2, 3, 4];
