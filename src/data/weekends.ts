@@ -396,7 +396,7 @@ export const weekends: Weekend[] = [
     id: 'we3',
     number: 3,
     title: 'Reinforcement Learning',
-    theme: 'Markov decision processes, Bellman equations, epsilon-greedy, SARSA, REINFORCE',
+    theme: 'Markov decision processes, Bellman equations, RL algorithms',
     dates: '11–12 December 2026',
     startISO: '2026-12-11',
     fridayRoom: 'HG D 7.2',
