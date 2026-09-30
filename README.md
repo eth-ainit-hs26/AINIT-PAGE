@@ -28,9 +28,9 @@ updating an agenda or adding a slide deck means editing only that file.
 Material links use the helpers at the top of the file:
 
 ```ts
-raw(1, 'slides/vapnik-slt.pdf')                  // PDF in BMAI-WE1-public
-colab(1, 'exercises/gradient_descent.ipynb')     // notebook opened in Colab
-SOON                                             // not uploaded yet, renders greyed out
+raw(1, 'slides/llms.pdf')                     // PDF in public/slides/we1/llms.pdf
+colab(2, 'exercises/gradient_descent.ipynb')  // Colab notebook in public/exercises/we2/gradient_descent.ipynb
+SOON                                          // not uploaded yet, renders greyed out
 ```
 
 Links set to `SOON` render as "Soon" instead of a clickable link, so an agenda
