@@ -33,7 +33,7 @@ export function HomePage() {
             <dl className="hero__meta">
               <div>
                 <dt>Weekends</dt>
-                <dd>4</dd>
+                <dd>3</dd>
               </div>
               <div>
                 <dt>Period</dt>
