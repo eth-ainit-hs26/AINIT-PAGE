@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { weekends, deck } from '../data/weekends';
+import { weekends, deck, SOON } from '../data/weekends';
 import { WeekendCard } from '../components/WeekendCard';
 import { CalendarStrip } from '../components/CalendarStrip';
 
@@ -58,7 +58,7 @@ export function HomePage() {
             <div className="hero__cta">
               <a
                 className="btn btn--ghost"
-                href={deck(1, 'intro-and-onboarding.pdf')}
+                href={deck(1, SOON)}
                 target="_blank"
                 rel="noopener noreferrer"
                 download=""
@@ -69,11 +69,11 @@ export function HomePage() {
                 The same deck as Carlos wrote on it in the weekend 1 lecture. It
                 sits beside the clean deck because this is where the clean deck
                 lives: every other annotated copy sits beside its deck on the
-                weekend 1 schedule. Carlos, 2026-09-05.
+                weekend 1 schedule.
               */}
               <a
                 className="btn btn--ghost"
-                href={deck(1, 'intro-and-onboarding-annotated.pdf')}
+                href={deck(1, SOON)}
                 target="_blank"
                 rel="noopener noreferrer"
                 download=""
@@ -81,8 +81,8 @@ export function HomePage() {
                 Intro slides, annotated in the lecture (PDF)
               </a>
               {/*
-                The recordings of the whole course unit, 273-0003-00L, on the ETH
-                video portal. Same button as on the FDD site. Carlos, 2026-09-05.
+                The recordings of the whole course unit, 275-0004-00L, on the ETH
+                video portal.
               */}
               <a
                 className="btn btn--ghost"

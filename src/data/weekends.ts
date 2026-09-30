@@ -354,7 +354,7 @@ export const weekends: Weekend[] = [
     startISO: '2026-11-13',
     fridayRoom: 'HG D 7.2',
     saturdayRoom: 'HG D 7.2',
-    project: 'Tax agent',
+    project: 'Recommender for online retail',
     summary:
       'This weekend introduces the notion of representation learning, with a focus on recommendation systems, matrix factorization, and bandit algorithms. Guest lectures on Saturday.',
     friday: [
