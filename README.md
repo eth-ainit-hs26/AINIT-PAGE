@@ -25,12 +25,15 @@ All course content lives in [`src/data/weekends.ts`](src/data/weekends.ts) as a
 single typed `Weekend[]` array. Pages and components render from that array, so
 updating an agenda or adding a slide deck means editing only that file.
 
-Material links use the helpers at the top of the file:
+New content should be added to the (`friday` or `saturday`) field in the
+corresponding weekend, ***AND*** the `resources` field at the bottom as a centralized
+place to hold all materials. Some helpers are provided at the top of `src/data/weekends.ts`.
+For example:
 
 ```ts
-raw(1, 'slides/llms.pdf')                     // PDF in public/slides/we1/llms.pdf
-colab(2, 'exercises/gradient_descent.ipynb')  // Colab notebook in public/exercises/we2/gradient_descent.ipynb
-SOON                                          // not uploaded yet, renders greyed out
+raw(1, 'slides/llms.pdf')                    // PDF for download at public/slides/we1/llms.pdf
+colab(2, 'exercises/gradient_descent.ipynb') // Colab notebook at public/exercises/we2/gradient_descent.ipynb
+SOON                                         // not uploaded yet, renders greyed out
 ```
 
 Links set to `SOON` render as "Soon" instead of a clickable link, so an agenda
