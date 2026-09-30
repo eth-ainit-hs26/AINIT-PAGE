@@ -142,7 +142,7 @@ export const weekends: Weekend[] = [
     // Title Case to match the other three weekend cards, which sit beside
     // this one on the home page; he wrote it in sentence case.
     title: 'Large Language Models',
-    theme: "LLMs, Prompt Engineering, and Prompt Optimization",
+    theme: "LLMs, prompt engineering, and prompt optimization",
     dates: '16-17 October 2026',
     startISO: '2026-10-16',
     fridayRoom: 'HG D 7.2',
