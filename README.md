@@ -1,9 +1,9 @@
-# AINIT 2026 course website
+# AI in Industry HS 2026 course website
 
 Course website for **HS 2026 — AI in Industry**
 (ETH Zürich, autumn semester 2026).
 
-A static, Moodle-style site listing the four course weekends, each with its
+A static, Moodle-style site listing the three course weekends, each with its
 Friday and Saturday agenda, a theme and its material links, plus a calendar view
 with `.ics` and Google Calendar export.
 
