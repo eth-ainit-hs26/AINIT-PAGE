@@ -58,7 +58,7 @@ export function HomePage() {
             <div className="hero__cta">
               <a
                 className="btn btn--ghost"
-                href={deck(1, SOON)}
+                href={deck(1, 'ainit-hs26-introduction-and-administration.pdf')}
                 target="_blank"
                 rel="noopener noreferrer"
                 download=""
