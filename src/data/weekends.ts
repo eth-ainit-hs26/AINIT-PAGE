@@ -263,7 +263,7 @@ export const weekends: Weekend[] = [
       { time: '10:00', title: 'Coffee break at HG D30.0075, until 10:30', type: 'break' },
       {
         time: '10:30',
-        title: 'The future of AI',
+        title: 'Guest speaker: Joao Carvalho',
         type: 'lecture',
         // links: [
         //   { label: 'Slides', url: deck(1, '') },
@@ -272,7 +272,7 @@ export const weekends: Weekend[] = [
       },
       {
         time: '11:00',
-        title: 'Cosine similarity and basics of linear algebra',
+        title: 'Guest speaker: Joao Carvalho',
         type: 'lecture',
         // links: [
         //   { label: 'Slides', url: deck(1, '') },
