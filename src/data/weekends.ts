@@ -185,10 +185,13 @@ export const weekends: Weekend[] = [
         time: '10:00',
         title: 'Large language models',
         type: 'lecture',
-        // links: [
-        //   { label: 'Slides', url: deck(1, '') },
-        //   { label: 'Annotated', url: deck(1, '') },
-        // ],
+        // Games 4 and 5 (representation, the transformer), built from
+        // llm-deck/llm-slides.tex in w1-lecture-material and published on
+        // 2026-10-12 at Carlos's instruction. The annotated copy follows the lecture.
+        links: [
+          { label: 'Slides', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
+          // { label: 'Annotated', url: deck(1, '') },
+        ],
       },
       { time: '10:30', title: 'Coffee break at Dozentenfoyer, until 11:00', type: 'break' },
       {
@@ -298,7 +301,7 @@ export const weekends: Weekend[] = [
       /* Slides */
       // { group: 'Lecture slides', label: 'Language models with the Ge\'ez games', url: deck(1, '') },
       // { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Annotated)', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'Large language models', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'Large language models', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
       // { group: 'Lecture slides', label: 'Large language models (Annotated)', url: deck(1, '') },
       // { group: 'Lecture slides', label: 'Reasoning, prompt engineering, and OPRO', url: deck(1, '') },
       // { group: 'Lecture slides', label: 'Reasoning, prompt engineering, and OPRO (Annotated)', url: deck(1, '') },
