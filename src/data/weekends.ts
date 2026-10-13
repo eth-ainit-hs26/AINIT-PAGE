@@ -155,16 +155,19 @@ export const weekends: Weekend[] = [
         time: '08:15',
         title: 'Language models with the Ge\'ez games',
         type: 'lecture',
+        // The introduction and Games 1 to 3 (structure, imitation, prediction), built
+        // from llm-deck/geez-slides.tex in w1-lecture-material and published on
+        // 2026-10-13 at Carlos's instruction.
+        //
         // "Annotated" is the same deck as Carlos wrote on it in the lecture, an
         // iPad export, and it sits right after the deck it annotates on every
         // lecture row, as on the FDD site. Carlos asked for that on 2026-09-05,
         // when the last four copies arrived. Their embedded fonts are damaged,
         // see the note on the Materials list below.
-
-        // links: [
-        //   { label: 'Slides', url: deck(1, '') },
-        //   { label: 'Annotated', url: deck(1, '') },
-        // ],
+        links: [
+          { label: 'Slides', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
+          // { label: 'Annotated', url: deck(1, '') },
+        ],
       },
       {
         time: '09:00',
@@ -186,8 +189,9 @@ export const weekends: Weekend[] = [
         title: 'Large language models',
         type: 'lecture',
         // Games 4 and 5 (representation, the transformer), built from
-        // llm-deck/llm-slides.tex in w1-lecture-material and published on
-        // 2026-10-12 at Carlos's instruction. The annotated copy follows the lecture.
+        // llm-deck/llm-slides.tex in w1-lecture-material, published on
+        // 2026-10-12 and rebuilt on 2026-10-13 at Carlos's instruction. The annotated
+        // copy follows the lecture.
         links: [
           { label: 'Slides', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
           // { label: 'Annotated', url: deck(1, '') },
@@ -299,7 +303,7 @@ export const weekends: Weekend[] = [
       /* Centralized list of all the weekend's resources */
 
       /* Slides */
-      // { group: 'Lecture slides', label: 'Language models with the Ge\'ez games', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'Language models with the Ge\'ez games', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
       // { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Annotated)', url: deck(1, '') },
       { group: 'Lecture slides', label: 'Large language models', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
       // { group: 'Lecture slides', label: 'Large language models (Annotated)', url: deck(1, '') },
