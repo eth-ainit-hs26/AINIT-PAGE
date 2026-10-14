@@ -304,8 +304,9 @@ export const weekends: Weekend[] = [
 
       /* Slides */
       // The opening of the course, "The Word, the Thought, the Power, the Act": four blocks, four voices,
-      // one order. The official cold intro, built from cold-intro/intro-slides in w1-lecture-material
-      // and published on 2026-10-14 at Carlos's instruction. The handout is one page per slide.
+      // one order. The official cold intro (the Title sequence, a dark film-titles look), built from
+      // cold-intro/intro-slides in w1-lecture-material and published on 2026-10-14 at Carlos's
+      // instruction. The handout is one page per slide.
       { group: 'Lecture slides', label: 'Course opening: the Word, the Thought, the Power, the Act', url: deck(1, 'ainit-hs26-cold-intro.pdf') },
       { group: 'Lecture slides', label: 'Course opening (Handout)', url: deck(1, 'ainit-hs26-cold-intro-handout.pdf') },
       { group: 'Lecture slides', label: 'Language models with the Ge\'ez games', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
