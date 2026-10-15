@@ -302,13 +302,15 @@ export const weekends: Weekend[] = [
         time: '12:00',
         title: 'Project intro: LLM Marketing Agent',
         type: 'project',
-        // links: [
-        //   { label: 'Slides', url: deck(1, '') },
-        //   {
-        //     label: 'Project Notebook',
-        //     url: colab('w1-project-public', ''),
-        //   },
-        // ],
+        // The Project 1 introduction deck, published on 2026-10-15. The notebook
+        // link follows once w1-project-public exists.
+        links: [
+          { label: 'Slides', url: deck(1, 'w1_project_intro_hs26.pdf') },
+          // {
+          //   label: 'Project Notebook',
+          //   url: colab('w1-project-public', ''),
+          // },
+        ],
       },
     ],
     resources: [
@@ -348,11 +350,11 @@ export const weekends: Weekend[] = [
       { group: 'Coding exercises', label: 'MLOps', url: colab('w1-cx-public', '04_mlops_student.ipynb') },
 
       /* Project */
-      // {
-      //   group: 'Project',
-      //   label: 'Project 1 slides',
-      //   url: deck(1, ''),
-      // },
+      {
+        group: 'Project',
+        label: 'Project 1 slides',
+        url: deck(1, 'w1_project_intro_hs26.pdf'),
+      },
       // {
       //   group: 'Project',
       //   label: 'Project 1 Colab notebook',
