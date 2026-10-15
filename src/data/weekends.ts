@@ -250,10 +250,10 @@ export const weekends: Weekend[] = [
       },
       {
         time: '12:00',
-        title: 'Coding bazaar',
+        title: 'Coding bazaar (RZ D8 PBLabs)',
         type: 'lab',
       },
-      { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
+      { time: '13:00', title: 'Lunch break at RZ D8 PBLabs, until 14:00', type: 'break' },
       {
         time: '14:00',
         title: 'Prompt engineering',

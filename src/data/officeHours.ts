@@ -31,7 +31,7 @@ export const officeHourTAsPerDay = 2;
 export const ZOOM_SLOT_SUFFIX = '-ZOOM';
 
 /** Monday (ISO `YYYY-MM-DD`) of the first bookable week. */
-export const officeHourFirstMonday = '2026-10-20';
+export const officeHourFirstMonday = '2026-10-19';
 
 /** Number of consecutive weeks to offer from the first Monday. */
 export const officeHourWeeks = 15;
