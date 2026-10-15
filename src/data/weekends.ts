@@ -217,12 +217,20 @@ export const weekends: Weekend[] = [
         time: '14:00',
         title: 'Prompt engineering',
         type: 'exercise',
-        // links: [
-        //   {
-        //     label: 'Prompt engineering notebook',
-        //     url: colab('w1-cx-public', ''),
-        //   },
-        // ]
+        links: [
+          {
+            label: 'Basics',
+            url: colab('w1-cx-public', '02a_prompt_engineering_student.ipynb'),
+          },
+          {
+            label: 'Chain of thought',
+            url: colab('w1-cx-public', '02b_CoT_student.ipynb'),
+          },
+          {
+            label: 'Tree of thought + subquestion decomposition',
+            url: colab('w1-cx-public', '02c_subques_student.ipynb'),
+          },
+        ]
       },
       {
         time: '15:00',
@@ -238,12 +246,12 @@ export const weekends: Weekend[] = [
         time: '16:00',
         title: "OPRO",
         type: 'exercise',
-        // links: [
-        //   {
-        //     label: 'OPRO notebook',
-        //     url: colab('w1-cx-public', ''),
-        //   },
-        // ]
+        links: [
+          {
+            label: 'OPRO notebook',
+            url: colab('w1-cx-public', '03_opro_student.ipynb'),
+          },
+        ]
       },
     ],
     saturday: [
@@ -321,8 +329,10 @@ export const weekends: Weekend[] = [
 
       /* Coding exercises */
       // { group: 'Coding exercises', label: "Ge'ez games", url: exercise(1, '') },
-      // { group: 'Coding exercises', label: 'Prompt engineering', url: colab('w1-cx-public', '') },
-      // { group: 'Coding exercises', label: 'OPRO', url: colab('w1-cx-public', '') },
+      { group: 'Coding exercises', label: 'Prompt engineering: Basics', url: colab('w1-cx-public', '02a_prompt_engineering_student.ipynb.ipynb') },
+      { group: 'Coding exercises', label: 'Prompt engineering: Chain of thought', url: colab('w1-cx-public', '02b_CoT_student.ipynb') },
+      { group: 'Coding exercises', label: 'Prompt engineering: Tree of thought + subquestion decomposition', url: colab('w1-cx-public', '02c_subques_student.ipynb') },
+      { group: 'Coding exercises', label: 'OPRO', url: colab('w1-cx-public', '03_opro_student.ipynb') },
       // { group: 'Coding exercises', label: 'MLOps', url: colab('w1-cx-public', '') },
 
       /* Project */
