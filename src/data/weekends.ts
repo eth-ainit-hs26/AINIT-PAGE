@@ -14,7 +14,9 @@ import type { Weekend } from '../types';
  * Times and rooms are the course unit's own entry in the ETH Vorlesungs-
  * verzeichnis, 275-0004-00L, autumn semester 2026: Friday 08:15 to 17:00 and
  * Saturday 08:15 to 13:00, both in HG D 7.2. That is why every day starts at
- * 08:15 rather than 08:00.
+ * 08:15 rather than 08:00. The one exception is the course opening on the
+ * Friday of weekend 1, an 08:00 row that Carlos asked for on 2026-10-15; the
+ * master spreadsheet starts both days at 08:00 as well.
  *
  * Catering comes from the CAS AIS HS26 schedule sent by the programme office on
  * 3 September 2026. THE FRIDAY VENUES ARE NOT THE SAME EVERY WEEKEND, so they
@@ -152,12 +154,30 @@ export const weekends: Weekend[] = [
       "This weekend introduces the fundamentals of large language models and how to enhance their performance through prompt engineering and optimization.",
     friday: [
       {
+        time: '08:00',
+        title: 'Course opening',
+        type: 'lecture',
+        // The opening of the course, "The Word, the Thought, the Power, the Act" (the
+        // Title sequence, a dark film-titles look), and the introduction and
+        // administration deck. Both were public already, the opening since 2026-10-14
+        // and the administration deck since 2026-10-09; this row puts them in the
+        // schedule, at Carlos's instruction of 2026-10-15 ("the cold intro for the
+        // course on Friday 8am"). The first lecture still starts at 08:15, see the
+        // note on the schedule facts above.
+        links: [
+          { label: 'Opening slides', url: deck(1, 'ainit-hs26-cold-intro.pdf') },
+          { label: 'Opening handout', url: deck(1, 'ainit-hs26-cold-intro-handout.pdf') },
+          { label: 'Introduction & administration slides', url: deck(1, 'ainit-hs26-introduction-and-administration.pdf') },
+        ],
+      },
+      {
         time: '08:15',
         title: 'Language models with the Ge\'ez games',
         type: 'lecture',
         // The introduction and Games 1 to 3 (structure, imitation, prediction), built
         // from llm-deck/geez-slides.tex in w1-lecture-material and published on
-        // 2026-10-13 at Carlos's instruction.
+        // 2026-10-13 at Carlos's instruction. Replaced on 2026-10-15 by the build of
+        // 2026-10-14 (84 pages), with its handout (27 pages, the last click of each frame).
         //
         // "Annotated" is the same deck as Carlos wrote on it in the lecture, an
         // iPad export, and it sits right after the deck it annotates on every
@@ -166,6 +186,7 @@ export const weekends: Weekend[] = [
         // see the note on the Materials list below.
         links: [
           { label: 'Slides', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
+          { label: 'Handout', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games-handout.pdf') },
           // { label: 'Annotated', url: deck(1, '') },
         ],
       },
@@ -194,10 +215,13 @@ export const weekends: Weekend[] = [
         type: 'lecture',
         // Games 4 and 5 (representation, the transformer), built from
         // llm-deck/llm-slides.tex in w1-lecture-material, published on
-        // 2026-10-12 and rebuilt on 2026-10-13 at Carlos's instruction. The annotated
-        // copy follows the lecture.
+        // 2026-10-12 and rebuilt on 2026-10-13 at Carlos's instruction. Replaced on
+        // 2026-10-15 by the build of 2026-10-14 (95 pages: wheels for the chances, a recap
+        // after Game 4, what it means for you, the summary), with its handout (30 pages).
+        // The annotated copy follows the lecture.
         links: [
           { label: 'Slides', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
+          { label: 'Handout', url: deck(1, 'ainit-hs26-large-language-models-handout.pdf') },
           // { label: 'Annotated', url: deck(1, '') },
         ],
       },
@@ -206,10 +230,23 @@ export const weekends: Weekend[] = [
         time: '11:00',
         title: 'Reasoning, prompt engineering, and OPRO',
         type: 'lecture',
-        // links: [
-        //   { label: 'Slides', url: deck(1, '') },
-        //   { label: 'Annotated', url: deck(1, '') },
-        // ],
+        // Four pieces of material, in the order of the lecture (Carlos, 2026-10-15):
+        // the reasoning slides with their game, the ladder from a language model to a
+        // planning agent, then OPRO. Published on 2026-10-15 from w1-lecture-material:
+        // rlvr-deck/reasoning-slides.pdf and reasoning-lab/ (branch
+        // claude/rlvr-reasoning-version, commit cfde390), ladder-deck/ladder-slides.pdf,
+        // opro-deck/opro-slides.pdf. The labels name the deck because there are three on
+        // one row. Mara's Valley is one HTML page, no network needed.
+        links: [
+          { label: 'Reasoning slides', url: deck(1, 'ainit-hs26-reasoning-finding-the-way.pdf') },
+          { label: 'Reasoning handout', url: deck(1, 'ainit-hs26-reasoning-finding-the-way-handout.pdf') },
+          { label: "Mara's Valley (game)", url: viz(1, 'mara-valley') },
+          { label: 'Ladder slides', url: deck(1, 'ainit-hs26-the-ladder.pdf') },
+          { label: 'Ladder handout', url: deck(1, 'ainit-hs26-the-ladder-handout.pdf') },
+          { label: 'OPRO slides', url: deck(1, 'ainit-hs26-opro.pdf') },
+          { label: 'OPRO handout', url: deck(1, 'ainit-hs26-opro-handout.pdf') },
+          // { label: 'Annotated', url: deck(1, '') },
+        ],
       },
       {
         time: '12:00',
@@ -240,10 +277,14 @@ export const weekends: Weekend[] = [
         time: '15:00',
         title: 'Summary of GEPA',
         type: 'lecture',
-        // links: [
-        //   { label: 'Slides', url: deck(1, '') },
-        //   { label: 'Annotated', url: deck(1, '') },
-        // ],
+        // GEPA, "Reflective prompt evolution" (Agrawal et al., ICLR 2026): the CSCS
+        // workshop deck transcribed into the course style, from gepa-deck/ in
+        // w1-lecture-material. Published on 2026-10-15.
+        links: [
+          { label: 'Slides', url: deck(1, 'ainit-hs26-gepa.pdf') },
+          { label: 'Handout', url: deck(1, 'ainit-hs26-gepa-handout.pdf') },
+          // { label: 'Annotated', url: deck(1, '') },
+        ],
       },
       { time: '15:30', title: 'Coffee break at Polysnack, until 16:00', type: 'break' },
       {
@@ -323,13 +364,24 @@ export const weekends: Weekend[] = [
       // instruction. The handout is one page per slide.
       { group: 'Lecture slides', label: 'Course opening: the Word, the Thought, the Power, the Act', url: deck(1, 'ainit-hs26-cold-intro.pdf') },
       { group: 'Lecture slides', label: 'Course opening (Handout)', url: deck(1, 'ainit-hs26-cold-intro-handout.pdf') },
+      { group: 'Lecture slides', label: 'Course introduction and administration', url: deck(1, 'ainit-hs26-introduction-and-administration.pdf') },
       { group: 'Lecture slides', label: 'Language models with the Ge\'ez games', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
+      { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Handout)', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games-handout.pdf') },
       // { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Annotated)', url: deck(1, '') },
       { group: 'Lecture slides', label: 'Large language models', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
+      { group: 'Lecture slides', label: 'Large language models (Handout)', url: deck(1, 'ainit-hs26-large-language-models-handout.pdf') },
       // { group: 'Lecture slides', label: 'Large language models (Annotated)', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'Reasoning, prompt engineering, and OPRO', url: deck(1, '') },
+      // The 11:00 lecture, "Reasoning, prompt engineering, and OPRO": three decks, in the
+      // order of the lecture. Their game, Mara's Valley, is under Visualizations below.
+      { group: 'Lecture slides', label: 'Reasoning: finding the way, step by step', url: deck(1, 'ainit-hs26-reasoning-finding-the-way.pdf') },
+      { group: 'Lecture slides', label: 'Reasoning: finding the way, step by step (Handout)', url: deck(1, 'ainit-hs26-reasoning-finding-the-way-handout.pdf') },
+      { group: 'Lecture slides', label: 'The ladder: from a language model to a planning agent', url: deck(1, 'ainit-hs26-the-ladder.pdf') },
+      { group: 'Lecture slides', label: 'The ladder (Handout)', url: deck(1, 'ainit-hs26-the-ladder-handout.pdf') },
+      { group: 'Lecture slides', label: 'Prompt optimization: OPRO', url: deck(1, 'ainit-hs26-opro.pdf') },
+      { group: 'Lecture slides', label: 'Prompt optimization: OPRO (Handout)', url: deck(1, 'ainit-hs26-opro-handout.pdf') },
       // { group: 'Lecture slides', label: 'Reasoning, prompt engineering, and OPRO (Annotated)', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'Summary of GEPA', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'Summary of GEPA', url: deck(1, 'ainit-hs26-gepa.pdf') },
+      { group: 'Lecture slides', label: 'Summary of GEPA (Handout)', url: deck(1, 'ainit-hs26-gepa-handout.pdf') },
       // { group: 'Lecture slides', label: 'Summary of GEPA (Annotated)', url: deck(1, '') },
       // { group: 'Lecture slides', label: 'MLOps', url: deck(1, '') },
       // { group: 'Lecture slides', label: 'MLOps (Annotated)', url: deck(1, '') },
@@ -343,11 +395,18 @@ export const weekends: Weekend[] = [
       // { group: 'Coding exercises', label: "Ge'ez games", url: exercise(1, '') },
       { group: 'Coding exercises', label: 'Python Recap', url: colab('w1-cx-public', 'Python_recap.ipynb') },
       { group: 'Coding exercises', label: 'Ge\'ez Games', url: exercise(1, '01_geez_llm_game.html') },
-      { group: 'Coding exercises', label: 'Prompt engineering: Basics', url: colab('w1-cx-public', '02a_prompt_engineering_student.ipynb.ipynb') },
+      { group: 'Coding exercises', label: 'Prompt engineering: Basics', url: colab('w1-cx-public', '02a_prompt_engineering_student.ipynb') },
       { group: 'Coding exercises', label: 'Prompt engineering: Chain of thought', url: colab('w1-cx-public', '02b_CoT_student.ipynb') },
       { group: 'Coding exercises', label: 'Prompt engineering: Tree of thought + subquestion decomposition', url: colab('w1-cx-public', '02c_subques_student.ipynb') },
       { group: 'Coding exercises', label: 'OPRO', url: colab('w1-cx-public', '03_opro_student.ipynb') },
       { group: 'Coding exercises', label: 'MLOps', url: colab('w1-cx-public', '04_mlops_student.ipynb') },
+
+      /* Visualizations */
+      // The game of the reasoning slides, "Mara's Valley": Mara carries letters down a valley of
+      // fifteen places and the reader picks her roads. One HTML page with its fonts and pictures
+      // inside, no network needed, six short screens, works on a phone. Source:
+      // reasoning-lab/ in w1-lecture-material (branch claude/rlvr-reasoning-version).
+      { group: 'Visualizations', label: "Mara's Valley: finding the way, step by step (game)", url: viz(1, 'mara-valley') },
 
       /* Project */
       {
@@ -363,12 +422,7 @@ export const weekends: Weekend[] = [
       // { group: 'Project', label: 'Project 1 grading scheme', url: SOON },
 
 
-      // Demos of how other types of resources can be added
-      // {
-      //   group: 'Visualizations',
-      //   label: ''
-      //   url:  viz(1, 'filename'),
-      // },
+      // Demo of how another type of resource can be added
       // {
       //   group: 'Setup',
       //   label: 'Setting up Claude Code: VS Code, a terminal, and your licence',
