@@ -22,6 +22,7 @@
   --ruling: #A49F93;
   --nib: #3E3932;
   --wash: rgba(88, 64, 154, 0.10);
+  --wash2: rgba(143, 90, 6, 0.10);
   --serif: "EB Garamond", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --hatch: repeating-linear-gradient(45deg, var(--brand) 0 1px, transparent 1px 5px);
   --hatch2: repeating-linear-gradient(-45deg, var(--accent2) 0 1px, transparent 1px 5px);
@@ -29,12 +30,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #1B1812; --sheet: #221E17; --ink: #ECE6D6; --muted: #AAA190; --brand: #B3A6F2; --accent2: #E0A94E;
-    --ruling: #5B5546; --nib: #D9D2C0; --wash: rgba(179, 166, 242, 0.14); color-scheme: dark;
+    --ruling: #5B5546; --nib: #D9D2C0; --wash: rgba(179, 166, 242, 0.14); --wash2: rgba(224, 169, 78, 0.16);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #1B1812; --sheet: #221E17; --ink: #ECE6D6; --muted: #AAA190; --brand: #B3A6F2; --accent2: #E0A94E;
-  --ruling: #5B5546; --nib: #D9D2C0; --wash: rgba(179, 166, 242, 0.14); color-scheme: dark;
+  --ruling: #5B5546; --nib: #D9D2C0; --wash: rgba(179, 166, 242, 0.14); --wash2: rgba(224, 169, 78, 0.16);
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -64,6 +67,11 @@ h1 { font-weight: 600; font-size: clamp(28px, 4.2vw, 40px); margin: 10px 0 4px; 
 /* the play area: the two cards and the roads beside the valley */
 .play { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 20px; align-items: start; }
 @media (max-width: 780px) { .play { grid-template-columns: minmax(0, 1fr); } }
+/* while the valley is hidden the desk stands alone, centred and a little larger */
+.play.solo { grid-template-columns: minmax(0, 440px); justify-content: center; }
+@media (max-width: 780px) { .play.solo { grid-template-columns: minmax(0, 1fr); } }
+.play.solo .card .disc { width: min(150px, 100%); }
+.side { min-width: 0; }
 .desk { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .card { border: 1px solid var(--nib); background: var(--sheet); padding: 6px 6px 8px; text-align: center; position: relative; min-width: 0; }
@@ -87,6 +95,10 @@ h1 { font-weight: 600; font-size: clamp(28px, 4.2vw, 40px); margin: 10px 0 4px; 
 .btn.strong:disabled { background: var(--sheet); color: var(--muted); }
 .btn.wide { grid-column: 1 / -1; }
 .btn svg { width: 22px; height: 22px; flex: none; }
+/* the secondary option: opens the whole valley, offered only after a few letters */
+.peek { border-color: var(--accent2); color: var(--accent2); font-weight: 500; }
+.btn.peek:hover:not(:disabled) { background: var(--wash2); }
+.peek[aria-expanded="true"] { background: var(--wash2); }
 .score { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; min-height: 20px; }
 .mk { width: 18px; height: 18px; border-radius: 50%; border: 1.5px dashed var(--ruling); }
 .mk.paid { border: 1.5px solid var(--accent2); background: var(--hatch2); }
@@ -110,6 +122,16 @@ h1 { font-weight: 600; font-size: clamp(28px, 4.2vw, 40px); margin: 10px 0 4px; 
 .mara { transition: transform 420ms ease-in-out; }
 @media (prefers-reduced-motion: reduce) { .mara { transition: none; } }
 
+/* the first screen: only the first fork, the places beyond it are not seen yet */
+.fork { margin-top: 6px; }
+.fork svg { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
+.ring.unknown { stroke: var(--ruling); stroke-width: 3; stroke-dasharray: 7 6; }
+.qmark { font-family: var(--serif); font-weight: 600; font-size: 46px; fill: var(--muted); text-anchor: middle; }
+.dirname { font-family: var(--serif); font-size: 29px; fill: var(--ink); }
+.dirarrow { fill: none; stroke: var(--ink); stroke-width: 2.2; }
+.startname { font-family: var(--serif); font-weight: 600; font-size: 29px; fill: var(--ink); }
+.valley[hidden] + .notes { margin-top: 0; }
+
 /* the pattern */
 .pattern { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: 24px; align-items: start; }
 @media (max-width: 780px) { .pattern { grid-template-columns: minmax(0, 1fr); } }
@@ -131,7 +153,7 @@ h1 { font-weight: 600; font-size: clamp(28px, 4.2vw, 40px); margin: 10px 0 4px; 
 .rule.cold { color: var(--brand); } .rule.warm { color: var(--accent2); }
 
 /* notes */
-.notes { border: 1px solid var(--nib); background: var(--sheet); min-height: 8.5em; }
+.notes { border: 1px solid var(--nib); background: var(--sheet); min-height: 8.5em; margin-top: 14px; }
 .notes .band { height: 9px; background: var(--hatch); border-bottom: 1px solid var(--brand); }
 .notes ol { margin: 0; padding: 10px 14px 12px 32px; font-size: 18px; }
 .notes li { margin: 3px 0; }
@@ -157,8 +179,9 @@ h1 { font-weight: 600; font-size: clamp(28px, 4.2vw, 40px); margin: 10px 0 4px; 
   <!-- 1. the valley -->
   <section class="screen" data-title="The valley">
     <h1>Mara carries letters</h1>
-    <p class="lead">From the top of the valley to one place at the bottom.</p>
-    <div class="valley" data-map="intro"></div>
+    <p class="lead">From Spring Meadow, at the top of the valley, to one place at the bottom. At each place the road
+      forks: southwest or southeast.</p>
+    <div class="fork" data-fork></div>
   </section>
 
   <!-- 2. guess -->
@@ -223,6 +246,12 @@ window.VALLEY = {"names": ["Spring Meadow", "Frozen Lake", "Palm Oasis", "Glacie
   "use strict";
   var D = window.VALLEY;                      // {names, pics (data addresses), warmth (rank 1 to 15), mara}
   var N = 15, ND = 7, ROADS = 3;
+  // The valley is the answer to the game, so it is hidden while the game is on. After UNLOCK letters (finished on any
+  // screen, arrived or not) a button offers it as a secondary option; one state for all screens.
+  var UNLOCK = 3;
+  var finished = 0, valleyOpen = false;
+  var views = [];
+  var refreshAll = function () { views.forEach(function (v) { v(); }); };
   var child = function (i, d) { return 2 * i + 1 + d; };
   var depth = function (i) { return Math.floor(Math.log2(i + 1)); };
   var slot = function (i) { var k = depth(i), pos = i - (Math.pow(2, k) - 1); return (2 * pos + 1) / Math.pow(2, k + 1); };
@@ -243,6 +272,7 @@ window.VALLEY = {"names": ["Spring Meadow", "Frozen Lake", "Palm Oasis", "Glacie
   };
   var ARROW = ["M19 5 L6 18 M6 9 V18 H15", "M5 5 L18 18 M18 9 V18 H9"];
   var arrow = function (d) { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + ARROW[d] + '" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>'; };
+  var FORK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 V13 M12 13 L5 5 M12 13 L19 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
   var disc = function (i) { return '<span class="disc mini"><img alt="" src="' + D.pics[i] + '"></span>'; };
   var roadPath = function (a, b) {
     var xa = X(a), ya = Y(a) + R(a) * 0.6, xb = X(b), yb = Y(b) - R(b) * 0.6, dy = yb - ya;
@@ -293,6 +323,35 @@ window.VALLEY = {"names": ["Spring Meadow", "Frozen Lake", "Palm Oasis", "Glacie
     };
   }
 
+  // ===== the first screen: Spring Meadow with Mara and the two roads that leave it. The places beyond are not shown
+  function Fork(container) {
+    var cx = 300, cy = 76, r = 58, ex = [140, 460], ey = 236, er = 44;
+    var svg = el("svg", { viewBox: "0 0 600 350", role: "img",
+      "aria-label": "Mara at Spring Meadow. Two roads leave it, southwest and southeast, to places she has not seen." }, container, true);
+    var defs = el("defs", {}, svg, true);
+    ex.forEach(function (x) {
+      var ya = cy + r * 0.6, yb = ey - er * 0.6, dy = yb - ya;
+      var p = "M" + cx + " " + ya + " C" + cx + " " + (ya + 0.45 * dy) + " " + x + " " + (yb - 0.45 * dy) + " " + x + " " + yb;
+      el("path", { d: p, "class": "road" }, svg, true);
+      el("path", { d: p, "class": "road-bed" }, svg, true);
+    });
+    ex.forEach(function (x, d) {
+      el("circle", { cx: x, cy: ey, r: er, fill: "var(--paper)" }, svg, true);
+      el("circle", { cx: x, cy: ey, r: er, "class": "ring unknown" }, svg, true);
+      el("text", { x: x, y: ey + 16, "class": "qmark" }, svg, true).textContent = "?";
+      el("path", { d: ARROW[d], "class": "dirarrow", transform: "translate(" + (x - 88) + "," + (ey + er + 12) + ") scale(1.2)" }, svg, true);
+      el("text", { x: x - 54, y: ey + er + 38, "class": "dirname" }, svg, true).textContent = d === 0 ? "Southwest" : "Southeast";
+    });
+    var cp = el("clipPath", { id: "forkclip" }, defs, true);
+    el("circle", { cx: cx, cy: cy, r: r }, cp, true);
+    el("circle", { cx: cx, cy: cy, r: r, fill: "var(--paper)" }, svg, true);
+    var h = 2 * r, w = h * 240 / 180;
+    el("image", { href: D.pics[0], x: cx - w / 2, y: cy - r, width: w, height: h, "clip-path": "url(#forkclip)", preserveAspectRatio: "none" }, svg, true);
+    el("circle", { cx: cx, cy: cy, r: r, "class": "ring here" }, svg, true);
+    el("image", { href: D.mara, width: 78, height: 96, x: cx - 39, y: cy - r * 0.15 - 78 }, svg, true);
+    el("text", { x: cx + r + 18, y: cy + 10, "class": "startname" }, svg, true).textContent = D.names[0];
+  }
+
   // ===== a game: the two cards, the roads, the map. mode is guess, rule or think
   function Game(root, mode) {
     var s = { dest: null, at: 0, path: [0], done: false, marks: [], streak: 0, best: 0, last: -1, notes: [], tappable: mode !== "think" };
@@ -319,14 +378,39 @@ window.VALLEY = {"names": ["Spring Meadow", "Frozen Lake", "Palm Oasis", "Glacie
     next.addEventListener("click", newLetter);
     if (mode === "rule") { count = el("div", { "class": "count" }, desk); }
     var score = el("div", { "class": "score", "aria-hidden": "true" }, desk);
-    var right = el("div", { "class": "valley" }, root);
+    // the secondary option: the whole valley. Hidden, and the button too, until UNLOCK letters are finished
+    var peek = el("button", { "class": "btn peek", type: "button", hidden: "", "aria-expanded": "false", "aria-controls": "valley-" + mode }, desk);
+    peek.innerHTML = FORK_ICON + "<span></span>";
+    var peekText = peek.lastChild;
+    var side = el("div", { "class": "side" }, root);
+    var right = el("div", { "class": "valley", id: "valley-" + mode, hidden: "" }, side);
     var map = new Map(right, mode, function (j) { if (s.done || s.at >= ND) return; if (j === child(s.at, 0)) step(0); else if (j === child(s.at, 1)) step(1); });
     if (mode === "think") {
-      var nb = el("div", { "class": "notes", style: "margin-top:14px" }, right);
+      var nb = el("div", { "class": "notes" }, side);
       el("div", { "class": "band" }, nb);
       notesOl = el("ol", {}, nb);
     }
     var timer = null;
+
+    function refresh() {
+      var can = finished >= UNLOCK, show = can && valleyOpen;
+      peek.hidden = !can;
+      peek.setAttribute("aria-expanded", show ? "true" : "false");
+      peekText.textContent = show ? "Hide the valley" : "Show the valley";
+      right.hidden = !show;
+      side.hidden = !show && mode !== "think";      // the notes of the think-aloud screen stay
+      root.classList.toggle("solo", !show && mode !== "think");
+    }
+    views.push(refresh);
+    peek.addEventListener("click", function () {
+      valleyOpen = !valleyOpen;
+      refreshAll();
+      if (valleyOpen) {
+        var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        right.scrollIntoView({ block: "nearest", behavior: calm ? "auto" : "smooth" });
+      }
+    });
+    refresh();
 
     function draw() {
       here.img.src = D.pics[s.at]; here.name.textContent = D.names[s.at];
@@ -363,6 +447,7 @@ window.VALLEY = {"names": ["Spring Meadow", "Frozen Lake", "Palm Oasis", "Glacie
       s.at = to; s.path.push(to);
       if (to >= ND) {
         s.done = true;
+        finished += 1;
         var paid = to === s.dest;
         s.marks.push(paid);
         if (paid) { s.streak += 1; s.best = Math.max(s.best, s.streak); result.innerHTML = "<b>Arrived.</b> One coin."; }
@@ -370,6 +455,7 @@ window.VALLEY = {"names": ["Spring Meadow", "Frozen Lake", "Palm Oasis", "Glacie
         if (mode === "think") s.notes.push({ answer: true, text: "Answer: " + D.names[to] + "." });
       }
       draw();
+      if (s.done) refreshAll();
     }
     function walk() {
       clearTimeout(timer);
@@ -387,8 +473,7 @@ window.VALLEY = {"names": ["Spring Meadow", "Frozen Lake", "Palm Oasis", "Glacie
   var screens = Array.prototype.slice.call(document.querySelectorAll(".screen"));
   var games = {};
   Array.prototype.forEach.call(document.querySelectorAll("[data-game]"), function (g) { games[g.getAttribute("data-game")] = new Game(g, g.getAttribute("data-game")); });
-  var intro = new Map(document.querySelector('[data-map="intro"]'), "intro", null);
-  intro.draw({ dest: null, at: 0, path: [0], done: true, tappable: false });
+  new Fork(document.querySelector("[data-fork]"));
 
   // the pattern: one letter to each place of the bottom row, in a fixed mixed order, with its first road
   var order = [7, 9, 14, 10, 13, 11, 12, 8];
