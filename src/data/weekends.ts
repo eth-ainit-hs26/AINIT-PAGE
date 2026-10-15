@@ -177,12 +177,16 @@ export const weekends: Weekend[] = [
         // pages, so 'Open in browser' would name them all: the labels say
         // WHICH exercise instead, in the order the TA runs them.
 
-        // links: [
-        //   {
-        //     label: 'Ge\'ez games',
-        //     url: exercise(1, ''),
-        //   },
-        // ],
+        links: [
+          {
+            label: 'Ge\'ez games',
+            url: exercise(1, '01_geez_llm_game.html'),
+          },
+          {
+            label: 'Python Recap notebook',
+            url: colab('w1-cx-public', 'Python_recap.ipynb'),
+          },
+        ],
       },
       {
         time: '10:00',
@@ -268,12 +272,12 @@ export const weekends: Weekend[] = [
         time: '09:00',
         title: 'MLOps',
         type: 'exercise',
-        // links: [
-        //   {
-        //     label: 'MLOps notebook',
-        //     url: colab('w1-cx-public', ''),
-        //   },
-        // ]
+        links: [
+          {
+            label: 'MLOps notebook',
+            url: colab('w1-cx-public', '04_mlops_student.ipynb'),
+          },
+        ]
       },
       { time: '10:00', title: 'Coffee break outside the classroom, until 10:30', type: 'break' },
       {
@@ -335,11 +339,13 @@ export const weekends: Weekend[] = [
 
       /* Coding exercises */
       // { group: 'Coding exercises', label: "Ge'ez games", url: exercise(1, '') },
+      { group: 'Coding exercises', label: 'Python Recap', url: colab('w1-cx-public', 'Python_recap.ipynb') },
+      { group: 'Coding exercises', label: 'Ge\'ez Games', url: exercise(1, '01_geez_llm_game.html') },
       { group: 'Coding exercises', label: 'Prompt engineering: Basics', url: colab('w1-cx-public', '02a_prompt_engineering_student.ipynb.ipynb') },
       { group: 'Coding exercises', label: 'Prompt engineering: Chain of thought', url: colab('w1-cx-public', '02b_CoT_student.ipynb') },
       { group: 'Coding exercises', label: 'Prompt engineering: Tree of thought + subquestion decomposition', url: colab('w1-cx-public', '02c_subques_student.ipynb') },
       { group: 'Coding exercises', label: 'OPRO', url: colab('w1-cx-public', '03_opro_student.ipynb') },
-      // { group: 'Coding exercises', label: 'MLOps', url: colab('w1-cx-public', '') },
+      { group: 'Coding exercises', label: 'MLOps', url: colab('w1-cx-public', '04_mlops_student.ipynb') },
 
       /* Project */
       // {
