@@ -179,15 +179,15 @@ export const weekends: Weekend[] = [
         // 2026-10-13 at Carlos's instruction. Replaced on 2026-10-15 by the build of
         // 2026-10-14 (84 pages), with its handout (27 pages, the last click of each frame).
         //
-        // "Annotated" is the same deck as Carlos wrote on it in the lecture, an
-        // iPad export, and it sits right after the deck it annotates on every
-        // lecture row, as on the FDD site. Carlos asked for that on 2026-09-05,
-        // when the last four copies arrived. Their embedded fonts are damaged,
-        // see the note on the Materials list below.
+        // "Annotated" is the deck as Carlos wrote on it in the lecture, an iPad
+        // export, and it sits right after the deck it annotates on every lecture
+        // row, as on the FDD site. Published on 2026-10-16. It has 86 pages: the
+        // deck's 84 and two repeats of a frame, each with its own handwriting (pages
+        // 42 and 49).
         links: [
           { label: 'Slides', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
           { label: 'Handout', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games-handout.pdf') },
-          // { label: 'Annotated', url: deck(1, '') },
+          { label: 'Annotated', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games-annotated.pdf') },
         ],
       },
       {
@@ -218,11 +218,13 @@ export const weekends: Weekend[] = [
         // 2026-10-12 and rebuilt on 2026-10-13 at Carlos's instruction. Replaced on
         // 2026-10-15 by the build of 2026-10-14 (95 pages: wheels for the chances, a recap
         // after Game 4, what it means for you, the summary), with its handout (30 pages).
-        // The annotated copy follows the lecture.
+        // The annotated copy, published on 2026-10-16, is the deck as Carlos wrote on it
+        // in the lecture: 99 pages, the deck's 95 and four handwritten sketch pages of his
+        // (pages 9, 20, 28 and 97).
         links: [
           { label: 'Slides', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
           { label: 'Handout', url: deck(1, 'ainit-hs26-large-language-models-handout.pdf') },
-          // { label: 'Annotated', url: deck(1, '') },
+          { label: 'Annotated', url: deck(1, 'ainit-hs26-large-language-models-annotated.pdf') },
         ],
       },
       { time: '10:30', title: 'Coffee break at Dozentenfoyer, until 11:00', type: 'break' },
@@ -239,16 +241,20 @@ export const weekends: Weekend[] = [
         // (town-lab/), one HTML page, no network needed. Mara's Valley, the first version,
         // stays in rlvr-deck/ and reasoning-lab/ of that repository. The ladder is
         // ladder-deck/ladder-slides.pdf, OPRO opro-deck/opro-slides.pdf. The labels name
-        // the deck because there are three on one row.
+        // the deck because there are three on one row. The annotated copies of the ladder
+        // and of OPRO, published on 2026-10-16, sit after their handouts; the reasoning
+        // deck has none. The ladder copy has 136 pages (the deck's 128 and eight handwritten
+        // sketch pages, two of them blank), OPRO has 43 (the deck's 42 and one sketch page).
         links: [
           { label: 'Reasoning slides', url: deck(1, 'ainit-hs26-reasoning-finding-the-way.pdf') },
           { label: 'Reasoning handout', url: deck(1, 'ainit-hs26-reasoning-finding-the-way-handout.pdf') },
           { label: "Mara's Town (game)", url: viz(1, 'mara-town') },
           { label: 'Ladder slides', url: deck(1, 'ainit-hs26-the-ladder.pdf') },
           { label: 'Ladder handout', url: deck(1, 'ainit-hs26-the-ladder-handout.pdf') },
+          { label: 'Ladder annotated', url: deck(1, 'ainit-hs26-the-ladder-annotated.pdf') },
           { label: 'OPRO slides', url: deck(1, 'ainit-hs26-opro.pdf') },
           { label: 'OPRO handout', url: deck(1, 'ainit-hs26-opro-handout.pdf') },
-          // { label: 'Annotated', url: deck(1, '') },
+          { label: 'OPRO annotated', url: deck(1, 'ainit-hs26-opro-annotated.pdf') },
         ],
       },
       {
@@ -370,19 +376,20 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Course introduction and administration', url: deck(1, 'ainit-hs26-introduction-and-administration.pdf') },
       { group: 'Lecture slides', label: 'Language models with the Ge\'ez games', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
       { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Handout)', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games-handout.pdf') },
-      // { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Annotated)', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Annotated)', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games-annotated.pdf') },
       { group: 'Lecture slides', label: 'Large language models', url: deck(1, 'ainit-hs26-large-language-models.pdf') },
       { group: 'Lecture slides', label: 'Large language models (Handout)', url: deck(1, 'ainit-hs26-large-language-models-handout.pdf') },
-      // { group: 'Lecture slides', label: 'Large language models (Annotated)', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'Large language models (Annotated)', url: deck(1, 'ainit-hs26-large-language-models-annotated.pdf') },
       // The 11:00 lecture, "Reasoning, prompt engineering, and OPRO": three decks, in the
       // order of the lecture. Their game, Mara's Town, is under Visualizations below.
       { group: 'Lecture slides', label: 'Reasoning: finding the way, step by step', url: deck(1, 'ainit-hs26-reasoning-finding-the-way.pdf') },
       { group: 'Lecture slides', label: 'Reasoning: finding the way, step by step (Handout)', url: deck(1, 'ainit-hs26-reasoning-finding-the-way-handout.pdf') },
       { group: 'Lecture slides', label: 'The ladder: from a language model to a planning agent', url: deck(1, 'ainit-hs26-the-ladder.pdf') },
       { group: 'Lecture slides', label: 'The ladder (Handout)', url: deck(1, 'ainit-hs26-the-ladder-handout.pdf') },
+      { group: 'Lecture slides', label: 'The ladder (Annotated)', url: deck(1, 'ainit-hs26-the-ladder-annotated.pdf') },
       { group: 'Lecture slides', label: 'Prompt optimization: OPRO', url: deck(1, 'ainit-hs26-opro.pdf') },
       { group: 'Lecture slides', label: 'Prompt optimization: OPRO (Handout)', url: deck(1, 'ainit-hs26-opro-handout.pdf') },
-      // { group: 'Lecture slides', label: 'Reasoning, prompt engineering, and OPRO (Annotated)', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'Prompt optimization: OPRO (Annotated)', url: deck(1, 'ainit-hs26-opro-annotated.pdf') },
       { group: 'Lecture slides', label: 'Summary of GEPA', url: deck(1, 'ainit-hs26-gepa.pdf') },
       { group: 'Lecture slides', label: 'Summary of GEPA (Handout)', url: deck(1, 'ainit-hs26-gepa-handout.pdf') },
       // { group: 'Lecture slides', label: 'Summary of GEPA (Annotated)', url: deck(1, '') },
