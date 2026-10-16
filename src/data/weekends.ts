@@ -232,15 +232,18 @@ export const weekends: Weekend[] = [
         type: 'lecture',
         // Four pieces of material, in the order of the lecture (Carlos, 2026-10-15):
         // the reasoning slides with their game, the ladder from a language model to a
-        // planning agent, then OPRO. Published on 2026-10-15 from w1-lecture-material:
-        // rlvr-deck/reasoning-slides.pdf and reasoning-lab/ (branch
-        // claude/rlvr-reasoning-version, commit cfde390), ladder-deck/ladder-slides.pdf,
-        // opro-deck/opro-slides.pdf. The labels name the deck because there are three on
-        // one row. Mara's Valley is one HTML page, no network needed.
+        // planning agent, then OPRO. Published on 2026-10-15 from w1-lecture-material and,
+        // on 2026-10-16, the reasoning slides and their game were REPLACED by the town
+        // version (Carlos: "replace the reasoning slides with these slides"): the same file
+        // names, town-deck/town-slides.pdf and its handout, and the game Mara's Town
+        // (town-lab/), one HTML page, no network needed. Mara's Valley, the first version,
+        // stays in rlvr-deck/ and reasoning-lab/ of that repository. The ladder is
+        // ladder-deck/ladder-slides.pdf, OPRO opro-deck/opro-slides.pdf. The labels name
+        // the deck because there are three on one row.
         links: [
           { label: 'Reasoning slides', url: deck(1, 'ainit-hs26-reasoning-finding-the-way.pdf') },
           { label: 'Reasoning handout', url: deck(1, 'ainit-hs26-reasoning-finding-the-way-handout.pdf') },
-          { label: "Mara's Valley (game)", url: viz(1, 'mara-valley') },
+          { label: "Mara's Town (game)", url: viz(1, 'mara-town') },
           { label: 'Ladder slides', url: deck(1, 'ainit-hs26-the-ladder.pdf') },
           { label: 'Ladder handout', url: deck(1, 'ainit-hs26-the-ladder-handout.pdf') },
           { label: 'OPRO slides', url: deck(1, 'ainit-hs26-opro.pdf') },
@@ -372,7 +375,7 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Large language models (Handout)', url: deck(1, 'ainit-hs26-large-language-models-handout.pdf') },
       // { group: 'Lecture slides', label: 'Large language models (Annotated)', url: deck(1, '') },
       // The 11:00 lecture, "Reasoning, prompt engineering, and OPRO": three decks, in the
-      // order of the lecture. Their game, Mara's Valley, is under Visualizations below.
+      // order of the lecture. Their game, Mara's Town, is under Visualizations below.
       { group: 'Lecture slides', label: 'Reasoning: finding the way, step by step', url: deck(1, 'ainit-hs26-reasoning-finding-the-way.pdf') },
       { group: 'Lecture slides', label: 'Reasoning: finding the way, step by step (Handout)', url: deck(1, 'ainit-hs26-reasoning-finding-the-way-handout.pdf') },
       { group: 'Lecture slides', label: 'The ladder: from a language model to a planning agent', url: deck(1, 'ainit-hs26-the-ladder.pdf') },
@@ -402,11 +405,12 @@ export const weekends: Weekend[] = [
       { group: 'Coding exercises', label: 'MLOps', url: colab('w1-cx-public', '04_mlops_student.ipynb') },
 
       /* Visualizations */
-      // The game of the reasoning slides, "Mara's Valley": Mara carries letters down a valley of
-      // fifteen places and the reader picks her roads. One HTML page with its fonts and pictures
-      // inside, no network needed, six short screens, works on a phone. Source:
-      // reasoning-lab/ in w1-lecture-material (branch claude/rlvr-reasoning-version).
-      { group: 'Visualizations', label: "Mara's Valley: finding the way, step by step (game)", url: viz(1, 'mara-valley') },
+      // The game of the reasoning slides, "Mara's Town" (it replaced Mara's Valley on 2026-10-16):
+      // Mara carries letters across a town of nine places, told by their houses and their
+      // snowmen, and the reader sends her north and east and delivers. One HTML page with its
+      // fonts and pictures inside, no network needed, works on a phone. Source: town-lab/ in
+      // w1-lecture-material.
+      { group: 'Visualizations', label: "Mara's Town: finding the way, step by step (game)", url: viz(1, 'mara-town') },
 
       /* Project */
       {
