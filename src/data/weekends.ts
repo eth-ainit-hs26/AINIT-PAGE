@@ -307,10 +307,10 @@ export const weekends: Weekend[] = [
         time: '08:15',
         title: 'MLOps',
         type: 'lecture',
-        // links: [
-        //   { label: 'Slides', url: deck(1, '') },
+        links: [
+          { label: 'Slides', url: deck(1, 'mlops-slides-hs26.pdf') },
         //   { label: 'Annotated', url: deck(1, '') },
-        // ],
+        ],
       },
       {
         time: '09:00',
