@@ -356,10 +356,10 @@ export const weekends: Weekend[] = [
         // link follows once w1-project-public exists.
         links: [
           { label: 'Slides', url: deck(1, 'w1_project_intro_hs26.pdf') },
-          // {
-          //   label: 'Project Notebook',
-          //   url: colab('w1-project-public', ''),
-          // },
+          {
+            label: 'Project Notebook',
+            url: colab('w1-project-public', 'project1.ipynb'),
+          },
         ],
       },
     ],
@@ -393,16 +393,11 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Summary of GEPA', url: deck(1, 'ainit-hs26-gepa.pdf') },
       { group: 'Lecture slides', label: 'Summary of GEPA (Handout)', url: deck(1, 'ainit-hs26-gepa-handout.pdf') },
       // { group: 'Lecture slides', label: 'Summary of GEPA (Annotated)', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'MLOps', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'MLOps', url: deck(1, 'mlops-slides-hs26.pdf') },
       // { group: 'Lecture slides', label: 'MLOps (Annotated)', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'MLOps (Annotated)', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'The future of AI', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'The future of AI (Annotated)', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'Cosine similarity and basics of linear algebra', url: deck(1, '') },
-      // { group: 'Lecture slides', label: 'Cosine similarity and basics of linear algebra (Annotated)', url: deck(1, '') },
 
       /* Coding exercises */
-      // { group: 'Coding exercises', label: "Ge'ez games", url: exercise(1, '') },
+      { group: 'Coding exercises', label: "Ge'ez games", url: exercise(1, '01_geez_llm_game.html')},
       { group: 'Coding exercises', label: 'Python Recap', url: colab('w1-cx-public', 'Python_recap.ipynb') },
       { group: 'Coding exercises', label: 'Ge\'ez Games', url: exercise(1, '01_geez_llm_game.html') },
       { group: 'Coding exercises', label: 'Prompt engineering: Basics', url: colab('w1-cx-public', '02a_prompt_engineering_student.ipynb') },
@@ -425,11 +420,11 @@ export const weekends: Weekend[] = [
         label: 'Project 1 slides',
         url: deck(1, 'w1_project_intro_hs26.pdf'),
       },
-      // {
-      //   group: 'Project',
-      //   label: 'Project 1 Colab notebook',
-      //   url: colab('w1-project-public', ''),
-      // },
+      {
+        group: 'Project',
+        label: 'Project 1 Colab notebook',
+        url: colab('w1-project-public', 'project1.ipynb'),
+      },
       // { group: 'Project', label: 'Project 1 grading scheme', url: SOON },
 
 
