@@ -437,7 +437,7 @@ export const weekends: Weekend[] = [
       { group: 'CX solutions', label: 'Prompt engineering: Chain of thought', url: colab('w1-cx-public', '02b_CoT_solution.ipynb') },
       { group: 'CX solutions', label: 'Prompt engineering: Tree of thought + subquestion decomposition', url: colab('w1-cx-public', '02c_subques_solution.ipynb') },
       { group: 'CX solutions', label: 'OPRO', url: colab('w1-cx-public', '03_opro_solution.ipynb') },
-      { group: 'CX solutions', label: 'MLOps', url: colab('w1-cx-public', SOON) }, // '04_mlops_solution.ipynb'
+      { group: 'CX solutions', label: 'MLOps', url: colab('w1-cx-public', '04_mlops_solution.ipynb') }, 
     ],
   },
   {
