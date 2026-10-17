@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { weekends, deck, SOON } from '../data/weekends';
+import { weekends, deck } from '../data/weekends';
 import { WeekendCard } from '../components/WeekendCard';
 import { CalendarStrip } from '../components/CalendarStrip';
 
