@@ -71,15 +71,6 @@ export function HomePage() {
                 lives: every other annotated copy sits beside its deck on the
                 weekend 1 schedule.
               */}
-              <a
-                className="btn btn--ghost"
-                href={deck(1, SOON)}
-                target="_blank"
-                rel="noopener noreferrer"
-                download=""
-              >
-                Intro slides, annotated in the lecture (PDF)
-              </a>
               {/*
                 The recordings of the whole course unit, 275-0004-00L, on the ETH
                 video portal.

@@ -397,7 +397,6 @@ export const weekends: Weekend[] = [
       // { group: 'Lecture slides', label: 'MLOps (Annotated)', url: deck(1, '') },
 
       /* Coding exercises */
-      { group: 'Coding exercises', label: "Ge'ez games", url: exercise(1, '01_geez_llm_game.html')},
       { group: 'Coding exercises', label: 'Python Recap', url: colab('w1-cx-public', 'Python_recap.ipynb') },
       { group: 'Coding exercises', label: 'Ge\'ez Games', url: exercise(1, '01_geez_llm_game.html') },
       { group: 'Coding exercises', label: 'Prompt engineering: Basics', url: colab('w1-cx-public', '02a_prompt_engineering_student.ipynb') },
@@ -434,6 +433,11 @@ export const weekends: Weekend[] = [
       //   label: 'Setting up Claude Code: VS Code, a terminal, and your licence',
       //   url: guide('filename'),
       // },
+      { group: 'CX solutions', label: 'Prompt engineering: Basics', url: colab('w1-cx-public', '02a_prompt_engineering_solution.ipynb') },
+      { group: 'CX solutions', label: 'Prompt engineering: Chain of thought', url: colab('w1-cx-public', '02b_CoT_solution.ipynb') },
+      { group: 'CX solutions', label: 'Prompt engineering: Tree of thought + subquestion decomposition', url: colab('w1-cx-public', '02c_subques_solution.ipynb') },
+      { group: 'CX solutions', label: 'OPRO', url: colab('w1-cx-public', '03_opro_solution.ipynb') },
+      { group: 'CX solutions', label: 'MLOps', url: colab('w1-cx-public', SOON) }, // '04_mlops_solution.ipynb'
     ],
   },
   {
