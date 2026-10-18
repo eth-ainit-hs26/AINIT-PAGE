@@ -334,10 +334,12 @@ export const weekends: Weekend[] = [
         time: '10:30',
         title: 'Guest speaker: Joao Carvalho',
         type: 'lecture',
-        // links: [
-        //   { label: 'Slides', url: deck(1, '') },
-        //   { label: 'Annotated', url: deck(1, '') },
-        // ],
+        // The slides of the guest lecture, "Harnesses: Beyond the Model", sent by the
+        // speaker and published on 2026-10-18 with his agreement. Both rows carry the
+        // same title, so the link sits on the first.
+        links: [
+          { label: 'Slides', url: deck(1, 'ainit-hs26-guest-joao-carvalho.pdf') },
+        ],
       },
       {
         time: '11:00',
@@ -395,6 +397,7 @@ export const weekends: Weekend[] = [
       // { group: 'Lecture slides', label: 'Summary of GEPA (Annotated)', url: deck(1, '') },
       { group: 'Lecture slides', label: 'MLOps', url: deck(1, 'mlops-slides-hs26.pdf') },
       // { group: 'Lecture slides', label: 'MLOps (Annotated)', url: deck(1, '') },
+      { group: 'Lecture slides', label: 'Guest lecture: Joao Carvalho, "Harnesses: Beyond the Model"', url: deck(1, 'ainit-hs26-guest-joao-carvalho.pdf') },
 
       /* Coding exercises */
       { group: 'Coding exercises', label: 'Python Recap', url: colab('w1-cx-public', 'Python_recap.ipynb') },
