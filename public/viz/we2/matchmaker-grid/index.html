@@ -1,0 +1,1672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matchmaker on a Grid</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..600&display=swap" rel="stylesheet">
+<style>
+/* Matchmaker on a Grid: a sketch (2026-11-06) of matrix factorization by gradient descent on many computers, from
+   Carlos's three pages of that morning. One colour per matrix (customers' numbers violet, films' numbers ochre,
+   predictions blue, ratings green, losses crimson) and a shade per slice; the grasshopper green. */
+:root{
+  --bg:#F9F4E3; --leaf:#FFFBF0; --ink:#2A2432; --muted:#6B6275; --rule:#D8CBA9;
+  --rubric:#58409A; --ochre:#8F5A06; --blue:#1E6AAE; --loss:#B4233C; --green:#2F7D62;
+  --c-u:var(--rubric); --c-v:var(--ochre); --c-p:var(--blue); --c-r:var(--green); --c-l:var(--loss);
+  --s0:9%; --s1:20%; --s2:33%; --e0:36%; --e1:58%; --e2:82%;
+  --band-a:color-mix(in srgb, var(--rubric) 16%, transparent);
+  --band-b:color-mix(in srgb, var(--ochre) 20%, transparent);
+  --serif:"EB Garamond", Garamond, "Iowan Old Style", "Times New Roman", serif;
+  --emoji:"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  --gut:max(16px, env(safe-area-inset-left, 0px)); --gut-r:max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
+    --rubric:#B9A6F3; --ochre:#E3AA4C; --blue:#86BDEE; --loss:#F2879A; --green:#7CCFAE;
+    --s0:13%; --s1:25%; --s2:39%; --e0:38%; --e1:60%; --e2:84%;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
+  --rubric:#B9A6F3; --ochre:#E3AA4C; --blue:#86BDEE; --loss:#F2879A; --green:#7CCFAE;
+  --s0:13%; --s1:25%; --s2:39%; --e0:38%; --e1:60%; --e2:84%;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%; margin:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--serif); font-size:18px; line-height:1.4; -webkit-font-smoothing:antialiased}
+button{font:inherit; color:inherit}
+button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
+.em{font-family:var(--emoji); font-style:normal; line-height:1}
+
+/* the frame: top bar, the slide, Back and Next */
+.app{height:100%; display:grid; grid-template-rows:auto minmax(0,1fr) auto}
+.top{display:flex; align-items:center; gap:14px; padding:8px var(--gut-r) 8px var(--gut); border-bottom:1px solid var(--rule); min-width:0}
+.brand{font-size:21px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.brand em{color:var(--rubric)}
+.brand .tag{margin-left:10px; font-size:14px; font-style:italic; color:var(--muted)}
+.pager{margin-left:auto; display:flex; align-items:center; gap:6px; flex:none}
+.pager button{border:1.5px solid var(--rule); background:var(--leaf); color:var(--rubric); border-radius:999px; padding:1px 11px 3px;
+  font-size:15px; cursor:pointer}
+.pager button[aria-current="true"]{background:var(--rubric); border-color:var(--rubric); color:var(--leaf)}
+.themebtn{width:30px; height:30px; border-radius:50%; border:1.5px solid var(--rule); background:transparent; cursor:pointer; color:var(--muted); flex:none; padding:0}
+.stage{position:relative; overflow:auto; padding:10px var(--gut-r) 10px var(--gut)}
+.foot{display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:12px; padding:8px var(--gut-r) 10px var(--gut); border-top:1px solid var(--rule)}
+.navbtn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:4px 20px 6px; font-size:17px; cursor:pointer; min-width:96px}
+.navbtn.next{background:var(--rubric); color:var(--leaf)}
+.navbtn:disabled{opacity:.3; cursor:default}
+.where{text-align:center; color:var(--muted); font-size:15px; font-style:italic; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.dots{display:inline-flex; gap:5px; vertical-align:middle; margin-left:8px}
+.dots i{width:8px; height:8px; border-radius:50%; background:var(--rule); display:inline-block}
+.dots i.on{background:var(--rubric)}
+
+/* a slide: its title and words above the picture */
+.slide{max-width:1180px; margin:0 auto}
+.slide h2{margin:0 0 4px; font-size:27px; font-weight:600; text-wrap:balance}
+.slide h2 .kick{font-size:15px; font-weight:500; color:var(--rubric); letter-spacing:.06em; text-transform:uppercase; margin-right:10px}
+.words{min-height:3.0em; font-size:19px; max-width:72ch; text-wrap:pretty; margin-bottom:8px}
+.words b{font-weight:600}
+.words .rub{color:var(--rubric)}
+.words .och{color:var(--ochre)}
+
+/* number cells: the colour of their matrix (data-m: u customers' numbers, v films' numbers, p predictions,
+   r ratings, l losses), the shade of their slice (data-s: 0 light, 1 medium, 2 strong) */
+.n{display:grid; place-items:center; width:var(--w); height:var(--h); border:1.5px solid var(--rule); border-radius:9px;
+  font-size:var(--fs); font-weight:600; font-variant-numeric:lining-nums tabular-nums; color:var(--muted); background:var(--leaf);
+  line-height:1; white-space:nowrap; transition:opacity .35s ease, background-color .35s ease, border-color .35s ease, box-shadow .2s ease}
+[data-m="u"]{--hue:var(--c-u)} [data-m="v"]{--hue:var(--c-v)} [data-m="p"]{--hue:var(--c-p)}
+[data-m="r"]{--hue:var(--c-r)} [data-m="l"]{--hue:var(--c-l)}
+[data-s="0"]{--sp:var(--s0); --ep:var(--e0)} [data-s="1"]{--sp:var(--s1); --ep:var(--e1)} [data-s="2"]{--sp:var(--s2); --ep:var(--e2)}
+.n[data-m]{background:color-mix(in srgb, var(--hue) var(--sp), var(--leaf)); border-color:color-mix(in srgb, var(--hue) var(--ep), var(--leaf));
+  color:color-mix(in srgb, var(--hue) 80%, var(--ink))}
+.n.slot{border:1.5px dashed var(--rule); background:transparent; color:transparent}
+.n.ask{border:2px dashed var(--rubric); color:var(--rubric); background:transparent; cursor:pointer}
+.n.ask.draft{border-style:solid; color:var(--ink)}
+.n.ask.active{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5px var(--rubric)}
+.n.ask.wrong{color:var(--muted); text-decoration:line-through; text-decoration-thickness:2px}
+.n.ghosted{opacity:.22; border-style:dashed}
+
+/* SLIDE 1: the cross. One grid: the films' table on top, the customers' table on the left, the predictions where
+   they meet. Rows of the customers and the predictions line up; columns of the films and the predictions line up. */
+.cross{--w:46px; --h:36px; --fs:20px; display:grid; gap:5px; justify-content:center; position:relative;
+  grid-template-columns:auto var(--w) var(--w) 14px repeat(6, var(--w));
+  grid-template-rows:auto var(--h) var(--h) 22px repeat(6, var(--h))}
+.cross .lab{display:grid; place-items:center; font-size:15px; color:var(--muted)}
+.cross .who{padding-right:6px; font-size:18px; color:var(--ink); place-items:center end}
+.cross .film{font-size:26px; padding-bottom:2px}
+.cross .cap{font-size:14px; font-style:italic; color:var(--muted); white-space:nowrap}
+.cross .band{border-radius:9px; transition:background-color .35s ease}
+.cross .band.a{background:var(--band-a)}
+.cross .band.b{background:var(--band-b)}
+.cross .frame{border:2.5px solid var(--rubric); border-radius:12px; margin:-5px; pointer-events:none; transition:opacity .3s ease}
+.cross .cut{background:var(--rubric); opacity:0; transition:opacity .4s ease; pointer-events:none; border-radius:2px}
+.cross .cut.on{opacity:.8}
+.board{display:flex; flex-direction:column; align-items:center; gap:12px}
+.board.tight{gap:6px}
+.pad{display:flex; flex-wrap:wrap; justify-content:center; gap:6px; max-width:760px}
+.pad button{min-width:40px; height:38px; border-radius:10px; border:1.5px solid var(--rule); background:var(--leaf); font-size:20px; cursor:pointer; font-weight:600}
+.pad button.ok{background:var(--rubric); border-color:var(--rubric); color:var(--leaf); min-width:64px}
+.pad button:disabled{opacity:.35; cursor:default}
+.row{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px}
+.btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:3px 16px 5px; font-size:16px; cursor:pointer}
+.btn:disabled{opacity:.35; cursor:default}
+.note{font-size:17px; color:var(--muted); min-height:1.4em; text-align:center}
+.note .work{color:var(--ink); font-variant-numeric:lining-nums tabular-nums}
+.count{font-size:16px; color:var(--muted); font-style:italic}
+.choices{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+.choices button{min-width:64px; height:44px; border-radius:12px; border:1.5px solid var(--rubric); background:var(--leaf); color:var(--rubric); font-size:22px; font-weight:600; cursor:pointer}
+.choices button.no{border-color:var(--rule); color:var(--muted); text-decoration:line-through; text-decoration-thickness:2px}
+.choices button.yes{background:var(--rubric); color:var(--leaf)}
+
+/* SLIDES 2 and 3: the big picture and the computers. One layout for both: the films' numbers on top, the
+   customers' numbers on the left, the predictions where they meet, the ratings and the losses on their right.
+   A computer (a card) is a cut of the big picture, 2 customers by 2 films; its corner holds its name and its
+   memory, 21 places. */
+.big,.card{display:grid; gap:var(--gap); position:relative; justify-content:start; align-content:start}
+.big{--w:28px; --h:25px; --fs:14px; --gap:4px; --gg:12px; --cw:50px; --eh:26px}
+.card{--w:26px; --h:23px; --fs:13px; --gap:3px; --gg:7px; --cw:38px; --eh:20px; --sw:42px; padding:7px;
+  border:1.5px solid var(--rule); border-radius:12px; background:var(--leaf)}
+.big .n,.card .n{border-radius:7px}
+.big .who,.card .who{display:grid; place-items:center end; padding-right:5px; color:var(--ink); font-size:15px; white-space:nowrap}
+.card .who{font-size:13px; padding-right:3px}
+.big .film,.card .film{display:grid; place-items:end center; font-size:20px; padding-bottom:2px}
+.card .film{font-size:16px}
+.big .cap,.card .cap{display:grid; place-items:end center; font-size:14px; font-style:italic; color:var(--muted); white-space:nowrap; padding-bottom:3px}
+.card .cap{font-size:12px; padding-bottom:1px}
+.card.blank .who,.card.blank .film{visibility:hidden}
+.band{border-radius:7px; transition:background-color .3s ease, opacity .45s ease}
+.band.a{background:var(--band-a)}
+.band.b{background:var(--band-b)}
+.cut{background:var(--rubric); opacity:0; transition:opacity .4s ease; pointer-events:none; border-radius:2px}
+.cut.on{opacity:.8}
+.cut.h{align-self:start; height:3px; margin-top:calc(var(--gap) / -2 - 1.5px)}
+.cut.v{justify-self:start; width:3px; margin-left:calc(var(--gap) / -2 - 1.5px)}
+.n.hide{visibility:hidden}
+.n.pop{animation:pop .45s ease both}
+.n.ring{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--ink)}
+@keyframes pop{0%{transform:scale(.4); opacity:0} 70%{transform:scale(1.12); opacity:1} 100%{transform:scale(1); opacity:1}}
+.corner{display:flex; flex-direction:column; align-items:flex-start; gap:5px; padding:1px 0 0 1px; min-width:0}
+.corner .lab{font-size:15px; font-weight:600; color:var(--rubric); line-height:1; white-space:nowrap}
+.mem{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); font-variant-numeric:lining-nums tabular-nums}
+.gauge{display:grid; grid-template-columns:repeat(7, 6px); grid-auto-rows:6px; gap:2px}
+.n.sum{width:100%; align-self:center; font-weight:700}
+.n.dec{font-size:calc(var(--fs) * .8)}
+.grid3{position:relative; display:grid; grid-template-columns:repeat(4, auto); gap:14px; align-items:start; padding-top:24px;
+  transform-origin:0 0}
+.grid3 .card{--w:30px}
+/* slide 3's what-if: the computers that do not take part are greyed a little */
+.card.dim{opacity:.5; filter:grayscale(1)}
+.card{transition:opacity .45s ease, filter .45s ease, border-color .5s ease, background-color .5s ease}
+/* while the camera is in (slide 3, steps 5 to 9) the board is cut at the edges of its box */
+.fitbox.cam{overflow:hidden}
+.card > .corner, .card > .who, .card > .film, .card > .cap{transition:opacity .45s ease}
+/* slide 2: a computer that has not appeared yet shows only the numbers it will hold (show-r: its ratings, show-f:
+   its customers' or films' numbers); the whole tables are its cells moved together (transforms), with headers
+   and cut lines drawn over the board */
+.card.ghost{border-color:transparent; background:transparent}
+.card.ghost > *{opacity:0}
+.card.ghost.show-r > [data-m="r"], .card.ghost.show-f > [data-m="u"], .card.ghost.show-f > [data-m="v"]{opacity:1}
+.s2 .card .n{transform-origin:0 0}
+.hdr{position:absolute; white-space:nowrap; pointer-events:none; line-height:1; color:var(--ink); transition:opacity .45s ease}
+.hdr.off{opacity:0}
+.hdr.hn{transform:translate(-100%,-50%); font-size:13px}
+.hdr.hf{transform:translate(-50%,-100%); font-size:16px}
+.hdr.hn.lg{font-size:16px}
+.hdr.hf.lg{font-size:21px}
+.cutx{position:absolute; z-index:4}
+.n.tried{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--green)}
+.n.moved{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--ochre)}
+/* the grasshopper's what-if, beside B2: the number, the average loss, the slope, the new number */
+.wif{position:absolute; left:100%; top:0; margin-left:14px; display:grid; grid-template-columns:auto auto; gap:3px 10px; align-items:center;
+  padding:6px 11px; border:1.5px solid var(--green); border-radius:10px; background:var(--leaf); font-size:13px; white-space:nowrap}
+.wif .lab{font-size:12px; font-style:italic; color:var(--muted)}
+.wif .v{font-weight:600; font-variant-numeric:lining-nums tabular-nums}
+.wif .v .to{color:var(--muted); font-weight:400; padding:0 3px}
+.wif .loss{color:var(--loss)}
+.wif .sl{color:var(--green)}
+.wif .mv{color:var(--ochre)}
+.wif .off{visibility:hidden}
+/* the paper grasshopper of the matchmaker (source/game/hopper.js and hopper.css) */
+.hopper{position:absolute; line-height:0; pointer-events:none; z-index:5}
+.hopper svg{display:block; overflow:visible}
+.hopper{--h-body:#74C46E; --h-head:#92D58A; --h-deep:#2F7D62; --h-ink:var(--ink); --h-eye:#FFFBF0; --h-pupil:#2A2432; --h-shade:rgba(42,36,50,.17)}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .hopper{--h-body:#7CCB76; --h-head:#9DDC94; --h-deep:#47A878; --h-shade:rgba(0,0,0,.38)}
+}
+:root[data-theme="dark"] .hopper{--h-body:#7CCB76; --h-head:#9DDC94; --h-deep:#47A878; --h-shade:rgba(0,0,0,.38)}
+.hopper .h-shade path{fill:var(--h-shade)}
+.hopper .h-body{fill:var(--h-body)}
+.hopper .h-head{fill:var(--h-head)}
+.hopper .h-deep{fill:var(--h-deep)}
+.hopper .h-ink{fill:var(--h-ink)}
+.hopper .h-eye{fill:var(--h-eye)}
+.hopper .h-pupil{fill:var(--h-pupil)}
+.n.loss.zero{background:var(--leaf); border-color:var(--rule); color:var(--muted)}
+/* step 11: the loss curve beside B3, the controls under the words */
+.chart{position:absolute; left:100%; top:0; margin-left:14px; border:1.5px solid var(--rule); border-radius:10px; background:var(--leaf); line-height:0}
+.chart svg{display:block}
+.chart .ct{font-size:11.5px; font-style:italic; fill:var(--muted)}
+.chart .tk{font-size:10px; fill:var(--muted); font-variant-numeric:lining-nums tabular-nums}
+.chart .ax{stroke:var(--rule); stroke-width:1.2}
+.chart .cl{fill:none; stroke:var(--loss); stroke-width:2; stroke-linejoin:round; stroke-linecap:round}
+.chart .cd{fill:var(--loss)}
+.wordsrow{display:flex; flex-wrap:wrap; align-items:flex-start; column-gap:28px}
+.ctl{display:flex; align-items:center; gap:12px; margin:2px 0 8px; font-size:16px; color:var(--muted); font-style:italic;
+  font-variant-numeric:lining-nums tabular-nums}
+.ctl .btn{font-style:normal; min-width:84px}
+.grid3 .kA{justify-self:end}
+.grid3 .kB{align-self:end; justify-self:start}
+.avg{align-self:end; justify-self:center; display:flex; flex-direction:column; align-items:center; gap:4px; padding-bottom:6px}
+.avg .cap{font-size:13px; font-style:italic; color:var(--muted); white-space:nowrap}
+.avg .ring{min-width:74px; height:44px; padding:0 10px; display:grid; place-items:center; border:4px double var(--rubric); border-radius:999px;
+  background:var(--leaf); color:var(--loss); font-size:20px; font-weight:700; font-variant-numeric:lining-nums tabular-nums}
+.gauge i{border:1px solid var(--rule); border-radius:1.5px}
+.gauge i.on{background:var(--muted); border-color:var(--muted)}
+.gauge i.on[data-m]{background:var(--hue); border-color:var(--hue)}
+.fitbox{position:relative; width:100%}
+.fitin{position:absolute; top:0; left:50%; width:max-content; transform-origin:top center}
+
+@media (max-width:640px){
+  .brand{font-size:18px}
+  .brand .tag{display:none}
+  .slide h2{font-size:22px}
+  .words{font-size:17px; min-height:4.2em}
+  .cross{--w:33px; --h:28px; --fs:15px; gap:3px; grid-template-columns:auto var(--w) var(--w) 8px repeat(6, var(--w));
+    grid-template-rows:auto var(--h) var(--h) 18px repeat(6, var(--h))}
+  .cross .who{font-size:14px; padding-right:3px}
+  .cross .film{font-size:19px}
+  .pad button{min-width:34px; height:38px; font-size:18px}
+  .navbtn{min-width:76px; padding:4px 12px 6px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">Matchmaker <em>on a Grid</em><span class="tag">sketch</span></div>
+    <nav class="pager" id="pager" aria-label="Slides"></nav>
+    <button class="themebtn" id="theme" title="Light or dark (t)" aria-label="Light or dark">&#9680;</button>
+  </header>
+  <main class="stage" id="stage"></main>
+  <footer class="foot">
+    <button class="navbtn" id="back">Back</button>
+    <div class="where" id="where"></div>
+    <button class="navbtn next" id="next">Next</button>
+  </footer>
+</div>
+<script src="data.js"></script>
+<script>
+(function () {
+  "use strict";
+  var G = window.GRID;
+  var MINUS = String.fromCharCode(8722), TIMES = String.fromCharCode(215), ARROW = String.fromCharCode(8594);
+  var N = 6, K = 2;
+
+  /* helpers */
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === "class") e.className = attrs[k];
+      else if (k === "text") e.textContent = attrs[k];
+      else if (k === "html") e.innerHTML = attrs[k];
+      else if (k === "style") e.setAttribute("style", attrs[k]);
+      else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function num(x, d) {
+    // a number with the typographic minus, at most d decimals (default 2), no trailing zeros
+    if (d === undefined) d = 2;
+    var r = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
+    if (Object.is(r, -0) || Math.abs(r) < 1e-12) r = 0;
+    return (r < 0 ? MINUS : "") + String(Math.abs(r));
+  }
+  function setNum(cell, x, d) { cell.textContent = num(x, d); }
+  // the colours: a cell keeps the colour of its matrix and the shade of its slice for good. A slice of the customers'
+  // or the films' numbers (2 rows or 2 columns) is light, medium or strong from the first to the last; a block of the
+  // ratings, the predictions or the losses (2 x 2) is light in the corners, medium on the edges, strong in the centre.
+  function sliceShade(s) { return s; }
+  function blockShade(bi, bj) { return (bi === 1 ? 1 : 0) + (bj === 1 ? 1 : 0); }
+  function paint(c, m, s) { c.setAttribute("data-m", m); c.setAttribute("data-s", String(s)); return c; }
+  function predict(U, V) {
+    return U.map(function (u) { return V.map(function (v) { return u[0] * v[0] + u[1] * v[1]; }); });
+  }
+  function wait(ms, token) {
+    return new Promise(function (res, rej) { setTimeout(function () { if (token && token.dead) rej("dead"); else res(); }, ms); });
+  }
+  var P0 = predict(G.U0, G.V0);
+  var CUST = G.customers, FILMS = G.films;
+  var BLK = { rows: [2, 3], cols: [2, 3] };          // the participants' frame: Rosa and Tim, The Intouchables and Apollo 13
+
+  /* the engine: slides of steps, Back and Next, the address #s=1&k=2 */
+  var SLIDES = [];
+  var stage = document.getElementById("stage");
+  var cur = { s: 0, k: 0 }, built = -1, ctx = null;
+  function defineSlide(d) { SLIDES.push(d); }
+  function go(s, k, carry) {
+    // carry: Next from the last step of the slide before, so the first step of this one plays its motion
+    s = Math.max(0, Math.min(SLIDES.length - 1, s));
+    var d = SLIDES[s];
+    k = Math.max(0, Math.min(d.steps.length - 1, k));
+    var from = built === s ? cur.k : (carry ? -1 : null);
+    stopMotion();
+    if (built !== s) {
+      if (ctx && ctx.token) ctx.token.dead = true;
+      stage.innerHTML = "";
+      var root = el("section", { class: "slide" });
+      stage.appendChild(root);
+      ctx = { root: root, token: { dead: false } };
+      d.build(ctx);
+      built = s;
+    }
+    cur = { s: s, k: k };
+    if (ctx.token) ctx.token.dead = true;
+    ctx.token = { dead: false };
+    d.show(ctx, k, from === k - 1 ? from : null);
+    chrome();
+    try { history.replaceState(null, "", "#s=" + (s + 1) + "&k=" + (k + 1)); } catch (e) {}
+  }
+  function next() {
+    var d = SLIDES[cur.s];
+    if (cur.k < d.steps.length - 1) go(cur.s, cur.k + 1);
+    else if (cur.s < SLIDES.length - 1) go(cur.s + 1, 0, true);
+  }
+  function back() {
+    if (cur.k > 0) go(cur.s, cur.k - 1);
+    else if (cur.s > 0) go(cur.s - 1, SLIDES[cur.s - 1].steps.length - 1);
+  }
+  function chrome() {
+    var pager = document.getElementById("pager");
+    pager.innerHTML = "";
+    SLIDES.forEach(function (d, i) {
+      pager.appendChild(el("button", { "aria-current": i === cur.s ? "true" : "false", title: d.title, onclick: function () { go(i, 0); } }, ["Slide " + (i + 1)]));
+    });
+    var d = SLIDES[cur.s], where = document.getElementById("where");
+    where.innerHTML = "";
+    where.appendChild(document.createTextNode(d.steps[cur.k]));
+    var dots = el("span", { class: "dots" });
+    d.steps.forEach(function (x, i) { dots.appendChild(el("i", { class: i === cur.k ? "on" : "" })); });
+    where.appendChild(dots);
+    document.getElementById("back").disabled = cur.s === 0 && cur.k === 0;
+    document.getElementById("next").disabled = cur.s === SLIDES.length - 1 && cur.k === d.steps.length - 1;
+  }
+  document.getElementById("next").addEventListener("click", next);
+  document.getElementById("back").addEventListener("click", back);
+  document.addEventListener("keydown", function (e) {
+    if (e.target && /input|textarea/i.test(e.target.tagName)) return;
+    var d = SLIDES[cur.s];
+    if (d.onkey && d.onkey(ctx, e)) { e.preventDefault(); return; }
+    if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); next(); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); back(); }
+    else if (e.key === "t") toggleTheme();
+  });
+  function toggleTheme() {
+    var r = document.documentElement, dark = r.getAttribute("data-theme") === "dark" ||
+      (!r.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    r.setAttribute("data-theme", dark ? "light" : "dark");
+    try { localStorage.setItem("grid-theme", dark ? "light" : "dark"); } catch (e) {}
+  }
+  try { var th = localStorage.getItem("grid-theme"); if (th) document.documentElement.setAttribute("data-theme", th); } catch (e) {}
+  document.getElementById("theme").addEventListener("click", toggleTheme);
+
+  /* SLIDE 1: four predictions, two slices */
+  function buildCross(root) {
+    // one CSS grid: column 1 names, 2-3 the customers' numbers, 4 a gap, 5-10 the films;
+    // row 1 the films' pictures, 2-3 the films' numbers, 4 the customers' column heads, 5-10 the customers
+    var cross = el("div", { class: "cross" });
+    var C = { cross: cross, custCells: [], filmCells: [], prodCells: [], rowBand: [], colBand: [] };
+    function put(e, r, c, rs, cs) {
+      e.style.gridRow = r + " / span " + (rs || 1);
+      e.style.gridColumn = c + " / span " + (cs || 1);
+      cross.appendChild(e);
+      return e;
+    }
+    // bands first, so the cells paint above them: one per customer row and per film column
+    for (var i = 0; i < N; i++) C.rowBand.push(put(el("div", { class: "band" }), 5 + i, 2, 1, 9));
+    for (var j = 0; j < N; j++) C.colBand.push(put(el("div", { class: "band" }), 2, 5 + j, 9, 1));
+    put(el("div", { class: "lab cap", text: "the films' numbers" }), 1, 1, 1, 3);
+    put(el("div", { class: "lab", text: "①" }), 2, 3);
+    put(el("div", { class: "lab", text: "②" }), 3, 3);
+    put(el("div", { class: "lab", text: "①" }), 4, 2);
+    put(el("div", { class: "lab", text: "②" }), 4, 3);
+    FILMS.forEach(function (f, j) {
+      put(el("div", { class: "lab film em", title: f.t, text: f.g }), 1, 5 + j);
+      C.filmCells.push([0, 1].map(function (k) {
+        var c = paint(put(el("div", { class: "n" }), 2 + k, 5 + j), "v", sliceShade(j >> 1));
+        setNum(c, G.V0[j][k]);
+        return c;
+      }));
+    });
+    CUST.forEach(function (name, i) {
+      put(el("div", { class: "lab who", text: name }), 5 + i, 1);
+      C.custCells.push([0, 1].map(function (k) {
+        var c = paint(put(el("div", { class: "n" }), 5 + i, 2 + k), "u", sliceShade(i >> 1));
+        setNum(c, G.U0[i][k]);
+        return c;
+      }));
+      C.prodCells.push(FILMS.map(function (f, j) { return paint(put(el("div", { class: "n slot" }), 5 + i, 5 + j), "p", blockShade(i >> 1, j >> 1)); }));
+    });
+    C.frame = put(el("div", { class: "frame" }), 5 + BLK.rows[0], 5 + BLK.cols[0], 2, 2);
+    root.appendChild(cross);
+    return C;
+  }
+  function bands(C, rows, cols) {
+    for (var i = 0; i < N; i++) C.rowBand[i].className = "band" + (rows.indexOf(i) >= 0 ? " a" : "");
+    for (var j = 0; j < N; j++) C.colBand[j].className = "band" + (cols.indexOf(j) >= 0 ? " b" : "");
+  }
+  function ghostOutside(C, rows, cols, on) {
+    for (var i = 0; i < N; i++) for (var k = 0; k < K; k++) C.custCells[i][k].classList.toggle("ghosted", on && rows.indexOf(i) < 0);
+    for (var j = 0; j < N; j++) for (var k2 = 0; k2 < K; k2++) C.filmCells[j][k2].classList.toggle("ghosted", on && cols.indexOf(j) < 0);
+    for (var a = 0; a < N; a++) for (var b = 0; b < N; b++) {
+      var inside = rows.indexOf(a) >= 0 && cols.indexOf(b) >= 0;
+      C.prodCells[a][b].classList.toggle("ghosted", on && !inside);
+    }
+  }
+  function workLine(i, j) {
+    var u = G.U0[i], v = G.V0[j];
+    function p(x) { return x < 0 ? "(" + num(x) + ")" : num(x); }
+    return CUST[i] + " " + TIMES + " " + FILMS[j].t + ": " + p(u[0]) + " " + TIMES + " " + p(v[0]) + " + " +
+      p(u[1]) + " " + TIMES + " " + p(v[1]) + " = " + num(P0[i][j]);
+  }
+
+  var S1 = { answers: {}, tries: {}, active: null, draft: "" };
+  function key(i, j) { return i + "," + j; }
+
+  defineSlide({
+    title: "Four predictions, two slices",
+    steps: ["Compute the frame", "How many numbers?", "Only two slices", "Every frame"],
+    build: function (ctx) {
+      var r = ctx.root;
+      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 1" }), "Four predictions"]));
+      ctx.words = r.appendChild(el("div", { class: "words" }));
+      var board = r.appendChild(el("div", { class: "board" }));
+      ctx.C = buildCross(board);
+      ctx.tools = board.appendChild(el("div", { class: "board" }));
+      // the keypad and its buttons (step 1)
+      ctx.pad = el("div", { class: "pad" });
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", MINUS].forEach(function (d) {
+        ctx.pad.appendChild(el("button", { text: d, onclick: function () { typeKey(ctx, d === MINUS ? "-" : d); } }));
+      });
+      ctx.pad.appendChild(el("button", { text: "⌫", title: "Delete", onclick: function () { typeKey(ctx, "Backspace"); } }));
+      ctx.pad.appendChild(el("button", { class: "ok", text: "OK", onclick: function () { typeKey(ctx, "Enter"); } }));
+      ctx.note = el("div", { class: "note" });
+      ctx.count = el("span", { class: "count" });
+      ctx.showAll = el("button", { class: "btn", text: "Show all", onclick: function () { fillAll(ctx); } });
+      ctx.again = el("button", { class: "btn", text: "Start again", onclick: function () {
+        S1.answers = {}; S1.tries = {}; S1.active = null; S1.draft = ""; ctx.note.innerHTML = ""; nextAsk(ctx); render1(ctx);
+      } });
+      ctx.showMe = el("button", { class: "btn", text: "Show me", onclick: function () {
+        if (!S1.active) return;
+        var ij = S1.active.split(",").map(Number);
+        S1.answers[S1.active] = true;
+        ctx.note.innerHTML = "<span class=\"work\">" + workLine(ij[0], ij[1]) + "</span>";
+        nextAsk(ctx); render1(ctx);
+      } });
+      ctx.padRow = el("div", { class: "board tight" }, [ctx.pad, ctx.note, el("div", { class: "row" }, [ctx.count, ctx.showMe, ctx.showAll, ctx.again])]);
+      // the question (step 2)
+      ctx.quiz = el("div", { class: "board" });
+      ctx.tools.appendChild(ctx.padRow);
+      ctx.tools.appendChild(ctx.quiz);
+      // the frame's slots
+      BLK.rows.forEach(function (i) {
+        BLK.cols.forEach(function (j) {
+          ctx.C.prodCells[i][j].addEventListener("click", function () {
+            if (cur.s !== 0 || cur.k !== 0 || S1.answers[key(i, j)]) return;
+            S1.active = key(i, j); S1.draft = ""; render1(ctx);
+          });
+        });
+      });
+    },
+    onkey: function (ctx, e) {
+      if (cur.k !== 0 || !S1.active) return false;
+      var k = e.key;
+      if (k === "Subtract" || k === MINUS || e.code === "Minus" || e.code === "NumpadSubtract") k = "-";
+      if (/^[0-9]$/.test(k) || k === "-" || k === "Backspace" || k === "Enter") { typeKey(ctx, k); return true; }
+      return false;
+    },
+    show: function (ctx, k, from) {
+      var C = ctx.C;
+      ctx.padRow.hidden = k !== 0;
+      ctx.quiz.hidden = k !== 1;
+      C.frame.style.opacity = k === 3 ? "0" : "1";
+      if (C.cuts) C.cuts.forEach(function (c) { c.classList.remove("on"); });
+      for (var i = 0; i < N; i++) for (var j = 0; j < N; j++) {
+        var inBlk = BLK.rows.indexOf(i) >= 0 && BLK.cols.indexOf(j) >= 0;
+        if (!inBlk) { C.prodCells[i][j].className = "n slot"; C.prodCells[i][j].textContent = ""; }
+      }
+      if (k >= 1) fillAll(ctx, true);
+      ghostOutside(C, BLK.rows, BLK.cols, k === 2);
+      if (k === 0) {
+        ctx.words.innerHTML = "Six customers and six films, two guessed numbers each. Their product is 36 predictions. " +
+          "<b>Compute the four in the frame.</b> Tap a <span class=\"rub\">?</span>, type the number, OK.";
+        if (!S1.active) nextAsk(ctx);
+        render1(ctx);
+      } else if (k === 1) {
+        bands(C, [], []);
+        buildQuiz(ctx);
+      } else if (k === 2) {
+        bands(C, BLK.rows, BLK.cols);
+        ctx.words.innerHTML = "Only <b class=\"rub\">two rows</b> of the customers' numbers and <b class=\"och\">two columns</b> of the films' numbers: " +
+          "8 of the 24. The other 16 were never needed for this frame.";
+      } else if (k === 3) {
+        ctx.words.innerHTML = "The same holds for every frame of 2 customers and 2 films: it needs its own two rows and its own two columns. " +
+          "Cut along the lines, and the 36 predictions fall into <b>nine jobs</b>.";
+        walkFrames(ctx, from === 2);
+      }
+    }
+  });
+
+  function nextAsk(ctx) {
+    var order = [[2, 2], [2, 3], [3, 2], [3, 3]];
+    for (var t = 0; t < order.length; t++) {
+      var kk = key(order[t][0], order[t][1]);
+      if (!S1.answers[kk]) { S1.active = kk; S1.draft = ""; return; }
+    }
+    S1.active = null;
+  }
+  function render1(ctx) {
+    var C = ctx.C, done = 0;
+    BLK.rows.forEach(function (i) {
+      BLK.cols.forEach(function (j) {
+        var c = C.prodCells[i][j], kk = key(i, j);
+        c.className = "n";
+        if (S1.answers[kk]) { setNum(c, P0[i][j]); done++; }
+        else {
+          c.classList.add("ask");
+          c.textContent = S1.active === kk && S1.draft ? S1.draft.replace("-", MINUS) : "?";
+          if (S1.active === kk) c.classList.add("active");
+          if (S1.active === kk && S1.draft) c.classList.add("draft");
+        }
+      });
+    });
+    if (cur.s === 0 && cur.k === 0) {
+      if (S1.active) {
+        var ij = S1.active.split(",").map(Number);
+        bands(C, [ij[0]], [ij[1]]);
+      } else bands(C, [], []);
+      if (done === 4) {
+        ctx.note.innerHTML = "All four. <b>Next:</b> which numbers did you use?";
+        ctx.words.innerHTML = "Six customers and six films, two guessed numbers each. Their product is 36 predictions. <b>The four in the frame are done.</b>";
+      }
+    }
+    ctx.count.textContent = done + " of 4";
+    ctx.showMe.hidden = !(S1.active && (S1.tries[S1.active] || 0) >= 2);
+    Array.prototype.forEach.call(ctx.pad.querySelectorAll("button"), function (b) { b.disabled = !S1.active; });
+  }
+  function typeKey(ctx, k) {
+    if (!S1.active) return;
+    var ij = S1.active.split(",").map(Number);
+    if (k === "Backspace") S1.draft = S1.draft.slice(0, -1);
+    else if (k === "-") S1.draft = S1.draft.indexOf("-") === 0 ? S1.draft.slice(1) : "-" + S1.draft;
+    else if (/^[0-9]$/.test(k)) { if (S1.draft.replace("-", "").length < 2) S1.draft += k; }
+    else if (k === "Enter") {
+      if (!S1.draft || S1.draft === "-") return;
+      var v = parseInt(S1.draft, 10);
+      if (v === P0[ij[0]][ij[1]]) {
+        S1.answers[S1.active] = true;
+        ctx.note.innerHTML = "<span class=\"work\">" + workLine(ij[0], ij[1]) + "</span>";
+        nextAsk(ctx);
+      } else {
+        S1.tries[S1.active] = (S1.tries[S1.active] || 0) + 1;
+        var t = S1.tries[S1.active];
+        var cell = ctx.C.prodCells[ij[0]][ij[1]];
+        ctx.note.innerHTML = t >= 2 ? "Not " + num(v) + " either. <b>Show me</b> gives the worked line." :
+          "Not " + num(v) + ". " + CUST[ij[0]] + "'s row times " + FILMS[ij[1]].t + "'s column: the first numbers multiplied, plus the second numbers multiplied.";
+        S1.draft = "";
+        render1(ctx);
+        cell.classList.add("wrong");
+        cell.textContent = num(v);
+        setTimeout(function () { if (cur.s === 0 && cur.k === 0) render1(ctx); }, 900);
+        return;
+      }
+    }
+    render1(ctx);
+  }
+  function fillAll(ctx, quiet) {
+    BLK.rows.forEach(function (i) { BLK.cols.forEach(function (j) { S1.answers[key(i, j)] = true; }); });
+    S1.active = null;
+    render1(ctx);
+    if (!quiet) ctx.note.innerHTML = "All four: " + BLK.rows.map(function (i) {
+      return BLK.cols.map(function (j) { return num(P0[i][j]); }).join(", ");
+    }).join(" and ") + ".";
+  }
+  function buildQuiz(ctx) {
+    var q = ctx.quiz;
+    q.innerHTML = "";
+    ctx.words.innerHTML = "<b>To fill the frame, how many of the 24 guessed numbers did you need?</b>";
+    var note = el("div", { class: "note" });
+    var row = el("div", { class: "choices" });
+    [24, 12, 8, 4].forEach(function (n) {
+      var b = el("button", { text: String(n), onclick: function () {
+        if (n === 8) {
+          b.classList.add("yes");
+          note.innerHTML = "Eight: the two numbers of Rosa and of Tim, the two numbers of The Intouchables and of Apollo 13.";
+          bands(ctx.C, BLK.rows, BLK.cols);
+        } else {
+          b.classList.add("no");
+          note.textContent = n > 8 ? "Fewer. Look at the rows and the columns that lit up while you computed." :
+            "More. Each prediction takes a whole row and a whole column.";
+        }
+      } });
+      row.appendChild(b);
+    });
+    q.appendChild(row);
+    q.appendChild(note);
+  }
+  function walkFrames(ctx, animate) {
+    var C = ctx.C, token = ctx.token;
+    ghostOutside(C, [], [], false);
+    if (!C.cuts) {
+      C.cuts = [];
+      // two cuts across the customers and the predictions, two down through the films and the predictions
+      [1, 2].forEach(function (b) {
+        var h = el("div", { class: "cut" });
+        h.style.gridRow = (5 + 2 * b) + " / span 1"; h.style.gridColumn = "1 / span 10";
+        h.style.alignSelf = "start"; h.style.height = "3px"; h.style.marginTop = "-4px";
+        C.cross.appendChild(h); C.cuts.push(h);
+        var v = el("div", { class: "cut" });
+        v.style.gridColumn = (5 + 2 * b) + " / span 1"; v.style.gridRow = "2 / span 9";
+        v.style.justifySelf = "start"; v.style.width = "3px"; v.style.marginLeft = "-4px";
+        C.cross.appendChild(v); C.cuts.push(v);
+      });
+    }
+    function frameAt(bi, bj) {
+      var rows = [2 * bi, 2 * bi + 1], cols = [2 * bj, 2 * bj + 1];
+      bands(C, rows, cols);
+      rows.forEach(function (i) { cols.forEach(function (j) { var c = C.prodCells[i][j]; c.className = "n"; setNum(c, P0[i][j]); }); });
+    }
+    function end() {
+      bands(C, [], []);
+      for (var i = 0; i < N; i++) for (var j = 0; j < N; j++) { var c = C.prodCells[i][j]; c.className = "n"; setNum(c, P0[i][j]); }
+      C.cuts.forEach(function (c) { c.classList.add("on"); });
+    }
+    if (!animate) { end(); return; }
+    var seq = Promise.resolve();
+    [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]].forEach(function (b) {
+      seq = seq.then(function () { frameAt(b[0], b[1]); return wait(650, token); });
+    });
+    seq.then(end, function () {});
+  }
+
+  /* SLIDES 2 and 3: the big picture and the computers */
+  var ROOM = 21;     // the memory of every computer, in numbers: a C computer's 4 ratings, 4 + 4 copies, 4 predictions, 4 losses, 1 sum
+  function blockRows(bi) { return [2 * bi, 2 * bi + 1]; }
+  function blockCols(bj) { return [2 * bj, 2 * bj + 1]; }
+
+  // grid lines of a panel of n customers by m films: names, 2 customers' columns, a gap, m predictions, a gap,
+  // m ratings, a gap, m losses; the films' pictures, 2 films' rows, a gap, n rows
+  function lay(n, m) {
+    return {
+      a: function (k) { return 2 + k; }, p: function (j) { return 5 + j; },
+      r: function (j) { return 6 + m + j; }, l: function (j) { return 7 + 2 * m + j; }, last: 6 + 3 * m,
+      b: function (k) { return 2 + k; }, row: function (i) { return 5 + i; }
+    };
+  }
+  function panel(kind, rows, cols) {
+    // kind "big" (the whole tables), "C" (a computer with a block), "A" (a customers' slice), "B" (a films' slice)
+    var n = rows.length, m = cols.length, L = lay(n, m);
+    var box = el("div", { class: kind === "big" ? "big" : "card k" + kind });
+    var hasA = kind !== "B", hasB = kind !== "A", hasC = kind === "big" || kind === "C", hasS = kind === "C";
+    var colsT = "var(--cw) repeat(2,var(--w))", rowsT = "var(--eh) repeat(2,var(--h))";
+    if (hasC || kind === "B") colsT += " var(--gg) repeat(" + m + ",var(--w))";
+    if (hasC) colsT += " var(--gg) repeat(" + m + ",var(--w)) var(--gg) repeat(" + m + ",var(--w))";
+    if (hasS) colsT += " var(--gg) var(--sw)";
+    if (hasA) rowsT += " var(--gg) repeat(" + n + ",var(--h))";
+    box.style.gridTemplateColumns = colsT;
+    box.style.gridTemplateRows = rowsT;
+    function put(e, r, c, rs, cs) {
+      e.style.gridRow = r + " / span " + (rs || 1);
+      e.style.gridColumn = c + " / span " + (cs || 1);
+      box.appendChild(e);
+      return e;
+    }
+    var P = { box: box, kind: kind, rows: rows, cols: cols, L: L, put: put, A: [], B: [], P: [], R: [], Lo: [], rowBand: [], colBand: [] };
+    // the bands first, so that the cells paint above them
+    if (hasA) rows.forEach(function (ci, i) { P.rowBand.push(put(el("div", { class: "band" }), L.row(i), 2, 1, hasC ? L.last - 1 : 2)); });
+    if (hasB) cols.forEach(function (fj, j) {
+      var bs = [put(el("div", { class: "band" }), 2, L.p(j), hasA ? 3 + n : 2, 1)];
+      if (hasC) { bs.push(put(el("div", { class: "band" }), L.row(0), L.r(j), n, 1)); bs.push(put(el("div", { class: "band" }), L.row(0), L.l(j), n, 1)); }
+      P.colBand.push(bs);
+    });
+    function slot(r, c, m, s) { return paint(put(el("div", { class: "n slot" }), r, c), m, s); }
+    if (hasA) rows.forEach(function (ci, i) {
+      put(el("div", { class: "who", text: CUST[ci] }), L.row(i), 1);
+      P.A.push([0, 1].map(function (k) { return slot(L.row(i), L.a(k), "u", sliceShade(ci >> 1)); }));
+    });
+    if (hasB) {
+      cols.forEach(function (fj, j) { put(el("div", { class: "film em", title: FILMS[fj].t, text: FILMS[fj].g }), 1, L.p(j)); });
+      P.B = [0, 1].map(function (k) { return cols.map(function (fj, j) { return slot(L.b(k), L.p(j), "v", sliceShade(fj >> 1)); }); });
+    }
+    if (hasC) {
+      rows.forEach(function (ci, i) {
+        P.P.push(cols.map(function (fj, j) { return slot(L.row(i), L.p(j), "p", blockShade(ci >> 1, fj >> 1)); }));
+        P.R.push(cols.map(function (fj, j) { return slot(L.row(i), L.r(j), "r", blockShade(ci >> 1, fj >> 1)); }));
+        P.Lo.push(cols.map(function (fj, j) { return slot(L.row(i), L.l(j), "l", blockShade(ci >> 1, fj >> 1)); }));
+      });
+      put(el("div", { class: "cap", text: "ratings" }), 2, L.r(0), 2, m);
+      put(el("div", { class: "cap", text: "losses" }), 2, L.l(0), 2, m);
+    }
+    if (hasS) {
+      put(el("div", { class: "cap", text: "sum" }), 2, L.last + 2, 2, 1);
+      P.sum = slot(L.row(0), L.last + 2, "l", blockShade(rows[0] >> 1, cols[0] >> 1));
+      P.sum.classList.add("sum");
+    }
+    if (kind !== "big") {
+      var corner = put(el("div", { class: "corner" }), 1, 1, 3, 3);
+      P.label = corner.appendChild(el("div", { class: "lab" }));
+      var mem = corner.appendChild(el("div", { class: "mem", title: "memory: " + ROOM + " numbers" }));
+      P.gauge = mem.appendChild(el("div", { class: "gauge" }));
+      for (var g = 0; g < ROOM; g++) P.gauge.appendChild(el("i"));
+      P.count = mem.appendChild(el("span"));
+    }
+    return P;
+  }
+  function cellTo(c, x, d) {
+    if (x === null || x === undefined) { c.className = "n slot"; c.textContent = ""; return; }
+    c.className = "n";
+    setNum(c, x, d);
+    if (c.textContent.indexOf(".") >= 0) c.classList.add("dec");
+  }
+  function lossTo(c, x, d) {
+    if (x === null || x === undefined) { c.className = "n slot"; c.textContent = ""; return; }
+    c.className = "n loss";
+    c.textContent = num(x, d);
+    if (c.textContent.indexOf(".") >= 0) c.classList.add("dec");
+    if (c.textContent === "0") c.classList.add("zero");
+  }
+  function fillPanel(P, U, V, what) {
+    // what: which parts hold their numbers ({A, B, R, P, L, S}); the other places stay empty
+    P.rows.forEach(function (ci, i) {
+      if (P.A.length) [0, 1].forEach(function (k) { cellTo(P.A[i][k], what.A ? U[ci][k] : null); });
+    });
+    if (P.B.length) [0, 1].forEach(function (k) { P.cols.forEach(function (fj, j) { cellTo(P.B[k][j], what.B ? V[fj][k] : null); }); });
+    var tot = 0;
+    if (P.P.length) P.rows.forEach(function (ci, i) {
+      P.cols.forEach(function (fj, j) {
+        var p = U[ci][0] * V[fj][0] + U[ci][1] * V[fj][1], l = Math.pow(G.R[ci][fj] - p, 2);
+        tot += l;
+        cellTo(P.R[i][j], what.R ? G.R[ci][fj] : null);
+        cellTo(P.P[i][j], what.P ? p : null);
+        lossTo(P.Lo[i][j], what.L ? l : null);
+      });
+    });
+    if (P.sum) { lossTo(P.sum, what.S ? tot : null); P.sum.classList.add("sum"); P.total = tot; }
+    gauge(P);
+  }
+  var GORDER = ["r", "u", "v", "p", "l"];      // the memory fills in the colours of what it holds, in this order
+  function gauge(P) {
+    if (!P.gauge) return;
+    var held = {}, marks = [];
+    Array.prototype.forEach.call(P.box.querySelectorAll(".n:not(.slot):not(.hide)"), function (c) {
+      var m = c.getAttribute("data-m");
+      held[m] = (held[m] || 0) + 1;
+    });
+    GORDER.forEach(function (m) { for (var t = 0; t < (held[m] || 0); t++) marks.push(m); });
+    for (var e = 0; e < (P.extra || 0); e++) marks.push("");
+    Array.prototype.forEach.call(P.gauge.children, function (g, t) {
+      g.className = t < marks.length ? "on" : "";
+      if (t < marks.length && marks[t]) g.setAttribute("data-m", marks[t]); else g.removeAttribute("data-m");
+    });
+    P.count.textContent = marks.length + "/" + ROOM;
+  }
+  function bandsP(P, rows, cols) {
+    P.rowBand.forEach(function (b, i) { b.className = "band" + (rows.indexOf(i) >= 0 ? " a" : ""); });
+    P.colBand.forEach(function (bs, j) { bs.forEach(function (b) { b.className = "band" + (cols.indexOf(j) >= 0 ? " b" : ""); }); });
+  }
+  function reveal(c) {
+    c.classList.remove("hide", "pop");
+    void c.offsetWidth;
+    c.classList.add("pop");
+  }
+  function ring(root, list) {
+    Array.prototype.forEach.call(root.querySelectorAll(".n.ring"), function (c) { c.classList.remove("ring"); });
+    list.forEach(function (c) { c.classList.add("ring"); });
+  }
+
+  // a copy of a cell travels to the place of another; the target stays hidden until the copy lands
+  var flying = [], running = [];
+  function stopMotion() {
+    flying.forEach(function (f) { if (f.clone.parentNode) f.clone.parentNode.removeChild(f.clone); });
+    flying = [];
+    running.forEach(function (a) { a.cancel(); });
+    running = [];
+  }
+  function track(a) {
+    // a Web Animation that a new step must cancel
+    running.push(a);
+    a.onfinish = function () { running = running.filter(function (x) { return x !== a; }); };
+    return a;
+  }
+  function reduced() { return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  function fly(from, to, ms, delay, token, done, keepTarget) {
+    // keepTarget: the target stays as it is (several copies land on it)
+    if (!keepTarget) to.classList.add("hide");
+    function start() {
+      if (token.dead) return;
+      var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+      var w = from.offsetWidth, h = from.offsetHeight;
+      if (reduced() || !a.width || !b.width || !w) { if (!keepTarget) to.classList.remove("hide"); if (done) done(); return; }
+      var c = from.cloneNode(true);
+      c.classList.remove("hide", "pop", "ring");
+      c.style.cssText = "position:fixed; left:" + a.left + "px; top:" + a.top + "px; width:" + w + "px; height:" + h +
+        "px; margin:0; transform-origin:0 0; z-index:60; pointer-events:none; font-size:" + getComputedStyle(from).fontSize +
+        "; border-radius:7px; box-shadow:0 6px 14px rgba(0,0,0,.2)";
+      document.body.appendChild(c);
+      var f = { clone: c };
+      flying.push(f);
+      // a copy that lands on a cell takes its size; a copy that joins a larger box keeps its own and goes to its centre
+      var end = keepTarget ?
+        "translate(" + (b.left + b.width / 2 - a.left - a.width / 2) + "px," + (b.top + b.height / 2 - a.top - a.height / 2) + "px) scale(" + (a.width / w) + "," + (a.height / h) + ")" :
+        "translate(" + (b.left - a.left) + "px," + (b.top - a.top) + "px) scale(" + (b.width / w) + "," + (b.height / h) + ")";
+      var anim = c.animate([
+        { transform: "translate(0px,0px) scale(" + (a.width / w) + "," + (a.height / h) + ")" },
+        { transform: end }
+      ], { duration: ms, easing: "cubic-bezier(.45,0,.2,1)", fill: "forwards" });
+      anim.onfinish = function () {
+        if (c.parentNode) c.parentNode.removeChild(c);
+        flying = flying.filter(function (x) { return x !== f; });
+        if (token.dead) return;
+        if (!keepTarget) to.classList.remove("hide");
+        if (done) done();
+      };
+    }
+    if (delay) setTimeout(start, delay); else start();
+  }
+
+  // a board too wide or too tall for the screen is scaled down as one picture
+  function refit() {
+    if (!ctx || !ctx.root) return;
+    var slideEl = ctx.root;
+    Array.prototype.forEach.call(slideEl.querySelectorAll(".fitbox"), function (box) {
+      if (box.hidden) return;
+      var inn = box.firstElementChild;
+      inn.style.transform = "translateX(-50%)";
+      var W = inn.offsetWidth, H = inn.offsetHeight;
+      box.style.height = H + "px";
+      var availH = stage.clientHeight - 26 - (slideEl.offsetHeight - H);
+      var sW = Math.min(box.max || 1.25, box.clientWidth / W);
+      var s = Math.min(sW, Math.max(availH / H, 0.55));
+      inn.style.transform = "translateX(-50%) scale(" + s + ")";
+      box.style.height = Math.ceil(H * s) + "px";
+      box.sc = s;
+    });
+    if (ctx.aim) ctx.aim();
+  }
+  window.addEventListener("resize", refit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+
+  /* SLIDES 2 and 3 share one board: the A computers (customers' slices) on the left, the B computers (films'
+     slices) on top, the C computers (blocks of ratings) in between, the average loss in the corner. Slide 2 ends on
+     the board with which slide 3 begins. */
+  function wordsRow(ctx) {
+    var head = ctx.root.appendChild(el("div", { class: "wordsrow" }));
+    ctx.words = head.appendChild(el("div", { class: "words" }));
+    return head;
+  }
+  function buildGrid(ctx) {
+    ctx.box = ctx.root.appendChild(el("div", { class: "fitbox" }));
+    ctx.fitin = ctx.box.appendChild(el("div", { class: "fitin" }));
+    var g = ctx.grid = ctx.fitin.appendChild(el("div", { class: "grid3" }));
+    ctx.avg = g.appendChild(el("div", { class: "avg" }, [el("div", { class: "cap", text: "average loss" }), el("div", { class: "ring" })]));
+    ctx.ringEl = ctx.avg.lastChild;
+    ctx.B = [0, 1, 2].map(function (bj) {
+      var b = panel("B", [], blockCols(bj));
+      b.label.textContent = "B" + (bj + 1);
+      g.appendChild(b.box);
+      return b;
+    });
+    ctx.A = [];
+    ctx.C = [[], [], []];
+    for (var bi = 0; bi < 3; bi++) {
+      var a = panel("A", blockRows(bi), []);
+      a.label.textContent = "A" + (bi + 1);
+      g.appendChild(a.box);
+      ctx.A.push(a);
+      for (var bj = 0; bj < 3; bj++) {
+        var c = panel("C", blockRows(bi), blockCols(bj));
+        c.label.textContent = "C" + (bi + 1) + (bj + 1);
+        g.appendChild(c.box);
+        ctx.C[bi].push(c);
+      }
+    }
+  }
+  function posIn(e, root) {
+    // the position of an element in the board's own coordinates (before its scale), whatever its transform
+    var x = 0, y = 0;
+    while (e && e !== root) {
+      x += e.offsetLeft; y += e.offsetTop;
+      var p = e.offsetParent;
+      if (p && p !== root) { x += p.clientLeft; y += p.clientTop; }
+      e = p;
+    }
+    return { x: x, y: y };
+  }
+
+  /* SLIDE 2: too large for one computer. Six steps of one animation: the ratings whole; cut into nine blocks that
+     move apart to their places on the grid; the computers C11 to C33 appear around them; the guessed numbers whole,
+     on the left of and above the computers; cut into slices that move to their places; the B and A computers
+     appear. A whole table is the computers' own cells moved together (a transform per cell). */
+  var WORDS2 = [
+    "The ratings: <b>36 numbers</b>. Gradient descent also keeps 24 guessed numbers, 36 predictions and 36 losses: " +
+      "132 numbers. A computer here has room for <b>21</b>.",
+    "Cut the ratings every 2 customers and every 2 films: <b>nine blocks</b> of 4 ratings, each moved to a place of its own.",
+    "Nine computers, <b>C11 to C33</b>, one per block. Each holds its 4 ratings and keeps room for its copies, its " +
+      "predictions and its losses.",
+    "The guessed numbers: the <b class=\"rub\">customers' numbers</b> on the left of the computers, the " +
+      "<b class=\"och\">films' numbers</b> above them.",
+    "Cut them too: the customers' numbers into 3 slices of 2 customers, the films' numbers into 3 slices of 2 films. " +
+      "Each slice lines up with a row or a column of computers.",
+    "Six more computers: <b>B1 to B3</b> hold the films' slices, <b>A1 to A3</b> the customers' slices. Every " +
+      "computer of the grid has its share."
+  ];
+  var STEPS2 = ["The ratings", "Nine blocks", "Nine computers", "The guessed numbers", "Six slices", "Six more computers"];
+  var WHOLE_R = 1.55;   // the whole ratings are drawn larger and shrink as they move to the computers
+  var EX = 26;          // how far the blocks and slices first move apart, in pixels
+  defineSlide({
+    title: "Too large for one computer",
+    steps: STEPS2,
+    build: function (ctx) {
+      var r = ctx.root;
+      r.classList.add("s2");
+      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 2" }), "Too large for one computer"]));
+      wordsRow(ctx);
+      buildGrid(ctx);
+      // the headers of the whole tables and their cut lines, over the board
+      function hdr(cls, text) { return ctx.fitin.appendChild(el("div", { class: "hdr off " + cls, text: text })); }
+      ctx.hdrR = CUST.map(function (n) { return hdr("hn lg", n); }).concat(FILMS.map(function (f) { return hdr("hf lg em", f.g); }));
+      ctx.hdrF = CUST.map(function (n) { return hdr("hn", n); }).concat(FILMS.map(function (f) { return hdr("hf em", f.g); }));
+      function cut() { return ctx.fitin.appendChild(el("div", { class: "cut cutx" })); }
+      ctx.cutR = [cut(), cut(), cut(), cut()];
+      ctx.cutF = [cut(), cut(), cut(), cut()];
+    },
+    show: function (ctx, k, from) {
+      ctx.words.innerHTML = WORDS2[k];
+      refit();
+      layout2(ctx);
+      if (from === k - 1 && !reduced()) ANIM2[k](ctx, ctx.token);
+      else state2(ctx, k);
+    }
+  });
+  function tf(dx, dy, s) { return "translate(" + dx.toFixed(1) + "px," + dy.toFixed(1) + "px)" + (s !== 1 ? " scale(" + s + ")" : ""); }
+  function place(e, x, y) { e.style.left = x.toFixed(1) + "px"; e.style.top = y.toFixed(1) + "px"; }
+  function cutAt(e, x, y, w, h) { place(e, x, y); e.style.width = w.toFixed(1) + "px"; e.style.height = h.toFixed(1) + "px"; }
+  function layout2(ctx) {
+    // where every cell stands in the whole tables, as a transform from its place on its computer
+    var R = ctx.fitin, gap = 4;
+    var c11 = posIn(ctx.C[0][0].box, R), last = ctx.C[2][2].box, c33 = posIn(last, R);
+    var cx = (c11.x + c33.x + last.offsetWidth) / 2, cy = (c11.y + c33.y + last.offsetHeight) / 2;
+    // the ratings, WHOLE_R times larger, centred on the nine C computers
+    var r0 = ctx.C[0][0].R[0][0], S = WHOLE_R, w = r0.offsetWidth * S, h = r0.offsetHeight * S;
+    var pw = w + gap * S, ph = h + gap * S, ax = cx - (6 * pw - gap * S) / 2, ay = cy - (6 * ph - gap * S) / 2;
+    ctx.wr = [];
+    eachC(ctx, function (c, bi, bj) {
+      [0, 1].forEach(function (i) {
+        [0, 1].forEach(function (j) {
+          var e = c.R[i][j], p = posIn(e, R), dx = ax + (2 * bj + j) * pw - p.x, dy = ay + (2 * bi + i) * ph - p.y;
+          ctx.wr.push({ e: e, b: 3 * bi + bj, whole: tf(dx, dy, S), ex: tf(dx + (bj - 1) * EX, dy + (bi - 1) * EX, S) });
+        });
+      });
+    });
+    for (var t = 0; t < 6; t++) {
+      place(ctx.hdrR[t], ax - 9, ay + t * ph + h / 2);
+      place(ctx.hdrR[6 + t], ax + t * pw + w / 2, ay - 7);
+    }
+    var tw = 6 * pw - gap * S, th = 6 * ph - gap * S;
+    [2, 4].forEach(function (q, t) {
+      cutAt(ctx.cutR[t], ax - 9, ay + q * ph - gap * S / 2 - 1.5, tw + 18, 3);
+      cutAt(ctx.cutR[2 + t], ax + q * pw - gap * S / 2 - 1.5, ay - 9, 3, th + 18);
+    });
+    // the customers' numbers in the A column and the films' numbers in the B row, both centred on the C computers
+    var a0 = ctx.A[0].A[0][0], aw = a0.offsetWidth, ah = a0.offsetHeight, apw = aw + gap, aph = ah + gap;
+    var ux = posIn(a0, R).x, uy = cy - (6 * aph - gap) / 2;
+    var b0 = ctx.B[0].B[0][0], bw = b0.offsetWidth, bh = b0.offsetHeight, bpw = bw + gap, bph = bh + gap;
+    var vx = cx - (6 * bpw - gap) / 2, vy = posIn(b0, R).y;
+    ctx.wf = [];
+    ctx.A.forEach(function (a, bi) {
+      [0, 1].forEach(function (i) {
+        [0, 1].forEach(function (k) {
+          var e = a.A[i][k], p = posIn(e, R), dx = ux + k * apw - p.x, dy = uy + (2 * bi + i) * aph - p.y;
+          ctx.wf.push({ e: e, b: bi, whole: tf(dx, dy, 1), ex: tf(dx, dy + (bi - 1) * EX, 1) });
+        });
+      });
+    });
+    ctx.B.forEach(function (b, bj) {
+      [0, 1].forEach(function (k) {
+        [0, 1].forEach(function (j) {
+          var e = b.B[k][j], p = posIn(e, R), dx = vx + (2 * bj + j) * bpw - p.x, dy = vy + k * bph - p.y;
+          ctx.wf.push({ e: e, b: bj, whole: tf(dx, dy, 1), ex: tf(dx + (bj - 1) * EX, dy, 1) });
+        });
+      });
+    });
+    for (var u = 0; u < 6; u++) {
+      place(ctx.hdrF[u], ux - 7, uy + u * aph + ah / 2);
+      place(ctx.hdrF[6 + u], vx + u * bpw + bw / 2, vy - 5);
+    }
+    [2, 4].forEach(function (q, t) {
+      cutAt(ctx.cutF[t], ux - 7, uy + q * aph - gap / 2 - 1.5, 2 * apw - gap + 14, 3);
+      cutAt(ctx.cutF[2 + t], vx + q * bpw - gap / 2 - 1.5, vy - 7, 3, 2 * bph - gap + 14);
+    });
+  }
+  function setT(list, whole) { list.forEach(function (w) { w.e.style.transform = whole ? w.whole : ""; }); }
+  function state2(ctx, k) {
+    // the board at the end of step k (k = -1: nothing yet, for the entry from slide 1)
+    var U = G.U0, V = G.V0;
+    eachC(ctx, function (c) {
+      fillPanel(c, U, V, { R: true });
+      bandsP(c, [], []);
+      c.box.classList.toggle("ghost", k < 2);
+      c.box.classList.toggle("show-r", k >= 0);
+    });
+    ctx.A.forEach(function (a) { fillPanel(a, U, V, { A: true }); });
+    ctx.B.forEach(function (b) { fillPanel(b, U, V, { B: true }); });
+    ctx.A.concat(ctx.B).forEach(function (p) {
+      bandsP(p, [], []);
+      p.box.classList.toggle("ghost", k < 5);
+      p.box.classList.toggle("show-f", k >= 3);
+    });
+    setT(ctx.wr, k <= 0);
+    setT(ctx.wf, k <= 3);
+    ctx.hdrR.forEach(function (e) { e.classList.toggle("off", k !== 0); });
+    ctx.hdrF.forEach(function (e) { e.classList.toggle("off", k !== 3); });
+    ctx.cutR.concat(ctx.cutF).forEach(function (e) { e.classList.remove("on"); });
+    ctx.avg.style.visibility = "hidden";
+  }
+  var ANIM2 = [
+    function (ctx, token) { state2(ctx, -1); wait(80, token).then(function () { state2(ctx, 0); }, function () {}); },
+    function (ctx, token) { split(ctx, token, ctx.wr, ctx.cutR, 1); },
+    function (ctx, token) { materialize(ctx, token, [].concat(ctx.C[0], ctx.C[1], ctx.C[2]), 2); },
+    function (ctx, token) { state2(ctx, 2); wait(80, token).then(function () { state2(ctx, 3); }, function () {}); },
+    function (ctx, token) { split(ctx, token, ctx.wf, ctx.cutF, 4); },
+    function (ctx, token) { materialize(ctx, token, ctx.B.concat(ctx.A), 5); }
+  ];
+  function split(ctx, token, list, cuts, k) {
+    // the cut lines; then every block or slice moves a little away from the others and slides to its place
+    state2(ctx, k - 1);
+    wait(150, token).then(function () {
+      cuts.forEach(function (e) { e.classList.add("on"); });
+      return wait(950, token);
+    }).then(function () {
+      state2(ctx, k);
+      list.forEach(function (w) {
+        var hold = 110 * w.b, tot = 550 + hold + 1250;
+        track(w.e.animate([
+          { transform: w.whole, easing: "cubic-bezier(.3,0,.25,1)" },
+          { transform: w.ex, offset: 550 / tot },
+          { transform: w.ex, offset: (550 + hold) / tot, easing: "cubic-bezier(.45,0,.2,1)" },
+          { transform: "none" }
+        ], { duration: tot }));
+      });
+    }, function () {});
+  }
+  function materialize(ctx, token, cards, k) {
+    // the computers appear around their numbers, one after the other
+    state2(ctx, k - 1);
+    var seq = wait(250, token);
+    cards.forEach(function (c) {
+      seq = seq.then(function () { c.box.classList.remove("ghost"); return wait(140, token); });
+    });
+    seq.then(null, function () {});
+  }
+
+  /* the paper grasshopper of the matchmaker (source/game/hopper.js, itself AML step 0's cut-out): the same parts and
+     the same seeds, so it is the same grasshopper */
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs, parent, cls) {
+    var e = document.createElementNS(SVGNS, tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (cls) e.setAttribute("class", cls);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function hashStr(s) {
+    var h = 2166136261;
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+  function rng(seed) {
+    var a = hashStr(String(seed));
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function cutPath(pts, seed, amp, step) {
+    var r = rng(seed), out = [], n = pts.length;
+    for (var i = 0; i < n; i++) {
+      var a = pts[i], b = pts[(i + 1) % n];
+      var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.sqrt(dx * dx + dy * dy) || 1;
+      var m = Math.max(1, Math.round(len / step)), nx = -dy / len, ny = dx / len;
+      out.push([a[0] + (r() - 0.5) * amp * 1.2, a[1] + (r() - 0.5) * amp * 1.2]);
+      for (var j = 1; j < m; j++) {
+        var f = j / m, o = (r() - 0.5) * 2 * amp;
+        out.push([a[0] + dx * f + nx * o, a[1] + dy * f + ny * o]);
+      }
+    }
+    return "M " + out.map(function (p) { return p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" L ") + " Z";
+  }
+  function strip(x1, y1, x2, y2, w) {
+    var dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx * dx + dy * dy) || 1;
+    var nx = -dy / len * w / 2, ny = dx / len * w / 2;
+    return [[x1 + nx, y1 + ny], [x2 + nx, y2 + ny], [x2 - nx, y2 - ny], [x1 - nx, y1 - ny]];
+  }
+  function disc(cx, cy, r, n) {
+    var p = [];
+    for (var i = 0; i < n; i++) p.push([cx + r * Math.cos(2 * Math.PI * i / n), cy + r * Math.sin(2 * Math.PI * i / n)]);
+    return p;
+  }
+  var HPARTS = [
+    ["h-deep", [[-2, -17], [3, -24], [-29, -47], [-38, -45], [-35, -39]], 0.7],
+    ["h-ink", strip(-35, -43, -50, -1, 3.4), 0.3],
+    ["h-ink", strip(-50, -1, -58, 0, 3), 0.2],
+    ["h-ink", strip(5, -14, 0, -6, 2.8), 0.25], ["h-ink", strip(0, -6, 6, 0, 2.8), 0.25],
+    ["h-ink", strip(18, -15, 22, -7, 2.8), 0.25], ["h-ink", strip(22, -7, 28, 0, 2.8), 0.25],
+    ["h-body", [[-48, -17], [-38, -23], [-22, -28], [-4, -31], [14, -33], [20, -32], [20, -16],
+                [4, -13], [-16, -12], [-34, -12], [-45, -13]], 0.9],
+    ["h-deep", [[14, -31], [-10, -30], [-36, -24], [-47, -18], [-34, -21], [-10, -26], [14, -27]], 0.5],
+    ["h-head", [[15, -34], [24, -38], [33, -35], [37, -27], [35, -19], [27, -13], [18, -15]], 0.7],
+    ["h-ink", strip(31, -35, 41, -49, 2.2), 0.2], ["h-ink", strip(41, -49, 57, -60, 2), 0.2],
+    ["h-eye", disc(28, -27, 4.4, 12), 0.25],
+    ["h-pupil", disc(29, -27, 2.1, 10), 0.1]
+  ];
+  var HOP_SIZE = 38;
+  function grasshopper() {
+    var s = el("span", { class: "hopper", "aria-hidden": "true" });
+    var v = svgEl("svg", { viewBox: "-61 -63 122 68", width: HOP_SIZE, height: (HOP_SIZE * 68 / 122).toFixed(1), focusable: "false" }, s);
+    var sh = svgEl("g", { transform: "translate(3,4)" }, v, "h-shade"), pp = svgEl("g", null, v, "h-paper");
+    HPARTS.forEach(function (p, i) {
+      var d = cutPath(p[1], "hopper-" + i, p[2], 7);
+      svgEl("path", { d: d }, sh);
+      svgEl("path", { d: d }, pp, p[0]);
+    });
+    return s;
+  }
+
+  /* the what-if of steps 8 to 10: one number of one B computer (data.js: hop), a hop of eps, the slope, the move */
+  function avgLoss(U, V) {
+    var t = 0;
+    for (var i = 0; i < N; i++) for (var j = 0; j < N; j++) t += Math.pow(G.R[i][j] - (U[i][0] * V[j][0] + U[i][1] * V[j][1]), 2);
+    return t / (N * N);
+  }
+  var HOP = { film: G.hop.film, k: G.hop.k, bj: Math.floor(G.hop.film / 2), j: G.hop.film % 2 };
+  var V1 = G.V0.map(function (r) { return r.slice(); });
+  V1[HOP.film][HOP.k] = Math.round((V1[HOP.film][HOP.k] + G.eps) * 1e9) / 1e9;
+  var W = { x0: G.V0[HOP.film][HOP.k], x1: V1[HOP.film][HOP.k], a0: avgLoss(G.U0, G.V0), a1: avgLoss(G.U0, V1) };
+  W.slope = (W.a1 - W.a0) / G.eps;
+  W.next = W.x0 - G.alpha * W.slope;
+  var VNEXT = G.V0.map(function (r) { return r.slice(); });
+  VNEXT[HOP.film][HOP.k] = W.next;
+  var HOPNAME = FILMS[HOP.film].t + (/s$/.test(FILMS[HOP.film].t) ? "' " : "'s ") + (HOP.k === 0 ? "first" : "second") + " number";
+  var COLC = "C1" + (HOP.bj + 1) + ", C2" + (HOP.bj + 1) + " and C3" + (HOP.bj + 1);
+
+  /* step 11: the run. RUN[r] holds both tables and the average loss after r rounds (r = 0 to G.play). A round as in
+     tools/make_data.py: every number's slope from a hop of eps at the same guess (in closed form, equal to the hop),
+     then every number moves at once to x - alpha * slope. */
+  function slopesAt(U, V) {
+    var P = predict(U, V), su = [], sv = [];
+    for (var i = 0; i < N; i++) su.push([0, 1].map(function (k) {
+      var t = 0;
+      for (var j = 0; j < N; j++) t += -2 * V[j][k] * (G.R[i][j] - P[i][j]) + G.eps * V[j][k] * V[j][k];
+      return t / (N * N);
+    }));
+    for (var j2 = 0; j2 < N; j2++) sv.push([0, 1].map(function (k) {
+      var t = 0;
+      for (var i2 = 0; i2 < N; i2++) t += -2 * U[i2][k] * (G.R[i2][j2] - P[i2][j2]) + G.eps * U[i2][k] * U[i2][k];
+      return t / (N * N);
+    }));
+    return { u: su, v: sv };
+  }
+  var RUN = (function () {
+    var U = G.U0, V = G.V0, out = [{ U: U, V: V, avg: avgLoss(U, V) }];
+    for (var r = 1; r <= G.play; r++) {
+      var s = slopesAt(U, V);
+      U = U.map(function (u, i) { return u.map(function (x, k) { return x - G.alpha * s.u[i][k]; }); });
+      V = V.map(function (v, j) { return v.map(function (x, k) { return x - G.alpha * s.v[j][k]; }); });
+      out.push({ U: U, V: V, avg: avgLoss(U, V) });
+    }
+    return out;
+  })();
+  function fmtAvg(a) { return num(a, a < 0.1 ? 4 : 2); }
+  function roundText(r) { return "round " + r + " of " + G.play + (r === G.play ? ": the average loss stops falling" : ""); }
+  var CH = { w: 186, h: 90, x0: 32, x1: 176, y0: 20, y1: 68 };
+  function chartX(t) { return CH.x0 + (CH.x1 - CH.x0) * t / G.play; }
+  function chartY(a) { return CH.y1 - (CH.y1 - CH.y0) * a / RUN[0].avg; }
+  function buildChart() {
+    var box = el("div", { class: "chart" });
+    var s = svgEl("svg", { viewBox: "0 0 " + CH.w + " " + CH.h, width: CH.w, height: CH.h, "aria-label": "average loss, round by round" });
+    box.appendChild(s);
+    function txt(x, y, t, cls, anchor) { svgEl("text", { x: x, y: y, "text-anchor": anchor || "start" }, s, cls).textContent = t; }
+    txt(CH.x0, 13, "average loss", "ct");
+    svgEl("line", { x1: CH.x0, y1: CH.y1, x2: CH.x1, y2: CH.y1 }, s, "ax");
+    svgEl("line", { x1: CH.x0, y1: CH.y0, x2: CH.x0, y2: CH.y1 }, s, "ax");
+    txt(CH.x0 - 4, CH.y0 + 3, num(RUN[0].avg, 2), "tk", "end");
+    txt(CH.x0 - 4, CH.y1 + 3, "0", "tk", "end");
+    txt(CH.x0, CH.y1 + 14, "0", "tk", "middle");
+    txt(CH.x1, CH.y1 + 14, String(G.play), "tk", "middle");
+    txt((CH.x0 + CH.x1) / 2, CH.y1 + 14, "round", "tk", "middle");
+    return { box: box, line: svgEl("polyline", { points: "" }, s, "cl"), dot: svgEl("circle", { r: 3.2 }, s, "cd") };
+  }
+  function chartAt(ch, r) {
+    var pts = [];
+    for (var t = 0; t <= r; t++) pts.push(chartX(t).toFixed(1) + "," + chartY(RUN[t].avg).toFixed(1));
+    ch.line.setAttribute("points", pts.join(" "));
+    ch.dot.setAttribute("cx", chartX(r).toFixed(1));
+    ch.dot.setAttribute("cy", chartY(RUN[r].avg).toFixed(1));
+  }
+  function paren(x, d) { var t = num(x, d); return x < 0 ? "(" + t + ")" : t; }
+
+  /* SLIDE 3: gradient descent on the grid, on slide 2's board. Its steps start where slide 2 ends: inside show(),
+     k counts from the first of the 11 steps of Carlos's sketch, whose steps 1 to 3 (the ratings, the films' and the
+     customers' numbers placed on the computers) are slide 2's; k 3 is this slide's first step. */
+  var WORDS3 = [
+    "<b>1.</b> Every A computer sends a copy of its numbers to the 3 C computers of its row.",
+    "<b>2.</b> Every B computer sends a copy of its numbers to the 3 C computers of its column.",
+    "<b>3.</b> Every C computer multiplies its two copies: its 4 predictions.",
+    "<b>4.</b> Every C computer computes its 4 losses and their sum. The nine sums divided by 36 give the average loss.",
+    "<b>5.</b> One grasshopper on B" + (HOP.bj + 1) + " tries a small change of " + HOPNAME + ": from " +
+      num(W.x0) + " to " + num(W.x1) + ".",
+    "Only the C computers of B" + (HOP.bj + 1) + "'s column use that number: " + COLC + ". Each gets the new copy and " +
+      "recomputes 2 predictions, 2 losses and its sum. The other computers wait.",
+    "The three new sums go to B" + (HOP.bj + 1) + ". With the six other sums unchanged, the average loss goes from " +
+      num(W.a0, 2) + " to " + num(W.a1, 4) + ".",
+    "<b>6.</b> The slope: the change of the loss divided by the change of the number, (" + num(W.a1, 4) + " " + MINUS + " " +
+      num(W.a0, 2) + ") / " + num(G.eps) + " = " + num(W.slope, 2) + ".",
+    "<b>7.</b> B" + (HOP.bj + 1) + " moves the number against the slope, " + num(G.alpha) + " times the slope: " + num(W.x0) + " " +
+      MINUS + " " + num(G.alpha) + " " + TIMES + " " + paren(W.slope, 2) + " = " + num(W.next, 2) + ". " + COLC +
+      " go back to the old copy, " + num(W.x0) + ".",
+    "<b>8.</b> Round after round: every number of A and B does its what-if and moves, the copies go out, the C computers " +
+      "predict. The predictions come close to the ratings."
+  ];
+  var STEPS3 = ["Copies along the rows", "Copies down the columns", "Predictions", "Losses", "One small change",
+    "Only one column", "The loss before and after", "The slope", "The update", "The run"];
+  var ORDER = [[0, 0], [0, 1], [1, 0], [1, 1]];
+  function eachC(ctx, f) { for (var bi = 0; bi < 3; bi++) for (var bj = 0; bj < 3; bj++) f(ctx.C[bi][bj], bi, bj); }
+  function avgOf(ctx) { var t = 0; eachC(ctx, function (c) { t += c.total; }); return t / 36; }
+  function popEl(e) {
+    if (reduced()) return;
+    e.animate([{ transform: "scale(.5)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: 0.7 }, { transform: "scale(1)", opacity: 1 }],
+      { duration: 450, easing: "ease-out" });
+  }
+
+  defineSlide({
+    title: "Gradient descent on the grid",
+    steps: STEPS3,
+    onkey: function (ctx, e) {
+      if (ctx.k !== 12 || e.key !== " " || (e.target && e.target.tagName === "BUTTON")) return false;
+      toggleRun(ctx);
+      return true;
+    },
+    build: function (ctx) {
+      var r = ctx.root;
+      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 3" }), "Gradient descent on the grid"]));
+      var head = wordsRow(ctx);
+      // step 11's controls, on the right of the words: Play, Pause, Replay and the round
+      ctx.run = { r: 0, playing: false, gen: 0 };
+      ctx.ctl = head.appendChild(el("div", { class: "ctl" }));
+      ctx.playBtn = ctx.ctl.appendChild(el("button", { class: "btn", onclick: function () { toggleRun(ctx); } }, ["Play"]));
+      ctx.roundEl = ctx.ctl.appendChild(el("span", { text: roundText(0) }));
+      buildGrid(ctx);
+      // the grasshopper stands on B2's card above its number; the what-if sits on the right of B2, above C12's ratings
+      var b2 = ctx.B[HOP.bj];
+      ctx.hop = b2.box.appendChild(grasshopper());
+      ctx.wif = b2.box.appendChild(el("div", { class: "wif" }));
+      ctx.wifRows = [
+        ["number", [num(W.x0), ARROW, num(W.x1)], ""],
+        ["average loss", [num(W.a0, 2), ARROW, num(W.a1, 4)], "loss"],
+        ["slope", [num(W.slope, 2)], "sl"],
+        ["new number", [num(W.next, 2)], "mv"]
+      ].map(function (r) {
+        var lab = ctx.wif.appendChild(el("div", { class: "lab", text: r[0] }));
+        var v = ctx.wif.appendChild(el("div", { class: "v " + r[2] }));
+        r[1].forEach(function (x) { v.appendChild(x === ARROW ? el("span", { class: "to", text: ARROW }) : document.createTextNode(x)); });
+        return { lab: lab, v: v };
+      });
+      ctx.chart = buildChart();
+      ctx.B[2].box.appendChild(ctx.chart.box);
+      ctx.aim = function () { aim(ctx, ctx.shot || "full", false); };
+    },
+    show: function (ctx, step, prev) {
+      var k = step + 3, from = prev === null ? null : prev + 3;     // see the note above WORDS3
+      var U = G.U0, V = G.V0;
+      var trial = k >= 8 && k <= 10;          // the C computers of B2's column hold the tried number
+      ctx.words.innerHTML = WORDS3[step];
+      ctx.B.forEach(function (b, bj) {
+        var mine = bj === HOP.bj;
+        b.extra = mine ? (k >= 10 ? 4 : k >= 9 ? 3 : k >= 7 ? 1 : 0) : 0;   // B2 keeps the old number, the two averages, the slope
+        fillPanel(b, U, mine && k >= 7 ? (k >= 11 ? VNEXT : V1) : V, { B: true });
+        bandsP(b, [], mine && k >= 7 && k <= 10 ? [HOP.j] : []);
+      });
+      if (k >= 7) hopCell(ctx).classList.add(k >= 11 ? "moved" : "tried");
+      ctx.A.forEach(function (a) { fillPanel(a, U, V, { A: true }); bandsP(a, [], []); });
+      eachC(ctx, function (c, bi, bj) {
+        var inCol = trial && bj === HOP.bj;
+        fillPanel(c, U, inCol ? V1 : V, { R: true, A: k >= 3, B: k >= 4, P: k >= 5, L: k >= 6, S: k >= 6 });
+        bandsP(c, [], inCol ? [HOP.j] : []);
+        if (inCol) c.B[HOP.k][HOP.j].classList.add("tried");
+      });
+      dimOthers(ctx, k >= 7 && k <= 10);     // B2 and its column play the what-if; the update (k 11) ends with all back
+      ctx.box.classList.toggle("cam", k >= 7 && k <= 11);
+      ctx.avg.style.visibility = k >= 6 ? "" : "hidden";
+      ctx.ringEl.textContent = num(trial ? W.a0 : avgOf(ctx), 2);     // the what-if leaves the average loss as it was
+      ctx.ringEl.style.visibility = "";
+      ctx.k = k;
+      ctx.hop.style.visibility = k >= 7 && k <= 11 ? "" : "hidden";
+      ctx.wif.style.visibility = k >= 7 && k <= 11 ? "" : "hidden";
+      ctx.wifRows.forEach(function (r, t) { rowOn(r, k >= [7, 9, 10, 11][t]); });
+      ctx.chart.box.style.visibility = k === 12 ? "" : "hidden";
+      ctx.ctl.hidden = k !== 12;
+      ctx.run.playing = false;
+      ctx.run.gen++;
+      if (k === 12) runStart(ctx);
+      ring(ctx.root, []);
+      refit();
+      placeHop(ctx);
+      // the camera: close on B2 at k 7 and k 10, the whole board otherwise; k 11 arrives close and update() pulls back
+      var arrive = from === k - 1;
+      aim(ctx, arrive && k === 11 ? "close" : shotOf(k), arrive && (k === 7 || k === 8 || k === 10));
+      if (!arrive) return;
+      if (k === 12) playRun(ctx);
+      if (k === 3) copies(ctx, "A");
+      if (k === 4) copies(ctx, "B");
+      if (k === 5) predictAll(ctx);
+      if (k === 6) lossesAll(ctx);
+      if (k === 7) hopTries(ctx);
+      if (k === 8) tryColumn(ctx);
+      if (k === 9) sumsToB(ctx);
+      if (k === 10) popRow(ctx, 2, CAM_MS + 100);
+      if (k === 11) update(ctx);
+    }
+  });
+
+  /* step 11: the run, round after round */
+  function runStart(ctx) {
+    // the board as step 10 leaves it: B2's number moved, every other number and every copy as at the start
+    ctx.run.r = 0;
+    ctx.run.busy = false;
+    ctx.B.forEach(function (b) { fillPanel(b, G.U0, VNEXT, { B: true }); bandsP(b, [], []); });
+    hopCell(ctx).classList.add("moved");
+    ctx.A.forEach(function (a) { fillPanel(a, G.U0, G.V0, { A: true }); bandsP(a, [], []); });
+    eachC(ctx, function (c) { fillPanel(c, G.U0, G.V0, FULL); bandsP(c, [], []); });
+    ctx.ringEl.textContent = fmtAvg(RUN[0].avg);
+    chartAt(ctx.chart, 0);
+    ctx.roundEl.textContent = roundText(0);
+    runButton(ctx);
+  }
+  function runShow(ctx, r) {
+    var st = RUN[r];
+    ctx.B.forEach(function (b) { fillPanel(b, st.U, st.V, { B: true }); });
+    ctx.A.forEach(function (a) { fillPanel(a, st.U, st.V, { A: true }); });
+    eachC(ctx, function (c) { fillPanel(c, st.U, st.V, FULL); });
+    ctx.ringEl.textContent = fmtAvg(st.avg);
+    chartAt(ctx.chart, r);
+    ctx.roundEl.textContent = roundText(r);
+  }
+  function runButton(ctx) {
+    ctx.playBtn.textContent = ctx.run.playing ? "Pause" : ctx.run.r >= G.play ? "Replay" : "Play";
+  }
+  function toggleRun(ctx) {
+    if (ctx.run.playing) { ctx.run.playing = false; ctx.run.gen++; runButton(ctx); return; }
+    if (ctx.run.r >= G.play) runStart(ctx);
+    playRun(ctx);
+  }
+  function playRun(ctx) {
+    // round 1 in full (the moves, the copies, the predictions, the losses, the sums), then the rounds faster and faster
+    ctx.run.playing = true;
+    runButton(ctx);
+    tick(ctx, ctx.token, ++ctx.run.gen);
+  }
+  function tick(ctx, token, gen) {
+    if (token.dead || ctx.run.gen !== gen || !ctx.run.playing || ctx.run.busy) return;
+    var r = ctx.run.r;
+    if (r >= G.play) { ctx.run.playing = false; runButton(ctx); return; }
+    if (r === 0) {
+      ctx.run.busy = true;
+      round1(ctx, token).then(function () {
+        if (token.dead) return;
+        ctx.run.busy = false;
+        ctx.run.r = 1;
+        if (ctx.run.playing) later(ctx, token, ctx.run.gen); else runButton(ctx);
+      }, function () {});
+      return;
+    }
+    ctx.run.r = r + 1;
+    runShow(ctx, r + 1);
+    later(ctx, token, gen);
+  }
+  function later(ctx, token, gen) {
+    var r = ctx.run.r;
+    if (r >= G.play) { ctx.run.playing = false; runButton(ctx); return; }
+    setTimeout(function () { tick(ctx, token, gen); }, r === 1 ? 1100 : r < 5 ? 650 : r < 20 ? 260 : 110);
+  }
+  function round1(ctx, token) {
+    var s0 = RUN[0], s1 = RUN[1], hc = hopCell(ctx), moved = [], gs = [];
+    ctx.A.forEach(function (a) { a.rows.forEach(function (ci, i) { [0, 1].forEach(function (k) { moved.push([a.A[i][k], s1.U[ci][k]]); }); }); });
+    ctx.B.forEach(function (b) { b.cols.forEach(function (fj, j) { [0, 1].forEach(function (k) { if (b.B[k][j] !== hc) moved.push([b.B[k][j], s1.V[fj][k]]); }); }); });
+    return wait(500, token).then(function () {
+      // every other number of A and B does its what-if and moves, all at once
+      moved.forEach(function (m) { cellTo(m[0], m[1]); m[0].classList.add("moved"); reveal(m[0]); });
+      return wait(1500, token);
+    }).then(function () {
+      // the copies go out again; the predictions, losses and sums wait for them
+      Array.prototype.forEach.call(ctx.root.querySelectorAll(".n.moved"), function (c) { c.classList.remove("moved"); });
+      eachC(ctx, function (c) {
+        fillPanel(c, s1.U, s1.V, FULL);
+        var cells = [].concat(c.P[0], c.P[1], c.Lo[0], c.Lo[1], [c.sum]);
+        gs.push({ cells: cells, fin: cells.map(snap) });
+        fillPanel(c, s0.U, s0.V, FULL);
+        c.rows.forEach(function (ci, i) { [0, 1].forEach(function (k) { cellTo(c.A[i][k], s1.U[ci][k]); }); });
+        c.cols.forEach(function (fj, j) { [0, 1].forEach(function (k) { cellTo(c.B[k][j], s1.V[fj][k]); }); });
+      });
+      copies(ctx, "A");
+      copies(ctx, "B");
+      return wait(3000, token);
+    }).then(function () {
+      gs.forEach(function (g) { for (var t = 0; t < 4; t++) unsnap(g.cells[t], g.fin[t], true); });
+      return wait(800, token);
+    }).then(function () {
+      gs.forEach(function (g) { for (var t = 4; t < 8; t++) unsnap(g.cells[t], g.fin[t], true); });
+      return wait(800, token);
+    }).then(function () {
+      gs.forEach(function (g) { unsnap(g.cells[8], g.fin[8], true); });
+      return wait(700, token);
+    }).then(function () {
+      return new Promise(function (res) {
+        var landed = whenAll(9, res);
+        eachC(ctx, function (c, bi, bj) { fly(c.sum, ctx.ringEl, 800, 90 * (3 * bi + bj), token, landed, true); });
+      });
+    }).then(function () {
+      ctx.ringEl.textContent = fmtAvg(s1.avg);
+      popEl(ctx.ringEl);
+      chartAt(ctx.chart, 1);
+      ctx.roundEl.textContent = roundText(1);
+    });
+  }
+
+  /* the camera of the what-if (Carlos, feedback on version 5: zoom in and grey the others a little while the
+     grasshopper's what-if plays, then scale back). The column of B2 is as tall as the board, so no zoom holds all of
+     it: the camera goes close on B2 (its number, the grasshopper, the what-if box, C12 under it) when the action is
+     there (k 7, k 10, the start of k 11) and shows the whole board when the column acts (k 8, k 9). */
+  var CAM_MS = 900, ZOOM_MAX = 2, ZOOM_ABS = 2, HEADROOM = 20;
+  function shotOf(k) { return k === 7 || k === 10 ? "close" : "full"; }
+  function region(ctx, els) {
+    var r = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+    els.forEach(function (e) {
+      var p = posIn(e, ctx.fitin);
+      r.x0 = Math.min(r.x0, p.x); r.y0 = Math.min(r.y0, p.y);
+      r.x1 = Math.max(r.x1, p.x + e.offsetWidth); r.y1 = Math.max(r.y1, p.y + e.offsetHeight);
+    });
+    return r;
+  }
+  function camera(ctx, shot) {
+    // the board's transform for a shot, in the coordinates of .fitin before refit's scale
+    if (shot !== "close" || ctx.box.hidden || !ctx.box.sc) return "none";
+    var s = ctx.box.sc, W = ctx.fitin.offsetWidth, H = ctx.fitin.offsetHeight;
+    var vx0 = W / 2 - ctx.box.clientWidth / (2 * s), vx1 = W / 2 + ctx.box.clientWidth / (2 * s), vy0 = 0, vy1 = ctx.box.clientHeight / s;
+    var F = region(ctx, [ctx.B[HOP.bj].box, ctx.wif, ctx.hop, ctx.C[0][HOP.bj].box]);
+    F.y0 -= HEADROOM;                                   // room for the grasshopper's jump
+    var z = Math.min(ZOOM_MAX, ZOOM_ABS / s, 0.94 * (vx1 - vx0) / (F.x1 - F.x0), 0.94 * (vy1 - vy0) / (F.y1 - F.y0));
+    if (z <= 1.02) return "none";
+    var tx = (vx0 + vx1) / 2 - z * (F.x0 + F.x1) / 2, ty = (vy0 + vy1) / 2 - z * (F.y0 + F.y1) / 2;
+    // sideways the board covers the box; downwards it reaches the box's bottom
+    tx = z * W >= vx1 - vx0 ? Math.min(vx0, Math.max(vx1 - z * W, tx)) : Math.max(vx0, Math.min(vx1 - z * W, tx));
+    ty = Math.max(ty, vy1 - z * H);
+    return "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + z.toFixed(4) + ")";
+  }
+  function aim(ctx, shot, animate) {
+    // set the camera for a shot; with animate, the board travels there from where it is now
+    var g = ctx.grid, to = camera(ctx, shot), was = getComputedStyle(g).transform;
+    ctx.shot = shot;
+    g.style.transform = to === "none" ? "" : to;
+    if (!animate || reduced() || (was === "none" && to === "none")) return;
+    track(g.animate([{ transform: was }, { transform: to }], { duration: CAM_MS, easing: "cubic-bezier(.45,0,.2,1)" }));
+  }
+
+  /* steps 8 to 10: the grasshopper's what-if */
+  var FULL = { R: true, A: true, B: true, P: true, L: true, S: true };
+  function hopCell(ctx) { return ctx.B[HOP.bj].B[HOP.k][HOP.j]; }
+  function colCards(ctx) { return [0, 1, 2].map(function (bi) { return ctx.C[bi][HOP.bj]; }); }
+  function trialCells(c) {
+    // the cells of a C computer that the tried number changes: its copy, 2 predictions, 2 losses, the sum
+    var j = HOP.j;
+    return [c.B[HOP.k][j], c.P[0][j], c.P[1][j], c.Lo[0][j], c.Lo[1][j], c.sum];
+  }
+  function dimOthers(ctx, on) {
+    // during the what-if only B2 and the C computers of its column work
+    ctx.A.forEach(function (a) { a.box.classList.toggle("dim", on); });
+    ctx.B.forEach(function (b, bj) { b.box.classList.toggle("dim", on && bj !== HOP.bj); });
+    eachC(ctx, function (c, bi, bj) { c.box.classList.toggle("dim", on && bj !== HOP.bj); });
+  }
+  function rowOn(r, on) { r.lab.classList.toggle("off", !on); r.v.classList.toggle("off", !on); }
+  function snap(c) { return { x: c.textContent, cls: c.className }; }
+  function unsnap(c, s, pop) {
+    c.textContent = s.x;
+    c.className = s.cls;
+    if (pop) reveal(c);
+  }
+  function placeHop(ctx) {
+    var c = hopCell(ctx), h = HOP_SIZE * 68 / 122;
+    ctx.hop.style.left = (c.offsetLeft + c.offsetWidth / 2 - HOP_SIZE / 2) + "px";
+    ctx.hop.style.top = (-h + 2) + "px";
+  }
+  function jump(ctx) {
+    if (reduced()) return;
+    ctx.hop.animate([{ transform: "none" }, { transform: "translateY(-15px) rotate(-8deg)", offset: 0.45 }, { transform: "none" }],
+      { duration: 520, easing: "ease-in-out" });
+  }
+  function hopTries(ctx) {
+    // the grasshopper lands on B2, jumps, and the number becomes the tried one
+    var token = ctx.token, hc = hopCell(ctx), fin = snap(hc), r = ctx.wifRows[0];
+    cellTo(hc, W.x0);
+    ctx.hop.style.visibility = "hidden";
+    ctx.wif.style.visibility = "hidden";
+    rowOn(r, false);
+    wait(CAM_MS - 100, token).then(function () {
+      ctx.hop.style.visibility = "";
+      if (!reduced()) ctx.hop.animate([{ transform: "translateY(-30px)", opacity: 0 }, { transform: "none", opacity: 1 }],
+        { duration: 520, easing: "cubic-bezier(.3,0,.2,1)" });
+      return wait(850, token);
+    }).then(function () {
+      jump(ctx);
+      return wait(480, token);
+    }).then(function () {
+      unsnap(hc, fin, true);
+      return wait(650, token);
+    }).then(function () {
+      ctx.wif.style.visibility = "";
+      rowOn(r, true);
+      popEl(ctx.wif);
+    }, function () {});
+  }
+  function tryColumn(ctx) {
+    // the tried number goes down B2's column; each C computer there recomputes its predictions, losses and sum
+    var token = ctx.token, hc = hopCell(ctx), cs = colCards(ctx);
+    var gs = cs.map(function (c) { var all = trialCells(c); return { all: all, fin: all.map(snap) }; });
+    cs.forEach(function (c) { fillPanel(c, G.U0, G.V0, FULL); });
+    // once the three copies have landed: the predictions, then the losses, then the sums
+    var landed = whenAll(3, function () {
+      var seq = wait(350, token);
+      [[1, 2], [3, 4], [5]].forEach(function (part) {
+        seq = seq.then(function () {
+          gs.forEach(function (g) { part.forEach(function (t) { unsnap(g.all[t], g.fin[t], true); }); });
+          return wait(800, token);
+        });
+      });
+      seq.then(null, function () {});
+    });
+    cs.forEach(function (c, bi) {
+      var g = gs[bi];
+      fly(hc, g.all[0], 700 + 220 * bi, CAM_MS + 100 + 140 * bi, token, function () { unsnap(g.all[0], g.fin[0], false); landed(); });
+    });
+  }
+  function whenAll(n, f) { var left = n; return function () { if (--left === 0) f(); }; }
+  function sumsToB(ctx) {
+    // the three new sums fly to B2's what-if: the average loss after the change
+    var token = ctx.token, r = ctx.wifRows[1];
+    rowOn(r, false);
+    var landed = whenAll(3, function () { rowOn(r, true); popEl(r.v); });
+    colCards(ctx).forEach(function (c, bi) { fly(c.sum, r.v, 850, 300 + 170 * bi, token, landed, true); });
+  }
+  function popRow(ctx, t, ms) {
+    var token = ctx.token, r = ctx.wifRows[t];
+    rowOn(r, false);
+    wait(ms || 400, token).then(function () { rowOn(r, true); popEl(r.v); }, function () {});
+  }
+  function update(ctx) {
+    // the new number appears, B2's number jumps to it; the camera scales back, the column drops the tried number,
+    // then the other computers come back
+    var token = ctx.token, hc = hopCell(ctx), fin = snap(hc), r = ctx.wifRows[3], cs = colCards(ctx);
+    var gs = cs.map(function (c) { var all = trialCells(c); return { all: all, fin: all.map(snap) }; });
+    cellTo(hc, W.x1);
+    hc.classList.add("tried");
+    cs.forEach(function (c) { fillPanel(c, G.U0, V1, FULL); c.B[HOP.k][HOP.j].classList.add("tried"); bandsP(c, [], [HOP.j]); });
+    dimOthers(ctx, true);
+    rowOn(r, false);
+    wait(400, token).then(function () {
+      rowOn(r, true);
+      popEl(r.v);
+      return wait(800, token);
+    }).then(function () {
+      jump(ctx);
+      return wait(480, token);
+    }).then(function () {
+      unsnap(hc, fin, true);
+      return wait(800, token);
+    }).then(function () {
+      aim(ctx, "full", true);
+      return wait(CAM_MS + 200, token);
+    }).then(function () {
+      gs.forEach(function (g) { g.all.forEach(function (c, t) { unsnap(c, g.fin[t], true); }); });
+      cs.forEach(function (c) { bandsP(c, [], []); });
+      return wait(700, token);
+    }).then(function () {
+      dimOthers(ctx, false);
+    }, function () {});
+  }
+  function copies(ctx, side) {
+    // every A computer sends a copy along its row, every B computer down its column; the copies land in the C computers
+    var token = ctx.token, src = side === "A" ? ctx.A : ctx.B;
+    src.forEach(function (s) { bandsP(s, side === "A" ? [0, 1] : [], side === "A" ? [] : [0, 1]); });
+    eachC(ctx, function (c, bi, bj) {
+      var s = side === "A" ? ctx.A[bi] : ctx.B[bj], far = side === "A" ? bj : bi, near = side === "A" ? bi : bj;
+      ORDER.forEach(function (ik, t) {
+        var from = side === "A" ? s.A[ik[0]][ik[1]] : s.B[ik[0]][ik[1]];
+        var to = side === "A" ? c.A[ik[0]][ik[1]] : c.B[ik[0]][ik[1]];
+        fly(from, to, 650 + 230 * far, 250 + 300 * near + 45 * t, token, function () { gauge(c); });
+      });
+    });
+    eachC(ctx, function (c) { gauge(c); });
+    wait(2900, token).then(function () { src.forEach(function (s) { bandsP(s, [], []); }); }, function () {});
+  }
+  function predictAll(ctx) {
+    var token = ctx.token;
+    eachC(ctx, function (c) { ORDER.forEach(function (ij) { c.P[ij[0]][ij[1]].classList.add("hide"); }); gauge(c); });
+    var seq = wait(400, token);
+    ORDER.forEach(function (ij) {
+      seq = seq.then(function () {
+        eachC(ctx, function (c) { bandsP(c, [ij[0]], [ij[1]]); reveal(c.P[ij[0]][ij[1]]); gauge(c); });
+        return wait(850, token);
+      });
+    });
+    seq.then(function () { eachC(ctx, function (c) { bandsP(c, [], []); }); }, function () {});
+  }
+  function lossesAll(ctx) {
+    var token = ctx.token;
+    eachC(ctx, function (c) { ORDER.forEach(function (ij) { c.Lo[ij[0]][ij[1]].classList.add("hide"); }); c.sum.classList.add("hide"); gauge(c); });
+    ctx.ringEl.style.visibility = "hidden";
+    var seq = wait(400, token);
+    ORDER.forEach(function (ij) {
+      seq = seq.then(function () {
+        var rings = [];
+        eachC(ctx, function (c) { rings.push(c.P[ij[0]][ij[1]], c.R[ij[0]][ij[1]]); reveal(c.Lo[ij[0]][ij[1]]); gauge(c); });
+        ring(ctx.root, rings);
+        return wait(700, token);
+      });
+    });
+    seq = seq.then(function () {
+      ring(ctx.root, []);
+      eachC(ctx, function (c) { reveal(c.sum); gauge(c); });
+      return wait(900, token);
+    });
+    seq = seq.then(function () {
+      eachC(ctx, function (c, bi, bj) { fly(c.sum, ctx.ringEl, 800, 110 * (3 * bi + bj), token, null, true); });
+      return wait(800 + 110 * 8 + 80, token);
+    });
+    seq.then(function () { ctx.ringEl.style.visibility = ""; popEl(ctx.ringEl); }, function () {});
+  }
+
+  var m = /s=(\d+)&k=(\d+)/.exec(location.hash || "");
+  go(m ? +m[1] - 1 : 0, m ? +m[2] - 1 : 0);
+  window.GRIDSKETCH = { go: go, next: next, back: back, state: function () { return { s: cur.s, k: cur.k }; }, S1: S1 };
+})();
+</script>
+</body>
+</html>
