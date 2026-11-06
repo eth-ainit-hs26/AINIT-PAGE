@@ -1247,9 +1247,9 @@ button.chip:hover{border-color:var(--rubric)}
 </style>
 <style>
 /* Act 4 of Once Upon a Video Store: The nearest neighbour (owner: the act 2 agent). Classes start with a4-.
-   The board, the stacks, the number cells and the key belong to the notation (notation.css). This file lays them
-   out, sizes them through the notation's custom properties, and keeps the Love Actually column hidden until the
-   prediction (step 6). */
+   The two boards, the number cells and the key belong to the notation (notation.css). This file lays them out,
+   sizes them through the notation's custom properties, and keeps the Love Actually column hidden until the
+   prediction (step 5). */
 .a4-near{display:grid; justify-items:center; align-content:start; gap:14px; text-align:center}
 .a4-cap{margin:0; max-width:40em; font-size:21px; line-height:1.35; text-wrap:balance}
 .a4-term{color:var(--rubric)}
@@ -1281,15 +1281,11 @@ button.chip:hover{border-color:var(--rubric)}
 .a4-near .nt-board [data-f="love"]{transition:opacity .5s ease, visibility .5s}
 .a4-near:not(.a4-love) .nt-board [data-f="love"]{opacity:0; visibility:hidden}
 
-/* Act 1 again: the key, then the two stacks side by side (one above the other on a phone) */
-.a4-pair{display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:14px 56px}
+/* Act 1 again: the key, then Zoe's board */
 .a4-key{margin-top:-2px}
 
-/* Wide screens: Replay and Skip stand at the right of the board, so the board keeps the whole height */
-@media (min-width: 900px){
-  .a4-near[data-k="2"] .a4-act, .a4-near[data-k="3"] .a4-act{position:absolute; left:100%; bottom:2px; width:max-content; margin-left:20px}
-}
-/* Short screens: the projector at 720p. A slightly lower board, so that it fits with Ivo's working open. */
+/* Short screens: the projector at 720p. A slightly lower board, so that the prediction (step 5) fits with its result
+   under the board (larger numbers overflow there by about 56 px). */
 @media (max-height: 760px){
   .a4-near{gap:10px}
   .a4-cap{font-size:20px}
@@ -1321,9 +1317,6 @@ button.chip:hover{border-color:var(--rubric)}
   .a4-py{font-size:15px}
   .a4-bd, .a4-one{gap:7px}
   .a4-big{margin-top:0}
-  .a4-pair{gap:8px}
-  .a4-pair .nt-tab, .a4-pair .nt-wrap{--nt-w:40px; --nt-h:32px; --nt-fs:19px; --nt-sy:4px; --nt-xg:15px; --nt-rg:6px}
-  .a4-pair .nt-tab .rt-film .pic{--s:24px}
 }
 @media (prefers-reduced-motion: reduce){
   .a4-near .nt-board [data-f="love"]{transition:none}
@@ -1903,7 +1896,8 @@ button.chip:hover{border-color:var(--rubric)}
    N.unconvert(target)        numbers made by convert become marks again, at once (for Back)
    N.vector(p, films, opts)   a customer as a row: name on the left, numbers in film order, film pictures above
    N.stack(opts)              two rows stacked; the products flow out film by film, then the sum (a controller)
-   N.board(opts)              act 4: the newcomer on top, the regulars below, an inner product column, sorting
+   N.board(opts)              act 4: the newcomer on top, the regulars below, an inner product column, sorting;
+                              bd.reveal() shows the inner products without their working (after the lesson)
    N.TIMES, N.PLUS, N.EQUALS, N.WORDS, N.TEMPO, N.tone(x)
    Every animation is driven by timers (never by animation events) and is skipped under reduced motion. */
 (function () {
@@ -1929,7 +1923,8 @@ button.chip:hover{border-color:var(--rubric)}
     pause: 900,                               // between two beats when a stack plays them all
     rise: 850,                                // act 4: a regular's row rises under the newcomer
     land: 800,                                // act 4: the sum lands in the regular's inner product cell
-    sort: 1200                                // act 4: the rows move to their ranks
+    sort: 1200,                               // act 4: the rows move to their ranks
+    reveal: 260                               // after the lesson: between one inner product appearing and the next
   };
 
   /* SMALL TOOLS */
@@ -2634,7 +2629,8 @@ button.chip:hover{border-color:var(--rubric)}
     }
     function setDone() {
       people.forEach(function (p) {
-        if (st.done[p]) { if (!ipTd[p].firstChild) fill(ipTd[p], IP[p]); }
+        // show(): a reveal cut short leaves no number hidden
+        if (st.done[p]) { if (!ipTd[p].firstChild) fill(ipTd[p], IP[p]); show(ipTd[p].firstChild, true); }
         else ipTd[p].textContent = "";
       });
     }
@@ -2810,6 +2806,26 @@ button.chip:hover{border-color:var(--rubric)}
         return R.wait(TEMPO.sort + 45 * people.length);
       },
       unsort: function () { return api.show({ sorted: false }); },
+      // After the lesson: every inner product appears in its row, top to bottom, with no band, no products and no
+      // sum on the move (Carlos, 2026-11-06: "Don't calculate it in front of the participants"). The state is the
+      // end state at once and only the appearance is timed, so a new step or stop() shows every number. Promise.
+      reveal: function (o) {
+        o = o || {};
+        job++;
+        people.forEach(function (p) { st.done[p] = true; });
+        st.numbers = true;
+        st.band = false;
+        st.focus = null;
+        target = null;
+        draw();
+        if (o.animate === false || !MOTION) return Promise.resolve(true);
+        var gap = TEMPO.reveal * (o.pace || 1);
+        var cells = (st.sorted ? RANKED : people).map(function (p) { return ipTd[p].firstChild; });
+        cells.forEach(function (c) { show(c, false); });
+        return R.run(cells.map(function (c, i) {
+          return [i * gap, function () { show(c, true); flash(c, "pop", 520); }];
+        }), (cells.length - 1) * gap + 520);
+      },
       // Cut any motion short and show where it was going.
       stop: function () {
         job++;
@@ -4379,15 +4395,16 @@ button.chip:hover{border-color:var(--rubric)}
 <script>
 /* Act 4 of Once Upon a Video Store: The nearest neighbour. Owner: the act 2 agent (see BRIEF.md and BRIEF-r2.md).
    Class names start with a4-. One scene, nearest, drawn in the notation of NOTATION.md (Store.N): the board of act 4
-   with Vera's row on top, then the stacks of act 1. Eight steps, one idea each:
+   with Vera's row on top, then a small board of act 1 with Zoe's row on top. Seven steps, one idea each:
      1 the ratings in marks: Vera on top, the six regulars below (Love Actually waits, hidden)
      2 the marks become numbers: the notation's wave over the whole board
-     3 Vera and Ivo, slowly: his row rises under hers, multiply film by film, then add; the sum lands in his row
-     4 the other five, faster (Skip draws the end at once)
-     5 sorted by inner product: Kai ends right under Vera, her nearest neighbour
-     6 Love Actually appears: the participant copies Kai's number into Vera's "?"; a week later she watched it
-     7 back to act 1: Zoe over Max and Zoe over Lea in the same stacks, ticks and crosses only
-     8 a match gives 1 and a mismatch -1: the counting of act 1 was the inner product all along; next, Python
+     3 Vera's inner products appear in their column, top to bottom, without their working
+     4 sorted by inner product: Kai ends right under Vera, her nearest neighbour
+     5 Love Actually appears: the participant copies Kai's number into Vera's "?"; a week later she watched it
+     6 back to act 1: Zoe on top, Max and Lea below, and their inner products
+     7 a match adds 1 and a mismatch -1: the counting of act 1 was the inner product all along; next, Python
+   Act 3 taught the inner product, so this act never works one out on screen (Carlos, 2026-11-06: "Don't calculate
+   it in front of the participants"): the rows stand one on top of the other and the inner products appear.
    A step reached from the step before plays its motion; any other arrival (Back, the pager) draws it at once.
    No globals. */
 (function () {
@@ -4402,13 +4419,12 @@ button.chip:hover{border-color:var(--rubric)}
   var R1 = S.ROUND1, Z = R1.newcomer;
   var R1F = R1.films.filter(function (f) { return f !== R1.unseen; });
   var ONE = ["max", "lea"];                       // act 1: Max matched Zoe on all three films, Lea on none
-  var FIRST = REG[0];                             // Ivo, the row worked out slowly
   function name(p) { return S.get(p).n; }
 
   var TITLE = "Vera's nearest neighbour";
-  var TITLES = ["Vera and the regulars", "From marks to numbers", "Vera and " + name(FIRST), "The other five",
-                "Vera's nearest neighbour", "A prediction for Vera", "Back to act 1", "The inner product, all along"];
-  var PAIR_PACE = 0.55;                           // act 1's stacks: the participants know the beats by now
+  var TITLES = ["Vera and the regulars", "From marks to numbers", "Vera's inner products", "Vera's nearest neighbour",
+                "A prediction for Vera", "Back to act 1", "The inner product, all along"];
+  var COPY_STEP = 4, ONE_STEP = 5;                // the prediction, and act 1 again (counted from 0)
   var FUT = { "2": "love it", "1": "like it", "0": "shrug", "-1": "dislike it", "-2": "hate it" };
   var HOW_MANY = ["none", "one film", "two films", "all three films"];
 
@@ -4453,25 +4469,7 @@ button.chip:hover{border-color:var(--rubric)}
     if (X.wave) { X.wave.cancel(); X.wave = null; }
   }
 
-  /* STEP 3 AND 4: the inner products, row by row (the board does the motion) */
-  function first() {
-    X.bd.show({ numbers: true, done: 0, band: false, sorted: false });
-    X.bd.compute(FIRST, { pace: 1 });
-  }
-  function rest() {
-    var me = X.tok;
-    X.bd.show({ numbers: true, done: 1, sorted: false });
-    X.skip.classList.remove("a4-gone");
-    X.bd.computeAll({ first: 0.5, rest: 0.25 }).then(function () { if (me === X.tok) X.skip.classList.add("a4-gone"); });
-  }
-  function skip() {
-    if (X.k !== 3) return;
-    halt();
-    X.bd.show({ numbers: true, done: REG.length, sorted: false });
-    X.skip.classList.add("a4-gone");
-  }
-
-  /* STEP 6: Kai's number flies up into Vera's "?" */
+  /* STEP 5: Kai's number flies up into Vera's "?" */
   function kaiCell() { return X.bd.cell(X.nn, LOVE).querySelector(".nt-n"); }
   function resetCopy() {
     N.setSlot(X.vslot, null);
@@ -4490,7 +4488,7 @@ button.chip:hover{border-color:var(--rubric)}
     S.reveal(X.res);
   }
   function copy() {
-    if (X.k !== 5 || X.copy.classList.contains("a4-gone")) return;
+    if (X.k !== COPY_STEP || X.copy.classList.contains("a4-gone")) return;
     X.copy.classList.add("a4-gone");
     REG.forEach(function (p) { if (p !== X.nn) X.bd.cell(p, LOVE).classList.add("dim"); });
     var src = kaiCell();
@@ -4518,36 +4516,36 @@ button.chip:hover{border-color:var(--rubric)}
     }, 450);
   }
 
-  /* STEP 7: act 1's two stacks, one after the other */
-  function pair(live) {
-    var me = X.tok;
-    if (!live || !motion) { X.A.end(); X.B.end(); X.oneSay.classList.remove("a4-wait"); return; }
-    X.A.reset();
-    X.B.reset();
+  /* STEP 6: act 1's board; its two inner products appear, then the line that reads them */
+  function one(live) {
+    var me = X.tok, all = ONE.length;
+    if (!live || !motion) {
+      X.bd1.show({ numbers: true, done: all, band: false, sorted: false });
+      X.oneSay.classList.remove("a4-wait");
+      return;
+    }
+    X.bd1.show({ numbers: true, done: 0, band: false, sorted: false });
     X.oneSay.classList.add("a4-wait");
     later(function () {
-      X.A.play().then(function (ok) {
+      X.bd1.reveal().then(function (ok) {
         if (!ok || me !== X.tok) return;
         later(function () {
-          X.B.play().then(function (ok2) {
-            if (!ok2 || me !== X.tok) return;
-            X.oneSay.classList.remove("a4-wait");
-            S.reveal(X.oneSay);
-          });
-        }, 500);
+          X.oneSay.classList.remove("a4-wait");
+          S.reveal(X.oneSay);
+        }, 250);
       });
-    }, 500);
+    }, 400);
   }
 
   S.define("nearest", {
     act: 4,
     title: TITLE,
-    steps: 8,
+    steps: 7,
     build: function (inner) {
       var root = el("div", "a4-near");
       X.root = root;
 
-      // the board: Vera on top, the regulars below, the inner product column, Love Actually (hidden until step 6)
+      // the board: Vera on top, the regulars below, the inner product column, Love Actually (hidden until step 5)
       X.bd = N.board({ top: V, people: REG, films: FILMS, more: [LOVE], marks: true });
       X.nn = X.bd.ranked[0];
       var vtd = X.bd.cell(V, LOVE);
@@ -4560,54 +4558,45 @@ button.chip:hover{border-color:var(--rubric)}
       X.caps = [
         ["Vera, the newcomer, on top. The six regulars below, on the same three films."],
         ["The marks become numbers. From here on, only numbers."],
-        [name(FIRST) + "'s row rises under Vera's. Multiply film by film, then add: their ", term("inner product"),
-         " lands in " + name(FIRST) + "'s row."],
-        ["The same for the other five regulars, faster."],
+        ["Each regular's ", term("inner product"), " with Vera, worked out as in act 3."],
         ["Sorted by inner product: ", b(name(X.nn)), ", the taste twin of act 2, is Vera's ", term("nearest neighbour"), "."],
         ["Vera has not seen ", film, ". Her nearest neighbour, ", b(name(X.nn)), ", has."],
         ["Back to act 1, where every mark was a tick or a cross."],
-        ["With ticks and crosses only, each product is 1 for a ", b("match"), " and " + num(-1) + " for a ", b("mismatch"), "."]
+        ["With ticks and crosses only, each film adds 1 for a ", b("match"), " and " + num(-1) + " for a ", b("mismatch"), "."]
       ].map(function (parts) { return make("p", "a4-cap", parts); });
       put(root, X.caps);
 
       var bdBox = el("div", "a4-bd");
       X.bdBox = bdBox;
       bdBox.appendChild(X.bd.el);
-      X.replay1 = button("Replay", "quiet", function () { if (X.k === 2) { halt(); first(); } });
-      X.skip = button("Skip to the end", "quiet", skip);
       X.copy = button("Copy " + name(X.nn) + "'s number", "primary", copy);
-      X.bar = make("div", "a4-bar", [X.replay1, X.skip, X.copy]);
+      X.bar = make("div", "a4-bar", [X.copy]);
       X.res = make("div", "a4-res a4-wait", [
         make("p", "a4-say", [b(name(X.nn)), " " + S.word(kl) + ", so Vera will probably ", term(FUT[String(kl)]), " too."]),
         payoff === undefined || payoff === null ? null
           : make("p", "a4-later", ["A week later, Vera watched it and gave it ", N.cell(payoff, { cls: "a4-inl" }), "."])
       ]);
       X.res.setAttribute("aria-live", "polite");
-      // The buttons and the result share one place: the result appears where the Copy button was.
+      // The button and the result share one place: the result appears where the Copy button was.
       X.act = make("div", "a4-act", [X.bar, X.res]);
       bdBox.appendChild(X.act);
       root.appendChild(bdBox);
 
-      // act 1 again: the key of its two marks, then Zoe over Max and Zoe over Lea
+      // act 1 again: the key of its two marks, then Zoe on top of Max and Lea, in the board of act 4
       var one = el("div", "a4-one");
       X.one = one;
       X.key = N.legend([1, -1]);
       X.key.classList.add("a4-key");
-      function stackOf(p) { return N.stack({ top: Z, bottom: p, films: R1F, heads: "pic", sumLabel: N.WORDS.name, pace: PAIR_PACE }); }
-      X.A = stackOf(ONE[0]);
-      X.B = stackOf(ONE[1]);
-      X.pairBox = make("div", "a4-pair", [X.A.el, X.B.el]);
+      X.bd1 = N.board({ top: Z, people: ONE, films: R1F });
       var m0 = S.matches(ONE[0], Z, R1F), m1 = S.matches(ONE[1], Z, R1F);
       X.oneSay = make("p", "a4-say a4-wait", ["In act 1, ", b(name(ONE[0])), " matched " + name(Z) + " on " + HOW_MANY[m0] + ", and ",
                                              b(name(ONE[1])), " on " + HOW_MANY[m1] + "."]);
-      X.replay2 = button("Replay", "quiet", function () { if (X.k === 6) { halt(); pair(true); } });
-      X.bar2 = make("div", "a4-bar", [X.replay2]);
       X.rule = make("div", "a4-rule", [
         make("p", "a4-say", ["So the inner product is the matches minus the mismatches."]),
         make("p", "a4-big", ["The counting of act 1 was the ", term("inner product"), " all along."]),
         make("p", "a4-py", [el("span", "em", "🐍"), " Next: you write this in Python. ", colabLink()])
       ]);
-      put(one, [X.key, X.pairBox, X.oneSay, X.bar2, X.rule]);
+      put(one, [X.key, X.bd1.el, X.oneSay, X.rule]);
       root.appendChild(one);
 
       inner.appendChild(root);
@@ -4621,20 +4610,15 @@ button.chip:hover{border-color:var(--rubric)}
       api.setTitle(TITLES[k]);
       X.root.dataset.k = String(k);
       X.caps.forEach(function (c, i) { c.hidden = i !== k; });
-      X.bdBox.hidden = k >= 6;
-      X.one.hidden = k < 6;
-      X.root.classList.toggle("a4-love", k === 5);
+      X.bdBox.hidden = k >= ONE_STEP;
+      X.one.hidden = k < ONE_STEP;
+      X.root.classList.toggle("a4-love", k === COPY_STEP);
 
-      // the buttons of this step
-      X.replay1.hidden = k !== 2;
-      X.skip.hidden = k !== 3;
-      X.skip.classList.add("a4-gone");
-      X.copy.hidden = k !== 5;
-      X.act.hidden = [2, 3, 5].indexOf(k) < 0;
-      X.res.hidden = k !== 5;
+      // the Copy button, and the result in its place
+      X.act.hidden = k !== COPY_STEP;
       resetCopy();
 
-      // the board
+      // Vera's board
       var bd = X.bd, all = REG.length;
       if (k === 0) bd.show({ numbers: false, done: 0, band: false, sorted: false });
       else if (k === 1) {
@@ -4645,29 +4629,25 @@ button.chip:hover{border-color:var(--rubric)}
         }
         else bd.show({ numbers: true, done: 0, band: false, sorted: false });
       } else if (k === 2) {
-        if (live) first();
-        else bd.show({ numbers: true, done: 1, sorted: false });
+        bd.show({ numbers: true, done: live ? 0 : all, band: false, sorted: false });
+        if (live) later(function () { bd.reveal(); }, 350);
       } else if (k === 3) {
-        if (live) rest();
-        else bd.show({ numbers: true, done: all, sorted: false });
-      } else if (k === 4) {
-        if (live) { bd.show({ numbers: true, done: all, sorted: false }); bd.sort(true); }
+        if (live) { bd.show({ numbers: true, done: all, band: false, sorted: false }); bd.sort(true); }
         else bd.show({ numbers: true, done: all, sorted: true });
       } else bd.show({ numbers: true, done: all, sorted: true });
 
       // act 1 again
-      X.key.hidden = k !== 6;
-      X.bar2.hidden = k !== 6;
-      X.oneSay.hidden = k !== 6;
-      X.rule.hidden = k !== 7;
-      if (k >= 6) pair(live && k === 6);
-      else { X.A.stop(); X.B.stop(); }
+      X.key.hidden = k !== ONE_STEP;
+      X.oneSay.hidden = k !== ONE_STEP;
+      X.rule.hidden = k !== ONE_STEP + 1;
+      if (k === ONE_STEP) one(live);
+      else if (k > ONE_STEP) X.bd1.show({ numbers: true, done: ONE.length, band: false, sorted: false });
+      else X.bd1.stop();
     },
     leave: function (api) {
       halt();
       X.bd.stop();
-      X.A.stop();
-      X.B.stop();
+      X.bd1.stop();
       api.setTitle(TITLE);
     }
   });
