@@ -489,6 +489,8 @@ button.chip:hover{border-color:var(--rubric)}
 .mx-t td.mx-bl{border-right:0}
 .mx-t td.mx-bra{border-left:0}
 .mx-t th.mx-bh{width:var(--mx-bw)}
+/* row heads "none": no column of heads at all (its corner goes with it, or the column heads shift one column left) */
+.mx-norh th.mx-rh, .mx-norh th.mx-corner{display:none}
 /* the heads */
 .mx-t th.mx-rh{text-align:left; white-space:nowrap; padding:var(--mx-py) 8px var(--mx-py) 6px; font-weight:500; font-size:17px;
   vertical-align:middle; transition:background-color .3s ease, opacity .3s ease, color .3s ease; border-radius:12px 0 0 12px}
@@ -592,6 +594,20 @@ button.chip:hover{border-color:var(--rubric)}
 .mx-x-stk > .mx-xnb{grid-area:nb; align-self:start}
 .mx-x-stk > .mx-xnote{grid-area:note; justify-self:stretch; align-self:start}
 .mx-cross:not(.mx-x-stk) > .mx-xnb, .mx-cross:not(.mx-x-stk) > .mx-xnote{display:none}
+/* The textbook cross (o.layout "textbook", 2026-11-06): the films' matrix, turned, ABOVE the predictions (it spans the
+   first two columns and stands at the right, so its columns are the predictions' columns and its row heads stand above
+   the customers); the customers, the predictions and the ratings level at their last row (align-self end: nothing may
+   stand under a matrix's rows in this row of the grid). */
+.mx-cross.mx-x-tb{grid-template-areas:"f f nb nb" "c p r ." "note s s avg"}
+.mx-x-tb > .mx-xf{justify-self:end; align-self:end}
+.mx-x-tb > .mx-xc, .mx-x-tb > .mx-xp{justify-self:end; align-self:end}
+.mx-x-tb > .mx-xr{align-self:end}
+/* the turned films' matrix: its caption on its left, level with its column heads (as in the grid sketch) */
+.mx-x-tb > .mx-xf > .mx.mx-tr{grid-template-columns:auto auto; grid-template-areas:"cap tw" ". size"; column-gap:10px;
+  align-items:start}
+.mx-x-tb > .mx-xf > .mx.mx-tr > .mx-cap{grid-area:cap; padding-top:.4em}
+.mx-x-tb > .mx-xf > .mx.mx-tr > .mx-tw{grid-area:tw}
+.mx-x-tb > .mx-xf > .mx.mx-tr > .mx-size{grid-area:size}
 .mx-xarr{position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:1}
 .mx-xarr g{transition:opacity .4s ease}
 .mx-xarr g.mx-xoff{opacity:0}
@@ -624,6 +640,14 @@ button.chip:hover{border-color:var(--rubric)}
   .mx-stk-side > .mx-note{align-self:center; justify-items:start; text-align:left}
 }
 .mx-stk > .mx-note{grid-area:note}
+/* The textbook layout of M.stack (2026-11-06): the second matrix, turned, above the product (spanning both columns, at
+   the right, so its columns are the product's); the first on the product's left, their last rows level. */
+.mx-stk.mx-stk-tb{grid-template-areas:"b b" "a c" "calc calc" "note note"; row-gap:var(--mx-srg, 16px)}
+.mx-stk-tb > .mx-ssb, .mx-stk-tb > .mx-ssa, .mx-stk-tb > .mx-ssc{justify-self:end; align-self:end}
+.mx-stk.mx-stk-tb.mx-stk-two{grid-template-columns:auto auto; grid-template-areas:". b" "a ." "calc calc" "note note"}
+@media (min-width: 901px){
+  .mx-stk.mx-stk-tb.mx-stk-side{grid-template-columns:auto auto minmax(0, 34ch); grid-template-areas:"b b calc" "a c note"}
+}
 .mx-stk .mx-hit > .nt-n{box-shadow:0 0 0 3px var(--leaf), 0 0 0 6px var(--rubric)}
 .mx-sov{position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:2}
 .mx-sbox{fill:none; stroke-width:2.5}
@@ -642,6 +666,10 @@ button.chip:hover{border-color:var(--rubric)}
 .mx-calc .nt-n{min-width:40px; min-height:32px; font-size:20px}
 .mx-calc .mx-csum .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--rubric)}
 .mx-cwait{visibility:hidden}
+/* M.workLine outside a stack: the look of the stack's worked line */
+.mx-wl{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 12px}
+.mx-wl .nt-n{min-width:40px; min-height:32px; font-size:20px}
+.mx-wl .mx-csum .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--rubric)}
 
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
@@ -680,9 +708,12 @@ button.chip:hover{border-color:var(--rubric)}
   .mx-cross.mx-x-stk{grid-template-columns:repeat(3, auto); grid-template-areas:"note note note" "f nb nb" "c p r" ". s s" ". avg avg";
     column-gap:var(--mx-xcg, 12px)}
   .mx-x-stk > .mx-xa{justify-self:center}
+  .mx-cross.mx-x-tb{grid-template-areas:"note note note" "f f nb" "c p r" ". s s" ". avg avg"}
   .mx-stk{--mx-scg:30px; --mx-srg:6px}
   .mx-calc{gap:4px 8px}
   .mx-calc .nt-n{min-width:32px; min-height:27px; font-size:17px}
+  .mx-wl{gap:4px 8px}
+  .mx-wl .nt-n{min-width:32px; min-height:27px; font-size:17px}
   .mx-co{font-size:17px}
   .mx-cl, .mx-cg{gap:4px}
 }
@@ -691,154 +722,75 @@ button.chip:hover{border-color:var(--rubric)}
 }
 </style>
 <style>
-/* The guessing diagram (MF.G.diagram) and Popper's schema (MF.G.schema). Owned by agent S2-A; GUESS.md has the design.
-   Classes start with g-. The diagram is three of the notation's stacks and a loss in one grid; its sizes are the
-   notation's custom properties, set here for the whole diagram (and for its loss and bubble, which sit outside a stack).
-   Colours: the numbers keep the notation's colours (blue above 0, orange below 0); the guesses and the model in ink;
-   the forward pass and the loss in the rubric violet (--g-fwd); a move or update in ochre (--g-move); --g-slope is
-   section 3's slope. The three are defined once on :root in core.css. */
-.g-dia{
+/* The guessing diagram (MF.G.diagram) and Popper's schema (MF.G.schema). The diagram is agent b's since the port to the
+   textbook cross (2026-11-06); GUESS.md has the design. Classes start with g-. The diagram is an M.cross (layout
+   "textbook") of four MF.M matrices of one row or one column (the customer's row, the film's column, the prediction,
+   the rating), the loss and the worked line; its number cells take the sizes of MF.M's sm, md and lg.
+   Colours: the numbers keep the notation's colours (blue above 0, orange below 0); the guesses in ink; the forward pass
+   and the loss in the rubric violet (--g-fwd); a move or update in ochre (--g-move); --g-slope is section 3's slope.
+   The three are defined once on :root in core.css. */
+.g-dia{--g-room:17px; --g-lw:58px; --g-lh:42px; --g-lfs:24px; --g-ww:38px; --g-wh:30px; --g-wfs:18px;
   position:relative; display:grid; justify-items:center; gap:10px; width:100%; min-width:0}
+.g-sm{--g-lw:50px; --g-lh:36px; --g-lfs:21px; --g-ww:34px; --g-wh:28px; --g-wfs:17px}
+.g-lg{--g-lw:66px; --g-lh:48px; --g-lfs:28px; --g-ww:42px; --g-wh:33px; --g-wfs:20px}
 
-/* sizes: md (default), lg (one diagram alone on the projector), sm (compact, top to bottom) */
-.g-dia.g-nobub .g-bub{display:none}
-/* the dimensions' tiles (1, 2) are light in both themes: their numeral keeps a dark ink (core draws it in the text colour) */
-.g-dia .rt-film .pic{color:#2A2432}
-.g-dia, .g-dia .nt-wrap, .g-dia .nt-tab{--nt-w:54px; --nt-h:42px; --nt-fs:25px; --nt-sx:18px; --nt-sy:5px; --nt-xg:22px; --nt-rg:10px;
-  --nt-eqw:28px; --nt-pw:var(--nt-w)}
-.g-lg, .g-lg .nt-wrap, .g-lg .nt-tab{--nt-w:62px; --nt-h:48px; --nt-fs:29px; --nt-sx:22px; --nt-xg:26px; --nt-rg:12px; --nt-eqw:32px}
-.g-sm, .g-sm .nt-wrap, .g-sm .nt-tab{--nt-w:40px; --nt-h:32px; --nt-fs:19px; --nt-sx:13px; --nt-sy:4px; --nt-xg:15px; --nt-rg:7px; --nt-eqw:17px}
-
-/* the grid: the results of the four parts on one line, the bubble under the last three */
-.g-grid{display:grid; grid-template-columns:repeat(4, auto); grid-template-areas:"pred diff sq loss" ". bub bub bub";
-  align-items:end; justify-content:center; column-gap:26px; row-gap:8px; max-width:100%; min-width:0}
-.g-part{min-width:0}
-.g-pred{grid-area:pred}
-.g-diff{grid-area:diff}
-.g-sq{grid-area:sq; display:flex; align-items:center; gap:12px; padding-bottom:var(--nt-sy)}
-.g-sq[hidden]{display:none}
-.g-sqlab{color:var(--g-fwd)}
-.g-dia .nt-n.g-sqn{min-width:var(--nt-w); min-height:var(--nt-h); font-size:var(--nt-fs); font-weight:700}
-.g-loss{grid-area:loss; display:grid; justify-items:center; gap:6px; padding-bottom:var(--nt-sy)}
-.g-bub{grid-area:bub; align-self:start; justify-self:center; position:relative; margin-top:6px}
-.g-extra{grid-column:1 / -1; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px 18px}
-.g-lg .g-grid{column-gap:32px}
-
-/* inside the stacks */
-.g-dia .nt-tab .rt-who{font-size:18px}
-.g-lg .nt-tab .rt-who{font-size:20px}
-.g-dia .nt-tab .rt-film .pic{--s:28px; font-size:17px}
-.g-dia .nt-tab .rt-who .pic{--s:26px}
-.g-glab, .g-cap{font-variant-caps:all-small-caps; letter-spacing:.09em; font-weight:600; font-size:15.5px; line-height:1.1; white-space:nowrap}
-.g-glab{display:block; text-align:left; color:var(--ink); padding-bottom:4px}
-.g-dia thead th.rt-corner{vertical-align:bottom}
-.g-pred .nt-sumh{color:var(--g-fwd)}
-.g-diff .rt-who .rt-n, .g-sq .rt-who .rt-n{font-variant-caps:all-small-caps; letter-spacing:.08em; font-size:15.5px; font-weight:600;
-  color:var(--muted)}
-.g-diff tr.nt-bot .rt-who .rt-n, .g-dia .nt-rlab, .g-fwd{color:var(--g-fwd)}
-.g-dia .nt-rlab{font-weight:600; font-size:15.5px}
-.g-diff tr.nt-top .rt-who .rt-n{color:var(--ink)}
-
-/* the loss: the square again, large and ringed in the violet of the forward pass */
-.g-dia .nt-n.g-lossn{min-width:calc(var(--nt-w) * 1.2); min-height:calc(var(--nt-h) * 1.12); font-size:calc(var(--nt-fs) * 1.14);
-  font-weight:700; border-width:2.5px; box-shadow:0 0 0 3px var(--leaf), 0 0 0 5.5px var(--g-fwd)}
+/* the cross: three columns (the customer's row, the prediction, the rating), the film's column above the first two,
+   the worked line under the customer's row, the loss under the prediction and the rating */
+.g-x.mx-cross.mx-x-tb{--mx-xcg:34px; --mx-xrg:10px; --mx-xjoin:18px; grid-template-columns:repeat(3, auto);
+  grid-template-areas:"f f nb" "c p r" "note s s"}
+.g-x.mx-x-tb > .mx-xf{margin-bottom:calc(26px - var(--mx-xrg))}
+.g-x > .mx-xr{margin-left:10px}
+.g-x > .mx-xnote{justify-self:end; align-self:start; margin-top:4px}
+.g-x .g-mp > .mx-cap, .g-x .g-loss > .g-cap{color:var(--g-fwd)}
+.g-cap{font-variant-caps:all-small-caps; letter-spacing:.09em; font-weight:600; font-size:15.5px; line-height:1.1; white-space:nowrap}
+.g-loss{display:grid; justify-items:center; gap:5px}
+.g-dia .nt-n.g-lossn{min-width:var(--g-lw); min-height:var(--g-lh); font-size:var(--g-lfs); font-weight:700; border-width:2.5px;
+  box-shadow:0 0 0 3px var(--leaf), 0 0 0 5.5px var(--g-fwd)}
 .g-dia .nt-n.g-lossn.nt-slot{border-width:2px}
+/* the worked line: each pair multiplied, then the products and the sum, ringed; set to the right, under the row */
+.g-dia .mx-wl.g-wl{flex-direction:column; align-items:flex-end; gap:5px}
+.g-dia .g-wl .nt-n{min-width:var(--g-ww); min-height:var(--g-wh); font-size:var(--g-wfs)}
+.g-nowork .g-work{display:none}
 
 /* a guessed number: the ring of the number about to move, and the flash of a move, both in ochre */
 .g-dia .nt-n.g-focus{box-shadow:0 0 0 3px var(--leaf), 0 0 0 6px var(--g-move)}
 .g-dia .nt-n.g-moved{box-shadow:0 0 0 3px var(--leaf), 0 0 0 6px var(--g-move)}
-.g-room .g-pred .nt-wrap{padding-top:30px}
-.g-room .g-pred .nt-tab{--nt-xg:36px}
-
-/* o.direct: the rating over the prediction, an arrow that joins them, the loss (no difference, no square) */
-.g-direct .g-grid{grid-template-columns:repeat(2, auto); grid-template-areas:"pred diff" ". bub"}
-.g-direct .g-diff{display:flex; align-items:stretch; gap:10px}
-.g-direct .g-dhold{align-self:center}
-.g-direct .g-diff tr.nt-res{display:none}
-.g-direct .g-diff tr.nt-bot .nt-x{visibility:hidden}
-.g-direct .g-loss{align-self:center; padding-bottom:0}
-.g-join{position:relative; flex:none; width:40px}
-.g-join::before{content:""; position:absolute; left:0; width:12px; top:25%; bottom:25%; border:2px solid var(--g-fwd);
-  border-left:0; border-radius:0 9px 9px 0; opacity:.8}
-.g-join::after{content:""; position:absolute; left:12px; right:2px; top:calc(50% - 1px); height:2px; background:var(--g-fwd); opacity:.8;
-  clip-path:none}
-.g-join{--g-jh:9px}
-.g-join > i{position:absolute; right:-6px; top:50%; transform:translateY(-50%); border-left:var(--g-jh) solid var(--g-fwd);
-  border-top:6px solid transparent; border-bottom:6px solid transparent; opacity:.8}
-.g-dia:not(.g-on-loss) .g-join{visibility:hidden}
-.g-direct.g-sm .g-grid{grid-template-columns:auto; grid-template-areas:"pred" "diff" "bub"}
-.g-sm .g-join{width:30px}
-
-/* the bubble: why we square, with two differences and their squares */
-.g-bubin{display:flex; align-items:center; gap:16px; padding:8px 16px 9px; background:var(--bg); border:1.5px solid var(--rule);
-  border-radius:16px; position:relative; z-index:1}
-.g-bub::before{content:""; position:absolute; top:-7px; left:50%; width:14px; height:14px; background:var(--bg);
-  border-left:1.5px solid var(--rule); border-top:1.5px solid var(--rule); transform:translateX(-50%) rotate(45deg); z-index:2}
-.g-bubt{display:grid; gap:2px; max-width:27ch; text-align:left}
-.g-bubq{font-weight:700; color:var(--g-fwd); font-size:18px; line-height:1.15}
-.g-bubw{font-size:16.5px; line-height:1.28}
-.g-bubtab{border-collapse:separate; border-spacing:6px 3px; --nt-w:46px; --nt-h:32px; --nt-fs:19px}
-.g-bubtab th{font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600; font-size:14.5px; color:var(--muted); text-align:right;
-  padding-right:2px}
-.g-bubtab td{padding:0; text-align:center}
+/* o.room: room above every guessed number for a grasshopper (MF.H.team): under the heads, and between the film's two
+   (g-roomc the customer's row, g-roomf the film's column) */
+.g-roomc .g-mc thead th, .g-roomf .g-mf thead th{padding-bottom:var(--g-room)}
+.g-roomf .g-mf tbody tr + tr > *{padding-top:calc(var(--mx-py) + var(--g-room))}
 
 /* parts that are not shown yet keep their place */
-.g-dia:not(.g-on-guesses) .g-pred{visibility:hidden}
-.g-dia:not(.g-on-prediction) .g-pred tr.nt-res, .g-dia:not(.g-on-prediction) .g-pred .nt-sumh .nt-hl{visibility:hidden}
-.g-dia:not(.g-on-truth) .g-diff{visibility:hidden}
-.g-dia:not(.g-on-compare) .g-diff tr.nt-bot{visibility:hidden}
-.g-dia:not(.g-on-difference) .g-diff tr.nt-res{visibility:hidden}
-.g-dia:not(.g-on-square) .g-sq{visibility:hidden}
+.g-dia:not(.g-on-guesses) .g-mc, .g-dia:not(.g-on-guesses) .g-mf{visibility:hidden}
+.g-dia:not(.g-on-rating) .g-mr{visibility:hidden}
+.g-dia:not(.g-on-prediction) .g-mp, .g-dia:not(.g-on-prediction) .g-work{visibility:hidden}
 .g-dia:not(.g-on-loss) .g-loss{visibility:hidden}
-.g-dia:not(.g-on-bubble) .g-bub{visibility:hidden}
-.g-xpart.g-xoff{visibility:hidden}
+.g-dia.g-pwait .g-predn, .g-dia.g-lwait .g-lossn{visibility:hidden}
 
 .g-note{display:grid; justify-items:center; gap:6px; text-align:center; width:100%; min-width:0}
 .g-note:empty{display:none}
 .g-layer{position:absolute; left:0; top:0; width:0; height:0; overflow:visible; pointer-events:none; z-index:9}
 .g-ghost{position:absolute; margin:0; box-sizing:border-box; pointer-events:none; z-index:9; box-shadow:0 6px 16px rgba(42,36,50,.22)}
 
-/* compact: top to bottom, the guesses and the prediction first, the three results under them */
-.g-sm .g-grid{grid-template-columns:repeat(3, auto); grid-template-areas:"pred pred pred" "diff sq loss" "bub bub bub";
-  column-gap:12px; row-gap:6px}
-.g-sm .g-pred{justify-self:center}
-.g-sm .nt-tab .rt-who{font-size:15px}
-.g-sm .nt-tab .rt-film .pic{--s:22px; font-size:14px}
-.g-sm .nt-tab .rt-who .pic{--s:22px}
-.g-sm .g-glab, .g-sm .g-cap, .g-sm .g-diff .rt-who .rt-n, .g-sm .g-sq .rt-who .rt-n, .g-sm .nt-rlab{font-size:13px}
-.g-sm .g-bubin{gap:10px; padding:6px 10px 7px}
-.g-sm .g-bubq{font-size:15px}
-.g-sm .g-bubw{font-size:14px}
-.g-sm .g-bubtab{--nt-w:38px; --nt-h:28px; --nt-fs:16px; border-spacing:4px 3px}
-.g-sm .g-bubtab th{font-size:12.5px}
-
+/* Short screens: the projector at 720p */
 @media (max-height: 760px){
-  .g-lg, .g-lg .nt-wrap, .g-lg .nt-tab{--nt-w:58px; --nt-h:45px; --nt-fs:27px; --nt-xg:24px; --nt-rg:11px}
+  .g-dia{--g-room:16px; --g-lw:54px; --g-lh:40px; --g-lfs:23px; --g-ww:36px; --g-wh:29px; --g-wfs:17px}
+  .g-sm{--g-lw:48px; --g-lh:34px; --g-lfs:20px; --g-ww:33px; --g-wh:27px; --g-wfs:16px}
+  .g-x.mx-cross.mx-x-tb{--mx-xrg:8px; --mx-xjoin:16px}
+  .g-x.mx-x-tb > .mx-xf{margin-bottom:calc(24px - var(--mx-xrg))}
 }
-/* Phones: the compact grid */
+/* Phones */
 @media (max-width: 560px){
-  .g-dia, .g-dia .nt-wrap, .g-dia .nt-tab, .g-lg, .g-lg .nt-wrap, .g-lg .nt-tab{--nt-w:40px; --nt-h:33px; --nt-fs:19px; --nt-sx:14px;
-    --nt-sy:4px; --nt-xg:15px; --nt-rg:7px; --nt-eqw:17px}
-  .g-grid, .g-lg .g-grid{grid-template-columns:repeat(3, auto); grid-template-areas:"pred pred pred" "diff sq loss" "bub bub bub";
-    column-gap:16px; row-gap:6px}
-  .g-pred{justify-self:center}
-  .g-dia .nt-tab .rt-who, .g-lg .nt-tab .rt-who{font-size:15px}
-  .g-dia .nt-tab .rt-film .pic{--s:22px; font-size:14px}
-  .g-dia .nt-tab .rt-who .pic{--s:22px}
-  .g-glab, .g-cap, .g-diff .rt-who .rt-n, .g-sq .rt-who .rt-n, .g-dia .nt-rlab{font-size:13px}
-  .g-sq{gap:8px}
+  .g-dia, .g-sm, .g-lg{--g-room:15px; --g-lw:44px; --g-lh:32px; --g-lfs:18px; --g-ww:28px; --g-wh:24px; --g-wfs:14px}
+  .g-x.mx-cross.mx-x-tb{--mx-xcg:10px; --mx-xrg:6px; --mx-xjoin:14px; grid-template-areas:"f f nb" "c p r" "note s s"}
+  .g-x.mx-x-tb > .mx-xf{margin-bottom:calc(22px - var(--mx-xrg))}
+  .g-x > .mx-xr{margin-left:4px}
+  .g-cap{font-size:13px}
+  .g-dia .g-wl.mx-wl{gap:4px}
+  .g-dia .g-wl .mx-co{font-size:15px}
+  .g-dia .g-wl .mx-cl, .g-dia .g-wl .mx-cg{gap:3px}
   .g-dia .nt-n.g-lossn{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--g-fwd)}
   .g-dia .nt-n.g-focus, .g-dia .nt-n.g-moved{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4.5px var(--g-move)}
-  .g-bub{margin-top:4px}
-  .g-bubin{gap:10px; padding:6px 10px 7px}
-  .g-bubq{font-size:15px}
-  .g-bubw{font-size:14px; line-height:1.25}
-  .g-bubtab{--nt-w:38px; --nt-h:28px; --nt-fs:16px; border-spacing:4px 3px}
-  .g-bubtab th{font-size:12.5px}
-  .g-room .g-pred .nt-wrap{padding-top:22px}
-  .g-room .g-pred .nt-tab{--nt-xg:26px}
-  .g-direct .g-grid, .g-direct.g-lg .g-grid{grid-template-columns:auto; grid-template-areas:"pred" "diff" "bub"}
-  .g-join{width:30px}
 }
 
 /* POPPER'S SCHEMA: the sentence, four boxes with arrows, the loop over the top, Popper's words, the beats */
@@ -903,10 +855,12 @@ button.chip:hover{border-color:var(--rubric)}
 </style>
 <style>
 /* MF.L, the table view of section 4 (loss.js). Owned by S4-A (BRIEF-s4.md, LOSS.md). Classes start with lv-.
-   Since 2026-11-05 the parts stand in the stack of part two (M.cross, layout "stack", MATRIX.md): the films on top of
-   the customers, the predictions and the ratings on their right, the losses under those two, the average loss in its
-   double violet ring on the right of the losses; the desk and the words beside or under it. Captions: the model in ink, the forward
-   pass in violet (--g-fwd); the update in ochre (--g-move). */
+   Since 2026-11-06 the parts stand in part two's textbook cross (M.cross, layout "textbook", MATRIX.md): the films'
+   matrix turned above the predictions, the customers on their left, the ratings on the right of the predictions, the
+   losses under those two, the average loss in its double violet ring on the right of the losses; the desk and the
+   words beside or under it. One prediction as part one shows a score: the customer's row and the film's column
+   outlined (an SVG over the cross), its worked line on the desk. Captions: the model in ink, the forward pass in
+   violet (--g-fwd); the update in ochre (--g-move). */
 .lv{position:relative; display:grid; justify-items:center; gap:8px; width:100%; min-width:0}
 .lv .mx-prod.lv-board{gap:10px}
 .lv-cross{--mx-xcg:26px; --mx-xrg:10px}
@@ -919,7 +873,6 @@ button.chip:hover{border-color:var(--rubric)}
   .lv-sided > .mx-prod{grid-column:1}
   .lv-sided > .lv-side{grid-column:2; grid-row:1}
   .lv-sided .lv-note{max-width:100%}
-  .lv-sided .mx-desk .nt-wrap, .lv-sided .mx-desk .nt-tab{--nt-sx:12px}
 }
 @media (min-width: 561px) and (max-height: 760px){
   .lv.lv-sided-short{grid-template-columns:max-content minmax(0, 430px); justify-content:center; align-items:center; column-gap:30px}
@@ -945,8 +898,10 @@ button.chip:hover{border-color:var(--rubric)}
 .lv-dec .lv-guesses .mx, .lv-dec .lv-predictions, .lv-dec .lv-ratings, .lv-dec .lv-losses{--nt-w:60px; --nt-fs:19px}
 .lv-dec.lv-md .lv-guesses .mx, .lv-dec.lv-md .lv-predictions, .lv-dec.lv-md .lv-ratings, .lv-dec.lv-md .lv-losses{--nt-w:70px; --nt-fs:22px}
 
-/* room under the heads for a still team of grasshoppers (MF.H.team) on the first row; the predictions and the
-   ratings beside the customers take the same room, so their rows stay level with the customers' rows */
+/* V.room: room above every number cell of the guesses for a still team of grasshoppers (MF.H.team, each standing on
+   its number cell), and under the heads for the first row; the predictions and the ratings beside the customers take
+   the same room, so their rows stay level with the customers' rows */
+.lv-room .mx.lv-guesses, .lv-room .mx.lv-predictions, .lv-room .mx.lv-ratings{--mx-py:6px}
 .lv-room .mx.lv-guesses .mx-ch, .lv-room .mx.lv-predictions .mx-ch, .lv-room .mx.lv-ratings .mx-ch{padding-bottom:8px}
 
 /* one cell of the table in focus: the four entries that belong to it are ringed */
@@ -974,12 +929,20 @@ button.chip:hover{border-color:var(--rubric)}
   font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600; font-size:17px; white-space:nowrap}
 .lv-tag:empty{display:none}
 
-/* the desk in the side: the stack of one prediction (the product view's), or one loss worked out as
-   (rating - prediction) squared; without a desk it takes no room, unless o.desk keeps its place */
+/* the desk in the side: the worked line of one prediction (M.workLine: each pair multiplied, then the products and
+   the sum, ringed), or one loss worked out as (prediction - rating) squared; without a desk it takes no room, unless
+   o.desk keeps its place */
 .lv-desks{display:grid; justify-items:center; align-items:center}
 .lv:not([data-desk]):not(.lv-keep) .lv-desks{display:none}
-.lv:not([data-desk="stack"]) .lv-desks > .mx-desk{display:none}
-.lv .mx-desk .nt-wrap, .lv .mx-desk .nt-tab{--nt-w:54px; --nt-h:40px; --nt-fs:24px; --nt-sx:20px; --nt-xg:20px; --nt-rg:10px; --nt-eqw:28px}
+.lv:not([data-desk="line"]) .lv-wd{display:none}
+.lv-wd{display:grid; justify-items:center}
+/* beside the cross the two lines of the worked line stand one above the other, as in part one's side column */
+@media (min-width: 561px){
+  .lv-sided .lv-wd .mx-wl{flex-direction:column; align-items:center; gap:8px}
+}
+@media (min-width: 561px) and (max-height: 760px){
+  .lv-sided-short .lv-wd .mx-wl{flex-direction:column; align-items:center; gap:6px}
+}
 .lv-ld{display:none; justify-content:center}
 .lv[data-desk="loss"] .lv-ld{display:flex}
 .lv-lf{display:flex; align-items:flex-end; gap:7px}
@@ -1007,24 +970,24 @@ button.chip:hover{border-color:var(--rubric)}
 @media (max-height: 760px){
   .lv{gap:6px}
   .lv-cross{--mx-xrg:6px}
-  .lv .mx-desk .nt-wrap, .lv .mx-desk .nt-tab{--nt-w:48px; --nt-h:34px; --nt-fs:21px; --nt-sx:16px; --nt-sy:3px; --nt-xg:16px; --nt-rg:7px}
+  .lv-wd .mx-wl .nt-n{min-width:38px; min-height:30px; font-size:19px}
   .lv-lcell{--nt-w:50px; --nt-h:36px; --nt-fs:22px}
   .lv-op{line-height:36px; font-size:24px}
   .lv .nt-n.lv-avgn{--nt-w:108px; --nt-h:60px; --nt-fs:37px}
-  .lv-dec .lv-guesses .mx, .lv-dec .lv-predictions, .lv-dec .lv-ratings, .lv-dec .lv-losses{--nt-w:56px; --nt-fs:18px}
+  .lv-dec .lv-guesses .mx, .lv-dec .lv-predictions, .lv-dec .lv-ratings, .lv-dec .lv-losses{--nt-w:56px; --nt-fs:17px}
+  /* the cells of part two's board at 720p */
+  .lv-cross .mx-sm{--nt-h:27px; --nt-fs:17px; --mx-py:1.5px}
+  .lv-cross .mx td.mx-c{line-height:1}
   .lv-cross{--mx-xcg:26px; --mx-xrg:4px; --mx-xjoin:14px}
-  /* the films' column heads are the customers' (the columns are aligned): left out, as in part two, unless a team
-     of grasshoppers needs the room above the first row */
-  .lv:not(.lv-room) .lv-cross > .mx-xf thead{display:none}
   .lv-cross .mx-cap{font-size:14.5px}
   .lv-cross .mx-ch .pic{--s:24px}
+  .lv-room .mx.lv-guesses, .lv-room .mx.lv-predictions, .lv-room .mx.lv-ratings{--mx-py:5px}
   .lv-room .mx.lv-guesses .mx-ch, .lv-room .mx.lv-predictions .mx-ch, .lv-room .mx.lv-ratings .mx-ch{padding-bottom:6px}
 }
 /* Phones: the same stack, tighter; the average on the right of the losses for one film, under them for two (as in
    part two); the desk under everything */
 @media (max-width: 560px){
   .lv-cross{--mx-xcg:8px; --mx-xrg:4px; --mx-xjoin:14px}
-  .lv:not(.lv-room) .lv-cross > .mx-xf thead{display:none}
   /* no row heads on the predictions, the ratings and the losses (as in part two): the corner goes too, or the
      column heads shift one column left */
   .lv-cross .lv-predictions .mx-rh, .lv-cross .lv-ratings .mx-rh, .lv-cross .lv-losses .mx-rh,
@@ -1037,9 +1000,9 @@ button.chip:hover{border-color:var(--rubric)}
   .lv-cross .mx-t th.mx-rh{padding:var(--mx-py) 3px var(--mx-py) 1px}
   .lv-long{display:none}
   .lv-short{display:inline}
-  .lv-one .lv-cross.mx-x-stk{grid-template-columns:repeat(4, auto); grid-template-areas:"f . . ." "c p r ." ". s s avg"}
+  .lv-one .lv-cross.mx-x-tb{grid-template-columns:repeat(4, auto); grid-template-areas:"f f . ." "c p r ." ". s s avg"}
   .lv-one .lv-avgcap{white-space:normal; max-width:4.6em; text-align:center; line-height:1}
-  .lv-many .lv-cross.mx-x-stk{grid-template-areas:"f . ." "c p r" ". s s" ". avg avg"}
+  .lv-many .lv-cross.mx-x-tb{grid-template-areas:"f f ." "c p r" ". s s" ". avg avg"}
   /* o.decPhone: every number cell keeps the width of two decimals on a phone */
   .lv-decph .mx.lv-guesses, .lv-decph .mx.lv-predictions, .lv-decph .mx.lv-ratings, .lv-decph .mx.lv-losses{--nt-w:34px; --nt-fs:12.5px}
   .lv-decph .mx .nt-n{padding:0 .1em}
@@ -1047,7 +1010,6 @@ button.chip:hover{border-color:var(--rubric)}
   .lv-many .lv-avgp{position:relative}
   .lv-many .mx-xa{margin-top:6px}
   .lv-many .lv-ring{padding:2px}
-  .lv .mx-desk .nt-wrap, .lv .mx-desk .nt-tab{--nt-w:36px; --nt-h:26px; --nt-fs:16px; --nt-sx:10px; --nt-sy:2px; --nt-xg:10px; --nt-rg:4px; --nt-eqw:18px}
   .lv-lf{gap:5px}
   .lv-lab{font-size:13px}
   .lv-lcell{--nt-w:42px; --nt-h:32px; --nt-fs:19px}
@@ -1060,8 +1022,8 @@ button.chip:hover{border-color:var(--rubric)}
   .lv-dec.lv-many .lv-guesses .mx, .lv-dec.lv-many .lv-predictions, .lv-dec.lv-many .lv-ratings, .lv-dec.lv-many .lv-losses{--nt-w:34px}
   .lv-dec.lv-many .lv-guesses .nt-n, .lv-dec.lv-many .lv-predictions .nt-n, .lv-dec.lv-many .lv-losses .nt-n{padding:0 .12em}
   .lv .mx td.lv-ring-on > .nt-n, .lv .mx td.lv-mark > .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--g-fwd)}
+  .lv-room .lv-cross .mx.lv-guesses, .lv-room .lv-cross .mx.lv-predictions, .lv-room .lv-cross .mx.lv-ratings{--mx-py:4.5px}
   .lv-room .mx.lv-guesses .mx-ch, .lv-room .mx.lv-predictions .mx-ch, .lv-room .mx.lv-ratings .mx-ch{padding-bottom:5px}
-  .lv .mx-desk .nt-tab thead{display:none}
   .lv-many .lv-avgcap{position:absolute; right:calc(100% + 6px); top:50%; transform:translateY(-50%); white-space:normal;
     max-width:4.6em; text-align:right; line-height:1}
 }
@@ -1153,17 +1115,18 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-key i{display:inline-block; width:15px; height:15px; border-radius:3px}
 .s5-key .nt-n.s5-in{--nt-w:26px; --nt-h:21px; --nt-fs:14px}
 
-/* the run: the step count and Play on one line, the curve under them, in the board's top-right corner (the stack's
-   slot nb: on the right of the films' numbers, above the ratings and the average); the average loss in its double
-   violet ring stands in the board (in a row with the count and Replay under the large curve on the last step of scene
-   real); on a phone the run is a row under the board */
-.s5-strip{display:grid; grid-template-columns:auto minmax(0, 1fr); grid-template-areas:"count ctl" "curve curve"; align-items:center;
-  gap:6px 14px; width:300px}
+/* the run, in the board's top-right corner (the textbook cross's slot nb: on the right of the films' numbers, above the
+   ratings and the average): the step count over Play on the left, the curve on their right, about as tall as the
+   films' numbers beside it (--s5-ch); the average loss in its double violet ring stands in the board (in a row with
+   the count and Replay under the large curve on the last step of scene real); on a phone the run is a row under the
+   board */
+.s5-strip{display:grid; grid-template-columns:auto minmax(0, 1fr); grid-template-areas:"count curve" "ctl curve"; align-items:center;
+  gap:6px 16px; width:340px}
 .s5-strip[hidden]{display:none}
-.s5-strip > .s5-count{grid-area:count}
+.s5-strip > .s5-count{grid-area:count; align-self:end}
 .s5-strip > .s5-ringw{grid-area:ring}
-.s5-strip > .s5-ctl{grid-area:ctl; justify-content:flex-start}
-.s5-strip > .s5-curve{grid-area:curve; height:110px}
+.s5-strip > .s5-ctl{grid-area:ctl; justify-content:flex-start; align-self:start}
+.s5-strip > .s5-curve{grid-area:curve; height:var(--s5-ch, 90px)}
 .s5-count{display:grid; justify-items:center; gap:0; margin:0}
 /* in the corner the count is one line: "step 52" */
 .s5-x .s5-count, .s5-runrow .s5-count{display:flex; align-items:baseline; gap:7px}
@@ -1196,7 +1159,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-runrow > .s5-play{grid-area:ctl; justify-self:start}
 .s5-runrow > .s5-curve{grid-area:curve; width:100%; height:70px}
 .s5-runrow .s5-cn{font-size:24px}
-/* the corner of the stack (slot nb): its foot level with the films' last row, its left edge with the ratings' */
+/* the corner of the cross (slot nb): its foot level with the films' last row, its left edge with the ratings' */
 .s5-x > .mx-xnb, .s5-recap .lv-cross > .mx-xnb{align-self:end; justify-self:start}
 
 /* scene schema: Popper's diagram with the method written under its boxes, the loop drawn in ochre on its last step */
@@ -1207,11 +1170,21 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-pop.s5-again .g-again::after{border-top-color:var(--ochre)}
 .s5-pop.s5-again .g-againl{color:var(--ochre); font-weight:600}
 
-/* scenes real and larger: the stack of part two (M.cross, matrix.css) as maps of squares, the words above it on every
-   screen (Carlos, 2026-11-06: "the text must go above or below but not on the side"). The films' pictures over the
-   ratings are left out in the stack, so that the users' rows stand level with the ratings' rows. */
+/* scenes real and larger: part two's textbook cross (M.cross, layout "textbook", matrix.css) as maps of squares, the
+   words above it on every screen (Carlos, 2026-11-06: "the text must go above or below but not on the side"): the
+   users' numbers on the left of the predictions, the films' numbers turned (one column per film) above them, their
+   columns over the predictions' columns (one square size for the whole board), the ratings on the right of the
+   predictions, the losses under both, the average on the right of the losses. The films' pictures over the ratings are
+   left out on the board (too small to read at these sizes). */
 .s5-words{display:grid; justify-items:center; gap:4px; min-width:0}
 .s5-x{--mx-xcg:26px; --mx-xrg:8px}
+/* the films' numbers stand a little higher than the row gap alone puts them, so the arrow down into the predictions
+   has room (matrix.js draws it only with more than 14 px); the run's corner keeps its foot level with them */
+.s5-x.mx-x-tb > .mx-xf, .s5-x.mx-x-tb > .mx-xnb{margin-bottom:calc(23px - var(--mx-xrg, 8px))}
+/* the turned map's caption on its left, level with its first row, in the corner above the users' numbers (part two
+   puts the turned films' caption on its left too) */
+.s5-x .s5-map.s5-tr{position:relative}
+.s5-x .s5-tr > .s5-mcap{position:absolute; right:calc(100% + 10px); top:2px}
 /* a tapped square's line: on a desk screen a small label over the square (sec5.js, float()), pointing at it; on a phone
    a line under the board. In scene real the source line stands under the table of the first two steps. */
 @media (min-width: 561px){
@@ -1237,8 +1210,10 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-later{visibility:hidden}
 .s5-x .s5-ring{padding:3px}
 .s5-x .nt-n.s5-big{--nt-w:84px; --nt-h:44px; --nt-fs:26px; box-shadow:0 0 0 2.5px var(--leaf), 0 0 0 4.5px var(--g-fwd)}
-.s5-real .s5-x .s5-map{--sq:11px}
-.s5-larger .s5-x .s5-map{--sq:4px}
+.s5-real .s5-x .s5-map{--sq:14px}
+.s5-real .s5-strip{--s5-ch:80px}
+.s5-larger .s5-x .s5-map{--sq:5px}
+.s5-larger .s5-strip{--s5-ch:76px}
 .s5-larger .s5-x.s5-solo .s5-map{--sq:12px}
 .s5-larger .s5-x:not(.s5-solo) .s5-mg i{border-radius:1px}
 .s5-larger .s5-x:not(.s5-solo) .s5-mg i.s5-miss{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2.5px var(--g-move)}
@@ -1260,6 +1235,9 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-card .s5-map{--sq:4px; --gap:0px}
 .s5-card .s5-mg{padding:2px; position:relative}
 .s5-rowbox{position:absolute; left:-1px; right:-1px; top:0; height:calc(var(--sq) + 4px); border:2px solid var(--rubric); border-radius:3px;
+  pointer-events:none}
+/* the first film's column of the turned films' map (the films' embeddings are columns) */
+.s5-colbox{position:absolute; top:-1px; bottom:-1px; left:0; width:calc(var(--sq) + 4px); border:2px solid var(--rubric); border-radius:3px;
   pointer-events:none}
 .s5-card .s5-curve{width:150px; height:96px}
 .s5-card .s5-ct text{font-size:11px}
@@ -1283,8 +1261,7 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-src{font-size:13.5px}
   .s5-read{font-size:15px}
   .s5 .nt-n.s5-in{--nt-w:32px; --nt-h:24px; --nt-fs:16.5px}
-  .s5-strip{gap:4px 12px; width:250px}
-  .s5-strip > .s5-curve{height:62px}
+  .s5-strip{gap:4px 12px; width:300px}
   .s5 .mx.s5-mx{--nt-w:36px; --nt-h:22px; --nt-fs:14.5px; --mx-py:1px; --mx-px:1px}
   .s5 .mx.s5-mx .mx-cap{font-size:14px}
   .s5 .pic.s5-tile{--s:21px}
@@ -1300,9 +1277,11 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-x{--mx-xcg:20px; --mx-xrg:6px}
   .s5-x .s5-mcap{font-size:13.5px}
   .s5-x .nt-n.s5-big{--nt-w:72px; --nt-h:36px; --nt-fs:22px}
-  .s5-real .s5-x .s5-map{--sq:7px}
+  .s5-real .s5-x .s5-map{--sq:9px}
+  .s5-real .s5-strip{--s5-ch:64px}
   .s5-larger .s5-x{--mx-xrg:4px; --mx-xjoin:12px}
   .s5-larger .s5-x .s5-map{--sq:3px; gap:1px}
+  .s5-larger .s5-strip{--s5-ch:64px}
   .s5-larger .s5-x .s5-mcap{line-height:1}
   .s5-larger .s5-x .s5-mg{padding:1px}
   .s5-larger .s5-x.s5-solo .s5-map{--sq:9px}
@@ -1316,12 +1295,16 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-endmap .s5-map{--sq:8px}
   .s5-lic p{font-size:12px}
 }
-/* 720p on a desk only (the phone frame also matches max-height 760px): the recap's cells; the curves in the board's
-   corner as tall as the films' numbers beside them allow, so the board does not grow */
+/* 720p on a desk only (the phone frame also matches max-height 760px): the recap's board (MF.L.view, agent c's
+   loss.css) pinned here, its cells, the films' pictures, the gaps of its cross, so that it fits under the words; its
+   curve in the board's corner as tall as the films' numbers beside it allow, so the board does not grow */
 @media (min-width: 561px) and (max-height: 760px){
-  .s5-recap .lv-cross .mx-sm{--nt-h:27px; --mx-py:1.5px}
+  .s5-recap .lv-cross{--mx-xrg:4px; --mx-xjoin:14px}
+  .s5-recap .lv-cross .mx-sm{--nt-h:26px; --mx-py:1.5px}
+  /* a row as tall as its cell: no line box of the td's font (the cell sets its own line height) */
+  .s5-recap .lv-cross td.mx-c{line-height:0}
+  .s5-recap .lv-cross .mx-ch .pic{--s:24px}
   .s5-recap .s5-runrow > .s5-curve{height:52px}
-  .s5-real:not(.s5-bigc) .s5-strip > .s5-curve{height:78px}
 }
 /* Phones */
 @media (max-width: 560px){
@@ -1341,6 +1324,7 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-map{--sq:12px}
   .s5-mcap{font-size:13px}
   .s5-strip{grid-template-columns:auto minmax(0, 1fr) auto; grid-template-areas:"count curve ctl"; gap:2px 10px; width:100%}
+  .s5-strip > .s5-count, .s5-strip > .s5-ctl{align-self:center}
   .s5-strip > .s5-curve{height:58px}
   .s5-x .s5-count, .s5-runrow .s5-count{display:grid; justify-items:center; gap:0}
   .s5-cl{font-size:13px}
@@ -1349,9 +1333,10 @@ button.chip:hover{border-color:var(--rubric)}
   .s5.s5-xon{row-gap:6px}
   .s5-x{--mx-xcg:12px; --mx-xrg:6px}
   /* the average on the right of the losses, as on a desk: the maps leave room for it; the run in a row under the board */
-  .s5-x.mx-x-stk:not(.s5-solo){grid-template-columns:repeat(4, auto); grid-template-areas:"f . . ." "c p r ." ". s s avg" "nb nb nb nb"}
-  .s5-recap .lv-many .lv-cross.mx-x-stk{grid-template-areas:"f . ." "c p r" ". s s" ". avg avg" "nb nb nb"}
+  .s5-x.mx-x-tb:not(.s5-solo){grid-template-columns:repeat(4, auto); grid-template-areas:"f f . ." "c p r ." ". s s avg" "nb nb nb nb"}
+  .s5-recap .lv-many .lv-cross.mx-x-tb{grid-template-areas:"f f ." "c p r" ". s s" ". avg avg" "nb nb nb"}
   .s5-x > .mx-xnb, .s5-recap .lv-cross > .mx-xnb{justify-self:stretch; align-self:start}
+  .s5-x.mx-x-tb > .mx-xnb{margin-bottom:0}
   /* the source line gives way to a tapped number's line: one line under the table */
   .s5-real:not(.s5-xon) > .s5-read:empty{display:none}
   .s5-src:has(~ .s5-read:not(:empty)){display:none}
@@ -1526,8 +1511,9 @@ button.chip:hover{border-color:var(--rubric)}
     elsa: { paddington:  1, martian: -2 }
   };
 
-  // Section 1. The Matchmaker's score of a customer and a film is the inner product of their rows over the three
-  // axes. Scores (rows Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
+  // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
+  // film's column over the three axes (kept here one row per film; the game draws the films turned). Scores (rows
+  // Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
   //   Sara  7  0 -7 -6     Leo  -4 -6 10  0     Maya  -1  7 -2  2
   // Suggested worked examples: Sara and The Intouchables 4 + 1 + 2 = 7 (agree on all three axes),
   // Leo and Apollo 13 -4 - 4 + 2 = -6, Sara and Apollo 13 4 - 2 - 2 = 0 (the products cancel).
@@ -1536,15 +1522,16 @@ button.chip:hover{border-color:var(--rubric)}
     films: ["intouchables", "apollo13", "mib", "interstellar"],
     axes: ["real", "comedy", "action"],
     worked: [["sara", "intouchables"], ["leo", "apollo13"], ["sara", "apollo13"]],
-    // Scene 4, a bigger product: two plain matrices of invented numbers, 5 rows and 6 rows, 4 columns each.
-    // Their product (every row of A with every row of B) is 5 x 6:
+    // Scene 4, a bigger product: two plain matrices of invented numbers, A 5 x 4 and B 4 x 6 as drawn (B kept one
+    // row per column of the drawing). Their product (every row of A with every column of B) is 5 x 6:
     //   -3  6  4 -3  1 -2  /  3 -4  5 -2  6 -2  /  -2  5 -3  3 -3  0  /  4 -4 -3  3 -2  3  /  0  5  4 -2  0  0
     big: {
       A: [[1, -2, 0, 2], [2, 1, -1, 0], [-1, 0, 2, 1], [0, 2, 1, -2], [2, -1, 1, 1]],
       B: [[1, 1, 0, -1], [0, -2, 2, 1], [2, 0, -1, 1], [-1, 1, 1, 0], [1, 2, -2, 2], [0, -1, 1, -2]]
     },
-    // The scene byhand (2026-11-05): a 3 x 3 and a 4 x 3 matrix of invented numbers whose 3 x 4 product the
-    // participants fill in by hand, from source/tools/s1_byhand.py (seed 20261105). Their product:
+    // The scene byhand (2026-11-05): a 3 x 3 and a 3 x 4 matrix (B kept one row per column of the drawing) of
+    // invented numbers whose 3 x 4 product the participants fill in by hand, from source/tools/s1_byhand.py (seed
+    // 20261105). Their product:
     //   2  0 -7  1  /  -3 -5  1 -1  /  -2 -4  9  1
     hand: {
       A: [[-2, 1, 2], [-1, 1, -1], [2, 1, -2]],
@@ -1865,7 +1852,7 @@ button.chip:hover{border-color:var(--rubric)}
               cards: { 3: { kicker: "Gradient descent, optional", num: 1, skip: null },
                        4: { kicker: "Gradient descent, optional", num: 2, skip: null } },
               back: { 3: "Then come back here for the second half: many customers, many films.",
-                      4: "Then open part three of the Matchmaker: the whole picture." } },
+                      4: "That is the end of the Matchmaker." } },  // played after part three (Carlos, 2026-11-06)
     "3": { sections: [5], tag: "Part three: the whole picture",
            cards: { 5: { kicker: "Once Upon a Matchmaker, part three", num: 3 } } }
   };
@@ -3179,7 +3166,12 @@ button.chip:hover{border-color:var(--rubric)}
    M.grid(r, c, o)    a small picture of a matrix with r rows and c columns, for a question about shapes
    M.cross(o)         the guessing picture (Carlos, 2026-11-04): the ratings in the centre, the customers on their
                       left, the films above, the predictions below, the losses beside the predictions, with arrows
-   Two tones carry a pair: "a" (violet) the row of the first matrix, "b" (ochre) the row of the second. In the
+   M.stack(o)         section 1's product (2026-11-05): B on top of A, the product on the right of A; with
+                      layout "textbook" (2026-11-06) B turned above the product (MATRIX.md, The textbook cross)
+   M.workLine(ps, o)  the worked line of one inner product outside a stack (2026-11-06): each pair multiplied, then
+                      the products and the sum, ringed
+   Two tones carry a pair: "a" (violet) the row of the first matrix, "b" (ochre) the row of the second as stored,
+   its column on screen with layout "textbook". In the
    product the row band is "a" and the column band "b", so the cell where the two bands cross holds the inner
    product of the two lit rows. Motions run on timers and the Web Animations API, show() and stop() cut them
    short and draw the end state, and nothing moves under reduced motion. No globals besides MF.M. */
@@ -3328,8 +3320,16 @@ button.chip:hover{border-color:var(--rubric)}
      o.phonePics      true: on a phone the row heads keep only their picture
      o.caption        a word above it; o.shape: true shows its size under it; o.brackets: false hides the brackets
      o.size           "sm", "md" (default) or "lg"; o.cls extra classes on the wrapper
+     o.transpose      true: drawn turned, one drawn row per column of o.cols and one drawn column per row of o.rows
+                      (the films' matrix of the textbook cross, 2026-11-06: one row per number, one column per film).
+                      Every call below still takes logical indices (i a row of o.rows, j a column of o.cols): only the
+                      drawing turns. o.rowHeads names the heads of o.rows wherever they are drawn ("chip" becomes
+                      "full" on top), o.colHeads those of o.cols ("full" becomes "chip" on the left). The size label
+                      and the brackets follow the drawing. A cell keeps data-i and data-j logical.
+     Drawn row heads "none": the column of row heads goes (class mx-norh), so the brackets stand at the left edge.
    The controller:
-     m.el, m.table, m.R, m.C (counts), m.rowSpec, m.colSpec, m.value(i, j), m.td(i, j), m.item(i, j)
+     m.el, m.table, m.R, m.C (logical counts), m.rowSpec, m.colSpec, m.value(i, j), m.td(i, j), m.item(i, j),
+     m.transposed, m.drawn ({ R, C }, the counts as drawn)
      m.set(i, j, x, { pop })   a number (with a landing pop), undefined or "?" for a slot, null for an empty cell
      m.setAll(v)               v a list of rows, a function (i, j), or "numbers", "slots", "empty", "marks"; no motion,
                                and a number that is already drawn only changes its digits (the fast path of a loop)
@@ -3338,9 +3338,13 @@ button.chip:hover{border-color:var(--rubric)}
      m.only({ rows, cols }, "dim" or "hide")   everything outside those rows and columns dims or disappears;
                                rows or cols left out means all of them; m.only(null) shows everything
      m.brackets(on), m.showShape(on), m.convert(o), m.unconvert(), m.rowHead(i), m.colHead(j), m.caption */
+  // A head kind for a line drawn on the left ("row") or on top ("col"): the two names of picture and name swap.
+  var AS_ROW = { full: "chip", chip: "chip", name: "name", pic: "pic", num: "num", none: "none" };
+  var AS_COL = { chip: "full", full: "full", name: "full", pic: "pic", num: "num", none: "none" };
   function matrix(o) {
     o = o || {};
     var R = heads(o.rows), C = heads(o.cols);
+    var T = !!o.transpose;
     var vals = o.values;
     function value(i, j) {
       if (typeof vals === "function") return vals(i, j);
@@ -3349,9 +3353,13 @@ button.chip:hover{border-color:var(--rubric)}
     }
     var plainR = !R.some(function (h) { return h.id; }), plainC = !C.some(function (h) { return h.id; });
     var rk = o.rowHeads || (plainR ? "num" : "chip"), ck = o.colHeads || (plainC ? "num" : "full");
-    var wrap = el("div", "mx mx-" + (o.size || "md") + (o.cls ? " " + o.cls : ""));
+    // What is drawn: rows DR with heads of kind drk on the left, columns DC with heads of kind dck on top.
+    var DR = T ? C : R, DC = T ? R : C;
+    var drk = T ? AS_ROW[ck] || ck : rk, dck = T ? AS_COL[rk] || rk : ck;
+    var wrap = el("div", "mx mx-" + (o.size || "md") + (T ? " mx-tr" : "") + (o.cls ? " " + o.cls : ""));
     if (o.brackets !== false) wrap.classList.add("mx-br");
     if (o.phonePics) wrap.classList.add("mx-phpic");
+    if (drk === "none") wrap.classList.add("mx-norh");
     var cap = el("p", "mx-cap", o.caption || "");
     if (!o.caption) cap.hidden = true;
     wrap.appendChild(cap);
@@ -3359,39 +3367,48 @@ button.chip:hover{border-color:var(--rubric)}
     var thead = el("thead"), hr = el("tr");
     hr.appendChild(el("th", "mx-corner"));
     hr.appendChild(el("th", "mx-bh"));
-    var chs = C.map(function (h, j) { var th = colHead(h, ck); th.dataset.j = String(j); hr.appendChild(th); return th; });
+    var dchs = DC.map(function (h, c) { var th = colHead(h, dck); th.dataset.j = String(c); hr.appendChild(th); return th; });
     hr.appendChild(el("th", "mx-bh"));
     thead.appendChild(hr);
-    if (ck === "none") thead.hidden = true;
+    if (dck === "none") thead.hidden = true;
     t.appendChild(thead);
-    var tb = el("tbody"), rhs = [], tds = [];
-    R.forEach(function (h, i) {
+    var tb = el("tbody"), drhs = [], dtds = [];
+    DR.forEach(function (h, r) {
       var tr = el("tr");
-      tr.dataset.i = String(i);
+      tr.dataset.i = String(r);
       if (h.id) tr.dataset.id = h.id;
-      var th = rowHead(h, rk);
-      rhs.push(th);
+      var th = rowHead(h, drk);
+      drhs.push(th);
       tr.appendChild(th);
       // The two brackets are cells of the first row that span every row: "[" before the numbers, "]" after.
-      if (i === 0) { var bl = el("td", "mx-bl"); bl.rowSpan = R.length; tr.appendChild(bl); }
-      tds.push(C.map(function (ch, j) {
+      if (r === 0) { var bl = el("td", "mx-bl"); bl.rowSpan = DR.length; tr.appendChild(bl); }
+      dtds.push(DC.map(function (ch, c) {
         var td = el("td", "mx-c");
-        td.dataset.i = String(i);
-        td.dataset.j = String(j);
+        // data-i and data-j are the logical row and column
+        td.dataset.i = String(T ? c : r);
+        td.dataset.j = String(T ? r : c);
         tr.appendChild(td);
         return td;
       }));
-      if (i === 0) { var br = el("td", "mx-bra"); br.rowSpan = R.length; tr.appendChild(br); }
+      if (r === 0) { var br = el("td", "mx-bra"); br.rowSpan = DR.length; tr.appendChild(br); }
       tb.appendChild(tr);
     });
-    // Rounded ends of a band: the first and last cell of each row and column know where they are.
-    tds.forEach(function (row) { if (row.length) row[row.length - 1].classList.add("mx-endr"); });
-    if (tds.length) tds[tds.length - 1].forEach(function (td) { td.classList.add("mx-endc"); });
+    // Rounded ends of a band: the first and last cell of each drawn row and column know where they are.
+    dtds.forEach(function (row) { if (row.length) row[row.length - 1].classList.add("mx-endr"); });
+    if (dtds.length) dtds[dtds.length - 1].forEach(function (td) { td.classList.add("mx-endc"); });
     t.appendChild(tb);
+    // The logical view: tds[i][j] is the cell of row i and column j of o.rows and o.cols, rhs[i] the head of row i,
+    // chs[j] the head of column j, wherever they are drawn.
+    var tds, rhs, chs;
+    if (T) {
+      tds = R.map(function (h, i) { return C.map(function (h2, j) { return dtds[j][i]; }); });
+      rhs = dchs;
+      chs = drhs;
+    } else { tds = dtds; rhs = drhs; chs = dchs; }
     var tw = el("div", "mx-tw");
     tw.appendChild(t);
     wrap.appendChild(tw);
-    var size = shape(R.length, C.length);
+    var size = shape(DR.length, DC.length);
     size.classList.add("mx-size");
     if (!o.shape) size.hidden = true;
     wrap.appendChild(size);
@@ -3443,8 +3460,9 @@ button.chip:hover{border-color:var(--rubric)}
       if (kind === "row") return tds[k] ? [rhs[k]].concat(tds[k]) : [];
       return chs[k] ? [chs[k]].concat(tds.map(function (r) { return r[k]; })) : [];
     }
+    // A logical row of a turned matrix is drawn as a column: it takes the column's band.
     function band(kind, k, tone) {
-      var list = lineOf(kind, k), cls = toneCls[kind];
+      var list = lineOf(kind, k), cls = toneCls[T ? (kind === "row" ? "col" : "row") : kind];
       list.forEach(function (c) { c.classList.remove(cls.a, cls.b); });
       if (tone && cls[tone]) list.forEach(function (c) { c.classList.add(cls[tone]); });
       return api;
@@ -3478,6 +3496,7 @@ button.chip:hover{border-color:var(--rubric)}
     }
     var api = {
       el: wrap, table: t, caption: cap, sizeEl: size, R: R.length, C: C.length, rowSpec: R, colSpec: C,
+      transposed: T, drawn: { R: DR.length, C: DC.length },
       value: value,
       td: function (i, j) { return (tds[i] && tds[i][j]) || null; },
       item: function (i, j) { var td = tds[i] && tds[i][j]; return td ? td.firstChild : null; },
@@ -3802,13 +3821,19 @@ button.chip:hover{border-color:var(--rubric)}
                            films, above the ratings (part two puts one number's Before and After there), and o.note
                            under the customers, on the left of the losses (the scene's tools). On a phone: the note on
                            top, the average under the losses. The arrow pr is the line between the predictions and
-                           the ratings (no head). */
+                           the ratings (no head).
+     o.layout "textbook" (Carlos, 2026-11-06, REQUEST.md, seventh message: the orientation of the grid sketch): as the
+                           stack, but the films' matrix is drawn turned (the caller builds o.f with M.matrix's
+                           transpose: one row per number, one column per film) ABOVE the predictions, its columns
+                           aligned with theirs; the customers on the predictions' left, their rows level. The
+                           predictions need no heads of their own. The arrow fp runs straight down from the films into
+                           the predictions, cp straight right from the customers. */
   var SVGNS = "http://www.w3.org/2000/svg";
   var ARROWS = ["cp", "fp", "rs", "ps", "sa", "pr"];
   function cross(o) {
     o = o || {};
-    var STK = o.layout === "stack";
-    var root = el("div", "mx-cross" + (STK ? " mx-x-stk" : "") + (o.cls ? " " + o.cls : ""));
+    var TB = o.layout === "textbook", STK = o.layout === "stack" || TB;
+    var root = el("div", "mx-cross" + (STK ? " mx-x-stk" : "") + (TB ? " mx-x-tb" : "") + (o.cls ? " " + o.cls : ""));
     var parts = {};
     [["c", "mx-xc"], ["f", "mx-xf"], ["r", "mx-xr"], ["p", "mx-xp"], ["s", "mx-xs"], ["avg", "mx-xa"], ["desk", "mx-xd"],
      ["nb", "mx-xnb"], ["note", "mx-xnote"]].forEach(function (a) {
@@ -3890,7 +3915,11 @@ button.chip:hover{border-color:var(--rubric)}
     function stackArrows(C, F, R, Pp, S, A) {
       if (C && Pp) paintArrow("cp", run(C.body.r, Pp.out.l, C.body.cy), "r");
       else paintArrow("cp", null);
-      if (F && Pp && F.body.r + GAP + 8 < Pp.body.cx) {
+      if (TB) {
+        // the films stand above the predictions: a straight drop from their last row into the predictions' top
+        var y1 = F ? F.body.b + 3 : 0, y2 = Pp ? Pp.out.t - 3 : 0;
+        paintArrow("fp", F && Pp && y2 - y1 > 14 ? [[Pp.body.cx, y1], [Pp.body.cx, y2]] : null, "d");
+      } else if (F && Pp && F.body.r + GAP + 8 < Pp.body.cx) {
         // the line leaves the films at their middle, or higher up their rows when the drop would be too short
         var top = Pp.out.t - 3, fy = Math.max(F.body.t + 4, Math.min(F.body.cy, top - 16));
         paintArrow("fp", top - fy > 14 ? [[F.body.r + GAP, fy], [Pp.body.cx, fy], [Pp.body.cx, top]] : null, "d");
@@ -3998,9 +4027,57 @@ button.chip:hover{border-color:var(--rubric)}
      S.run(list, { gap, each, keep })   the pairs one after another, lit, each score straight into its cell (a
                                promise); each(i, j) is called as a pair lights; keep leaves the last pair lit
      S.stop()                  cuts any motion short and draws where it was going
-     S.redraw()                measures again (a ResizeObserver and the end of a transition call it too) */
+     S.redraw()                measures again (a ResizeObserver and the end of a transition call it too)
+     o.layout "textbook" (Carlos, 2026-11-06: the orientation of the grid sketch, REQUEST.md, seventh message): the
+                    second matrix drawn turned (o.B keeps one row per film; M.matrix's transpose) ABOVE the product,
+                    its columns aligned with the product's columns; the first matrix on the product's left, their rows
+                    level. The product has no heads by default (the first's row heads and the second's column heads
+                    name its rows and columns). A lit pair: the first's row i and the second's column j outlined, an
+                    arrow straight right into the product's row, one straight down into its column. With C false the
+                    second stands up and to the right of the first, where the product would come. */
+  /* The worked line of one inner product (2026-11-06, taken out of M.stack so that a scene can show it without a
+     stack): the first line each pair multiplied, a x b + c x d ..., the second their products and then the sum,
+     ringed. ps: [[a, b], ...]; sum: the sum. Returns { el, parts }: el a div.mx-wl holding the two lines, parts the
+     pieces in the order S.work reveals them (every pair, the products, the sum). */
+  function lineOf(ps, sum) {
+    var box = el("div", "mx-wl"), row1 = el("span", "mx-cl"), row2 = el("span", "mx-cl");
+    ps.forEach(function (p, k) {
+      var g = el("span", "mx-cg");
+      if (k) g.appendChild(el("span", "mx-co", "+"));
+      g.appendChild(N.cell(p[0]));
+      g.appendChild(el("span", "mx-co mx-ct2", N.TIMES));
+      g.appendChild(N.cell(p[1]));
+      row1.appendChild(g);
+    });
+    var eq1 = el("span", "mx-cg");
+    eq1.appendChild(el("span", "mx-co", "="));
+    ps.forEach(function (p, k) {
+      if (k) eq1.appendChild(el("span", "mx-co", "+"));
+      eq1.appendChild(N.cell(p[0] * p[1]));
+    });
+    row2.appendChild(eq1);
+    var eq2 = el("span", "mx-cg mx-csum");
+    eq2.appendChild(el("span", "mx-co", "="));
+    eq2.appendChild(N.cell(sum));
+    row2.appendChild(eq2);
+    box.appendChild(row1);
+    box.appendChild(row2);
+    return { el: box, parts: [].slice.call(row1.children).concat([eq1, eq2]) };
+  }
+  /* M.workLine(pairs, o): the same line for a scene, outside a stack (sections 3 and 4 work one prediction this way).
+     o.sum defaults to the sum of the products. A scene that plays it adds mx-cwait to every part and takes it off one
+     part at a time, as S.work does (260 ms, then every 300 ms). */
+  function workLine(ps, o) {
+    o = o || {};
+    var sum = o.sum !== undefined ? o.sum : ps.reduce(function (t, p) { return t + p[0] * p[1]; }, 0);
+    var w = lineOf(ps, sum);
+    if (o.cls) w.el.className += " " + o.cls;
+    return { el: w.el, parts: w.parts, sum: sum };
+  }
+
   function stack(o) {
     o = o || {};
+    var TB = o.layout === "textbook";
     var common = { size: o.size, brackets: o.brackets, shape: o.shapes, phonePics: o.phonePics };
     function opts(extra, cls) {
       var r = {};
@@ -4009,8 +4086,10 @@ button.chip:hover{border-color:var(--rubric)}
       r.cls = (r.cls ? r.cls + " " : "") + cls;
       return r;
     }
-    var A = matrix(opts(o.A, "mx-ma")), B = matrix(opts(o.B, "mx-mb"));
-    var root = el("div", "mx-stk" + (o.C === false ? " mx-stk-two" : "") + (o.side ? " mx-stk-side" : "") + (o.cls ? " " + o.cls : ""));
+    var bo = opts(o.B, "mx-mb");
+    if (TB) bo.transpose = true;
+    var A = matrix(opts(o.A, "mx-ma")), B = matrix(bo);
+    var root = el("div", "mx-stk" + (TB ? " mx-stk-tb" : "") + (o.C === false ? " mx-stk-two" : "") + (o.side ? " mx-stk-side" : "") + (o.cls ? " " + o.cls : ""));
     var sa = el("div", "mx-sslot mx-ssa"), sb = el("div", "mx-sslot mx-ssb");
     sa.appendChild(A.el);
     sb.appendChild(B.el);
@@ -4026,8 +4105,8 @@ button.chip:hover{border-color:var(--rubric)}
       var cOpts = opts(o.C || {}, "mx-mc");
       cOpts.rows = A.rowSpec.map(function (h) { return h.id ? { id: h.id } : { label: h.label }; });
       cOpts.cols = B.rowSpec.map(function (h) { return h.id ? { id: h.id } : { label: h.label }; });
-      if (!cOpts.colHeads) cOpts.colHeads = B.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
-      if (!cOpts.rowHeads) cOpts.rowHeads = A.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
+      if (!cOpts.colHeads) cOpts.colHeads = TB ? "none" : B.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
+      if (!cOpts.rowHeads) cOpts.rowHeads = TB ? "none" : A.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
       cOpts.fill = "slots";
       cOpts.values = function (i, j) { return value(i, j); };
       C = matrix(cOpts);
@@ -4059,9 +4138,17 @@ button.chip:hover{border-color:var(--rubric)}
       var x0 = (r.left - b.left) / k, y0 = (r.top - b.top) / k, w = r.width / k, h = r.height / k;
       return { l: x0, t: y0, r: x0 + w, b: y0 + h, cx: x0 + w / 2, cy: y0 + h / 2, w: w, h: h };
     }
+    // The box of row i of a matrix (its head and its cells), wherever it is drawn: a column of a turned matrix.
     function rowBox(m, i) {
-      var a = rect(m.rowHead(i)), z = rect(m.td(i, m.C - 1)), f = rect(m.td(i, 0));
-      return { l: Math.min(a.l, f.l), r: z.r, t: Math.min(f.t, z.t), b: Math.max(f.b, z.b) };
+      var l = Infinity, t = Infinity, r = -Infinity, b = -Infinity, list = [m.rowHead(i)];
+      for (var k = 0; k < m.C; k++) list.push(m.td(i, k));
+      list.forEach(function (n) {
+        if (!n) return;
+        var x = rect(n);
+        if (!(x.w > 0 && x.h > 0)) return;
+        l = Math.min(l, x.l); t = Math.min(t, x.t); r = Math.max(r, x.r); b = Math.max(b, x.b);
+      });
+      return { l: l, r: r, t: t, b: b };
     }
     // The left (or top) edge of a head, or of the first cell when the heads are hidden ("none").
     function edge(head, cell, side) {
@@ -4093,6 +4180,7 @@ button.chip:hover{border-color:var(--rubric)}
         n.setAttribute("visibility", "visible");
       });
       if (!C) return;
+      if (TB) { drawTB(i, j, ra, rb, pad); return; }
       var y = (ra.t + ra.b) / 2, x1 = ra.r + pad + 5, x2 = edge(C.rowHead(i), C.td(i, 0), "l") - 4;
       if (x2 - x1 > 16) {
         G.lineA.setAttribute("d", pts([[x1, y], [x2 - 8, y]]));
@@ -4109,6 +4197,29 @@ button.chip:hover{border-color:var(--rubric)}
       });
       if (cx - xb > 10 && top - yb > 14) {
         G.lineB.setAttribute("d", pts([[xb, yb], [cx, yb], [cx, top - 8]]));
+        G.headB.setAttribute("d", head([cx, top], "d"));
+        G.lineB.setAttribute("visibility", "visible");
+        G.headB.setAttribute("visibility", "visible");
+      }
+    }
+    // The textbook cross: straight right from the first's row into the product's row, straight down from the
+    // second's column into the product's column (above the product's caption and size when they are in the way).
+    function drawTB(i, j, ra, rb, pad) {
+      var y = (ra.t + ra.b) / 2, x1 = ra.r + pad + 5, x2 = edge(C.rowHead(i), C.td(i, 0), "l") - 4;
+      if (x2 - x1 > 16) {
+        G.lineA.setAttribute("d", pts([[x1, y], [x2 - 8, y]]));
+        G.headA.setAttribute("d", head([x2, y], "r"));
+        G.lineA.setAttribute("visibility", "visible");
+        G.headA.setAttribute("visibility", "visible");
+      }
+      var cx = rect(C.td(0, j)).cx, yb = rb.b + pad + 5, top = edge(C.colHead(j), C.td(0, j), "t") - 3;
+      [C.caption, C.sizeEl].forEach(function (n) {
+        if (!n || n.hidden || !n.offsetWidth) return;
+        var r = rect(n);
+        if (cx >= r.l - 6 && cx <= r.r + 6 && r.t > yb && r.t < top) top = r.t - 3;
+      });
+      if (top - yb > 14) {
+        G.lineB.setAttribute("d", pts([[cx, yb], [cx, top - 8]]));
         G.headB.setAttribute("d", head([cx, top], "d"));
         G.lineB.setAttribute("visibility", "visible");
         G.headB.setAttribute("visibility", "visible");
@@ -4138,31 +4249,9 @@ button.chip:hover{border-color:var(--rubric)}
     }
     function calcLine(i, j) {
       calc.textContent = "";
-      var ps = product(i, j), items = [];
-      function add(node, cls) { if (cls) node.classList.add(cls); calc.appendChild(node); items.push(node); return node; }
-      var row1 = el("span", "mx-cl"), row2 = el("span", "mx-cl");
-      ps.forEach(function (p, k) {
-        var g = el("span", "mx-cg");
-        if (k) g.appendChild(el("span", "mx-co", "+"));
-        g.appendChild(N.cell(p[0]));
-        g.appendChild(el("span", "mx-co mx-ct2", N.TIMES));
-        g.appendChild(N.cell(p[1]));
-        row1.appendChild(g);
-      });
-      var eq1 = el("span", "mx-cg");
-      eq1.appendChild(el("span", "mx-co", "="));
-      ps.forEach(function (p, k) {
-        if (k) eq1.appendChild(el("span", "mx-co", "+"));
-        eq1.appendChild(N.cell(p[0] * p[1]));
-      });
-      row2.appendChild(eq1);
-      var eq2 = el("span", "mx-cg mx-csum");
-      eq2.appendChild(el("span", "mx-co", "="));
-      eq2.appendChild(N.cell(value(i, j)));
-      row2.appendChild(eq2);
-      calc.appendChild(row1);
-      calc.appendChild(row2);
-      return [].slice.call(row1.children).concat([eq1, eq2]);
+      var w = lineOf(product(i, j), value(i, j));
+      while (w.el.firstChild) calc.appendChild(w.el.firstChild);
+      return w.parts;
     }
     function draw0() {
       paint();
@@ -4250,89 +4339,95 @@ button.chip:hover{border-color:var(--rubric)}
     return X;
   }
 
-  MF.M = { matrix: matrix, product: product, cross: cross, stack: stack, shape: shape, grid: grid, TEMPO: TEMPO };
+  MF.M = { matrix: matrix, product: product, cross: cross, stack: stack, workLine: workLine, shape: shape, grid: grid,
+    TEMPO: TEMPO };
 })();
 </script>
 <script>
-/* The guessing diagram of section 2 (MF.G.diagram) and Popper's schema (MF.G.schema). Owned by agent S2-A
-   (BRIEF-s2.md); GUESS.md has the design, the colours, the size budget and how a later section extends it.
+/* The guessing diagram of one corner (MF.G.diagram), the small cross since 2026-11-06, and Popper's schema
+   (MF.G.schema). The diagram was S2-A's (BRIEF-s2.md) and is agent b's since the port to the textbook cross
+   (BRIEF-port-b.md); the schema is unchanged. GUESS.md has the design, the colours, the sizes and the API.
    Loaded after notation.js and matrix.js, before the sections. Classes start with g-.
 
-   One corner of the table: one customer, one film, their two guessed rows of two numbers, the actual rating y.
-   The diagram is two of the notation's stacks and a loss, read left to right in the grammar of the AML
-   grasshopper pages (the model in ink, the forward pass and the loss in the rubric violet):
-     guesses, prediction    the customer's guessed row on top and the film's row under it are the guesses; the
-                            products and the sum under the rule are the prediction (the inner product)
-     truth, compare,        a stack of one column: the actual rating on top, the prediction under it, a minus
-     difference             between them, and under the rule the difference, the rating minus the prediction
-     square                 the square of the difference, given directly (Carlos, 2026-11-04: no stack that
-                            multiplies the difference by itself)
-     loss                   the square, large and ringed in violet
-     bubble                 why we square, with a tiny table of two differences and their squares
-   The results stand on one line, so the forward pass reads along the bottom: prediction, difference, square, loss.
-   o.direct (every diagram after section 2's scene diagram, Carlos 2026-11-04: "afterwards, we go from predictions
-   and ratings directly into losses"): the rating over the prediction, an arrow, and the loss; no difference and no
-   square are drawn, and the parts "difference" and "square" show nothing new.
+   One corner of the table: one customer, one film, their guessed numbers, the actual rating y. Since 2026-11-06 the
+   corner is drawn the way part two draws its board (M.cross, layout "textbook"): the customer's guessed row (two
+   numbers) on the left, the film's guessed column (its first number on top) above the prediction, the prediction where
+   the row and the column meet, the rating on the right of the prediction, the loss under the two, straight from the
+   prediction and the rating (Carlos, 2026-11-04), and under the customer's row the worked line of the inner product
+   (each pair multiplied, then the products and the sum, ringed: M.workLine). The prediction always stands on the left
+   of the rating, and the loss is (prediction - rating) squared (Carlos, 2026-11-06).
 
-   var G = MF.G;
-   var D = G.diagram({ customer: "ida", film: "paddington", c: [-1, -2], f: [-1, 2], parts: 0 });
-   box.appendChild(D.el);
+                                Paddington
+                            (1)   [ -3 ]
+                            (2)   [  2 ]
+                                     v
+             (1)  (2)            prediction    rating
+      Ida  [ -3   -3 ]  >          [ 3 ]        [ 2 ]
+                                      \____ ____/
+      -3 x -3  +  -3 x 2                   v
+      =  9  +  -6  =  (3)               loss  1
 
-   The API that S2-B and later sections build on (kept from the main session's stub, same names and meanings):
+     var G = MF.G;
+     var D = G.diagram({ customer: "ida", film: "paddington", c: [-3, -3], f: [-3, 2], parts: 0 });
+     box.appendChild(D.el);
+
    G.diagram(o)          o.customer, o.film: ids (default MF.S2.corner); o.rating: y (default MF.rating of the two);
-                         o.c, o.f: the guessed rows, two numbers each (an entry left undefined draws "?");
-                         o.parts: how many parts show at first (default all); o.size: "md" (default), "lg" or "sm"
-                         (sm: compact, top to bottom, for several corners side by side).
-                         Added by S2-A: o.pace (the tempo of reveals, default 1, smaller is faster), o.room (true:
-                         more room above and between the guessed rows, for a grasshopper on a number), o.bubble
-                         (false: the bubble and its place are left out, for compact corners side by side; its step
-                         then shows nothing new).
-                         Added by the main session (2026-11-04): o.direct (see above).
-   D.PARTS               ["guesses", "truth", "prediction", "compare", "difference", "square", "loss", "bubble"]
+                         o.c: the customer's two guessed numbers, o.f: the film's two (an entry left undefined draws
+                         "?"); o.parts: how many parts show at first (default all); o.size "md" (default), "lg" or
+                         "sm"; o.pace: the tempo of reveals (default 1, smaller is faster); o.room: true gives every
+                         guessed number room above it for a grasshopper (MF.H.team), "c" or "f" only the customer's
+                         row or only the film's column (a scene with one grasshopper); o.work: false leaves the
+                         worked line out (section 3's descent, whose numbers are rounded to two places: a product of
+                         two rounded numbers would not match its factors). o.direct and o.bubble are
+                         accepted and ignored: every diagram goes straight from the prediction and the rating to the
+                         loss since 2026-11-04, and the bubble went with section 2's scene diagram.
+   D.PARTS               ["guesses", "rating", "prediction", "loss"]
    D.show(k)             the first k parts at once, no motion (0: nothing; D.PARTS.length: everything).
    D.reveal(k)           part k (0-based) comes in; the parts before it show at once. Promise of true, or false when
                          cut short by D.stop(), D.show() or a new reveal. D.reveal(k, { pace }) sets the tempo.
-   D.set(which, i, x, o) one guessed number: which "c" (the customer's row) or "f" (the film's row), i 0 or 1, x a
-                         number (undefined draws "?"). The prediction, difference, square and loss follow at once.
-                         o.pop: a small landing motion on the changed number, with a ring in ochre (the update).
-   D.setRows(c, f)       both rows at once, no motion.
+                         "prediction" plays the worked line (each pair, the products, the sum) and flies the sum into
+                         the prediction; "loss" flies the prediction, then the rating, into the loss.
+   D.set(which, i, x, o) one guessed number: which "c" (the customer's row) or "f" (the film's column), i 0 or 1 (the
+                         film's first number is the top cell of its column), x a number (undefined draws "?"). The
+                         worked line, the prediction and the loss follow at once. o.pop: a small landing motion with
+                         a ring in ochre (the update).
+   D.setRows(c, f)       all four at once, no motion.
    D.values()            { c, f, y, prediction, difference, square, loss }: numbers, or null while a guess is "?".
-                         square and loss are the same number for one corner.
+                         difference is the prediction minus the rating; square and loss are the same number.
    D.focus(which, i)     rings one guessed number in ochre (which null clears the ring).
    D.cell(which, i)      the element of one guessed number. It stays the same element for the life of the diagram
                          (D.set repaints it), so a listener on it survives every change.
+   D.result(name)        the number cell of "rating", "prediction" (also "pair", the prediction beside the rating),
+                         "sum" (the ringed sum of the worked line) or "loss"; any other name gives null.
+   D.product(j)          the product cell of column j in the worked line (D.set builds the line again: ask again).
+   D.work()              the worked line of the moment, { el, parts, sum } (M.workLine), or null while a guess is "?".
+   D.matrix(name)        the MF.M matrix of "c" (the customer's row), "f" (the film's column), "p" (the prediction)
+                         or "r" (the rating), for its heads.
+   D.part(name)          the element of "customer", "film", "prediction", "rating", "work" or "loss".
    D.note                an empty box under the diagram for the scene's own words and buttons.
+   D.layer               an overlay inside the diagram for flying copies and a section's marks.
    D.stop()              ends any motion at once and draws where it was going.
-   D.el                  the element.
-   G.loss(c, f, y)       the squared difference of y and the inner product of c and f (plain arithmetic).
-   Added by S2-A:
-   G.predict(c, f)       the inner product of two rows (plain arithmetic).
-   D.layer               an overlay inside the diagram for flying copies and a later section's marks.
-   D.part(name)          the element that holds a part (a stack, the loss, the bubble, or an added part).
-   D.result(name)        the number cell of "rating", "prediction", "difference", "square" or "loss" (with o.direct
-                         the difference and the square are hidden; "pair" gives the prediction under the rating).
-   D.product(j)          the product cell of column j in the prediction's stack.
-   D.stacks()            { prediction, difference, square }: the stack controllers of the moment (D.set builds them
-                         again, so ask again after a change); square is null since 2026-11-04 (a single cell).
+   D.redraw()            measures the cross again and draws its arrows (after a change of layout).
    D.state()             { shown, aim, size, values }.
-   D.addPart(name, node, o)  a part of a later section: appended to D.PARTS, drawn in the place o.area names
-                         ("extra", a row under the diagram, by default), shown and revealed like the others.
+   D.el                  the element.
+   G.loss(c, f, y)       (the prediction minus y) squared, the prediction the inner product of c and f.
+   G.predict(c, f)       the inner product of two lists of numbers (plain arithmetic).
    G.schema(o)           Popper's tetradic schema, revealable one element at a time (see the comment above schema).
    G.PARTS, G.SCHEMA     the two lists of parts. */
 (function () {
   "use strict";
   var MF = window.MF;
-  if (!MF || !MF.N) return;
+  if (!MF || !MF.N || !MF.M) return;
   var N = MF.N, el = MF.el;
   var MOTION = !MF.reducedMotion;
-  var PARTS = ["guesses", "truth", "prediction", "compare", "difference", "square", "loss", "bubble"];
-  // Durations in ms at pace 1.
-  var TEMPO = { enter: 460, pop: 520, fly: 820, settle: 260, ring: 300 };
+  var PARTS = ["guesses", "rating", "prediction", "loss"];
+  // Durations in ms at pace 1. first and beat: the worked line, as M.stack's S.work plays it.
+  var TEMPO = { enter: 460, pop: 520, fly: 820, settle: 260, ring: 300, first: 260, beat: 300 };
 
   /* ARITHMETIC */
   function known(v) { return typeof v === "number" && isFinite(v); }
   function predict(c, f) { var s = 0; for (var k = 0; k < c.length; k++) s += c[k] * f[k]; return s; }
-  function loss(c, f, y) { var d = y - predict(c, f); return d * d; }
+  function loss(c, f, y) { var d = predict(c, f) - y; return d * d; }
 
   /* SMALL TOOLS */
   // Timers that one call cancels: run([[t, fn], ...], end) resolves true at the end, false if stop() came first.
@@ -4374,14 +4469,14 @@ button.chip:hover{border-color:var(--rubric)}
     return anim(node, [{ transform: "translateY(10px)", opacity: 0 }, { transform: "none", opacity: 1 }],
                 { duration: ms || TEMPO.enter, easing: "cubic-bezier(.2,.7,.2,1)" });
   }
-  // A copy of a badge travels from one element to another inside the layer, then goes.
+  // A copy of a number travels from one element to another inside the layer, then goes.
   function fly(layer, from, to, dur, o) {
     o = o || {};
     if (!MOTION || !layer || !from || !to) return null;
     var base = layer.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
     if (!a.width || !b.width) return null;
     var g = from.cloneNode(true);
-    g.classList.remove("nt-hot", "nt-ask", "nt-off", "g-focus");
+    g.classList.remove("nt-hot", "nt-ask", "nt-off", "g-focus", "g-moved", "mx-xbody");
     g.classList.add("g-ghost");
     g.removeAttribute("role");
     g.removeAttribute("aria-label");
@@ -4401,7 +4496,7 @@ button.chip:hover{border-color:var(--rubric)}
     setTimeout(function () { if (g.parentNode) g.parentNode.removeChild(g); }, dur + (o.delay || 0) + 40);
     return g;
   }
-  // A number badge that lives as long as the diagram: a number, or "?" while it is unknown.
+  // A number cell that lives as long as the diagram: a number, or "?" while it is unknown.
   function paintNum(c, x) {
     c.classList.remove("nt-slot", "nt-draft", "nt-wrong", "nt-right", "nt-ask", "nt-hot");
     if (known(x)) return N.setCell(c, x);
@@ -4417,15 +4512,13 @@ button.chip:hover{border-color:var(--rubric)}
     c.setAttribute("role", "img");
     return paintNum(c, x);
   }
-  function swapIn(holder, node) {
-    if (!holder) return;
-    if (holder.firstChild) holder.replaceChild(node, holder.firstChild);
-    else holder.appendChild(node);
-  }
+  // A cell of an MF.M matrix takes one of the diagram's own number cells.
+  function seat(td, c) { if (!td) return; td.textContent = ""; td.appendChild(c); }
 
-  /* THE GUESSING DIAGRAM */
+  /* THE SMALL CROSS */
   function diagram(o) {
     o = o || {};
+    var M = MF.M;
     var corner = (MF.S2 && MF.S2.corner) || ["ida", "paddington"];
     var who = o.customer || corner[0], film = o.film || corner[1];
     var y = o.rating !== undefined ? o.rating : MF.rating(who, film);
@@ -4437,26 +4530,26 @@ button.chip:hover{border-color:var(--rubric)}
     var shown = 0, aim = 0, token = 0, focus = null;
     var seq = Seq();
 
-    var root = el("div", "g-dia g-" + size + (o.room ? " g-room" : "") + (o.bubble === false ? " g-nobub" : ""));
-    var grid = el("div", "g-grid");
+    var room = o.room === "c" || o.room === "f" ? " g-room g-room" + o.room : (o.room ? " g-room g-roomc g-roomf" : "");
+    var root = el("div", "g-dia g-" + size + room + (o.work === false ? " g-nowork" : ""));
     var note = el("div", "g-note");
     var layer = el("div", "g-layer");
-    root.appendChild(grid);
-    root.appendChild(note);
-    root.appendChild(layer);
+    function mat(extra) {
+      var r = { size: size, fill: "empty" };
+      Object.keys(extra).forEach(function (k) { r[k] = extra[k]; });
+      return M.matrix(r);
+    }
+    // The customer's row; the film's column (drawn turned, its name on its left); the prediction and the rating, one
+    // cell each.
+    var mc = mat({ rows: [who], cols: dims, rowHeads: "chip", colHeads: "pic", cls: "g-mc" });
+    var mf = mat({ rows: [film], cols: dims, transpose: true, rowHeads: "pic", colHeads: "pic", caption: MF.get(film).n, cls: "g-mf" });
+    var mp = mat({ rows: [who], cols: [film], rowHeads: "none", colHeads: "none", caption: "prediction", cls: "g-mp" });
+    var mr = mat({ rows: [who], cols: [film], rowHeads: "none", colHeads: "none", caption: "rating", cls: "g-mr" });
+    [mc.colHead(0), mc.colHead(1), mf.colHead(0), mf.colHead(1)].forEach(function (th, k) {
+      if (th) th.title = MF.get(dims[k % 2]).t;
+    });
 
-    var P = {
-      pred: el("div", "g-part g-pred"),
-      diff: el("div", "g-part g-diff"),
-      sq: el("div", "g-part g-sq"),
-      loss: el("div", "g-part g-loss"),
-      bub: el("div", "g-part g-bub"),
-      extra: el("div", "g-extra")
-    };
-    ["pred", "diff", "sq", "loss", "bub", "extra"].forEach(function (k) { grid.appendChild(P[k]); });
-    P.extra.hidden = true;
-
-    // The four guessed numbers keep their elements for the life of the diagram.
+    // The four guessed numbers, the prediction, the rating and the loss keep their elements for the life of the diagram.
     var cells = { c: [], f: [] };
     ["c", "f"].forEach(function (w) {
       for (var i = 0; i < 2; i++) {
@@ -4464,96 +4557,42 @@ button.chip:hover{border-color:var(--rubric)}
         c.dataset.which = w;
         c.dataset.i = String(i);
         cells[w].push(c);
+        seat((w === "c" ? mc : mf).td(0, i), c);
       }
     });
-    var lossCap = el("p", "g-cap g-fwd", "loss");
-    var lossCell = newNum(undefined, "g-lossn");
-    P.loss.appendChild(lossCap);
-    P.loss.appendChild(lossCell);
-    // The square, given directly: one cell with its label, on the line of the results.
-    var sqCell = newNum(undefined, "g-sqn");
-    P.sq.appendChild(el("span", "g-cap g-fwd g-sqlab", "square"));
-    P.sq.appendChild(sqCell);
-    // o.direct: the rating over the prediction, an arrow, the loss. The loss moves beside the pair.
-    var direct = !!o.direct;
-    var diffHold = el("div", "g-dhold");
-    P.diff.appendChild(diffHold);
-    if (direct) {
-      root.classList.add("g-direct");
-      var join = el("span", "g-join");
-      join.appendChild(el("i"));
-      join.setAttribute("aria-hidden", "true");
-      P.diff.appendChild(join);
-      P.diff.appendChild(P.loss);
-      P.sq.hidden = true;
-    }
-    var bubText = el("div", "g-bubt");
-    bubText.appendChild(el("p", "g-bubq", "Why square?"));
-    bubText.appendChild(el("p", "g-bubw", "Bigger mistakes are punished harder: a difference twice as big costs four times as much."));
-    var bubTab = el("table", "g-bubtab");
-    var bubIn = el("div", "g-bubin");
-    bubIn.appendChild(bubText);
-    bubIn.appendChild(bubTab);
-    P.bub.appendChild(bubIn);
-    P.bub.setAttribute("role", "note");
-    var extras = {};
-    var stk = { p: null, d: null };
+    var predCell = newNum(undefined, "g-predn"), rateCell = newNum(y, "g-raten");
+    seat(mp.td(0, 0), predCell);
+    seat(mr.td(0, 0), rateCell);
+    var lossBox = el("div", "g-loss");
+    var lossCell = newNum(undefined, "g-lossn mx-xbody");
+    lossBox.appendChild(el("p", "mx-cap g-cap", "loss"));
+    lossBox.appendChild(lossCell);
+    var workBox = el("div", "g-work");
+    var X = M.cross({ c: mc.el, f: mf.el, p: mp.el, r: mr.el, s: lossBox, note: workBox, layout: "textbook", cls: "g-x" });
+    root.appendChild(X.el);
+    root.appendChild(note);
+    root.appendChild(layer);
+    var wl = null;
 
     function vals() {
       var ok = known(st.c[0]) && known(st.c[1]) && known(st.f[0]) && known(st.f[1]);
-      var p = ok ? predict(st.c, st.f) : null, d = ok ? y - p : null;
+      var p = ok ? predict(st.c, st.f) : null, d = ok ? p - y : null;
       return { ok: ok, c: st.c.slice(), f: st.f.slice(), y: y, prediction: p, difference: d,
                square: ok ? d * d : null, loss: ok ? d * d : null };
     }
-    function zeros(a) { return a.map(function (v) { return known(v) ? v : 0; }); }
-    function idx(name) { return parts.indexOf(name); }
-    function on(name) { var k = idx(name); return k >= 0 && k < shown; }
+    function on(name) { var k = parts.indexOf(name); return k >= 0 && k < shown; }
 
-    function bubble(v) {
-      bubTab.textContent = "";
-      var d = v.ok && v.difference !== 0 ? v.difference : 1;
-      var ds = [d, 2 * d];
-      [["difference", ds], ["square", ds.map(function (x) { return x * x; })]].forEach(function (row) {
-        var tr = el("tr");
-        tr.appendChild(el("th", "", row[0]));
-        row[1].forEach(function (x) { var td = el("td"); td.appendChild(N.cell(x)); tr.appendChild(td); });
-        bubTab.appendChild(tr);
-      });
-    }
-    // Build the three stacks for the numbers of the moment; the guessed numbers move into the first one.
-    function build() {
-      [stk.p, stk.d].forEach(function (s) { if (s) s.show(0); });
-      layer.textContent = "";
+    // The worked line, the prediction and the loss for the numbers of the moment.
+    function refresh() {
       var v = vals();
-      var s1 = N.stack({ top: { p: who, values: zeros(st.c) }, bottom: { p: film, values: zeros(st.f) }, films: dims,
-                         heads: "pic", sumLabel: "prediction", slots: v.ok ? null : [0, 1, "sum"], pace: pace });
-      var tops = s1.table.querySelectorAll("tr.nt-top td.nt-c"), bots = s1.table.querySelectorAll("tr.nt-bot td.nt-c .nt-h");
-      for (var i = 0; i < 2; i++) {
-        cells.c[i].classList.remove("nt-hot");
-        cells.f[i].classList.remove("nt-hot");
-        swapIn(tops[i], cells.c[i]);
-        swapIn(bots[i], cells.f[i]);
-      }
-      var cornerTh = s1.table.querySelector("thead th.rt-corner");
-      if (cornerTh) cornerTh.appendChild(el("span", "g-glab", "guesses"));
-      Array.prototype.forEach.call(s1.table.querySelectorAll("thead th.rt-film"), function (th, j) { th.title = MF.get(dims[j]).t; });
-      s1.table.querySelectorAll("tr.nt-res td.nt-pc").forEach(function (td) { td.classList.add("g-fwdrule"); });
-      P.pred.textContent = "";
-      P.pred.appendChild(s1.el);
-
-      var s2 = N.stack({ top: { label: "rating", values: [y] }, bottom: { label: "prediction", values: [v.ok ? v.prediction : 0] },
-                         films: [dims[0]], heads: "none", resLabel: "difference", slots: v.ok ? null : [0], pace: pace });
-      var minus = s2.table.querySelector("tr.nt-bot .nt-x");
-      if (minus) minus.textContent = MF.MINUS;
-      if (v.ok) N.setCell(s2.table.querySelector("tr.nt-res .nt-prod"), v.difference);
-      else swapIn(s2.table.querySelector("tr.nt-bot td.nt-c .nt-h"), N.slot());
-      diffHold.textContent = "";
-      diffHold.appendChild(s2.el);
-
-      paintNum(sqCell, v.ok ? v.square : undefined);
+      paintNum(predCell, v.ok ? v.prediction : undefined);
       paintNum(lossCell, v.ok ? v.loss : undefined);
-      bubble(v);
-      stk.p = s1; stk.d = s2;
+      workBox.textContent = "";
+      wl = null;
+      if (v.ok) {
+        wl = M.workLine([[st.c[0], st.f[0]], [st.c[1], st.f[1]]], { sum: v.prediction, cls: "g-wl" });
+        workBox.appendChild(wl.el);
+      }
       root.classList.toggle("g-open", !v.ok);
     }
     function paintFocus() {
@@ -4561,13 +4600,19 @@ button.chip:hover{border-color:var(--rubric)}
         cells[w].forEach(function (c, i) { c.classList.toggle("g-focus", !!focus && focus[0] === w && focus[1] === i); });
       });
     }
+    // On a phone the prediction and the rating stand too close for the line between them: it would read as a dot.
+    var narrow = window.matchMedia ? window.matchMedia("(max-width: 560px)") : null;
+    function arrows() {
+      var pr = on("prediction") && on("rating") && !(narrow && narrow.matches);
+      X.arrows({ cp: on("prediction"), fp: on("prediction"), pr: pr, rs: on("loss"), ps: on("loss") });
+    }
+    if (narrow && narrow.addEventListener) narrow.addEventListener("change", function () { arrows(); });
     // The state of `shown` parts, at once.
     function paint() {
       parts.forEach(function (name, k) { root.classList.toggle("g-on-" + name, k < shown); });
-      Object.keys(extras).forEach(function (name) { extras[name].node.classList.toggle("g-xoff", !on(name)); });
-      P.extra.hidden = !Object.keys(extras).some(function (n) { return extras[n].area === "extra"; });
-      if (stk.p) stk.p.show(on("prediction") ? stk.p.beats : 0);
-      if (stk.d) stk.d.show(on("difference") && !direct ? stk.d.beats : 0);
+      root.classList.remove("g-pwait", "g-lwait");
+      if (wl) wl.parts.forEach(function (p) { p.classList.remove("mx-cwait"); });
+      arrows();
       paintFocus();
     }
     function settle() {
@@ -4577,73 +4622,53 @@ button.chip:hover{border-color:var(--rubric)}
       shown = aim;
       paint();
     }
-    function setPace(p) {
-      p = p || basePace;
-      if (p === pace) return;
-      pace = p;
-      build();
-    }
 
     // The motion of one part; resolves true when it has landed.
-    function play(name, my) {
+    function play(name) {
       var T = function (ms) { return ms * pace; };
-      function alive() { return my === token; }
       function add(n) { root.classList.add("g-on-" + n); }
       var v = vals();
       if (name === "guesses") {
         add("guesses");
-        rise(P.pred, T(TEMPO.enter));
+        rise(mc.el, T(TEMPO.enter));
+        rise(mf.el, T(TEMPO.enter));
         return seq.wait(T(TEMPO.enter));
       }
-      if (name === "truth") {
-        add("truth");
-        var rc = D.result("rating");
-        pop(rc, T(TEMPO.pop));
+      if (name === "rating") {
+        add("rating");
+        arrows();
+        pop(rateCell, T(TEMPO.pop));
         return seq.wait(T(TEMPO.pop));
       }
       if (name === "prediction") {
         add("prediction");
-        stk.p.show(0);
-        return seq.wait(T(TEMPO.settle)).then(function (ok) { return ok && alive() ? stk.p.play() : false; });
-      }
-      if (name === "compare") {
-        var from = D.result("prediction"), to = stk.d.table.querySelector("tr.nt-bot td.nt-c .nt-h > .nt-n");
-        if (!v.ok) { add("compare"); return seq.wait(T(TEMPO.settle)); }
-        fly(layer, from, to, T(TEMPO.fly), { arc: 30 });
-        return seq.run([[T(TEMPO.fly), function () { add("compare"); pop(to, T(TEMPO.pop)); }]], T(TEMPO.fly + TEMPO.settle));
-      }
-      if ((name === "difference" || name === "square") && direct) { add(name); return seq.wait(T(60)); }
-      if (name === "difference") {
-        add("difference");
-        stk.d.show(0);
-        return seq.wait(T(TEMPO.settle)).then(function (ok) { return ok && alive() ? stk.d.play() : false; });
-      }
-      if (name === "square") {
-        if (!v.ok) { add("square"); return seq.wait(T(TEMPO.settle)); }
-        fly(layer, D.result("difference"), sqCell, T(TEMPO.fly), { arc: 26 });
-        return seq.run([[T(TEMPO.fly), function () { add("square"); pop(sqCell, T(TEMPO.pop)); }]], T(TEMPO.fly + TEMPO.pop));
+        arrows();
+        if (!v.ok || !wl) return seq.wait(T(TEMPO.settle));
+        // the worked line plays, one piece at a time, then its sum flies into the prediction
+        root.classList.add("g-pwait");
+        var ps = wl.parts, acts = [];
+        ps.forEach(function (p) { p.classList.add("mx-cwait"); });
+        ps.forEach(function (p, k) {
+          acts.push([T(TEMPO.first + k * TEMPO.beat), function () { p.classList.remove("mx-cwait"); rise(p, T(TEMPO.settle)); }]);
+        });
+        var tFly = T(TEMPO.first + ps.length * TEMPO.beat + 120);
+        acts.push([tFly, function () { fly(layer, D.result("sum"), predCell, T(TEMPO.fly), { arc: 28 }); }]);
+        acts.push([tFly + T(TEMPO.fly), function () { root.classList.remove("g-pwait"); pop(predCell, T(TEMPO.pop)); }]);
+        return seq.run(acts, tFly + T(TEMPO.fly + TEMPO.settle));
       }
       if (name === "loss") {
-        if (!v.ok) { add("loss"); return seq.wait(T(TEMPO.settle)); }
-        if (direct) {
-          // the rating and the prediction go straight into the loss
-          fly(layer, D.result("rating"), lossCell, T(TEMPO.fly), { arc: 22 });
-          fly(layer, D.result("pair"), lossCell, T(TEMPO.fly), { arc: -22, delay: T(120) });
-          return seq.run([[T(TEMPO.fly + 120), function () { add("loss"); pop(lossCell, T(TEMPO.pop)); }]], T(TEMPO.fly + 120 + TEMPO.pop));
-        }
-        fly(layer, sqCell, lossCell, T(TEMPO.fly), { arc: 34 });
-        return seq.run([[T(TEMPO.fly), function () { add("loss"); pop(lossCell, T(TEMPO.pop)); }]], T(TEMPO.fly + TEMPO.pop));
+        add("loss");
+        arrows();
+        if (!v.ok) return seq.wait(T(TEMPO.settle));
+        // the prediction, then the rating, straight into the loss
+        root.classList.add("g-lwait");
+        fly(layer, predCell, lossCell, T(TEMPO.fly), { arc: 18 });
+        fly(layer, rateCell, lossCell, T(TEMPO.fly), { arc: 18, delay: T(160) });
+        return seq.run([[T(TEMPO.fly + 160), function () { root.classList.remove("g-lwait"); pop(lossCell, T(TEMPO.pop)); }]],
+                       T(TEMPO.fly + 160 + TEMPO.pop));
       }
-      if (name === "bubble") {
-        add("bubble");
-        anim(P.bub, [{ transform: "scale(.6)", opacity: 0 }, { transform: "scale(1.04)", opacity: 1, offset: 0.6 }, { transform: "none", opacity: 1 }],
-             { duration: T(TEMPO.pop + 120), easing: "cubic-bezier(.3,.75,.3,1.2)" });
-        return seq.wait(T(TEMPO.pop + 120));
-      }
-      // a part added by a later section
       add(name);
-      if (extras[name]) { extras[name].node.classList.remove("g-xoff"); rise(extras[name].node, T(TEMPO.enter)); }
-      return seq.wait(T(TEMPO.enter));
+      return seq.wait(T(TEMPO.settle));
     }
 
     var D = {
@@ -4652,9 +4677,10 @@ button.chip:hover{border-color:var(--rubric)}
         token++;
         seq.stop();
         layer.textContent = "";
-        setPace(basePace);
+        pace = basePace;
         shown = aim = Math.max(0, Math.min(parts.length, k | 0));
         paint();
+        X.redraw();
         return D;
       },
       reveal: function (k, ro) {
@@ -4665,12 +4691,13 @@ button.chip:hover{border-color:var(--rubric)}
         seq.stop();
         layer.textContent = "";
         if (shown > k) return Promise.resolve(true);
-        setPace(ro.pace || basePace);
+        pace = ro.pace || basePace;
         shown = k;
         aim = k + 1;
         paint();
+        X.redraw();
         if (!MOTION) { shown = aim; paint(); return Promise.resolve(true); }
-        return play(parts[k], my).then(function (ok) {
+        return play(parts[k]).then(function (ok) {
           if (my !== token) return false;
           if (ok) { shown = aim; paint(); }
           return ok;
@@ -4681,7 +4708,7 @@ button.chip:hover{border-color:var(--rubric)}
         if (!cells[which] || (i !== 0 && i !== 1)) return D;
         st[which][i] = known(x) ? x : undefined;
         paintNum(cells[which][i], st[which][i]);
-        build();
+        refresh();
         paint();
         if (so && so.pop && MOTION) {
           var c = cells[which][i];
@@ -4700,7 +4727,7 @@ button.chip:hover{border-color:var(--rubric)}
           paintNum(cells.c[i], st.c[i]);
           paintNum(cells.f[i], st.f[i]);
         }
-        build();
+        refresh();
         paint();
         return D;
       },
@@ -4708,46 +4735,27 @@ button.chip:hover{border-color:var(--rubric)}
       focus: function (which, i) { focus = which ? [which, i] : null; paintFocus(); return D; },
       cell: function (which, i) { return cells[which] ? cells[which][i] || null : null; },
       stop: function () { settle(); return D; },
+      redraw: function () { X.redraw(); return D; },
       part: function (name) {
-        if (extras[name]) return extras[name].node;
-        if (name === "guesses" || name === "prediction") return P.pred;
-        if (name === "truth" || name === "compare" || name === "difference") return P.diff;
-        if (name === "square") return P.sq;
-        if (name === "loss") return P.loss;
-        if (name === "bubble") return P.bub;
-        return null;
+        return { customer: mc.el, film: mf.el, prediction: mp.el, rating: mr.el, work: workBox, loss: lossBox }[name] || null;
       },
+      matrix: function (name) { return { c: mc, f: mf, p: mp, r: mr }[name] || null; },
       result: function (name) {
-        if (name === "rating") return stk.d ? stk.d.table.querySelector("tr.nt-top td.nt-c > .nt-n") : null;
-        if (name === "prediction") return stk.p ? stk.p.table.querySelector("tr.nt-res td.nt-sc .nt-h > .nt-n") : null;
-        if (name === "difference") return stk.d ? stk.d.table.querySelector("tr.nt-res td.nt-pc .nt-h > .nt-n") : null;
-        if (name === "pair") return stk.d ? stk.d.table.querySelector("tr.nt-bot td.nt-c .nt-h > .nt-n") : null;
-        if (name === "square") return sqCell;
+        if (name === "rating") return rateCell;
+        if (name === "prediction" || name === "pair") return predCell;
         if (name === "loss") return lossCell;
+        if (name === "sum") return wl ? wl.parts[wl.parts.length - 1].querySelector(".nt-n") : null;
         return null;
       },
       product: function (j) {
-        if (!stk.p) return null;
-        var hs = stk.p.table.querySelectorAll("tr.nt-res td.nt-pc .nt-h > .nt-n");
+        if (!wl) return null;
+        var hs = wl.parts[wl.parts.length - 2].querySelectorAll(".nt-n");
         return hs[j] || null;
       },
-      stacks: function () { return { prediction: stk.p, difference: stk.d, square: null }; },
-      state: function () { return { shown: shown, aim: aim, size: size, values: D.values() }; },
-      addPart: function (name, node, ao) {
-        ao = ao || {};
-        if (parts.indexOf(name) >= 0 || !node) return D;
-        parts.push(name);
-        node.classList.add("g-xpart");
-        var area = ao.area || "extra";
-        extras[name] = { node: node, area: area };
-        if (area === "extra") P.extra.appendChild(node);
-        else if (P[area]) P[area].appendChild(node);
-        else grid.appendChild(node);
-        paint();
-        return D;
-      }
+      work: function () { return wl; },
+      state: function () { return { shown: shown, aim: aim, size: size, values: D.values() }; }
     };
-    build();
+    refresh();
     D.show(o.parts === undefined ? PARTS.length : o.parts);
     return D;
   }
@@ -4941,15 +4949,20 @@ button.chip:hover{border-color:var(--rubric)}
                                        customer's row for "c", the film's column for "f"
    T.partner(c, f, which, r, k, i, j)  the number that multiplies this one in the stack of rating (i, j)
    T.asks(c, f, R, which, r, k)        what every known rating, alone, gives the number: a list in reading order of
-                                       { i, j, touches, partner, difference, slope }, slope -2 times the partner
-                                       times the difference when it touches, 0 when it does not
+                                       { i, j, touches, partner, difference, miss, slope }, slope -2 times the partner
+                                       times the difference when it touches, 0 when it does not; miss is the
+                                       prediction minus the rating, so the same slope is 2 times the partner times
+                                       the miss (the rule as the scenes write it since 2026-11-06)
    T.slope(c, f, R, which, r, k)       the slope of the average loss for that number: the average of those slopes
    T.slopes(c, f, R)                   { c: rows of slopes, f: rows of slopes }, every slope on the same guess
    T.step(c, f, R, alpha)              every slope measured first, then every number moved by alpha times its slope
                                        against it: { c, f, slopes, loss } (slopes before the step, loss after)
    T.run(c, f, R, alpha, max, tol)     T.step again and again until the loss is below tol or after max steps:
                                        { states: [{ c, f, loss }], steps, reached }, states[0] the start
-   T.FACTOR                            -2, section 3's number in front of the slope rule
+   T.FACTOR                            -2, section 3's number in front of the slope rule with the rating first
+   T.RULE                              2, the number in front of the rule as the scenes write it since 2026-11-06,
+                                       the prediction before the rating (Carlos: a prediction always stands on the
+                                       left of its rating): 2 x partner x (prediction - rating)
 
    Added by S4-B for the scenes shared and together (sec4d.js) and TABLE.md:
    T.average(list)                     the sum of the numbers divided by how many there are (0 for an empty list)
@@ -4976,7 +4989,7 @@ button.chip:hover{border-color:var(--rubric)}
     var S4 = root && root.MF && root.MF.S4;
     return S4 ? { alpha: S4.alpha, tol: S4.tol, max: S4.max } : DEF;
   }
-  var FACTOR = -2;
+  var FACTOR = -2, RULE = 2;
 
   function copy(m) { return m.map(function (row) { return row.slice(); }); }
   function inner(a, b) {
@@ -5023,9 +5036,9 @@ button.chip:hover{border-color:var(--rubric)}
     for (var i = 0; i < c.length; i++) for (var j = 0; j < f.length; j++) {
       if (!known(R, i, j)) continue;
       var t = which === "c" ? i === r : j === r;
-      var d = R[i][j] - inner(c[i], f[j]);
+      var q = inner(c[i], f[j]), d = R[i][j] - q;
       var p = partner(c, f, which, r, k, i, j);
-      out.push({ i: i, j: j, touches: t, partner: t ? p : null, difference: d, slope: t ? FACTOR * p * d : 0 });
+      out.push({ i: i, j: j, touches: t, partner: t ? p : null, difference: d, miss: q - R[i][j], slope: t ? FACTOR * p * d : 0 });
     }
     return out;
   }
@@ -5091,7 +5104,7 @@ button.chip:hover{border-color:var(--rubric)}
   }
 
   var T = { matrices: matrices, ratings: ratings, predict: predict, table: table, loss: loss, touches: touches,
-            partner: partner, asks: asks, slope: slope, slopes: slopes, step: step, run: run, FACTOR: FACTOR,
+            partner: partner, asks: asks, slope: slope, slopes: slopes, step: step, run: run, FACTOR: FACTOR, RULE: RULE,
             average: average, at: at, order: order, update: update, rises: rises };
   if (typeof module !== "undefined" && module.exports) module.exports = T;
   if (root && root.MF) root.MF.T = T;
@@ -5118,23 +5131,27 @@ button.chip:hover{border-color:var(--rubric)}
    The main session wrote the first stub on 2026-11-03; S4-A owns its look (BRIEF-s4.md) and documents it in LOSS.md.
    Keep the names and meanings below, because S4-B's scenes use them: save this file only in working states.
 
-   The picture is the stack of part two (M.cross with layout "stack", Carlos's sketch of 2026-11-05, MATRIX.md): the
-   film embeddings on top of the customer embeddings, the predictions on the right of the customers (section 1's
-   product view: a customer's row band in violet, a film's column band in ochre), the ratings on their right with a
-   plain line between the two, the losses under the predictions and the ratings, and the average loss in a double
-   ring on the right of the losses, with arrows from the customers and the films to the predictions, from the
-   predictions and the ratings into the losses, from the losses to the average. No differences: a loss comes
-   straight from its rating and its prediction. Until 2026-11-05 it was the cross of 2026-11-04. On the right a desk where one prediction
-   plays as a stack (the rows glide in, the products, the sum flies into its cell) or one loss is worked as
-   (rating - prediction) squared. Captions: the model in ink (customers, films, ratings), the forward pass in violet.
+   The picture is part two's board (M.cross with layout "textbook" since 2026-11-06, Carlos's seventh message,
+   MATRIX.md; the stack of his sketch of 2026-11-05 before): the customer embeddings, one row per customer, on the left
+   of the predictions; the film embeddings turned, one column per film, ABOVE the predictions (a customer's row band in
+   violet, a film's column band in ochre, crossing at the prediction), the ratings on their right with a plain line
+   between the two, the losses under the predictions and the ratings, and the average loss in a double ring on the
+   right of the losses, with arrows from the customers and the films to the predictions, from the predictions and the
+   ratings into the losses, from the losses to the average. No differences: a loss comes straight from its prediction
+   and its rating. Until 2026-11-05 it was the cross of 2026-11-04. Beside or under the board a desk: one prediction
+   worked as part one shows a score (since the port of 2026-11-06: the customer's row and the film's column outlined in
+   the board, the worked line of M.workLine on the desk, the sum flying into its cell), or one loss worked as
+   (prediction - rating) squared, the prediction on the left of the rating as on the board (Carlos, 2026-11-06).
+   Captions: the model in ink (customers, films, ratings), the forward pass in violet.
 
    var V = MF.L.view({ people: MF.S2.people, films: [MF.S4.film] });   // the column; films: MF.S2.films for the table
    box.appendChild(V.el);
 
    L.view(o)          o.people, o.films: ids (default MF.S2.people and MF.S2.films); o.c, o.f: the guessed matrices,
-                      a row per customer and per film (default MF.S2.start); o.ratings: R (default from MF.V);
-                      o.parts: how many parts show at first (default all); o.size "sm" (default) or "md";
-                      o.places: decimals on the page (default 2), o.lossPlaces for losses and the average (default 2)
+                      a row per customer and per film (default MF.S2.start; the films' rows are drawn as columns);
+                      o.ratings: R (default from MF.V); o.parts: how many parts show at first (default all);
+                      o.size "sm" (default) or "md"; o.places: decimals on the page (default 2), o.lossPlaces for
+                      losses and the average (default 2)
                       Added by S4-A: o.avgPlaces (default o.lossPlaces) and o.tol (default MF.S4.tol) for the ring;
                       o.dec: true gives every number cell room for two decimals, so a run never shifts the layout
                       (o.layout, o.phoneFold and o.phonePredictionsBelow belonged to the layout before the cross and
@@ -5149,11 +5166,12 @@ button.chip:hover{border-color:var(--rubric)}
    V.reveal(k)        part k comes in, the parts before it at once: a Promise of true, or false when cut short
    V.set(c, f, o)     new guesses, everything that depends on them recomputed at once (fast enough for a loop);
                       o.pop rings the guessed numbers that changed (ochre, the update)
-   V.setNumber(which, r, k, x, o)   one guessed number ("c" or "f", its row, its position)
+   V.setNumber(which, r, k, x, o)   one guessed number ("c" or "f", its row in the data, its position)
    V.values()         MF.T.table of the guess: { c, f, R, P, D, S, sum, n, loss } (copies)
    V.matrix(part)     the MF.M matrix of "c", "f" (the guesses), "p", "r", "s" (predictions, ratings, losses), so
-                      a scene can use its bands, rings and dimming (MATRIX.md)
-   V.cell(part, i, j) the td of one entry of those matrices; V.cell("avg") the ring of the average
+                      a scene can use its bands, rings and dimming (MATRIX.md); "f" is turned, its calls stay logical
+   V.cell(part, i, j) the td of one entry of those matrices (logical: film j's number i is V.cell("f", j, i));
+                      V.cell("avg") the ring of the average
    V.guessCells()     the tds of every guessed number in reading order, the customers' rows first: for MF.H.team
    V.mark(list)       rings entries: [{ part, i, j, tone }], tone "a" (violet), "b" (ochre) or "slope" (green);
                       null clears every ring
@@ -5165,27 +5183,31 @@ button.chip:hover{border-color:var(--rubric)}
    V.showParts(names) exactly these parts at once (a list of PARTS names), the others hidden in their place
    V.add(name)        one more part comes in (it rises), the parts showing stay: a Promise of true, false when cut
    V.focus(i, j)      one cell of the table: customer i's row band in the customers and across the four tables,
-                      film j's row in the films and its column band in the predictions, a ring on (i, j) in the
+                      film j's column band in the films and in the predictions, a ring on (i, j) in the
                       predictions, ratings and losses; V.focus(null) clears
    V.predict(done, o) which predictions show (a list of [i, j], "all" or a count in reading order), the others "?";
-                      o.pair [i, j] puts that pair's stack on the desk (o.beat: how many beats show), o.ask [i, j]
-                      makes that prediction the room's slot (V.slot("p") finds it)
-   V.work(i, j, o)    one prediction, played: the rows light up and glide onto the desk, the stack plays, the sum
-                      flies into its cell (o.pace, default 1, smaller is faster); a Promise of true, false when cut
-   V.losses(done, o)  which losses show (a list, "all" or a count); o.cell [i, j] and o.beat (below 2: the rating
-                      and the prediction, 2: the loss too) put that cell's loss on the desk, (rating - prediction)
+                      o.pair [i, j] lights that pair (the customer's row and the film's column outlined) and puts its
+                      worked line on the desk, o.beat how many parts of the line show (in the order they play: each
+                      pair multiplied, then the products, then the sum; default all when the prediction shows, else
+                      the pairs); o.ask [i, j] makes that prediction the room's slot (V.slot("p") finds it) and lights it
+   V.work(i, j, o)    one prediction, played: the pair lights up, the worked line plays part by part, the sum flies
+                      into its cell (o.pace, default 1, smaller is faster); a Promise of true, false when cut
+   V.pair(i, j, o)    the pair lights up and the pairs of its worked line play in, the products and the sum stay
+                      hidden (the room works them out); o.pace; a Promise
+   V.losses(done, o)  which losses show (a list, "all" or a count); o.cell [i, j] and o.beat (below 2: the prediction
+                      and the rating, 2: the loss too) put that cell's loss on the desk, (prediction - rating)
                       squared; o.ask [i, j] makes the loss the room's slot (o.diff is ignored since 2026-11-04)
-   V.lossWork(i, j, o) one loss, played: the rating and the prediction fly onto the desk, the loss comes and flies
-                      into its cell (o.pace); a Promise
+   V.lossWork(i, j, o) one loss, played: the prediction and then the rating fly onto the desk, the loss comes and
+                      flies into its cell (o.pace); a Promise
    V.fill(o)          the predictions, the losses and the average filled fast, as a wave (o.pace); a Promise
    V.land(o)          every loss flies into the ring, which counts their sum, divides by their number and shows the
                       average (o.pace); a Promise. V.average(on) draws the ring empty (false) or full (true) at once
-   V.desk(mode)       "stack", "loss" or null: which desk shows under the matrices (V.work and V.lossWork open their
-                      own); the desk takes room only while it shows
+   V.desk(mode)       "line" (one prediction's worked line), "loss" or null: which desk shows beside the board
+                      (V.work, V.pair and V.lossWork open their own); the desk takes room only while it shows
    V.slot(part)       the room's slot of the moment ("p" or "s"), or null
    V.format(o)        { places, lossPlaces, avgPlaces, tol } for the numbers on the page, redrawn at once
    V.room(on)         more room above every number cell, for a still team of grasshoppers (MF.H.team)
-   V.product          the MF.M product view inside (P.A customers, P.B films, P.C predictions, the desk)
+   V.product          the MF.M product view inside (P.A customers, P.B films, P.C predictions; no desk since the port)
    V.cross            the M.cross that lays the parts out and draws the arrows (V.cross.redraw())
    V.layer            an overlay for flying copies: V.fly(from, to, o) sends a copy of a number cell there */
 (function () {
@@ -5194,13 +5216,15 @@ button.chip:hover{border-color:var(--rubric)}
   if (!MF || !MF.M || !MF.T || !MF.N) return;
   var M = MF.M, N = MF.N, T = MF.T, el = MF.el;
   var MOTION = !MF.reducedMotion;
+  var SVGNS = "http://www.w3.org/2000/svg";
   var PARTS = ["guesses", "predictions", "ratings", "losses", "average"];
   var LETTER = { guesses: ["c", "f"], predictions: ["p"], ratings: ["r"], losses: ["s"], average: ["avg"] };
   var CAPTION = { c: "Customer embeddings", f: "Film embeddings", p: "Predictions", r: "Ratings", s: "Losses" };
   var SHORT = { c: "Customers", f: "Films" };     // the captions on a phone, as in part two
   var ABOUT = "≈";
-  // Durations in ms at pace 1 (smaller pace is faster).
-  var TEMPO = { ring: 380, fly: 760, gap: 110, pop: 520, show: 520, beat: 640, wave: 130, land: 700, tag: 650 };
+  var ALL = 99;                                    // every part of a worked line
+  // Durations in ms at pace 1 (smaller pace is faster). part: one part of a worked line (as M.stack's S.work).
+  var TEMPO = { ring: 380, fly: 760, gap: 110, pop: 520, show: 520, beat: 640, wave: 130, land: 700, tag: 650, part: 300 };
 
   function copy(m) { return m.map(function (row) { return row.slice(); }); }
   function isNum(x) { return typeof x === "number" && isFinite(x); }
@@ -5280,7 +5304,7 @@ button.chip:hover{border-color:var(--rubric)}
     var base = layer.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
     if (!a.width || !b.width) return null;
     var g = from.cloneNode(true);
-    g.classList.remove("nt-hot", "nt-ask", "nt-off", "lv-hide");
+    g.classList.remove("nt-hot", "nt-ask", "nt-off", "lv-hide", "mx-cwait");
     g.classList.add("lv-ghost");
     g.removeAttribute("role");
     g.removeAttribute("aria-label");
@@ -5327,13 +5351,15 @@ button.chip:hover{border-color:var(--rubric)}
     var all = [];
     for (var i0 = 0; i0 < people.length; i0++) for (var j0 = 0; j0 < films.length; j0++) all.push([i0, j0]);
 
-    /* THE BOARD: section 1's product view (the guesses, their product and its desk), laid out as the cross with the
-       ratings, the losses and the ring. */
+    /* THE BOARD: section 1's product view (the guesses and their product), laid out as the textbook cross with the
+       ratings, the losses and the ring. The product view keeps no desk: one prediction is worked on the view's own
+       desk (the worked line below). */
     var P = M.product({
       A: { rows: people, cols: S2.dims, values: c, caption: CAPTION.c, colHeads: "pic", rowHeads: "chip", phonePics: true },
-      B: { rows: films, cols: S2.dims, values: f, caption: CAPTION.f, colHeads: "pic", rowHeads: "chip", phonePics: true },
-      C: { caption: CAPTION.p, rowHeads: "pic", colHeads: "pic", phonePics: true },
-      size: size, layout: "row", stack: { size: "", heads: "pic" }
+      // the films' matrix turned (one column per film, one row per number); the predictions need no heads
+      B: { rows: films, cols: S2.dims, values: f, caption: CAPTION.f, transpose: true, colHeads: "pic", rowHeads: "pic" },
+      C: { caption: CAPTION.p, rowHeads: "none", colHeads: "none" },
+      size: size, layout: "row", desk: false
     });
     P.el.classList.add("lv-board");
     root.appendChild(P.el);
@@ -5373,8 +5399,26 @@ button.chip:hover{border-color:var(--rubric)}
     ga.appendChild(ring);
     mats.r.setAll(R);
 
-    /* THE LOSS DESK: one cell's loss straight from its rating and its prediction, (rating - prediction) squared, with
-       no difference shown (Carlos, 2026-11-04: "We never show differences. We just do directly the loss."). */
+    /* THE LINE DESK: one prediction worked as part one shows a score, M.workLine's two lines (each pair multiplied,
+       the customer's number first; then the products and the sum, ringed). */
+    var wd = el("div", "lv-wd");
+    var WL = null;
+    function lineFor(i, j) {
+      var k = key(i, j) + "|" + c[i].join(",") + "|" + f[j].join(",");
+      if (WL && WL.key === k) return WL;
+      wd.textContent = "";
+      var w = M.workLine(c[i].map(function (x, q) { return [x, f[j][q]]; }));
+      w.key = k;
+      w.sumCell = w.el.querySelector(".mx-csum .nt-n");
+      wd.appendChild(w.el);
+      WL = w;
+      return w;
+    }
+
+    /* THE LOSS DESK: one cell's loss straight from its prediction and its rating, (prediction - rating) squared, the
+       prediction on the left of the rating as on the board, with no difference shown (Carlos, 2026-11-04: "We never
+       show differences. We just do directly the loss."; 2026-11-06: "put prediction always on the same side of
+       ratings and don't swap them"). */
     var ld = el("div", "lv-ld");
     function qcell(lab, cls) {
       var g = el("div", "lv-lq" + (cls ? " " + cls : ""));
@@ -5388,15 +5432,22 @@ button.chip:hover{border-color:var(--rubric)}
       x.setAttribute("aria-hidden", "true");
       return x;
     }
-    var qR = qcell("rating", "lv-ink"), qP = qcell("prediction"), qS = qcell("loss", "lv-sqr");
+    var qP = qcell("prediction"), qR = qcell("rating", "lv-ink"), qS = qcell("loss", "lv-sqr");
     var formula = el("div", "lv-lf");
-    [sign("("), qR.el, sign(MF.MINUS), qP.el, sign(")\u00B2", "lv-sq2"), sign("="), qS.el].forEach(function (n) { formula.appendChild(n); });
+    [sign("("), qP.el, sign(MF.MINUS), qR.el, sign(")²", "lv-sq2"), sign("="), qS.el].forEach(function (n) { formula.appendChild(n); });
     ld.appendChild(formula);
     var desks = el("div", "lv-desks");
-    if (P.desk) desks.appendChild(P.desk);
+    desks.appendChild(wd);
     desks.appendChild(ld);
-    var X = M.cross({ c: A.el, f: B.el, r: mats.r.el, p: C.el, s: mats.s.el, avg: ga, nb: o.nb, layout: "stack", cls: "lv-cross" });
+    var X = M.cross({ c: A.el, f: B.el, r: mats.r.el, p: C.el, s: mats.s.el, avg: ga, nb: o.nb, layout: "textbook", cls: "lv-cross" });
     matsBox.parentNode.replaceChild(X.el, matsBox);
+    // The outlines of a lit pair, as part one draws them: the customer's row in violet, the film's column in ochre.
+    var ov = document.createElementNS(SVGNS, "svg");
+    ov.setAttribute("class", "mx-sov lv-ov");
+    ov.setAttribute("aria-hidden", "true");
+    function mk(cls) { var n = document.createElementNS(SVGNS, "rect"); n.setAttribute("class", cls); ov.appendChild(n); return n; }
+    var boxA = mk("mx-sbox mx-sta lv-box"), boxB = mk("mx-sbox mx-stb lv-box");
+    X.el.appendChild(ov);
     // The side: the desk, then the scene's words (o.side: a column on the right of the cross on desk screens)
     var note = el("div", "lv-note");
     var side = el("div", "lv-side");
@@ -5407,7 +5458,8 @@ button.chip:hover{border-color:var(--rubric)}
     var layer = el("div", "lv-fly");
     root.appendChild(layer);
 
-    var S = { shown: PARTS.length, loss: null, askP: null, askS: null, lcell: null, lbeat: 0, avg: true, focus: null };
+    // pair: the lit pair [i, j] (outlined, its line on the desk); wbeat: the parts of its line that show
+    var S = { shown: PARTS.length, loss: null, askP: null, askS: null, lcell: null, lbeat: 0, avg: true, focus: null, pair: null, wbeat: ALL };
     var seq = Seq(), tok = 0, aim = null;
     // A motion starts: every motion before it ends where it is, and aim is where this one is going (V.stop draws it).
     function begin(goal) {
@@ -5460,9 +5512,18 @@ button.chip:hover{border-color:var(--rubric)}
       }
       drawAvg(t);
       drawDesk(t);
+      drawLine();
       tidy();
+      outline();
     }
-    // The loss desk for S.lcell at S.lbeat: below 2 the rating and the prediction, 2 the loss too.
+    // The line desk for S.pair: its first S.wbeat parts show, the others keep their place, hidden.
+    function drawLine() {
+      wd.classList.toggle("lv-idle", !S.pair);
+      if (!S.pair) return;
+      var w = lineFor(S.pair[0], S.pair[1]);
+      w.parts.forEach(function (p, q) { p.classList.toggle("mx-cwait", q >= S.wbeat); });
+    }
+    // The loss desk for S.lcell at S.lbeat: below 2 the prediction and the rating, 2 the loss too.
     function deskCell(box, x, on, slot, cls) {
       box.textContent = "";
       var cell = slot ? N.slot({ cls: cls }) : N.cell(isNum(x) ? x : 0, { cls: cls });
@@ -5473,13 +5534,62 @@ button.chip:hover{border-color:var(--rubric)}
     function drawDesk(t) {
       if (!S.lcell) return;
       var i = S.lcell[0], j = S.lcell[1], b = S.lbeat;
-      deskCell(qR.box, R[i][j], true);
       deskCell(qP.box, t.P[i][j], true);
+      deskCell(qR.box, R[i][j], true);
       deskCell(qS.box, t.S[i][j], true, b < 2, "lv-sqn");
     }
+    /* The outlines of S.pair, measured in the cross: the box of the customer's row (its head and its cells) and of
+       the film's column (its picture and its cells), wherever they are drawn. Only while the guesses show. */
+    function rect(node) {
+      var b = X.el.getBoundingClientRect(), r = node.getBoundingClientRect();
+      var k = X.el.offsetWidth ? b.width / X.el.offsetWidth : 1;
+      if (!k || !isFinite(k)) k = 1;
+      return { l: (r.left - b.left) / k, t: (r.top - b.top) / k, r: (r.right - b.left) / k, b: (r.bottom - b.top) / k, w: r.width / k, h: r.height / k };
+    }
+    function lineBox(m, i) {
+      var l = Infinity, t = Infinity, r = -Infinity, b = -Infinity, list = [m.rowHead(i)];
+      for (var q = 0; q < m.C; q++) list.push(m.td(i, q));
+      list.forEach(function (n) {
+        if (!n) return;
+        var x = rect(n);
+        if (!(x.w > 0 && x.h > 0)) return;
+        l = Math.min(l, x.l); t = Math.min(t, x.t); r = Math.max(r, x.r); b = Math.max(b, x.b);
+      });
+      return r > l ? { l: l, t: t, r: r, b: b } : null;
+    }
+    function outline() {
+      boxA.setAttribute("visibility", "hidden");
+      boxB.setAttribute("visibility", "hidden");
+      if (!S.pair || !partOn("guesses") || !X.el.isConnected || !X.el.offsetWidth) return;
+      var pad = 3;
+      [[boxA, lineBox(A, S.pair[0])], [boxB, lineBox(B, S.pair[1])]].forEach(function (x) {
+        var n = x[0], r = x[1];
+        if (!r) return;
+        n.setAttribute("x", (r.l - pad).toFixed(1));
+        n.setAttribute("y", (r.t - pad).toFixed(1));
+        n.setAttribute("width", (r.r - r.l + 2 * pad).toFixed(1));
+        n.setAttribute("height", (r.b - r.t + 2 * pad).toFixed(1));
+        n.setAttribute("rx", "13");
+        n.setAttribute("visibility", "visible");
+      });
+    }
+    var queued = false;
+    function later() {
+      if (queued) return;
+      queued = true;
+      var go = function () { queued = false; outline(); };
+      if (window.requestAnimationFrame) window.requestAnimationFrame(go); else setTimeout(go, 16);
+    }
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(later);
+      [X.el, A.el, B.el].forEach(function (n) { ro.observe(n); });
+    }
+    X.el.addEventListener("transitionend", function (e) { if (e.propertyName !== "opacity") later(); });
+    X.el.addEventListener("animationend", later);
     function paintParts() {
       PARTS.forEach(function (p) { groups[p].forEach(function (g) { g.classList.toggle("lv-off", !partOn(p)); g.classList.remove("lv-in"); }); });
       arrows();
+      outline();
     }
     // The arrows follow the parts, as in part two: into the predictions with the guesses and the predictions, the
     // line between the predictions and the ratings with both, into the losses with the predictions, the ratings and the
@@ -5502,18 +5612,18 @@ button.chip:hover{border-color:var(--rubric)}
       if (!on) return;
       var i = on[0], j = on[1];
       A.band("row", i, "a");
-      B.band("row", j, "b");
+      B.band("row", j, "b");                       // film j's numbers: a column of the turned matrix
       C.band("row", i, "a");
       C.band("col", j, "b");
       ["r", "s"].forEach(function (x) { mats[x].band("row", i, "a"); });
       ["p", "r", "s"].forEach(function (x) { var td = mats[x].td(i, j); if (td) td.classList.add("lv-ring-on"); });
     }
+    function doneList() { return P.state().done; }
 
     /* THE API */
     function stop() {
       var goal = aim;
       begin(null);
-      P.stop();
       if (goal) goal();
       Array.prototype.forEach.call(root.querySelectorAll(".lv-in"), function (g) { g.classList.remove("lv-in"); });
       draw();
@@ -5540,6 +5650,7 @@ button.chip:hover{border-color:var(--rubric)}
       S.shown = k + 1;
       gs.forEach(function (g) { g.classList.remove("lv-off"); });
       arrows();
+      outline();
       if (!MOTION) return Promise.resolve(true);
       gs.forEach(function (g) { g.classList.add("lv-in"); });
       return seq.run([[TEMPO.show, function () { gs.forEach(function (g) { g.classList.remove("lv-in"); }); }]], TEMPO.show)
@@ -5615,25 +5726,61 @@ button.chip:hover{border-color:var(--rubric)}
       var m = toMap(done, all);
       S.askP = so.ask ? key(so.ask[0], so.ask[1]) : null;
       var pair = so.pair || so.ask || null;
-      P.show({ done: m ? all.filter(function (p) { return m[key(p[0], p[1])]; }) : "all", pair: pair, beat: so.beat });
-      if (pair) setDesk("stack");
+      P.show({ done: m ? all.filter(function (p) { return m[key(p[0], p[1])]; }) : "all", pair: pair });
+      S.pair = pair ? pair.slice() : null;
+      if (pair) {
+        var shown = !S.askP && P.isDone(pair[0], pair[1]);
+        S.wbeat = so.beat === undefined ? (shown ? ALL : c[pair[0]].length) : so.beat;
+        setDesk("line");
+      }
       draw();
       bands(pair || S.focus);
       return api;
     }
-    function work(i, j, so) {
+    // The pair (i, j) lights up and the first `upto` parts of its line play in, one every TEMPO.part; with land the
+    // sum then flies into its cell. The goal of the motion is drawn at once when it is cut short.
+    function play(i, j, so, upto, land) {
       so = so || {};
-      var my = begin(function () { draw(); bands([i, j]); });
-      S.askP = null;
-      setDesk("stack");
-      return P.compute(i, j, { pace: so.pace || 1 }).then(function (ok) {
-        if (my !== tok) return false;
-        arrived(my);
+      var pace = so.pace || 1, k = key(i, j);
+      var before = doneList().filter(function (p) { return key(p[0], p[1]) !== k; });
+      var after = land ? before.concat([[i, j]]) : doneList();
+      function end() {
+        P.show({ done: after, pair: [i, j] });
+        S.pair = [i, j];
+        S.wbeat = upto;
         draw();
         bands([i, j]);
-        return ok;
+      }
+      var my = begin(end);
+      if (land) S.askP = null;
+      S.pair = [i, j];
+      S.wbeat = 0;
+      P.show({ done: land ? before : doneList(), pair: [i, j] });
+      setDesk("line");
+      draw();
+      bands([i, j]);
+      if (!MOTION) { end(); arrived(my); return Promise.resolve(true); }
+      var w = lineFor(i, j), acts = [], t = TEMPO.ring * pace, step = TEMPO.part * pace;
+      var n = Math.min(upto, w.parts.length);
+      w.parts.slice(0, n).forEach(function (p, q) {
+        acts.push([t + q * step, function () { S.wbeat = q + 1; p.classList.remove("mx-cwait"); pop(p, 300 * Math.max(pace, 0.6)); }]);
+      });
+      var at = t + n * step;
+      if (land) {
+        var dur = TEMPO.land * pace;
+        at += 250 * pace;
+        acts.push([at, function () { fly(layer, w.sumCell, C.td(i, j), dur, { arc: 30 }); }]);
+        at += dur;
+        acts.push([at, function () { end(); pop(C.item(i, j)); }]);
+      }
+      return seq.run(acts, at + 120).then(function (ok) {
+        if (my !== tok || !ok) return false;
+        arrived(my);
+        return true;
       });
     }
+    function work(i, j, so) { return play(i, j, so, ALL, true); }
+    function pair(i, j, so) { return play(i, j, so, c[i].length, false); }
     function losses(done, so) {
       so = so || {};
       begin(null);
@@ -5663,19 +5810,20 @@ button.chip:hover{border-color:var(--rubric)}
         draw();
       }
       if (!MOTION) { done(); return Promise.resolve(true); }
-      // the rating and the prediction fly onto the desk, then the loss comes and flies into its cell
-      var top = qR.box.firstChild, bot = qP.box.firstChild;
-      top.classList.add("lv-hide");
-      bot.classList.add("lv-hide");
+      // the prediction and then the rating fly onto the desk (left to right, as on the board), then the loss comes
+      // and flies into its cell
+      var first = qP.box.firstChild, second = qR.box.firstChild;
+      first.classList.add("lv-hide");
+      second.classList.add("lv-hide");
       var t0 = TEMPO.ring * pace, tf = TEMPO.fly * pace, t1 = t0 + tf + TEMPO.gap * pace;
       var t2 = t1 + TEMPO.beat * pace, t3 = t2 + 160 * pace + TEMPO.land * pace;
       return seq.run([
         [t0, function () {
-          fly(layer, mats.r.item(i, j), top, tf);
-          fly(layer, C.item(i, j), bot, tf, { delay: TEMPO.gap * pace });
+          fly(layer, C.item(i, j), first, tf);
+          fly(layer, mats.r.item(i, j), second, tf, { delay: TEMPO.gap * pace });
         }],
-        [t0 + tf, function () { top.classList.remove("lv-hide"); }],
-        [t1, function () { bot.classList.remove("lv-hide"); formula.classList.add("lv-hot"); }],
+        [t0 + tf, function () { first.classList.remove("lv-hide"); }],
+        [t1, function () { second.classList.remove("lv-hide"); formula.classList.add("lv-hot"); }],
         [t2, function () {
           S.lbeat = 2;
           drawDesk(T.table(c, f, R));
@@ -5698,6 +5846,7 @@ button.chip:hover{border-color:var(--rubric)}
       S.askP = null;
       S.askS = null;
       S.lcell = null;
+      S.pair = null;
       setDesk(null);
       bands(null);
       S.loss = toMap([], all);
@@ -5775,7 +5924,7 @@ button.chip:hover{border-color:var(--rubric)}
       draw();
       return api;
     }
-    function room(on) { root.classList.toggle("lv-room", !!on); X.redraw(); return api; }
+    function room(on) { root.classList.toggle("lv-room", !!on); X.redraw(); later(); return api; }
 
     P.show({ done: "all", pair: null });
     draw();
@@ -5783,8 +5932,8 @@ button.chip:hover{border-color:var(--rubric)}
     var api = { PARTS: PARTS, LETTER: LETTER, show: show, reveal: reveal, set: set, setNumber: setNumber, values: values,
                 matrix: function (part) { return mats[part] || null; }, cell: cell, guessCells: guessCells, mark: mark,
                 note: note, stop: stop, el: root, people: people, films: films,
-                showParts: showParts, add: add, focus: focus, predict: predict, work: work, losses: losses, lossWork: lossWork,
-                fill: fill, land: land, average: average, desk: desk, slot: slot, format: format, room: room,
+                showParts: showParts, add: add, focus: focus, predict: predict, work: work, pair: pair, losses: losses,
+                lossWork: lossWork, fill: fill, land: land, average: average, desk: desk, slot: slot, format: format, room: room,
                 product: P, layer: layer, cross: X,
                 fly: function (from, to, fo) { fo = fo || {}; return fly(layer, from, to, fo.ms || TEMPO.fly, fo); },
                 TEMPO: TEMPO };
@@ -5797,16 +5946,19 @@ button.chip:hover{border-color:var(--rubric)}
 <script>
 /* Section 5, the whole picture: S5-A's scenes (BRIEF-s5.md, WHOLE.md). Classes start with s5-.
 
-   recap   The whole method, on part two's table (MF.L.view): we are given the rating matrix; we factorize it into
-           two matrices whose product gives the ratings; their rows are the embeddings; we find them by gradient
-           descent (the run of the optional game's table replayed, every number moving at once, with a small curve
-           of the average loss). Game 3 stands alone: its words name parts one and two, never the optional game.
+   recap   The whole method, on part two's table (MF.L.view, the textbook cross): we are given the rating matrix; we
+           factorize it into two matrices whose product gives the ratings; their rows and columns are the embeddings
+           (a customer's numbers form a row, a film's a column); we find them by gradient descent (the run of the
+           optional game's table replayed, every number moving at once, with a small curve of the average loss).
+           Game 3 stands alone: its words name parts one and two, never the optional game.
    schema  Popper's diagram (MF.G.schema) with the method written under its four boxes, then the loop.
-   real    Real ratings, MF.S5.runs[0]: ten MovieLens users and twelve films, stars, then stars minus 3; then the stack
-           of part two as maps of coloured squares (M.cross, layout "stack"): five numbers per row, the first guess,
-           its predictions and losses; the 200 steps replayed; the result; the best possible.
+   real    Real ratings, MF.S5.runs[0]: ten MovieLens users and twelve films, stars, then stars minus 3; then part
+           two's textbook cross as maps of coloured squares (M.cross, layout "textbook"): the users' numbers 10 x 5,
+           the films' numbers turned, 5 x 12, above the predictions; the first guess, its predictions and losses; the
+           200 steps replayed; the result; the best possible.
    larger  A larger table, MF.S5.runs[1]: 26 users and 20 films as a map of coloured squares, then the same cross with
-           eight numbers per row; the 500 steps replayed, the result on the best possible.
+           eight numbers per user and per film (26 x 8 and 8 x 20); the 500 steps replayed, the result on the best
+           possible.
    end     The whole picture: the method in one line of four cards; every rating was known; a recommender is judged
            on ratings it never saw; the dataset, the citation and the licence conditions.
 
@@ -6151,7 +6303,10 @@ button.chip:hover{border-color:var(--rubric)}
   }
 
   /* MF.W5.map: a table drawn as small coloured squares, no digits (the sign colours, stronger for larger numbers).
-     o.rows, o.cols, o.films (pictures over the columns), o.caption, o.fwd (caption in the violet of the forward pass).
+     o.rows, o.cols, o.films (pictures over the drawn columns), o.caption, o.fwd (caption in the violet of the forward
+     pass). o.turn draws it turned (the films' numbers of the textbook cross, as M.matrix's transpose: one drawn row
+     per number, one drawn column per film); the rows, the columns, get(i, j), m.cell(i, j), m.mark and a square's
+     data-i and data-j stay logical (row i is film i), only the drawing turns.
      m.set(get) paints every square from get(i, j) (null draws a "?"); m.mark(list, cls) rings squares. */
   function quant(v) {
     if (v === null || v === undefined) return "q";
@@ -6159,8 +6314,9 @@ button.chip:hover{border-color:var(--rubric)}
     return k === 0 ? "z" : (v > 0 ? "p" : "n") + k;
   }
   function map(o) {
-    var root = el("div", "s5-map" + (o.cls ? " " + o.cls : ""));
-    root.style.setProperty("--cols", String(o.cols));
+    var turn = !!o.turn, DR = turn ? o.cols : o.rows, DC = turn ? o.rows : o.cols;    // the counts as drawn
+    var root = el("div", "s5-map" + (turn ? " s5-tr" : "") + (o.cls ? " " + o.cls : ""));
+    root.style.setProperty("--cols", String(DC));
     if (o.caption) {
       // o.cut: how many leading characters of the caption a phone keeps ("Users' numbers" becomes "Users")
       var cap = el("p", "s5-mcap" + (o.fwd ? " s5-fwd" : ""), o.cut ? o.caption.slice(0, o.cut) : o.caption);
@@ -6174,19 +6330,17 @@ button.chip:hover{border-color:var(--rubric)}
       root.appendChild(hd);
     }
     var g = el("div", "s5-mg mx-xbody"), cells = [];
-    for (var i = 0; i < o.rows; i++) {
-      var row = [];
-      for (var j = 0; j < o.cols; j++) {
-        var c = el("i");
-        c.dataset.i = String(i);
-        c.dataset.j = String(j);
-        g.appendChild(c);
-        row.push(c);
-      }
-      cells.push(row);
+    for (var i = 0; i < o.rows; i++) cells.push([]);
+    // the squares in drawn order (row by row of the drawing), each filed under its logical row and column
+    for (var a = 0; a < DR; a++) for (var b = 0; b < DC; b++) {
+      var li = turn ? b : a, lj = turn ? a : b, c = el("i");
+      c.dataset.i = String(li);
+      c.dataset.j = String(lj);
+      g.appendChild(c);
+      cells[li][lj] = c;
     }
     root.appendChild(g);
-    var m = { el: root, grid: g, rows: o.rows, cols: o.cols, board: o.board || "" };
+    var m = { el: root, grid: g, rows: o.rows, cols: o.cols, turn: turn, drawn: { R: DR, C: DC }, board: o.board || "" };
     g.dataset.board = m.board;
     m.set = function (get) {
       for (var i = 0; i < o.rows; i++) for (var j = 0; j < o.cols; j++) {
@@ -6260,8 +6414,30 @@ button.chip:hover{border-color:var(--rubric)}
     return { el: w, set: function (j) { n.textContent = String(j); } };
   }
 
-  /* The line that reads a tapped (or hovered) cell of a table or a square of a map: the user, the film, the stars,
-     the rating and, once predictions show, the prediction; on the losses' map also the loss. On a desk screen it
+  /* The words of a tapped square or number, as a list of strings and numbers ({ v, p }: a number with p decimals;
+     { loss }: a loss as the ring writes it), or null. On a map of numbers: the user or the film and which of its
+     numbers ("number 1" is a user's first square from the left, a film's top square). On the ratings, the
+     predictions and the losses: the user and the film, then, once predictions show (P), the prediction before the
+     rating, as on the board (Carlos, 2026-11-06), the rating with its stars, and on the losses the loss,
+     (prediction - rating) squared. Pure, so ../tools/check_s5.js reads it in node. */
+  function readOf(d, board, i, j, st, P) {
+    if (board === "U" || board === "F") {
+      if (!st) return null;
+      return [board === "U" ? "User " + d.users[i] : d.films[i].short, ", number " + (j + 1) + ": ",
+              { v: board === "U" ? st.c[i][j] : st.f[i][j], p: 2 }, "."];
+    }
+    if (board !== "R" && board !== "P" && board !== "S") return null;
+    var out = ["User " + d.users[i] + " and " + d.films[j].short + ": "];
+    if (P) out.push("prediction ", { v: P[i][j], p: 2 }, ", rating ", { v: d.R[i][j], p: 1 }, " (" + d.stars[i][j] + " stars)");
+    else out.push(String(d.stars[i][j]) + " stars, rating ", { v: d.R[i][j], p: 1 });
+    if (board === "S" && P) out.push(", loss ", { loss: lossOf(P[i][j], d.R[i][j]) });
+    out.push(".");
+    return out;
+  }
+  // the loss of one rating, (prediction - rating) squared
+  function lossOf(p, r) { var e = p - r; return e * e; }
+
+  /* The line that reads a tapped (or hovered) cell of a table or a square of a map (readOf). On a desk screen it
      floats over the cell (under it near the top of the scene), a small pointer on the cell; on a phone it is a line
      under the board. */
   function reader(S, d) {
@@ -6270,18 +6446,9 @@ button.chip:hover{border-color:var(--rubric)}
       if (!c || !S.root.contains(c)) return;
       var box = c.closest("[data-board]");
       if (!box) return;
-      var board = box.dataset.board, i = +c.dataset.i, j = +c.dataset.j, kids;
-      if ((board === "U" || board === "F") && S.st) {
-        kids = [board === "U" ? "User " + d.users[i] : d.films[i].short, ", number " + (j + 1) + ": ",
-                num(board === "U" ? S.st.c[i][j] : S.st.f[i][j], 2), "."];
-      } else if (board === "R" || board === "P" || board === "S") {
-        var f = d.films[j];
-        kids = ["User " + d.users[i] + " and " + f.short + ": "];
-        kids.push(String(d.stars[i][j]) + " stars, rating ", num(d.R[i][j], 1));
-        if (S.predOn && S.P) kids.push(", prediction ", num(S.P[i][j], 2));
-        if (board === "S" && S.P) { var e2 = d.R[i][j] - S.P[i][j]; kids.push(", loss ", lossCell(e2 * e2)); }
-        kids.push(".");
-      } else return;
+      var items = readOf(d, box.dataset.board, +c.dataset.i, +c.dataset.j, S.st, S.predOn && S.P ? S.P : null);
+      if (!items) return;
+      var kids = items.map(function (x) { return typeof x === "string" ? x : x.loss !== undefined ? lossCell(x.loss) : num(x.v, x.p); });
       put(S.read, kids);
       S.root.querySelectorAll(".s5-on").forEach(function (x) { x.classList.remove("s5-on"); });
       if (c.tagName === "I") c.classList.add("s5-on");
@@ -6369,8 +6536,8 @@ button.chip:hover{border-color:var(--rubric)}
       V.set(end.c, end.f);
       V.showParts(["guesses", "predictions", "ratings"]);
       V.focus(0, 0);
-      words(S, [rub("The rows are the embeddings:"), " one row of numbers for every customer and for every film."],
-        [name(P4[0]) + "'s row with " + name(F4[0]) + "'s row gives the prediction of her rating: their inner product, as in part one."]);
+      words(S, [rub("Rows and columns are the embeddings:"), " a row for every customer, a column for every film."],
+        [name(P4[0]) + "'s row with " + name(F4[0]) + "'s column gives the prediction of her rating: their inner product, as in part one."]);
       return;
     }
     V.showParts(L.PARTS.slice());
@@ -6474,8 +6641,9 @@ button.chip:hover{border-color:var(--rubric)}
     }
   });
 
-  /* SCENES 3 AND 4 SHARE THE RUN: a strip with the step count, Play and the curve; the ring of the average loss stands
-     in the cross (in a row with the count and Replay under the large curve on the last step of scene 3) */
+  /* SCENES 3 AND 4 SHARE THE RUN: a strip with the step count, Play and the curve, in the board's top-right corner; the
+     ring of the average loss stands in the cross, on the right of the losses (in a row with the count and Replay under
+     the large curve on the last step of scene 3) */
   function strip(S, d, total) {
     S.strip = el("div", "s5-strip");
     S.count = counter();
@@ -6507,28 +6675,36 @@ button.chip:hover{border-color:var(--rubric)}
     if (S.pU) S.pU.set(function (i, j) { return st.c[i][j]; });
     if (S.pF) S.pF.set(function (i, j) { return st.f[i][j]; });
   }
-  // the loss of every rating, (rating - prediction) squared: the squares of the losses' map
-  function lossesOf(d, P) { return function (i, j) { var e = d.R[i][j] - P[i][j]; return e * e; }; }
+  // the loss of every rating, (prediction - rating) squared: the squares of the losses' map
+  function lossesOf(d, P) { return function (i, j) { return lossOf(P[i][j], d.R[i][j]); }; }
 
-  /* THE STACK OF SCENES 3 AND 4 (M.cross with layout "stack" in matrix.js, as in part two since 2026-11-05; the cross
-     of 2026-11-04 before): maps of squares. The films' numbers on top of the users' numbers (one row per film), the
-     predictions on the right of the users' numbers, the ratings on their right, the losses under the predictions and
-     the ratings, the average loss in its ring on the right of the losses; arrows show who makes what. The words stand
-     above the board on every screen (Carlos, 2026-11-06: "the text must go above or below but not on the side"); the
-     step count, Play and the curve in the board's top-right corner (the slot nb, on the right of the films' numbers,
-     above the ratings), under the board on a phone; a tapped square's line floats over the square (under the board on
-     a phone). */
+  /* THE TEXTBOOK CROSS OF SCENES 3 AND 4 (M.cross with layout "textbook" in matrix.js, as part two since 2026-11-06,
+     Carlos's seventh message; part two's stack from 2026-11-05, the cross of 2026-11-04 before): maps of squares. The
+     users' numbers on the left of the predictions, one row per user; the films' numbers turned, one column per film,
+     above the predictions, their columns over the predictions' columns, so a prediction stands where its user's row
+     meets its film's column; the ratings on the right of the predictions, the losses under the predictions and the
+     ratings, the average loss in its ring on the right of the losses; arrows show who makes what. The words stand above
+     the board on every screen (Carlos, 2026-11-06: "the text must go above or below but not on the side"); the step
+     count, Play and the curve in the board's top-right corner (the slot nb, on the right of the films' numbers, above
+     the ratings), under the board on a phone; a tapped square's line floats over the square (under the board on a
+     phone). W5.shapes(n) gives the five maps' sizes as drawn. */
+  function shapes(n) {
+    var r = S5.runs[n];
+    return { users: [r.users, r.k], films: [r.k, r.films], predictions: [r.users, r.films], ratings: [r.users, r.films],
+             losses: [r.users, r.films] };
+  }
   function crossOf(S, d, total) {
-    var r = d.run;
-    S.pR = map({ rows: r.users, cols: r.films, films: d.films, caption: "Ratings", board: "R" });
-    S.pU = map({ rows: r.users, cols: r.k, caption: "Users' numbers", cut: 5, board: "U" });
-    S.pF = map({ rows: r.films, cols: r.k, caption: "Films' numbers", cut: 5, board: "F" });
-    S.pP = map({ rows: r.users, cols: r.films, caption: "Predictions", fwd: true, board: "P" });
-    S.pS = map({ rows: r.users, cols: r.films, caption: "Losses", fwd: true, board: "S" });
+    var r = d.run, sh = shapes(d.n);
+    // map() takes the logical rows and columns; the films' map is drawn turned, so its logical rows are the films
+    S.pR = map({ rows: sh.ratings[0], cols: sh.ratings[1], films: d.films, caption: "Ratings", board: "R" });
+    S.pU = map({ rows: sh.users[0], cols: sh.users[1], caption: "Users' numbers", cut: 5, board: "U" });
+    S.pF = map({ rows: sh.films[1], cols: sh.films[0], turn: true, caption: "Films' numbers", cut: 5, board: "F" });
+    S.pP = map({ rows: sh.predictions[0], cols: sh.predictions[1], caption: "Predictions", fwd: true, board: "P" });
+    S.pS = map({ rows: sh.losses[0], cols: sh.losses[1], caption: "Losses", fwd: true, board: "S" });
     S.pR.set(function (i, j) { return d.R[i][j]; });
     strip(S, d, total);
     [S.count.el, S.ctl, S.curve.el].forEach(function (x) { S.strip.appendChild(x); });
-    S.X = M.cross({ c: S.pU.el, f: S.pF.el, r: S.pR.el, p: S.pP.el, s: S.pS.el, avg: S.ring.el, nb: S.strip, layout: "stack", cls: "s5-x" });
+    S.X = M.cross({ c: S.pU.el, f: S.pF.el, r: S.pR.el, p: S.pP.el, s: S.pS.el, avg: S.ring.el, nb: S.strip, layout: "textbook", cls: "s5-x" });
     S.ringSlot = S.ring.el.parentNode;
     S.stripSlot = S.strip.parentNode;
     S.words = h("div", "s5-words", [S.lead, S.say]);
@@ -6567,7 +6743,7 @@ button.chip:hover{border-color:var(--rubric)}
     return t0 + (R + C - 1) * gap;
   }
   // The forward pass, played: the predictions with the arrows from the two matrices, then the losses with the
-  // arrows from the ratings and the predictions, then the average loss.
+  // arrows from the predictions and the ratings, then the average loss.
   function forward(S, t0) {
     outputs(S, false);
     var gap = Math.max(12, Math.round(700 / (S.pP.rows + S.pP.cols)));
@@ -6659,7 +6835,7 @@ button.chip:hover{border-color:var(--rubric)}
     if (st === "predict") {
       S.player.reset();
       words(S, [rub("Their product:"), " a prediction for every rating."],
-        ["Every user's row with every film's row. The predictions and the ratings give the losses: the average loss is ",
+        ["Every user's row with every film's column. The predictions and the ratings give the losses: the average loss is ",
          lossCell(d.losses[0]), "."]);
       if (live) forward(S, 150);
       return;
@@ -6679,12 +6855,12 @@ button.chip:hover{border-color:var(--rubric)}
     if (st === "result") {
       S.pP.mark(d.misses);
       words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
-        [d.within + " of the " + d.ratings + " ratings come back within half a star. The ringed predictions do not; the largest miss is ",
+        [d.within + " of the " + d.ratings + " predictions come within half a star of their ratings. The ringed ones do not; the largest miss is ",
          num(d.largest), " of a star."]);
       return;
     }
     words(S, [rub("Is that the right answer?")],
-      [cap(count(r.k)) + " numbers per row cannot give back " + d.ratings + " real ratings exactly: the best possible is ", lossCell(r.best),
+      [cap(count(r.k)) + " numbers per user and per film cannot give back " + d.ratings + " real ratings exactly: the best possible is ", lossCell(r.best),
        ". Another method, the singular value decomposition (part 4a of the next notebook), computes it exactly when every rating is known. Gradient descent knew nothing of it, and ends on it."]);
     S.curve.best(true);
     S.curve.zoom(true, live);
@@ -6775,8 +6951,8 @@ button.chip:hover{border-color:var(--rubric)}
     S.curve.best(true);
     S.curve.zoom(true, live);
     words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
-      ["The best possible with " + count(r.k) + " numbers per row is ", lossCell(r.best), ". " + d.within + " of the " + d.ratings +
-       " ratings come back within half a star; the ringed predictions do not."]);
+      ["The best possible with " + count(r.k) + " numbers per user and per film is ", lossCell(r.best), ". " + d.within + " of the " +
+       d.ratings + " predictions come within half a star of their ratings; the ringed ones do not."]);
   }
   MF.define("larger", {
     act: 5,
@@ -6888,20 +7064,23 @@ button.chip:hover{border-color:var(--rubric)}
       S.root.appendChild(S.lead);
       S.root.appendChild(S.say);
       var e = d.states[d.steps];
-      var mR = map({ rows: r.users, cols: r.films }), mC = map({ rows: r.users, cols: r.k }), mF = map({ rows: r.films, cols: r.k });
-      var mE = map({ rows: r.users, cols: r.k });
+      // the users' matrix one row per user, the films' matrix turned, one column per film (the textbook cross)
+      var mR = map({ rows: r.users, cols: r.films }), mC = map({ rows: r.users, cols: r.k }), mF = map({ rows: r.films, cols: r.k, turn: true });
+      var mE = map({ rows: r.users, cols: r.k }), mG = map({ rows: r.films, cols: r.k, turn: true });
       mR.set(function (i, j) { return d.R[i][j]; });
       mC.set(function (i, j) { return e.c[i][j]; });
       mF.set(function (i, j) { return e.f[i][j]; });
       mE.set(function (i, j) { return e.c[i][j]; });
+      mG.set(function (i, j) { return e.f[i][j]; });
       mE.grid.appendChild(el("span", "s5-rowbox"));         // a violet frame round the first user's row: one embedding
+      mG.grid.appendChild(el("span", "s5-colbox"));         // and round the first film's column: another
       var cv = curve({ losses: d.losses, small: true, cls: "s5-mini", xlabel: "", ylabel: "" });
       S.cv = cv;
       S.chain = el("div", "s5-chain");
       var arrow = function () { var a = el("span", "s5-arrow", "→"); a.setAttribute("aria-hidden", "true"); return a; };
       [card([mR.el], [rub("The ratings")]), arrow(),
        card([mC.el, mF.el], ["factorized into ", rub("two matrices")]), arrow(),
-       card([mE.el], ["whose rows are the ", rub("embeddings")]), arrow(),
+       card([mE.el, mG.el], ["whose rows and columns are the ", rub("embeddings")]), arrow(),
        card([cv.el], ["found by ", rub("gradient descent")])].forEach(function (x) { S.chain.appendChild(x); });
       S.root.appendChild(S.chain);
       S.aside = el("p", "s5-aside");
@@ -6932,7 +7111,7 @@ button.chip:hover{border-color:var(--rubric)}
   });
 
   MF.W5 = { player: player, curve: curve, map: map, mtable: mtable, ring: ring, tile: tile, PICS: PICS, data: data,
-            quant: quant, avg: avg, REPLAY: REPLAY };
+            quant: quant, avg: avg, REPLAY: REPLAY, shapes: shapes, readOf: readOf, lossOf: lossOf };
 })();
 </script>
 <script>MF.start({ game: "3" });</script>

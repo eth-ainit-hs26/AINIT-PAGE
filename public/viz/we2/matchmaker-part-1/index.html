@@ -489,6 +489,8 @@ button.chip:hover{border-color:var(--rubric)}
 .mx-t td.mx-bl{border-right:0}
 .mx-t td.mx-bra{border-left:0}
 .mx-t th.mx-bh{width:var(--mx-bw)}
+/* row heads "none": no column of heads at all (its corner goes with it, or the column heads shift one column left) */
+.mx-norh th.mx-rh, .mx-norh th.mx-corner{display:none}
 /* the heads */
 .mx-t th.mx-rh{text-align:left; white-space:nowrap; padding:var(--mx-py) 8px var(--mx-py) 6px; font-weight:500; font-size:17px;
   vertical-align:middle; transition:background-color .3s ease, opacity .3s ease, color .3s ease; border-radius:12px 0 0 12px}
@@ -592,6 +594,20 @@ button.chip:hover{border-color:var(--rubric)}
 .mx-x-stk > .mx-xnb{grid-area:nb; align-self:start}
 .mx-x-stk > .mx-xnote{grid-area:note; justify-self:stretch; align-self:start}
 .mx-cross:not(.mx-x-stk) > .mx-xnb, .mx-cross:not(.mx-x-stk) > .mx-xnote{display:none}
+/* The textbook cross (o.layout "textbook", 2026-11-06): the films' matrix, turned, ABOVE the predictions (it spans the
+   first two columns and stands at the right, so its columns are the predictions' columns and its row heads stand above
+   the customers); the customers, the predictions and the ratings level at their last row (align-self end: nothing may
+   stand under a matrix's rows in this row of the grid). */
+.mx-cross.mx-x-tb{grid-template-areas:"f f nb nb" "c p r ." "note s s avg"}
+.mx-x-tb > .mx-xf{justify-self:end; align-self:end}
+.mx-x-tb > .mx-xc, .mx-x-tb > .mx-xp{justify-self:end; align-self:end}
+.mx-x-tb > .mx-xr{align-self:end}
+/* the turned films' matrix: its caption on its left, level with its column heads (as in the grid sketch) */
+.mx-x-tb > .mx-xf > .mx.mx-tr{grid-template-columns:auto auto; grid-template-areas:"cap tw" ". size"; column-gap:10px;
+  align-items:start}
+.mx-x-tb > .mx-xf > .mx.mx-tr > .mx-cap{grid-area:cap; padding-top:.4em}
+.mx-x-tb > .mx-xf > .mx.mx-tr > .mx-tw{grid-area:tw}
+.mx-x-tb > .mx-xf > .mx.mx-tr > .mx-size{grid-area:size}
 .mx-xarr{position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:1}
 .mx-xarr g{transition:opacity .4s ease}
 .mx-xarr g.mx-xoff{opacity:0}
@@ -624,6 +640,14 @@ button.chip:hover{border-color:var(--rubric)}
   .mx-stk-side > .mx-note{align-self:center; justify-items:start; text-align:left}
 }
 .mx-stk > .mx-note{grid-area:note}
+/* The textbook layout of M.stack (2026-11-06): the second matrix, turned, above the product (spanning both columns, at
+   the right, so its columns are the product's); the first on the product's left, their last rows level. */
+.mx-stk.mx-stk-tb{grid-template-areas:"b b" "a c" "calc calc" "note note"; row-gap:var(--mx-srg, 16px)}
+.mx-stk-tb > .mx-ssb, .mx-stk-tb > .mx-ssa, .mx-stk-tb > .mx-ssc{justify-self:end; align-self:end}
+.mx-stk.mx-stk-tb.mx-stk-two{grid-template-columns:auto auto; grid-template-areas:". b" "a ." "calc calc" "note note"}
+@media (min-width: 901px){
+  .mx-stk.mx-stk-tb.mx-stk-side{grid-template-columns:auto auto minmax(0, 34ch); grid-template-areas:"b b calc" "a c note"}
+}
 .mx-stk .mx-hit > .nt-n{box-shadow:0 0 0 3px var(--leaf), 0 0 0 6px var(--rubric)}
 .mx-sov{position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:2}
 .mx-sbox{fill:none; stroke-width:2.5}
@@ -642,6 +666,10 @@ button.chip:hover{border-color:var(--rubric)}
 .mx-calc .nt-n{min-width:40px; min-height:32px; font-size:20px}
 .mx-calc .mx-csum .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--rubric)}
 .mx-cwait{visibility:hidden}
+/* M.workLine outside a stack: the look of the stack's worked line */
+.mx-wl{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 12px}
+.mx-wl .nt-n{min-width:40px; min-height:32px; font-size:20px}
+.mx-wl .mx-csum .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--rubric)}
 
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
@@ -680,9 +708,12 @@ button.chip:hover{border-color:var(--rubric)}
   .mx-cross.mx-x-stk{grid-template-columns:repeat(3, auto); grid-template-areas:"note note note" "f nb nb" "c p r" ". s s" ". avg avg";
     column-gap:var(--mx-xcg, 12px)}
   .mx-x-stk > .mx-xa{justify-self:center}
+  .mx-cross.mx-x-tb{grid-template-areas:"note note note" "f f nb" "c p r" ". s s" ". avg avg"}
   .mx-stk{--mx-scg:30px; --mx-srg:6px}
   .mx-calc{gap:4px 8px}
   .mx-calc .nt-n{min-width:32px; min-height:27px; font-size:17px}
+  .mx-wl{gap:4px 8px}
+  .mx-wl .nt-n{min-width:32px; min-height:27px; font-size:17px}
   .mx-co{font-size:17px}
   .mx-cl, .mx-cg{gap:4px}
 }
@@ -692,8 +723,20 @@ button.chip:hover{border-color:var(--rubric)}
 </style>
 <style>
 /* Section 1, "Matrix multiplication" (part one of the Matchmaker). Built by agent S1-A on 2026-11-03, rewritten by the
-   main session on 2026-11-05 for the stacked layout (M.stack) and the scene byhand. Class names start with s1-. */
+   main session on 2026-11-05 for the stacked layout (M.stack) and the scene byhand, turned to the textbook layout of
+   M.stack on 2026-11-06 (the second matrix turned above the product). Class names start with s1-. */
 .s1-mm, .s1-sc, .s1-mul, .s1-bg, .s1-hand{display:grid; justify-items:center; gap:12px; width:100%}
+/* Every number cell of a product's stack keeps one width, so that the columns of the turned matrix line up with the
+   columns of the product under it (MATRIX.md, The textbook cross, traps). */
+.s1-sc td.mx-c > .nt-n, .s1-mul td.mx-c > .nt-n, .s1-bg td.mx-c > .nt-n, .s1-hand td.mx-c > .nt-n{width:var(--nt-w)}
+/* A stack keeps only the rows of its grid that a scene fills: an empty row of the template still takes a row gap. In
+   the scenes bigger and byhand the first matrix has no column heads, so the tops of the first matrix and of the
+   product are level: the second matrix gets room under it for the arrow down into the product (at least 14 px, the
+   arrow is left out with less), which a larger row gap would also add under the worked line. */
+.s1-tabs .mx-stk.mx-stk-tb.mx-stk-two{grid-template-areas:". b" "a ."}
+.s1-mul .mx-stk.mx-stk-tb, .s1-bg .mx-stk.s1-lone{grid-template-areas:"b b" "a c"}
+.s1-hand .mx-stk.mx-stk-tb{grid-template-areas:"b b" "a c" "calc calc"}
+.s1-bg .mx-stk:not(.s1-lone) > .mx-ssb, .s1-hand .mx-stk > .mx-ssb{padding-bottom:20px}
 .s1-in{animation:s1-in .45s cubic-bezier(.2,.7,.2,1) both}
 @keyframes s1-in{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
 .s1-still, .s1-still *{transition:none !important}
@@ -739,8 +782,9 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-mkc{color:var(--muted); font-style:italic; font-size:14.5px}
 .s1-note{font-size:15px; color:var(--muted); font-style:italic}
 
-/* 1. The critic's answers on top of the profiles */
+/* 1. The profiles and, up and to the right of them, the critic's answers turned (one column per film) */
 .s1-tabs{display:grid; justify-items:center; gap:10px; width:100%}
+.s1-tabs .mx-stk{--mx-scg:34px}
 .s1-tabs .mx-cap{font-size:17px}
 .s1-key{gap:8px 20px}
 .s1-tbody{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:12px 52px; width:100%}
@@ -765,26 +809,31 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-sc .mx-stk-side .s1-tools{justify-content:flex-start}
 }
 
-/* 3. Matrix multiplication */
+/* 3. Matrix multiplication. Step 3, the rule: the columns of the first (the axes on top of the customers) and the
+   rows of the second (the axes down the left of the films), and their counts in the two sizes. Step 5, the product's
+   shape: its rows from the first (violet), its columns from the second (ochre); the two inner counts fade. */
 .s1-mul{gap:12px}
-.s1-mul[data-k="3"] .mx-ma th.mx-ch .pic, .s1-mul[data-k="3"] .mx-mb th.mx-ch .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--rubric)}
-.s1-mul[data-k="3"] .mx-ma .mx-sc, .s1-mul[data-k="3"] .mx-mb .mx-sc{color:var(--rubric); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:4px}
+.s1-mul[data-k="3"] .mx-ma th.mx-ch .pic, .s1-mul[data-k="3"] .mx-mb th.mx-rh .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--rubric)}
+.s1-mul[data-k="3"] .mx-ma .mx-sc, .s1-mul[data-k="3"] .mx-mb .mx-sr{color:var(--rubric); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:4px}
 .s1-mul[data-k="3"] .mx-mc{opacity:.28}
-.s1-mul[data-k="5"] .mx-ma th.mx-rh, .s1-mul[data-k="5"] .mx-mc th.mx-rh, .s1-mul[data-k="5"] .mx-ma .mx-sr, .s1-mul[data-k="5"] .mx-mc .mx-sr{color:var(--rubric); font-weight:700}
-.s1-mul[data-k="5"] .mx-mb th.mx-rh, .s1-mul[data-k="5"] .mx-mb .mx-sr, .s1-mul[data-k="5"] .mx-mc .mx-sc{color:var(--ochre); font-weight:700}
-.s1-mul[data-k="5"] .mx-mb th.mx-rh .pic, .s1-mul[data-k="5"] .mx-mc th.mx-ch .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--ochre)}
-.s1-mul[data-k="5"] .mx-ma th.mx-rh .pic, .s1-mul[data-k="5"] .mx-mc th.mx-rh .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--rubric)}
-.s1-mul[data-k="5"] .mx-ma .mx-sc, .s1-mul[data-k="5"] .mx-mb .mx-sc{color:var(--muted)}
+.s1-mul[data-k="5"] .mx-ma th.mx-rh, .s1-mul[data-k="5"] .mx-ma .mx-sr, .s1-mul[data-k="5"] .mx-mc .mx-sr{color:var(--rubric); font-weight:700}
+.s1-mul[data-k="5"] .mx-mb .mx-sc, .s1-mul[data-k="5"] .mx-mc .mx-sc{color:var(--ochre); font-weight:700}
+.s1-mul[data-k="5"] .mx-mb th.mx-ch .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--ochre)}
+.s1-mul[data-k="5"] .mx-ma th.mx-rh .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--rubric)}
+.s1-mul[data-k="5"] .mx-ma .mx-sc, .s1-mul[data-k="5"] .mx-mb .mx-sr{color:var(--muted)}
 .s1-mul[data-k="6"] .mx-mc .mx-cap{color:var(--rubric)}
+.s1-std{font-size:19px; line-height:1.35; text-align:center; max-width:100%; text-wrap:balance}
 
 /* 4. A bigger product */
 .s1-bg{gap:12px}
 .s1-bg .mx-t td.mx-c{line-height:1}
 .s1-why{display:grid; justify-items:center; gap:14px}
-.s1-whyst{display:grid; justify-items:center}
-.s1-whyst .nt-lg .nt-tab .rt-who{white-space:nowrap}
-.s1-hole{display:inline-block; box-sizing:border-box; min-width:var(--nt-w); min-height:var(--nt-h); border:2px dashed var(--muted); border-radius:10px}
-.s1-lost{display:inline-grid; place-items:center; box-sizing:border-box; min-width:var(--nt-pw); min-height:var(--nt-h); border:2px dashed var(--muted);
+/* why the two must match: a row of four against a column of three, then the pairs, the fourth with a hole */
+.s1-whyst{display:grid; justify-items:center; gap:12px}
+.s1-lone td.mx-c > .nt-n{width:var(--nt-w)}
+.s1-pairs .mx-cl{gap:8px}
+.s1-hole{display:inline-block; box-sizing:border-box; min-width:40px; min-height:32px; border:2px dashed var(--muted); border-radius:10px}
+.s1-lost{display:inline-grid; place-items:center; box-sizing:border-box; min-width:var(--nt-w); min-height:var(--nt-h); border:2px dashed var(--muted);
   border-radius:10px; color:var(--muted); font-size:var(--nt-fs); font-weight:700; line-height:1}
 .s1-quiz{display:grid; justify-items:center; gap:14px; width:100%}
 .s1-qline{display:flex; align-items:center; gap:14px}
@@ -853,7 +902,8 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-tabs .mx-ch .pic, .s1-sc .mx-ch .pic, .s1-mul .mx-ch .pic{--s:24px}
   .s1-tabs .mx-c > .vote{min-height:31px}
   .s1-bg .mx-sm{--nt-w:38px; --nt-h:25px; --nt-fs:17px}
-  .s1-bg .mx-stk{--mx-srg:4px}
+  .s1-bg .mx-stk:not(.s1-lone){--mx-srg:6px}
+  .s1-std{font-size:17.5px}
   .s1-mul{gap:6px}
   .s1-mul .mx{--nt-h:29px}
   .s1-mul .mx-ch .pic{--s:22px}
@@ -883,6 +933,8 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-mkc{font-size:12px}
   .s1-note{font-size:13px}
   .s1-tabs, .s1-tside{gap:6px}
+  .s1-tabs .mx{--nt-w:32px}
+  .s1-tabs .mx-stk{--mx-scg:8px}
   .s1-tabs .mx-cap{font-size:14px}
   .s1-tabs .s1-read{font-size:14.5px}
   .s1-key{gap:6px 10px}
@@ -896,11 +948,15 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-mul .mx-cap{font-size:13px}
   .s1-mul .mx-mc .mx-rh .pic{display:none}
   .s1-opts{gap:8px}
-  .s1-whyst .nt-wrap.nt-lg, .s1-whyst .nt-lg .nt-tab{--nt-w:38px; --nt-h:32px; --nt-fs:18px; --nt-sx:10px; --nt-xg:16px; --nt-rg:7px}
-  .s1-whyst .nt-lg .nt-tab .rt-who{font-size:13.5px}
+  .s1-std{font-size:15px}
+  .s1-hole{min-width:32px; min-height:27px}
   .s1-bg .mx-sm{--nt-w:27px; --nt-h:23px; --nt-fs:13.5px; --mx-px:1.5px}
   .s1-bg .mx-stk{--mx-scg:14px}
   .s1-bg .mx-cap{display:none}
+  /* the picture of why keeps its captions and the room of its two arrows */
+  .s1-bg .mx-stk.s1-lone{--mx-scg:30px; --mx-srg:16px}
+  .s1-bg .s1-lone .mx-cap{display:block}
+  .s1-pairs .mx-cl{gap:4px}
   .s1-bg .mx-size .mx-shape{font-size:15px}
   .s1-opt{padding:6px 8px 8px; gap:4px}
   .s1-gpair{gap:5px}
@@ -909,17 +965,21 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-wait{font-size:14.5px}
   .s1-hand .mx{--nt-w:34px; --nt-h:26px; --nt-fs:16px}
   .s1-hand .mx-cap{display:none}
-  .s1-hbody{gap:8px}
-  .s1-hyou{width:100%; gap:6px}
-  .s1-hentry .nt-n{min-width:46px; min-height:34px; font-size:20px}
+  .s1-hand{gap:4px}
+  .s1-hand .mx-calc{padding-top:0}
+  .s1-hand .mx-calc .nt-n{min-height:24px}
+  .s1-hfar{display:none}
+  .s1-hbody{gap:4px}
+  .s1-hyou{width:100%; gap:4px}
+  .s1-hentry .nt-n{min-width:46px; min-height:30px; font-size:20px}
   .s1-hminus{font-size:20px}
   .s1-hlab{font-size:14px}
   .s1-hpad{grid-template-columns:repeat(7, 42px); gap:5px}
   .s1-hfn{order:1}
   .s1-hfn[data-k="back"]{order:2}
   .s1-hok{order:3}
-  .s1-hkey{height:36px; font-size:18px}
-  .s1-hok{grid-column:span 2; min-height:36px; padding:0 10px}
+  .s1-hkey{height:34px; font-size:18px}
+  .s1-hok{grid-column:span 2; min-height:34px; padding:0 10px}
   .s1-hmsg{font-size:14.5px; min-height:2.6em}
 }
 @media (prefers-reduced-motion: reduce){
@@ -1063,8 +1123,9 @@ button.chip:hover{border-color:var(--rubric)}
     elsa: { paddington:  1, martian: -2 }
   };
 
-  // Section 1. The Matchmaker's score of a customer and a film is the inner product of their rows over the three
-  // axes. Scores (rows Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
+  // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
+  // film's column over the three axes (kept here one row per film; the game draws the films turned). Scores (rows
+  // Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
   //   Sara  7  0 -7 -6     Leo  -4 -6 10  0     Maya  -1  7 -2  2
   // Suggested worked examples: Sara and The Intouchables 4 + 1 + 2 = 7 (agree on all three axes),
   // Leo and Apollo 13 -4 - 4 + 2 = -6, Sara and Apollo 13 4 - 2 - 2 = 0 (the products cancel).
@@ -1073,15 +1134,16 @@ button.chip:hover{border-color:var(--rubric)}
     films: ["intouchables", "apollo13", "mib", "interstellar"],
     axes: ["real", "comedy", "action"],
     worked: [["sara", "intouchables"], ["leo", "apollo13"], ["sara", "apollo13"]],
-    // Scene 4, a bigger product: two plain matrices of invented numbers, 5 rows and 6 rows, 4 columns each.
-    // Their product (every row of A with every row of B) is 5 x 6:
+    // Scene 4, a bigger product: two plain matrices of invented numbers, A 5 x 4 and B 4 x 6 as drawn (B kept one
+    // row per column of the drawing). Their product (every row of A with every column of B) is 5 x 6:
     //   -3  6  4 -3  1 -2  /  3 -4  5 -2  6 -2  /  -2  5 -3  3 -3  0  /  4 -4 -3  3 -2  3  /  0  5  4 -2  0  0
     big: {
       A: [[1, -2, 0, 2], [2, 1, -1, 0], [-1, 0, 2, 1], [0, 2, 1, -2], [2, -1, 1, 1]],
       B: [[1, 1, 0, -1], [0, -2, 2, 1], [2, 0, -1, 1], [-1, 1, 1, 0], [1, 2, -2, 2], [0, -1, 1, -2]]
     },
-    // The scene byhand (2026-11-05): a 3 x 3 and a 4 x 3 matrix of invented numbers whose 3 x 4 product the
-    // participants fill in by hand, from source/tools/s1_byhand.py (seed 20261105). Their product:
+    // The scene byhand (2026-11-05): a 3 x 3 and a 3 x 4 matrix (B kept one row per column of the drawing) of
+    // invented numbers whose 3 x 4 product the participants fill in by hand, from source/tools/s1_byhand.py (seed
+    // 20261105). Their product:
     //   2  0 -7  1  /  -3 -5  1 -1  /  -2 -4  9  1
     hand: {
       A: [[-2, 1, 2], [-1, 1, -1], [2, 1, -2]],
@@ -1402,7 +1464,7 @@ button.chip:hover{border-color:var(--rubric)}
               cards: { 3: { kicker: "Gradient descent, optional", num: 1, skip: null },
                        4: { kicker: "Gradient descent, optional", num: 2, skip: null } },
               back: { 3: "Then come back here for the second half: many customers, many films.",
-                      4: "Then open part three of the Matchmaker: the whole picture." } },
+                      4: "That is the end of the Matchmaker." } },  // played after part three (Carlos, 2026-11-06)
     "3": { sections: [5], tag: "Part three: the whole picture",
            cards: { 5: { kicker: "Once Upon a Matchmaker, part three", num: 3 } } }
   };
@@ -2716,7 +2778,12 @@ button.chip:hover{border-color:var(--rubric)}
    M.grid(r, c, o)    a small picture of a matrix with r rows and c columns, for a question about shapes
    M.cross(o)         the guessing picture (Carlos, 2026-11-04): the ratings in the centre, the customers on their
                       left, the films above, the predictions below, the losses beside the predictions, with arrows
-   Two tones carry a pair: "a" (violet) the row of the first matrix, "b" (ochre) the row of the second. In the
+   M.stack(o)         section 1's product (2026-11-05): B on top of A, the product on the right of A; with
+                      layout "textbook" (2026-11-06) B turned above the product (MATRIX.md, The textbook cross)
+   M.workLine(ps, o)  the worked line of one inner product outside a stack (2026-11-06): each pair multiplied, then
+                      the products and the sum, ringed
+   Two tones carry a pair: "a" (violet) the row of the first matrix, "b" (ochre) the row of the second as stored,
+   its column on screen with layout "textbook". In the
    product the row band is "a" and the column band "b", so the cell where the two bands cross holds the inner
    product of the two lit rows. Motions run on timers and the Web Animations API, show() and stop() cut them
    short and draw the end state, and nothing moves under reduced motion. No globals besides MF.M. */
@@ -2865,8 +2932,16 @@ button.chip:hover{border-color:var(--rubric)}
      o.phonePics      true: on a phone the row heads keep only their picture
      o.caption        a word above it; o.shape: true shows its size under it; o.brackets: false hides the brackets
      o.size           "sm", "md" (default) or "lg"; o.cls extra classes on the wrapper
+     o.transpose      true: drawn turned, one drawn row per column of o.cols and one drawn column per row of o.rows
+                      (the films' matrix of the textbook cross, 2026-11-06: one row per number, one column per film).
+                      Every call below still takes logical indices (i a row of o.rows, j a column of o.cols): only the
+                      drawing turns. o.rowHeads names the heads of o.rows wherever they are drawn ("chip" becomes
+                      "full" on top), o.colHeads those of o.cols ("full" becomes "chip" on the left). The size label
+                      and the brackets follow the drawing. A cell keeps data-i and data-j logical.
+     Drawn row heads "none": the column of row heads goes (class mx-norh), so the brackets stand at the left edge.
    The controller:
-     m.el, m.table, m.R, m.C (counts), m.rowSpec, m.colSpec, m.value(i, j), m.td(i, j), m.item(i, j)
+     m.el, m.table, m.R, m.C (logical counts), m.rowSpec, m.colSpec, m.value(i, j), m.td(i, j), m.item(i, j),
+     m.transposed, m.drawn ({ R, C }, the counts as drawn)
      m.set(i, j, x, { pop })   a number (with a landing pop), undefined or "?" for a slot, null for an empty cell
      m.setAll(v)               v a list of rows, a function (i, j), or "numbers", "slots", "empty", "marks"; no motion,
                                and a number that is already drawn only changes its digits (the fast path of a loop)
@@ -2875,9 +2950,13 @@ button.chip:hover{border-color:var(--rubric)}
      m.only({ rows, cols }, "dim" or "hide")   everything outside those rows and columns dims or disappears;
                                rows or cols left out means all of them; m.only(null) shows everything
      m.brackets(on), m.showShape(on), m.convert(o), m.unconvert(), m.rowHead(i), m.colHead(j), m.caption */
+  // A head kind for a line drawn on the left ("row") or on top ("col"): the two names of picture and name swap.
+  var AS_ROW = { full: "chip", chip: "chip", name: "name", pic: "pic", num: "num", none: "none" };
+  var AS_COL = { chip: "full", full: "full", name: "full", pic: "pic", num: "num", none: "none" };
   function matrix(o) {
     o = o || {};
     var R = heads(o.rows), C = heads(o.cols);
+    var T = !!o.transpose;
     var vals = o.values;
     function value(i, j) {
       if (typeof vals === "function") return vals(i, j);
@@ -2886,9 +2965,13 @@ button.chip:hover{border-color:var(--rubric)}
     }
     var plainR = !R.some(function (h) { return h.id; }), plainC = !C.some(function (h) { return h.id; });
     var rk = o.rowHeads || (plainR ? "num" : "chip"), ck = o.colHeads || (plainC ? "num" : "full");
-    var wrap = el("div", "mx mx-" + (o.size || "md") + (o.cls ? " " + o.cls : ""));
+    // What is drawn: rows DR with heads of kind drk on the left, columns DC with heads of kind dck on top.
+    var DR = T ? C : R, DC = T ? R : C;
+    var drk = T ? AS_ROW[ck] || ck : rk, dck = T ? AS_COL[rk] || rk : ck;
+    var wrap = el("div", "mx mx-" + (o.size || "md") + (T ? " mx-tr" : "") + (o.cls ? " " + o.cls : ""));
     if (o.brackets !== false) wrap.classList.add("mx-br");
     if (o.phonePics) wrap.classList.add("mx-phpic");
+    if (drk === "none") wrap.classList.add("mx-norh");
     var cap = el("p", "mx-cap", o.caption || "");
     if (!o.caption) cap.hidden = true;
     wrap.appendChild(cap);
@@ -2896,39 +2979,48 @@ button.chip:hover{border-color:var(--rubric)}
     var thead = el("thead"), hr = el("tr");
     hr.appendChild(el("th", "mx-corner"));
     hr.appendChild(el("th", "mx-bh"));
-    var chs = C.map(function (h, j) { var th = colHead(h, ck); th.dataset.j = String(j); hr.appendChild(th); return th; });
+    var dchs = DC.map(function (h, c) { var th = colHead(h, dck); th.dataset.j = String(c); hr.appendChild(th); return th; });
     hr.appendChild(el("th", "mx-bh"));
     thead.appendChild(hr);
-    if (ck === "none") thead.hidden = true;
+    if (dck === "none") thead.hidden = true;
     t.appendChild(thead);
-    var tb = el("tbody"), rhs = [], tds = [];
-    R.forEach(function (h, i) {
+    var tb = el("tbody"), drhs = [], dtds = [];
+    DR.forEach(function (h, r) {
       var tr = el("tr");
-      tr.dataset.i = String(i);
+      tr.dataset.i = String(r);
       if (h.id) tr.dataset.id = h.id;
-      var th = rowHead(h, rk);
-      rhs.push(th);
+      var th = rowHead(h, drk);
+      drhs.push(th);
       tr.appendChild(th);
       // The two brackets are cells of the first row that span every row: "[" before the numbers, "]" after.
-      if (i === 0) { var bl = el("td", "mx-bl"); bl.rowSpan = R.length; tr.appendChild(bl); }
-      tds.push(C.map(function (ch, j) {
+      if (r === 0) { var bl = el("td", "mx-bl"); bl.rowSpan = DR.length; tr.appendChild(bl); }
+      dtds.push(DC.map(function (ch, c) {
         var td = el("td", "mx-c");
-        td.dataset.i = String(i);
-        td.dataset.j = String(j);
+        // data-i and data-j are the logical row and column
+        td.dataset.i = String(T ? c : r);
+        td.dataset.j = String(T ? r : c);
         tr.appendChild(td);
         return td;
       }));
-      if (i === 0) { var br = el("td", "mx-bra"); br.rowSpan = R.length; tr.appendChild(br); }
+      if (r === 0) { var br = el("td", "mx-bra"); br.rowSpan = DR.length; tr.appendChild(br); }
       tb.appendChild(tr);
     });
-    // Rounded ends of a band: the first and last cell of each row and column know where they are.
-    tds.forEach(function (row) { if (row.length) row[row.length - 1].classList.add("mx-endr"); });
-    if (tds.length) tds[tds.length - 1].forEach(function (td) { td.classList.add("mx-endc"); });
+    // Rounded ends of a band: the first and last cell of each drawn row and column know where they are.
+    dtds.forEach(function (row) { if (row.length) row[row.length - 1].classList.add("mx-endr"); });
+    if (dtds.length) dtds[dtds.length - 1].forEach(function (td) { td.classList.add("mx-endc"); });
     t.appendChild(tb);
+    // The logical view: tds[i][j] is the cell of row i and column j of o.rows and o.cols, rhs[i] the head of row i,
+    // chs[j] the head of column j, wherever they are drawn.
+    var tds, rhs, chs;
+    if (T) {
+      tds = R.map(function (h, i) { return C.map(function (h2, j) { return dtds[j][i]; }); });
+      rhs = dchs;
+      chs = drhs;
+    } else { tds = dtds; rhs = drhs; chs = dchs; }
     var tw = el("div", "mx-tw");
     tw.appendChild(t);
     wrap.appendChild(tw);
-    var size = shape(R.length, C.length);
+    var size = shape(DR.length, DC.length);
     size.classList.add("mx-size");
     if (!o.shape) size.hidden = true;
     wrap.appendChild(size);
@@ -2980,8 +3072,9 @@ button.chip:hover{border-color:var(--rubric)}
       if (kind === "row") return tds[k] ? [rhs[k]].concat(tds[k]) : [];
       return chs[k] ? [chs[k]].concat(tds.map(function (r) { return r[k]; })) : [];
     }
+    // A logical row of a turned matrix is drawn as a column: it takes the column's band.
     function band(kind, k, tone) {
-      var list = lineOf(kind, k), cls = toneCls[kind];
+      var list = lineOf(kind, k), cls = toneCls[T ? (kind === "row" ? "col" : "row") : kind];
       list.forEach(function (c) { c.classList.remove(cls.a, cls.b); });
       if (tone && cls[tone]) list.forEach(function (c) { c.classList.add(cls[tone]); });
       return api;
@@ -3015,6 +3108,7 @@ button.chip:hover{border-color:var(--rubric)}
     }
     var api = {
       el: wrap, table: t, caption: cap, sizeEl: size, R: R.length, C: C.length, rowSpec: R, colSpec: C,
+      transposed: T, drawn: { R: DR.length, C: DC.length },
       value: value,
       td: function (i, j) { return (tds[i] && tds[i][j]) || null; },
       item: function (i, j) { var td = tds[i] && tds[i][j]; return td ? td.firstChild : null; },
@@ -3339,13 +3433,19 @@ button.chip:hover{border-color:var(--rubric)}
                            films, above the ratings (part two puts one number's Before and After there), and o.note
                            under the customers, on the left of the losses (the scene's tools). On a phone: the note on
                            top, the average under the losses. The arrow pr is the line between the predictions and
-                           the ratings (no head). */
+                           the ratings (no head).
+     o.layout "textbook" (Carlos, 2026-11-06, REQUEST.md, seventh message: the orientation of the grid sketch): as the
+                           stack, but the films' matrix is drawn turned (the caller builds o.f with M.matrix's
+                           transpose: one row per number, one column per film) ABOVE the predictions, its columns
+                           aligned with theirs; the customers on the predictions' left, their rows level. The
+                           predictions need no heads of their own. The arrow fp runs straight down from the films into
+                           the predictions, cp straight right from the customers. */
   var SVGNS = "http://www.w3.org/2000/svg";
   var ARROWS = ["cp", "fp", "rs", "ps", "sa", "pr"];
   function cross(o) {
     o = o || {};
-    var STK = o.layout === "stack";
-    var root = el("div", "mx-cross" + (STK ? " mx-x-stk" : "") + (o.cls ? " " + o.cls : ""));
+    var TB = o.layout === "textbook", STK = o.layout === "stack" || TB;
+    var root = el("div", "mx-cross" + (STK ? " mx-x-stk" : "") + (TB ? " mx-x-tb" : "") + (o.cls ? " " + o.cls : ""));
     var parts = {};
     [["c", "mx-xc"], ["f", "mx-xf"], ["r", "mx-xr"], ["p", "mx-xp"], ["s", "mx-xs"], ["avg", "mx-xa"], ["desk", "mx-xd"],
      ["nb", "mx-xnb"], ["note", "mx-xnote"]].forEach(function (a) {
@@ -3427,7 +3527,11 @@ button.chip:hover{border-color:var(--rubric)}
     function stackArrows(C, F, R, Pp, S, A) {
       if (C && Pp) paintArrow("cp", run(C.body.r, Pp.out.l, C.body.cy), "r");
       else paintArrow("cp", null);
-      if (F && Pp && F.body.r + GAP + 8 < Pp.body.cx) {
+      if (TB) {
+        // the films stand above the predictions: a straight drop from their last row into the predictions' top
+        var y1 = F ? F.body.b + 3 : 0, y2 = Pp ? Pp.out.t - 3 : 0;
+        paintArrow("fp", F && Pp && y2 - y1 > 14 ? [[Pp.body.cx, y1], [Pp.body.cx, y2]] : null, "d");
+      } else if (F && Pp && F.body.r + GAP + 8 < Pp.body.cx) {
         // the line leaves the films at their middle, or higher up their rows when the drop would be too short
         var top = Pp.out.t - 3, fy = Math.max(F.body.t + 4, Math.min(F.body.cy, top - 16));
         paintArrow("fp", top - fy > 14 ? [[F.body.r + GAP, fy], [Pp.body.cx, fy], [Pp.body.cx, top]] : null, "d");
@@ -3535,9 +3639,57 @@ button.chip:hover{border-color:var(--rubric)}
      S.run(list, { gap, each, keep })   the pairs one after another, lit, each score straight into its cell (a
                                promise); each(i, j) is called as a pair lights; keep leaves the last pair lit
      S.stop()                  cuts any motion short and draws where it was going
-     S.redraw()                measures again (a ResizeObserver and the end of a transition call it too) */
+     S.redraw()                measures again (a ResizeObserver and the end of a transition call it too)
+     o.layout "textbook" (Carlos, 2026-11-06: the orientation of the grid sketch, REQUEST.md, seventh message): the
+                    second matrix drawn turned (o.B keeps one row per film; M.matrix's transpose) ABOVE the product,
+                    its columns aligned with the product's columns; the first matrix on the product's left, their rows
+                    level. The product has no heads by default (the first's row heads and the second's column heads
+                    name its rows and columns). A lit pair: the first's row i and the second's column j outlined, an
+                    arrow straight right into the product's row, one straight down into its column. With C false the
+                    second stands up and to the right of the first, where the product would come. */
+  /* The worked line of one inner product (2026-11-06, taken out of M.stack so that a scene can show it without a
+     stack): the first line each pair multiplied, a x b + c x d ..., the second their products and then the sum,
+     ringed. ps: [[a, b], ...]; sum: the sum. Returns { el, parts }: el a div.mx-wl holding the two lines, parts the
+     pieces in the order S.work reveals them (every pair, the products, the sum). */
+  function lineOf(ps, sum) {
+    var box = el("div", "mx-wl"), row1 = el("span", "mx-cl"), row2 = el("span", "mx-cl");
+    ps.forEach(function (p, k) {
+      var g = el("span", "mx-cg");
+      if (k) g.appendChild(el("span", "mx-co", "+"));
+      g.appendChild(N.cell(p[0]));
+      g.appendChild(el("span", "mx-co mx-ct2", N.TIMES));
+      g.appendChild(N.cell(p[1]));
+      row1.appendChild(g);
+    });
+    var eq1 = el("span", "mx-cg");
+    eq1.appendChild(el("span", "mx-co", "="));
+    ps.forEach(function (p, k) {
+      if (k) eq1.appendChild(el("span", "mx-co", "+"));
+      eq1.appendChild(N.cell(p[0] * p[1]));
+    });
+    row2.appendChild(eq1);
+    var eq2 = el("span", "mx-cg mx-csum");
+    eq2.appendChild(el("span", "mx-co", "="));
+    eq2.appendChild(N.cell(sum));
+    row2.appendChild(eq2);
+    box.appendChild(row1);
+    box.appendChild(row2);
+    return { el: box, parts: [].slice.call(row1.children).concat([eq1, eq2]) };
+  }
+  /* M.workLine(pairs, o): the same line for a scene, outside a stack (sections 3 and 4 work one prediction this way).
+     o.sum defaults to the sum of the products. A scene that plays it adds mx-cwait to every part and takes it off one
+     part at a time, as S.work does (260 ms, then every 300 ms). */
+  function workLine(ps, o) {
+    o = o || {};
+    var sum = o.sum !== undefined ? o.sum : ps.reduce(function (t, p) { return t + p[0] * p[1]; }, 0);
+    var w = lineOf(ps, sum);
+    if (o.cls) w.el.className += " " + o.cls;
+    return { el: w.el, parts: w.parts, sum: sum };
+  }
+
   function stack(o) {
     o = o || {};
+    var TB = o.layout === "textbook";
     var common = { size: o.size, brackets: o.brackets, shape: o.shapes, phonePics: o.phonePics };
     function opts(extra, cls) {
       var r = {};
@@ -3546,8 +3698,10 @@ button.chip:hover{border-color:var(--rubric)}
       r.cls = (r.cls ? r.cls + " " : "") + cls;
       return r;
     }
-    var A = matrix(opts(o.A, "mx-ma")), B = matrix(opts(o.B, "mx-mb"));
-    var root = el("div", "mx-stk" + (o.C === false ? " mx-stk-two" : "") + (o.side ? " mx-stk-side" : "") + (o.cls ? " " + o.cls : ""));
+    var bo = opts(o.B, "mx-mb");
+    if (TB) bo.transpose = true;
+    var A = matrix(opts(o.A, "mx-ma")), B = matrix(bo);
+    var root = el("div", "mx-stk" + (TB ? " mx-stk-tb" : "") + (o.C === false ? " mx-stk-two" : "") + (o.side ? " mx-stk-side" : "") + (o.cls ? " " + o.cls : ""));
     var sa = el("div", "mx-sslot mx-ssa"), sb = el("div", "mx-sslot mx-ssb");
     sa.appendChild(A.el);
     sb.appendChild(B.el);
@@ -3563,8 +3717,8 @@ button.chip:hover{border-color:var(--rubric)}
       var cOpts = opts(o.C || {}, "mx-mc");
       cOpts.rows = A.rowSpec.map(function (h) { return h.id ? { id: h.id } : { label: h.label }; });
       cOpts.cols = B.rowSpec.map(function (h) { return h.id ? { id: h.id } : { label: h.label }; });
-      if (!cOpts.colHeads) cOpts.colHeads = B.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
-      if (!cOpts.rowHeads) cOpts.rowHeads = A.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
+      if (!cOpts.colHeads) cOpts.colHeads = TB ? "none" : B.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
+      if (!cOpts.rowHeads) cOpts.rowHeads = TB ? "none" : A.rowSpec.some(function (h) { return h.id; }) ? "pic" : "num";
       cOpts.fill = "slots";
       cOpts.values = function (i, j) { return value(i, j); };
       C = matrix(cOpts);
@@ -3596,9 +3750,17 @@ button.chip:hover{border-color:var(--rubric)}
       var x0 = (r.left - b.left) / k, y0 = (r.top - b.top) / k, w = r.width / k, h = r.height / k;
       return { l: x0, t: y0, r: x0 + w, b: y0 + h, cx: x0 + w / 2, cy: y0 + h / 2, w: w, h: h };
     }
+    // The box of row i of a matrix (its head and its cells), wherever it is drawn: a column of a turned matrix.
     function rowBox(m, i) {
-      var a = rect(m.rowHead(i)), z = rect(m.td(i, m.C - 1)), f = rect(m.td(i, 0));
-      return { l: Math.min(a.l, f.l), r: z.r, t: Math.min(f.t, z.t), b: Math.max(f.b, z.b) };
+      var l = Infinity, t = Infinity, r = -Infinity, b = -Infinity, list = [m.rowHead(i)];
+      for (var k = 0; k < m.C; k++) list.push(m.td(i, k));
+      list.forEach(function (n) {
+        if (!n) return;
+        var x = rect(n);
+        if (!(x.w > 0 && x.h > 0)) return;
+        l = Math.min(l, x.l); t = Math.min(t, x.t); r = Math.max(r, x.r); b = Math.max(b, x.b);
+      });
+      return { l: l, r: r, t: t, b: b };
     }
     // The left (or top) edge of a head, or of the first cell when the heads are hidden ("none").
     function edge(head, cell, side) {
@@ -3630,6 +3792,7 @@ button.chip:hover{border-color:var(--rubric)}
         n.setAttribute("visibility", "visible");
       });
       if (!C) return;
+      if (TB) { drawTB(i, j, ra, rb, pad); return; }
       var y = (ra.t + ra.b) / 2, x1 = ra.r + pad + 5, x2 = edge(C.rowHead(i), C.td(i, 0), "l") - 4;
       if (x2 - x1 > 16) {
         G.lineA.setAttribute("d", pts([[x1, y], [x2 - 8, y]]));
@@ -3646,6 +3809,29 @@ button.chip:hover{border-color:var(--rubric)}
       });
       if (cx - xb > 10 && top - yb > 14) {
         G.lineB.setAttribute("d", pts([[xb, yb], [cx, yb], [cx, top - 8]]));
+        G.headB.setAttribute("d", head([cx, top], "d"));
+        G.lineB.setAttribute("visibility", "visible");
+        G.headB.setAttribute("visibility", "visible");
+      }
+    }
+    // The textbook cross: straight right from the first's row into the product's row, straight down from the
+    // second's column into the product's column (above the product's caption and size when they are in the way).
+    function drawTB(i, j, ra, rb, pad) {
+      var y = (ra.t + ra.b) / 2, x1 = ra.r + pad + 5, x2 = edge(C.rowHead(i), C.td(i, 0), "l") - 4;
+      if (x2 - x1 > 16) {
+        G.lineA.setAttribute("d", pts([[x1, y], [x2 - 8, y]]));
+        G.headA.setAttribute("d", head([x2, y], "r"));
+        G.lineA.setAttribute("visibility", "visible");
+        G.headA.setAttribute("visibility", "visible");
+      }
+      var cx = rect(C.td(0, j)).cx, yb = rb.b + pad + 5, top = edge(C.colHead(j), C.td(0, j), "t") - 3;
+      [C.caption, C.sizeEl].forEach(function (n) {
+        if (!n || n.hidden || !n.offsetWidth) return;
+        var r = rect(n);
+        if (cx >= r.l - 6 && cx <= r.r + 6 && r.t > yb && r.t < top) top = r.t - 3;
+      });
+      if (top - yb > 14) {
+        G.lineB.setAttribute("d", pts([[cx, yb], [cx, top - 8]]));
         G.headB.setAttribute("d", head([cx, top], "d"));
         G.lineB.setAttribute("visibility", "visible");
         G.headB.setAttribute("visibility", "visible");
@@ -3675,31 +3861,9 @@ button.chip:hover{border-color:var(--rubric)}
     }
     function calcLine(i, j) {
       calc.textContent = "";
-      var ps = product(i, j), items = [];
-      function add(node, cls) { if (cls) node.classList.add(cls); calc.appendChild(node); items.push(node); return node; }
-      var row1 = el("span", "mx-cl"), row2 = el("span", "mx-cl");
-      ps.forEach(function (p, k) {
-        var g = el("span", "mx-cg");
-        if (k) g.appendChild(el("span", "mx-co", "+"));
-        g.appendChild(N.cell(p[0]));
-        g.appendChild(el("span", "mx-co mx-ct2", N.TIMES));
-        g.appendChild(N.cell(p[1]));
-        row1.appendChild(g);
-      });
-      var eq1 = el("span", "mx-cg");
-      eq1.appendChild(el("span", "mx-co", "="));
-      ps.forEach(function (p, k) {
-        if (k) eq1.appendChild(el("span", "mx-co", "+"));
-        eq1.appendChild(N.cell(p[0] * p[1]));
-      });
-      row2.appendChild(eq1);
-      var eq2 = el("span", "mx-cg mx-csum");
-      eq2.appendChild(el("span", "mx-co", "="));
-      eq2.appendChild(N.cell(value(i, j)));
-      row2.appendChild(eq2);
-      calc.appendChild(row1);
-      calc.appendChild(row2);
-      return [].slice.call(row1.children).concat([eq1, eq2]);
+      var w = lineOf(product(i, j), value(i, j));
+      while (w.el.firstChild) calc.appendChild(w.el.firstChild);
+      return w.parts;
     }
     function draw0() {
       paint();
@@ -3787,27 +3951,35 @@ button.chip:hover{border-color:var(--rubric)}
     return X;
   }
 
-  MF.M = { matrix: matrix, product: product, cross: cross, stack: stack, shape: shape, grid: grid, TEMPO: TEMPO };
+  MF.M = { matrix: matrix, product: product, cross: cross, stack: stack, workLine: workLine, shape: shape, grid: grid,
+    TEMPO: TEMPO };
 })();
 </script>
 <script>
 /* Section 1, "Matrix multiplication": part one of the Matchmaker, a game of its own since 2026-11-05 (game1.html).
    Built by agent S1-A on 2026-11-03 (see BRIEF-s1.md); rewritten by the main session on 2026-11-05 at Carlos's
-   request (REQUEST.md, fifth message): one leaf for the cover and the three leaves after it, the films ON TOP of the
-   customers (M.stack) wherever the two tables stand together, no desk and no stack for the inner product, and a
-   scene where the participants multiply by hand. Classes start with s1-.
+   request (REQUEST.md, fifth message): one leaf for the cover and the three leaves after it, no desk and no stack
+   for the inner product, and a scene where the participants multiply by hand. Turned to the textbook orientation on
+   2026-11-06 (REQUEST.md, seventh message; BRIEF-port-a.md): every M.stack takes layout "textbook", so the films'
+   matrix is drawn turned, one row per axis and one column per film, ABOVE the product, and the customers' matrix
+   stands on its left. The rule is the textbook's: the first matrix has as many columns as the second has rows, and
+   every row of the first meets every column of the second. The data (MF.S1) keeps one row per film; only the drawing
+   turns. Classes start with s1-.
 
-   matchmaker   the cover with a summary (the website, the three questions, the five marks); the critic's answers on
-                top of the customers' profiles, in marks; the marks become numbers; each row an embedding
-   scores       the films on top of the customers and the empty table of scores on the right of the customers. Sara
-                and The Intouchables: their two rows outlined, an arrow from each into the row and the column of
+   matchmaker   the cover with a summary (the website, the three questions, the five marks); the profiles, one row per
+                customer, and the critic's answers turned, one column per film, up and to the right of them, in
+                marks; the marks become numbers; an embedding: Sara's row and The Intouchables' column outlined
+   scores       the films turned above the empty table of scores, the customers on its left. Sara and The
+                Intouchables: her row and its column outlined, an arrow from each into the row and the column of
                 their score, the inner product worked once on one line; then every other score lands at once while
-                its two rows are lit; each customer's best match
-   multiply     the name, a matrix, its size (rows × columns), the rule (the same number of columns), every row with
-                every row, the shape of the product, the table of scores as the product
-   bigger       MF.S1.big: 5 × 4 and 6 × 4, their 5 × 6 product filled fast; why the columns must match (a row of
-                four numbers on a row of three); two questions, the answer hidden until the room has chosen
-   byhand       MF.S1.hand: a 3 × 3 and a 4 × 3 matrix; the participant fills in the 12 cells of their product
+                its row and its column are lit; each customer's best match
+   multiply     the name, a matrix, its size (rows × columns), the rule (the columns of the first match the rows of
+                the second, the rule used everywhere), every row with every column, the shape of the product, the
+                table of scores as the product
+   bigger       MF.S1.big: 5 × 4 and, turned, 4 × 6, their 5 × 6 product filled fast; why the two must match (a row
+                of four numbers against a column of three); two questions, the answer hidden until the room has chosen
+   byhand       MF.S1.hand: a 3 × 3 and, turned, a 3 × 4 matrix; the participant fills in the 12 cells of their
+                product
 
    Every number and table is the notation's (MF.N) or the matrix component's (MF.M); this file arranges them and
    writes the words, made from the data so they stay true to it. A motion plays only when its step is reached from
@@ -3903,9 +4075,9 @@ button.chip:hover{border-color:var(--rubric)}
   var A = null;
   var T1 = ["Once Upon a Matchmaker", "The critic's answers", "Marks become numbers", "An embedding"];
   var L1 = {
-    1: "Each customer fills in a profile. A film critic answers the same three questions for every film.",
+    1: "Each customer fills in a profile, one row each. A film critic answers the same three questions for every film, one column each.",
     2: "A computer works with numbers: each mark becomes its number, as in the video store.",
-    3: "The three numbers of a customer are their embedding. A film has one too."
+    3: "The three numbers of a customer's row are their embedding. A film's embedding is the three numbers of its column."
   };
   function waveStop() {
     if (!A) return;
@@ -3968,13 +4140,15 @@ button.chip:hover{border-color:var(--rubric)}
       sum.appendChild(el("p", "s1-note", "An invented example: the customers, their profiles and the critic are made up. The films are real."));
       cover.appendChild(sum);
 
-      // Steps 1 to 3, the two tables: the critic's answers on top of the profiles, in marks, then in numbers.
+      // Steps 1 to 3, the two tables: the profiles, one row per customer, and the critic's answers turned, one
+      // column per film, up and to the right of them (the textbook stack without a product), in marks, then numbers.
       var tabs = el("div", "s1-tabs");
       var lead = el("p", "s1-lead");
       var key = N.legend(MF.LEVELS);
       key.classList.add("s1-key");
-      var S = M.stack({ A: { rows: PEOPLE, cols: AX, fill: "marks", caption: "Profiles", colHeads: "none" },
-                        B: { rows: FILMS, cols: AX, fill: "marks", caption: "The critic" },
+      var S = M.stack({ layout: "textbook",
+                        A: { rows: PEOPLE, cols: AX, fill: "marks", caption: "Profiles", colHeads: "pic" },
+                        B: { rows: FILMS, cols: AX, fill: "marks", caption: "The critic", rowHeads: "full", colHeads: "chip" },
                         C: false, brackets: false, phonePics: true });
       var read = el("div", "s1-read");
       var again = button("Replay the wave", "quiet s1-again", function () { wave(MOTION); });
@@ -4028,8 +4202,8 @@ button.chip:hover{border-color:var(--rubric)}
   var T2 = ["A table of scores", "Sara and The Intouchables", "Every other score", "The rating matrix"];
   var L2 = [
     "With the numbers of every customer and every film, the Matchmaker can fill a table of scores.",
-    "Sara and The Intouchables: multiply their numbers axis by axis, then add.",
-    "Every other score the same way: a customer's row with a film's row.",
+    "Sara's row and the column of The Intouchables: multiply their numbers axis by axis, then add.",
+    "Every other score the same way: a customer's row with a film's column.",
     "The whole table of scores: the rating matrix."
   ];
   function rest2() {
@@ -4077,8 +4251,11 @@ button.chip:hover{border-color:var(--rubric)}
     build: function (inner) {
       var root = el("div", "s1-sc");
       var lead = el("p", "s1-lead");
-      var S = M.stack({ A: { rows: PEOPLE, cols: AX, caption: "Customers", colHeads: "pic" },
-                        B: { rows: FILMS, cols: AX, caption: "Films", colHeads: "pic" },
+      // The films turned above the scores: their pictures on top (no wider than a cell, so that the columns of the
+      // films and of the scores line up) and the axes down their left side, as on top of the customers.
+      var S = M.stack({ layout: "textbook",
+                        A: { rows: PEOPLE, cols: AX, caption: "Customers", colHeads: "pic" },
+                        B: { rows: FILMS, cols: AX, caption: "Films", rowHeads: "pic", colHeads: "pic" },
                         C: { caption: "Scores" }, brackets: false, phonePics: true, side: true });
       var cue = el("p", "s1-cue");
       cue.setAttribute("aria-live", "polite");
@@ -4105,20 +4282,27 @@ button.chip:hover{border-color:var(--rubric)}
 
   /* 3. MATRIX MULTIPLICATION */
   var C3 = null;
+  // The sizes in the words come from the data: the customers' matrix is people x axes, the films' matrix, turned,
+  // axes x films.
+  var NA = AX.length, NP = PEOPLE.length, NF = FILMS.length;
   var L3 = [
     ["What we just did has a name: ", el("b", "s1-rub", "matrix multiplication"), "."],
     ["A rectangular table of numbers is called a ", el("b", "s1-rub", "matrix"), ". The customers' table and the films' table are matrices."],
     ["The size of a matrix is its number of rows, then its number of columns."],
-    ["Two matrices can be multiplied when they have the same number of columns: here 3 and 3."],
-    ["To multiply them, take every row of the first with every row of the second: one inner product each."],
-    ["The product has a row for each row of the first matrix, and a column for each row of the second."],
+    ["Two matrices can be multiplied when the first has as many columns as the second has rows: here " + NA + " and " + NA + "."],
+    ["To multiply them, take every row of the first with every column of the second: one inner product each."],
+    ["The product has a row for each row of the first matrix, and a column for each column of the second: " + NP + " × " + NF + "."],
     ["The table of scores is the product of the customers' matrix and the films' matrix: the rating matrix."]
   ];
+  // Said once, where the rule first appears (step 3): the notebook's optional note on the textbook rule is gone.
+  var EVERYWHERE = "This is the rule used everywhere: in textbooks, in Python's numpy library and in the TAs' notebook.";
   function step3(k, live) {
     var S = C3.S;
     C3.root.dataset.k = String(k);
     put(C3.lead, L3[k].map(function (x) { return typeof x === "string" ? x : x.cloneNode(true); }));
     if (MOTION && live) replay(C3.lead, "s1-in");
+    C3.std.hidden = k !== 3;
+    if (MOTION && live && k === 3) replay(C3.std, "s1-in");
     if (!live) still(C3.root);
     [S.A, S.B, S.C].forEach(function (m) { m.brackets(k >= 1); m.showShape(k >= 2); });
     if (k === 4 && live) { S.show({ done: 0, lit: null }); S.run(S.pairs, { gap: 300 }); }
@@ -4129,13 +4313,17 @@ button.chip:hover{border-color:var(--rubric)}
     build: function (inner) {
       var root = el("div", "s1-mul");
       var lead = el("p", "s1-lead");
-      var S = M.stack({ A: { rows: PEOPLE, cols: AX, caption: "Customers", colHeads: "pic" },
-                        B: { rows: FILMS, cols: AX, caption: "Films", colHeads: "pic" },
+      var S = M.stack({ layout: "textbook",
+                        A: { rows: PEOPLE, cols: AX, caption: "Customers", colHeads: "pic" },
+                        B: { rows: FILMS, cols: AX, caption: "Films", rowHeads: "pic", colHeads: "pic" },
                         C: { caption: "Scores" }, brackets: false, shapes: true, phonePics: true });
+      var std = el("p", "s1-std", EVERYWHERE);
+      std.hidden = true;
       root.appendChild(lead);
       root.appendChild(S.el);
+      root.appendChild(std);
       inner.appendChild(root);
-      C3 = { root: root, lead: lead, S: S, last: null };
+      C3 = { root: root, lead: lead, S: S, std: std, last: null };
     },
     enter: function () { C3.last = null; },
     leave: function () { C3.S.stop(); },
@@ -4149,10 +4337,13 @@ button.chip:hover{border-color:var(--rubric)}
   /* 4. A BIGGER PRODUCT */
   var D = null;
   var BIG = S1.big;
+  // The bigger pair as the scene draws it: the first matrix BIG.A (rows x columns), the second turned (one row per
+  // number of a row of BIG.B, one column per row of BIG.B).
+  var BA = [BIG.A.length, BIG.A[0].length], BB = [BIG.B[0].length, BIG.B.length];
   var L4 = [
-    "Two bigger matrices: 5 rows and 6 rows, with 4 columns each.",
-    "So we can multiply them: every row with every row.",
-    "Why must the number of columns be the same?",
+    "Two bigger matrices: the first has " + BA[0] + " rows and " + BA[1] + " columns, the second " + BB[0] + " rows and " + BB[1] + " columns.",
+    "The first has " + BA[1] + " columns and the second " + BB[0] + " rows, so we can multiply them: every row with every column.",
+    "Why must the columns of the first match the rows of the second?",
     "Your turn. Which pair can be multiplied?",
     "Your turn. How big is the product?"
   ];
@@ -4219,59 +4410,75 @@ button.chip:hover{border-color:var(--rubric)}
     draw(false);
     return Q;
   }
+  // A pair of shapes r1 x c1 and r2 x c2: they can be multiplied when the first has as many columns as the second
+  // has rows. (Every option of question 1 gets the same answer under Carlos's earlier rule, the same number of
+  // columns, so the question stayed as it was.)
   function pairOpt(r1, c1, r2, c2) {
     var g = h("span", "s1-gpair", [M.grid(r1, c1), el("span", "s1-and", "and"), M.grid(r2, c2)]);
-    return { el: g, say: r1 + " by " + c1 + " and " + r2 + " by " + c2, right: c1 === c2 };
+    return { el: g, say: r1 + " by " + c1 + " and " + r2 + " by " + c2, right: c1 === r2 };
   }
   function shapeOpt(r1, c1, right) {
     return { el: M.grid(r1, c1), say: r1 + " by " + c1, right: right };
   }
-  // A row of four numbers on a row of three: the stack of the notation, with the fourth partner missing.
+  // A row of four numbers against a column of three, in the textbook look: the row on the left, the column above
+  // the cell where their inner product would land, both outlined with their arrows; the cell holds a "?" that is no
+  // product. Under them the pairs, first with first: the fourth number of the row meets a hole.
   function lonely() {
-    var top = BIG.A[0].slice(), bot = BIG.B[0].slice(0, 3);
-    var st = N.stack({ top: { label: "4 numbers", values: top }, bottom: { label: "3 numbers", values: bot.concat([0]) },
-                       films: ["c0", "c1", "c2", "c3"], heads: "none", sum: false, size: "lg" });
-    st.show(3);
-    var bh = st.table.querySelectorAll("tr.nt-bot td.nt-c");
-    var last = bh[3];
+    var row = BIG.A[0].slice(), col = BIG.B[0].slice(0, 3);
+    var S = M.stack({ layout: "textbook", cls: "s1-lone",
+                      A: { rows: 1, cols: row.length, values: [row], caption: "A row of 4", rowHeads: "none", colHeads: "none" },
+                      B: { rows: 1, cols: col.length, values: [col], caption: "A column of 3", rowHeads: "none", colHeads: "none" },
+                      C: {}, brackets: true });
+    S.light(0, 0);
+    var td = S.C.td(0, 0);
+    td.textContent = "";
+    var q = el("span", "s1-lost", "?");
+    q.setAttribute("role", "img");
+    q.setAttribute("aria-label", "no product");
+    td.appendChild(q);
+    // The pairs line of the worked inner product (M.workLine), its first line only; the fourth partner is a hole.
+    var w = M.workLine(row.map(function (x, k) { return [x, k < col.length ? col[k] : 0]; }), { cls: "s1-pairs" });
+    while (w.el.children.length > 1) w.el.removeChild(w.el.lastChild);
+    var groups = w.el.querySelectorAll(".mx-cg"), last = groups[groups.length - 1];
+    var cells = last.querySelectorAll(".nt-n"), partner = cells[cells.length - 1];
     var hole = el("span", "s1-hole");
     hole.setAttribute("role", "img");
     hole.setAttribute("aria-label", "no number");
-    var spot = last.querySelector(".nt-h");
-    if (spot) { spot.textContent = ""; spot.appendChild(hole); }
-    var pcs = st.table.querySelectorAll("tr.nt-res td.nt-pc");
-    var q = el("span", "s1-lost", "?");
-    q.setAttribute("aria-label", "no product");
-    pcs[3].appendChild(q);
-    return st;
+    partner.parentNode.replaceChild(hole, partner);
+    return { el: h("div", "s1-whyst", [S.el, w.el]), S: S };
   }
   MF.define("bigger", {
     act: 1, title: "A bigger product", steps: 5,
     build: function (inner) {
       var root = el("div", "s1-bg");
       var lead = el("p", "s1-lead");
-      var S = M.stack({ A: { rows: 5, cols: 4, values: BIG.A, caption: "First matrix", colHeads: "none" },
-                        B: { rows: 6, cols: 4, values: BIG.B, caption: "Second matrix", colHeads: "none" },
-                        C: { caption: "Their product", colHeads: "none", rowHeads: "none" },
+      // The first matrix numbers its rows and the second, turned, its columns (from 1): the product's row i and
+      // column j are named by them (the notebook's "row 3 and column 4 in the game").
+      var S = M.stack({ layout: "textbook",
+                        A: { rows: BA[0], cols: BA[1], values: BIG.A, caption: "First matrix", colHeads: "none" },
+                        B: { rows: BB[1], cols: BB[0], values: BIG.B, caption: "Second matrix", colHeads: "none" },
+                        C: { caption: "Their product" },
                         brackets: true, shapes: true, size: "sm", side: true });
       var why = el("div", "s1-why");
-      var st = lonely();
-      why.appendChild(h("div", "s1-whyst", [st.el]));
-      why.appendChild(el("p", "s1-read", "The fourth number of the top row has no partner below it. Its product cannot be formed, " +
-        "so neither can the inner product. Every row of the first matrix must have exactly as many numbers as every row of the second."));
+      var lone = lonely();
+      why.appendChild(lone.el);
+      why.appendChild(el("p", "s1-read", "The fourth number of the row has no partner in the column. Its product cannot be formed, " +
+        "so neither can the inner product. The first matrix must have as many columns as the second has rows."));
       var q1 = Quiz({
         options: [pairOpt(2, 3, 4, 2), pairOpt(3, 4, 2, 3), pairOpt(4, 2, 2, 2)],
-        hints: ["Count the columns of each matrix: the two counts must be the same.",
-                "Count the little squares across one row of each matrix. Which pair has the same count twice?"],
-        why: "In C both matrices have 2 columns, so every row of the first can meet every row of the second. In A and in B the numbers of columns differ."
+        hints: ["Count the columns of the first matrix and the rows of the second: the two counts must be the same.",
+                "Count the little squares across one row of the first matrix, then down one column of the second. In which pair are the two counts equal?"],
+        why: "In C the first matrix has 2 columns and the second has 2 rows, so every row of the first can meet every column of the second. " +
+             "In A the first has 3 columns and the second 4 rows; in B the first has 4 columns and the second 2 rows."
       });
-      var q2lead = h("p", "s1-qline", [M.grid(5, 4), el("span", "s1-and", "and"), M.grid(6, 4)]);
+      var q2lead = h("p", "s1-qline", [M.grid(BA[0], BA[1]), el("span", "s1-and", "and"), M.grid(BB[0], BB[1])]);
       var q2 = Quiz({
         lead: q2lead,
-        options: [shapeOpt(4, 4, false), shapeOpt(5, 6, true), shapeOpt(6, 5, false), shapeOpt(5, 4, false)],
+        options: [shapeOpt(BA[1], BB[0], false), shapeOpt(BA[0], BB[1], true), shapeOpt(BB[1], BA[0], false), shapeOpt(BA[0], BA[1], false)],
         hints: ["The product has a row for each row of the first matrix.",
-                "And a column for each row of the second matrix."],
-        why: "A row for each of the 5 rows of the first matrix and a column for each of the 6 rows of the second: 5 × 6, thirty inner products."
+                "And a column for each column of the second matrix."],
+        why: "A row for each of the " + BA[0] + " rows of the first matrix and a column for each of the " + BB[1] +
+             " columns of the second: " + BA[0] + " × " + BB[1] + ", " + BA[0] * BB[1] + " inner products."
       });
       var all = button("Show all", "quiet", function () { D.S.stop(); });
       S.note.appendChild(h("div", "s1-tools", [all]));
@@ -4281,7 +4488,7 @@ button.chip:hover{border-color:var(--rubric)}
       root.appendChild(q1.el);
       root.appendChild(q2.el);
       inner.appendChild(root);
-      D = { root: root, lead: lead, S: S, why: why, q1: q1, q2: q2, all: all, last: null };
+      D = { root: root, lead: lead, S: S, why: why, lone: lone.S, q1: q1, q2: q2, all: all, last: null };
     },
     enter: function () { D.last = null; },
     leave: function () { D.S.stop(); },
@@ -4297,6 +4504,8 @@ button.chip:hover{border-color:var(--rubric)}
       D.q2.el.hidden = k !== 4;
       D.all.hidden = k !== 1;
       D.S.C.el.classList.toggle("s1-later", k === 0);
+      // The picture of why: its outlines and arrows are measured now that it shows (they were lit while hidden).
+      if (k === 2) D.lone.redraw();
       if (k === 1 && live) { D.S.show({ done: 0, lit: null }); D.S.run(D.S.pairs, { gap: 140 }); }
       else D.S.show({ done: k === 0 ? 0 : "all", lit: null });
       if (k === 3) D.q1.draw(false);
@@ -4306,11 +4515,14 @@ button.chip:hover{border-color:var(--rubric)}
 
   /* 5. BY HAND: the participants fill in the 12 cells of a product (Carlos, 2026-11-05: "Before you open the Colab
      notebook, add a little section where you show two matrices of decent size, and then the participant has to fill
-     the calculated product by hand ... at most 12 entries"). Tap a cell (its two rows light up), type its score on
-     the keypad or the keyboard, OK. A wrong answer earns a hint; after two, "Show me" plays the worked line. The
-     cells filled stay filled when the participant goes back and forth; "Start again" empties them. */
+     the calculated product by hand ... at most 12 entries"). The first matrix on the left, the second (one row per
+     column in MF.S1.hand) turned above the product. Tap a cell (the first's row and the second's column light up),
+     type its score on the keypad or the keyboard, OK. A wrong answer earns a hint; after two, "Show me" plays the
+     worked line. The cells filled stay filled when the participant goes back and forth; "Start again" empties them. */
   var E = null;
   var HAND = S1.hand;
+  // The two matrices as drawn: the first rows x columns, the second turned.
+  var HA = [HAND.A.length, HAND.A[0].length], HB = [HAND.B[0].length, HAND.B.length];
   var MAXD = 2;          // digits a typed number may have
   function hkey(p) { return p[0] + "," + p[1]; }
   function handDone() { return E.S.pairs.filter(function (p) { return !!E.ok[hkey(p)]; }); }
@@ -4342,13 +4554,15 @@ button.chip:hover{border-color:var(--rubric)}
     E.nextc.hidden = !(sel && how === "shown" && n < total);
     E.pad.classList.toggle("s1-padoff", !sel || !!how);
     if (n === total) {
-      put(E.msg, [el("b", "s1-tag ok", "All " + count(total) + "."), " The product of a 3 × 3 and a 4 × 3 matrix: 3 rows and 4 columns."]);
+      put(E.msg, [el("b", "s1-tag ok", "All " + count(total) + "."), " The product of a " + HA[0] + " × " + HA[1] + " and a " +
+        HB[0] + " × " + HB[1] + " matrix: " + HA[0] + " rows and " + HB[1] + " columns."]);
       return;
     }
     if (!sel) { E.msg.textContent = "Tap an empty cell of the product."; return; }
-    var where = "Row " + (sel[0] + 1) + " of the first matrix with row " + (sel[1] + 1) + " of the second.";
-    if (how === "shown") put(E.msg, [el("b", "s1-tag ok", "The answer."), " " + where + " The worked line is under the matrices."]);
-    else if (tried === 1) put(E.msg, [el("b", "s1-tag no", "Not quite."), " Multiply the numbers that stand above each other in the two lit rows, then add the three products."]);
+    var where = "Row " + (sel[0] + 1) + " of the first matrix with column " + (sel[1] + 1) + " of the second.";
+    // On a phone the worked line stands right above the keypad, so the pointer to it is left out there (sec1.css).
+    if (how === "shown") put(E.msg, [el("b", "s1-tag ok", "The answer."), " " + where, el("span", "s1-hfar", " The worked line is under the matrices.")]);
+    else if (tried === 1) put(E.msg, [el("b", "s1-tag no", "Not quite."), " Multiply the lit row's numbers, left to right, with the lit column's, top to bottom, then add the " + count(HA[1]) + " products."]);
     else if (tried >= 2) put(E.msg, [el("b", "s1-tag no", "Not quite."), " Check the sign of each product, then add."]);
     else E.msg.textContent = where + " Type its score, then OK.";
   }
@@ -4425,9 +4639,12 @@ button.chip:hover{border-color:var(--rubric)}
     build: function (inner) {
       var root = el("div", "s1-hand");
       var lead = el("p", "s1-lead", "Your turn: multiply by hand. Tap a cell of the product, type its score, then OK.");
-      var S = M.stack({ A: { rows: 3, cols: 3, values: HAND.A, caption: "First matrix", colHeads: "none" },
-                        B: { rows: 4, cols: 3, values: HAND.B, caption: "Second matrix" },
-                        C: { caption: "Their product", colHeads: "none", rowHeads: "none" }, brackets: true });
+      // The first numbers its rows and the second, turned, its columns (from 1): they name the product's rows and
+      // columns, as in the scene bigger.
+      var S = M.stack({ layout: "textbook",
+                        A: { rows: HA[0], cols: HA[1], values: HAND.A, caption: "First matrix", colHeads: "none" },
+                        B: { rows: HB[1], cols: HB[0], values: HAND.B, caption: "Second matrix", colHeads: "none" },
+                        C: { caption: "Their product" }, brackets: true });
       var entry = el("span", "s1-hentry");
       entry.setAttribute("aria-live", "polite");
       entry.setAttribute("aria-label", "Your number");

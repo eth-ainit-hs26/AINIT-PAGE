@@ -1046,8 +1046,9 @@ button.chip:hover{border-color:var(--rubric)}
     elsa: { paddington:  1, martian: -2 }
   };
 
-  // Section 1. The Matchmaker's score of a customer and a film is the inner product of their rows over the three
-  // axes. Scores (rows Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
+  // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
+  // film's column over the three axes (kept here one row per film; the game draws the films turned). Scores (rows
+  // Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
   //   Sara  7  0 -7 -6     Leo  -4 -6 10  0     Maya  -1  7 -2  2
   // Suggested worked examples: Sara and The Intouchables 4 + 1 + 2 = 7 (agree on all three axes),
   // Leo and Apollo 13 -4 - 4 + 2 = -6, Sara and Apollo 13 4 - 2 - 2 = 0 (the products cancel).
@@ -1056,15 +1057,16 @@ button.chip:hover{border-color:var(--rubric)}
     films: ["intouchables", "apollo13", "mib", "interstellar"],
     axes: ["real", "comedy", "action"],
     worked: [["sara", "intouchables"], ["leo", "apollo13"], ["sara", "apollo13"]],
-    // Scene 4, a bigger product: two plain matrices of invented numbers, 5 rows and 6 rows, 4 columns each.
-    // Their product (every row of A with every row of B) is 5 x 6:
+    // Scene 4, a bigger product: two plain matrices of invented numbers, A 5 x 4 and B 4 x 6 as drawn (B kept one
+    // row per column of the drawing). Their product (every row of A with every column of B) is 5 x 6:
     //   -3  6  4 -3  1 -2  /  3 -4  5 -2  6 -2  /  -2  5 -3  3 -3  0  /  4 -4 -3  3 -2  3  /  0  5  4 -2  0  0
     big: {
       A: [[1, -2, 0, 2], [2, 1, -1, 0], [-1, 0, 2, 1], [0, 2, 1, -2], [2, -1, 1, 1]],
       B: [[1, 1, 0, -1], [0, -2, 2, 1], [2, 0, -1, 1], [-1, 1, 1, 0], [1, 2, -2, 2], [0, -1, 1, -2]]
     },
-    // The scene byhand (2026-11-05): a 3 x 3 and a 4 x 3 matrix of invented numbers whose 3 x 4 product the
-    // participants fill in by hand, from source/tools/s1_byhand.py (seed 20261105). Their product:
+    // The scene byhand (2026-11-05): a 3 x 3 and a 3 x 4 matrix (B kept one row per column of the drawing) of
+    // invented numbers whose 3 x 4 product the participants fill in by hand, from source/tools/s1_byhand.py (seed
+    // 20261105). Their product:
     //   2  0 -7  1  /  -3 -5  1 -1  /  -2 -4  9  1
     hand: {
       A: [[-2, 1, 2], [-1, 1, -1], [2, 1, -2]],
@@ -2703,7 +2705,8 @@ button.chip:hover{border-color:var(--rubric)}
                       layout "textbook" (2026-11-06) B turned above the product (MATRIX.md, The textbook cross)
    M.workLine(ps, o)  the worked line of one inner product outside a stack (2026-11-06): each pair multiplied, then
                       the products and the sum, ringed
-   Two tones carry a pair: "a" (violet) the row of the first matrix, "b" (ochre) the row of the second. In the
+   Two tones carry a pair: "a" (violet) the row of the first matrix, "b" (ochre) the row of the second as stored,
+   its column on screen with layout "textbook". In the
    product the row band is "a" and the column band "b", so the cell where the two bands cross holds the inner
    product of the two lit rows. Motions run on timers and the Web Animations API, show() and stop() cut them
    short and draw the end state, and nothing moves under reduced motion. No globals besides MF.M. */
