@@ -455,41 +455,57 @@ export const weekends: Weekend[] = [
     project: 'Recommender for online retail',
     summary:
       'This weekend introduces representation learning through recommendation systems: the inner product and nearest neighbors, matrix factorization, and bandit algorithms, then matrix factorization on computing clusters. Guest lecture on Saturday.',
-    // Agenda from the Syllabus tab of the master spreadsheet, read on 2026-11-06 (Carlos's instruction that day).
-    // Each day's first row stays at 08:15, the Vorlesungsverzeichnis time (see the schedule facts above), where the
-    // spreadsheet says 08:00; the break rows keep the programme office's venues. The chips are the weekend's
-    // visualizations only (Carlos, 2026-11-06): pages in public/viz/we2/, copied from the private repository
-    // eth-ainit-hs26/w2-cx-private, and each game opens its own Colab notebooks.
+    // Agenda from the Syllabus tab of the master spreadsheet, read on 2026-11-06 (Carlos's instruction that day),
+    // and his message of the same afternoon for Saturday: Buhmann from 09:00 to 12:00, the project intro at 12:00,
+    // the coding bazaar at 13:00. Each day's first row stays at 08:15, the Vorlesungsverzeichnis time (see the
+    // schedule facts above), where the spreadsheet says 08:00; the break rows keep the programme office's venues.
+    // The chips are the weekend's visualizations (pages in public/viz/we2/, copied from the private repository
+    // eth-ainit-hs26/w2-cx-private; each game opens its own Colab notebooks) and the business cases, one PDF per
+    // case on the row of the block it follows (public/slides/we2/, from cases-deck/ of the public repository
+    // eth-ainit-hs26/w2-recsys-bandits-lecture), published at Carlos's instruction of 2026-11-06.
     friday: [
       {
         time: '08:15',
         title: 'The inner product and nearest neighbors',
         type: 'lecture',
-        links: [{ label: 'Once Upon a Video Store (game)', url: viz(2, 'video-store') }],
+        links: [
+          { label: 'Once Upon a Video Store (game)', url: viz(2, 'video-store') },
+          { label: 'Case: Etsy', url: deck(2, 'ainit-hs26-case-etsy.pdf') },
+          { label: 'Case: Airbnb', url: deck(2, 'ainit-hs26-case-airbnb.pdf') },
+        ],
       },
       { time: '09:00', title: 'Inner product and nearest neighbors', type: 'exercise' },
       {
         time: '10:00',
         title: 'Matrix product and matrix factorization',
         type: 'lecture',
-        // Once Upon a Matchmaker, four games: the three parts in order, then the optional one
-        // (Carlos, 2026-11-06: the optional part comes after the three main parts).
+        // Once Upon a Matchmaker, four games: part one here, the rest at 11:00, the optional one last
+        // (Carlos, 2026-11-06).
+        links: [{ label: 'Matchmaker, part one: matrix multiplication', url: viz(2, 'matchmaker-part-1') }],
+      },
+      { time: '10:30', title: 'Coffee break outside the classroom, until 11:00', type: 'break' },
+      {
+        time: '11:00',
+        title: 'Matrix product and matrix factorization',
+        type: 'lecture',
         links: [
-          { label: 'Matchmaker, part one: matrix multiplication', url: viz(2, 'matchmaker-part-1') },
           { label: 'Matchmaker, part two: matrix factorization', url: viz(2, 'matchmaker-part-2') },
           { label: 'Matchmaker, part three: the whole picture', url: viz(2, 'matchmaker-part-3') },
           { label: 'Matchmaker, optional: gradient descent up close', url: viz(2, 'matchmaker-optional') },
+          { label: 'Case: Spotify', url: deck(2, 'ainit-hs26-case-spotify.pdf') },
         ],
       },
-      { time: '10:30', title: 'Coffee break outside the classroom, until 11:00', type: 'break' },
-      { time: '11:00', title: 'Matrix product and matrix factorization', type: 'lecture' },
       { time: '12:00', title: 'Matrix factorization', type: 'exercise' },
       { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
       {
         time: '14:00',
         title: 'Bandits',
         type: 'lecture',
-        links: [{ label: 'Once Upon a Mirror (game)', url: viz(2, 'mirror') }],
+        links: [
+          { label: 'Once Upon a Mirror (game)', url: viz(2, 'mirror') },
+          { label: "Case: Spotify's home page", url: deck(2, 'ainit-hs26-case-spotify-home-page.pdf') },
+          { label: 'Case: Amazon Payments', url: deck(2, 'ainit-hs26-case-amazon-payments.pdf') },
+        ],
       },
       { time: '15:00', title: 'Bandits', type: 'exercise' },
       { time: '15:30', title: 'Coffee break at Polysnack, until 16:00', type: 'break' },
@@ -497,7 +513,10 @@ export const weekends: Weekend[] = [
         time: '16:00',
         title: 'Parallelized matrix factorization',
         type: 'lecture',
-        links: [{ label: 'Matchmaker on a Grid (visualization)', url: viz(2, 'matchmaker-grid') }],
+        links: [
+          { label: 'Matchmaker on a Grid (visualization)', url: viz(2, 'matchmaker-grid') },
+          { label: "Case: LinkedIn's ads", url: deck(2, 'ainit-hs26-case-linkedin-ads.pdf') },
+        ],
       },
     ],
     saturday: [
@@ -505,8 +524,9 @@ export const weekends: Weekend[] = [
       { time: '09:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '10:00', title: 'Coffee break outside the classroom, until 10:30', type: 'break' },
       { time: '10:30', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
-      { time: '11:00', title: 'Project intro: Recommender for online retail', type: 'project' },
-      { time: '12:00', title: 'Coding bazaar', type: 'lab' },
+      { time: '11:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
+      { time: '12:00', title: 'Project intro: Recommender for online retail', type: 'project' },
+      { time: '13:00', title: 'Coding bazaar', type: 'lab' },
     ],
     resources: [
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors', url: SOON },
@@ -515,6 +535,14 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Parallelized matrix factorization', url: SOON },
       { group: 'Lecture slides', label: 'Computing clusters', url: SOON },
       { group: 'Lecture slides', label: 'Guest lecture: Joachim M. Buhmann', url: SOON },
+      { group: 'Business cases', label: 'All six cases', url: deck(2, 'ainit-hs26-business-cases.pdf') },
+      { group: 'Business cases', label: 'All six cases (Handout)', url: deck(2, 'ainit-hs26-business-cases-handout.pdf') },
+      { group: 'Business cases', label: 'Etsy', url: deck(2, 'ainit-hs26-case-etsy.pdf') },
+      { group: 'Business cases', label: 'Airbnb', url: deck(2, 'ainit-hs26-case-airbnb.pdf') },
+      { group: 'Business cases', label: 'Spotify', url: deck(2, 'ainit-hs26-case-spotify.pdf') },
+      { group: 'Business cases', label: "Spotify's home page", url: deck(2, 'ainit-hs26-case-spotify-home-page.pdf') },
+      { group: 'Business cases', label: 'Amazon Payments', url: deck(2, 'ainit-hs26-case-amazon-payments.pdf') },
+      { group: 'Business cases', label: "LinkedIn's ads", url: deck(2, 'ainit-hs26-case-linkedin-ads.pdf') },
       { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: SOON },
       { group: 'Coding exercises', label: 'Matrix factorization', url: SOON },
       { group: 'Coding exercises', label: 'Bandits', url: SOON },
