@@ -864,6 +864,51 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-ag .s2-count{order:2; min-height:0}
   .s2-ag .s2-cx{display:none}
 }
+
+/* NABLA AND THE UPDATE (2026-11-06, Carlos's eighth message), nudge's steps 5 to 7: the fraction and w = w - α∇ in the
+   note under the customers. On a wide screen the block stands out of the grid's flow (it is wider than the
+   customers), so the board keeps its place; on a phone it stands on top of the board, and only the update from step 6 on. */
+.s2-nd .s2-note{position:relative}
+.s2-nab{position:absolute; left:0; top:10px; z-index:3; display:grid; justify-items:start; gap:12px; width:max-content}
+.s2-nab[hidden], .s2-nab > [hidden]{display:none}
+.s2-fq{display:flex; align-items:center; gap:4px}
+.s2-fr{display:inline-grid; justify-items:center}
+.s2-fr > .s2-ft{padding:0 3px 5px; border-bottom:1.5px solid var(--ink)}
+.s2-fr > .s2-fq:last-child{padding:5px 3px 0}
+.s2-sym{font-size:22px; font-style:italic; line-height:1; color:var(--ink); padding:0 1px}
+.s2-al, .s2-gk{color:var(--g-move)}
+/* ∇ drawn (EB Garamond has none): cap height, a serif nabla's strokes; the text ∇ beside it is for screen readers */
+.s2-nab-g{display:inline-block; position:relative; width:.72em; height:.66em; vertical-align:-.01em; margin:0 .05em}
+.s2-nab-g svg{display:block; width:100%; height:100%; fill:currentColor; overflow:visible}
+.s2-sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.s2-var{font-style:italic}
+.s2-symg{font-style:normal; margin-right:3px}
+.s2-gk{font-size:19px; font-weight:600; line-height:1}
+.s2-gop{font-size:19px; line-height:1; color:var(--ink)}
+.s2-nab .nt-n.s2-gn{--nt-w:40px; --nt-h:30px; --nt-fs:17px; padding:0 .22em}
+.s2-ul{display:grid; grid-template-columns:auto auto; column-gap:6px; row-gap:9px; align-items:center}
+@media (max-height: 760px){
+  .s2-nab{top:6px; gap:9px}
+  .s2-nab .nt-n.s2-gn{--nt-w:38px; --nt-h:27px; --nt-fs:16px}
+  .s2-fq{gap:3px}
+  .s2-fr > .s2-ft{padding-bottom:4px}
+  .s2-fr > .s2-fq:last-child{padding-top:4px}
+  .s2-ul{row-gap:6px}
+}
+@media (max-width: 560px){
+  .s2-nab{position:static; justify-self:center; justify-items:center; gap:6px}
+  .s2-nd[data-k="5"] .s2-gl, .s2-nd[data-k="6"] .s2-gl{display:none}
+  .s2-nab .nt-n.s2-gn{--nt-w:32px; --nt-h:20px; --nt-fs:14px}
+  .s2-fr > .s2-ft{padding-bottom:2px}
+  .s2-fr > .s2-fq:last-child{padding-top:2px}
+  /* the block takes the room the tag "smaller" had under the average (it showed it on the step before) */
+  .s2-nd[data-k="4"] .s2-tag, .s2-nd[data-k="5"] .s2-tag{display:none}
+  .s2-sym{font-size:20px}
+  .s2-gop{font-size:17px}
+  .s2-gk{font-size:16px}
+  .s2-fq{gap:3px}
+  .s2-ul{row-gap:4px}
+}
 </style>
 </head>
 <body>
@@ -3845,6 +3890,9 @@ button.chip:hover{border-color:var(--rubric)}
    take one number x; the average loss before; the average loss after x + EPS; then x moves to
    x - ALPHA * (after - before) / EPS, up when the average fell, down when it grew. Every number in turn, the customers'
    rows first, then the films', is one round; rounds until the average is below TOL.
+   Since 2026-11-06 (Carlos's eighth message in REQUEST.md) the scene "One small change" also writes the ratio out,
+   after the what-if: (after - before) / EPS, named nabla, and the update w = w - ALPHA * nabla. sec2.js works it on
+   the numbers it shows; the arithmetic here is unchanged.
 
    Z.EPS, Z.ALPHA, Z.TOL, Z.CORNER_TOL   0.01, 0.1, 0.0001, 0.01 (MF.S2 overrides them in the browser)
    Z.predict(c, f)                 P[i][j], the inner product of customer row i and film row j
@@ -3954,8 +4002,9 @@ button.chip:hover{border-color:var(--rubric)}
            a first guess (MF.S2.start); the predictions, which just appear; the loss of Ida and Paddington worked as
            (prediction - rating) squared; the other five losses; their average
    nudge   The Martian's second number: zoomed into a Before box; After, the number plus 0.01; the average's After;
-           smaller or larger; the update, an ochre arrow from the average back to the number, whose size is computed
-           out of sight (MF.Z.nudge)
+           smaller or larger; since 2026-11-06 (Carlos's eighth message) the change of the average over the change of
+           the number, named ∇, and the update w = w - α∇ with its numbers, in a block under the customers; the update,
+           an ochre arrow from the average back to the number (MF.Z.nudge)
    again   every number in turn, then again, round after round, until the average loss is about 0 (MF.Z.run)
    yours   the corner Ida and Paddington: the participant types four numbers, then for each number reads its Before and
            After and the loss's, and chooses Up or Down; the game moves it by the Matchmaker's amount (MF.Z.move)
@@ -4059,6 +4108,8 @@ button.chip:hover{border-color:var(--rubric)}
   }
   // Two decimals always, for the Before and After of one number ("-1.00" and "-0.99").
   function fix2(v) { var t = v.toFixed(2); return minus(t === "-0.00" ? "0.00" : t); }
+  // A fixed number of decimals ("10.667" and "10.620", the averages in the fraction of nudge's step 5).
+  function fixN(v, d) { var t = v.toFixed(d); return minus(Number(t) === 0 ? (0).toFixed(d) : t); }
   // Before and after of the average: two decimals, or more when two would show the same text.
   function pairText(a, b) {
     for (var d = 2; d <= 6; d++) {
@@ -4190,7 +4241,8 @@ button.chip:hover{border-color:var(--rubric)}
       if (!on) { AV.bn.textContent = "?"; AV.bn.dataset.t = "q"; AV.bn.classList.add("nt-slot"); }
       else AV.bn.classList.remove("nt-slot");
       if (S.av && on) {
-        var tx = isNum(S.av.after) ? pairText(S.av.before, S.av.after) : [avgText(S.av.before), ""];
+        var tx = !isNum(S.av.after) ? [avgText(S.av.before), ""] :
+                 S.av.d ? [fixN(S.av.before, S.av.d), fixN(S.av.after, S.av.d)] : pairText(S.av.before, S.av.after);
         paint(AV.bn, S.av.before, isNum(S.av.after) ? tx[0] : avgText(S.av.before));
         if (isNum(S.av.after)) paint(AV.an, S.av.after, tx[1]);
       }
@@ -4296,7 +4348,8 @@ button.chip:hover{border-color:var(--rubric)}
       },
       // The whole state at once. g: { c, f } the guess (rows; null or a null entry draws a slot); p, s: which
       // predictions and losses show ("all", a map "i,j": true, or null); avg: the average shows; nb: the number box
-      // ({ which, r, k, x, after } or null); av: the average's box ({ before, after, tag, tagKind } or null);
+      // ({ which, r, k, x, after } or null); av: the average's box ({ before, after, d, tag, tagKind } or null; d, a
+      // number of decimals for both, else two or more as pairText decides);
       // tgt: [which, r, k] ringed in ochre; cone, flow, upd: the overlay's zoom, flow line and update arrow.
       set: function (s) {
         if (s.g !== undefined) { S.c = s.g ? copy(s.g.c) : null; S.f = s.g ? copy(s.g.f) : null; }
@@ -4568,17 +4621,102 @@ button.chip:hover{border-color:var(--rubric)}
                 ": adding to the number helps, so the number goes up. Had the average grown, it would go down."
               : pairText(NW.avgBefore, NW.avgAfter)[1] + " is larger than " + pairText(NW.avgBefore, NW.avgAfter)[0] +
                 ": adding to the number hurts, so the number goes down.",
+      "The change of the average loss, divided by the change of the number: we call this fraction ∇, nabla.",
+      "Call the number w. The update subtracts a tenth of ∇, α = " + MF.num(Z.ALPHA) + ". " +
+        (NAB.g < 0 ? "∇ is negative, so w goes up." : "∇ is positive, so w goes down."),
       "The Matchmaker moves it " + (NW.fell ? "up" : "down") + ", from " + MF.num(NW.x) + " to " + n2(NW.to) +
         ", and the average loss falls to " + n2(T1.avg) + "."
     ][k];
   }
   var TAG = { smaller: "smaller", larger: "larger" };
+  var LAST = 6;                                       // the step of the update arrow
+
+  /* NABLA AND THE UPDATE (Carlos, 2026-11-06, REQUEST.md eighth message), steps 5 and 6: the change of the average loss
+     over the change of the number, named ∇, then w = w - α∇. Worked on the numbers the page shows, the averages with
+     three decimals: then the change (-0.047), ∇ (-4.7) and the new number (-0.53) agree with the board, where two
+     decimals would give -0.05, -5 and -0.5. */
+  var NAB = (function () {
+    var aB = Number(NW.avgBefore.toFixed(3)), aA = Number(NW.avgAfter.toFixed(3));
+    var xB = Number(NW.x.toFixed(2)), xA = Number(NW.after.toFixed(2));
+    var dA = Number((aA - aB).toFixed(3)), dX = Number((xA - xB).toFixed(2));
+    var g = Number((dA / dX).toFixed(6));
+    return { aB: aB, aA: aA, xB: xB, xA: xA, dA: dA, dX: dX, g: g, w1: Number((NW.x - Z.ALPHA * g).toFixed(6)) };
+  })();
+  MF.S2NAB = NAB;                                     // for _try-s2.js
+  // ∇ drawn: EB Garamond has no nabla, and the fallback fonts draw a heavy one. A thick left stroke and thin ones on
+  // the right and on top, as a serif nabla has; the text ∇ stays for copying and screen readers.
+  function nabla() {
+    var s = el("span", "s2-nab-g"), svg = document.createElementNS(SVGNS, "svg"), p = document.createElementNS(SVGNS, "path");
+    svg.setAttribute("viewBox", "0 1 12 11");
+    svg.setAttribute("aria-hidden", "true");
+    p.setAttribute("fill-rule", "evenodd");
+    p.setAttribute("d", "M0.4 1.2 L11.6 1.2 L6 11.6 Z M3.16 2.1 L10.15 2.1 L6.65 8.59 Z");
+    svg.appendChild(p);
+    s.appendChild(svg);
+    s.appendChild(el("span", "s2-sr", "∇"));
+    return s;
+  }
+  // A lead of this scene: ∇ drawn, w and α in italics, as in the formula.
+  function setLead(node, text) {
+    node.textContent = "";
+    text.split(/(∇|\bw\b|α)/).forEach(function (part) {
+      if (!part) return;
+      if (part === "∇") node.appendChild(nabla());
+      else if (part === "w" || part === "α") node.appendChild(el("i", "s2-var", part));
+      else node.appendChild(document.createTextNode(part));
+    });
+  }
+  // The block under the customers (on a phone on top of the board): the fraction, then the update in two lines,
+  // w = w - α∇ and the same with numbers. Built once; a step shows what it has reached.
+  function nabBlock() {
+    var box = el("div", "s2-nab");
+    function c(v, text) { var x = N.cell(v, { cls: "s2-gn" }); paint(x, v, text); return x; }
+    function op(t) { var x = el("span", "s2-gop", t); x.setAttribute("aria-hidden", "true"); return x; }
+    function sym(t, cls) {
+      var x = el("span", "s2-sym" + (cls ? " " + cls : ""), t === "∇" ? null : t);
+      if (t === "∇") { x.classList.add("s2-symg"); x.appendChild(nabla()); }
+      x.setAttribute("aria-hidden", "true");
+      return x;
+    }
+    function row(kids, cls) { var r = el("span", "s2-fq" + (cls ? " " + cls : "")); kids.forEach(function (n) { r.appendChild(n); }); return r; }
+    function frac(top, bottom) { var f = el("span", "s2-fr"); top.classList.add("s2-ft"); f.appendChild(top); f.appendChild(bottom); return f; }
+    var F = {
+      aA: c(NAB.aA, fixN(NAB.aA, 3)), aB: c(NAB.aB, fixN(NAB.aB, 3)), xA: c(NAB.xA, fix2(NAB.xA)), xB: c(NAB.xB, fix2(NAB.xB)),
+      dA: c(NAB.dA, fixN(NAB.dA, 3)), dX: c(NAB.dX, fix2(NAB.dX)), g: c(NAB.g, MF.num(NAB.g)),
+      w0: c(NW.x, MF.num(NW.x)), g2: c(NAB.g, MF.num(NAB.g)), w1: c(NAB.w1, n2(NAB.w1))
+    };
+    var gl = row([sym("∇"), op("="),
+                  frac(row([F.aA, op(MF.MINUS), F.aB]), row([F.xA, op(MF.MINUS), op("("), F.xB, op(")")])),
+                  op("="), frac(row([F.dA]), row([F.dX])), op("="), F.g], "s2-gl");
+    gl.setAttribute("role", "img");
+    gl.setAttribute("aria-label", "nabla is the change of the average loss, " + MF.spoken(NAB.dA) + ", divided by the change of the number, " +
+                    MF.spoken(NAB.dX) + ": " + MF.spoken(NAB.g));
+    var ul = el("div", "s2-ul");
+    [sym("w"), row([op("="), sym("w"), op(MF.MINUS), sym("α", "s2-al"), sym("∇")]),
+     el("span"), row([op("="), F.w0, op(MF.MINUS), el("span", "s2-gk", MF.num(Z.ALPHA)), op("×"), op("("), F.g2, op(")"), op("="), F.w1])]
+      .forEach(function (n) { ul.appendChild(n); });
+    ul.setAttribute("role", "img");
+    ul.setAttribute("aria-label", "w becomes w minus alpha times nabla: " + MF.spoken(NW.x) + " minus " + MF.num(Z.ALPHA) + " times " +
+                    MF.spoken(NAB.g) + " is " + MF.spoken(Number(n2(NAB.w1).replace(MF.MINUS, "-"))));
+    box.appendChild(gl);
+    box.appendChild(ul);
+    F.box = box;
+    F.gl = gl;
+    F.ul = ul;
+    F.cells = [F.aA, F.aB, F.xA, F.xB, F.dA, F.dX, F.g, F.w0, F.g2, F.w1];
+    return F;
+  }
   function nudgeState(k) {
-    var B = ND.B;
+    var B = ND.B, F = ND.F, up = k === LAST;
     B.parts({ r: true, c: true, f: true, p: true, s: true, avg: true });
-    var nb = k <= 3 ? { which: W[0], r: W[1], k: W[2], x: NW.x, after: k >= 1 } : null;
-    var av = k >= 2 && k <= 3 ? { before: NW.avgBefore, after: NW.avgAfter, tag: k === 3 ? (NW.fell ? TAG.smaller : TAG.larger) : "", tagKind: NW.fell ? "down" : "up" } : null;
-    B.set({ g: k === 4 ? G1 : G0, p: "all", s: "all", avg: true, nb: nb, av: av, tgt: W.slice(), cone: k <= 3, flow: k >= 2 && k <= 3, upd: k === 4 });
+    var nb = up ? null : { which: W[0], r: W[1], k: W[2], x: NW.x, after: k >= 1 };
+    // From step 5 on the averages show three decimals, the fraction's.
+    var av = k >= 2 && !up ? { before: NW.avgBefore, after: NW.avgAfter, d: k >= 4 ? 3 : 0,
+                               tag: k >= 3 ? (NW.fell ? TAG.smaller : TAG.larger) : "", tagKind: NW.fell ? "down" : "up" } : null;
+    B.set({ g: up ? G1 : G0, p: "all", s: "all", avg: true, nb: nb, av: av, tgt: W.slice(), cone: !up, flow: k >= 2 && !up, upd: up });
+    F.box.hidden = k < 4;
+    F.gl.hidden = k < 4;
+    F.ul.hidden = k < 5;
     ND.root.dataset.k = String(k);
   }
   function nudgeLive(k) {
@@ -4623,7 +4761,43 @@ button.chip:hover{border-color:var(--rubric)}
       anim(AV.an, [{ transform: "scale(1)" }, { transform: "scale(1.15)" }, { transform: "scale(1)" }], { duration: 700, delay: 150 });
       return;
     }
+    var F = ND.F;
     if (k === 4) {
+      // ∇: the two averages roll to three decimals; they, then the number's After and Before, fly into the fraction;
+      // the two changes come, then ∇.
+      var t2 = pairText(NW.avgBefore, NW.avgAfter), four = [F.aA, F.aB, F.xA, F.xB, F.dA, F.dX, F.g];
+      four.forEach(function (n) { n.style.visibility = "hidden"; });
+      rise(F.gl);
+      paint(AV.bn, NW.avgBefore, t2[0]);
+      paint(AV.an, NW.avgAfter, t2[1]);
+      seq.run([
+        [200, function () { roll(AV.bn, NW.avgBefore, fixN(NW.avgBefore, 3), 480); roll(AV.an, NW.avgAfter, fixN(NW.avgAfter, 3), 480); }],
+        [850, function () { B.fly(AV.an, F.aA, 760, { arc: 28 }); B.fly(AV.bn, F.aB, 760, { arc: 28, delay: 140 }); }],
+        [1760, function () {
+          F.aA.style.visibility = ""; F.aB.style.visibility = "";
+          B.fly(NB.an, F.xA, 760, { arc: 28 }); B.fly(NB.bn, F.xB, 760, { arc: 28, delay: 140 });
+        }],
+        [2670, function () { F.xA.style.visibility = ""; F.xB.style.visibility = ""; }],
+        [2950, function () { F.dA.style.visibility = ""; F.dX.style.visibility = ""; pop(F.dA, 420); pop(F.dX, 420); }],
+        [3550, function () { F.g.style.visibility = ""; pop(F.g, 520); }]
+      ], 3600).then(function () { four.forEach(function (n) { n.style.visibility = ""; }); });
+      return;
+    }
+    if (k === 5) {
+      // The update, written: its first line rises; the number (from the board) and ∇ (from the fraction) fly into the
+      // second line; then the new number.
+      var five = [F.w0, F.g2, F.w1];
+      five.forEach(function (n) { n.style.visibility = "hidden"; });
+      rise(F.ul);
+      seq.run([
+        [450, function () { B.fly(cell, F.w0, 760, { arc: 26 }); }],
+        [1210, function () { F.w0.style.visibility = ""; pop(F.w0, 360); B.fly(F.g, F.g2, 640, { arc: 20 }); }],
+        [1850, function () { F.g2.style.visibility = ""; }],
+        [2150, function () { F.w1.style.visibility = ""; pop(F.w1, 520); }]
+      ], 2200).then(function () { five.forEach(function (n) { n.style.visibility = ""; }); });
+      return;
+    }
+    if (k === LAST) {
       // The update: the ochre arrow draws from the average back to the number, which moves; the board follows.
       var tc = B.guessCell(W[0], W[1], W[2]);
       B.set({ g: G0 });
@@ -4640,16 +4814,18 @@ button.chip:hover{border-color:var(--rubric)}
     }
   }
   MF.define("nudge", {
-    act: 2, title: "One small change", steps: 5,
+    act: 2, title: "One small change", steps: LAST + 1,
     build: function (inner) {
       var root = el("div", "s2-sc s2-nd");
       var lead = el("p", "s2-lead");
       lead.setAttribute("aria-live", "polite");
       var B = board({ people: PEOPLE, films: FILMS });
+      var F = nabBlock();
+      B.note.appendChild(F.box);
       root.appendChild(lead);
       root.appendChild(B.el);
       inner.appendChild(root);
-      ND = { root: root, lead: lead, B: B, seq: Seq(), last: null };
+      ND = { root: root, lead: lead, B: B, F: F, seq: Seq(), last: null };
     },
     enter: function () { ND.last = null; },
     leave: function () { ND.seq.stop(); ND.B.clearFly(); },
@@ -4658,8 +4834,8 @@ button.chip:hover{border-color:var(--rubric)}
       ND.last = k;
       ND.seq.stop();
       ND.B.clearFly();
-      [ND.B.NB.bn, ND.B.NB.a, ND.B.AV.a, ND.B.AV.bn].forEach(function (n) { n.style.visibility = ""; });
-      ND.lead.textContent = L2(k);
+      [ND.B.NB.bn, ND.B.NB.a, ND.B.AV.a, ND.B.AV.bn].concat(ND.F.cells).forEach(function (n) { n.style.visibility = ""; });
+      setLead(ND.lead, L2(k));
       if (live) replay(ND.lead, "s2-in"); else still(ND.root);
       nudgeState(k);
       if (live) nudgeLive(k);
