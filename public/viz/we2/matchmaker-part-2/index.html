@@ -666,6 +666,10 @@ button.chip:hover{border-color:var(--rubric)}
 .mx-calc .nt-n{min-width:40px; min-height:32px; font-size:20px}
 .mx-calc .mx-csum .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--rubric)}
 .mx-cwait{visibility:hidden}
+/* M.workLine outside a stack: the look of the stack's worked line */
+.mx-wl{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 12px}
+.mx-wl .nt-n{min-width:40px; min-height:32px; font-size:20px}
+.mx-wl .mx-csum .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--rubric)}
 
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
@@ -708,6 +712,8 @@ button.chip:hover{border-color:var(--rubric)}
   .mx-stk{--mx-scg:30px; --mx-srg:6px}
   .mx-calc{gap:4px 8px}
   .mx-calc .nt-n{min-width:32px; min-height:27px; font-size:17px}
+  .mx-wl{gap:4px 8px}
+  .mx-wl .nt-n{min-width:32px; min-height:27px; font-size:17px}
   .mx-co{font-size:17px}
   .mx-cl, .mx-cg{gap:4px}
 }
@@ -1334,7 +1340,7 @@ button.chip:hover{border-color:var(--rubric)}
               cards: { 3: { kicker: "Gradient descent, optional", num: 1, skip: null },
                        4: { kicker: "Gradient descent, optional", num: 2, skip: null } },
               back: { 3: "Then come back here for the second half: many customers, many films.",
-                      4: "Then open part three of the Matchmaker: the whole picture." } },
+                      4: "That is the end of the Matchmaker." } },  // played after part three (Carlos, 2026-11-06)
     "3": { sections: [5], tag: "Part three: the whole picture",
            cards: { 5: { kicker: "Once Upon a Matchmaker, part three", num: 3 } } }
   };
@@ -2648,6 +2654,10 @@ button.chip:hover{border-color:var(--rubric)}
    M.grid(r, c, o)    a small picture of a matrix with r rows and c columns, for a question about shapes
    M.cross(o)         the guessing picture (Carlos, 2026-11-04): the ratings in the centre, the customers on their
                       left, the films above, the predictions below, the losses beside the predictions, with arrows
+   M.stack(o)         section 1's product (2026-11-05): B on top of A, the product on the right of A; with
+                      layout "textbook" (2026-11-06) B turned above the product (MATRIX.md, The textbook cross)
+   M.workLine(ps, o)  the worked line of one inner product outside a stack (2026-11-06): each pair multiplied, then
+                      the products and the sum, ringed
    Two tones carry a pair: "a" (violet) the row of the first matrix, "b" (ochre) the row of the second. In the
    product the row band is "a" and the column band "b", so the cell where the two bands cross holds the inner
    product of the two lit rows. Motions run on timers and the Web Animations API, show() and stop() cut them
@@ -3512,6 +3522,46 @@ button.chip:hover{border-color:var(--rubric)}
                     name its rows and columns). A lit pair: the first's row i and the second's column j outlined, an
                     arrow straight right into the product's row, one straight down into its column. With C false the
                     second stands up and to the right of the first, where the product would come. */
+  /* The worked line of one inner product (2026-11-06, taken out of M.stack so that a scene can show it without a
+     stack): the first line each pair multiplied, a x b + c x d ..., the second their products and then the sum,
+     ringed. ps: [[a, b], ...]; sum: the sum. Returns { el, parts }: el a div.mx-wl holding the two lines, parts the
+     pieces in the order S.work reveals them (every pair, the products, the sum). */
+  function lineOf(ps, sum) {
+    var box = el("div", "mx-wl"), row1 = el("span", "mx-cl"), row2 = el("span", "mx-cl");
+    ps.forEach(function (p, k) {
+      var g = el("span", "mx-cg");
+      if (k) g.appendChild(el("span", "mx-co", "+"));
+      g.appendChild(N.cell(p[0]));
+      g.appendChild(el("span", "mx-co mx-ct2", N.TIMES));
+      g.appendChild(N.cell(p[1]));
+      row1.appendChild(g);
+    });
+    var eq1 = el("span", "mx-cg");
+    eq1.appendChild(el("span", "mx-co", "="));
+    ps.forEach(function (p, k) {
+      if (k) eq1.appendChild(el("span", "mx-co", "+"));
+      eq1.appendChild(N.cell(p[0] * p[1]));
+    });
+    row2.appendChild(eq1);
+    var eq2 = el("span", "mx-cg mx-csum");
+    eq2.appendChild(el("span", "mx-co", "="));
+    eq2.appendChild(N.cell(sum));
+    row2.appendChild(eq2);
+    box.appendChild(row1);
+    box.appendChild(row2);
+    return { el: box, parts: [].slice.call(row1.children).concat([eq1, eq2]) };
+  }
+  /* M.workLine(pairs, o): the same line for a scene, outside a stack (sections 3 and 4 work one prediction this way).
+     o.sum defaults to the sum of the products. A scene that plays it adds mx-cwait to every part and takes it off one
+     part at a time, as S.work does (260 ms, then every 300 ms). */
+  function workLine(ps, o) {
+    o = o || {};
+    var sum = o.sum !== undefined ? o.sum : ps.reduce(function (t, p) { return t + p[0] * p[1]; }, 0);
+    var w = lineOf(ps, sum);
+    if (o.cls) w.el.className += " " + o.cls;
+    return { el: w.el, parts: w.parts, sum: sum };
+  }
+
   function stack(o) {
     o = o || {};
     var TB = o.layout === "textbook";
@@ -3686,31 +3736,9 @@ button.chip:hover{border-color:var(--rubric)}
     }
     function calcLine(i, j) {
       calc.textContent = "";
-      var ps = product(i, j), items = [];
-      function add(node, cls) { if (cls) node.classList.add(cls); calc.appendChild(node); items.push(node); return node; }
-      var row1 = el("span", "mx-cl"), row2 = el("span", "mx-cl");
-      ps.forEach(function (p, k) {
-        var g = el("span", "mx-cg");
-        if (k) g.appendChild(el("span", "mx-co", "+"));
-        g.appendChild(N.cell(p[0]));
-        g.appendChild(el("span", "mx-co mx-ct2", N.TIMES));
-        g.appendChild(N.cell(p[1]));
-        row1.appendChild(g);
-      });
-      var eq1 = el("span", "mx-cg");
-      eq1.appendChild(el("span", "mx-co", "="));
-      ps.forEach(function (p, k) {
-        if (k) eq1.appendChild(el("span", "mx-co", "+"));
-        eq1.appendChild(N.cell(p[0] * p[1]));
-      });
-      row2.appendChild(eq1);
-      var eq2 = el("span", "mx-cg mx-csum");
-      eq2.appendChild(el("span", "mx-co", "="));
-      eq2.appendChild(N.cell(value(i, j)));
-      row2.appendChild(eq2);
-      calc.appendChild(row1);
-      calc.appendChild(row2);
-      return [].slice.call(row1.children).concat([eq1, eq2]);
+      var w = lineOf(product(i, j), value(i, j));
+      while (w.el.firstChild) calc.appendChild(w.el.firstChild);
+      return w.parts;
     }
     function draw0() {
       paint();
@@ -3798,7 +3826,8 @@ button.chip:hover{border-color:var(--rubric)}
     return X;
   }
 
-  MF.M = { matrix: matrix, product: product, cross: cross, stack: stack, shape: shape, grid: grid, TEMPO: TEMPO };
+  MF.M = { matrix: matrix, product: product, cross: cross, stack: stack, workLine: workLine, shape: shape, grid: grid,
+    TEMPO: TEMPO };
 })();
 </script>
 <script>
@@ -3819,7 +3848,7 @@ button.chip:hover{border-color:var(--rubric)}
 
    Z.EPS, Z.ALPHA, Z.TOL, Z.CORNER_TOL   0.01, 0.1, 0.0001, 0.01 (MF.S2 overrides them in the browser)
    Z.predict(c, f)                 P[i][j], the inner product of customer row i and film row j
-   Z.table(c, f, R)                { P, S, sum, n, avg }: predictions, losses (rating - prediction) squared, their sum,
+   Z.table(c, f, R)                { P, S, sum, n, avg }: predictions, losses (prediction - rating) squared, their sum,
                                    how many, their average
    Z.order(c, f)                   every guessed number as [which, r, k], the customers' rows first
    Z.at(c, f, which, r, k)         the number at that place
@@ -3923,7 +3952,7 @@ button.chip:hover{border-color:var(--rubric)}
 
    board   one click each: the ratings; the customers' embeddings, empty; the films' embeddings, empty, on top of them;
            a first guess (MF.S2.start); the predictions, which just appear; the loss of Ida and Paddington worked as
-           (rating - prediction) squared; the other five losses; their average
+           (prediction - rating) squared; the other five losses; their average
    nudge   The Martian's second number: zoomed into a Before box; After, the number plus 0.01; the average's After;
            smaller or larger; the update, an ochre arrow from the average back to the number, whose size is computed
            out of sight (MF.Z.nudge)
@@ -4384,13 +4413,14 @@ button.chip:hover{border-color:var(--rubric)}
       "And an embedding of each film: a column of two numbers.",
       "It starts from a guess.",
       "The predictions: every customer's row with every film's column, the product of the two matrices, as in part one.",
-      "How far off is a prediction? Its loss: the rating minus the prediction, squared. Ida rated Paddington " + MF.num(r0) +
-        ", the guess predicts " + MF.num(p0) + ".",
+      "How far off is a prediction? Its loss: the prediction minus the rating, squared. For Ida and Paddington: " +
+        MF.num(p0) + " and " + MF.num(r0) + ".",
       "The same for the other " + (T0.n - 1 === 5 ? "five" : String(T0.n - 1)) + " ratings.",
       "Their average, " + n2(T0.avg) + ", measures the whole guess in one number. The smaller, the better."
     ][k];
   }
-  // The worked loss under the customers: (rating - prediction) squared = loss.
+  // The worked loss under the customers: (prediction - rating) squared = loss. The prediction stands on the left of
+  // the rating, as on the board (Carlos, 2026-11-06: never swap the two).
   function lossLine() {
     var lf = el("div", "s2-lf");
     function q(lab, cls) {
@@ -4402,7 +4432,7 @@ button.chip:hover{border-color:var(--rubric)}
     }
     function op(t, cls) { var x = el("span", "s2-op" + (cls ? " " + cls : ""), t); x.setAttribute("aria-hidden", "true"); return x; }
     var qR = q("rating", "s2-ink"), qP = q("prediction", "s2-fw"), qS = q("loss", "s2-fw s2-qs");
-    [op("("), qR.el, op(MF.MINUS), qP.el, op(")²", "s2-sq"), op("="), qS.el].forEach(function (n) { lf.appendChild(n); });
+    [op("("), qP.el, op(MF.MINUS), qR.el, op(")²", "s2-sq"), op("="), qS.el].forEach(function (n) { lf.appendChild(n); });
     lf.setAttribute("role", "img");
     return { el: lf, R: qR, P: qP, S: qS };
   }
@@ -4415,7 +4445,7 @@ button.chip:hover{border-color:var(--rubric)}
     LF.P.box.appendChild(N.cell(p));
     var sc = beat >= 1 ? N.cell(s) : N.slot();
     LF.S.box.appendChild(sc);
-    LF.el.setAttribute("aria-label", "the rating " + MF.spoken(r) + " minus the prediction " + MF.spoken(p) + ", squared, is " + MF.spoken(s));
+    LF.el.setAttribute("aria-label", "the prediction " + MF.spoken(p) + " minus the rating " + MF.spoken(r) + ", squared, is " + MF.spoken(s));
     return { r: LF.R.box.firstChild, p: LF.P.box.firstChild, s: sc };
   }
   function boardState(k) {
@@ -4449,7 +4479,8 @@ button.chip:hover{border-color:var(--rubric)}
       return;
     }
     if (k === 5) {
-      // The rating and the prediction fly down into the line, the loss comes, then flies into its cell.
+      // The prediction and then the rating fly down into the line (left to right, as on the board), the loss comes,
+      // then flies into its cell.
       rise(B.m.s.el);
       var parts = fillLoss(BD.lf, 0, 0, 0), target = B.item("s", 0, 0);
       parts.r.style.visibility = "hidden";
@@ -4457,10 +4488,10 @@ button.chip:hover{border-color:var(--rubric)}
       target.style.visibility = "hidden";
       rise(BD.lf.el);
       seq.run([
-        [300, function () { B.fly(B.item("r", 0, 0), parts.r, 700, { arc: 30 }); }],
-        [1000, function () { parts.r.style.visibility = ""; B.fly(B.item("p", 0, 0), parts.p, 700, { arc: 30 }); }],
-        [1700, function () { parts.p.style.visibility = ""; }],
-        [2100, function () { var s = fillLoss(BD.lf, 0, 0, 1); s.r.style.visibility = ""; pop(s.s, 520); }],
+        [300, function () { B.fly(B.item("p", 0, 0), parts.p, 700, { arc: 30 }); }],
+        [1000, function () { parts.p.style.visibility = ""; B.fly(B.item("r", 0, 0), parts.r, 700, { arc: 30 }); }],
+        [1700, function () { parts.r.style.visibility = ""; }],
+        [2100, function () { var s = fillLoss(BD.lf, 0, 0, 1); pop(s.s, 520); }],
         [2900, function () { B.fly(BD.lf.S.box.firstChild, target, 750, { arc: 20 }); }],
         [3650, function () { target.style.visibility = ""; pop(target, 420); }]
       ], 3700).then(function () {
