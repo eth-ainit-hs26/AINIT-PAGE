@@ -124,7 +124,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .choices button.no{border-color:var(--rule); color:var(--muted); text-decoration:line-through; text-decoration-thickness:2px}
 .choices button.yes{background:var(--rubric); color:var(--leaf)}
 
-/* SLIDES 2 and 3: the big picture and the computers. One layout for both: the films' numbers on top, the
+/* SLIDES 3 and 4: the big picture and the computers. One layout for both: the films' numbers on top, the
    customers' numbers on the left, the predictions where they meet, the ratings and the losses on their right.
    A computer (a card) is a cut of the big picture, 2 customers by 2 films; its corner holds its name and its
    memory, 21 places. */
@@ -160,13 +160,13 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .grid3{position:relative; display:grid; grid-template-columns:repeat(4, auto); gap:14px; align-items:start; padding-top:24px;
   transform-origin:0 0}
 .grid3 .card{--w:30px}
-/* slide 3's what-if: the computers that do not take part are greyed a little */
+/* slide 4's what-if: the computers that do not take part are greyed a little */
 .card.dim{opacity:.5; filter:grayscale(1)}
 .card{transition:opacity .45s ease, filter .45s ease, border-color .5s ease, background-color .5s ease}
-/* while the camera is in (slide 3, steps 5 to 9) the board is cut at the edges of its box */
+/* while the camera is in (slide 4, steps 5 to 9) the board is cut at the edges of its box */
 .fitbox.cam{overflow:hidden}
 .card > .corner, .card > .who, .card > .film, .card > .cap{transition:opacity .45s ease}
-/* slide 2: a computer that has not appeared yet shows only the numbers it will hold (show-r: its ratings, show-f:
+/* slide 3: a computer that has not appeared yet shows only the numbers it will hold (show-r: its ratings, show-f:
    its customers' or films' numbers); the whole tables are its cells moved together (transforms), with headers
    and cut lines drawn over the board */
 .card.ghost{border-color:transparent; background:transparent}
@@ -230,9 +230,41 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .gauge i.on{background:var(--muted); border-color:var(--muted)}
 .gauge i.on[data-m]{background:var(--hue); border-color:var(--hue)}
 .fitbox{position:relative; width:100%}
+/* a computer shows only what it holds: no empty places for the copies, the predictions, the losses and the sum still
+   to come (Carlos, 2026-11-07: the dashed places were confusing); a caption shows with its numbers */
+.card .n.slot{visibility:hidden}
+.card.no-l > .cap.c-l, .card.no-s > .cap.c-s{visibility:hidden}
 .fitin{position:absolute; top:0; left:50%; width:max-content; transform-origin:top center}
 
+/* SLIDE 2: fifteen computers of 21 places; a table pours into one of them and what does not fit is left over */
+.pboard{display:grid; grid-template-columns:auto auto; column-gap:44px; row-gap:16px; align-items:center}
+.pside{display:flex; flex-direction:column; align-items:center; gap:10px}
+.tz{display:grid; align-items:center; justify-items:center}
+.tz > .tset{grid-area:1 / 1; display:flex; flex-direction:column; align-items:center; gap:14px; transition:opacity .45s ease .35s}
+.tz > .tset.off{opacity:0; pointer-events:none; transition-delay:0s}
+.tbl{display:grid; gap:5px; --w:40px; --h:32px; --fs:18px; justify-content:start; align-content:start}
+.tbl .n{border-radius:8px}
+.tbl .who{display:grid; place-items:center end; padding-right:6px; font-size:17px; white-space:nowrap}
+.tbl .film{display:grid; place-items:end center; font-size:23px; padding-bottom:2px}
+.tbl .cap{font-size:14px; font-style:italic; color:var(--muted); white-space:nowrap; padding-bottom:4px; place-self:end center}
+.tbl .n.gone{opacity:.16}
+.tbl .n.over{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4.5px var(--loss)}
+.left{min-height:1.5em; font-size:17px; font-style:italic; font-weight:600; color:var(--loss); text-align:center}
+.pool{display:grid; grid-template-columns:repeat(5, auto); gap:12px}
+.pc{display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 9px 5px; border:1.5px solid var(--rule);
+  border-radius:12px; background:var(--leaf); transition:border-color .35s ease}
+.pls{display:grid; grid-template-columns:repeat(7, 15px); grid-auto-rows:15px; gap:3px}
+.pl{border:1.2px solid var(--rule); border-radius:3px; transition:background-color .25s ease, border-color .25s ease}
+.pl.on[data-m]{background:color-mix(in srgb, var(--hue) 80%, var(--leaf)); border-color:var(--hue)}
+.pl.hide{visibility:hidden}
+.pc .cnt{font-size:13px; color:var(--muted); font-variant-numeric:lining-nums tabular-nums}
+.pc.full{border-color:var(--loss)}
+.pc.full .cnt{color:var(--loss); font-weight:600}
+.total{font-size:17px; font-style:italic; color:var(--ink); font-variant-numeric:lining-nums tabular-nums}
+
 @media (max-width:640px){
+  .pboard{grid-template-columns:auto}
+  .pool{grid-template-columns:repeat(3, auto)}
   .brand{font-size:18px}
   .brand .tag{display:none}
   .slide h2{font-size:22px}
@@ -656,7 +688,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     seq.then(end, function () {});
   }
 
-  /* SLIDES 2 and 3: the big picture and the computers */
+  /* SLIDES 3 and 4: the big picture and the computers */
   var ROOM = 21;     // the memory of every computer, in numbers: a C computer's 4 ratings, 4 + 4 copies, 4 predictions, 4 losses, 1 sum
   function blockRows(bi) { return [2 * bi, 2 * bi + 1]; }
   function blockCols(bj) { return [2 * bj, 2 * bj + 1]; }
@@ -712,10 +744,10 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
         P.Lo.push(cols.map(function (fj, j) { return slot(L.row(i), L.l(j), "l", blockShade(ci >> 1, fj >> 1)); }));
       });
       put(el("div", { class: "cap", text: "ratings" }), 2, L.r(0), 2, m);
-      put(el("div", { class: "cap", text: "losses" }), 2, L.l(0), 2, m);
+      put(el("div", { class: "cap c-l", text: "losses" }), 2, L.l(0), 2, m);
     }
     if (hasS) {
-      put(el("div", { class: "cap", text: "sum" }), 2, L.last + 2, 2, 1);
+      put(el("div", { class: "cap c-s", text: "sum" }), 2, L.last + 2, 2, 1);
       P.sum = slot(L.row(0), L.last + 2, "l", blockShade(rows[0] >> 1, cols[0] >> 1));
       P.sum.classList.add("sum");
     }
@@ -759,6 +791,14 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
       });
     });
     if (P.sum) { lossTo(P.sum, what.S ? tot : null); P.sum.classList.add("sum"); P.total = tot; }
+    if (P.kind === "C") {
+      P.box.classList.toggle("no-l", !what.L);
+      P.box.classList.toggle("no-s", !what.S);
+      // a band ends where the numbers end: before the losses come, the bands stop at the ratings
+      var span = what.L ? P.L.last - 1 : P.L.r(P.cols.length - 1) - 1;
+      P.rowBand.forEach(function (b) { b.style.gridColumn = "2 / span " + span; });
+      P.colBand.forEach(function (bs) { if (bs[2]) bs[2].style.visibility = what.L ? "" : "hidden"; });
+    }
     gauge(P);
   }
   var GORDER = ["r", "u", "v", "p", "l"];      // the memory fills in the colours of what it holds, in this order
@@ -863,9 +903,9 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   window.addEventListener("resize", refit);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
 
-  /* SLIDES 2 and 3 share one board: the A computers (customers' slices) on the left, the B computers (films'
-     slices) on top, the C computers (blocks of ratings) in between, the average loss in the corner. Slide 2 ends on
-     the board with which slide 3 begins. */
+  /* SLIDES 3 and 4 share one board: the A computers (customers' slices) on the left, the B computers (films'
+     slices) on top, the C computers (blocks of ratings) in between, the average loss in the corner. Slide 3 ends on
+     the board with which slide 4 begins. */
   function wordsRow(ctx) {
     var head = ctx.root.appendChild(el("div", { class: "wordsrow" }));
     ctx.words = head.appendChild(el("div", { class: "words" }));
@@ -910,33 +950,215 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     return { x: x, y: y };
   }
 
-  /* SLIDE 2: too large for one computer. Six steps of one animation: the ratings whole; cut into nine blocks that
+  /* SLIDE 2: too large for one computer (Carlos, 2026-11-07: "a scene ... where we present the computers available
+     to us and the slots they have, and we show that neither the rating matrix nor the factor matrices will fit in any
+     single of them"). POOL computers of ROOM places each; the ratings, then the guessed numbers, pour into one
+     computer each: the first ROOM numbers fill its places, the others are left over. */
+  var POOL = 15;                                           // the computers of slides 3 and 4: C11 to C33, B1 to B3, A1 to A3
+  var NR = N * N, NG = 2 * N * K, JOB = NR + NG + NR + NR;  // the ratings; the guessed numbers; with the predictions and the losses
+  var WORDS_P = [
+    "We have <b>" + POOL + " computers</b>, each with room for <b>" + ROOM + " numbers</b>.",
+    "The ratings: " + N + " customers by " + N + " films, <b>" + NR + " numbers</b>. Do they fit in one computer?",
+    "One computer takes " + ROOM + " of them. <b>" + (NR - ROOM) + " ratings are left over.</b> Every computer has the same " +
+      ROOM + " places, so none can hold the ratings.",
+    "The guessed numbers: " + N * K + " for the customers and " + N * K + " for the films, <b>" + NG + " numbers</b>.",
+    "Another computer takes " + ROOM + " of them. <b>" + (NG - ROOM) + " are left over.</b> No computer can hold the guessed " +
+      "numbers either.",
+    "Together the " + POOL + " computers have " + POOL * ROOM + " places, more than the " + JOB + " numbers gradient descent " +
+      "keeps. But no table fits in a single computer. <b>How do we share the tables?</b>"
+  ];
+  var STEPS_P = [POOL + " computers", "The ratings", "Into one computer", "The guessed numbers", "Into another computer",
+    "Share the tables"];
+  defineSlide({
+    title: "Too large for one computer",
+    steps: STEPS_P,
+    build: function (ctx) {
+      var r = ctx.root;
+      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 2" }), "Too large for one computer"]));
+      wordsRow(ctx);
+      ctx.box = r.appendChild(el("div", { class: "fitbox" }));
+      ctx.fitin = ctx.box.appendChild(el("div", { class: "fitin" }));
+      var b = ctx.fitin.appendChild(el("div", { class: "pboard" }));
+      var side = b.appendChild(el("div", { class: "pside" }));
+      var tz = side.appendChild(el("div", { class: "tz" }));
+      ctx.tr = ratingsTable(tz);
+      ctx.tg = guessTable(tz);
+      var right = b.appendChild(el("div", { class: "pside" }));
+      var pool = right.appendChild(el("div", { class: "pool" }));
+      ctx.pcs = [];
+      for (var t = 0; t < POOL; t++) ctx.pcs.push(computer(pool));
+      ctx.total = right.appendChild(el("div", { class: "total", text: POOL + " computers " + TIMES + " " + ROOM + " places = " +
+        POOL * ROOM + " places" }));
+    },
+    show: function (ctx, k, from) {
+      ctx.words.innerHTML = WORDS_P[k];
+      stateP(ctx, k);                                      // first, so that the board is measured with its counts
+      refit();
+      if (from === k - 1 && !reduced()) ANIM_P[k](ctx, ctx.token);
+    }
+  });
+  function tset(parent, leftText) {
+    // a set: one table or two blocks, then the line of what is left over (shown when it is poured)
+    var box = parent.appendChild(el("div", { class: "tset off" }));   // hidden until its step
+    return { box: box, cells: [], leftText: leftText };
+  }
+  function tableGrid(T, cols, rows) {
+    var g = T.box.appendChild(el("div", { class: "tbl" }));
+    g.style.gridTemplateColumns = cols;
+    g.style.gridTemplateRows = rows;
+    return function put(e, r, c, cs) { e.style.gridRow = String(r); e.style.gridColumn = c + " / span " + (cs || 1); g.appendChild(e); return e; };
+  }
+  function ratingsTable(parent) {
+    // the ratings whole, row by row in T.cells: the customers' names on the left, the films' pictures on top
+    var T = tset(parent, (NR - ROOM) + " ratings left over");
+    var put = tableGrid(T, "auto repeat(" + N + ", var(--w))", "auto repeat(" + N + ", var(--h))");
+    FILMS.forEach(function (f, j) { put(el("div", { class: "film em", title: f.t, text: f.g }), 1, 2 + j); });
+    CUST.forEach(function (name, i) {
+      put(el("div", { class: "who", text: name }), 2 + i, 1);
+      FILMS.forEach(function (f, j) {
+        var c = paint(put(el("div", { class: "n" }), 2 + i, 2 + j), "r", blockShade(i >> 1, j >> 1));
+        setNum(c, G.R[i][j]);
+        T.cells.push(c);
+      });
+    });
+    T.left = T.box.appendChild(el("div", { class: "left", text: T.leftText }));
+    return T;
+  }
+  function guessTable(parent) {
+    // the guessed numbers in two blocks, one above the other so that no row of the films' numbers sits beside a
+    // customer: the customers' numbers (a row per customer), then the films' numbers (a column per film). T.cells
+    // holds the customers' numbers row by row, then the films' numbers row by row.
+    var T = tset(parent, (NG - ROOM) + " guessed numbers left over");
+    var put = tableGrid(T, "auto repeat(" + K + ", var(--w))", "auto repeat(" + N + ", var(--h))");
+    put(el("div", { class: "cap", text: "the customers' numbers" }), 1, 1, K + 1);
+    CUST.forEach(function (name, i) {
+      put(el("div", { class: "who", text: name }), 2 + i, 1);
+      for (var ku = 0; ku < K; ku++) {
+        var c = paint(put(el("div", { class: "n" }), 2 + i, 2 + ku), "u", sliceShade(i >> 1));
+        setNum(c, G.U0[i][ku]);
+        T.cells.push(c);
+      }
+    });
+    put = tableGrid(T, "repeat(" + N + ", var(--w))", "auto auto repeat(" + K + ", var(--h))");
+    put(el("div", { class: "cap", text: "the films' numbers" }), 1, 1, N);
+    FILMS.forEach(function (f, j) { put(el("div", { class: "film em", title: f.t, text: f.g }), 2, 1 + j); });
+    for (var kv = 0; kv < K; kv++) {
+      FILMS.forEach(function (f, j) {
+        var c = paint(put(el("div", { class: "n" }), 3 + kv, 1 + j), "v", sliceShade(j >> 1));
+        setNum(c, G.V0[j][kv]);
+        T.cells.push(c);
+      });
+    }
+    T.left = T.box.appendChild(el("div", { class: "left", text: T.leftText }));
+    return T;
+  }
+  function computer(parent) {
+    // a computer: its ROOM places and how many of them hold a number
+    var box = parent.appendChild(el("div", { class: "pc" })), pls = box.appendChild(el("div", { class: "pls" }));
+    var P = { box: box, places: [], held: 0 };
+    for (var t = 0; t < ROOM; t++) P.places.push(pls.appendChild(el("div", { class: "pl" })));
+    P.cnt = box.appendChild(el("div", { class: "cnt", text: "0/" + ROOM }));
+    return P;
+  }
+  function fillPc(P, marks) {
+    // marks: the matrix of the number in each place, from the first; the other places stay empty
+    P.places.forEach(function (p, t) {
+      p.classList.remove("hide");
+      p.classList.toggle("on", t < marks.length);
+      if (t < marks.length) p.setAttribute("data-m", marks[t]); else p.removeAttribute("data-m");
+    });
+    P.held = marks.length;
+    P.cnt.textContent = P.held + "/" + ROOM;
+    P.box.classList.toggle("full", P.held >= ROOM);
+  }
+  function marksOf(cells) { return cells.slice(0, ROOM).map(function (c) { return c.getAttribute("data-m"); }); }
+  function stateP(ctx, k) {
+    // slide 2 at the end of step k: the ratings at steps 1 and 2, the guessed numbers from step 3; the first computer
+    // holds ROOM ratings from step 2, the second ROOM guessed numbers from step 4
+    var R = ctx.tr, T = ctx.tg;
+    R.box.classList.toggle("off", k < 1 || k > 2);
+    T.box.classList.toggle("off", k < 3);
+    R.cells.forEach(function (c, t) { c.classList.toggle("gone", k === 2 && t < ROOM); c.classList.toggle("over", k === 2 && t >= ROOM); });
+    T.cells.forEach(function (c, t) { c.classList.toggle("gone", k >= 4 && t < ROOM); c.classList.toggle("over", k >= 4 && t >= ROOM); });
+    ctx.pcs.forEach(function (P, t) { fillPc(P, t === 0 && k >= 2 ? marksOf(R.cells) : t === 1 && k >= 4 ? marksOf(T.cells) : []); });
+    R.left.style.visibility = k === 2 ? "" : "hidden";
+    T.left.style.visibility = k >= 4 ? "" : "hidden";
+    ctx.total.style.visibility = k === 5 ? "" : "hidden";
+  }
+  var ANIM_P = [
+    function (ctx) {
+      // the computers appear one after the other
+      ctx.pcs.forEach(function (P, t) {
+        track(P.box.animate([{ opacity: 0, transform: "scale(.8)" }, { opacity: 1, transform: "none" }],
+          { duration: 420, delay: 150 + 45 * t, easing: "cubic-bezier(.3,0,.2,1)", fill: "backwards" }));
+      });
+    },
+    function () {},                                        // the ratings fade in
+    function (ctx, token) { pourP(token, ctx.tr, ctx.pcs[0]); },
+    function () {},                                        // the ratings fade out, the guessed numbers fade in
+    function (ctx, token) { pourP(token, ctx.tg, ctx.pcs[1]); },
+    function (ctx) { popEl(ctx.total); }
+  ];
+  function pourP(token, T, P) {
+    // the first ROOM numbers of the set T fly into the computer's places one after the other; then the others shake,
+    // left over
+    var cells = T.cells, n = Math.min(cells.length, ROOM);
+    cells.forEach(function (c) { c.classList.remove("gone", "over"); });
+    fillPc(P, []);
+    T.left.style.visibility = "hidden";
+    var landed = whenAll(n, function () {
+      wait(250, token).then(function () {
+        P.box.classList.add("full");
+        cells.slice(n).forEach(function (c) {
+          c.classList.add("over");
+          track(c.animate([{ transform: "none" }, { transform: "translateX(-4px)" }, { transform: "translateX(4px)" },
+            { transform: "translateX(-2px)" }, { transform: "none" }], { duration: 450, easing: "ease-in-out" }));
+        });
+        T.left.style.visibility = "";
+        popEl(T.left);
+      }, function () {});
+    });
+    cells.slice(0, n).forEach(function (c, t) {
+      wait(300 + 70 * t, token).then(function () {
+        var p = P.places[t];
+        fly(c, p, 650, 0, token, function () {
+          p.classList.add("on");
+          p.setAttribute("data-m", c.getAttribute("data-m"));
+          P.held++;
+          P.cnt.textContent = P.held + "/" + ROOM;
+          landed();
+        });
+        p.classList.remove("hide");                        // the place stays drawn while its number flies in
+        c.classList.add("gone");
+      }, function () {});
+    });
+  }
+
+  /* SLIDE 3: blocks and slices. Six steps of one animation: the ratings whole; cut into nine blocks that
      move apart to their places on the grid; the computers C11 to C33 appear around them; the guessed numbers whole,
      on the left of and above the computers; cut into slices that move to their places; the B and A computers
      appear. A whole table is the computers' own cells moved together (a transform per cell). */
   var WORDS2 = [
-    "The ratings: <b>36 numbers</b>. Gradient descent also keeps 24 guessed numbers, 36 predictions and 36 losses: " +
-      "132 numbers. A computer here has room for <b>21</b>.",
+    "The ratings again: <b>36 numbers</b>, too many for one computer.",
     "Cut the ratings every 2 customers and every 2 films: <b>nine blocks</b> of 4 ratings, each moved to a place of its own.",
-    "Nine computers, <b>C11 to C33</b>, one per block. Each holds its 4 ratings and keeps room for its copies, its " +
-      "predictions and its losses.",
+    "Nine of the computers, <b>C11 to C33</b>, one per block. Each holds its 4 ratings: 4 of its 21 places.",
     "The guessed numbers: the <b class=\"rub\">customers' numbers</b> on the left of the computers, the " +
       "<b class=\"och\">films' numbers</b> above them.",
     "Cut them too: the customers' numbers into 3 slices of 2 customers, the films' numbers into 3 slices of 2 films. " +
       "Each slice lines up with a row or a column of computers.",
-    "Six more computers: <b>B1 to B3</b> hold the films' slices, <b>A1 to A3</b> the customers' slices. Every " +
+    "The other six computers: <b>B1 to B3</b> hold the films' slices, <b>A1 to A3</b> the customers' slices. Every " +
       "computer of the grid has its share."
   ];
   var STEPS2 = ["The ratings", "Nine blocks", "Nine computers", "The guessed numbers", "Six slices", "Six more computers"];
   var WHOLE_R = 1.55;   // the whole ratings are drawn larger and shrink as they move to the computers
   var EX = 26;          // how far the blocks and slices first move apart, in pixels
   defineSlide({
-    title: "Too large for one computer",
+    title: "Blocks and slices",
     steps: STEPS2,
     build: function (ctx) {
       var r = ctx.root;
       r.classList.add("s2");
-      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 2" }), "Too large for one computer"]));
+      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 3" }), "Blocks and slices"]));
       wordsRow(ctx);
       buildGrid(ctx);
       // the headers of the whole tables and their cut lines, over the board
@@ -1017,7 +1239,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   }
   function setT(list, whole) { list.forEach(function (w) { w.e.style.transform = whole ? w.whole : ""; }); }
   function state2(ctx, k) {
-    // the board at the end of step k (k = -1: nothing yet, for the entry from slide 1)
+    // the board at the end of step k (k = -1: nothing yet, for the entry from slide 2)
     var U = G.U0, V = G.V0;
     eachC(ctx, function (c) {
       fillPanel(c, U, V, { R: true });
@@ -1224,9 +1446,9 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   }
   function paren(x, d) { var t = num(x, d); return x < 0 ? "(" + t + ")" : t; }
 
-  /* SLIDE 3: gradient descent on the grid, on slide 2's board. Its steps start where slide 2 ends: inside show(),
+  /* SLIDE 4: gradient descent on the grid, on slide 3's board. Its steps start where slide 3 ends: inside show(),
      k counts from the first of the 11 steps of Carlos's sketch, whose steps 1 to 3 (the ratings, the films' and the
-     customers' numbers placed on the computers) are slide 2's; k 3 is this slide's first step. */
+     customers' numbers placed on the computers) are slide 3's; k 3 is this slide's first step. */
   var WORDS3 = [
     "<b>1.</b> Every A computer sends a copy of its numbers to the 3 C computers of its row.",
     "<b>2.</b> Every B computer sends a copy of its numbers to the 3 C computers of its column.",
@@ -1267,7 +1489,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     },
     build: function (ctx) {
       var r = ctx.root;
-      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 3" }), "Gradient descent on the grid"]));
+      r.appendChild(el("h2", {}, [el("span", { class: "kick", text: "Slide 4" }), "Gradient descent on the grid"]));
       var head = wordsRow(ctx);
       // step 11's controls, on the right of the words: Play, Pause, Replay and the round
       ctx.run = { r: 0, playing: false, gen: 0 };
