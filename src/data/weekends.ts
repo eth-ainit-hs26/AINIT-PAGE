@@ -460,9 +460,10 @@ export const weekends: Weekend[] = [
     // the coding bazaar at 13:00. Each day's first row stays at 08:15, the Vorlesungsverzeichnis time (see the
     // schedule facts above), where the spreadsheet says 08:00; the break rows keep the programme office's venues.
     // The chips are the weekend's visualizations (pages in public/viz/we2/, copied from the private repository
-    // eth-ainit-hs26/w2-cx-private; each game opens its own Colab notebooks) and the business cases, one PDF per
-    // case on the row of the block it follows (public/slides/we2/, from cases-deck/ of the public repository
-    // eth-ainit-hs26/w2-recsys-bandits-lecture), published at Carlos's instruction of 2026-11-06.
+    // eth-ainit-hs26/w2-cx-private; each game opens its own Colab notebooks) and the business cases (public/slides/we2/,
+    // from cases-deck/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture), published at Carlos's
+    // instruction of 2026-11-06: since 2026-11-09 one PDF per block with all the cases that follow it, on that block's
+    // row ("for each block, put in one single deck all the slides with all the business cases"); before, one per case.
     friday: [
       {
         time: '08:15',
@@ -470,8 +471,7 @@ export const weekends: Weekend[] = [
         type: 'lecture',
         links: [
           { label: 'Once Upon a Video Store (game)', url: viz(2, 'video-store') },
-          { label: 'Case: Etsy', url: deck(2, 'ainit-hs26-case-etsy.pdf') },
-          { label: 'Case: Airbnb', url: deck(2, 'ainit-hs26-case-airbnb.pdf') },
+          { label: 'Cases: Etsy, Airbnb', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf') },
         ],
       },
       { time: '09:00', title: 'Inner product and nearest neighbors', type: 'exercise' },
@@ -492,7 +492,7 @@ export const weekends: Weekend[] = [
           { label: 'Matchmaker, part two: matrix factorization', url: viz(2, 'matchmaker-part-2') },
           { label: 'Matchmaker, part three: the whole picture', url: viz(2, 'matchmaker-part-3') },
           { label: 'Matchmaker, optional: gradient descent up close', url: viz(2, 'matchmaker-optional') },
-          { label: 'Case: Spotify', url: deck(2, 'ainit-hs26-case-spotify.pdf') },
+          { label: 'Case: Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
         ],
       },
       { time: '12:00', title: 'Matrix factorization', type: 'exercise' },
@@ -503,8 +503,7 @@ export const weekends: Weekend[] = [
         type: 'lecture',
         links: [
           { label: 'Once Upon a Mirror (game)', url: viz(2, 'mirror') },
-          { label: "Case: Spotify's home page", url: deck(2, 'ainit-hs26-case-spotify-home-page.pdf') },
-          { label: 'Case: Amazon Payments', url: deck(2, 'ainit-hs26-case-amazon-payments.pdf') },
+          { label: "Cases: Spotify's home page, Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
         ],
       },
       { time: '15:00', title: 'Bandits', type: 'exercise' },
@@ -515,7 +514,7 @@ export const weekends: Weekend[] = [
         type: 'lecture',
         links: [
           { label: 'Matchmaker on a Grid (visualization)', url: viz(2, 'matchmaker-grid') },
-          { label: "Case: LinkedIn's ads", url: deck(2, 'ainit-hs26-case-linkedin-ads.pdf') },
+          { label: "Case: LinkedIn's ads", url: deck(2, 'ainit-hs26-business-cases-parallelized-mf.pdf') },
         ],
       },
     ],
@@ -537,12 +536,10 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Guest lecture: Joachim M. Buhmann', url: SOON },
       { group: 'Business cases', label: 'All six cases', url: deck(2, 'ainit-hs26-business-cases.pdf') },
       { group: 'Business cases', label: 'All six cases (Handout)', url: deck(2, 'ainit-hs26-business-cases-handout.pdf') },
-      { group: 'Business cases', label: 'Etsy', url: deck(2, 'ainit-hs26-case-etsy.pdf') },
-      { group: 'Business cases', label: 'Airbnb', url: deck(2, 'ainit-hs26-case-airbnb.pdf') },
-      { group: 'Business cases', label: 'Spotify', url: deck(2, 'ainit-hs26-case-spotify.pdf') },
-      { group: 'Business cases', label: "Spotify's home page", url: deck(2, 'ainit-hs26-case-spotify-home-page.pdf') },
-      { group: 'Business cases', label: 'Amazon Payments', url: deck(2, 'ainit-hs26-case-amazon-payments.pdf') },
-      { group: 'Business cases', label: "LinkedIn's ads", url: deck(2, 'ainit-hs26-case-linkedin-ads.pdf') },
+      { group: 'Business cases', label: 'The inner product and nearest neighbors: Etsy, Airbnb', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf') },
+      { group: 'Business cases', label: 'Matrix product and matrix factorization: Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
+      { group: 'Business cases', label: "Bandits: Spotify's home page, Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
+      { group: 'Business cases', label: "Parallelized matrix factorization: LinkedIn's ads", url: deck(2, 'ainit-hs26-business-cases-parallelized-mf.pdf') },
       { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: SOON },
       { group: 'Coding exercises', label: 'Matrix factorization', url: SOON },
       { group: 'Coding exercises', label: 'Bandits', url: SOON },
