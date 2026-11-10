@@ -519,7 +519,17 @@ export const weekends: Weekend[] = [
       },
     ],
     saturday: [
-      { time: '08:15', title: 'Computing clusters', type: 'lecture' },
+      {
+        time: '08:15',
+        title: 'Computing clusters',
+        type: 'lecture',
+        // The first block of FDD weekend 7 ported into Codex plates, from clusters-deck/ of the public repository
+        // eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's instruction of 2026-11-10.
+        links: [
+          { label: 'Slides', url: deck(2, 'ainit-hs26-computing-clusters.pdf') },
+          { label: 'Handout', url: deck(2, 'ainit-hs26-computing-clusters-handout.pdf') },
+        ],
+      },
       { time: '09:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '10:00', title: 'Coffee break at HG E30.0075, until 10:30', type: 'break' },
       { time: '10:30', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
@@ -532,7 +542,8 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Matrix product and matrix factorization', url: SOON },
       { group: 'Lecture slides', label: 'Bandits', url: SOON },
       { group: 'Lecture slides', label: 'Parallelized matrix factorization', url: SOON },
-      { group: 'Lecture slides', label: 'Computing clusters', url: SOON },
+      { group: 'Lecture slides', label: 'Computing clusters', url: deck(2, 'ainit-hs26-computing-clusters.pdf') },
+      { group: 'Lecture slides', label: 'Computing clusters (Handout)', url: deck(2, 'ainit-hs26-computing-clusters-handout.pdf') },
       { group: 'Lecture slides', label: 'Guest lecture: Joachim M. Buhmann', url: SOON },
       { group: 'Business cases', label: 'All six cases', url: deck(2, 'ainit-hs26-business-cases.pdf') },
       { group: 'Business cases', label: 'All six cases (Handout)', url: deck(2, 'ainit-hs26-business-cases-handout.pdf') },
