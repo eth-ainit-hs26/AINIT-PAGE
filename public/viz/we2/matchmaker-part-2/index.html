@@ -734,6 +734,22 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* THE BOARD */
 .s2-x{--mx-xcg:42px; --mx-xrg:12px}
+/* Wide screens since 2026-11-10 (Carlos's twelfth message), from 1120 px (the projector, a laptop, an iPad on its side;
+   the board needs about 990 px): the losses on the right of the ratings, the average on the right of the losses
+   (sec2.js lifts it level with their middle row); under them the note, under the customers and the predictions, and
+   the slope picture of One small change (plot). The board scene and the plan put the note, the worked loss, under the
+   predictions, the ratings and the losses. Every board but the corner's keeps the same room under its rows (--s2-r3,
+   the height of the block of ∇), so it stands at one place from scene to scene. Narrower screens keep matrix.css's
+   textbook layout, the losses under the predictions and the ratings; there the slope picture takes the place of the
+   losses and the average on its step (below, and the phone's rules at the end). */
+@media (min-width: 1120px){
+  .mx-cross.mx-x-tb.s2-x{grid-template-columns:repeat(5, auto); grid-template-areas:"f f nb nb nb" "c p r s avg" "note note plot plot plot"}
+  .mx-cross.mx-x-tb.s2-x.s2-bd{grid-template-areas:"f f nb nb nb" "c p r s avg" ". note note note ."}
+  .s2-x.mx-x-tb > .mx-xs{justify-self:start; align-self:end; margin-top:0}
+  .s2-x.mx-x-tb > .mx-xa{align-self:end}
+  .s2-x:not(.s2-one) > .mx-xnote{min-height:var(--s2-r3, 155px)}
+  .s2-bd .s2-note{max-width:none; justify-items:center}
+}
 .s2-x .mx{--nt-w:58px; --nt-h:34px; --nt-fs:19px}
 /* every number cell keeps one width, so the run never shifts the picture */
 .s2-x td.mx-c > .nt-n{width:var(--nt-w)}
@@ -799,7 +815,8 @@ button.chip:hover{border-color:var(--rubric)}
 /* THE NOTE under the customers: the worked loss, the tools, the participant's keys */
 .s2-note{display:grid; justify-items:start; align-content:start; gap:10px; max-width:31ch}
 .s2-lf{display:flex; align-items:flex-end; gap:5px}
-.s2-lf[hidden]{display:none}
+/* hidden, the worked loss keeps its room, so the board does not move when it comes */
+.s2-lf[hidden]{display:flex; visibility:hidden}
 .s2-lq{display:grid; justify-items:center; gap:3px}
 .s2-lab{font-size:13px; font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600; line-height:1}
 .s2-ink .s2-lab{color:var(--ink)}
@@ -825,10 +842,52 @@ button.chip:hover{border-color:var(--rubric)}
 .s2-yt[data-phase="type"] .s2-mc td.mx-c, .s2-yt[data-phase="type"] .s2-mf td.mx-c{cursor:pointer}
 .s2-yt .s2-note{max-width:33ch}
 
+/* THE PLAN (2026-11-10, Carlos's twelfth message): a lit part of the board stands on a tinted panel (ochre, the numbers
+   that change; violet, the forward pass), the other parts dim; one number gets two small arrows, up and down */
+.s2-x .s2-m, .s2-x .s2-avg{transition:opacity .45s ease}
+.s2-x.s2-hl .s2-m:not(.s2-lit), .s2-x.s2-hl .s2-avg:not(.s2-lit){opacity:.26}
+.s2-x.s2-hl .mx-xarr{opacity:.26}
+.s2-hlr{stroke-width:2}
+.s2-hlr.s2-hm{fill:color-mix(in srgb, var(--g-move) 15%, transparent); stroke:color-mix(in srgb, var(--g-move) 70%, transparent)}
+.s2-hlr.s2-hf{fill:color-mix(in srgb, var(--g-fwd) 11%, transparent); stroke:color-mix(in srgb, var(--g-fwd) 55%, transparent)}
+.s2-udm{fill:var(--g-move)}
+
+/* THE SLOPE IN A PICTURE (2026-11-10): One small change's step 6, under the ratings and the losses. The look of the
+   optional game's close view (hopper.css): the curve violet, the triangle green, Before hollow, After filled. */
+.s2-xplot{grid-area:plot; justify-self:start; align-self:start}
+.s2-plot{position:relative; width:var(--s2-pw, 340px); height:var(--s2-ph, 150px)}
+.s2-plot[hidden]{display:none}
+.s2-psvg{position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible}
+.s2-pax{stroke:var(--ink); stroke-width:1.5; opacity:.75; fill:none}
+.s2-pgd{stroke:var(--muted); stroke-width:1.2; stroke-dasharray:4 4}
+.s2-ptk{fill:var(--muted); font-family:var(--serif); font-size:15px; font-variant-numeric:lining-nums tabular-nums}
+.s2-ptx{text-anchor:middle}
+.s2-pty{text-anchor:end}
+.s2-pti{fill:var(--ink); font-family:var(--serif); font-style:italic; font-size:16px}
+.s2-ptiy{fill:var(--g-fwd); font-weight:600}
+.s2-pcv{fill:none; stroke:var(--g-fwd); stroke-width:3; stroke-linecap:round; stroke-linejoin:round}
+.s2-ptr line{stroke:var(--g-slope); stroke-width:2.6; stroke-linecap:round}
+.s2-ptr .s2-phyp{stroke-width:3.2}
+.s2-ptf{fill:var(--g-slope); opacity:.13}
+.s2-ppt{stroke:var(--g-fwd); stroke-width:2.4; fill:var(--g-fwd)}
+.s2-ppt.s2-pold{fill:var(--leaf)}
+.s2-plab{position:absolute; white-space:nowrap; color:var(--g-slope); font-weight:700; font-size:16px; line-height:1;
+  font-variant-numeric:lining-nums tabular-nums}
+.s2-plab .s2-nab-g{width:.78em; height:.7em}
+.s2-plab-g{font-size:18px}
+/* Screens from 561 to 1119 px keep the textbook layout, the losses under the predictions and the ratings: the picture
+   stands there on its step only, in the place of the losses and the average, as on a phone */
+@media (min-width: 561px) and (max-width: 1119px){
+  .s2-xplot{grid-row:3; grid-column:2 / -1; justify-self:end; align-self:start}
+  .s2-nd[data-k="6"] .s2-plot, .s2-nd[data-k="7"] .s2-plot{display:none}
+  .s2-nd[data-k="5"] .mx-xs, .s2-nd[data-k="5"] .mx-xa, .s2-nd[data-k="5"] .mx-xarr,
+  .s2-nd[data-k="5"] .s2-flow, .s2-nd[data-k="5"] .s2-flowh{visibility:hidden}
+}
+
 /* The projector at 720p */
 @media (max-height: 760px){
   .s2-sc{gap:6px}
-  .s2-lead{font-size:18.5px; min-height:2.5em}
+  .s2-lead{font-size:18.5px; min-height:2.6em}
   .s2-x{--mx-xrg:8px}
   .s2-x{--mx-xjoin:14px}
   .s2-x .mx{--nt-w:54px; --nt-h:27px; --nt-fs:17px; --mx-py:1.5px}
@@ -841,6 +900,11 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-lcell .nt-n{--nt-h:31px; --nt-fs:18px; --nt-w:44px}
   .s2-msg, .s2-count{font-size:16px}
   .s2-ag .s2-ava .nt-n.s2-bn{--nt-w:78px}
+  .s2-x{--s2-r3:125px; --s2-ph:125px}
+  .s2-ptk{font-size:14px}
+  .s2-pti{font-size:15px}
+  .s2-plab{font-size:15px}
+  .s2-plab-g{font-size:16.5px}
 }
 /* Phones: the note on top, three columns, the average under the losses */
 @media (max-width: 560px){
@@ -884,9 +948,11 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-ag .s2-ava .nt-n.s2-bn{--nt-w:64px}
 }
 
-/* NABLA AND THE UPDATE (2026-11-06, Carlos's eighth message), nudge's steps 5 to 7: the fraction and w = w - α∇ in the
-   note under the customers. On a wide screen the block stands out of the grid's flow (it is wider than the
-   customers), so the board keeps its place; on a phone it stands on top of the board, and only the update from step 6 on. */
+/* NABLA AND THE UPDATE (2026-11-06, Carlos's eighth message), nudge's steps 5 to 8: the fraction and w = w - α∇ in the
+   note under the customers. On a wide screen the block stands out of the grid's flow (Again and again's fractions
+   are wider than the customers and the predictions), and the note keeps its room (--s2-r3), so the board keeps its
+   place; on a phone it stands on top of the board: the fraction on step 5, the slope picture alone on step 6, only
+   the update from step 7 on. */
 .s2-nd .s2-note, .s2-ag .s2-note{position:relative}
 .s2-nab{position:absolute; left:0; top:10px; z-index:3; display:grid; justify-items:start; gap:12px; width:max-content}
 .s2-nab[hidden], .s2-nab > [hidden]{display:none}
@@ -907,7 +973,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s2-nab .nt-n.s2-gn{--nt-w:40px; --nt-h:30px; --nt-fs:17px; padding:0 .22em}
 .s2-ul{display:grid; grid-template-columns:auto auto; column-gap:6px; row-gap:9px; align-items:center}
 @media (max-height: 760px){
-  .s2-nab{top:6px; gap:9px}
+  .s2-nab{top:0; gap:6px}
   .s2-nab .nt-n.s2-gn{--nt-w:38px; --nt-h:27px; --nt-fs:16px}
   .s2-fq{gap:3px}
   .s2-fr > .s2-ft{padding-bottom:4px}
@@ -916,12 +982,23 @@ button.chip:hover{border-color:var(--rubric)}
 }
 @media (max-width: 560px){
   .s2-nab{position:static; justify-self:center; justify-items:center; gap:6px}
-  .s2-nd[data-k="5"] .s2-gl, .s2-nd[data-k="6"] .s2-gl{display:none}
+  .s2-nd[data-k="6"] .s2-gl, .s2-nd[data-k="7"] .s2-gl{display:none}
+  /* the slope picture, on its step only, takes the place of the losses and the average (its axis carries the
+     average's Before and After); the fraction above the board goes, and so do the lines into what is hidden */
+  .s2-xplot{grid-row:4 / 6; grid-column:1 / -1; justify-self:center; align-self:center}
+  .s2-nd[data-k="5"] .s2-nab, .s2-nd[data-k="6"] .s2-plot, .s2-nd[data-k="7"] .s2-plot{display:none}
+  .s2-nd[data-k="5"] .mx-xs, .s2-nd[data-k="5"] .mx-xa, .s2-nd[data-k="5"] .mx-xarr,
+  .s2-nd[data-k="5"] .s2-flow, .s2-nd[data-k="5"] .s2-flowh{visibility:hidden}
+  .s2-x{--s2-pw:310px; --s2-ph:112px}
+  .s2-ptk{font-size:13px}
+  .s2-pti{font-size:13.5px}
+  .s2-plab{font-size:13.5px}
+  .s2-plab-g{font-size:15px}
   .s2-nab .nt-n.s2-gn{--nt-w:32px; --nt-h:20px; --nt-fs:14px}
   .s2-fr > .s2-ft{padding-bottom:2px}
   .s2-fr > .s2-fq:last-child{padding-top:2px}
   /* the block takes the room the tag "smaller" had under the average (it showed it on the step before) */
-  .s2-nd[data-k="4"] .s2-tag, .s2-nd[data-k="5"] .s2-tag{display:none}
+  .s2-nd[data-k="4"] .s2-tag, .s2-nd[data-k="5"] .s2-tag, .s2-nd[data-k="6"] .s2-tag{display:none}
   .s2-sym{font-size:20px}
   .s2-gop{font-size:17px}
   .s2-gk{font-size:16px}
@@ -961,12 +1038,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Once Upon a Matchmaker: the shared base, owned by the main session.
    The scene engine (copied from Once Upon a Video Store), the data and the helpers that every section uses.
    Each agent's scenes live in their own file (sec1.js, ...) and register with MF.define; dev.html then calls
-   MF.start(). The engine adds a section card before sections 2 to 5 and a leaf "Your turn in Python" at the
-   end of sections 1 to 4 (PYTHON below), so agents never build those.
+   MF.start(). The engine adds a section card before sections 1 to 5 and a leaf "Your turn in Python" at the
+   end of sections 1 to 4 (PYTHON below), so agents never build those. Section 0 is the preface of part one
+   (sec0.js, since 2026-11-10): the cover and matrix factorization at a glance, with no card and no Python leaf.
 
    A scene:
      MF.define("key", {
-       act: 1,                       // the SECTION, 1 to 5 (the video store called them acts; `section: 1` works too);
+       act: 1,                       // the SECTION, 0 to 5 (the video store called them acts; `section: 1` works too);
                                      // scenes are shown section by section, in the order they were defined
                                      // (or in the order PLACE in this file lists them, as in section 3)
        title: "A newcomer",          // the heading of the leaf and the tooltip in the pager
@@ -1026,7 +1104,18 @@ button.chip:hover{border-color:var(--rubric)}
     { id: "paddington", t: "Paddington", short: "Paddington", y: 2014, g: "🐻", d: "#F3E0C7", sec: 2,
       sum: "A young bear from Peru travels to London, where the Brown family takes him in." },
     { id: "martian", t: "The Martian", short: "The Martian", y: 2015, g: "🥔", d: "#F7D2C4", sec: 2,
-      sum: "An astronaut left behind on Mars after a storm grows potatoes and works out how to stay alive until a rescue can reach him." }
+      sum: "An astronaut left behind on Mars after a storm grows potatoes and works out how to stay alive until a rescue can reach him." },
+    // Section 0, the preface of part one: five films that four customers rated, some of them.
+    { id: "jaws", t: "Jaws", short: "Jaws", y: 1975, g: "🦈", d: "#D6E8F7", sec: 0,
+      sum: "A great white shark attacks swimmers off a summer resort island, and the police chief goes to sea with a scientist and a shark hunter to kill it." },
+    { id: "toystory", t: "Toy Story", short: "Toy Story", y: 1995, g: "🤠", d: "#FFF0B8", sec: 0,
+      sum: "A cowboy doll is jealous when a space ranger toy becomes his boy's favourite, until the two are lost together and must find their way home." },
+    { id: "titanic", t: "Titanic", short: "Titanic", y: 1997, g: "🚢", d: "#CFE3F5", sec: 0,
+      sum: "A poor artist and a rich young woman fall in love on board the Titanic during its first voyage in 1912." },
+    { id: "jurassic", t: "Jurassic Park", short: "Jurassic Park", y: 1993, g: "🦖", d: "#D8EDD3", sec: 0,
+      sum: "Dinosaurs cloned for a theme park on an island break loose during a tour before the park opens." },
+    { id: "frozen", t: "Frozen", short: "Frozen", y: 2013, g: "⛄", d: "#E4D7F2", sec: 0,
+      sum: "A princess sets out with an ice harvester and a snowman to find her sister, whose magic has trapped their kingdom in an endless winter." }
   ];
 
   // Customers. n name, d tile colour, sec the section that introduces them.
@@ -1037,14 +1126,21 @@ button.chip:hover{border-color:var(--rubric)}
     // Section 2: three customers who filled in no profile; they only rated two films.
     { id: "ida",  n: "Ida",  d: "#D8EDD3", sec: 2 },
     { id: "raj",  n: "Raj",  d: "#E4D7F2", sec: 2 },
-    { id: "elsa", n: "Elsa", d: "#D6E8F7", sec: 2 }
+    { id: "elsa", n: "Elsa", d: "#D6E8F7", sec: 2 },
+    // Section 0, the preface of part one: four customers known only by their ratings.
+    { id: "ada",  n: "Ada",  d: "#E2E8C9", sec: 0 },
+    { id: "hugo", n: "Hugo", d: "#FFE1C6", sec: 0 },
+    { id: "nora", n: "Nora", d: "#F3E0C7", sec: 0 },
+    { id: "tom",  n: "Tom",  d: "#F7D2C4", sec: 0 }
   ];
 
   // Section 2: the two columns of a guessed embedding. Nobody filled in a profile, so these columns have no
   // names: they mean whatever the guessing makes of them. Drawn as numbered tiles; isAxis() is true for them.
+  // The preface (section 0) uses three: d3 is its own.
   var DIMS = [
     { id: "d1", t: "First number", short: "First", g: "①", d: "#EFE6D2", dim: true },
-    { id: "d2", t: "Second number", short: "Second", g: "②", d: "#EFE6D2", dim: true }
+    { id: "d2", t: "Second number", short: "Second", g: "②", d: "#EFE6D2", dim: true },
+    { id: "d3", t: "Third number", short: "Third", g: "③", d: "#EFE6D2", dim: true }
   ];
 
   // Every known number, row by row: V[row][column]. A customer's profile and a film's critic answers are rows
@@ -1063,6 +1159,21 @@ button.chip:hover{border-color:var(--rubric)}
     ida:  { paddington:  2, martian:  1 },
     raj:  { paddington: -1, martian:  2 },
     elsa: { paddington:  1, martian: -2 }
+  };
+
+  // Section 0, the preface of part one (sec0.js; Carlos, 2026-11-10): four customers rated some of five films. The
+  // right two tables of embeddings, three numbers each, are shown at once ("Here we cheat a bit"), and their product
+  // gives back every known rating and fills the six holes. Invented numbers from ../tools/s0_preface.py (seed
+  // 20261110): every number of the two tables is -1, 0 or 1, every number of their product between -2 and 2. The
+  // product, rows Ada, Hugo, Nora, Tom, columns Jaws, Toy Story, Titanic, Jurassic Park, Frozen, a hole in brackets:
+  //   Ada 0 [-2] -1 [1] -2  /  Hugo 1 [2] [2] -2 1  /  Nora -1 -2 -2 2 [-1]  /  Tom -2 1 [-1] 1 2
+  var S0 = {
+    people: ["ada", "hugo", "nora", "tom"],
+    films: ["jaws", "toystory", "titanic", "jurassic", "frozen"],
+    dims: ["d1", "d2", "d3"],
+    c: [[0, 1, 1], [1, -1, -1], [-1, 1, 1], [-1, -1, 0]],                    // one row per customer
+    f: [[1, 1, -1], [0, -1, -1], [1, 0, -1], [-1, 0, 1], [-1, -1, -1]],     // one row per film, drawn turned
+    holes: [[0, 1], [0, 3], [1, 1], [1, 2], [2, 4], [3, 2]]                  // [customer, film]: not rated
   };
 
   // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
@@ -1385,9 +1496,11 @@ button.chip:hover{border-color:var(--rubric)}
   })();
 
   /* SCENE ENGINE */
-  // The five sections (the engine's word for them is still "act"). Their plan is source/PLAN.md.
+  // The five sections (the engine's word for them is still "act"). Their plan is source/PLAN.md. Section 0 is the
+  // preface of part one (Carlos, 2026-11-10: "We need to add a section before all these sections"); only game 1
+  // holds it.
   var SECTIONS = [1, 2, 3, 4, 5];
-  var ACT_NAMES = { 1: "Matrix multiplication", 2: "Matrix factorization", 3: "Smaller hops",
+  var ACT_NAMES = { 0: "Matrix factorization at a glance", 1: "Matrix multiplication", 2: "Matrix factorization", 3: "Smaller hops",
                     4: "Many customers, many films", 5: "The whole picture" };
 
   // The four games (Carlos, 2026-11-05: "Section one on its own becomes its own visualization ... it's now a
@@ -1397,7 +1510,7 @@ button.chip:hover{border-color:var(--rubric)}
   // interaction tests expect. sections: the sections the game holds; tag: the words beside the brand; cards: what a
   // section card says in this game (kicker, its numeral, no skip button); back: the last line of a Python leaf.
   var GAMES = {
-    "1": { sections: [1], tag: "Part one: matrix multiplication",
+    "1": { sections: [0, 1], tag: "Part one: matrix multiplication",
            back: { 1: "Then open part two of the Matchmaker: matrix factorization." } },
     "2": { sections: [2], tag: "Part two: matrix factorization",
            cards: { 2: { kicker: "Once Upon a Matchmaker, part two", num: 2 } },
@@ -1419,12 +1532,15 @@ button.chip:hover{border-color:var(--rubric)}
   }
 
   // Section cards (Carlos, 2026-11-03: "there are section dividers"). The engine puts one leaf of its own before
-  // sections 2 to 5: the leaf turns violet, then the section's numeral, its name, one line and a small motif come
-  // in one after another. Section 1 opens with the cover instead. Sections 3 and 4 are optional (Carlos, 2026-11-04:
+  // sections 1 to 5: the leaf turns violet, then the section's numeral, its name, one line and a small motif come
+  // in one after another. Until 2026-11-10 section 1 opened with the cover instead; since then the cover and the
+  // preface (section 0, no card) come first, and section 1 has its card. Sections 3 and 4 are optional (Carlos, 2026-11-04:
   // "The part of the gradient should be marked as optional and allow the possibility to skip it. Same for part 4."):
   // their cards say so and carry a button to section 5, every leaf of theirs carries the tag "optional", and their
   // leaves "Your turn in Python" open the optional notebook.
   var ACT_INTRO = {
+    1: { kicker: "Section one", motif: "product",
+         line: "How two tables, one row per customer and one column per film, give a score for every customer and every film." },
     2: { kicker: "Section two", motif: "unknown",
          line: "In real life nobody fills in a profile. The Matchmaker sees only ratings, and has to find the numbers behind them." },
     3: { kicker: "Section three, optional", motif: "hop", optional: true, skipTo: 5, skip: "Skip sections 3 and 4",
@@ -1448,6 +1564,12 @@ button.chip:hover{border-color:var(--rubric)}
   function introMotif(kind) {
     var N = window.MF && window.MF.N;
     if (kind === "unknown" && N) return [N.slot(), N.slot(), el("span", "act-op", "×"), N.slot(), N.slot()];
+    // Section 1: a 2 x 3 matrix times a 3 x 2 one gives a 2 x 2 one, drawn as little squares (MF.M.grid).
+    var Mx = window.MF && window.MF.M;
+    if (kind === "product" && Mx && Mx.grid) {
+      return [Mx.grid(2, 3, { label: false }), el("span", "act-op", "×"), Mx.grid(3, 2, { label: false }),
+              el("span", "act-op", "="), Mx.grid(2, 2, { label: false })];
+    }
     if (kind === "hop") {
       // Section 3's grasshopper (MF.H.glyph, hopper.js), the emoji until that file draws one.
       var H = window.MF && window.MF.H, gh = el("span", "act-op act-hopper");
@@ -1530,7 +1652,7 @@ button.chip:hover{border-color:var(--rubric)}
   function define(key, spec) {
     if (KEYS[key]) { console.warn("MF: scene defined twice: " + key); return; }
     spec.key = key;
-    spec.act = spec.section || spec.act || 1;
+    spec.act = spec.section !== undefined ? spec.section : spec.act !== undefined ? spec.act : 1;
     spec.steps = Math.max(1, spec.steps || 1);
     // The section card has order -1 and the Python leaf 1e6, so a listed scene (between -1 and 0) comes right after
     // the card and before the unlisted scenes of its section.
@@ -1722,7 +1844,7 @@ button.chip:hover{border-color:var(--rubric)}
 
   window.MF = {
     // data
-    AXES: AXES, DIMS: DIMS, FILMS: FILMS, PEOPLE: PEOPLE, V: V, S1: S1, S2: S2, S3: S3, S4: S4, PLACE: PLACE,
+    AXES: AXES, DIMS: DIMS, FILMS: FILMS, PEOPLE: PEOPLE, V: V, S0: S0, S1: S1, S2: S2, S3: S3, S4: S4, PLACE: PLACE,
     LEVELS: LEVELS, KIND: KIND, WORD: WORD, CRITIC_WORD: CRITIC_WORD, MARKNAME: MARKNAME, MINUS: MINUS,
     ACT_NAMES: ACT_NAMES, SECTIONS: SECTIONS, COLAB: COLAB, COLAB_OPT: COLAB_OPT, PYTHON: PYTHON, GAMES: GAMES,
     game: function () { return GAME; },
@@ -3482,7 +3604,11 @@ button.chip:hover{border-color:var(--rubric)}
         var ly = (Pp.body.t + Pp.body.b) / 2;
         paintArrow("pr", [[Pp.out.r + GAP, ly], [R.out.l - GAP, ly]], null);
       } else paintArrow("pr", null);
-      if (S && Pp && R) {
+      if (S && R && S.out.l > R.out.r + 12) {
+        // the losses on the right of the ratings (part two's desk layout since 2026-11-10): one arrow straight in
+        paintArrow("rs", run(R.out.r, S.out.l, R.body.cy), "r");
+        paintArrow("ps", null);
+      } else if (S && Pp && R) {
         var yj = (Math.max(Pp.out.b, R.out.b) + S.out.t) / 2;
         if (S.out.t - Math.max(Pp.out.b, R.out.b) > 14) {
           paintArrow("rs", [[Pp.body.cx, Pp.out.b + 3], [Pp.body.cx, yj], [R.body.cx, yj], [R.body.cx, R.out.b + 3]], null);
@@ -4021,21 +4147,27 @@ button.chip:hover{border-color:var(--rubric)}
    the rule, the loop). Classes start with s2-.
 
    board   one click each: the ratings; the customers' embeddings, empty; the films' embeddings, empty, on top of them;
-           a first guess (MF.S2.start); the predictions, which just appear; the loss of Ida and Paddington worked as
-           (prediction - rating) squared; the other five losses; their average
+           a first guess (MF.S2.start); the predictions, which just appear; three losses worked one by one as
+           (prediction - rating) squared (Ida and Paddington, Ida and The Martian, Raj and Paddington; since 2026-11-10,
+           Carlos's twelfth message); the other three losses at once; their average
+   plan    (2026-11-10, his twelfth message) four steps on the board, each lighting parts of it: the embeddings change to
+           make the average loss small; a small loss brings the predictions close to the ratings; one number at a time,
+           a ring walking over them; for each number, a little up or a little down
    nudge   The Martian's second number: zoomed into a Before box; After, the number plus 0.01; the average's After;
            smaller or larger; since 2026-11-06 (Carlos's eighth message) the change of the average over the change of
-           the number, named ∇, and the update w = w - α∇ with its numbers, in a block under the customers; the update,
-           an ochre arrow from the average back to the number (MF.Z.nudge)
+           the number, named ∇, and the update w = w - α∇ with its numbers, in a block under the customers; since
+           2026-11-10 between the two the slope in a picture: the average loss against the number, the triangle of the
+           move, ∇ its slope; the update, an ochre arrow from the average back to the number (MF.Z.nudge)
    again   every number in turn, then again, round after round, until the average loss is about 0 (MF.Z.run)
    yours   the corner Ida and Paddington: the participant types four numbers, then for each number reads its Before and
            After and the loss's, and chooses Up or Down; the game moves it by the Matchmaker's amount (MF.Z.move)
 
    The picture is M.cross with o.layout "textbook" (matrix.js, since 2026-11-06, Carlos's seventh message): the
    customers' embeddings one row per customer, the films' embeddings turned, one column per film, ABOVE the predictions,
-   which stand where a customer's row and a film's column cross; the ratings on the right of the predictions, the
-   losses under those two, the average on the right of the losses, one number's Before and After above the ratings. Arrows of the forward pass in violet, the
-   update in ochre. A motion plays only when its step is reached from the step before; Back, the pager and a reload
+   which stand where a customer's row and a film's column cross; the ratings on the right of the predictions, one
+   number's Before and After above the ratings. Since 2026-11-10 a wide screen has the losses on the right of the
+   ratings and the average on the right of the losses (sec2.css); a phone keeps the losses under the predictions and
+   the ratings, the average under the losses. Arrows of the forward pass in violet, the update in ochre. A motion plays only when its step is reached from the step before; Back, the pager and a reload
    draw the end state at once; leaving a scene stops every timer. */
 (function () {
   "use strict";
@@ -4178,8 +4310,9 @@ button.chip:hover{border-color:var(--rubric)}
     [["c", "Customer embeddings", "Customers"], ["f", "Film embeddings", "Films"]].forEach(function (x) {
       put(m[x[0]].caption, [el("span", "s2-long", x[1]), el("span", "s2-short", x[2])]);
     });
-    if (!o.one) m.s = M.matrix({ rows: o.people, cols: o.films, fill: "slots", caption: "Losses", colHeads: "pic",
-                                 rowHeads: "pic", size: "sm", cls: "s2-m s2-ms s2-fwd" });
+    // no heads: since 2026-11-10 the losses stand on the right of the ratings, row for row (on a phone under them)
+    if (!o.one) m.s = M.matrix({ rows: o.people, cols: o.films, fill: "slots", caption: "Losses", colHeads: "none",
+                                 rowHeads: "none", size: "sm", cls: "s2-m s2-ms s2-fwd" });
     // A Before and After pair: two number cells, an arrow between them with a small label above it.
     function pair(cls) {
       var w = el("div", "s2-ba " + cls);
@@ -4217,23 +4350,27 @@ button.chip:hover{border-color:var(--rubric)}
     nbEl.appendChild(NB.el);
     var note = el("div", "s2-note");
     // o.noNb: a board that never shows one number's Before and After (the first scene) keeps no room for it
-    var parts = { c: m.c.el, f: m.f.el, p: m.p.el, r: m.r.el, note: note, layout: "textbook", cls: "s2-x" + (o.one ? " s2-one" : "") };
+    var parts = { c: m.c.el, f: m.f.el, p: m.p.el, r: m.r.el, note: note, layout: "textbook",
+                  cls: "s2-x" + (o.one ? " s2-one" : "") + (o.cls ? " " + o.cls : "") };
     if (!o.noNb) parts.nb = nbEl;
     if (o.one) parts.s = avgEl; else { parts.s = m.s.el; parts.avg = avgEl; }
     var X = M.cross(parts);
+    // o.plot: an element for the place under the ratings and the losses (One small change's slope picture)
+    if (o.plot) { var plotSlot = el("div", "mx-xslot s2-xplot"); plotSlot.appendChild(o.plot); X.el.appendChild(plotSlot); }
     // Two layers: the zoom and the lines behind the tables (whose cells are opaque), so a line that crosses a row
     // passes behind its numbers (Again and again moves every number, the customers' too); the arrowheads in front.
     function layerOf(cls) { var s = document.createElementNS(SVGNS, "svg"); s.setAttribute("class", cls); s.setAttribute("aria-hidden", "true"); return s; }
     var ov = layerOf("s2-ov"), ovh = layerOf("s2-ov s2-ovh");
     function mk(tag, cls, into) { var n = document.createElementNS(SVGNS, tag); n.setAttribute("class", cls); (into || ov).appendChild(n); return n; }
     var G = { cone: mk("polygon", "s2-cone"), flow: mk("path", "s2-flow"), flowH: mk("path", "s2-flowh", ovh),
-              upd: mk("path", "s2-upd"), updH: mk("path", "s2-updh", ovh) };
+              upd: mk("path", "s2-upd"), updH: mk("path", "s2-updh", ovh), lit: mk("g", "s2-hlg"), ud: mk("g", "s2-udg", ovh) };
     X.el.appendChild(ov);
     X.el.appendChild(ovh);
     var layer = el("div", "s2-fly");
     X.el.appendChild(layer);
 
-    var S = { c: null, f: null, pOn: null, sOn: null, avgOn: false, on: {}, nb: null, av: null, cone: null, flow: false, upd: null, tgt: null };
+    var S = { c: null, f: null, pOn: null, sOn: null, avgOn: false, on: {}, nb: null, av: null, cone: null, flow: false, upd: null, tgt: null,
+              lit: null, ud: null };
     function matOf(which) { return which === "c" ? m.c : m.f; }
     function rows(which) { return which === "c" ? S.c : S.f; }
     function full() {
@@ -4348,12 +4485,58 @@ button.chip:hover{border-color:var(--rubric)}
         show(G.upd);
         if (!nbr) show(G.updH);
       }
+      // The plan's panels behind the lit parts, and two small arrows, up and down, on the right of one number.
+      G.lit.textContent = "";
+      (S.lit || []).forEach(function (x) {
+        var b = x[0] === "avg" ? rel(AV.bn) : cellsBox(m[x[0]]);
+        if (!b || !b.w) return;
+        var pad = 4, rc = mk("rect", "s2-hlr " + (x[1] === "m" ? "s2-hm" : "s2-hf"), G.lit);
+        [["x", b.l - pad], ["y", b.t - pad], ["width", b.w + 2 * pad], ["height", b.h + 2 * pad]].forEach(function (a) { rc.setAttribute(a[0], a[1].toFixed(1)); });
+        rc.setAttribute("rx", "10");
+      });
+      if (S.lit) show(G.lit);
+      G.ud.textContent = "";
+      var udTd = S.ud ? matOf(S.ud[0]).td(S.ud[1], S.ud[2]) : null;
+      if (udTd && udTd.firstChild) {
+        var ub = rel(udTd.firstChild), ux = ub.r + 22, s = 9, w2 = 7;
+        mk("path", "s2-udm", G.ud).setAttribute("d", pts([[ux - w2, ub.cy - 4], [ux, ub.cy - 4 - s], [ux + w2, ub.cy - 4]]) + " Z");
+        mk("path", "s2-udm", G.ud).setAttribute("d", pts([[ux - w2, ub.cy + 4], [ux, ub.cy + 4 + s], [ux + w2, ub.cy + 4]]) + " Z");
+        show(G.ud);
+      }
+    }
+    // The box of a matrix's numbers: from its first cell to its last (logical indices; a turned matrix too).
+    function cellsBox(mat) {
+      if (!mat) return null;
+      var a = mat.td(0, 0), z = mat.td(mat.R - 1, mat.C - 1);
+      if (!a || !z || !a.offsetWidth) return null;
+      var p = rel(a), q = rel(z), l = Math.min(p.l, q.l), t = Math.min(p.t, q.t), r = Math.max(p.r, q.r), b = Math.max(p.b, q.b);
+      return { l: l, t: t, r: r, b: b, w: r - l, h: b - t, cx: (l + r) / 2, cy: (t + b) / 2 };
+    }
+    // A wide screen puts the average on the right of the losses: its slot moves up or down until its number is level
+    // with their middle row, so the arrow between them runs straight (a phone puts it under them).
+    function levelAvg() {
+      var slot = avgEl.parentNode;
+      if (!m.s || !slot || !slot.style) return;
+      slot.style.transform = "";
+      if (!avgEl.offsetWidth || !m.s.el.offsetWidth || rel(avgEl).l < rel(m.s.el).r) return;
+      var dy = (cellsBox(m.s).cy - liftOf(m.s.td(0, 0))) - (rel(AV.bn).cy - liftOf(AV.bn));
+      if (Math.abs(dy) > 0.5) slot.style.transform = "translateY(" + dy.toFixed(1) + "px)";
+    }
+    // How far a rise or another moving transform shifts a node down at this moment, between it and the board: the
+    // levelling measures where the node stands at rest
+    function liftOf(node) {
+      var y = 0;
+      for (var n = node; n && n !== X.el; n = n.parentElement) {
+        var t = getComputedStyle(n).transform;
+        if (t && t !== "none") y += new DOMMatrixReadOnly(t).m42;
+      }
+      return y;
     }
     var queued = false;
     function later() {
       if (queued) return;
       queued = true;
-      requestAnimationFrame(function () { queued = false; drawOv(); });
+      requestAnimationFrame(function () { queued = false; levelAvg(); X.redraw(); drawOv(); });
     }
     if (window.ResizeObserver) { var ro = new ResizeObserver(later); ro.observe(X.el); }
     X.el.addEventListener("transitionend", later);
@@ -4370,7 +4553,21 @@ button.chip:hover{border-color:var(--rubric)}
         avgEl.classList.toggle("s2-off", o.one ? !on.s : !on.avg);
         X.arrows({ cp: !!(on.c && on.p), fp: !!(on.f && on.p), pr: !!(on.p && on.r), rs: !!(on.p && on.r && on.s),
                    ps: !!(on.p && on.r && on.s), sa: !!(on.s && on.avg) });
+        levelAvg();
         X.redraw();
+        return B;
+      },
+      // The plan: list [[part, tone], ...] the lit parts (part c, f, p, r, s or avg; tone "m" ochre, "f" violet), the
+      // others dim; ud [which, r, k] a number that gets the arrows up and down. lit(null) shows everything.
+      lit: function (list, ud) {
+        S.lit = list && list.length ? list : null;
+        S.ud = ud || null;
+        var on = {};
+        (S.lit || []).forEach(function (x) { on[x[0]] = true; });
+        ["c", "f", "p", "r", "s"].forEach(function (k) { if (m[k]) m[k].el.classList.toggle("s2-lit", !!on[k]); });
+        avgEl.classList.toggle("s2-lit", !!on.avg);
+        X.el.classList.toggle("s2-hl", !!S.lit);
+        drawOv();
         return B;
       },
       // The whole state at once. g: { c, f } the guess (rows; null or a null entry draws a slot); p, s: which
@@ -4396,7 +4593,7 @@ button.chip:hover{border-color:var(--rubric)}
         drawOv();
         return B;
       },
-      redraw: function () { X.redraw(); drawOv(); return B; },
+      redraw: function () { levelAvg(); X.redraw(); drawOv(); return B; },
       cell: function (part, i, j) { return m[part] ? m[part].td(i, j) : null; },
       item: function (part, i, j) { var td = m[part] ? m[part].td(i, j) : null; return td ? td.firstChild : null; },
       guessCell: function (which, r, k) { var td = matOf(which).td(r, k); return td ? td.firstChild : null; },
@@ -4481,21 +4678,28 @@ button.chip:hover{border-color:var(--rubric)}
   function n2(x) { return MF.dec(x, 2); }
   function ratingOf(i, j) { return R0[i][j]; }
 
-  /* 1. THE BOARD */
+  /* 1. THE BOARD. Since 2026-11-10 (Carlos's twelfth message, REQUEST.md: "only one is not enough") three losses are
+     worked one by one, in reading order, before the rest come at once. */
   var BD = null;
+  var WL = [[0, 0], [0, 1], [1, 0]];                  // the worked losses: [customer, film]
+  var WORDS = ["no", "one", "two", "three", "four", "five", "six"];
   var T1S = ["Only the ratings", "Customer embeddings", "Film embeddings", "A first guess", "The predictions",
-             "The loss of one rating", "Every loss", "The average loss"];
+             "The loss of one rating", "A second loss", "A third loss", "Every loss", "The average loss"];
+  function pairName(w) { return MF.get(PEOPLE[w[0]]).n + " and " + MF.get(FILMS[w[1]]).t; }
   function L1(k) {
-    var p0 = T0.P[0][0], r0 = ratingOf(0, 0);
+    var w = k >= 5 && k <= 7 ? WL[k - 5] : null, p = w ? T0.P[w[0]][w[1]] : 0, r = w ? ratingOf(w[0], w[1]) : 0;
+    var rest = T0.n - WL.length;
     return [
       "Ida, Raj and Elsa rated two films. Nobody filled in a profile: the ratings are all the Matchmaker knows.",
       "The Matchmaker looks for an embedding of each customer: two numbers, in columns that have no names.",
       "And an embedding of each film: a column of two numbers.",
       "It starts from a guess.",
       "The predictions: every customer's row with every film's column, the product of the two matrices, as in part one.",
-      "How far off is a prediction? Its loss: the prediction minus the rating, squared. For Ida and Paddington: " +
-        MF.num(p0) + " and " + MF.num(r0) + ".",
-      "The same for the other " + (T0.n - 1 === 5 ? "five" : String(T0.n - 1)) + " ratings.",
+      "How far off is a prediction? Its loss: the prediction minus the rating, squared. For " + (w ? pairName(w) : "") + ": " +
+        MF.num(p) + " and " + MF.num(r) + ".",
+      (w ? pairName(w) : "") + ": the prediction " + MF.num(p) + ", the rating " + MF.num(r) + ".",
+      (w ? pairName(w) : "") + ": the prediction " + MF.num(p) + ", the rating " + MF.num(r) + ".",
+      "The same for the other " + (WORDS[rest] || String(rest)) + " ratings, at once.",
       "Their average, " + n2(T0.avg) + ", measures the whole guess in one number. The smaller, the better."
     ][k];
   }
@@ -4528,16 +4732,19 @@ button.chip:hover{border-color:var(--rubric)}
     LF.el.setAttribute("aria-label", "the prediction " + MF.spoken(p) + " minus the rating " + MF.spoken(r) + ", squared, is " + MF.spoken(s));
     return { r: LF.R.box.firstChild, p: LF.P.box.firstChild, s: sc };
   }
+  function worked(i, j) { return WL.some(function (w) { return w[0] === i && w[1] === j; }); }
   function boardState(k) {
-    var B = BD.B;
-    B.parts({ r: true, c: k >= 1, f: k >= 2, p: k >= 4, s: k >= 5, avg: k >= 7 });
-    var s0 = {}; s0["0,0"] = true;
+    var B = BD.B, w = k >= 5 && k <= 7 ? WL[k - 5] : null, sOn = null;
+    B.parts({ r: true, c: k >= 1, f: k >= 2, p: k >= 4, s: k >= 5, avg: k >= 9 });
+    if (k >= 8) sOn = "all";
+    else if (k >= 5) { sOn = {}; WL.slice(0, k - 4).forEach(function (x) { sOn[x[0] + "," + x[1]] = true; }); }
     B.set({ g: k >= 3 ? G0 : { c: [[null, null], [null, null], [null, null]], f: [[null, null], [null, null]] },
-            p: k >= 4 ? "all" : null, s: k >= 6 ? "all" : (k === 5 ? s0 : null), avg: k >= 7,
+            p: k >= 4 ? "all" : null, s: sOn, avg: k >= 9,
             nb: null, av: null, tgt: null, cone: false, flow: false, upd: false });
-    BD.lf.el.hidden = k !== 5;
-    if (k === 5) fillLoss(BD.lf, 0, 0, 1);
-    ["p", "r", "s"].forEach(function (x) { var td = B.cell(x, 0, 0); if (td) td.classList.toggle("s2-ring", k === 5); });
+    BD.lf.el.hidden = !w;
+    if (w) fillLoss(BD.lf, w[0], w[1], 1);
+    BD.root.querySelectorAll("td.s2-ring").forEach(function (td) { td.classList.remove("s2-ring"); });
+    if (w) ["p", "r", "s"].forEach(function (x) { var td = B.cell(x, w[0], w[1]); if (td) td.classList.add("s2-ring"); });
   }
   function boardLive(k) {
     var B = BD.B, seq = BD.seq;
@@ -4558,20 +4765,20 @@ button.chip:hover{border-color:var(--rubric)}
       seq.run([[350, function () { waveIn(pc, 110); }]], 400);
       return;
     }
-    if (k === 5) {
+    if (k >= 5 && k <= 7) {
       // The prediction and then the rating fly down into the line (left to right, as on the board), the loss comes,
-      // then flies into its cell.
-      rise(B.m.s.el);
-      var parts = fillLoss(BD.lf, 0, 0, 0), target = B.item("s", 0, 0);
+      // then flies into its cell. Three times, one loss each.
+      var w = WL[k - 5];
+      if (k === 5) { rise(B.m.s.el); rise(BD.lf.el); }
+      var parts = fillLoss(BD.lf, w[0], w[1], 0), target = B.item("s", w[0], w[1]);
       parts.r.style.visibility = "hidden";
       parts.p.style.visibility = "hidden";
       target.style.visibility = "hidden";
-      rise(BD.lf.el);
       seq.run([
-        [300, function () { B.fly(B.item("p", 0, 0), parts.p, 700, { arc: 30 }); }],
-        [1000, function () { parts.p.style.visibility = ""; B.fly(B.item("r", 0, 0), parts.r, 700, { arc: 30 }); }],
+        [300, function () { B.fly(B.item("p", w[0], w[1]), parts.p, 700, { arc: 30 }); }],
+        [1000, function () { parts.p.style.visibility = ""; B.fly(B.item("r", w[0], w[1]), parts.r, 700, { arc: 30 }); }],
         [1700, function () { parts.r.style.visibility = ""; }],
-        [2100, function () { var s = fillLoss(BD.lf, 0, 0, 1); pop(s.s, 520); }],
+        [2100, function () { var s = fillLoss(BD.lf, w[0], w[1], 1); pop(s.s, 520); }],
         [2900, function () { B.fly(BD.lf.S.box.firstChild, target, 750, { arc: 20 }); }],
         [3650, function () { target.style.visibility = ""; pop(target, 420); }]
       ], 3700).then(function () {
@@ -4580,13 +4787,13 @@ button.chip:hover{border-color:var(--rubric)}
       });
       return;
     }
-    if (k === 6) {
+    if (k === 8) {
       var rest = [];
-      for (var i2 = 0; i2 < 3; i2++) for (var j2 = 0; j2 < 2; j2++) if (i2 || j2) rest.push(B.item("s", i2, j2));
+      for (var i2 = 0; i2 < 3; i2++) for (var j2 = 0; j2 < 2; j2++) if (!worked(i2, j2)) rest.push(B.item("s", i2, j2));
       waveIn(rest, 120);
       return;
     }
-    if (k === 7) {
+    if (k === 9) {
       // The six losses gather into the average, which appears.
       rise(B.avgEl);
       var av = B.AV.bn;
@@ -4608,12 +4815,12 @@ button.chip:hover{border-color:var(--rubric)}
     });
   }
   MF.define("board", {
-    act: 2, title: "Only the ratings", steps: 8,
+    act: 2, title: "Only the ratings", steps: T1S.length,
     build: function (inner) {
       var root = el("div", "s2-sc");
       var lead = el("p", "s2-lead");
       lead.setAttribute("aria-live", "polite");
-      var B = board({ people: PEOPLE, films: FILMS, noNb: true });
+      var B = board({ people: PEOPLE, films: FILMS, noNb: true, cls: "s2-bd" });
       var lf = lossLine();
       B.note.appendChild(lf.el);
       root.appendChild(lead);
@@ -4635,12 +4842,83 @@ button.chip:hover{border-color:var(--rubric)}
     }
   });
 
+  /* 1b. THE PLAN (Carlos, 2026-11-10, REQUEST.md twelfth message: "just before the before and after ... divide it into
+     three or four illustrations highlighting parts of all the matrices"): four steps on the board of the first guess.
+     The embeddings change to make the average loss small; a small loss brings the predictions close to the ratings;
+     the numbers one at a time, the customers' first (MF.Z.order), a ring walking over them and stopping on the last,
+     The Martian's second number; for each number, a little up or a little down. */
+  var PL = null;
+  var ORDER = Z.order(G0.c, G0.f);
+  var WALK = 320;                                     // ms per number of the walk
+  var T2S = ["Make the loss small", "Closer to the ratings", "One number at a time", "Up or down"];
+  function L4(k) {
+    return [
+      "Now the Matchmaker changes the customer and film embeddings, to make the average loss as small as it can.",
+      "The smaller the loss, the closer the predictions come to the ratings.",
+      "How? It takes the numbers of the embeddings one at a time: the customers' first, then the films'.",
+      "For each number it decides: increase it a little, or decrease it a little. Here is how, with " + nwName + "."
+    ][k];
+  }
+  // What each step lights: "m" ochre, the numbers that change; "f" violet, the forward pass.
+  function planLit(k) {
+    if (k === 1) return [["p", "f"], ["r", "f"], ["s", "f"], ["avg", "f"]];
+    return k === 0 ? [["c", "m"], ["f", "m"], ["avg", "f"]] : [["c", "m"], ["f", "m"]];
+  }
+  function planState(k) {
+    var B = PL.B;
+    B.parts({ r: true, c: true, f: true, p: true, s: true, avg: true });
+    B.set({ g: G0, p: "all", s: "all", avg: true, nb: null, av: null, tgt: k >= 2 ? W.slice() : null, cone: false, flow: false, upd: false });
+    B.lit(planLit(k), k === 3 ? W.slice() : null);
+  }
+  function planLive(k) {
+    var B = PL.B;
+    if (k <= 1) {
+      B.G.lit.querySelectorAll("rect").forEach(function (r) { anim(r, [{ opacity: 0 }, { opacity: 1 }], { duration: 650, easing: "ease-out" }); });
+      return;
+    }
+    if (k === 2) {
+      B.G.lit.querySelectorAll("rect").forEach(function (r) { anim(r, [{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: "ease-out" }); });
+      B.set({ tgt: ORDER[0].slice() });
+      PL.seq.run(ORDER.slice(1).map(function (o, q) { return [(q + 1) * WALK, function () { B.set({ tgt: o.slice() }); }]; }),
+                 ORDER.length * WALK).then(function (done) { if (done) B.set({ tgt: W.slice() }); });
+      return;
+    }
+    anim(B.G.ud, [{ opacity: 0, transform: "translateX(-8px)" }, { opacity: 1, transform: "none" }], { duration: 520, easing: "ease-out" });
+    var c = B.guessCell(W[0], W[1], W[2]);
+    if (c && c.parentNode) replay(c.parentNode, "s2-moved");
+  }
+  MF.define("plan", {
+    act: 2, title: T2S[0], steps: T2S.length,
+    build: function (inner) {
+      var root = el("div", "s2-sc s2-pl");
+      var lead = el("p", "s2-lead");
+      lead.setAttribute("aria-live", "polite");
+      var B = board({ people: PEOPLE, films: FILMS, noNb: true, cls: "s2-bd" });
+      root.appendChild(lead);
+      root.appendChild(B.el);
+      inner.appendChild(root);
+      PL = { root: root, lead: lead, B: B, seq: Seq(), last: null };
+    },
+    enter: function () { PL.last = null; },
+    leave: function () { PL.seq.stop(); },
+    step: function (k, api) {
+      var was = PL.last, live = MOTION && (was === k - 1 || (k === 0 && was === null));
+      PL.last = k;
+      PL.seq.stop();
+      api.setTitle(T2S[k]);
+      PL.lead.textContent = L4(k);
+      if (live) replay(PL.lead, "s2-in"); else still(PL.root);
+      planState(k);
+      if (live) planLive(k);
+    }
+  });
+
   /* 2. ONE SMALL CHANGE: The Martian's second number */
   var ND = null;
   var nwName = numberName(W[0], W[1], W[2], IDS);
   function L2(k) {
     return [
-      "One number at a time. " + nwName.charAt(0).toUpperCase() + nwName.slice(1) + " is " + MF.num(NW.x) + ": that is Before.",
+      nwName.charAt(0).toUpperCase() + nwName.slice(1) + " is " + MF.num(NW.x) + ": that is Before.",
       "Add a little, " + Z.EPS + ": After is " + fix2(NW.after) + ".",
       "With " + fix2(NW.after) + " instead of " + MF.num(NW.x) + ", the predictions change a little, and so does the average loss: " +
         pairText(NW.avgBefore, NW.avgAfter)[1] + " after, " + pairText(NW.avgBefore, NW.avgAfter)[0] + " before.",
@@ -4649,6 +4927,8 @@ button.chip:hover{border-color:var(--rubric)}
               : pairText(NW.avgBefore, NW.avgAfter)[1] + " is larger than " + pairText(NW.avgBefore, NW.avgAfter)[0] +
                 ": adding to the number hurts, so the number goes down.",
       "The change of the average loss, divided by the change of the number: we call this fraction ∇, nabla.",
+      "In a picture: the number moves " + NAB.t.dX + " to the right, the average loss changes by " + NAB.t.dA +
+        ". ∇ is the slope of the triangle.",
       "Call the number w. The update subtracts a tenth of ∇, α = " + MF.num(Z.ALPHA) + ". " +
         (NAB.g < 0 ? "∇ is negative, so w goes up." : "∇ is positive, so w goes down."),
       "The Matchmaker moves it " + (NW.fell ? "up" : "down") + ", from " + MF.num(NW.x) + " to " + n2(NW.to) +
@@ -4656,7 +4936,8 @@ button.chip:hover{border-color:var(--rubric)}
     ][k];
   }
   var TAG = { smaller: "smaller", larger: "larger", same: "the same" };
-  var LAST = 6;                                       // the step of the update arrow
+  var PLOTK = 5;                                      // the step of the slope picture
+  var LAST = 7;                                       // the step of the update arrow
 
   /* NABLA AND THE UPDATE (Carlos, 2026-11-06, REQUEST.md eighth message): steps 5 and 6 of One small change, and since
      2026-11-07 (his ninth message) every move of Again and again. The change of the average loss over the change of
@@ -4782,6 +5063,92 @@ button.chip:hover{border-color:var(--rubric)}
     F.ul.setAttribute("aria-label", "w becomes w minus alpha times nabla: " + say(ch.t.w0) + " minus " + MF.num(Z.ALPHA) + " times " +
                       say(ch.t.g) + " is " + say(ch.t.w1));
   }
+  /* THE SLOPE IN A PICTURE (Carlos, 2026-11-10, REQUEST.md twelfth message: "a little visualization of the loss
+     function ... the triangle there, showing the NABLA as the slope"): One small change's step 6, under the ratings
+     and the losses. The average loss against The Martian's second number close to -1, in the close view of the optional
+     game's triangle (sec3d.js): the curve (MF.Z), Before hollow and After filled, the triangle of the move: across, the
+     move of the number (0.01); down, the change of the average loss (-0.047); the slope, ∇ (-4.7). The numbers are the
+     fraction's (NAB): the ticks Before and After, the legs, the slope. Labels are HTML, for the drawn ∇. */
+  function avgAt(x) { var g = Z.put(G0.c, G0.f, W[0], W[1], W[2], x); return Z.table(g.c, g.f, R0).avg; }
+  var PV = (function () {
+    var e = NW.after - NW.x, lo = Math.min(NW.avgBefore, NW.avgAfter), hi = Math.max(NW.avgBefore, NW.avgAfter), d = hi - lo || 1;
+    return { x0: NW.x - e * 0.35, x1: NW.after + e * 0.45, y0: lo - d * 0.62, y1: hi + d * 0.5 };
+  })();
+  MF.S2PLOT = { avgAt: avgAt, view: PV };             // for _try-s2.js
+  function slopePlot() {
+    var root = el("div", "s2-plot"), svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("class", "s2-psvg");
+    svg.setAttribute("aria-hidden", "true");
+    root.appendChild(svg);
+    root.setAttribute("role", "img");
+    function say(t) { return t.replace(MF.MINUS, "minus "); }
+    root.setAttribute("aria-label", "The average loss against " + nwName + ": from " + say(NAB.t.xB) + " to " + say(NAB.t.xA) +
+                      ", a move of " + NAB.t.dX + ", it goes from " + NAB.t.aB + " to " + NAB.t.aA + ", a change of " + say(NAB.t.dA) +
+                      ". The slope of the triangle, nabla, is " + say(NAB.t.g) + ".");
+    function mk(tag, cls, into) { var n = document.createElementNS(SVGNS, tag); if (cls) n.setAttribute("class", cls); (into || svg).appendChild(n); return n; }
+    var gAx = mk("g"), gGd = mk("g"), curve = mk("path", "s2-pcv"), tri = mk("g", "s2-ptr");
+    var fillP = mk("polygon", "s2-ptf", tri), hop = mk("line", "s2-pleg", tri), chg = mk("line", "s2-pleg", tri), hyp = mk("line", "s2-phyp", tri);
+    var pB = mk("circle", "s2-ppt s2-pold"), pA = mk("circle", "s2-ppt");
+    function lab(kids, cls) { var s = h("span", "s2-plab" + (cls ? " " + cls : ""), kids); s.setAttribute("aria-hidden", "true"); root.appendChild(s); return s; }
+    var L = { hop: lab([NAB.t.dX]), chg: lab([NAB.t.dA]), g: lab([nabla(), " = " + NAB.t.g], "s2-plab-g") };
+    function place(node, x, y, anchor) {
+      node.style.left = x.toFixed(1) + "px";
+      node.style.top = y.toFixed(1) + "px";
+      node.style.transform = anchor === "l" ? "translate(0, -50%)" : anchor === "r" ? "translate(-100%, -50%)" : "translate(-50%, -50%)";
+    }
+    function text(x, y, cls, t) { var n = mk("text", cls, gAx); n.setAttribute("x", x.toFixed(1)); n.setAttribute("y", y.toFixed(1)); n.textContent = t; return n; }
+    function line(into, cls, a, b) {
+      var n = mk("line", cls, into);
+      n.setAttribute("x1", a[0].toFixed(1)); n.setAttribute("y1", a[1].toFixed(1)); n.setAttribute("x2", b[0].toFixed(1)); n.setAttribute("y2", b[1].toFixed(1));
+      return n;
+    }
+    function setLine(n, a, b) { n.setAttribute("x1", a[0].toFixed(1)); n.setAttribute("y1", a[1].toFixed(1)); n.setAttribute("x2", b[0].toFixed(1)); n.setAttribute("y2", b[1].toFixed(1)); }
+    var P = { el: root, curve: curve, pB: pB, pA: pA, hop: hop, chg: chg, hyp: hyp, fill: fillP, L: L };
+    P.draw = function () {
+      var w = root.clientWidth, hh = root.clientHeight;
+      if (!w || !hh) return P;
+      var small = hh < 120, px = { l: small ? 46 : 54, r: w - 6, t: small ? 18 : 22, b: hh - (small ? 30 : 36) };
+      svg.setAttribute("viewBox", "0 0 " + w + " " + hh);
+      function X(x) { return px.l + (x - PV.x0) / (PV.x1 - PV.x0) * (px.r - px.l); }
+      function Y(y) { return px.b - (y - PV.y0) / (PV.y1 - PV.y0) * (px.b - px.t); }
+      gAx.textContent = "";
+      gGd.textContent = "";
+      var xb = X(NW.x), xa = X(NW.after), yb = Y(NW.avgBefore), ya = Y(NW.avgAfter);
+      // axes, the ticks of Before and After on both, the guides from the two points to the axes
+      line(gAx, "s2-pax", [px.l, px.b], [px.r, px.b]);
+      line(gAx, "s2-pax", [px.l, px.t - 6], [px.l, px.b]);
+      [[xb, NAB.t.xB], [xa, NAB.t.xA]].forEach(function (q) {
+        line(gAx, "s2-pax", [q[0], px.b], [q[0], px.b + 5]);
+        text(q[0], px.b + (small ? 15 : 18), "s2-ptk s2-ptx", q[1]);
+      });
+      [[yb, NAB.t.aB], [ya, NAB.t.aA]].forEach(function (q) {
+        line(gAx, "s2-pax", [px.l - 5, q[0]], [px.l, q[0]]);
+        text(px.l - 8, q[0] + 5, "s2-ptk s2-pty", q[1]);
+      });
+      line(gGd, "s2-pgd", [xb, yb + 7], [xb, px.b]);
+      line(gGd, "s2-pgd", [xa, ya + 7], [xa, px.b]);
+      line(gGd, "s2-pgd", [px.l, yb], [xb - 7, yb]);
+      line(gGd, "s2-pgd", [px.l, ya], [Math.min(xb - 7, xa - 7), ya]);
+      text((px.l + px.r) / 2, hh - 4, "s2-pti s2-ptx", whose(W[0], W[1], IDS) + "'s " + ORD[W[2]] + " number");
+      text(px.l + 8, px.t - 8, "s2-pti s2-ptiy", "average loss");
+      // the curve, from MF.Z
+      var d = "", n = 48;
+      for (var q = 0; q <= n; q++) { var x = PV.x0 + (PV.x1 - PV.x0) * q / n; d += (q ? " L " : "M ") + X(x).toFixed(1) + " " + Y(avgAt(x)).toFixed(1); }
+      curve.setAttribute("d", d);
+      // the triangle of the move: across at Before's height, down to After, the slope from Before to After
+      setLine(hop, [xb, yb], [xa, yb]);
+      setLine(chg, [xa, yb], [xa, ya]);
+      setLine(hyp, [xb, yb], [xa, ya]);
+      fillP.setAttribute("points", [[xb, yb], [xa, yb], [xa, ya]].map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" "));
+      [[pB, xb, yb], [pA, xa, ya]].forEach(function (c) { c[0].setAttribute("cx", c[1].toFixed(1)); c[0].setAttribute("cy", c[2].toFixed(1)); c[0].setAttribute("r", small ? "4.6" : "5.4"); });
+      place(L.hop, (xb + xa) / 2, yb - (small ? 10 : 12), "c");
+      place(L.chg, xa + 8, (yb + ya) / 2, "l");
+      place(L.g, xb + (xa - xb) * 0.42, (yb + ya) / 2 + (small ? 17 : 20), "c");
+      return P;
+    };
+    if (window.ResizeObserver) new ResizeObserver(function () { P.draw(); }).observe(root);
+    return P;
+  }
   function nudgeState(k) {
     var B = ND.B, F = ND.F, up = k === LAST;
     B.parts({ r: true, c: true, f: true, p: true, s: true, avg: true });
@@ -4792,7 +5159,9 @@ button.chip:hover{border-color:var(--rubric)}
     B.set({ g: up ? G1 : G0, p: "all", s: "all", avg: true, nb: nb, av: av, tgt: W.slice(), cone: !up, flow: k >= 2 && !up, upd: up });
     F.box.hidden = k < 4;
     F.gl.hidden = k < 4;
-    F.ul.hidden = k < 5;
+    F.ul.hidden = k < PLOTK + 1;
+    ND.P.el.hidden = k < PLOTK;
+    if (k >= PLOTK) ND.P.draw();
     ND.root.dataset.k = String(k);
   }
   function nudgeLive(k) {
@@ -4859,7 +5228,30 @@ button.chip:hover{border-color:var(--rubric)}
       ], 3600).then(function () { four.forEach(function (n) { n.style.visibility = ""; }); });
       return;
     }
-    if (k === 5) {
+    if (k === PLOTK) {
+      // The slope in a picture: the curve draws itself, Before and After come, then the triangle: across, the move
+      // and its number; down, the change and its number; the slope and ∇.
+      var P = ND.P, L = P.L, labs = [L.hop, L.chg, L.g];
+      rise(P.el);
+      labs.forEach(function (n) { n.style.visibility = "hidden"; });
+      [P.pB, P.pA, P.hop, P.chg, P.hyp, P.fill].forEach(function (n) { n.style.visibility = "hidden"; });
+      B.drawIn(P.curve, 900);
+      seq.run([
+        [850, function () { P.pB.style.visibility = ""; anim(P.pB, [{ opacity: 0 }, { opacity: 1 }], { duration: 300 }); }],
+        [1100, function () { P.pA.style.visibility = ""; anim(P.pA, [{ opacity: 0 }, { opacity: 1 }], { duration: 300 }); }],
+        [1450, function () { P.hop.style.visibility = ""; B.drawIn(P.hop, 450); }],
+        [1800, function () { L.hop.style.visibility = ""; pop(L.hop, 420); }],
+        [2150, function () { P.chg.style.visibility = ""; B.drawIn(P.chg, 450); }],
+        [2500, function () { L.chg.style.visibility = ""; pop(L.chg, 420); }],
+        [2900, function () { P.hyp.style.visibility = ""; P.fill.style.visibility = ""; B.drawIn(P.hyp, 450);
+                             anim(P.fill, [{ opacity: 0 }, { opacity: 1 }], { duration: 500 }); }],
+        [3350, function () { L.g.style.visibility = ""; pop(L.g, 520); }]
+      ], 3400).then(function () {
+        labs.concat([P.pB, P.pA, P.hop, P.chg, P.hyp, P.fill]).forEach(function (n) { n.style.visibility = ""; });
+      });
+      return;
+    }
+    if (k === PLOTK + 1) {
       // The update, written: its first line rises; the number (from the board) and ∇ (from the fraction) fly into the
       // second line; then the new number.
       var five = [F.w0, F.g2, F.w1];
@@ -4895,14 +5287,15 @@ button.chip:hover{border-color:var(--rubric)}
       var root = el("div", "s2-sc s2-nd");
       var lead = el("p", "s2-lead");
       lead.setAttribute("aria-live", "polite");
-      var B = board({ people: PEOPLE, films: FILMS });
+      var P = slopePlot();
+      var B = board({ people: PEOPLE, films: FILMS, plot: P.el });
       var F = nabBlock();
       fillNab(F, NAB);
       B.note.appendChild(F.box);
       root.appendChild(lead);
       root.appendChild(B.el);
       inner.appendChild(root);
-      ND = { root: root, lead: lead, B: B, F: F, seq: Seq(), last: null };
+      ND = { root: root, lead: lead, B: B, F: F, P: P, seq: Seq(), last: null };
     },
     enter: function () { ND.last = null; },
     leave: function () { ND.seq.stop(); ND.B.clearFly(); },
@@ -4911,7 +5304,9 @@ button.chip:hover{border-color:var(--rubric)}
       ND.last = k;
       ND.seq.stop();
       ND.B.clearFly();
-      [ND.B.NB.bn, ND.B.NB.a, ND.B.AV.a, ND.B.AV.bn].concat(ND.F.cells).forEach(function (n) { n.style.visibility = ""; });
+      var P = ND.P;
+      [ND.B.NB.bn, ND.B.NB.a, ND.B.AV.a, ND.B.AV.bn].concat(ND.F.cells, [P.L.hop, P.L.chg, P.L.g, P.pB, P.pA, P.hop, P.chg, P.hyp, P.fill])
+        .forEach(function (n) { n.style.visibility = ""; });
       setLead(ND.lead, L2(k));
       if (live) replay(ND.lead, "s2-in"); else still(ND.root);
       nudgeState(k);
@@ -4991,14 +5386,17 @@ button.chip:hover{border-color:var(--rubric)}
     fitNab();
     agCount(Math.floor(f.i / PER) + 1, f.fast ? "" : numberName(mv.which, mv.r, mv.k, IDS));
   }
-  // A fraction with more decimals is wider: on a wide screen, where the block stands out of the grid's flow, it moves
-  // left into the margin as far as it must to keep 14 px from the losses.
+  // A fraction with more decimals is wider. Below 1120 px the losses stand under the predictions and the ratings, in
+  // the row of the block, which stands out of the grid's flow: it moves left into the margin as far as it must to keep
+  // 14 px from them. On a wide screen the losses stand beside the ratings, above the block, and it stays.
   function fitNab() {
     var F = AG.F, B = AG.B;
     F.box.style.transform = "";
     if (F.box.hidden || !F.box.offsetWidth || getComputedStyle(F.box).position !== "absolute") return;
+    var fb = F.box.getBoundingClientRect(), sb = B.m.s.el.getBoundingClientRect();
+    if (fb.top >= sb.bottom || fb.bottom <= sb.top) return;
     var k = B.el.offsetWidth ? B.el.getBoundingClientRect().width / B.el.offsetWidth : 1;
-    var over = F.box.getBoundingClientRect().right - (B.m.s.el.getBoundingClientRect().left - 14 * (k || 1));
+    var over = fb.right - (sb.left - 14 * (k || 1));
     if (over > 0) F.box.style.transform = "translateX(" + (-Math.ceil(over / (k || 1))) + "px)";
   }
   // The update of a move: the moved number pulses; in round 1 the arrow draws itself from the average to it.
@@ -5272,7 +5670,7 @@ button.chip:hover{border-color:var(--rubric)}
   });
 
   // For the tests: the numbers the scenes show.
-  MF.S2T = { G0: G0, T0: T0, NW: NW, G1: G1, T1: T1, run: theRun, YS: YS };
+  MF.S2T = { G0: G0, T0: T0, NW: NW, G1: G1, T1: T1, run: theRun, YS: YS, WL: WL, ORDER: ORDER, PLOTK: PLOTK, LAST: LAST };
 })();
 </script>
 <script>MF.start({ game: "2" });</script>
