@@ -875,13 +875,24 @@ button.chip:hover{border-color:var(--rubric)}
   font-variant-numeric:lining-nums tabular-nums}
 .s2-plab .s2-nab-g{width:.78em; height:.7em}
 .s2-plab-g{font-size:18px}
-/* Screens from 561 to 1119 px keep the textbook layout, the losses under the predictions and the ratings: the picture
+/* Screens from 740 to 1119 px keep the textbook layout, the losses under the predictions and the ratings: the picture
    stands there on its step only, in the place of the losses and the average, as on a phone */
-@media (min-width: 561px) and (max-width: 1119px){
+@media (min-width: 740px) and (max-width: 1119px){
   .s2-xplot{grid-row:3; grid-column:2 / -1; justify-self:end; align-self:start}
   .s2-nd[data-k="6"] .s2-plot, .s2-nd[data-k="7"] .s2-plot{display:none}
   .s2-nd[data-k="5"] .mx-xs, .s2-nd[data-k="5"] .mx-xa, .s2-nd[data-k="5"] .mx-xarr,
   .s2-nd[data-k="5"] .s2-flow, .s2-nd[data-k="5"] .s2-flowh{visibility:hidden}
+}
+/* Screens from 740 to 979 px (an iPad upright, a narrow window; 2026-11-10): the four columns of the textbook layout
+   need 843 px of leaf (875 in Again and again) and ran past the leaf's left edge, so the average stands under the
+   losses, as on a phone, and three columns need 631. The picture, on its step, takes the place of the losses and the
+   average, centred under the predictions and the ratings; the fraction, wider than the customers, leaves that step
+   to it, as on a phone */
+@media (min-width: 740px) and (max-width: 979px){
+  .mx-cross.mx-x-tb.s2-x{grid-template-columns:repeat(3, auto); grid-template-areas:"f f nb" "c p r" "note s s" "note avg avg"}
+  .s2-x.mx-x-tb > .mx-xa{justify-self:center}
+  .s2-xplot{grid-row:3 / 5; justify-self:center}
+  .s2-nd[data-k="5"] .s2-nab{display:none}
 }
 
 /* The projector at 720p */
@@ -906,8 +917,11 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-plab{font-size:15px}
   .s2-plab-g{font-size:16.5px}
 }
-/* Phones: the note on top, three columns, the average under the losses */
-@media (max-width: 560px){
+/* Phones, and screens up to 739 px (since 2026-11-10; the three columns of the desk need 631 px and Again and again's
+   fraction 378 more beside the losses): the note on top, three columns, the average under the losses */
+@media (max-width: 739px){
+  .mx-cross.mx-x-tb.s2-x{grid-template-columns:repeat(3, auto); grid-template-areas:"note note note" "f f nb" "c p r" ". s s" ". avg avg"}
+  .s2-x.mx-x-tb > .mx-xa{justify-self:center}
   .s2-lead{font-size:16px; min-height:0}
   .s2-x{--mx-xcg:12px; --mx-xrg:8px}
   .s2-x .mx{--nt-w:43px; --nt-h:24px; --nt-fs:14px; --mx-bw:4px; --mx-px:1px}
@@ -980,7 +994,7 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-fr > .s2-fq:last-child{padding-top:4px}
   .s2-ul{row-gap:6px}
 }
-@media (max-width: 560px){
+@media (max-width: 739px){
   .s2-nab{position:static; justify-self:center; justify-items:center; gap:6px}
   .s2-nd[data-k="6"] .s2-gl, .s2-nd[data-k="7"] .s2-gl{display:none}
   /* the slope picture, on its step only, takes the place of the losses and the average (its axis carries the
