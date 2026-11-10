@@ -1104,12 +1104,16 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-mg i[data-c="n6"]{background:color-mix(in srgb, var(--dislike) 70%, var(--leaf))}
 .s5-mg i[data-c="n7"]{background:color-mix(in srgb, var(--dislike) 82%, var(--leaf))}
 .s5-mg i[data-c="n8"]{background:var(--dislike)}
-.s5-mg i[data-c="q"]{background:var(--leaf); box-shadow:inset 0 0 0 1.5px var(--rubric)}
+/* a hidden rating: the notation's "?" in violet; its loss: nothing, an empty place in the grid */
+.s5-mg i[data-c="q"]{display:grid; place-items:center; background:var(--leaf); box-shadow:inset 0 0 0 1.5px var(--rubric)}
+.s5-mg i[data-c="q"]::after{content:"?"; color:var(--rubric); font-family:var(--serif); font-weight:700; font-style:normal;
+  font-size:calc(var(--sq) * .82); line-height:1}
+.s5-mg i[data-c="e"]{background:transparent; cursor:default}
 .s5-mg i.s5-miss{box-shadow:0 0 0 1.5px var(--leaf), 0 0 0 3px var(--g-move); position:relative; z-index:1}
+/* the prediction of a hidden rating: an ochre ring, as the recap rings the prediction of its unknown rating */
+.s5-mg i.s5-hid{box-shadow:0 0 0 1.5px var(--leaf), 0 0 0 3.5px var(--g-move); position:relative; z-index:1}
 .s5-mg i.s5-on{box-shadow:0 0 0 1.5px var(--leaf), 0 0 0 3px var(--rubric); position:relative; z-index:2}
 .s5-mg i.s5-row{box-shadow:inset 0 0 0 1.5px var(--rubric)}
-/* a hidden rating on which the recommender is judged: an ochre square */
-.s5-mg i.s5-judge{background:color-mix(in srgb, var(--g-move) 16%, var(--leaf)); box-shadow:inset 0 0 0 2px var(--g-move)}
 .s5-key{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 10px; font-size:15px; color:var(--muted)}
 .s5-key .s5-kq{display:inline-flex; align-items:center; gap:4px}
 .s5-key i{display:inline-block; width:15px; height:15px; border-radius:3px}
@@ -1217,16 +1221,37 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-larger .s5-x.s5-solo .s5-map{--sq:12px}
 .s5-larger .s5-x:not(.s5-solo) .s5-mg i{border-radius:1px}
 .s5-larger .s5-x:not(.s5-solo) .s5-mg i.s5-miss{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2.5px var(--g-move)}
-/* the last step of scene real: the curve takes the stage, the count, the ring and Replay in a row under it */
-.s5-real.s5-bigc .s5-read{display:none}
-.s5-real.s5-bigc .s5-boards{display:none}
-.s5-real.s5-bigc .s5-strip{grid-template-columns:minmax(0, 1fr) auto auto auto minmax(0, 1fr);
+/* the last step of scene larger (of scene real until 2026-11-10): the curve takes the stage, the count, the ring and
+   Replay in a row under it */
+.s5-bigc .s5-read, .s5-bigc .s5-boards, .s5-bigc .s5-key{display:none}
+.s5-bigc .s5-strip{grid-template-columns:minmax(0, 1fr) auto auto auto minmax(0, 1fr);
   grid-template-areas:"curve curve curve curve curve" ". count ring ctl ."; align-items:center; column-gap:44px; row-gap:10px;
   width:min(100%, 900px)}
-.s5-real.s5-bigc .s5-curve{height:260px}
-.s5-real.s5-bigc .s5-strip > .s5-ctl{justify-content:center}
+.s5-bigc .s5-strip > .s5-curve{height:260px}
+.s5-bigc .s5-strip > .s5-ctl{justify-content:center}
 
-/* scene end: the method as four cards, the hidden ratings, the dataset's lines */
+/* the last step of scene real: each hidden rating beside its prediction, one card per rating; the prediction ringed in
+   ochre as on the board */
+.s5-reveal{display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch; gap:18px; width:100%; margin-top:10px}
+.s5-reveal[hidden]{display:none}
+.s5-rcard{display:grid; justify-items:center; align-content:start; gap:12px; width:236px; padding:14px 12px 12px;
+  border:1.5px solid var(--rule); border-radius:14px; background:var(--bg)}
+.s5-rhead{display:flex; align-items:center; gap:10px}
+.s5-rwho p{margin:0; text-align:left}
+.s5-rfilm{font-size:19px; font-weight:600; line-height:1.15; color:var(--ink)}
+.s5-ruser{font-size:16px; line-height:1.2; color:var(--muted)}
+.s5-rcard .pic.s5-tile{--s:46px}
+.s5-rpair{display:flex; justify-content:center; align-items:flex-start; gap:20px}
+.s5-rp, .s5-rv{display:grid; justify-items:center; gap:5px}
+.s5-rp .s5-cl{color:var(--g-fwd)}
+.s5 .s5-rcard .nt-n.s5-in{--nt-w:68px; --nt-h:44px; --nt-fs:26px; margin:0; vertical-align:middle}
+.s5 .s5-rp .nt-n.s5-in{box-shadow:0 0 0 2.5px var(--leaf), 0 0 0 5px var(--g-move)}
+.s5-rs{font-size:14px; color:var(--muted)}
+.s5-rmiss{margin:0; font-size:17px; color:var(--muted)}
+.s5 .s5-rmiss .nt-n.s5-in{--nt-w:40px; --nt-h:28px; --nt-fs:17px; margin-left:.2em}
+.s5-rcard.s5-pop, .s5 .s5-rcard .nt-n.s5-pop{animation:s5-pop .5s cubic-bezier(.3,.75,.3,1.25) both}
+
+/* scene end: the method as four cards, the dataset's lines */
 .s5-chain{display:flex; flex-wrap:nowrap; align-items:center; justify-content:center; gap:10px}
 .s5-card{display:grid; justify-items:center; align-content:start; gap:8px; width:190px; padding:12px 10px 10px; border:1.5px solid var(--rule);
   border-radius:14px; background:var(--bg); text-align:center}
@@ -1243,9 +1268,6 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-card .s5-ct text{font-size:11px}
 .s5-card .s5-cti{font-size:11.5px}
 .s5-arrow{font-size:28px; color:var(--rubric); flex:none}
-/* steps 2 and 3: the map, the dataset's lines under it */
-.s5-endrow{display:flex; flex-direction:column; flex-wrap:nowrap; justify-content:center; align-items:center; gap:6px; width:100%; min-width:0}
-.s5-endmap .s5-map{--sq:12px}
 .s5-lic{display:grid; gap:2px; max-width:110ch; margin-top:4px; padding-top:6px; border-top:1px solid var(--rule)}
 .s5-lic p{font-size:12.5px; line-height:1.3; color:var(--muted); text-align:center; margin:0}
 
@@ -1270,7 +1292,15 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-ring{padding:3px}
   .s5 .nt-n.s5-big{--nt-w:92px; --nt-h:42px; --nt-fs:27px}
   .s5-curve{height:66px}
-  .s5-real.s5-bigc .s5-curve{height:220px}
+  .s5-bigc .s5-strip > .s5-curve{height:220px}
+  .s5-reveal{gap:14px; margin-top:6px}
+  .s5-rcard{width:216px; gap:9px; padding:11px 10px 10px}
+  .s5-rfilm{font-size:17.5px}
+  .s5-ruser{font-size:15px}
+  .s5-rcard .pic.s5-tile{--s:40px}
+  .s5 .s5-rcard .nt-n.s5-in{--nt-w:60px; --nt-h:38px; --nt-fs:23px}
+  .s5 .s5-rmiss .nt-n.s5-in{--nt-w:36px; --nt-h:25px; --nt-fs:15.5px}
+  .s5-rmiss{font-size:15.5px}
   .s5-read .nt-n.s5-in{--nt-w:26px; --nt-h:19px; --nt-fs:13.5px}
   .s5-runrow{gap:2px 12px; width:270px}
   .s5-runrow > .s5-curve{height:46px}
@@ -1292,7 +1322,6 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-card .s5-cardpic{min-height:96px}
   .s5-card .s5-map{--sq:3.5px}
   .s5-card .s5-curve{height:84px}
-  .s5-endmap .s5-map{--sq:8px}
   .s5-lic p{font-size:12px}
 }
 /* 720p on a desk only (the phone frame also matches max-height 760px): the recap's board (MF.L.view, agent c's
@@ -1350,9 +1379,28 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-larger .s5-x.s5-solo .s5-map{--sq:9px; --gap:1px}
   .s5-larger .s5-x.s5-solo .s5-mg i{border-radius:1px}
   .s5-larger .s5-x.s5-solo .s5-mh{display:none}
-  .s5-real.s5-bigc .s5-strip{grid-template-columns:auto auto auto; grid-template-areas:"curve curve curve" "count ring ctl"; column-gap:10px;
+  .s5-bigc .s5-strip{grid-template-columns:auto auto auto; grid-template-areas:"curve curve curve" "count ring ctl"; column-gap:10px;
     width:100%}
-  .s5-real.s5-bigc .s5-curve{height:190px}
+  .s5-bigc .s5-strip > .s5-curve{height:190px}
+  /* scene real: the hidden ratings' "?" too small to read on the phone's squares (the violet frame stays); a thinner
+     ring on the predictions; the cards one under another, each in a row */
+  .s5-real .s5-x .s5-mg i[data-c="q"]::after{content:none}
+  .s5-real .s5-x .s5-mg i.s5-hid{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2.5px var(--g-move)}
+  .s5-reveal{flex-direction:column; align-items:center; gap:8px; margin-top:4px}
+  .s5-rcard{width:100%; max-width:360px; grid-template-columns:auto 1fr; grid-template-areas:"head head" "pair miss";
+    align-items:center; gap:6px 10px; padding:8px 10px}
+  .s5-rhead{grid-area:head}
+  .s5-rpair{grid-area:pair; gap:12px}
+  .s5-rmiss{grid-area:miss; font-size:13.5px; text-align:right}
+  .s5-rfilm{font-size:15.5px}
+  .s5-ruser{font-size:13px}
+  .s5-rcard .pic.s5-tile{--s:30px}
+  .s5 .s5-rcard .nt-n.s5-in{--nt-w:46px; --nt-h:30px; --nt-fs:18px}
+  .s5 .s5-rp .nt-n.s5-in{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--g-move)}
+  .s5 .s5-rmiss .nt-n.s5-in{--nt-w:32px; --nt-h:22px; --nt-fs:13.5px}
+  .s5-rs{font-size:12px}
+  /* the recap's ringed prediction keeps its ochre (loss.css turns every ring violet on a phone) */
+  .s5-recap .lv .mx td.lv-mark-b > .nt-n{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--g-move)}
   .s5-runrow{grid-template-columns:auto minmax(0, 1fr) auto; grid-template-areas:"count curve ctl"; gap:2px 10px; width:100%}
   .s5-runrow > .s5-curve{height:48px}
   .s5-runrow .s5-cn{font-size:19px}
@@ -1367,12 +1415,11 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-card .s5-map{--sq:2.5px}
   .s5-card .s5-curve{width:120px; height:66px}
   .s5-arrow{font-size:20px}
-  .s5-endmap .s5-map{--sq:8px}
   .s5-key{font-size:13px; gap:3px 8px}
   .s5-lic p{font-size:10px; line-height:1.2}
 }
 @media (prefers-reduced-motion: reduce){
-  .s5 .mx-c > .nt-n.s5-pop{animation:none}
+  .s5 .mx-c > .nt-n.s5-pop, .s5-rcard.s5-pop, .s5 .s5-rcard .nt-n.s5-pop{animation:none}
 }
 </style>
 </head>
@@ -1407,12 +1454,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Once Upon a Matchmaker: the shared base, owned by the main session.
    The scene engine (copied from Once Upon a Video Store), the data and the helpers that every section uses.
    Each agent's scenes live in their own file (sec1.js, ...) and register with MF.define; dev.html then calls
-   MF.start(). The engine adds a section card before sections 2 to 5 and a leaf "Your turn in Python" at the
-   end of sections 1 to 4 (PYTHON below), so agents never build those.
+   MF.start(). The engine adds a section card before sections 1 to 5 and a leaf "Your turn in Python" at the
+   end of sections 1 to 4 (PYTHON below), so agents never build those. Section 0 is the preface of part one
+   (sec0.js, since 2026-11-10): the cover and matrix factorization at a glance, with no card and no Python leaf.
 
    A scene:
      MF.define("key", {
-       act: 1,                       // the SECTION, 1 to 5 (the video store called them acts; `section: 1` works too);
+       act: 1,                       // the SECTION, 0 to 5 (the video store called them acts; `section: 1` works too);
                                      // scenes are shown section by section, in the order they were defined
                                      // (or in the order PLACE in this file lists them, as in section 3)
        title: "A newcomer",          // the heading of the leaf and the tooltip in the pager
@@ -1472,7 +1520,18 @@ button.chip:hover{border-color:var(--rubric)}
     { id: "paddington", t: "Paddington", short: "Paddington", y: 2014, g: "🐻", d: "#F3E0C7", sec: 2,
       sum: "A young bear from Peru travels to London, where the Brown family takes him in." },
     { id: "martian", t: "The Martian", short: "The Martian", y: 2015, g: "🥔", d: "#F7D2C4", sec: 2,
-      sum: "An astronaut left behind on Mars after a storm grows potatoes and works out how to stay alive until a rescue can reach him." }
+      sum: "An astronaut left behind on Mars after a storm grows potatoes and works out how to stay alive until a rescue can reach him." },
+    // Section 0, the preface of part one: five films that four customers rated, some of them.
+    { id: "jaws", t: "Jaws", short: "Jaws", y: 1975, g: "🦈", d: "#D6E8F7", sec: 0,
+      sum: "A great white shark attacks swimmers off a summer resort island, and the police chief goes to sea with a scientist and a shark hunter to kill it." },
+    { id: "toystory", t: "Toy Story", short: "Toy Story", y: 1995, g: "🤠", d: "#FFF0B8", sec: 0,
+      sum: "A cowboy doll is jealous when a space ranger toy becomes his boy's favourite, until the two are lost together and must find their way home." },
+    { id: "titanic", t: "Titanic", short: "Titanic", y: 1997, g: "🚢", d: "#CFE3F5", sec: 0,
+      sum: "A poor artist and a rich young woman fall in love on board the Titanic during its first voyage in 1912." },
+    { id: "jurassic", t: "Jurassic Park", short: "Jurassic Park", y: 1993, g: "🦖", d: "#D8EDD3", sec: 0,
+      sum: "Dinosaurs cloned for a theme park on an island break loose during a tour before the park opens." },
+    { id: "frozen", t: "Frozen", short: "Frozen", y: 2013, g: "⛄", d: "#E4D7F2", sec: 0,
+      sum: "A princess sets out with an ice harvester and a snowman to find her sister, whose magic has trapped their kingdom in an endless winter." }
   ];
 
   // Customers. n name, d tile colour, sec the section that introduces them.
@@ -1483,14 +1542,21 @@ button.chip:hover{border-color:var(--rubric)}
     // Section 2: three customers who filled in no profile; they only rated two films.
     { id: "ida",  n: "Ida",  d: "#D8EDD3", sec: 2 },
     { id: "raj",  n: "Raj",  d: "#E4D7F2", sec: 2 },
-    { id: "elsa", n: "Elsa", d: "#D6E8F7", sec: 2 }
+    { id: "elsa", n: "Elsa", d: "#D6E8F7", sec: 2 },
+    // Section 0, the preface of part one: four customers known only by their ratings.
+    { id: "ada",  n: "Ada",  d: "#E2E8C9", sec: 0 },
+    { id: "hugo", n: "Hugo", d: "#FFE1C6", sec: 0 },
+    { id: "nora", n: "Nora", d: "#F3E0C7", sec: 0 },
+    { id: "tom",  n: "Tom",  d: "#F7D2C4", sec: 0 }
   ];
 
   // Section 2: the two columns of a guessed embedding. Nobody filled in a profile, so these columns have no
   // names: they mean whatever the guessing makes of them. Drawn as numbered tiles; isAxis() is true for them.
+  // The preface (section 0) uses three: d3 is its own.
   var DIMS = [
     { id: "d1", t: "First number", short: "First", g: "①", d: "#EFE6D2", dim: true },
-    { id: "d2", t: "Second number", short: "Second", g: "②", d: "#EFE6D2", dim: true }
+    { id: "d2", t: "Second number", short: "Second", g: "②", d: "#EFE6D2", dim: true },
+    { id: "d3", t: "Third number", short: "Third", g: "③", d: "#EFE6D2", dim: true }
   ];
 
   // Every known number, row by row: V[row][column]. A customer's profile and a film's critic answers are rows
@@ -1509,6 +1575,21 @@ button.chip:hover{border-color:var(--rubric)}
     ida:  { paddington:  2, martian:  1 },
     raj:  { paddington: -1, martian:  2 },
     elsa: { paddington:  1, martian: -2 }
+  };
+
+  // Section 0, the preface of part one (sec0.js; Carlos, 2026-11-10): four customers rated some of five films. The
+  // right two tables of embeddings, three numbers each, are shown at once ("Here we cheat a bit"), and their product
+  // gives back every known rating and fills the six holes. Invented numbers from ../tools/s0_preface.py (seed
+  // 20261110): every number of the two tables is -1, 0 or 1, every number of their product between -2 and 2. The
+  // product, rows Ada, Hugo, Nora, Tom, columns Jaws, Toy Story, Titanic, Jurassic Park, Frozen, a hole in brackets:
+  //   Ada 0 [-2] -1 [1] -2  /  Hugo 1 [2] [2] -2 1  /  Nora -1 -2 -2 2 [-1]  /  Tom -2 1 [-1] 1 2
+  var S0 = {
+    people: ["ada", "hugo", "nora", "tom"],
+    films: ["jaws", "toystory", "titanic", "jurassic", "frozen"],
+    dims: ["d1", "d2", "d3"],
+    c: [[0, 1, 1], [1, -1, -1], [-1, 1, 1], [-1, -1, 0]],                    // one row per customer
+    f: [[1, 1, -1], [0, -1, -1], [1, 0, -1], [-1, 0, 1], [-1, -1, -1]],     // one row per film, drawn turned
+    holes: [[0, 1], [0, 3], [1, 1], [1, 2], [2, 4], [3, 2]]                  // [customer, film]: not rated
   };
 
   // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
@@ -1831,9 +1912,11 @@ button.chip:hover{border-color:var(--rubric)}
   })();
 
   /* SCENE ENGINE */
-  // The five sections (the engine's word for them is still "act"). Their plan is source/PLAN.md.
+  // The five sections (the engine's word for them is still "act"). Their plan is source/PLAN.md. Section 0 is the
+  // preface of part one (Carlos, 2026-11-10: "We need to add a section before all these sections"); only game 1
+  // holds it.
   var SECTIONS = [1, 2, 3, 4, 5];
-  var ACT_NAMES = { 1: "Matrix multiplication", 2: "Matrix factorization", 3: "Smaller hops",
+  var ACT_NAMES = { 0: "Matrix factorization at a glance", 1: "Matrix multiplication", 2: "Matrix factorization", 3: "Smaller hops",
                     4: "Many customers, many films", 5: "The whole picture" };
 
   // The four games (Carlos, 2026-11-05: "Section one on its own becomes its own visualization ... it's now a
@@ -1843,7 +1926,7 @@ button.chip:hover{border-color:var(--rubric)}
   // interaction tests expect. sections: the sections the game holds; tag: the words beside the brand; cards: what a
   // section card says in this game (kicker, its numeral, no skip button); back: the last line of a Python leaf.
   var GAMES = {
-    "1": { sections: [1], tag: "Part one: matrix multiplication",
+    "1": { sections: [0, 1], tag: "Part one: matrix multiplication",
            back: { 1: "Then open part two of the Matchmaker: matrix factorization." } },
     "2": { sections: [2], tag: "Part two: matrix factorization",
            cards: { 2: { kicker: "Once Upon a Matchmaker, part two", num: 2 } },
@@ -1865,12 +1948,15 @@ button.chip:hover{border-color:var(--rubric)}
   }
 
   // Section cards (Carlos, 2026-11-03: "there are section dividers"). The engine puts one leaf of its own before
-  // sections 2 to 5: the leaf turns violet, then the section's numeral, its name, one line and a small motif come
-  // in one after another. Section 1 opens with the cover instead. Sections 3 and 4 are optional (Carlos, 2026-11-04:
+  // sections 1 to 5: the leaf turns violet, then the section's numeral, its name, one line and a small motif come
+  // in one after another. Until 2026-11-10 section 1 opened with the cover instead; since then the cover and the
+  // preface (section 0, no card) come first, and section 1 has its card. Sections 3 and 4 are optional (Carlos, 2026-11-04:
   // "The part of the gradient should be marked as optional and allow the possibility to skip it. Same for part 4."):
   // their cards say so and carry a button to section 5, every leaf of theirs carries the tag "optional", and their
   // leaves "Your turn in Python" open the optional notebook.
   var ACT_INTRO = {
+    1: { kicker: "Section one", motif: "product",
+         line: "How two tables, one row per customer and one column per film, give a score for every customer and every film." },
     2: { kicker: "Section two", motif: "unknown",
          line: "In real life nobody fills in a profile. The Matchmaker sees only ratings, and has to find the numbers behind them." },
     3: { kicker: "Section three, optional", motif: "hop", optional: true, skipTo: 5, skip: "Skip sections 3 and 4",
@@ -1894,6 +1980,12 @@ button.chip:hover{border-color:var(--rubric)}
   function introMotif(kind) {
     var N = window.MF && window.MF.N;
     if (kind === "unknown" && N) return [N.slot(), N.slot(), el("span", "act-op", "×"), N.slot(), N.slot()];
+    // Section 1: a 2 x 3 matrix times a 3 x 2 one gives a 2 x 2 one, drawn as little squares (MF.M.grid).
+    var Mx = window.MF && window.MF.M;
+    if (kind === "product" && Mx && Mx.grid) {
+      return [Mx.grid(2, 3, { label: false }), el("span", "act-op", "×"), Mx.grid(3, 2, { label: false }),
+              el("span", "act-op", "="), Mx.grid(2, 2, { label: false })];
+    }
     if (kind === "hop") {
       // Section 3's grasshopper (MF.H.glyph, hopper.js), the emoji until that file draws one.
       var H = window.MF && window.MF.H, gh = el("span", "act-op act-hopper");
@@ -1976,7 +2068,7 @@ button.chip:hover{border-color:var(--rubric)}
   function define(key, spec) {
     if (KEYS[key]) { console.warn("MF: scene defined twice: " + key); return; }
     spec.key = key;
-    spec.act = spec.section || spec.act || 1;
+    spec.act = spec.section !== undefined ? spec.section : spec.act !== undefined ? spec.act : 1;
     spec.steps = Math.max(1, spec.steps || 1);
     // The section card has order -1 and the Python leaf 1e6, so a listed scene (between -1 and 0) comes right after
     // the card and before the unlisted scenes of its section.
@@ -2168,7 +2260,7 @@ button.chip:hover{border-color:var(--rubric)}
 
   window.MF = {
     // data
-    AXES: AXES, DIMS: DIMS, FILMS: FILMS, PEOPLE: PEOPLE, V: V, S1: S1, S2: S2, S3: S3, S4: S4, PLACE: PLACE,
+    AXES: AXES, DIMS: DIMS, FILMS: FILMS, PEOPLE: PEOPLE, V: V, S0: S0, S1: S1, S2: S2, S3: S3, S4: S4, PLACE: PLACE,
     LEVELS: LEVELS, KIND: KIND, WORD: WORD, CRITIC_WORD: CRITIC_WORD, MARKNAME: MARKNAME, MINUS: MINUS,
     ACT_NAMES: ACT_NAMES, SECTIONS: SECTIONS, COLAB: COLAB, COLAB_OPT: COLAB_OPT, PYTHON: PYTHON, GAMES: GAMES,
     game: function () { return GAME; },
@@ -5119,9 +5211,12 @@ button.chip:hover{border-color:var(--rubric)}
    steps, the first guess c0 and f0 (seeded), best (the smallest average loss any two matrices with k
    columns can reach, by the singular values), near (the first step within 1% of best), close (within
    0.0001), end (loss, largest difference, ratings within half and a quarter of a star), start (the first
-   loss), and check (the loss at every 10th step, which tools/check_s5.js compares with MF.T.run). */
+   loss), and check (the loss at every 10th step, which tools/check_s5.js compares with MF.T.run).
+   runs[0] hides ratings: hidden lists them as [i, j] (drawn with hide_seed), its loss and its slopes leave
+   them out, its end counts only the known ratings, end.hidden holds the predictions for the hidden ones,
+   and best, near and close are null (the best possible needs every rating). */
 (function (root) {
-  var S5 = {"source":{"name":"MovieLens ml-latest-small","by":"GroupLens Research, University of Minnesota","url":"https://grouplens.org/datasets/movielens/","generated":"2018-09-26","sha256":{"ratings.csv":"aa289ca83157595d0df6aea1be6a4ded676ddc4385472e8313a8ed9805352646","movies.csv":"5a5f32dd9bb3797b8e728a1b98958789d2b13f294a69fdfbc5727f8a9611aa07"},"licence":["MovieLens ml-latest-small, GroupLens Research, University of Minnesota, generated on 26 September 2018.","F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems 5, 4: 19:1 to 19:19. https://doi.org/10.1145/2827872","Used under the dataset's licence: research use; no endorsement by the University of Minnesota or GroupLens is stated or implied; this transformation (520 ratings of 26 users for 20 films, stars minus 3) is distributed under the same conditions; no commercial or revenue-bearing use without GroupLens's permission."]},"shift":3,"users":[18,28,64,66,91,182,198,239,249,274,307,330,380,387,391,414,425,474,480,561,580,590,599,606,608,610],"films":[{"id":356,"title":"Forrest Gump (1994)","short":"Forrest Gump"},{"id":318,"title":"Shawshank Redemption, The (1994)","short":"The Shawshank Redemption"},{"id":296,"title":"Pulp Fiction (1994)","short":"Pulp Fiction"},{"id":593,"title":"Silence of the Lambs, The (1991)","short":"The Silence of the Lambs"},{"id":110,"title":"Braveheart (1995)","short":"Braveheart"},{"id":589,"title":"Terminator 2: Judgment Day (1991)","short":"Terminator 2"},{"id":480,"title":"Jurassic Park (1993)","short":"Jurassic Park"},{"id":47,"title":"Seven (a.k.a. Se7en) (1995)","short":"Seven"},{"id":50,"title":"Usual Suspects, The (1995)","short":"The Usual Suspects"},{"id":780,"title":"Independence Day (a.k.a. ID4) (1996)","short":"Independence Day"},{"id":32,"title":"Twelve Monkeys (a.k.a. 12 Monkeys) (1995)","short":"Twelve Monkeys"},{"id":260,"title":"Star Wars: Episode IV - A New Hope (1977)","short":"Star Wars"},{"id":1089,"title":"Reservoir Dogs (1992)","short":"Reservoir Dogs"},{"id":1196,"title":"Star Wars: Episode V - The Empire Strikes Back (1980)","short":"The Empire Strikes Back"},{"id":1210,"title":"Star Wars: Episode VI - Return of the Jedi (1983)","short":"Return of the Jedi"},{"id":2571,"title":"Matrix, The (1999)","short":"The Matrix"},{"id":2959,"title":"Fight Club (1999)","short":"Fight Club"},{"id":4993,"title":"Lord of the Rings: The Fellowship of the Ring, The (2001)","short":"The Fellowship of the Ring"},{"id":1214,"title":"Alien (1979)","short":"Alien"},{"id":1240,"title":"Terminator, The (1984)","short":"The Terminator"}],"stars":[[4.5,5.0,4.0,4.5,4.5,4.5,3.5,4.5,5.0,4.0,4.0,4.0,4.0,4.0,4.5,4.5,4.5,4.5,4.0,4.0],[4.0,3.5,4.5,2.5,3.5,4.5,2.5,3.0,3.5,3.0,3.5,4.0,3.0,4.0,4.0,4.0,3.5,3.0,3.5,4.5],[4.0,5.0,4.5,5.0,4.0,4.0,4.0,4.5,3.0,3.0,4.0,3.5,4.0,3.5,3.5,4.0,4.5,4.5,4.0,3.5],[5.0,4.5,5.0,4.0,5.0,4.0,3.0,5.0,4.0,3.5,5.0,2.5,4.0,4.0,3.0,5.0,5.0,5.0,4.0,4.0],[3.0,2.0,4.5,4.5,4.0,4.0,4.5,4.5,4.5,3.5,4.0,4.5,4.0,4.5,4.0,5.0,4.5,4.5,5.0,4.5],[5.0,4.5,5.0,4.5,3.5,2.0,3.5,4.0,4.5,1.5,4.0,3.5,5.0,3.0,2.5,5.0,5.0,3.0,4.5,2.0],[5.0,5.0,5.0,4.0,3.0,3.0,3.0,5.0,5.0,2.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,2.0,2.0,3.0],[5.0,5.0,5.0,3.5,4.5,3.5,4.0,5.0,4.5,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,4.0],[4.5,4.5,4.0,4.0,5.0,4.0,4.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,4.5,5.0,5.0,5.0,4.5,4.0],[4.5,4.5,5.0,4.0,4.5,4.5,3.5,4.0,4.0,3.5,4.0,3.0,4.5,4.5,4.0,4.0,5.0,3.0,4.0,4.0],[4.0,4.5,4.5,4.5,3.5,2.5,3.5,4.0,4.5,2.0,3.5,3.5,4.0,3.0,3.0,3.5,4.0,3.0,2.0,2.5],[5.0,4.5,4.0,5.0,3.5,3.5,2.0,3.0,5.0,2.5,5.0,4.0,2.5,5.0,5.0,3.5,4.0,3.5,4.0,2.5],[5.0,3.0,5.0,5.0,4.0,5.0,5.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,5.0,4.5,4.0,5.0,5.0,5.0],[4.0,3.5,5.0,4.0,3.5,3.5,3.0,4.5,4.5,2.0,3.5,4.5,4.5,4.5,4.0,4.0,4.5,3.0,4.0,4.0],[5.0,5.0,5.0,3.0,5.0,4.0,2.0,3.0,4.0,1.0,4.0,5.0,5.0,5.0,4.0,5.0,4.0,5.0,4.0,4.0],[5.0,5.0,5.0,4.0,5.0,5.0,4.0,4.0,5.0,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0],[5.0,5.0,4.0,4.0,4.0,3.5,3.5,4.5,4.5,3.5,4.0,3.0,3.5,3.0,3.0,3.5,4.5,4.5,4.0,3.0],[3.0,5.0,4.0,4.5,3.0,4.0,4.5,4.0,4.0,4.0,4.0,4.0,4.0,5.0,4.0,4.5,4.0,5.0,4.0,4.0],[5.0,5.0,4.0,4.5,5.0,4.5,5.0,4.5,3.5,3.0,4.0,4.5,4.0,5.0,3.5,5.0,4.5,3.5,5.0,4.0],[4.0,5.0,4.5,4.0,5.0,4.0,4.5,4.5,4.5,4.0,3.5,4.5,3.5,5.0,4.5,4.0,4.0,5.0,4.5,4.0],[4.0,5.0,5.0,4.5,4.5,4.0,4.0,5.0,5.0,3.0,5.0,4.0,5.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[5.0,4.5,4.5,3.5,4.0,4.5,4.0,3.0,4.5,4.0,3.0,5.0,4.0,5.0,4.5,4.0,3.5,4.5,4.5,4.5],[3.5,4.0,5.0,3.0,3.5,4.5,4.0,4.0,3.5,3.5,3.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,5.0,3.5],[4.0,3.5,5.0,4.5,3.5,3.5,2.5,3.0,4.5,2.5,4.0,4.5,5.0,4.5,4.5,5.0,5.0,4.5,4.0,4.0],[3.0,4.5,5.0,4.0,4.0,3.0,3.0,4.5,4.5,3.0,3.5,3.5,4.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[3.0,3.0,5.0,4.5,4.5,5.0,5.0,5.0,4.0,3.5,4.5,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.5,5.0]],"runs":[{"name":"small","users":10,"films":12,"k":5,"alpha":3,"steps":200,"seed":1,"c0":[[-0.37,0.35,0.26,-0.24,0.0],[-0.05,0.15,0.29,-0.41,-0.47],[0.34,-0.07,0.26,-0.5,-0.05],[0.22,-0.27,0.45,0.4,-0.47],[-0.47,0.04,0.44,-0.12,-0.28],[-0.08,-0.47,-0.28,-0.06,0.0],[-0.27,-0.27,-0.28,-0.04,-0.21],[-0.48,0.34,0.06,0.14,-0.31],[0.49,0.36,-0.38,-0.17,0.22],[0.21,0.44,-0.08,0.33,0.17]],"f0":[[-0.2,0.09,0.38,0.35,0.01],[0.09,-0.47,-0.26,0.3,-0.09],[-0.33,0.05,0.2,0.17,-0.13],[-0.06,0.01,0.28,0.02,-0.11],[-0.01,-0.47,-0.46,0.2,0.48],[0.09,-0.11,-0.33,0.0,0.48],[0.27,0.04,0.36,-0.27,0.01],[0.45,0.08,-0.04,-0.23,0.05],[0.46,-0.49,0.28,0.32,0.39],[0.24,0.31,0.02,0.06,-0.07],[-0.44,0.37,0.07,-0.3,0.0],[-0.02,-0.14,-0.15,0.04,0.12]],"best":0.06095497468514066,"near":117,"close":148,"end":{"loss":0.060961519399707655,"largest":0.9107141179440341,"within_half":113,"within_quarter":85},"start":1.9154462383333333,"every":10,"check":[1.9154462383333333,0.19308353763036093,0.09862724217010728,0.08532853209112394,0.08069558441062735,0.0769878077103079,0.0731046361932439,0.06929636310819641,0.06616017953970835,0.06398246982628202,0.06264594175927211,0.061883619469548484,0.061464206998030714,0.06123634269727873,0.061112398286882294,0.06104436927530881,0.06100653089656409,0.06098515944898472,0.060972894842061705,0.06096574640933354,0.060961519399707655]},{"name":"large","users":26,"films":20,"k":8,"alpha":3,"steps":500,"seed":2,"c0":[[0.46,0.45,-0.44,-0.42,0.34,0.24,0.17,-0.19],[0.11,0.11,0.08,-0.34,-0.07,-0.11,0.22,0.49],[0.45,0.04,-0.06,-0.23,-0.46,-0.47,-0.04,-0.18],[-0.12,0.39,0.03,0.06,-0.26,-0.48,-0.17,-0.36],[0.01,0.5,0.17,-0.32,0.39,0.3,0.23,0.41],[0.26,0.29,-0.15,0.48,0.46,-0.34,0.25,0.22],[-0.04,0.03,-0.01,0.42,0.0,0.33,-0.15,0.38],[0.4,-0.04,0.07,0.42,0.22,-0.01,-0.28,-0.18],[0.2,-0.33,0.41,-0.23,0.41,-0.19,0.46,0.21],[0.0,0.02,0.15,0.09,-0.19,-0.29,0.01,0.43],[0.12,-0.42,0.32,0.23,0.41,-0.31,0.24,-0.44],[0.15,-0.23,-0.27,0.38,-0.39,0.02,0.35,-0.26],[-0.29,0.38,-0.08,0.22,-0.47,-0.14,-0.33,0.17],[-0.42,0.45,-0.47,0.23,-0.48,-0.24,0.31,-0.34],[-0.32,0.19,-0.11,-0.46,0.49,-0.35,-0.46,-0.16],[0.12,0.24,-0.39,-0.16,-0.47,-0.05,0.27,0.24],[0.4,0.26,0.36,0.21,-0.03,-0.27,0.16,-0.18],[-0.4,-0.05,0.37,-0.37,0.08,-0.11,0.01,-0.36],[0.46,-0.24,0.11,-0.08,-0.48,0.06,-0.36,-0.44],[-0.47,-0.34,-0.4,0.14,0.01,0.48,0.43,0.49],[-0.27,-0.06,-0.25,0.09,0.12,0.3,0.21,-0.24],[-0.08,0.03,-0.5,-0.46,-0.09,-0.39,0.22,-0.26],[-0.4,-0.32,-0.27,-0.28,0.02,-0.04,-0.19,0.14],[-0.29,0.41,0.46,0.23,-0.07,0.01,0.08,-0.45],[-0.08,0.03,-0.32,-0.41,0.3,-0.13,0.02,0.42],[0.11,-0.21,0.48,-0.13,-0.48,0.19,-0.4,-0.19]],"f0":[[0.34,0.17,-0.48,-0.05,-0.09,-0.01,-0.29,0.09],[-0.43,-0.22,-0.13,0.44,-0.42,0.25,-0.31,0.07],[-0.11,-0.04,0.25,-0.1,-0.38,-0.38,-0.42,0.35],[0.14,0.46,0.19,-0.48,0.16,0.28,0.22,0.0],[-0.14,-0.04,0.3,-0.23,0.03,-0.02,0.45,0.3],[0.43,0.34,-0.2,-0.27,-0.01,-0.24,-0.07,0.18],[0.42,0.09,0.32,-0.4,-0.14,0.5,-0.35,-0.08],[-0.43,-0.41,0.4,0.49,0.15,-0.37,-0.2,-0.27],[0.17,0.18,-0.06,0.02,-0.39,0.04,0.45,0.26],[-0.4,0.02,0.22,-0.24,0.39,-0.04,0.2,-0.1],[0.5,0.28,0.07,-0.36,-0.06,-0.47,0.1,0.38],[-0.32,0.01,-0.02,-0.1,0.21,0.44,0.21,-0.03],[0.46,-0.17,0.25,0.16,0.26,0.35,-0.28,0.12],[-0.1,0.17,0.48,0.13,-0.49,-0.04,0.21,0.38],[0.15,0.32,-0.48,0.44,0.23,0.11,0.41,0.38],[-0.4,0.32,0.27,-0.3,0.24,0.09,-0.31,0.3],[-0.36,0.11,-0.07,-0.25,0.07,-0.03,-0.3,0.47],[-0.43,-0.5,-0.01,0.34,0.16,0.25,-0.01,0.17],[-0.17,-0.23,0.0,-0.47,-0.42,0.25,-0.33,0.25],[0.28,-0.1,0.17,0.29,0.36,-0.37,-0.34,-0.12]],"best":0.06946921990638412,"near":236,"close":344,"end":{"loss":0.06947610459607549,"largest":0.9621963269518196,"within_half":491,"within_quarter":343},"start":1.991351010730769,"every":10,"check":[1.991351010730769,0.4556790231597761,0.24917990300599976,0.1812050234219615,0.1383708090391534,0.11291804240762357,0.09902694073164506,0.09117625084942632,0.08618405063952504,0.08265094117256502,0.07998044609763778,0.07789759432261692,0.07625305003710223,0.07494855266262847,0.07391078828966598,0.07308253114703277,0.07241890524747853,0.07188491480823192,0.07145338190344247,0.07110320811834096,0.07081797016526391,0.07058482448812016,0.07039367038661408,0.07023651679640533,0.07010700434632722,0.07000004388907288,0.06991154181783195,0.06983818999867028,0.06977730395650107,0.06972669729254045,0.06968458349699916,0.06964949863864738,0.06962024009409139,0.06959581770024999,0.06957541460345025,0.06955835573149133,0.06954408229787297,0.06953213110760018,0.06952211770519864,0.06951372261166205,0.06950668005505356,0.06950076872160812,0.06949580414932059,0.06949163246062104,0.0694881251896397,0.0694851750063027,0.06948269217679691,0.06948060162980928,0.06947884052198965,0.0694773562154806,0.06947610459607549]}]};
+  var S5 = {"source":{"name":"MovieLens ml-latest-small","by":"GroupLens Research, University of Minnesota","url":"https://grouplens.org/datasets/movielens/","generated":"2018-09-26","sha256":{"ratings.csv":"aa289ca83157595d0df6aea1be6a4ded676ddc4385472e8313a8ed9805352646","movies.csv":"5a5f32dd9bb3797b8e728a1b98958789d2b13f294a69fdfbc5727f8a9611aa07"},"licence":["MovieLens ml-latest-small, GroupLens Research, University of Minnesota, generated on 26 September 2018.","F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems 5, 4: 19:1 to 19:19. https://doi.org/10.1145/2827872","Used under the dataset's licence: research use; no endorsement by the University of Minnesota or GroupLens is stated or implied; this transformation (520 ratings of 26 users for 20 films, stars minus 3) is distributed under the same conditions; no commercial or revenue-bearing use without GroupLens's permission."]},"shift":3,"users":[18,28,64,66,91,182,198,239,249,274,307,330,380,387,391,414,425,474,480,561,580,590,599,606,608,610],"films":[{"id":356,"title":"Forrest Gump (1994)","short":"Forrest Gump"},{"id":318,"title":"Shawshank Redemption, The (1994)","short":"The Shawshank Redemption"},{"id":296,"title":"Pulp Fiction (1994)","short":"Pulp Fiction"},{"id":593,"title":"Silence of the Lambs, The (1991)","short":"The Silence of the Lambs"},{"id":110,"title":"Braveheart (1995)","short":"Braveheart"},{"id":589,"title":"Terminator 2: Judgment Day (1991)","short":"Terminator 2"},{"id":480,"title":"Jurassic Park (1993)","short":"Jurassic Park"},{"id":47,"title":"Seven (a.k.a. Se7en) (1995)","short":"Seven"},{"id":50,"title":"Usual Suspects, The (1995)","short":"The Usual Suspects"},{"id":780,"title":"Independence Day (a.k.a. ID4) (1996)","short":"Independence Day"},{"id":32,"title":"Twelve Monkeys (a.k.a. 12 Monkeys) (1995)","short":"Twelve Monkeys"},{"id":260,"title":"Star Wars: Episode IV - A New Hope (1977)","short":"Star Wars"},{"id":1089,"title":"Reservoir Dogs (1992)","short":"Reservoir Dogs"},{"id":1196,"title":"Star Wars: Episode V - The Empire Strikes Back (1980)","short":"The Empire Strikes Back"},{"id":1210,"title":"Star Wars: Episode VI - Return of the Jedi (1983)","short":"Return of the Jedi"},{"id":2571,"title":"Matrix, The (1999)","short":"The Matrix"},{"id":2959,"title":"Fight Club (1999)","short":"Fight Club"},{"id":4993,"title":"Lord of the Rings: The Fellowship of the Ring, The (2001)","short":"The Fellowship of the Ring"},{"id":1214,"title":"Alien (1979)","short":"Alien"},{"id":1240,"title":"Terminator, The (1984)","short":"The Terminator"}],"stars":[[4.5,5.0,4.0,4.5,4.5,4.5,3.5,4.5,5.0,4.0,4.0,4.0,4.0,4.0,4.5,4.5,4.5,4.5,4.0,4.0],[4.0,3.5,4.5,2.5,3.5,4.5,2.5,3.0,3.5,3.0,3.5,4.0,3.0,4.0,4.0,4.0,3.5,3.0,3.5,4.5],[4.0,5.0,4.5,5.0,4.0,4.0,4.0,4.5,3.0,3.0,4.0,3.5,4.0,3.5,3.5,4.0,4.5,4.5,4.0,3.5],[5.0,4.5,5.0,4.0,5.0,4.0,3.0,5.0,4.0,3.5,5.0,2.5,4.0,4.0,3.0,5.0,5.0,5.0,4.0,4.0],[3.0,2.0,4.5,4.5,4.0,4.0,4.5,4.5,4.5,3.5,4.0,4.5,4.0,4.5,4.0,5.0,4.5,4.5,5.0,4.5],[5.0,4.5,5.0,4.5,3.5,2.0,3.5,4.0,4.5,1.5,4.0,3.5,5.0,3.0,2.5,5.0,5.0,3.0,4.5,2.0],[5.0,5.0,5.0,4.0,3.0,3.0,3.0,5.0,5.0,2.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,2.0,2.0,3.0],[5.0,5.0,5.0,3.5,4.5,3.5,4.0,5.0,4.5,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,4.0],[4.5,4.5,4.0,4.0,5.0,4.0,4.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,4.5,5.0,5.0,5.0,4.5,4.0],[4.5,4.5,5.0,4.0,4.5,4.5,3.5,4.0,4.0,3.5,4.0,3.0,4.5,4.5,4.0,4.0,5.0,3.0,4.0,4.0],[4.0,4.5,4.5,4.5,3.5,2.5,3.5,4.0,4.5,2.0,3.5,3.5,4.0,3.0,3.0,3.5,4.0,3.0,2.0,2.5],[5.0,4.5,4.0,5.0,3.5,3.5,2.0,3.0,5.0,2.5,5.0,4.0,2.5,5.0,5.0,3.5,4.0,3.5,4.0,2.5],[5.0,3.0,5.0,5.0,4.0,5.0,5.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,5.0,4.5,4.0,5.0,5.0,5.0],[4.0,3.5,5.0,4.0,3.5,3.5,3.0,4.5,4.5,2.0,3.5,4.5,4.5,4.5,4.0,4.0,4.5,3.0,4.0,4.0],[5.0,5.0,5.0,3.0,5.0,4.0,2.0,3.0,4.0,1.0,4.0,5.0,5.0,5.0,4.0,5.0,4.0,5.0,4.0,4.0],[5.0,5.0,5.0,4.0,5.0,5.0,4.0,4.0,5.0,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0],[5.0,5.0,4.0,4.0,4.0,3.5,3.5,4.5,4.5,3.5,4.0,3.0,3.5,3.0,3.0,3.5,4.5,4.5,4.0,3.0],[3.0,5.0,4.0,4.5,3.0,4.0,4.5,4.0,4.0,4.0,4.0,4.0,4.0,5.0,4.0,4.5,4.0,5.0,4.0,4.0],[5.0,5.0,4.0,4.5,5.0,4.5,5.0,4.5,3.5,3.0,4.0,4.5,4.0,5.0,3.5,5.0,4.5,3.5,5.0,4.0],[4.0,5.0,4.5,4.0,5.0,4.0,4.5,4.5,4.5,4.0,3.5,4.5,3.5,5.0,4.5,4.0,4.0,5.0,4.5,4.0],[4.0,5.0,5.0,4.5,4.5,4.0,4.0,5.0,5.0,3.0,5.0,4.0,5.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[5.0,4.5,4.5,3.5,4.0,4.5,4.0,3.0,4.5,4.0,3.0,5.0,4.0,5.0,4.5,4.0,3.5,4.5,4.5,4.5],[3.5,4.0,5.0,3.0,3.5,4.5,4.0,4.0,3.5,3.5,3.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,5.0,3.5],[4.0,3.5,5.0,4.5,3.5,3.5,2.5,3.0,4.5,2.5,4.0,4.5,5.0,4.5,4.5,5.0,5.0,4.5,4.0,4.0],[3.0,4.5,5.0,4.0,4.0,3.0,3.0,4.5,4.5,3.0,3.5,3.5,4.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[3.0,3.0,5.0,4.5,4.5,5.0,5.0,5.0,4.0,3.5,4.5,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.5,5.0]],"runs":[{"name":"small","users":10,"films":12,"k":2,"alpha":3,"steps":200,"seed":1,"hide_seed":1,"hidden":[[2,9],[1,4],[7,7]],"c0":[[-0.37,0.35],[0.26,-0.24],[0.0,-0.05],[0.15,0.29],[-0.41,-0.47],[0.34,-0.07],[0.26,-0.5],[-0.05,0.22],[-0.27,0.45],[0.4,-0.47]],"f0":[[-0.47,0.04],[0.44,-0.12],[-0.28,-0.08],[-0.47,-0.28],[-0.06,0.0],[-0.27,-0.27],[-0.28,-0.04],[-0.21,-0.48],[0.34,0.06],[0.14,-0.31],[0.49,0.36],[-0.38,-0.17]],"best":null,"near":null,"close":null,"end":{"loss":0.25086536262392417,"largest":1.772649786057978,"within_half":81,"within_quarter":48,"hidden":[0.672352306013165,0.6227970952582049,1.9847636790449537]},"start":1.8390872940170933,"every":10,"check":[1.8390872940170933,0.3044750041957047,0.2590643935446026,0.2540437813817596,0.25232099234287836,0.25157051752157084,0.2512171852084287,0.25104421638844676,0.2509574870633079,0.25091326904545835,0.2508904465622904,0.250878557970973,0.25087232192474956,0.2508690338570197,0.25086729347515047,0.2508663696690283,0.2508658782868727,0.2508656165200392,0.2508654769200221,0.25086540241262983,0.25086536262392417]},{"name":"large","users":26,"films":20,"k":8,"alpha":3,"steps":500,"seed":2,"c0":[[0.46,0.45,-0.44,-0.42,0.34,0.24,0.17,-0.19],[0.11,0.11,0.08,-0.34,-0.07,-0.11,0.22,0.49],[0.45,0.04,-0.06,-0.23,-0.46,-0.47,-0.04,-0.18],[-0.12,0.39,0.03,0.06,-0.26,-0.48,-0.17,-0.36],[0.01,0.5,0.17,-0.32,0.39,0.3,0.23,0.41],[0.26,0.29,-0.15,0.48,0.46,-0.34,0.25,0.22],[-0.04,0.03,-0.01,0.42,0.0,0.33,-0.15,0.38],[0.4,-0.04,0.07,0.42,0.22,-0.01,-0.28,-0.18],[0.2,-0.33,0.41,-0.23,0.41,-0.19,0.46,0.21],[0.0,0.02,0.15,0.09,-0.19,-0.29,0.01,0.43],[0.12,-0.42,0.32,0.23,0.41,-0.31,0.24,-0.44],[0.15,-0.23,-0.27,0.38,-0.39,0.02,0.35,-0.26],[-0.29,0.38,-0.08,0.22,-0.47,-0.14,-0.33,0.17],[-0.42,0.45,-0.47,0.23,-0.48,-0.24,0.31,-0.34],[-0.32,0.19,-0.11,-0.46,0.49,-0.35,-0.46,-0.16],[0.12,0.24,-0.39,-0.16,-0.47,-0.05,0.27,0.24],[0.4,0.26,0.36,0.21,-0.03,-0.27,0.16,-0.18],[-0.4,-0.05,0.37,-0.37,0.08,-0.11,0.01,-0.36],[0.46,-0.24,0.11,-0.08,-0.48,0.06,-0.36,-0.44],[-0.47,-0.34,-0.4,0.14,0.01,0.48,0.43,0.49],[-0.27,-0.06,-0.25,0.09,0.12,0.3,0.21,-0.24],[-0.08,0.03,-0.5,-0.46,-0.09,-0.39,0.22,-0.26],[-0.4,-0.32,-0.27,-0.28,0.02,-0.04,-0.19,0.14],[-0.29,0.41,0.46,0.23,-0.07,0.01,0.08,-0.45],[-0.08,0.03,-0.32,-0.41,0.3,-0.13,0.02,0.42],[0.11,-0.21,0.48,-0.13,-0.48,0.19,-0.4,-0.19]],"f0":[[0.34,0.17,-0.48,-0.05,-0.09,-0.01,-0.29,0.09],[-0.43,-0.22,-0.13,0.44,-0.42,0.25,-0.31,0.07],[-0.11,-0.04,0.25,-0.1,-0.38,-0.38,-0.42,0.35],[0.14,0.46,0.19,-0.48,0.16,0.28,0.22,0.0],[-0.14,-0.04,0.3,-0.23,0.03,-0.02,0.45,0.3],[0.43,0.34,-0.2,-0.27,-0.01,-0.24,-0.07,0.18],[0.42,0.09,0.32,-0.4,-0.14,0.5,-0.35,-0.08],[-0.43,-0.41,0.4,0.49,0.15,-0.37,-0.2,-0.27],[0.17,0.18,-0.06,0.02,-0.39,0.04,0.45,0.26],[-0.4,0.02,0.22,-0.24,0.39,-0.04,0.2,-0.1],[0.5,0.28,0.07,-0.36,-0.06,-0.47,0.1,0.38],[-0.32,0.01,-0.02,-0.1,0.21,0.44,0.21,-0.03],[0.46,-0.17,0.25,0.16,0.26,0.35,-0.28,0.12],[-0.1,0.17,0.48,0.13,-0.49,-0.04,0.21,0.38],[0.15,0.32,-0.48,0.44,0.23,0.11,0.41,0.38],[-0.4,0.32,0.27,-0.3,0.24,0.09,-0.31,0.3],[-0.36,0.11,-0.07,-0.25,0.07,-0.03,-0.3,0.47],[-0.43,-0.5,-0.01,0.34,0.16,0.25,-0.01,0.17],[-0.17,-0.23,0.0,-0.47,-0.42,0.25,-0.33,0.25],[0.28,-0.1,0.17,0.29,0.36,-0.37,-0.34,-0.12]],"best":0.06946921990638412,"near":236,"close":344,"end":{"loss":0.06947610459607549,"largest":0.9621963269518196,"within_half":491,"within_quarter":343},"start":1.991351010730769,"every":10,"check":[1.991351010730769,0.4556790231597761,0.24917990300599976,0.1812050234219615,0.1383708090391534,0.11291804240762357,0.09902694073164506,0.09117625084942632,0.08618405063952504,0.08265094117256502,0.07998044609763778,0.07789759432261692,0.07625305003710223,0.07494855266262847,0.07391078828966598,0.07308253114703277,0.07241890524747853,0.07188491480823192,0.07145338190344247,0.07110320811834096,0.07081797016526391,0.07058482448812016,0.07039367038661408,0.07023651679640533,0.07010700434632722,0.07000004388907288,0.06991154181783195,0.06983818999867028,0.06977730395650107,0.06972669729254045,0.06968458349699916,0.06964949863864738,0.06962024009409139,0.06959581770024999,0.06957541460345025,0.06955835573149133,0.06954408229787297,0.06953213110760018,0.06952211770519864,0.06951372261166205,0.06950668005505356,0.06950076872160812,0.06949580414932059,0.06949163246062104,0.0694881251896397,0.0694851750063027,0.06948269217679691,0.06948060162980928,0.06947884052198965,0.0694773562154806,0.06947610459607549]}]};
   if (typeof module !== "undefined" && module.exports) module.exports = S5;
   if (root && root.MF) root.MF.S5 = S5;
 })(typeof window !== "undefined" ? window : null);
@@ -5946,21 +6041,26 @@ button.chip:hover{border-color:var(--rubric)}
 <script>
 /* Section 5, the whole picture: S5-A's scenes (BRIEF-s5.md, WHOLE.md). Classes start with s5-.
 
-   recap   The whole method, on part two's table (MF.L.view, the textbook cross): we are given the rating matrix; we
-           factorize it into two matrices whose product gives the ratings; their rows and columns are the embeddings
-           (a customer's numbers form a row, a film's a column); we find them by gradient descent (the run of the
-           optional game's table replayed, every number moving at once, with a small curve of the average loss).
-           Game 3 stands alone: its words name parts one and two, never the optional game.
+   recap   The whole method, on part two's table (MF.L.view, the textbook cross) with one rating unknown, Elsa's of
+           Paddington (Carlos, 2026-11-10): we are given the rating matrix; we factorize it into two matrices whose
+           product gives the known ratings and predicts the unknown one (ringed); their rows and columns are the
+           embeddings (a customer's numbers form a row, a film's a column); we find them by gradient descent (a run
+           from the optional game's first guess replayed, every number moving at once, with a small curve of the
+           average loss). Game 3 stands alone: its words name parts one and two, never the optional game.
    schema  Popper's diagram (MF.G.schema) with the method written under its four boxes, then the loop.
-   real    Real ratings, MF.S5.runs[0]: ten MovieLens users and twelve films, stars, then stars minus 3; then part
-           two's textbook cross as maps of coloured squares (M.cross, layout "textbook"): the users' numbers 10 x 5,
-           the films' numbers turned, 5 x 12, above the predictions; the first guess, its predictions and losses; the
-           200 steps replayed; the result; the best possible.
+   real    Real ratings, MF.S5.runs[0]: ten MovieLens users and twelve films, three ratings hidden (Carlos,
+           2026-11-10), stars, then stars minus 3; then part two's textbook cross as maps of coloured squares
+           (M.cross, layout "textbook"): the users' numbers 10 x 2, the films' numbers turned, 2 x 12, above the
+           predictions; the first guess, its predictions (the hidden ratings' ringed) and losses; the 200 steps
+           replayed; the result; the hidden ratings revealed beside their predictions.
    larger  A larger table, MF.S5.runs[1]: 26 users and 20 films as a map of coloured squares, then the same cross with
-           eight numbers per user and per film (26 x 8 and 8 x 20); the 500 steps replayed, the result on the best
-           possible.
-   end     The whole picture: the method in one line of four cards; every rating was known; a recommender is judged
-           on ratings it never saw; the dataset, the citation and the licence conditions.
+           eight numbers per user and per film (26 x 8 and 8 x 20); the 500 steps replayed, the result; the best
+           possible (every rating of this table is known, so the singular value decomposition gives it).
+   end     The whole picture: the method in one line of four cards, the dataset, the citation and the licence
+           conditions. (Until 2026-11-10 two more steps hid ratings of the larger table; scene real does that now.)
+
+   A part of a board whose numbers change during a run keeps the width of its widest number of the whole run (hold
+   below; Carlos, 2026-11-10: the matrices were "vibrating" as the lengths of the numbers changed).
 
    No data number is typed here: every number comes from MF.S5 (s5-data.js), MF.S2, MF.S4 and MF.T. The runs are
    MF.T.run from the stored first guesses (../tools/check_s5.js proves they are the precomputed ones), computed once
@@ -5975,7 +6075,7 @@ button.chip:hover{border-color:var(--rubric)}
   var MOTION = !MF.reducedMotion;
   var SVGNS = "http://www.w3.org/2000/svg";
   var HALF = 0.5;                   // half a star: the criterion of run.end.within_half
-  var NEXT_HIDDEN = 0.2;            // the share of ratings the TAs' notebook hides (02_recsys, Part 2: "hide 20% of the ratings")
+  var NONE = "none";                // a square with nothing to show: the loss of a hidden rating
   var REPLAY = [12000, 22000];      // ms for the replay of runs[0] and runs[1] at the normal speed
   var UID = 0;
 
@@ -6103,37 +6203,54 @@ button.chip:hover{border-color:var(--rubric)}
     if (S.aside) { put(S.aside, aside || []); S.aside.hidden = !aside || !aside.length; }
   }
 
-  /* THE DATA OF A RUN: the table of stars, the ratings (stars minus the shift), the run of MF.T from the stored first
-     guess, its predictions at the start and the end, the ratings missed by more than half a star. */
+  /* THE DATA OF A RUN: the table of stars, the ratings (stars minus the shift; all: every one, R: the hidden ones
+     null, as MF.T reads an unknown rating), the run of MF.T from the stored first guess, its predictions at the start
+     and the end, the known ratings missed by more than half a star, and the hidden ratings (run.hidden, runs[0] since
+     2026-11-10) in reading order with their predictions at the end of the run. */
   var DATA = [null, null];
   function data(n) {
     if (DATA[n]) return DATA[n];
     var r = S5.runs[n];
     var stars = S5.stars.slice(0, r.users).map(function (row) { return row.slice(0, r.films); });
-    var R = stars.map(function (row) { return row.map(function (x) { return x - S5.shift; }); });
+    var all = stars.map(function (row) { return row.map(function (x) { return x - S5.shift; }); });
+    var hid = (r.hidden || []).map(function (p) { return p.slice(); }).sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+    var isHid = {};
+    hid.forEach(function (p) { isHid[p[0] + "," + p[1]] = true; });
+    var R = all.map(function (row, i) { return row.map(function (x, j) { return isHid[i + "," + j] ? null : x; }); });
     var out = T.run(r.c0, r.f0, R, r.alpha, r.steps, 0);
-    var d = { n: n, run: r, stars: stars, R: R, users: S5.users.slice(0, r.users), films: S5.films.slice(0, r.films),
+    var d = { n: n, run: r, stars: stars, all: all, R: R, hid: hid, users: S5.users.slice(0, r.users), films: S5.films.slice(0, r.films),
               states: out.states, steps: out.steps, losses: out.states.map(function (s) { return s.loss; }) };
+    d.isHid = function (i, j) { return !!isHid[i + "," + j]; };
     d.P0 = T.predict(r.c0, r.f0);
     var e = out.states[out.steps];
     d.PE = T.predict(e.c, e.f);
     d.misses = [];
     d.largest = 0;
+    d.above = 0;
     R.forEach(function (row, i) {
       row.forEach(function (x, j) {
+        if (x === null) return;
         var miss = Math.abs(x - d.PE[i][j]);
         d.largest = Math.max(d.largest, miss);
         if (miss > HALF) d.misses.push([i, j]);
+        if (x > 0) d.above++;
       });
     });
     d.ratings = r.users * r.films;
-    d.within = d.ratings - d.misses.length;
+    d.known = d.ratings - hid.length;
+    d.within = d.known - d.misses.length;
     d.numbers = (r.users + r.films) * r.k;
-    d.above = 0;
-    R.forEach(function (row) { row.forEach(function (x) { if (x > 0) d.above++; }); });
+    d.reveal = hid.map(function (p) {
+      var i = p[0], j = p[1];
+      return { i: i, j: j, user: d.users[i], film: d.films[j], stars: stars[i][j], rating: all[i][j], prediction: d.PE[i][j],
+               miss: Math.abs(d.PE[i][j] - all[i][j]) };
+    });
     DATA[n] = d;
     return d;
   }
+  // the stars and the ratings as the tables show them: a hidden rating gives null (its cell keeps its "?")
+  function starsOf(d) { return function (i, j) { return d.isHid(i, j) ? null : d.stars[i][j]; }; }
+  function ratingsOf(d) { return function (i, j) { return d.R[i][j]; }; }
   // The range the first guesses were drawn from, read off both runs' first guesses.
   function guessRange() {
     var lo = Infinity, hi = -Infinity;
@@ -6307,8 +6424,10 @@ button.chip:hover{border-color:var(--rubric)}
      pass). o.turn draws it turned (the films' numbers of the textbook cross, as M.matrix's transpose: one drawn row
      per number, one drawn column per film); the rows, the columns, get(i, j), m.cell(i, j), m.mark and a square's
      data-i and data-j stay logical (row i is film i), only the drawing turns.
-     m.set(get) paints every square from get(i, j) (null draws a "?"); m.mark(list, cls) rings squares. */
+     m.set(get) paints every square from get(i, j) (null draws a "?", NONE an empty place); m.mark(list, cls) rings
+     squares. */
   function quant(v) {
+    if (v === NONE) return "e";
     if (v === null || v === undefined) return "q";
     var k = Math.round(Math.min(Math.abs(v), 2) / 2 * 8);
     return k === 0 ? "z" : (v > 0 ? "p" : "n") + k;
@@ -6361,7 +6480,8 @@ button.chip:hover{border-color:var(--rubric)}
 
   /* A table of digits: an MF.M matrix with small cells, the films' pictures as heads (and their short titles while
      the root carries s5-titles), numbers rounded to o.places. o.rows: labels of the rows (or a count with no heads),
-     o.films or o.cols for the columns, o.rowFilms: the films as row heads, o.values(i, j), o.corner, o.caption. */
+     o.films or o.cols for the columns, o.rowFilms: the films as row heads, o.values(i, j), o.corner, o.caption.
+     o.hidden(i, j): true for a hidden rating, drawn as the notation's "?" (a slot) that m.paint leaves alone. */
   function mtable(o) {
     var rows = o.rowFilms ? o.rowFilms.map(function (f) { return { label: f.short }; })
                           : (Array.isArray(o.rows) ? o.rows.map(function (l) { return { label: l }; }) : o.rows);
@@ -6385,9 +6505,18 @@ button.chip:hover{border-color:var(--rubric)}
     if (corner && o.corner) corner.textContent = o.corner;
     m.table.dataset.board = o.board || "";
     m.places = o.places === undefined ? 2 : o.places;
+    m.hidden = o.hidden || function () { return false; };
+    for (var hi = 0; hi < m.R; hi++) for (var hj = 0; hj < m.C; hj++) if (m.hidden(hi, hj)) {
+      var q = m.set(hi, hj, "?");
+      q.classList.add("s5-unk");
+      q.setAttribute("aria-label", "hidden rating");
+    }
     m.paint = function (get, pl) {
       var p = pl === undefined ? m.places : pl;
-      for (var i = 0; i < m.R; i++) for (var j = 0; j < m.C; j++) { var c = m.item(i, j); if (c) paint(c, get(i, j), p); }
+      for (var i = 0; i < m.R; i++) for (var j = 0; j < m.C; j++) {
+        var c = m.item(i, j), x = m.hidden(i, j) ? null : get(i, j);
+        if (c && x !== null && x !== undefined) paint(c, x, p);
+      }
       return m;
     };
     m.mark = function (list) {
@@ -6413,13 +6542,68 @@ button.chip:hover{border-color:var(--rubric)}
     w.appendChild(n);
     return { el: w, set: function (j) { n.textContent = String(j); } };
   }
+  // A "?" in the words: the unknown rating's mark.
+  function qmark() {
+    var q = N.slot({ cls: "s5-in" });
+    q.setAttribute("aria-label", "question mark");
+    return q;
+  }
+
+  /* THE HOLD. The texts a run will show, one per form (digits read as 0: the digits are tabular, so texts of one form
+     are equally wide); the widest of them in a number cell, its border box in px, measured on the cell itself with
+     the thicker border of the strong tints and put back as it was (0 while the cell is not laid out); hold(parts,
+     texts) gives every number cell of the parts (pairs [box, probe]: the element that sets --nt-w for its cells and
+     one of its number cells) one width, the widest of the texts in any part or the widest of the stylesheet's widths,
+     so the parts of a board also keep their columns in line (--nt-w is cleared first, so a new screen size measures
+     afresh). */
+  function forms(texts) {
+    var seen = {}, out = [];
+    texts.forEach(function (t) { var k = String(t).replace(/[0-9]/g, "0"); if (!seen[k]) { seen[k] = true; out.push(k); } });
+    return out;
+  }
+  function widest(cell, texts) {
+    if (!cell || !cell.isConnected || !cell.getClientRects().length) return 0;
+    var keep = { t: cell.textContent, d: cell.dataset.t, m: cell.style.minWidth }, w = 0;
+    cell.style.minWidth = "0px";
+    cell.dataset.t = "2";
+    forms(texts).forEach(function (t) {
+      cell.textContent = t;
+      w = Math.max(w, Math.ceil(parseFloat(getComputedStyle(cell).width) - 0.01));
+    });
+    cell.textContent = keep.t;
+    if (keep.d === undefined) delete cell.dataset.t; else cell.dataset.t = keep.d;
+    cell.style.minWidth = keep.m;
+    return w;
+  }
+  function hold(parts, texts) {
+    parts.forEach(function (p) { if (p[0]) p[0].style.removeProperty("--nt-w"); });
+    var w = 0;
+    for (var q = 0; q < parts.length; q++) {
+      var box = parts[q][0], probe = parts[q][1];
+      if (!box || !probe || !probe.getClientRects().length) return 0;     // not laid out: measured on the next step
+      w = Math.max(w, parseFloat(getComputedStyle(probe).minWidth) || 0, widest(probe, texts));
+    }
+    parts.forEach(function (p) { p[0].style.setProperty("--nt-w", w + "px"); });
+    return w;
+  }
+  // Again on a new screen size and once the page's font has come (a measure in the fallback font is too narrow).
+  var HOLDS = [];
+  function onHold(fn) {
+    HOLDS.push(fn);
+    if (HOLDS.length > 1) return;
+    var queued = false;
+    function all() { queued = false; HOLDS.forEach(function (f) { f(); }); }
+    window.addEventListener("resize", function () { if (!queued) { queued = true; requestAnimationFrame(all); } });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(all);
+  }
 
   /* The words of a tapped square or number, as a list of strings and numbers ({ v, p }: a number with p decimals;
      { loss }: a loss as the ring writes it), or null. On a map of numbers: the user or the film and which of its
      numbers ("number 1" is a user's first square from the left, a film's top square). On the ratings, the
      predictions and the losses: the user and the film, then, once predictions show (P), the prediction before the
      rating, as on the board (Carlos, 2026-11-06), the rating with its stars, and on the losses the loss,
-     (prediction - rating) squared. Pure, so ../tools/check_s5.js reads it in node. */
+     (prediction - rating) squared. A hidden rating reads "rating hidden" and has no loss. Pure, so
+     ../tools/check_s5.js reads it in node. */
   function readOf(d, board, i, j, st, P) {
     if (board === "U" || board === "F") {
       if (!st) return null;
@@ -6428,6 +6612,13 @@ button.chip:hover{border-color:var(--rubric)}
     }
     if (board !== "R" && board !== "P" && board !== "S") return null;
     var out = ["User " + d.users[i] + " and " + d.films[j].short + ": "];
+    if (d.isHid && d.isHid(i, j)) {
+      if (P) out.push("prediction ", { v: P[i][j], p: 2 }, ", rating hidden");
+      else out.push("rating hidden");
+      if (board === "S" && P) out.push(", no loss");
+      out.push(".");
+      return out;
+    }
     if (P) out.push("prediction ", { v: P[i][j], p: 2 }, ", rating ", { v: d.R[i][j], p: 1 }, " (" + d.stars[i][j] + " stars)");
     else out.push(String(d.stars[i][j]) + " stars, rating ", { v: d.R[i][j], p: 1 });
     if (board === "S" && P) out.push(", loss ", { loss: lossOf(P[i][j], d.R[i][j]) });
@@ -6485,14 +6676,43 @@ button.chip:hover{border-color:var(--rubric)}
     return ["Real ratings from " + S5.source.name + " (" + S5.source.by + ")."];
   }
 
-  /* SCENE 1: THE WHOLE METHOD, on part two's table (MF.L.view, as in the optional game's scene table) */
+  /* SCENE 1: THE WHOLE METHOD, on part two's table (MF.L.view, as in the optional game's scene table), with one rating
+     unknown (Carlos, 2026-11-10: "please make one entry unknown in the rating matrix, so that it's clear how, by doing
+     this process, we eventually are able to predict the rating for the corresponding entry in the matrix"): Elsa's
+     of Paddington, a "?" in the ratings. The run leaves it out (MF.T reads null as unknown: no loss, no slope), and the
+     product of the two matrices predicts it, ringed in ochre. Two numbers per row could fit any value there, so the
+     number it settles on comes from the first guess; the words call it a prediction and nothing more. */
   var RC = null;
   var RC_STEPS = ["given", "factor", "embed", "descent"];
   var P4 = S2.people, F4 = S2.films;
+  var UNKNOWN = ["elsa", "paddington"];
   var REC = (function () {
-    var st = T.matrices(S2.start, P4, F4), R = T.ratings(P4, F4), run = T.run(st.c, st.f, R, S4.alpha);
-    return { start: st, R: R, run: run, losses: run.states.map(function (s) { return s.loss; }) };
+    var st = T.matrices(S2.start, P4, F4), R = T.ratings(P4, F4).map(function (row) { return row.slice(); });
+    var u = [P4.indexOf(UNKNOWN[0]), F4.indexOf(UNKNOWN[1])];
+    R[u[0]][u[1]] = null;
+    var run = T.run(st.c, st.f, R, S4.alpha), e = run.states[run.steps], known = 0;
+    R.forEach(function (row) { row.forEach(function (x) { if (x !== null) known++; }); });
+    return { start: st, R: R, u: u, known: known, run: run, losses: run.states.map(function (s) { return s.loss; }),
+             guess: T.predict(e.c, e.f)[u[0]][u[1]] };
   })();
+  // every text the run shows in the guesses, the predictions, the losses and the ring, as loss.js writes them
+  function recTexts() {
+    var cells = [], ring = [], tol = S4.tol || 0.0001;
+    REC.run.states.forEach(function (s) {
+      var t = T.table(s.c, s.f, REC.R);
+      s.c.concat(s.f).concat(t.P).forEach(function (row) { row.forEach(function (x) { cells.push(L.cellText(x, 2)); }); });
+      t.S.forEach(function (row) { row.forEach(function (x) { if (x !== null) cells.push(L.cellText(x, 2)); }); });
+      ring.push(L.avgText(s.loss, 2, tol));
+    });
+    return { cells: cells, ring: ring };
+  }
+  function recHold() {
+    var S = RC, V = S.V;
+    if (!S.texts) S.texts = recTexts();
+    hold(["c", "f", "p", "s"].map(function (x) { var m = V.matrix(x); return [m.el, m.item(0, 0)]; }), S.texts.cells);
+    var ring = V.cell("avg").querySelector(".nt-n");
+    if (ring) hold([[ring, ring]], S.texts.ring);
+  }
   function recWithin() {
     var e = REC.run.states[REC.run.steps], t = T.table(e.c, e.f, REC.R), m = 0;
     t.D.forEach(function (row) { row.forEach(function (x) { if (x !== null) m = Math.max(m, Math.abs(x)); }); });
@@ -6505,7 +6725,8 @@ button.chip:hover{border-color:var(--rubric)}
     S.curve.draw(j);
   }
   function rcStep(k, live) {
-    var S = RC, V = S.V, st = RC_STEPS[k], end = REC.run.states[REC.run.steps];
+    var S = RC, V = S.V, st = RC_STEPS[k], end = REC.run.states[REC.run.steps], u = REC.u;
+    var who = name(P4[u[0]]), what = MF.get(F4[u[1]]).t, ringed = [{ part: "p", i: u[0], j: u[1], tone: "b" }];
     S.k = k;
     S.player.pause();
     V.stop();
@@ -6518,14 +6739,15 @@ button.chip:hover{border-color:var(--rubric)}
       V.set(end.c, end.f);
       V.showParts(["ratings"]);
       words(S, [rub("We are given the rating matrix:")], ["the table of part two, " + count(pc) + " customers and " + count(fc) +
-        " films, " + count(pc * fc) + " ratings."]);
+        " films. " + who + "'s rating of " + what + " is unknown: ", qmark(), "."]);
       if (live) { V.showParts([]); V.add("ratings"); }
       return;
     }
     if (st === "factor") {
       V.set(end.c, end.f);
-      words(S, [rub("We factorize it:"), " two matrices whose product gives the ratings."],
-        ["The customers' matrix and the films' matrix: their product gives every rating within ", num(recWithin()), "."]);
+      V.mark(ringed);
+      words(S, [rub("We factorize it:"), " two matrices whose product gives the known ratings."],
+        ["Their product gives each of them within ", num(recWithin()), ". Where the rating is unknown it gives a number too: the prediction, ringed."]);
       if (live) {
         V.showParts(["ratings"]);
         V.add("guesses").then(function (ok) { if (ok && S.k === k) V.add("predictions"); });
@@ -6535,17 +6757,19 @@ button.chip:hover{border-color:var(--rubric)}
     if (st === "embed") {
       V.set(end.c, end.f);
       V.showParts(["guesses", "predictions", "ratings"]);
-      V.focus(0, 0);
+      V.focus(u[0], u[1]);
       words(S, [rub("Rows and columns are the embeddings:"), " a row for every customer, a column for every film."],
-        [name(P4[0]) + "'s row with " + name(F4[0]) + "'s column gives the prediction of her rating: their inner product, as in part one."]);
+        [who + "'s row with " + what + "'s column gives the prediction of the unknown rating: their inner product, as in part one."]);
       return;
     }
     V.showParts(L.PARTS.slice());
     V.predict("all");
     V.losses("all");
     V.average(true);
+    V.mark(ringed);
     words(S, [rub("And we find them by gradient descent:"), " " + REC.run.steps + " steps, every number moving at once."],
-      ["Guess, predict, average the losses, move every number a little the way that lowers the average loss, and again."]);
+      ["Guess, predict, average the " + count(REC.known) + " known losses, move every number a little, and again: the ringed prediction settles at ",
+       num(REC.guess), "."]);
     S.play.hidden = false;
     if (live) {
       S.player.reset();
@@ -6570,7 +6794,11 @@ button.chip:hover{border-color:var(--rubric)}
       S.runRow.appendChild(S.count.el);
       S.runRow.appendChild(S.play);
       S.runRow.appendChild(S.curve.el);
-      S.V = L.view({ people: P4, films: F4, size: "sm", dec: true, nb: S.runRow });
+      S.V = L.view({ people: P4, films: F4, size: "sm", dec: true, nb: S.runRow, ratings: REC.R });
+      // the unknown rating: the notation's "?" (loss.js draws a null rating as an empty cell and never redraws it)
+      var q = S.V.matrix("r").set(REC.u[0], REC.u[1], "?");
+      q.classList.add("s5-unk");
+      q.setAttribute("aria-label", "unknown rating");
       S.words = h("div", "s5-words", [S.lead, S.say]);
       S.root.appendChild(S.words);
       S.root.appendChild(S.V.el);
@@ -6586,6 +6814,8 @@ button.chip:hover{border-color:var(--rubric)}
       var live = isLive(RC, k);
       RC.t.stop();
       rcStep(k, live);
+      recHold();
+      if (!RC.held) { RC.held = true; onHold(function () { if (RC.root.getClientRects().length) { recHold(); RC.V.cross.redraw(); } }); }
       RC.V.cross.redraw();                            // the arrows at once, without waiting for the next frame
       RC.last = k;
     }
@@ -6675,8 +6905,31 @@ button.chip:hover{border-color:var(--rubric)}
     if (S.pU) S.pU.set(function (i, j) { return st.c[i][j]; });
     if (S.pF) S.pF.set(function (i, j) { return st.f[i][j]; });
   }
-  // the loss of every rating, (prediction - rating) squared: the squares of the losses' map
-  function lossesOf(d, P) { return function (i, j) { return lossOf(P[i][j], d.R[i][j]); }; }
+  // the loss of every rating, (prediction - rating) squared: the squares of the losses' map; a hidden rating has none
+  function lossesOf(d, P) { return function (i, j) { return d.R[i][j] === null ? NONE : lossOf(P[i][j], d.R[i][j]); }; }
+  // The ring keeps the width of the widest average loss of the run (the hold above).
+  function ringHold(S, d) {
+    if (!S.ringTexts) S.ringTexts = d.losses.map(avg);
+    hold([[S.ring.cell, S.ring.cell]], S.ringTexts);
+  }
+  function holdOnResize(S, d) {
+    ringHold(S, d);
+    if (S.held) return;
+    S.held = true;
+    onHold(function () { if (S.root.getClientRects().length) { ringHold(S, d); S.X.redraw(); } });
+  }
+  // The last step of scene larger (of scene real until 2026-11-10): the curve takes the stage, the count, the ring and
+  // Replay in a row under it; on the other steps the strip in the board's corner and the ring in the board.
+  function stage(S, on) {
+    S.root.classList.toggle("s5-bigc", on);
+    if (on) {
+      if (S.strip.parentNode !== S.root) S.root.insertBefore(S.strip, S.read);
+      if (S.ring.el.parentNode !== S.strip) S.strip.insertBefore(S.ring.el, S.ctl);
+    } else {
+      if (S.strip.parentNode !== S.stripSlot) S.stripSlot.appendChild(S.strip);
+      if (S.ring.el.parentNode !== S.ringSlot) S.ringSlot.appendChild(S.ring.el);
+    }
+  }
 
   /* THE TEXTBOOK CROSS OF SCENES 3 AND 4 (M.cross with layout "textbook" in matrix.js, as part two since 2026-11-06,
      Carlos's seventh message; part two's stack from 2026-11-05, the cross of 2026-11-04 before): maps of squares. The
@@ -6701,7 +6954,7 @@ button.chip:hover{border-color:var(--rubric)}
     S.pF = map({ rows: sh.films[1], cols: sh.films[0], turn: true, caption: "Films' numbers", cut: 5, board: "F" });
     S.pP = map({ rows: sh.predictions[0], cols: sh.predictions[1], caption: "Predictions", fwd: true, board: "P" });
     S.pS = map({ rows: sh.losses[0], cols: sh.losses[1], caption: "Losses", fwd: true, board: "S" });
-    S.pR.set(function (i, j) { return d.R[i][j]; });
+    S.pR.set(ratingsOf(d));
     strip(S, d, total);
     [S.count.el, S.ctl, S.curve.el].forEach(function (x) { S.strip.appendChild(x); });
     S.X = M.cross({ c: S.pU.el, f: S.pF.el, r: S.pR.el, p: S.pP.el, s: S.pS.el, avg: S.ring.el, nb: S.strip, layout: "textbook", cls: "s5-x" });
@@ -6758,56 +7011,53 @@ button.chip:hover{border-color:var(--rubric)}
     Array.prototype.forEach.call(S.root.querySelectorAll(".s5-mg i"), function (c) { c.style.visibility = ""; });
   }
 
-  /* SCENE 3: REAL RATINGS, runs[0]: the ratings as a table of digits first, then the cross of maps */
+  /* SCENE 3: REAL RATINGS, runs[0]: the ratings as a table of digits first, then the cross of maps. Three ratings are
+     hidden (Carlos, 2026-11-10: "hide maybe 2 or 3 ratings and you mark them visibly as unknown, and then show how we
+     can then predict them using matrix factorization"): a "?" in the table and in the ratings' map, no loss, left out
+     of the run (null in d.R); their predictions ringed in ochre from the first product on; on the last step each hidden
+     rating beside its prediction. Until 2026-11-10 every rating was known, five numbers per row, and the last step was
+     the best possible (scene larger has it now: it needs every rating). */
   var RE = null;
-  var RE_STEPS = ["stars", "numbers", "guess", "predict", "run", "result", "best"];
+  var RE_STEPS = ["stars", "numbers", "guess", "predict", "run", "result", "reveal"];
   function reStep(k, live) {
-    var S = RE, d = S.d, r = d.run, st = RE_STEPS[k];
-    var cross = k >= 2 && st !== "best";
+    var S = RE, d = S.d, r = d.run, st = RE_STEPS[k], nh = d.hid.length;
+    var cross = k >= 2 && st !== "reveal";
     S.k = k;
     S.player.pause();
     S.after = S.during = null;
     clearRead(S);
     S.root.classList.toggle("s5-titles", k <= 1);
-    S.root.classList.toggle("s5-bigc", st === "best");
     S.root.classList.toggle("s5-xon", cross);
+    S.root.classList.toggle("s5-revon", st === "reveal");
     S.mR.el.hidden = k >= 2;
     S.src.hidden = k >= 2;
     S.X.el.hidden = !cross;
+    S.cards.hidden = st !== "reveal";
     S.strip.classList.toggle("s5-later", k < 3);         // in its corner from the first guess on, unseen until the predictions
     S.predOn = k >= 3;
-    S.pP.mark(null);
-    S.curve.zoom(false);
-    S.curve.best(false);
-    // the run: in the board's corner, the ring after the losses; on the last step the strip under the words, the ring in it
-    if (st === "best") {
-      if (S.strip.parentNode !== S.root) S.root.insertBefore(S.strip, S.read);
-      if (S.ring.el.parentNode !== S.strip) S.strip.insertBefore(S.ring.el, S.ctl);
-    } else {
-      if (S.strip.parentNode !== S.stripSlot) S.stripSlot.appendChild(S.strip);
-      if (S.ring.el.parentNode !== S.ringSlot) S.ringSlot.appendChild(S.ring.el);
-    }
+    S.pP.mark(k >= 3 ? d.hid : null, "s5-hid");
     var shift = S5.shift, top = topStar();
     if (st === "stars" || st === "numbers") {
       if (st === "stars") {
-        S.mR.paint(function (i, j) { return d.stars[i][j]; }, 1);
+        S.mR.paint(starsOf(d), 1);
         starStyle(true);
         var uf = counts(r.users, r.films);
-        words(S, [uf[0] + " MovieLens users and " + uf[1] + " films: " + d.ratings + " ratings, every one known."],
-          ["Real ratings, in stars, as MovieLens gives them. Tap a number to read it."]);
+        words(S, [uf[0] + " MovieLens users and " + uf[1] + " films: " + d.ratings + " ratings. We hide " + count(nh) + " of them."],
+          ["Real ratings, in stars, as MovieLens gives them. The method never sees the " + count(nh) + " marked ", qmark(),
+           ". Tap a number to read it."]);
         return;
       }
       words(S, [rub("As the game's numbers:"), " the stars minus " + shift + "."],
         [String(top) + " stars becomes ", num(top - shift), ", " + shift + " stars becomes ", num(0), ". " + d.above + " of the " +
-         d.ratings + " ratings are above ", num(0), ": these films are well liked."]);
+         d.known + " known ratings are above ", num(0), ": these films are well liked."]);
       if (live) {
         starStyle(true);
-        S.mR.paint(function (i, j) { return d.stars[i][j]; }, 1);
+        S.mR.paint(starsOf(d), 1);
         for (var dg = 0; dg < r.users + r.films - 1; dg++) (function (dg) {
           S.t.later(300 + dg * 55, function () {
             for (var i = 0; i < r.users; i++) {
               var j = dg - i;
-              if (j < 0 || j >= r.films) continue;
+              if (j < 0 || j >= r.films || d.isHid(i, j)) continue;
               var c = S.mR.item(i, j);
               c.classList.remove("s5-st");
               paint(c, d.R[i][j], 1);
@@ -6817,12 +7067,13 @@ button.chip:hover{border-color:var(--rubric)}
         })(dg);
       } else {
         starStyle(false);
-        S.mR.paint(function (i, j) { return d.R[i][j]; }, 1);
+        S.mR.paint(ratingsOf(d), 1);
       }
       return;
     }
     starStyle(false);
-    S.mR.paint(function (i, j) { return d.R[i][j]; }, 1);
+    S.mR.paint(ratingsOf(d), 1);
+    if (st === "reveal") { reveal(S, d, live); return; }
     if (!(live && st === "predict")) outputs(S, k >= 3);
     if (st === "guess") {
       S.player.reset();
@@ -6834,16 +7085,16 @@ button.chip:hover{border-color:var(--rubric)}
     }
     if (st === "predict") {
       S.player.reset();
-      words(S, [rub("Their product:"), " a prediction for every rating."],
-        ["Every user's row with every film's column. The predictions and the ratings give the losses: the average loss is ",
+      words(S, [rub("Their product:"), " a prediction for every rating, the hidden ones too."],
+        ["The ringed squares predict the hidden ratings, which have no loss. The average loss of the " + d.known + " known ratings is ",
          lossCell(d.losses[0]), "."]);
       if (live) forward(S, 150);
       return;
     }
     if (st === "run") {
       // while the run plays, what a step does; at its end (or reached at rest) what to do with the result
-      var during = ["At every step each of the " + d.numbers + " numbers moves a little, the way that makes the average loss smaller."];
-      var after = ["Every prediction has settled. Tap a square to compare it with its rating."];
+      var during = ["At every step each of the " + d.numbers + " numbers moves a little, the way that makes the average loss smaller. The hidden ratings play no part."];
+      var after = ["Every prediction has settled, the " + count(nh) + " ringed ones too. Tap a square to compare it with its rating."];
       S.during = function () { put(S.say, during); };
       S.after = function () { put(S.say, after); };
       words(S, [rub("Gradient descent:"), " " + d.steps + " steps."], live ? during : after);
@@ -6852,22 +7103,51 @@ button.chip:hover{border-color:var(--rubric)}
       return;
     }
     S.player.end();
-    if (st === "result") {
-      S.pP.mark(d.misses);
-      words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
-        [d.within + " of the " + d.ratings + " predictions come within half a star of their ratings. The ringed ones do not; the largest miss is ",
-         num(d.largest), " of a star."]);
-      return;
-    }
-    words(S, [rub("Is that the right answer?")],
-      [cap(count(r.k)) + " numbers per user and per film cannot give back " + d.ratings + " real ratings exactly: the best possible is ", lossCell(r.best),
-       ". Another method, the singular value decomposition (part 4a of the next notebook), computes it exactly when every rating is known. Gradient descent knew nothing of it, and ends on it."]);
-    S.curve.best(true);
-    S.curve.zoom(true, live);
+    words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
+      [d.within + " of the " + d.known + " known ratings are predicted within half a star. And the " + count(nh) + " hidden ones?"]);
   }
   function starStyle(on) {
-    var S = RE;
-    for (var i = 0; i < S.mR.R; i++) for (var j = 0; j < S.mR.C; j++) { var c = S.mR.item(i, j); if (c) c.classList.toggle("s5-st", on); }
+    var S = RE, d = S.d;
+    for (var i = 0; i < S.mR.R; i++) for (var j = 0; j < S.mR.C; j++) {
+      var c = S.mR.item(i, j);
+      if (c && !d.isHid(i, j)) c.classList.toggle("s5-st", on);
+    }
+  }
+  /* The last step: each hidden rating beside its prediction (the prediction first, as on the board), how far apart
+     they are, in reading order. Played, the cards come in one by one, each rating after its prediction. */
+  function revealCard(x) {
+    var c = el("div", "s5-rcard"), head = el("div", "s5-rhead"), who = el("div", "s5-rwho");
+    head.appendChild(tile(x.film));
+    who.appendChild(el("p", "s5-rfilm", x.film.short));
+    who.appendChild(el("p", "s5-ruser", "User " + x.user));
+    head.appendChild(who);
+    c.appendChild(head);
+    var pair = el("div", "s5-rpair"), a = el("div", "s5-rp"), b = el("div", "s5-rv s5-late");
+    a.appendChild(el("span", "s5-cl", "prediction"));
+    a.appendChild(num(x.prediction, 2));
+    b.appendChild(el("span", "s5-cl", "rating"));
+    b.appendChild(num(x.rating, 1));
+    b.appendChild(el("span", "s5-rs", x.stars + " stars"));
+    pair.appendChild(a);
+    pair.appendChild(b);
+    c.appendChild(pair);
+    c.appendChild(h("p", "s5-rmiss s5-late", ["missed by ", num(x.miss, 2)]));
+    return c;
+  }
+  function reveal(S, d, live) {
+    S.player.end();
+    words(S, [rub("The hidden ratings,"), " beside their predictions."],
+      ["The method never saw these " + count(d.hid.length) + " ratings. A recommender is judged this way: on ratings it never saw."]);
+    var cards = S.cards.querySelectorAll(".s5-rcard");
+    S.cards.querySelectorAll(".s5-rcard, .s5-late").forEach(function (c) { c.style.visibility = ""; });
+    if (!live) return;
+    Array.prototype.forEach.call(cards, function (c, q) {
+      var late = c.querySelectorAll(".s5-late"), t0 = 250 + q * 1000;
+      c.style.visibility = "hidden";
+      late.forEach(function (x) { x.style.visibility = "hidden"; });
+      S.t.later(t0, function () { c.style.visibility = ""; pop(c); });
+      S.t.later(t0 + 500, function () { late.forEach(function (x) { x.style.visibility = ""; }); pop(late[0].querySelector(".nt-n")); });
+    });
   }
   MF.define("real", {
     act: 5,
@@ -6878,12 +7158,14 @@ button.chip:hover{border-color:var(--rubric)}
       RE = S;
       S.api = api;
       S.d = d;
-      S.mR = mtable({ rows: d.users.map(String), corner: "user", films: d.films, values: function (i, j) { return d.stars[i][j]; }, places: 1,
+      S.mR = mtable({ rows: d.users.map(String), corner: "user", films: d.films, values: starsOf(d), hidden: d.isHid, places: 1,
                       caption: "Ratings", board: "R" });
       crossOf(S, d, REPLAY[0]);
       S.boards = h("div", "s5-boards", [S.mR.el, S.X.el]);
       S.src = h("p", "s5-src", sourceLine());                // under the table of the first two steps
-      [S.words, S.boards, S.src, S.read].forEach(function (x) { S.root.appendChild(x); });
+      S.cards = el("div", "s5-reveal");
+      d.reveal.forEach(function (x) { S.cards.appendChild(revealCard(x)); });
+      [S.words, S.boards, S.cards, S.src, S.read].forEach(function (x) { S.root.appendChild(x); });
       embed(S, d.states[0]);
       reader(S, d);
     },
@@ -6896,21 +7178,23 @@ button.chip:hover{border-color:var(--rubric)}
       Array.prototype.forEach.call(RE.root.querySelectorAll(".mx-c > .nt-n"), function (c) { c.style.visibility = ""; });
       unhideSquares(RE);
       reStep(k, live);
+      holdOnResize(RE, RE.d);
       RE.X.redraw();                                  // the arrows at once, without waiting for the next frame
       RE.last = k;
     },
     onkey: function (e) {
       var st = RE_STEPS[RE.api.step];
-      if (RE.api.step >= 3 && st !== "best" && (e.key === "p" || e.key === "P")) { RE.player.toggle(); return true; }
+      if (RE.api.step >= 3 && st !== "reveal" && (e.key === "p" || e.key === "P")) { RE.player.toggle(); return true; }
       return false;
     }
   });
 
-  /* SCENE 4: A LARGER TABLE, runs[1]: the ratings alone as a map of coloured squares, then the cross */
+  /* SCENE 4: A LARGER TABLE, runs[1]: the ratings alone as a map of coloured squares, then the cross; every rating is
+     known, so the last step gives the best possible (scene real's last step until 2026-11-10, when it hid ratings) */
   var LG = null;
-  var LG_STEPS = ["table", "guess", "run", "result"];
+  var LG_STEPS = ["table", "guess", "run", "result", "best"];
   function lgStep(k, live) {
-    var S = LG, d = S.d, r = d.run, st = LG_STEPS[k];
+    var S = LG, d = S.d, r = d.run, st = LG_STEPS[k], big = st === "best";
     S.k = k;
     S.player.pause();
     S.after = S.during = null;
@@ -6919,9 +7203,11 @@ button.chip:hover{border-color:var(--rubric)}
     S.curve.zoom(false);
     S.curve.best(false);
     S.predOn = k >= 1;
+    stage(S, big);
     S.root.classList.toggle("s5-k0", k === 0);           // the ratings alone, centred, with the key of the colours
-    S.root.classList.toggle("s5-xon", k >= 1);
+    S.root.classList.toggle("s5-xon", k >= 1 && !big);
     S.X.el.classList.toggle("s5-solo", k === 0);
+    S.X.el.hidden = big;
     S.strip.classList.toggle("s5-later", k === 0);
     S.key.hidden = k !== 0;
     if (!(live && st === "guess")) outputs(S, k >= 1);
@@ -6947,12 +7233,17 @@ button.chip:hover{border-color:var(--rubric)}
       return;
     }
     S.player.end();
-    S.pP.mark(d.misses);
+    if (st === "result") {
+      S.pP.mark(d.misses);
+      words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
+        [d.within + " of the " + d.ratings + " predictions come within half a star of their ratings; the ringed ones do not."]);
+      return;
+    }
+    words(S, [rub("Is that the right answer?")],
+      [cap(count(r.k)) + " numbers per user and per film cannot give back " + d.ratings + " real ratings exactly: the best possible is ", lossCell(r.best),
+       ". Another method, the singular value decomposition (part 4a of the next notebook), computes it exactly when every rating is known. Gradient descent knew nothing of it, and ends on it."]);
     S.curve.best(true);
     S.curve.zoom(true, live);
-    words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
-      ["The best possible with " + count(r.k) + " numbers per user and per film is ", lossCell(r.best), ". " + d.within + " of the " +
-       d.ratings + " predictions come within half a star of their ratings; the ringed ones do not."]);
   }
   MF.define("larger", {
     act: 5,
@@ -6991,6 +7282,7 @@ button.chip:hover{border-color:var(--rubric)}
       LG.curve.stop();
       unhideSquares(LG);
       lgStep(k, live);
+      holdOnResize(LG, LG.d);
       LG.X.redraw();                                  // the arrows at once, without waiting for the next frame
       LG.last = k;
     },
@@ -7000,49 +7292,20 @@ button.chip:hover{border-color:var(--rubric)}
     }
   });
 
-  /* SCENE 5: THE WHOLE PICTURE */
+  /* SCENE 5: THE WHOLE PICTURE: the method in one line of four cards, drawn from the larger table's run, and the
+     dataset's lines. One step since 2026-11-10 (Carlos: scene real's hidden ratings replace the steps "unknown" and
+     "judge" that hid ratings of the larger table here). */
   var EN = null;
-  var EN_STEPS = ["method", "unknown", "judge"];
-  var seed = 2026;
-  function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-  function hiddenSet(d) {
-    // an example: every rating hidden with the TAs' share, drawn with a fixed seed
-    seed = 2026;
-    var out = [];
-    d.R.forEach(function (row, i) { row.forEach(function (x, j) { if (rnd() < NEXT_HIDDEN) out.push([i, j]); }); });
-    return out;
-  }
+  var EN_STEPS = ["method"];
   function enStep(k, live) {
-    var S = EN, d = S.d, st = EN_STEPS[k];
+    var S = EN;
     S.k = k;
-    S.chain.hidden = st !== "method";
-    S.mapBox.hidden = st === "method";
-    S.root.classList.toggle("s5-chainon", st === "method");     // the dataset's lines under the cards, else beside the map
-    S.big.mark(null, "s5-judge");
-    if (st === "method") {
-      words(S, [rub("The whole method:")], ["the ratings, factorized into two matrices, the embeddings, found by gradient descent."],
-        ["Nobody filled in these profiles. Their numbers have no names: any numbers whose product matches the ratings would do as well."]);
-      if (live) S.chain.querySelectorAll(".s5-card, .s5-arrow").forEach(function (c, q) {
-        c.style.visibility = "hidden";
-        S.t.later(200 + q * 260, function () { c.style.visibility = ""; pop(c); });
-      });
-      return;
-    }
-    var hid = S.hidden, isHid = {};
-    hid.forEach(function (p) { isHid[p[0] + "," + p[1]] = true; });
-    if (st === "unknown") {
-      words(S, ["Every rating of these tables was known."], ["A recommender is for the ratings nobody gave. To test one, hide some of the known ratings."]);
-      S.big.set(function (i, j) { return d.R[i][j]; });
-      if (live) S.t.later(900, function () {
-        hid.forEach(function (p, q) { S.t.later(q * 8, function () { S.big.cell(p[0], p[1]).dataset.c = "q"; }); });
-      });
-      else S.big.set(function (i, j) { return isHid[i + "," + j] ? null : d.R[i][j]; });
-      return;
-    }
-    S.big.set(function (i, j) { return isHid[i + "," + j] ? null : d.R[i][j]; });
-    S.big.mark(hid, "s5-judge");
-    words(S, ["So a recommender is judged on ratings it never saw."],
-      ["The next notebook, the TAs' on MovieLens, hides " + Math.round(NEXT_HIDDEN * 100) + "% of the ratings, learns from the rest, and judges its predictions on the hidden ones."]);
+    words(S, [rub("The whole method:")], ["the ratings, factorized into two matrices, the embeddings, found by gradient descent."],
+      ["Nobody filled in these profiles. Their numbers have no names: any numbers whose product matches the ratings would do as well."]);
+    if (live) S.chain.querySelectorAll(".s5-card, .s5-arrow").forEach(function (c, q) {
+      c.style.visibility = "hidden";
+      S.t.later(200 + q * 260, function () { c.style.visibility = ""; pop(c); });
+    });
   }
   function card(pics, text) {
     var c = el("div", "s5-card"), p = el("div", "s5-cardpic");
@@ -7060,7 +7323,6 @@ button.chip:hover{border-color:var(--rubric)}
       EN = S;
       S.api = api;
       S.d = d;
-      S.hidden = hiddenSet(d);
       S.root.appendChild(S.lead);
       S.root.appendChild(S.say);
       var e = d.states[d.steps];
@@ -7085,15 +7347,9 @@ button.chip:hover{border-color:var(--rubric)}
       S.root.appendChild(S.chain);
       S.aside = el("p", "s5-aside");
       S.root.appendChild(S.aside);
-      var low = el("div", "s5-endrow");
-      S.mapBox = el("div", "s5-endmap");
-      S.big = map({ rows: r.users, cols: r.films, films: d.films, caption: "Ratings" });
-      S.mapBox.appendChild(S.big.el);
-      low.appendChild(S.mapBox);
       var lic = el("div", "s5-lic");
       S5.source.licence.forEach(function (line) { lic.appendChild(el("p", "", line)); });
-      low.appendChild(lic);
-      S.root.appendChild(low);
+      S.root.appendChild(lic);
     },
     enter: function () { EN.last = null; },
     leave: function () {
@@ -7111,7 +7367,8 @@ button.chip:hover{border-color:var(--rubric)}
   });
 
   MF.W5 = { player: player, curve: curve, map: map, mtable: mtable, ring: ring, tile: tile, PICS: PICS, data: data,
-            quant: quant, avg: avg, REPLAY: REPLAY, shapes: shapes, readOf: readOf, lossOf: lossOf };
+            quant: quant, avg: avg, REPLAY: REPLAY, shapes: shapes, readOf: readOf, lossOf: lossOf, lossesOf: lossesOf,
+            NONE: NONE, rec: REC, recWithin: recWithin, forms: forms, hold: hold };
 })();
 </script>
 <script>MF.start({ game: "3" });</script>
