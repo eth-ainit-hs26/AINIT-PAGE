@@ -521,7 +521,7 @@ export const weekends: Weekend[] = [
     saturday: [
       { time: '08:15', title: 'Computing clusters', type: 'lecture' },
       { time: '09:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
-      { time: '10:00', title: 'Coffee break outside the classroom, until 10:30', type: 'break' },
+      { time: '10:00', title: 'Coffee break at HG E30.0075, until 10:30', type: 'break' },
       { time: '10:30', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '11:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '12:00', title: 'Project intro: Recommender for online retail', type: 'project' },
