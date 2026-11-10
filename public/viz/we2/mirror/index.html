@@ -42,6 +42,7 @@
   --c-ete: #58409A;
   --c-eg: #148A72;
   --c-ucb: #CC3466;
+  --c-you: #2B78C9;
   --card: #58409A;
   --card-rule: #7A64BC;
   --card-ink: #FFFBF0;
@@ -60,7 +61,7 @@
     --accent: #B9A6F3; --accent-soft: #352C4B; --ochre: #E3AA4C; --gold: #F0C150;
     --urn-window: #3A2F26; --tap: #FF9C40; --tap-edge: #FFC58A; --tap-hi: #FFE2BF; --notap: #2E2935; --notap-hi: #2E2935; --notap-edge: #CFC6B8;
     --yes: #73D19A; --no: #EE9393;
-    --c-queen: #F0C150; --c-random: #A49BB0; --c-ete: #B9A6F3; --c-eg: #5FD0BC; --c-ucb: #F28DB0;
+    --c-queen: #F0C150; --c-random: #A49BB0; --c-ete: #B9A6F3; --c-eg: #5FD0BC; --c-ucb: #F28DB0; --c-you: #7EB6F2;
     --card: #2F2552; --card-rule: #4C3F7E; --card-ink: #EEE7D8; --card-soft: #B9A6F3;
     color-scheme: dark;
   }
@@ -70,7 +71,7 @@
   --accent: #B9A6F3; --accent-soft: #352C4B; --ochre: #E3AA4C; --gold: #F0C150;
   --urn-window: #3A2F26; --tap: #FF9C40; --tap-edge: #FFC58A; --tap-hi: #FFE2BF; --notap: #2E2935; --notap-hi: #2E2935; --notap-edge: #CFC6B8;
   --yes: #73D19A; --no: #EE9393;
-  --c-queen: #F0C150; --c-random: #A49BB0; --c-ete: #B9A6F3; --c-eg: #5FD0BC; --c-ucb: #F28DB0;
+  --c-queen: #F0C150; --c-random: #A49BB0; --c-ete: #B9A6F3; --c-eg: #5FD0BC; --c-ucb: #F28DB0; --c-you: #7EB6F2;
   --card: #2F2552; --card-rule: #4C3F7E; --card-ink: #EEE7D8; --card-soft: #B9A6F3;
   color-scheme: dark;
 }
@@ -518,15 +519,36 @@ sub, sup { font-size: .65em; line-height: 0; }
 .s1-pick { font-family: var(--emoji); font-size: 1.45rem; width: 50px; height: 50px; border-radius: 12px; border: 2px solid transparent; background: var(--t, var(--panel)); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(42, 36, 50, .1); transition: transform .15s ease; }
 .s1-pick:hover { transform: translateY(-2px); }
 .s1-pick[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft), inset 0 0 0 1px rgba(42, 36, 50, .1); transform: scale(1.06); }
-.s1-urnrow { display: flex; align-items: flex-end; gap: 18px; }
-.s1-urnrow .mb-face, .s1-urnrow .mb-tile { margin-bottom: 18px; }
-.s1-urnwrap { position: relative; width: 120px; padding-top: 48px; flex: none; }
-.s1-urnwrap svg { width: 120px; height: auto; display: block; }
-.s1-urn.shake { animation: s1shake .35s ease-in-out; transform-origin: 50% 90%; }
-@keyframes s1shake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
-.s1-ball { position: absolute; left: 50%; top: 40px; width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 34% 30%, var(--notap-hi) 0 22%, var(--notap) 60%); box-shadow: inset 0 0 0 2px var(--notap-edge); transform: translate(-50%, -38px); animation: s1pop .6s ease-out both; }
-.s1-ball.on { background: radial-gradient(circle at 34% 30%, var(--tap-hi) 0 14%, var(--tap) 46%, var(--tap-edge) 100%); box-shadow: inset 0 0 0 1px var(--tap-edge); }
-@keyframes s1pop { from { transform: translate(-50%, 24px) scale(.4); } to { transform: translate(-50%, -38px) scale(1); } }
+/* The urn scene (2026-11-10): Carlos's two rows, the real world above the model, in the same columns: the row's name,
+   the mirror, the arrow with its action, Cinderella or her urn, the two outcomes. The = signs join the action and the
+   outcomes of the two rows. */
+.s1-an { position: relative; display: grid; grid-template-columns: auto auto 150px auto auto auto auto; align-items: center; justify-items: center; justify-content: center; column-gap: 14px; row-gap: 2px; margin: 6px auto 0; max-width: 100%; }
+.s1-an-lab { font-variant-caps: all-small-caps; letter-spacing: .14em; color: var(--muted); font-size: 1.1rem; font-weight: 600; }
+.s1-an-lab.r { grid-area: 1 / 1; } .s1-an-src.r { grid-area: 1 / 2; } .s1-an-arr.r { grid-area: 1 / 3; } .s1-an-who.r { grid-area: 1 / 4; }
+.s1-an-o.tp.r { grid-area: 1 / 5; } .s1-an-or.r { grid-area: 1 / 6; } .s1-an-o.np.r { grid-area: 1 / 7; }
+.s1-an-act.r { grid-area: 2 / 3; } .s1-an-eq.ad { grid-area: 3 / 3; } .s1-an-act.m { grid-area: 4 / 3; }
+.s1-an-eq.tp { grid-area: 2 / 5 / 5 / 6; } .s1-an-eq.np { grid-area: 2 / 7 / 5 / 8; }
+.s1-an-lab.m { grid-area: 5 / 1; } .s1-an-src.m { grid-area: 5 / 2; } .s1-an-arr.m { grid-area: 5 / 3; } .s1-an-who.m { grid-area: 5 / 4; }
+.s1-an-o.tp.m { grid-area: 5 / 5; } .s1-an-or.m { grid-area: 5 / 6; } .s1-an-o.np.m { grid-area: 5 / 7; }
+.s1-an-arr { position: relative; justify-self: stretch; height: 16px; }
+.s1-an-arr::before { content: ""; position: absolute; left: 2px; right: 10px; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 2px; background: linear-gradient(90deg, var(--accent) 0 38%, var(--gold, #F0C150) 46% 54%, var(--accent) 62% 100%); background-size: 300% 100%; background-position: 100% 0; }
+.s1-an-arr::after { content: ""; position: absolute; right: 0; top: 50%; margin-top: -7px; border-left: 13px solid var(--accent); border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+.s1-an.go .s1-an-arr::before { animation: s1run .65s linear both; }
+@keyframes s1run { from { background-position: 100% 0; } to { background-position: 0 0; } }
+.s1-an-act { font-style: italic; font-size: 1.08rem; line-height: 1.2; white-space: nowrap; text-align: center; }
+.s1-an-eq { font-family: var(--display); font-size: 1.8rem; font-weight: 600; line-height: 1; color: var(--accent); }
+.s1-an-or { color: var(--muted); font-size: 1rem; }
+.s1-an-o { display: grid; place-items: center; min-width: 40px; min-height: 40px; padding: 4px; border-radius: 999px; }
+.s1-an-o, .s1-an-or, .s1-an-eq.tp, .s1-an-eq.np { transition: opacity .3s ease, background-color .3s ease, box-shadow .3s ease; }
+.s1-an.lit-t .s1-an-o.tp, .s1-an.lit-n .s1-an-o.np { background: var(--accent-soft); box-shadow: 0 0 0 2.5px var(--accent); }
+.s1-an.lit-t .s1-an-o.np, .s1-an.lit-n .s1-an-o.tp, .s1-an.lit-t .s1-an-or, .s1-an.lit-n .s1-an-or, .s1-an.lit-t .s1-an-eq.np, .s1-an.lit-n .s1-an-eq.tp { opacity: .25; }
+.s1-pill { display: inline-block; border-radius: 999px; padding: 3px 11px 5px; font-weight: 700; font-size: 1rem; line-height: 1.2; white-space: nowrap; box-shadow: 0 2px 0 rgba(0, 0, 0, .12); }
+.s1-pill.t { background: var(--tap); color: #2A1300; }
+.s1-pill.n { background: #E9E4EC; color: #4B4357; }
+.s1-an .mb-dot { width: 28px; }
+.s1-an-who .mb-face { transform-origin: 50% 85%; }
+.s1-an-who .s1-urn { width: 72px; height: auto; display: block; transform-origin: 50% 90%; }
+.s1-hand { display: block; font-family: var(--emoji); font-size: 30px; line-height: 1; }
 .s1-urngrid { overflow-x: auto; max-width: 100%; }
 .s1-urngrid table { border-collapse: separate; border-spacing: 6px 4px; margin: 0 auto; }
 .s1-urngrid th, .s1-urngrid td { padding: 2px; text-align: center; }
@@ -550,6 +572,23 @@ sub, sup { font-size: .65em; line-height: 0; }
 .s1-choose button .emo { font-family: var(--emoji); font-size: 1.7rem; line-height: 1; }
 .s1-choose button:disabled { opacity: .45; cursor: default; }
 .s1-res { min-height: 1.5em; }
+.s1-taps.q { background: var(--c-queen); color: #2A1300; }
+/* The offer to play, the duel's two mirrors, the rows of beads of the participant's games (2026-11-10). */
+.s1-invite { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; max-width: 600px; padding: 22px 28px 24px; border-radius: 18px; background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); }
+.s1-invite p { margin: 0; }
+.s1-kick { font-variant-caps: all-small-caps; letter-spacing: .22em; font-size: 1.15rem; font-weight: 700; color: var(--accent); }
+.s1-big { font-family: var(--display); font-size: clamp(1.4rem, 3.4vw, 1.9rem); font-weight: 600; line-height: 1.15; text-wrap: balance; }
+.act.s1-go { font-size: 19px; padding: 8px 30px 10px; }
+.s1-duo { display: flex; justify-content: center; gap: 30px; }
+.s1-duoc { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.s1-beads { display: grid; grid-template-columns: repeat(15, 18px); gap: 4px; padding: 8px; border-radius: 12px; background: var(--leaf); box-shadow: inset 0 0 0 1px var(--line); width: max-content; margin: 0 auto; }
+.s1-beads .mb-dot { width: 18px; }
+.s1-vs { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.s1-vsrow { display: grid; grid-template-columns: 170px auto 120px; align-items: center; gap: 14px; }
+.s1-vsname { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 1.08rem; }
+.s1-vsname .ic { font-family: var(--emoji); font-size: 1.25rem; }
+.s1-vsrow .formula { font-size: 1.2rem; white-space: nowrap; }
+.s1-imag { max-width: 600px; }
 .s1-strat { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); width: 100%; max-width: 760px; }
 .s1-strat .card { padding-block: 18px; gap: 10px; border-top: 4px solid var(--c); }
 .s1-strat .name { font-size: 1.12rem; }
@@ -564,7 +603,22 @@ sub, sup { font-size: .65em; line-height: 0; }
   .s1-pick { width: 44px; height: 44px; font-size: 1.3rem; }
   .s1-choose { gap: 7px; }
   .s1-choose button { height: 48px; }
-  .s1-urnrow { gap: 10px; }
+  .s1-beads { grid-template-columns: repeat(15, 15px); gap: 3px; padding: 6px; }
+  .s1-beads .mb-dot { width: 15px; }
+  .s1-vsrow { grid-template-columns: 1fr; justify-items: center; gap: 4px; }
+  .s1-duo { gap: 18px; }
+  .s1-invite { padding: 18px 16px 20px; }
+  .s1-an { grid-template-columns: auto auto minmax(58px, 1fr) auto auto auto auto; column-gap: 5px; width: 100%; }
+  .s1-an-lab { writing-mode: vertical-rl; transform: rotate(180deg); font-size: .95rem; letter-spacing: .1em; }
+  .s1-an .mb-mirror.xs { --w: 46px; }
+  .s1-an .mb-face.md { --s: 46px; }
+  .s1-an-who .s1-urn { width: 50px; }
+  .s1-an-act { font-size: .92rem; white-space: normal; }
+  .s1-an-eq { font-size: 1.45rem; }
+  .s1-an-or { font-size: .85rem; }
+  .s1-an-o { min-width: 30px; min-height: 30px; padding: 3px; }
+  .s1-pill { font-size: .8rem; padding: 2px 7px 3px; }
+  .s1-an .mb-dot { width: 22px; }
   .s1-pc { min-width: 60px; padding: 7px 5px 5px; }
   .s1-urngrid table { border-spacing: 3px 3px; }
   .s1-urngrid .mb-face { --s: 34px; }
@@ -573,11 +627,26 @@ sub, sup { font-size: .65em; line-height: 0; }
   .s1-pq { width: 46px; font-size: .95rem; }
   .s1-urngrid th.who { padding-right: 2px; }
 }
-@media (prefers-reduced-motion: reduce) { .s1-urn.shake, .s1-ball, .s1-strat.new .card, .s1-shop.new .card { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .s1-an.go .s1-an-arr::before, .s1-strat.new .card, .s1-shop.new .card { animation: none; } }
 </style>
 <style>
-/* Section 2, Random (sec2.js). Its first scene is a movie, styled in anim.css (round 10); the other scenes use the
-   shared styles of core.css. */
+/* Section 2, Random (sec2.js). Its movies are styled in anim.css (round 10); the rate movie of round 12 adds the
+   bead blocks beside the morning and a narrower chart, so the beads, the chart and the line fit on one screen. */
+.mv-rateline .mv-dev { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 10px 18px; }
+.s2-bb { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.s2-bl { display: inline-flex; align-items: center; gap: 6px; font-size: 1.02rem; color: var(--muted); white-space: nowrap; }
+.s2-bl .ic { font-family: var(--emoji); font-size: 1.15rem; line-height: 1; }
+.mb-beads.s2-beads { grid-template-columns: repeat(10, 12px); gap: 3px; padding: 7px; }
+.s2-beads .mb-dot { width: 12px; }
+.s2-beads .mb-dot.slot { border-width: 1px; }
+.mv-rateline .mv-board .mb-chart { max-width: 600px; }
+.mv-rateline .mv-line { font-variant-numeric: lining-nums; }
+@media (max-width: 560px) {
+  .mv-rateline .mv-dev { gap: 8px 10px; }
+  .mb-beads.s2-beads { grid-template-columns: repeat(10, 10px); gap: 3px; padding: 6px; }
+  .s2-beads .mb-dot { width: 10px; }
+  .s2-bl { font-size: .92rem; }
+}
 </style>
 <style>
 /* Section 3, estimate then exploit (sec3.js). */
@@ -640,9 +709,10 @@ sub, sup { font-size: .65em; line-height: 0; }
 }
 </style>
 <style>
-/* Section 4, epsilon-greedy (sec4.js). */
+/* Section 4, epsilon-greedy (sec4.js). The roulette and the season are a movie, styled in anim.css (rounds 10 and
+   12); the walkthrough's styles left with it on 2026-11-10. */
 
-/* The reader's own spins (the third step of the first scene): the buttons, the tally, the history. */
+/* The reader's own spins (the second step of the first scene): the buttons, the tally, the history. */
 .s4-btns { gap: 8px; }
 .s4-tally { margin: 0; font-size: .95rem; }
 .s4-hist { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 4px; font-family: var(--emoji); font-size: 1.3rem; line-height: 1.3; }
@@ -650,61 +720,12 @@ sub, sup { font-size: .65em; line-height: 0; }
   .s4-hist { font-size: 1.1rem; }
 }
 
-/* The four steps in one line, the current one lit (the board scenes). */
-.steps.s4-parts { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 6px 16px; max-width: none; }
-.steps.s4-parts li { font-size: .95rem; gap: 7px; align-items: center; }
-.steps.s4-parts li::before { width: 22px; height: 22px; font-size: .85rem; }
-@media (max-width: 480px) {
-  .steps.s4-parts { gap: 4px 11px; }
-  .steps.s4-parts li { font-size: .9rem; gap: 5px; }
-  .steps.s4-parts li::before { width: 20px; height: 20px; }
-}
-
-/* A morning on the board: the roulette, the morning with the scene's buttons, and Cinderella's mirror in one row;
-   below them the board, then the caption. */
-.s4-play { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-.s4-panel { display: flex; align-items: center; justify-content: center; gap: 12px 20px; flex-wrap: wrap; }
-.s4-pstack { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
-.s4-board { min-width: 0; width: 100%; }
-.s4-cap { min-height: 2.9em; max-width: 62ch; }
-.s4-ctrl { gap: 8px; }
-.s4-ctrl .quiet { font-size: .92rem; padding: 7px 12px; }
-.s4-panel .mb-wheel { width: 96px; }
+/* The roulette of the movie, dim before the first spin. */
 .s4-wheel { transition: opacity .3s ease; }
 .s4-wheel.dim { opacity: .35; }
-.s4-morning { font-family: var(--display); font-size: 1.45rem; font-weight: 600; line-height: 1.15; white-space: nowrap; }
-@media (max-width: 560px) {
-  .s4-panel { gap: 10px 9px; }
-  .s4-panel .mb-badge { right: -8%; }
-  .s4-panel .mb-wheel { width: 70px; }
-  .s4-panel .mb-mirror.xs { --w: 56px; }
-  .s4-morning { font-size: 1.2rem; }
-}
+
 /* The last new part of a step is scrolled into view (core.js); keep it clear of the sticky nav bar. */
 .s4-sm { scroll-margin-bottom: 16px; }
-
-/* The card from the hat, inside a sentence. */
-.s4-card { display: inline-block; padding: 0 5px; border: 1px solid var(--line); border-radius: 5px; background: var(--panel); line-height: 1.3; }
-
-/* Spin: the pick on the board and the caption show when the needle lands (it turns for 1.2 s). */
-.s4-late { animation: s4late 1.35s ease both; }
-.s4-landing .mb-row.hl::before { animation: s4late 1.35s ease both; }
-.s4-landing .mb-prod.pick { animation: s4ring 1.35s ease both; }
-@keyframes s4late { 0%, 86% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes s4ring { 0%, 86% { box-shadow: none; } 100% { box-shadow: 0 0 0 3px var(--accent); } }
-/* Sample: the new dot is there and the estimate waits. Update: the new estimate is lit. */
-.s4-stale .mb-row.picked .mb-est .mb-decv { color: var(--muted); }
-.s4-upd .mb-row.picked .mb-est { color: var(--accent); font-weight: 600; }
-.s4-upd .mb-row.picked .mb-est .mb-frac { color: var(--accent); }
-.s4-flash .mb-row.picked .mb-est { animation: s4flash 1s ease; border-radius: 6px; }
-@keyframes s4flash { from { background: var(--accent-soft); } to { background: transparent; } }
-.s4-estin .mb-est { animation: fadein .5s ease; }
-/* The revealed probabilities, in the Queen's colour. */
-.s4-p { color: var(--ochre); }
-
-@media (prefers-reduced-motion: reduce) {
-  .s4-late, .s4-landing .mb-row.hl::before, .s4-landing .mb-prod.pick, .s4-flash .mb-row.picked .mb-est, .s4-estin .mb-est { animation: none; }
-}
 </style>
 <style>
 /* Section 5, UCB (sec5.js). */
@@ -1021,7 +1042,8 @@ sub, sup { font-size: .65em; line-height: 0; }
     random: { name: "Random", color: "--c-random", dash: true, icon: "🎩" },
     ete: { name: "Estimate then exploit", color: "--c-ete", icon: "🥇" },
     eg: { name: "Epsilon-greedy", color: "--c-eg", icon: "🎡" },
-    ucb: { name: "UCB", color: "--c-ucb", icon: "✨" }
+    ucb: { name: "UCB", color: "--c-ucb", icon: "✨" },
+    you: { name: "Your mirror", color: "--c-you", icon: "🪞" } // the participant's own games of section 1 (2026-11-10)
   };
   // The five notebooks, one per section; the game links the student version on Colab.
   MB.COLAB = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/";
@@ -1898,9 +1920,13 @@ sub, sup { font-size: .65em; line-height: 0; }
       paint(M.k, false);
     };
     M.count = () => framesOf(M.step).length;
+    M.reset = () => { M.cache = {}; }; // the frames are made again at the next render (another season)
     M.fx = () => (M.el ? effects(M.el) : null); // the effects on their own, for the checks
     return M;
   };
+
+  // The effects outside a movie (section 1's urn scene, 2026-11-10): root is positioned and holds a .mv-fx layer.
+  MB.fxOn = effects;
 
   // The pieces every movie shares.
   // The steps of the strategy in one line, the current one lit (on: its index, -1 none).
@@ -1924,8 +1950,10 @@ sub, sup { font-size: .65em; line-height: 0; }
   // "choose", "chosen" or "fast"), chips(t, beat) (beat: "choose", "show", "dot" or "fast"), src(t) (where the product
   // leaves from), and optional chooseOpt(t), chooseFx(A, t, mode), chooseMs(t, mode), tie(t) (the rows tied before a
   // draw at random), mid(t) }. mode: "slow" (every beat), "mid" (shorter beats), "quick" (no bead) or "fast" (one beat).
-  MB.mvMorning = function (c, t, mode, fastMs) {
-    const m = c.M[t], i = m.i, n = c.rowsAt(t)[i].length;
+  // scale (slow and mid, default 1) multiplies every time of the morning, to speed a season up gradually (round 12);
+  // chooseFx gets it as its fourth argument.
+  MB.mvMorning = function (c, t, mode, fastMs, scale) {
+    const m = c.M[t], i = m.i, n = c.rowsAt(t)[i].length, z = scale || 1, Z = (ms) => Math.round(ms * z);
     const cell = [`.mb-row[data-k="${i}"] .mb-cell:nth-child(${n + 1})`, `.mb-row[data-k="${i}"] .mb-cells`];
     const mid = c.mid ? c.mid(t) : `Morning ${t + 1}`;
     const tile = MB.tile(MB.PRODUCTS[i], "md");
@@ -1943,22 +1971,22 @@ sub, sup { font-size: .65em; line-height: 0; }
       ];
     }
     const slow = mode === "slow", F = [];
-    F.push({ ms: c.chooseMs ? c.chooseMs(t, mode) : (slow ? 900 : 380),
+    F.push({ ms: Z(c.chooseMs ? c.chooseMs(t, mode) : (slow ? 900 : 380)),
       p: { mid, parts: c.chips(t, "choose"), dev: c.dev(t, "choose"), cin: MB.mvCin(null), board: c.board(t, c.chooseOpt ? c.chooseOpt(t) : {}) },
-      fx: c.chooseFx ? (A) => c.chooseFx(A, t, mode) : null });
+      fx: c.chooseFx ? (A) => c.chooseFx(A, t, mode, z) : null });
     const tie = c.tie ? c.tie(t) : null;
-    if (tie && tie.length > 1) tie.concat(tie, [i]).forEach((k) => F.push({ ms: 200, p: { board: c.board(t, { hop: k, lit: tie }) } }));
-    F.push({ ms: slow ? 850 : 560, p: { dev: c.dev(t, "chosen"), board: c.board(t, { pick: i, lit: tie && tie.length > 1 ? [i] : (c.chooseOpt ? c.chooseOpt(t).lit : null) }) },
-      fx: (A) => A.fly(c.src(t), ".mv-cin .glass", tile, { ms: slow ? 780 : 520, s2: 0.75 }) });
+    if (tie && tie.length > 1) tie.concat(tie, [i]).forEach((k) => F.push({ ms: Z(200), p: { board: c.board(t, { hop: k, lit: tie }) } }));
+    F.push({ ms: Z(slow ? 850 : 560), p: { dev: c.dev(t, "chosen"), board: c.board(t, { pick: i, lit: tie && tie.length > 1 ? [i] : (c.chooseOpt ? c.chooseOpt(t).lit : null) }) },
+      fx: (A) => A.fly(c.src(t), ".mv-cin .glass", tile, { ms: Z(slow ? 780 : 520), s2: 0.75 }) });
     if (slow) {
-      F.push({ ms: 600, p: { parts: c.chips(t, "show"), cin: MB.mvCin(i, null, true) } });
-      F.push({ ms: 900, p: { cin: MB.mvCin(i, m.tap, false) }, fx: (A) => (m.tap ? A.hearts(".mv-cin .mv-face") : A.shake(".mv-cin .mv-face")) });
+      F.push({ ms: Z(600), p: { parts: c.chips(t, "show"), cin: MB.mvCin(i, null, true) } });
+      F.push({ ms: Z(900), p: { cin: MB.mvCin(i, m.tap, false) }, fx: (A) => (m.tap ? A.hearts(".mv-cin .mv-face") : A.shake(".mv-cin .mv-face")) });
     } else {
-      F.push({ ms: 650, p: { parts: c.chips(t, "show"), cin: MB.mvCin(i, m.tap, true) }, fx: (A) => { if (m.tap) A.hearts(".mv-cin .mv-face"); } });
+      F.push({ ms: Z(650), p: { parts: c.chips(t, "show"), cin: MB.mvCin(i, m.tap, true) }, fx: (A) => { if (m.tap) A.hearts(".mv-cin .mv-face"); } });
     }
-    F.push({ ms: slow ? 650 : 420, p: { parts: c.chips(t, "dot") },
-      fx: (A) => A.fly(".mv-cin .mb-badge", cell, MB.dot(m.tap), { ms: slow ? 600 : 380, s0: 0.8, s1: 1.5, s2: 1 }) });
-    F.push(land(slow ? 1000 : 520));
+    F.push({ ms: Z(slow ? 650 : 420), p: { parts: c.chips(t, "dot") },
+      fx: (A) => A.fly(".mv-cin .mb-badge", cell, MB.dot(m.tap), { ms: Z(slow ? 600 : 380), s0: 0.8, s1: 1.5, s2: 1 }) });
+    F.push(land(Z(slow ? 1000 : 520)));
     return F;
   };
 })();
@@ -1967,7 +1995,10 @@ sub, sup { font-size: .65em; line-height: 0; }
 /* Section 1, the Enchanted Forest: the characters, the urn, the estimate, the Queen's mirror, the four strategies.
    The main session's, rebuilt on 2026-11-05 from round 5 of the sketch: two customers, no law of large numbers,
    the board instead of the ledgers (REQUEST.md). Round 9 (2026-11-06): the cover, the portraits, the mirrors and the
-   tiles of art.js; the words above or below every picture. */
+   tiles of art.js; the words above or below every picture.
+   Round 12 (2026-11-10): the urn scene drawn from Carlos's slides of the earlier runs (showing an ad is drawing a
+   ball, both rows animated); after the urns the participant is invited to play 15 mornings, reads their rate, meets
+   the Queen's mirror as an imagined reference, compares, and plays 15 new mornings against it. */
 (function () {
   "use strict";
   const MB = window.MB, P = MB.P, PR = MB.PRODUCTS, CUST = MB.CUSTOMERS;
@@ -1978,13 +2009,13 @@ sub, sup { font-size: .65em; line-height: 0; }
     "She was feeding the mice.", "She was scrubbing the stairs.", "Not today, thank you."];
   const TAPS = ["She taps!", "She taps the glass.", "Tap! She wants it."];
 
-  const S = { guesses: {}, draws: [], last: null, play: { seq: [], last: null }, queen: null, queenRuns: 0 };
+  const S = { guesses: {}, draws: [], last: null, play: null, duel: null };
   const rand = MB.rand;
 
   const BALL_POS = [[43, 70], [64, 86], [36, 86], [57, 70], [50, 96]];
   function urnSVG(orange, o) {
     o = o || {};
-    let s = `<svg class="s1-urn${o.shake ? " shake" : ""}${o.small ? " sm" : ""}" viewBox="0 0 100 124" role="img" aria-label="${o.label || "urn"}">`;
+    let s = `<svg class="s1-urn${o.small ? " sm" : ""}" viewBox="0 0 100 124" role="img" aria-label="${o.label || "urn"}">`;
     s += `<rect x="38" y="106" width="24" height="12" rx="2" style="fill:var(--urn-dark)"/>`;
     s += `<path d="M36 13 L64 13 L66 24 C86 32 92 52 90 72 C88 94 72 110 50 110 C28 110 12 94 10 72 C8 52 14 32 34 24 Z" style="fill:var(--urn);stroke:var(--urn-dark);stroke-width:2"/>`;
     s += `<rect x="30" y="4" width="40" height="10" rx="3" style="fill:var(--urn-dark)"/>`;
@@ -2004,11 +2035,125 @@ sub, sup { font-size: .65em; line-height: 0; }
     const best = c.p[i] === Math.max(...c.p);
     return `<div class="s1-pc${best ? " best" : ""}">${best ? `<span class="s1-crown" aria-hidden="true">👑</span>` : ""}${MB.tile(q, "sm")}<div class="small">${q.short}</div><div class="formula small">${MB.pp} = ${MB.dec(c.p[i])}</div></div>`;
   }).join("")}</div>`;
-  // The Queen's season: the race season's moods, so its line is the same in every chart of the game.
-  function queenSeason(fresh) {
-    const seed = fresh ? MB.newSeed() : MB.raceSeed("moods");
-    return MB.sim.queen(P, MB.sim.moods(seed, MB.SEASON));
+  // The urn scene, from Carlos's slide of the earlier runs ("The customer as an urn", HS25 and FS26), 2026-11-10: the
+  // real world above, the model below, in the same columns. Real: the mirror shows an ad, Cinderella taps or not.
+  // Model: the mirror draws a ball from her urn for the mattress, orange or white. "Draw a ball" plays both rows.
+  const pill = (tap) => `<span class="s1-pill ${tap ? "t" : "n"}">${tap ? "Tap!" : "No tap"}</span>`;
+  function analogy(step) {
+    const mir = MB.mirror(PR[3], "", { size: "xs", cap: false, label: "the mirror shows the mattress" });
+    const lit = step >= 1 && S.last !== null ? (S.last ? " lit-t" : " lit-n") : "";
+    const nw = MB.cls(step, 1);
+    let h = `<div class="s1-an${lit}${MB.cls(step, 0)}" role="group" aria-label="Real: the mirror shows an ad and Cinderella taps or not. Model: the mirror draws a ball from her urn, orange or white.">
+      <span class="s1-an-lab r">Real</span><div class="s1-an-src r">${mir}</div><div class="s1-an-arr r"></div>
+      <span class="s1-an-act r">shows an ad</span><div class="s1-an-who r">${MB.face("cin", "md")}</div>
+      <span class="s1-an-o tp r">${pill(true)}</span><span class="s1-an-or r">or</span><span class="s1-an-o np r">${pill(false)}</span>`;
+    if (step >= 1) {
+      h += `<span class="s1-an-eq ad${nw}">=</span><span class="s1-an-eq tp${nw}">=</span><span class="s1-an-eq np${nw}">=</span>
+        <span class="s1-an-act m${nw}">draws a ball</span>
+        <span class="s1-an-lab m${nw}">Model</span><div class="s1-an-src m${nw}">${mir}</div><div class="s1-an-arr m${nw}"></div>
+        <div class="s1-an-who m${nw}">${urnSVG(URN_W, { open: true, label: "Cinderella's urn for the mattress: 2 orange balls and 3 white balls" })}</div>
+        <span class="s1-an-o tp m${nw}">${MB.dot(true)}</span><span class="s1-an-or m${nw}">or</span><span class="s1-an-o np m${nw}">${MB.dot(false)}</span>`;
+    }
+    return h + `<div class="mv-fx" aria-hidden="true"></div></div>`;
   }
+  const DRAW = { busy: false };
+  function setLit(fig, tap) {
+    fig.classList.remove("lit-t", "lit-n");
+    if (tap !== null) fig.classList.add(tap ? "lit-t" : "lit-n");
+  }
+  // One draw: the ad flies to Cinderella while a hand reaches into the urn; she taps or not while the ball comes out;
+  // her answer and the ball land in the same column, orange with "Tap!", white with "No tap".
+  function drawBall(el) {
+    const fig = el.querySelector(".s1-an"), btn = el.querySelector("#s1draw");
+    if (!fig || DRAW.busy) return;
+    const tap = rand() < URN_W / URN_N, col = tap ? "tp" : "np";
+    S.draws.push(tap);
+    S.last = tap;
+    if (MB.still || typeof Element === "undefined" || !Element.prototype.animate || !MB.fxOn) { setLit(fig, tap); return; }
+    DRAW.busy = true;
+    if (btn) btn.disabled = true;
+    setLit(fig, null);
+    const A = MB.fxOn(fig);
+    fig.classList.remove("go");
+    void fig.offsetWidth;
+    fig.classList.add("go");
+    A.fly(".s1-an-src.r .glass", ".s1-an-who.r .mb-face", MB.tile(PR[3], "sm"), { ms: 650, s2: 0.6 });
+    A.fly(".s1-an-src.m .glass", ".s1-an-who.m .s1-urn", `<span class="s1-hand">🫳</span>`, { ms: 650, s2: 0.9 });
+    MB.later(() => {
+      if (tap) A.hearts(".s1-an-who.r .mb-face"); else A.shake(".s1-an-who.r .mb-face");
+      A.wiggle(".s1-an-who.m .s1-urn");
+      A.fly(".s1-an-who.r .mb-face", `.s1-an-o.${col}.r .s1-pill`, pill(tap), { ms: 900, delay: 300, s0: 0.5, s1: 1.25, s2: 1 });
+      A.fly(".s1-an-who.m .s1-urn", `.s1-an-o.${col}.m .mb-dot`, MB.dot(tap), { ms: 900, delay: 300, s0: 0.5, s1: 1.6, s2: 1 });
+    }, 650);
+    MB.later(() => {
+      fig.classList.remove("go");
+      setLit(fig, tap);
+      A.pop(`.s1-an-o.${col}.r`, 1.2);
+      A.pop(`.s1-an-o.${col}.m`, 1.2);
+      DRAW.busy = false;
+      if (btn) btn.disabled = false;
+    }, 1880);
+  }
+
+
+  // The participant's games (2026-11-10): PLAY_N mornings, each with a mood; Cinderella taps when the mood is below
+  // the product's p (the rule of MB.sim), so the Queen's mirror can play the same mornings.
+  const newGame = () => ({ moods: MB.sim.moods(MB.newSeed(), PLAY_N), seq: [], last: null, on: false, fresh: false });
+  S.play = newGame();
+  S.duel = newGame();
+  const count = (a) => a.filter(Boolean).length;
+  const soFar = (a) => { let k = 0; return a.map((x, j) => (k += x ? 1 : 0) / (j + 1)); };
+  const queenTaps = (g) => g.moods.slice(0, g.seq.length).map((u) => u < P[BEST]);
+  const toPlay = () => MB.go(MB.scenes().findIndex((s) => s.key === "play"), 0, true);
+  // One bead per morning, orange for a tap.
+  const beads = (a, label) => `<div class="s1-beads" role="img" aria-label="${label}">${a.map((x) => MB.dot(x)).join("")}</div>`;
+  // The offer to play, said plainly (Carlos: "be more explicit in this slide about offering this possibility").
+  function invite(duel) {
+    return `<div class="s1-invite"><p class="s1-kick">${duel ? "Your turn again" : "Your turn"}</p>
+      <p class="s1-big">${duel ? `${PLAY_N} new mornings against the Queen's mirror` : `Play ${PLAY_N} mornings as Cinderella's mirror`}</p>
+      <p class="say">Each morning, tap the product to show. Cinderella taps it or not.${duel ? " The Queen's mirror plays the same mornings beside you." : ""} Get as many taps as you can.</p>
+      <button type="button" class="act s1-go" id="s1start">Play</button></div>`;
+  }
+  // A game in progress: the morning, the taps, your mirror (and the Queen's in a duel), the five products, the board.
+  function gameView(g, duel) {
+    const n = g.seq.length, done = n >= PLAY_N, T = count(g.seq.map((m) => m.tap)), Q = count(queenTaps(g));
+    const rows = PR.map(() => []);
+    g.seq.forEach((m) => rows[m.i].push(m.tap));
+    const pop = !!g.last && g.fresh;
+    const badge = (tap) => MB.badge(tap).replace(" bump", pop ? " bump" : "");
+    const mine = MB.mirror(g.last ? PR[g.last.i] : null, g.last ? badge(g.last.tap) : "", { size: "xs", cap: false, show: pop, spark: pop && g.last.tap, label: "your mirror" });
+    let h = `<div class="s1-playhead">${MB.face("cin", "sm")}<span>${done ? `All ${PLAY_N} mornings played` : `Morning ${n + 1} of ${PLAY_N}`}</span><span class="s1-taps">${duel ? "You" : "Taps"}: ${T}</span>${duel ? `<span class="s1-taps q">Queen: ${Q}</span>` : ""}</div>`;
+    if (duel) {
+      const queen = MB.mirror(g.last ? PR[BEST] : null, g.last ? badge(g.last.q) : "", { size: "xs", cap: false, queen: true, show: pop, label: "the Queen's mirror" });
+      h += `<div class="s1-duo"><div class="s1-duoc">${mine}<span class="small muted">Your mirror</span></div><div class="s1-duoc">${queen}<span class="small muted">The Queen's mirror</span></div></div>`;
+    } else h += mine;
+    h += `<div class="s1-choose">${PR.map((q, i) => `<button type="button" data-i="${i}" style="--t:${q.tile}"${done ? " disabled" : ""} title="${q.name}" aria-label="Show the ${q.name}"><span class="emo">${q.emo}</span></button>`).join("")}</div>`;
+    h += `<p class="res s1-res ${g.last ? (g.last.tap ? "yes" : "no") : "muted"}">${g.last ? `Morning ${n}: the ${PR[g.last.i].name.toLowerCase()}. ${g.last.tap ? g.last.text : `No tap. ${g.last.text}`}` : "&nbsp;"}</p>`;
+    return h + MB.board({ rows, cols: 8, estFormat: "both", pick: g.last ? g.last.i : null, fresh: pop });
+  }
+  function bindGame(el, g) {
+    el.querySelectorAll(".s1-choose button").forEach((b) => b.addEventListener("click", () => {
+      if (g.seq.length >= PLAY_N) return;
+      const t = g.seq.length, i = parseInt(b.dataset.i, 10), u = g.moods[t];
+      const m = { i, tap: u < P[i], q: u < P[BEST] };
+      g.seq.push(m);
+      g.last = Object.assign({ text: m.tap ? TAPS[(t + 1) % TAPS.length] : EXCUSES[(t + 1) % EXCUSES.length] }, m);
+      g.fresh = true;
+      MB.redraw();
+    }));
+    MB.on(el, "#s1start", () => { g.on = true; MB.redraw(); });
+  }
+  // Your taps and the Queen's mirror's on the same mornings: a row of beads each, and the two rates.
+  function vsRows(g) {
+    const you = g.seq.map((m) => m.tap), qq = queenTaps(g), n = you.length;
+    const row = (key, a) => {
+      const st = MB.STRAT[key], k = count(a);
+      return `<div class="s1-vsrow"><span class="s1-vsname"><span class="ic" aria-hidden="true">${st.icon}</span>${st.name}</span>${beads(a, `${st.name}: ${k} taps in ${n} mornings`)}<span class="formula">${k} / ${n} = <strong>${MB.dec(k / n)}</strong></span></div>`;
+    };
+    return `<div class="s1-vs">${row("you", you)}${row("queen", qq)}</div>`;
+  }
+  const notYet = (g) => `<div class="box"><p>${g.seq.length ? `You played ${g.seq.length} of ${PLAY_N} mornings.` : "You have not played yet."}</p>
+    <div class="row"><button type="button" class="act" id="s1toplay">Back to the game</button></div></div>`;
 
   const scenes = [
     {
@@ -2081,23 +2226,13 @@ sub, sup { font-size: .65em; line-height: 0; }
     {
       key: "urn", title: "Showing an ad is drawing a ball", steps: 2,
       render(el, step) {
-        const n = S.draws.length, g = S.draws.filter(Boolean).length;
-        let h = `<p class="say${MB.cls(step, 0)}">Even a favourite is not tapped every morning. Some mornings Cinderella is busy with the stepsisters.</p>
-          <p class="say${MB.cls(step, 0)}">Picture an urn for Cinderella and the mattress, with five balls. Orange means a tap. White means no tap.</p>
-          <div class="stack${MB.cls(step, 0)}">
-            <div class="s1-urnrow">${MB.face("cin", "md")}<div class="s1-urnwrap">${urnSVG(URN_W, { open: true, shake: S.shake, label: "Cinderella's urn for the mattress: 2 orange balls and 3 white balls" })}${step >= 1 && S.last !== null ? `<div class="s1-ball${S.last ? " on" : ""}"></div>` : ""}</div>${MB.tile(PR[3], "md")}</div>
-            <p class="formula">${MB.pp} = 2 / 5 = 0.4</p>
-            <p class="muted small">${MB.pp}: the probability that she taps the mattress, the share of orange balls.</p>
-          </div>`;
-        if (step >= 1) {
-          const res = S.last === null ? "" : S.last ? `<span class="res yes">Orange: a tap.</span>` : `<span class="res no">White: no tap.</span>`;
-          h += `<p class="say${MB.cls(step, 1)}">Showing the ad means drawing one ball. Orange: she taps. White: she does not. Then the ball goes back in.</p>
-            <div class="row${MB.cls(step, 1)}"><button type="button" class="act" id="s1draw">Draw a ball</button>${res}
-              <span class="muted">${n ? `${n} ${n === 1 ? "draw" : "draws"}: ${g} orange, ${n - g} white` : "No draws yet"}</span></div>`;
-        }
-        el.innerHTML = h;
-        S.shake = false;
-        MB.on(el, "#s1draw", () => { const t = rand() < URN_W / URN_N; S.draws.push(t); S.last = t; S.shake = true; MB.redraw(); });
+        el.innerHTML = `<p class="say${MB.cls(step, 0)}">Some mornings Cinderella taps the mattress, some mornings she does not.</p>
+          ${analogy(step)}
+          ${step >= 1 ? `<div class="stack${MB.cls(step, 1)}"><p class="formula">${MB.pp} = 2 / 5 = 0.4</p>
+            <p class="muted small">${MB.pp}: the probability that she taps the mattress.</p>
+            <button type="button" class="act" id="s1draw">Draw a ball</button></div>` : ""}`;
+        DRAW.busy = false;
+        MB.on(el, "#s1draw", () => drawBall(el));
       }
     },
     {
@@ -2142,20 +2277,12 @@ sub, sup { font-size: .65em; line-height: 0; }
       }
     },
     {
-      key: "play", title: "You are Cinderella's mirror", steps: 2,
+      key: "play", title: "Your turn: be Cinderella's mirror", steps: 2,
       render(el, step) {
-        const p = S.play, n = p.seq.length, done = n >= PLAY_N, T = p.seq.filter((m) => m.tap).length;
-        const rows = PR.map(() => []);
-        p.seq.forEach((m) => rows[m.i].push(m.tap));
-        const pop = !!p.last && S.playFresh;
-        let h = `<p class="say${MB.cls(step, 0)}">Fifteen mornings. Each morning, tap the product to show. Cinderella taps each product with its own probability, which you do not know.</p>
-          <div class="s1-playhead">${MB.face("cin", "sm")}<span>${done ? `All ${PLAY_N} mornings played` : `Morning ${n + 1} of ${PLAY_N}`}</span><span class="s1-taps">Taps: ${T}</span></div>
-          ${MB.mirror(p.last ? PR[p.last.i] : null, p.last ? MB.badge(p.last.tap).replace(" bump", pop ? " bump" : "") : "", { size: "xs", cap: false, show: pop, spark: pop && p.last.tap })}
-          <div class="s1-choose">${PR.map((q, i) => `<button type="button" data-i="${i}" style="--t:${q.tile}"${done ? " disabled" : ""} title="${q.name}" aria-label="Show the ${q.name}"><span class="emo">${q.emo}</span></button>`).join("")}</div>`;
-        h += `<p class="res s1-res ${p.last ? (p.last.tap ? "yes" : "no") : "muted"}">${p.last ? `Morning ${n}: the ${PR[p.last.i].name.toLowerCase()}. ${p.last.tap ? p.last.text : `No tap. ${p.last.text}`}` : "&nbsp;"}</p>`;
-        h += MB.board({ rows, cols: 8, estFormat: "both", pick: p.last ? p.last.i : null, fresh: !!p.last && S.playFresh });
+        const g = S.play, done = g.seq.length >= PLAY_N;
+        let h = !g.on && !g.seq.length ? invite(false) : gameView(g, false);
         if (done) {
-          h += `<div class="box"><strong>${T} ${T === 1 ? "tap" : "taps"} in ${PLAY_N} mornings.</strong>
+          h += `<div class="box"><strong>${count(g.seq.map((m) => m.tap))} taps in ${PLAY_N} mornings.</strong>
             <div class="row"><button type="button" class="quiet" id="s1again">Play again</button></div></div>`;
         }
         if (step >= 1) {
@@ -2165,43 +2292,75 @@ sub, sup { font-size: .65em; line-height: 0; }
             <p class="muted">Explore too little and you may never find her favourite. Explore too much and you waste mornings.</p></div>`;
         }
         el.innerHTML = h;
-        S.playFresh = false;
-        el.querySelectorAll(".s1-choose button").forEach((b) => b.addEventListener("click", () => {
-          if (S.play.seq.length >= PLAY_N) return;
-          const i = parseInt(b.dataset.i, 10), tap = rand() < P[i];
-          S.play.seq.push({ i, tap });
-          S.play.last = { i, tap, text: tap ? TAPS[S.play.seq.length % TAPS.length] : EXCUSES[S.play.seq.length % EXCUSES.length] };
-          S.playFresh = true;
-          MB.redraw();
-        }));
-        MB.on(el, "#s1again", () => { S.play = { seq: [], last: null }; MB.redraw(); });
+        g.fresh = false;
+        bindGame(el, g);
+        MB.on(el, "#s1again", () => { S.play = newGame(); S.play.on = true; MB.redraw(); });
       }
     },
     {
-      key: "queen", title: "The Queen's mirror", steps: 3,
+      key: "rate", title: "Your rate", steps: 2,
       render(el, step) {
-        const b = PR[BEST];
+        const g = S.play, n = g.seq.length;
+        if (!n) { el.innerHTML = notYet(g); MB.on(el, "#s1toplay", toPlay); return; }
+        const a = g.seq.map((m) => m.tap), T = count(a);
+        let h = `<p class="say${MB.cls(step, 0)}">Your ${n} mornings at Cinderella's, one bead per morning: ${MB.KEY}</p>
+          <div class="${MB.cls(step, 0)}">${beads(a, `${T} taps in ${n} mornings`)}</div>
+          <p class="say${MB.cls(step, 0)}"><strong>${T} ${T === 1 ? "tap" : "taps"} in ${n} mornings.</strong>${n < PLAY_N ? ` <span class="muted small">You played ${n} of ${PLAY_N} mornings.</span>` : ""}</p>`;
+        if (step >= 1) {
+          h += `<div class="box keybox${MB.cls(step, 1)}"><p class="formula big">rate = taps / mornings</p>
+            <p class="formula">your rate = ${T} / ${n} = <strong>${MB.dec(T / n)}</strong></p>
+            <p>The higher the rate, the better the mirror.</p></div>`;
+        }
+        el.innerHTML = h;
+      }
+    },
+    {
+      key: "queen", title: "The Queen's mirror", steps: 2,
+      render(el, step) {
         let h = `<div class="row s1-scene${MB.cls(step, 0)}">${MB.face("queen", "lg")}${MB.mirror(null, "", { size: "xs", queen: true, label: "the Queen's mirror" })}</div>
-          <p class="say${MB.cls(step, 0)}">Mirror, mirror on the wall: the Queen's mirror knows every probability ${MB.pp}. Each morning it shows the product with the highest ${MB.pp}. No mirror can do better.</p>
+          <p class="say${MB.cls(step, 0)}">Mirror, mirror on the wall: the Queen's mirror knows every probability ${MB.pp}. Each morning it shows the product with the highest ${MB.pp}.</p>
           <div class="s1-twoprobs${MB.cls(step, 0)}">${CUST.map((c) => {
             const g = S.guesses[c.id], fav = PR[c.p.indexOf(Math.max(...c.p))];
             const said = g ? (g === fav.id ? ` <span class="res yes">You guessed it.</span>` : ` <span class="muted">You guessed the ${PR.find((q) => q.id === g).short.toLowerCase()}.</span>`) : "";
             return `<div class="s1-cust"><div class="s1-who">${MB.who(c, "sm")}<span>: the ${fav.short.toLowerCase()} ${fav.emo}${said}</span></div>${probCards(c)}</div>`;
           }).join("")}</div>`;
         if (step >= 1) {
-          h += `<div class="box keybox${MB.cls(step, 1)}"><p class="formula big">rate = taps / mornings</p>
-              <p>The rate is what every strategy wants high. For Cinderella the Queen's mirror shows the ${b.name.toLowerCase()} every morning; she taps it with probability ${MB.dec(P[BEST])}.</p></div>`;
-        }
-        if (step >= 2) {
-          if (!S.queen) S.queen = queenSeason(false);
-          const v = MB.sim.rateSoFar(S.queen), T = S.queen.taps;
-          h += `<div class="${MB.cls(step, 2)}"><p class="say">One season of the Queen's mirror at Cinderella's: ${T} taps in ${MB.SEASON} mornings, a rate of ${MB.dec(T / MB.SEASON)}.</p>
-              ${MB.rateChart({ series: [{ key: "queen", v }], aria: "The rate of the Queen's mirror, morning by morning" })}
-              <div class="row"><button type="button" class="quiet" id="s1q">Another season</button>
-                <span class="muted small">The taps are random, so every season ends a little differently.</span></div></div>`;
+          h += `<div class="box keybox s1-imag${MB.cls(step, 1)}"><strong>An imaginary mirror</strong>
+            <p>No real mirror knows ${MB.pp}: it sees only taps. The Queen's mirror is imagined as a reference, the best rate a mirror could reach.</p>
+            <p>Every strategy is compared with it, and so is your game.</p></div>`;
         }
         el.innerHTML = h;
-        MB.on(el, "#s1q", () => { S.queen = queenSeason(true); MB.redraw(); });
+      }
+    },
+    {
+      key: "you-queen", title: "Your mirror against the Queen's", steps: 2,
+      render(el, step) {
+        const g = S.play, n = g.seq.length;
+        if (!n) { el.innerHTML = notYet(g); MB.on(el, "#s1toplay", toPlay); return; }
+        const you = g.seq.map((m) => m.tap), qq = queenTaps(g);
+        let h = `<p class="say${MB.cls(step, 0)}">The Queen's mirror on your ${n} mornings: the ${PR[BEST].name.toLowerCase()} every morning. The same mornings, the same Cinderella.</p>
+          <div class="${MB.cls(step, 0)}">${vsRows(g)}</div>`;
+        if (step >= 1) {
+          h += `<div class="stack${MB.cls(step, 1)}"><p class="say">The rate so far, after each morning:</p>
+            ${MB.rateChart({ T: PLAY_N, series: [{ key: "queen", v: soFar(qq) }, { key: "you", v: soFar(you) }], values: true, aria: "Your rate and the Queen's mirror's, morning by morning" })}
+            <button type="button" class="act s1-go" id="s1duel">Play again, against the Queen's mirror</button></div>`;
+        }
+        el.innerHTML = h;
+        MB.on(el, "#s1duel", () => MB.next());
+      }
+    },
+    {
+      key: "duel", title: "Play against the Queen's mirror", steps: 1,
+      render(el) {
+        const g = S.duel, done = g.seq.length >= PLAY_N;
+        let h = !g.on && !g.seq.length ? invite(true) : gameView(g, true);
+        if (done) {
+          h += `<div class="box">${vsRows(g)}<div class="row"><button type="button" class="quiet" id="s1again2">Play again</button></div></div>`;
+        }
+        el.innerHTML = h;
+        g.fresh = false;
+        bindGame(el, g);
+        MB.on(el, "#s1again2", () => { S.duel = newGame(); S.duel.on = true; MB.redraw(); });
       }
     },
     {
@@ -2224,10 +2383,15 @@ sub, sup { font-size: .65em; line-height: 0; }
    Played on the race season (MB.RACE), so its line is the same in every later chart.
    Round 10 (2026-11-06): the first scene is a movie (anim.js). Each morning the hat rocks, a card rises and flies to
    Cinderella's mirror, she taps or not, and a bead flies to the product's row; then the whole season plays faster
-   and ends with its total rate. */
+   and ends with its total rate.
+   Round 12 (2026-11-10), Carlos: "start producing the plot of the random strategy and then compare it against the
+   Queen's mirror so that the participants get accustomed to interpreting these graphics." A second movie draws the
+   rate so far of the season just played, one bead and one point per morning, slowly at first; then the Queen's mirror
+   on the same mornings, beside it. */
 (function () {
   "use strict";
-  const MB = window.MB, P = MB.P, T = MB.SEASON;
+  const MB = window.MB, P = MB.P, PR = MB.PRODUCTS, T = MB.SEASON;
+  const BEST = P.indexOf(Math.max(...P));
 
   function race(fresh) {
     const ms = fresh ? MB.newSeed() : MB.raceSeed("moods"), u = MB.sim.moods(ms, T);
@@ -2268,23 +2432,64 @@ sub, sup { font-size: .65em; line-height: 0; }
     }
   });
 
+  // The rate, morning by morning (round 12). Chapter 1: Random's beads, one per morning, ten mornings to a row, and
+  // its rate so far drawn point by point: mornings 1 to 3 slowly, then faster and faster. Chapter 2: the Queen's
+  // mirror on the same mornings, its beads and its line beside Random's. "Another season" ends chapter 2.
+  const bb = (key, s, upto) => `<div class="s2-bb"><span class="s2-bl"><span class="ic" aria-hidden="true">${MB.STRAT[key].icon}</span>${MB.STRAT[key].name}</span>
+    <div class="mb-beads s2-beads" role="img" aria-label="${MB.STRAT[key].name}: one bead per morning played, ten mornings to a row">${s.mornings.map((m, t) => MB.dot(t < upto ? m.tap : null)).join("")}</div></div>`;
+  function soFar(s, t) {
+    const k = s.mornings.slice(0, t).filter((m) => m.tap).length;
+    return `${k} ${k === 1 ? "tap" : "taps"} in ${t} ${t === 1 ? "morning" : "mornings"}: ${k}/${t} = ${MB.dec(k / t)}`;
+  }
+  // The chart with the first q mornings of the Queen's mirror (null: not on the chart) and the first r of Random.
+  const plot = (s, q, r) => MB.rateChart({
+    series: (q === null ? [] : [{ key: "queen", v: MB.sim.rateSoFar(s.queen).slice(0, q) }]).concat([{ key: "random", v: MB.sim.rateSoFar(s.random).slice(0, r) }]),
+    values: true, aria: q === null ? "Random's rate so far, morning by morning" : "The rates of the Queen's mirror and of Random, morning by morning" });
+  const LINE = MB.movie({
+    key: "rateline",
+    frames(step) {
+      const s = S.other || S.season, R = s.random, Q = s.queen, F = [];
+      if (step === 0) {
+        F.push({ ms: 1800, p: { dev: bb("random", R, 0), mid: `Mornings 1 to ${T}`, board: plot(s, null, 0),
+          line: "After each morning, the rate so far: the taps so far divided by the mornings so far." } });
+        for (let t = 1; t <= T; t++) {
+          F.push({ ms: t <= 3 ? 2300 : MB.mvPace(t - 4, 1100, 40, 0.86), p: { dev: bb("random", R, t), mid: `Morning ${t}`, board: plot(s, null, t), line: soFar(R, t) } });
+        }
+        return F;
+      }
+      const both = (q) => bb("random", R, T) + bb("queen", Q, q);
+      F.push({ ms: 1900, p: { dev: both(0), mid: `Mornings 1 to ${T}`, board: plot(s, 0, T),
+        line: `The Queen's mirror on the same mornings: the ${PR[BEST].name.toLowerCase()} every morning.` } });
+      for (let t = 1; t <= T; t++) {
+        F.push({ ms: MB.mvPace(t - 1, 520, 30, 0.88), p: { dev: both(t), mid: `Morning ${t}`, board: plot(s, t, T), line: `The Queen's mirror: ${soFar(Q, t)}` } });
+      }
+      F.push({ ms: 400, p: { line: "The higher the line, the better the mirror.",
+        after: `<div class="row"><button type="button" class="quiet" data-s2="again">Another season</button>${S.other ? `<button type="button" class="quiet" data-s2="back">Back to the first season</button>` : ""}</div>` } });
+      return F;
+    }
+  });
+
   const scenes = [
     {
       key: "random", title: "A card from a hat", steps: 2,
       render(el, step) { MOVIE.render(el, step); }
     },
     {
+      key: "random-rate", title: "Random's rate, morning by morning", steps: 1,
+      render(el) { LINE.render(el, 0); }
+    },
+    {
       key: "versus", title: "Random against the Queen's mirror", steps: 1,
-      render(el, step) {
-        const s = S.other || S.season;
-        const series = [{ key: "queen", v: MB.sim.rateSoFar(s.queen) }, { key: "random", v: MB.sim.rateSoFar(s.random) }];
-        el.innerHTML = `<p class="say${MB.cls(step, 0)}">The same season, the same Cinderella: the rate so far after each morning.</p>
-          <div class="${MB.cls(step, 0)}">${MB.rateChart({ series, values: true, aria: "The rates of the Queen's mirror and of Random, morning by morning" })}</div>
-          <div class="row"><button type="button" class="quiet" id="s2again">Another season</button>
-            ${S.other ? `<button type="button" class="quiet" id="s2back">Back to the first season</button>` : ""}</div>
-          <p class="say">Random shows Cinderella's favourite on one morning in five. The other mornings go to products she rarely taps.</p>`;
-        MB.on(el, "#s2again", () => { S.other = race(true); MB.redraw(); });
-        MB.on(el, "#s2back", () => { S.other = null; MB.redraw(); });
+      render(el) {
+        LINE.render(el, 1);
+        const root = el.querySelector(".mv");
+        if (root) root.addEventListener("click", (e) => {
+          const b = e.target.closest("[data-s2]");
+          if (!b) return;
+          S.other = b.dataset.s2 === "again" ? race(true) : null;
+          LINE.reset();
+          MB.redraw();
+        });
       }
     },
     MB.pythonScene(2)
@@ -2673,7 +2878,12 @@ sub, sup { font-size: .65em; line-height: 0; }
    Round 9 (2026-11-06, main session): the heads drawn by the engine; the roulette, the morning and Cinderella's
    mirror in one row above the board; the words above or below the pictures.
    Round 10 (2026-11-06, main session): the first scene is a movie (anim.js) and the reader's own spins; the list of
-   the four steps is gone, their names light up in the movie and on the board's scenes. */
+   the four steps is gone, their names light up in the movie and on the board's scenes.
+   Round 12 (2026-11-10, main session), Carlos: "do the initialization faster because we already know how it
+   initialization works ... gradually make it faster and faster and faster until you do the 100 mornings ... drop all
+   the other slides and then compare against the Queen's Mirror." The reader's spins follow the roulette; the movie's
+   second chapter, a scene of its own, plays the whole season faster and faster and ends with its total rate; the
+   walkthrough, the click-per-morning scene and the scene of the rest of the season are gone. */
 (function () {
   "use strict";
   const MB = window.MB, P = MB.P, PR = MB.PRODUCTS, T = MB.SEASON, K = PR.length, EPS = MB.EPS;
@@ -2682,11 +2892,7 @@ sub, sup { font-size: .65em; line-height: 0; }
   const IN_N = Math.round(1 / EPS);                       // one spin in five (eps 0.2)
   const ONE_IN = `one spin in ${MB.words[IN_N] || IN_N}`;
   const low = (s) => s.charAt(0).toLowerCase() + s.slice(1);
-  const up = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const the = (i) => `the ${low(PR[i].short)}`;
-  const taps = (row) => row.filter(Boolean).length;
-  const fr = (row) => `${taps(row)}/${row.length} = ${MB.dec(taps(row) / row.length)}`;
-  const card = (i) => `<span class="s4-card" title="${PR[i].name}">${PR[i].emo}</span>`;
 
   // The race season (MB.RACE): the same moods and streams as every comparison of the game; fresh: another season.
   function race(fresh) {
@@ -2710,81 +2916,13 @@ sub, sup { font-size: .65em; line-height: 0; }
   M.forEach((m, t) => { if (m.phase === "exploit" && m.i !== BEST) lastOff = t; });
   const LOCK = firstFrom(lastOff + 1, (m) => m.phase === "exploit");      // from morning 19 on, 🥇 is the vacuum
   const HATS = M.filter(explore).length, SPINS = T - K;
-  // Greedy alone (no hat) on the same moods: after the initialization it shows one product every morning.
-  const G = MB.sim.eg(P, RACE.u, MB.raceSeed("eg"), 0).mornings.slice(K);
-  const STUCK = G[0].i, STUCK_ALL = G.every((m) => m.i === STUCK);
-  const COLS = Math.max(...MB.sim.rows(E, FAST_END + 1).map((r) => r.length)) + 1; // the board up to morning 23: 14
-  const LONGEST = Math.max(...MB.sim.rows(E).map((r) => r.length));                 // the vacuum's row at the end: 71
+  const COLS = Math.max(...MB.sim.rows(E, FAST_END + 1).map((r) => r.length)) + 1; // the board up to morning 23: 14; it widens with the vacuum's row
 
-  // The four steps, lit one at a time in the movie and on the board's scenes.
+  // The four steps, lit one at a time in the movie.
   const SHORT = ["Initialize", "Spin", "Sample", "Update"];
-  const partsLine = (on) => `<ol class="steps s4-parts" aria-label="The four steps">${SHORT.map((p, j) =>
-    `<li${j === on ? ` class="on" aria-current="step"` : ""}>${p}</li>`).join("")}</ol>`;
 
-  // The roulette, the morning and the scene's buttons, and Cinderella's mirror with the product of the morning; the
-  // roulette is dim before the first spin. o.mirror: { i (the product), tap (true, false, or null before the sample),
-  // late (the product shows when the needle lands), pop (the badge pops) }.
-  const panel = (head, spin, o) => {
-    o = o || {};
-    const mi = o.mirror, mir = MB.mirror(mi && mi.i !== undefined && mi.i !== null ? PR[mi.i] : null,
-      mi && mi.tap !== undefined && mi.tap !== null ? MB.badge(mi.tap).replace(" bump", mi.pop ? " bump" : "") : "",
-      { size: "xs", cap: false, late: !!(mi && mi.late), label: mi && mi.i !== undefined && mi.i !== null ? `Cinderella's mirror shows the ${PR[mi.i].name.toLowerCase()}` : "Cinderella's mirror" });
-    return `<div class="s4-panel"><div class="s4-wheel${o.dim ? " dim" : ""}">${MB.wheel(EPS, spin, { spin: !!o.anim })}</div>
-    <div class="s4-pstack"><div class="s4-morning">${head}</div>${o.ctrl ? `<div class="row s4-ctrl">${o.ctrl}</div>` : ""}</div>${mir}</div>`;
-  };
-  // The board of the race season after upto mornings. o: { upto, cols, pick, staleAt (the estimates before that
-  // morning), hideEst, pop, landing (the pick shows when the needle lands), upd, flash, estin, reveal, wide }.
-  function board(o) {
-    const rows = MB.sim.rows(E, o.upto);
-    const estValues = o.hideEst ? rows.map(() => null)
-      : o.staleAt !== undefined ? MB.sim.rows(E, o.staleAt).map((r) => MB.estText(r, "both")) : undefined;
-    const cls = ["s4-board", o.wide ? "s4-bars" : "", o.landing ? "s4-landing" : "", o.staleAt !== undefined ? "s4-stale" : "",
-      o.upd ? "s4-upd" : "", o.flash ? "s4-flash" : "", o.estin ? "s4-estin" : ""].filter(Boolean).join(" ");
-    return `<div class="${cls}">${MB.board({ rows, cols: o.cols, estFormat: "both", estValues, pick: o.pick, highlight: o.pick,
-      fresh: o.pop || null, left: o.reveal ? [{ head: MB.pp, cells: P.map(MB.dec), width: 40, cls: "s4-p" }] : undefined,
-      aria: "Cinderella's board with epsilon-greedy: one row per product, one dot per showing" })}</div>`;
-  }
-  const popOf = (upto) => { const m = M[upto - 1], r = MB.sim.rows(E, upto)[m.i]; return { row: m.i, col: r.length - 1 }; };
-
-  // What happens on morning t, in the words of the steps.
-  function spinText(t) {
-    const m = M[t], before = MB.sim.rows(E, t);
-    if (explore(m)) return `<b>Spin:</b> the needle stops on ${HAT}, the small slice. A card from the hat, any of the five at random: ${the(m.i)} ${card(m.i)}.`;
-    if (m.tied && m.tied.length > 1) return `<b>Spin:</b> the needle stops on ${GOLD}. A tie for the highest estimate: ${MB.join(m.tied.map(the))}. The mirror picks ${the(m.i)} at random.`;
-    return `<b>Spin:</b> the needle stops on ${GOLD}, the highest estimate: ${the(m.i)}, ${fr(before[m.i])}.`;
-  }
-  const sampleText = (t) => `<b>Sample:</b> the mirror shows ${the(M[t].i)}. ${M[t].tap ? `Tap: an orange dot ${MB.TAP}` : `No tap: a white dot ${MB.NOTAP}`}.`;
-  function updateText(t) {
-    const i = M[t].i;
-    return `<b>Update:</b> the estimate of ${the(i)} was ${fr(MB.sim.rows(E, t)[i])}. Now it is ${fr(MB.sim.rows(E, t + 1)[i])}.`;
-  }
-  // A morning told in one go: the three steps, one after the other (sub 0, 1, 2).
-  function wholeText(t, sub) {
-    const m = M[t], i = m.i;
-    let s = `The same three steps. <b>Spin:</b> ${explore(m) ? HAT : GOLD}, ${the(i)}.`;
-    if (sub >= 1) s += ` <b>Sample:</b> ${m.tap ? "tap" : "no tap"}.`;
-    if (sub >= 2) s += ` <b>Update:</b> ${fr(MB.sim.rows(E, t)[i])} becomes ${fr(MB.sim.rows(E, t + 1)[i])}.`;
-    return s;
-  }
-  function firstText() {
-    const rows = MB.sim.rows(E, K), top = MB.sim.argmaxAll(rows.map(MB.estimate));
-    const lead = top.length > 1 ? `A tie for the highest estimate: ${MB.join(top.map(the))}.` : `${up(the(top[0]))} has the highest estimate, ${fr(rows[top[0]])}.`;
-    return `One dot each, so each estimate is 0 or 1. ${lead}`;
-  }
-
-  // The walkthrough on the board: the empty board, initialize, the first estimates, then morning K + 1 in three steps,
-  // the mornings before the first card from the hat in one step each, and that morning in three steps.
-  const WALK = [{ kind: "empty" }, { kind: "init" }, { kind: "first" }];
-  const three = (t) => ["spin", "sample", "update"].forEach((kind) => WALK.push({ kind, t }));
-  three(K);
-  for (let t = K + 1; t < HAT1; t++) WALK.push({ kind: "whole", t });
-  if (HAT1 > K) three(HAT1);
-
-  const I = { spins: [], spin: 0.8, anim: false };                                  // the first scene's roulette
-  const W = { upto: 0, pop: false, sub: 0, anim: false, flash: false };             // the walkthrough
-  const F = { upto: HAT1 + 1, phase: "done", anim: false, pop: false, flash: false };  // one morning per click
-  const R = { upto: FAST_END + 1, playing: false, reveal: false };                  // the rest of the season
-  const C = { other: null };                                                         // the rate chart's other season
+  const I = { spins: [], spin: 0.8, anim: false };  // the reader's own spins
+  const C = { other: null };                         // the rate chart's other season
 
   function spinIt(n) {
     for (let j = 0; j < n; j++) I.spins.push(MB.rand());
@@ -2793,38 +2931,11 @@ sub, sup { font-size: .65em; line-height: 0; }
     MB.redraw();
   }
 
-  // One click, one whole morning: the needle turns, then the dot, then the estimate.
-  function nextMorning() {
-    if (F.upto > FAST_END) return;
-    MB.stopTimers(); // a morning still running ends now
-    F.upto += 1;
-    if (MB.still) { F.phase = "done"; F.pop = true; MB.redraw(); return; }
-    F.phase = "spin";
-    F.anim = true;
-    MB.redraw();
-    MB.later(() => { F.phase = "sample"; F.pop = true; MB.redraw(); }, 1350);
-    MB.later(() => { F.phase = "done"; F.flash = true; MB.redraw(); }, 2050);
-  }
-  function fastText(t, ph) {
-    const m = M[t];
-    let s = `${explore(m) ? `${HAT} A card from the hat` : `${GOLD} The highest estimate`}: ${the(m.i)}${explore(m) ? ` ${card(m.i)}` : ""}.`;
-    if (ph === "spin") return s;
-    s += m.tap ? " Tap!" : " No tap.";
-    if (ph !== "done") return s;
-    const before = MB.sim.estimates(E, t), after = MB.sim.estimates(E, t + 1);
-    const othersZero = before.every((e, k) => k === m.i || !e);
-    const top = MB.sim.argmaxAll(after.map((e) => (e === null ? -1 : e)));
-    if (t === FIND && top.length === 1 && top[0] === BEST) s += ` Its estimate, ${fr(MB.sim.rows(E, t + 1)[BEST])}, is now the highest.`;
-    else if (t < FIND && m.phase === "exploit" && othersZero) s += ` The other estimates are all 0, so ${GOLD} keeps picking ${the(m.i)}.`;
-    else if (t > FIND && t < FAST_END && m.phase === "exploit" && m.i === BEST) s += ` ${GOLD} now picks ${the(BEST)}.`;
-    else if (t === FAST_END && explore(m)) s += ` The hat keeps showing other products now and then, all season.`;
-    return s;
-  }
-
   // The movie (round 10, anim.js). Chapter 1, the roulette alone: the needle spins five times, the spins of
-  // Cinderella's mornings 6 to 10, and the slice it stops on lights its name. Chapter 2, on the board: initialize,
-  // then mornings 6 to 8. On the large slice the product with the highest estimate (the medal on its row) flies to
-  // the mirror; on the small slice a card from the hat does.
+  // Cinderella's mornings 6 to 10, and the slice it stops on lights its name. Chapter 2 (round 12), on the board: the
+  // initialization in five quick beats, morning 6 beat by beat, then each morning faster than the one before, to
+  // morning 100 and the season's total rate. On the large slice the product with the highest estimate (the medal on
+  // its row) flies to the mirror; on the small slice a card from the hat does.
   const lgs = (lit) => `<div class="mv-lgs"><span class="mv-lg${lit === "gold" ? " on" : ""}"><span class="ic">${GOLD}</span>the highest estimate</span><span class="mv-lg${lit === "hat" ? " on" : ""}"><span class="ic">${HAT}</span>a card from the hat</span></div>`;
   const slice = (t) => (explore(M[t]) ? "hat" : "gold");
   const TRY = [K, K + 1, K + 2, K + 3, K + 4];
@@ -2850,10 +2961,11 @@ sub, sup { font-size: .65em; line-height: 0; }
     dev: smallDev,
     chips: (t, beat) => MB.mvChips(SHORT, t < K ? 0 : BEAT[beat] === undefined ? -1 : BEAT[beat]),
     src: (t) => (explore(M[t]) ? `.mv-hat .mv-card[data-i="${M[t].i}"]` : `.mb-row[data-k="${M[t].i}"] .mb-prod`),
-    chooseFx: (A, t) => { if (t >= K) A.spin(".mv-dev .mb-needle"); },
+    chooseFx: (A, t, mode, z) => { if (t >= K) A.spin(".mv-dev .mb-needle", Math.round(1200 * (z || 1))); },
     chooseMs: (t) => (t < K ? 300 : 1450),
     tie: (t) => (M[t].phase === "exploit" && M[t].tied && M[t].tied.length > 1 ? M[t].tied : null)
   };
+  const END = `The needle stopped on ${HAT} ${HATS} times in ${SPINS} spins.${LOCK >= 0 ? ` From morning ${LOCK + 1} on, ${GOLD} always picked ${the(BEST)}.` : ""}`;
   const MOVIE = MB.movie({
     key: "eg",
     cls: (step) => (step === 0 ? "mv-big" : ""),
@@ -2866,26 +2978,32 @@ sub, sup { font-size: .65em; line-height: 0; }
         });
         return F;
       }
-      const F = [{ ms: 800, p: { parts: MB.mvChips(SHORT, 0), dev: smallDev(0, "chosen"), mid: "Morning 1", cin: MB.mvCin(null), board: ectx.board(0, {}),
+      const F = [{ ms: 700, p: { parts: MB.mvChips(SHORT, 0), dev: smallDev(0, "chosen"), mid: "Morning 1", cin: MB.mvCin(null), board: ectx.board(0, {}),
         line: "" } }];
-      for (let t = 0; t < K; t++) F.push(...MB.mvMorning(ectx, t, "quick"));
-      F.push({ ms: 1300, p: { mid: `After morning ${K}`, board: ectx.board(K, { pop: true }) } });
+      for (let t = 0; t < K; t++) F.push(...MB.mvMorning(ectx, t, "fast", 450));
+      F.push({ ms: 1100, p: { mid: `After morning ${K}`, board: ectx.board(K, { pop: true }) } });
       F.push(...MB.mvMorning(ectx, K, "slow"));
-      for (let t = K + 1; t < HAT1; t++) F.push(...MB.mvMorning(ectx, t, "mid"));
-      if (HAT1 > K) F.push(...MB.mvMorning(ectx, HAT1, "slow"));
+      // Faster and faster: each morning takes 0.84 times the time of the one before, until a morning is a fifth of
+      // its full length; from there one beat per morning, shorter again, down to 45 ms.
+      let z = 1, j = 0;
+      for (let t = K + 1; t < T; t++) {
+        if (z >= 0.2) { F.push(...MB.mvMorning(ectx, t, "mid", 0, z)); z *= 0.84; }
+        else F.push(...MB.mvMorning(ectx, t, "fast", MB.mvPace(j++, 600, 45, 0.9)));
+      }
+      F.push({ ms: 400, p: { parts: MB.mvChips(SHORT, -1), board: ectx.board(T, {}), line: END, after: MB.totalRate("eg", E) }, done: MB.showTotal });
       return F;
     }
   });
 
   const scenes = [
     {
-      key: "eg-idea", title: "The roulette", steps: 3,
+      key: "eg-idea", title: "The roulette", steps: 2,
       render(el, step) {
-        if (step < 2) { MOVIE.render(el, step); return; }
+        if (step === 0) { MOVIE.render(el, 0); return; }
         // The reader's own spins (Carlos, round 5: "You show the roulette. I like it very much.").
         const n = I.spins.length, hats = I.spins.filter((x) => x < EPS).length, last = n ? (I.spins[n - 1] < EPS ? "hat" : "gold") : null;
         el.innerHTML = `<div class="mv mv-eg mv-big"><div class="mv-scene"><div class="mv-dev"><div class="mv-wheelbox">${MB.wheel(EPS, I.spin, { spin: I.anim })}</div>${lgs(I.anim ? null : last)}</div></div>
-            <p class="say${MB.cls(step, 2)}">Spin it yourself.</p>
+            <p class="say${MB.cls(step, 1)}">Spin it yourself.</p>
             <div class="row s4-btns"><button type="button" class="act" id="s4spin">Spin</button><button type="button" class="quiet" id="s4spin10">Spin 10 times</button></div>
             <p class="muted s4-tally">${n ? `${n} ${n === 1 ? "spin" : "spins"}: ${n - hats} ${GOLD} and ${hats} ${HAT}` : "No spins yet."}</p>
             ${n ? `<div class="s4-hist" role="img" aria-label="The last ${Math.min(10, n)} spins">${I.spins.slice(-10).map((x) => (x < EPS ? HAT : GOLD)).join("")}</div>` : ""}</div>`;
@@ -2897,124 +3015,8 @@ sub, sup { font-size: .65em; line-height: 0; }
       }
     },
     {
-      key: "eg-walk", title: `Cinderella's season, ε = ${EPS}`, steps: WALK.length,
-      render(el, step) {
-        const w = WALK[step], fresh = MB.isFresh();
-        if (fresh) {
-          W.pop = false; W.sub = 0; W.anim = false; W.flash = false;
-          if (w.kind === "init") {
-            // The five dots arrive one by one, from the top row down.
-            if (MB.still) W.upto = K;
-            else {
-              W.upto = 0;
-              MB.later(() => MB.animate(K, 340, (k) => { W.upto = k; W.pop = true; MB.redraw(); }), 300);
-            }
-          } else if (w.kind === "whole") {
-            if (MB.still) W.sub = 2;
-            else {
-              W.anim = true;
-              MB.later(() => { W.sub = 1; W.pop = true; MB.redraw(); }, 1400);
-              MB.later(() => { W.sub = 2; W.flash = true; MB.redraw(); }, 2250);
-            }
-          }
-        }
-        const o = { cols: COLS, upto: 0 };
-        let part = -1, head, spin = null, anim = false, cap, mirror = null;
-        if (w.kind === "empty") {
-          head = "A new season";
-          cap = `A new season at Cinderella's. No dots yet, so every estimate is unknown. One dot per showing: ${MB.KEY}`;
-        } else if (w.kind === "init") {
-          part = 0; head = `Mornings 1 to ${K}`;
-          o.upto = W.upto; o.hideEst = true;
-          if (W.pop && W.upto) o.pop = popOf(W.upto);
-          if (W.upto) mirror = { i: M[W.upto - 1].i, tap: M[W.upto - 1].tap, pop: W.pop };
-          cap = `<b>Initialize:</b> mornings 1 to ${K} show each product once, from the top row down.`;
-        } else if (w.kind === "first") {
-          part = 0; head = `After morning ${K}`;
-          o.upto = K; o.estin = fresh;
-          cap = firstText();
-        } else {
-          const t = w.t, m = M[t];
-          const sub = w.kind === "whole" ? W.sub : ["spin", "sample", "update"].indexOf(w.kind);
-          part = 1 + sub; head = `Morning ${t + 1}`; spin = m.spin; o.pick = m.i;
-          o.upto = sub === 0 ? t : t + 1;
-          if (sub === 0) { anim = w.kind === "whole" ? W.anim : fresh; o.landing = anim; }
-          if (sub === 1) { o.staleAt = t; if (w.kind === "whole" ? W.pop : fresh) o.pop = popOf(t + 1); }
-          if (sub === 2) { o.upd = true; o.flash = w.kind === "whole" ? W.flash : fresh; }
-          mirror = { i: m.i, tap: sub >= 1 ? m.tap : null, late: sub === 0 && anim, pop: sub === 1 && !!o.pop };
-          cap = w.kind === "whole" ? wholeText(t, sub) : [spinText, sampleText, updateText][sub](t);
-        }
-        const late = anim ? " s4-late" : "";
-        el.innerHTML = `${partsLine(part)}
-          <div class="s4-play">${panel(head, spin, { dim: spin === null, anim, mirror })}${board(o)}
-            <p class="say s4-cap s4-sm${late}${MB.cls(step, step)}">${cap}</p></div>`;
-        W.anim = false; W.pop = false; W.flash = false;
-      }
-    },
-    {
-      key: "eg-faster", title: "Morning after morning", steps: 2,
-      render(el, step) {
-        if (MB.isFresh()) {
-          F.phase = "done"; F.anim = false; F.pop = false; F.flash = false;
-          if (step === 1 && F.upto <= FAST_END) F.upto = FAST_END + 1; // the lesson needs every morning up to the next hat
-        }
-        const started = F.upto > HAT1 + 1, done = F.upto > FAST_END;
-        const t = F.upto - 1, m = M[t], ph = F.phase;
-        const o = { cols: COLS, upto: ph === "spin" ? t : F.upto };
-        if (started) {
-          o.pick = m.i;
-          o.landing = ph === "spin" && F.anim;
-          if (ph === "sample") o.staleAt = t;
-          if (ph === "done") o.upd = true;
-          if (F.pop && ph !== "spin") o.pop = popOf(F.upto);
-          o.flash = F.flash;
-        }
-        const part = !started ? -1 : ph === "spin" ? 1 : ph === "sample" ? 2 : 3;
-        const cap = started ? fastText(t, ph) : `Mornings ${HAT1 + 2} to ${FAST_END + 1}. Each click plays one whole morning: spin, sample, update.`;
-        const ctrl = step === 0 ? `<button type="button" class="act" id="s4next"${done ? " disabled" : ""}>${done ? `Morning ${FAST_END + 1} played` : "Next morning"}</button>` : "";
-        const fm = started ? { i: m.i, tap: ph === "spin" ? null : m.tap, late: ph === "spin" && F.anim, pop: ph === "sample" && F.pop } : null;
-        let h = `${partsLine(part)}
-          <div class="s4-play">${panel(`Morning ${F.upto}`, m.spin === undefined ? null : m.spin, { anim: F.anim, ctrl, mirror: fm })}${board(o)}
-            <p class="say s4-cap${ph === "spin" && F.anim ? " s4-late" : ""}">${cap}</p></div>`;
-        if (step === 1) {
-          const lesson = STUCK_ALL && STUCK !== BEST
-            ? `<p>Without the hat, ${GOLD} would have shown ${the(STUCK)} on every morning of the season: the other estimates were 0, and an estimate changes only when its product is shown.</p>`
-            : "";
-          h += `<div class="box keybox s4-sm${MB.cls(step, 1)}">${lesson}<p>On morning ${FIND + 1}, the hat found ${the(BEST)}, Cinderella's favourite. From morning ${LOCK + 1} on, ${GOLD} picks it.</p></div>`;
-        }
-        el.innerHTML = h;
-        F.anim = false; F.pop = false; F.flash = false;
-        MB.on(el, "#s4next", nextMorning);
-      }
-    },
-    {
-      key: "eg-season", title: "The whole season", steps: 1,
-      render(el, step) {
-        if (MB.isFresh() && R.playing) { R.playing = false; R.upto = T; } // the reader left during the season: show it whole
-        const t = R.upto - 1, m = M[t], done = R.upto >= T, started = R.upto > FAST_END + 1;
-        const o = { cols: LONGEST, upto: R.upto, wide: true, reveal: done && R.reveal };
-        if (R.playing) { o.pick = m.i; o.pop = popOf(R.upto); }
-        let cap;
-        if (done) cap = `Season played. The needle stopped on ${HAT} ${HATS} times in ${SPINS} spins. From morning ${LOCK + 1} on, ${GOLD} always picked ${the(BEST)}.`;
-        else if (started) cap = `${explore(m) ? `${HAT} A card from the hat` : `${GOLD} The highest estimate`}: ${the(m.i)}.${m.tap ? " Tap!" : " No tap."}`;
-        else cap = `Mornings ${FAST_END + 2} to ${T}: the same three steps every morning.`;
-        const ctrl = done ? `<button type="button" class="quiet" id="s4rev">${R.reveal ? "Hide what the Queen's mirror knows" : "What the Queen's mirror knows"}</button>`
-          : `<button type="button" class="act" id="s4rest"${R.playing ? " disabled" : ""}>${R.playing ? `Morning ${R.upto} of ${T}` : `Play mornings ${FAST_END + 2} to ${T}`}</button>`;
-        const rm = { i: m.i, tap: m.tap }; // before the play: morning 23, as the previous scene ended
-        let h = `<div class="s4-play s4-wide">${panel(`Morning ${R.upto}`, m.spin === undefined ? null : m.spin, { ctrl, mirror: rm })}${board(o)}
-            <p class="say s4-cap">${cap}</p></div>`;
-        if (done) h += MB.totalRate("eg", E);
-        if (done && R.reveal) h += `<div class="box"><strong>What the Queen's mirror knows</strong><p>The column ${MB.pp}: the probability that Cinderella taps each product, beside the mirror's estimate ${MB.phat}.</p></div>`;
-        el.innerHTML = h;
-        MB.on(el, "#s4rest", () => {
-          if (R.playing || R.upto >= T) return;
-          MB.stopTimers();
-          R.playing = true;
-          const start = R.upto;
-          MB.animate(T - start, 60, (k) => { R.upto = start + k; MB.redraw(); }, () => { R.playing = false; MB.redraw(); MB.showTotal(); });
-        });
-        MB.on(el, "#s4rev", () => { R.reveal = !R.reveal; MB.redraw(); });
-      }
+      key: "eg-season", title: `Cinderella's season, ε = ${EPS}`, steps: 1,
+      render(el) { MOVIE.render(el, 1); }
     },
     {
       key: "eg-rate", title: "Against the Queen's mirror", steps: 2,
