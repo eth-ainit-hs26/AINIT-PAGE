@@ -805,9 +805,10 @@ button.chip:hover{border-color:var(--rubric)}
 }
 </style>
 <style>
-/* Act 2 of Once Upon a Video Store: Shades of opinion. Owner: the act 2 agent. Class names start with a2-.
-   The card of five marks is tinted column by column: blue for the two ticks and the tick, grey for neutral,
-   orange for the cross and the two crosses, the doubled marks a shade stronger. */
+/* Act 2 of Once Upon a Video Store: Converting ratings into numbers. Owner: the act 2 agent. Class names start
+   with a2-. The card of five levels is tinted column by column: blue for the two ticks and the tick, grey for
+   neutral, orange for the cross and the two crosses, the doubled marks a shade stronger. Its rows since version 4:
+   stars, words, marks, numbers, customers. */
 
 .a2-say{font-size:20px; max-width:64ch}
 .a2-say b{color:var(--rubric); font-weight:600}
@@ -824,7 +825,7 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-card-q{font-size:25px; font-weight:600; font-style:italic; color:var(--rubric); line-height:1.1}
 .a2-card-film .chip{font-size:20px; padding:3px 16px 3px 3px; border-width:2px}
 .a2-card-film .chip .pic{--s:36px}
-.a2-sh[data-k="0"] .a2-card-film{visibility:hidden}
+.a2-sh[data-k="0"] .a2-card-film, .a2-sh[data-k="1"] .a2-card-film, .a2-sh[data-k="2"] .a2-card-film{visibility:hidden}
 .a2-grid{display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); column-gap:12px}
 .a2-cell{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:6px 6px; min-width:0}
 .a2-cell[data-r="2"]{background:var(--like-bg2)}
@@ -832,7 +833,14 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-cell[data-r="0"]{background:color-mix(in srgb, var(--muted) 14%, var(--leaf))}
 .a2-cell[data-r="-1"]{background:var(--dislike-bg)}
 .a2-cell[data-r="-2"]{background:var(--dislike-bg2)}
-.a2-g-mk{border-radius:18px 18px 0 0; padding-top:16px; gap:6px}
+/* the stars: five per column, the rating filled in gold, the rest empty */
+.a2-sh{--a2-gold:#D99608; --a2-star:22px}
+:root[data-theme="dark"] .a2-sh{--a2-gold:#F0C24B}
+.a2-g-st{border-radius:18px 18px 0 0; padding-top:16px; padding-bottom:4px}
+.a2-stars{display:inline-flex; gap:2px; line-height:0}
+.a2-star{width:var(--a2-star); height:var(--a2-star); fill:none; stroke:var(--a2-gold); stroke-width:1.7; stroke-linejoin:round}
+.a2-star.on{fill:var(--a2-gold)}
+.a2-g-mk{padding-top:2px; padding-bottom:12px; gap:6px}
 .a2-g-mk .vote{background:var(--leaf); min-width:76px; padding:9px 10px; border-radius:13px}
 .a2-g-mk .vote .mk{width:38px; height:38px}
 .a2-g-mk .vote .mk.tick2, .a2-g-mk .vote .mk.cross2{width:48px}
@@ -844,9 +852,11 @@ button.chip:hover{border-color:var(--rubric)}
 /* the number row: the notation's cells and slots (Store.N), sized here through its custom properties */
 .a2-g-num{padding-bottom:16px; --nt-w:62px; --nt-h:52px; --nt-fs:32px}
 /* the rows arrive one step at a time; the last row shown rounds the bottom of the columns */
-.a2-sh[data-k="0"] .a2-g-who, .a2-sh[data-k="0"] .a2-g-num, .a2-sh[data-k="1"] .a2-g-num{display:none}
-.a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-who, .a2-sh[data-k="2"] .a2-g-num{border-radius:0 0 18px 18px}
-.a2-sh.a2-pop .a2-g-who .chip, .a2-sh.a2-popn .a2-g-num .nt-n{animation:a2-pop .45s cubic-bezier(.3,.75,.3,1.25) both;
+.a2-sh[data-k="0"] .a2-g-mk, .a2-sh[data-k="0"] .a2-g-num, .a2-sh[data-k="0"] .a2-g-who,
+.a2-sh[data-k="1"] .a2-g-num, .a2-sh[data-k="1"] .a2-g-who, .a2-sh[data-k="2"] .a2-g-who{display:none}
+.a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-mk, .a2-sh[data-k="2"] .a2-g-num,
+.a2-sh[data-k="3"] .a2-g-who{border-radius:0 0 18px 18px}
+.a2-sh.a2-popm .a2-g-mk .vote, .a2-sh.a2-pop .a2-g-who .chip, .a2-sh.a2-popn .a2-g-num .nt-n{animation:a2-pop .45s cubic-bezier(.3,.75,.3,1.25) both;
   animation-delay:calc(var(--a2-i, 0) * 110ms)}
 
 /* shades: two pairs on Jaws */
@@ -870,10 +880,10 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-pair.agree .a2-truth b{color:var(--like)}
 .a2-pair.oppose .a2-truth{background:var(--dislike-bg); border-color:var(--dislike)}
 .a2-pair.oppose .a2-truth b{color:var(--dislike)}
-.a2-sh[data-k="4"] .a2-truth{visibility:visible; animation:a2-rise .4s ease both}
-.a2-sh[data-k="4"] .a2-pair.oppose .a2-truth{animation-delay:.18s}
-.a2-sh[data-k="3"] .a2-big{color:var(--rubric)}
-.a2-sh[data-k="4"] .a2-big{animation:a2-rise .45s ease .3s both}
+.a2-sh[data-k="5"] .a2-truth{visibility:visible; animation:a2-rise .4s ease both}
+.a2-sh[data-k="5"] .a2-pair.oppose .a2-truth{animation-delay:.18s}
+.a2-sh[data-k="4"] .a2-big{color:var(--rubric)}
+.a2-sh[data-k="5"] .a2-big{animation:a2-rise .45s ease .3s both}
 
 /* twin: the table with tappable names, the question beside it */
 .a2-tw{width:100%; max-width:1110px; margin:0 auto}
@@ -951,7 +961,8 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-next{color:var(--muted); font-style:italic; font-size:19px; margin-top:-8px}
 
 @media (prefers-reduced-motion: reduce){
-  .a2-sh.a2-pop .a2-g-who .chip, .a2-sh.a2-popn .a2-g-num .nt-n, .a2-sh[data-k="4"] .a2-truth, .a2-sh[data-k="4"] .a2-big,
+  .a2-sh.a2-popm .a2-g-mk .vote, .a2-sh.a2-pop .a2-g-who .chip, .a2-sh.a2-popn .a2-g-num .nt-n,
+  .a2-sh[data-k="5"] .a2-truth, .a2-sh[data-k="5"] .a2-big,
   .a2-ans.a2-in{animation:none}
   .a2-opt{transition:none}
 }
@@ -963,7 +974,9 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-sh{gap:12px}
   .a2-card{padding:10px 16px 14px; gap:8px}
   .a2-card-q{font-size:23px}
-  .a2-g-mk{padding-top:12px; gap:5px}
+  .a2-sh{--a2-star:20px}
+  .a2-g-st{padding-top:12px; padding-bottom:2px}
+  .a2-g-mk{padding-top:2px; padding-bottom:10px; gap:5px}
   .a2-g-mk .vote{padding:7px 10px}
   .a2-g-mk .vote .mk{width:33px; height:33px}
   .a2-g-mk .vote .mk.tick2, .a2-g-mk .vote .mk.cross2{width:42px}
@@ -986,7 +999,7 @@ button.chip:hover{border-color:var(--rubric)}
 @media (min-height: 860px) and (min-width: 1200px){
   .a2-say{font-size:22px}
   .a2-big{font-size:35px}
-  .a2-sh{gap:20px}
+  .a2-sh{gap:20px; --a2-star:26px}
   .a2-card-q{font-size:28px}
   .a2-g-wd{font-size:28px}
   .a2-mname{font-size:18px}
@@ -1035,7 +1048,11 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-card-film .chip .pic{--s:26px}
   .a2-grid{column-gap:4px}
   .a2-cell{padding:4px 2px}
-  .a2-g-mk{border-radius:12px 12px 0 0; padding-top:8px; gap:3px}
+  .a2-sh{--a2-star:11px}
+  .a2-stars{gap:1px}
+  .a2-star{stroke-width:2}
+  .a2-g-st{border-radius:12px 12px 0 0; padding-top:8px; padding-bottom:2px}
+  .a2-g-mk{padding-top:2px; padding-bottom:8px; gap:3px}
   .a2-g-mk .vote{min-width:0; width:100%; max-width:52px; padding:5px 2px; border-radius:9px}
   .a2-g-mk .vote .mk{width:22px; height:22px}
   .a2-g-mk .vote .mk.tick2, .a2-g-mk .vote .mk.cross2{width:27px}
@@ -1045,7 +1062,8 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-g-who .chip{font-size:12.5px; gap:3px; padding:1px 6px 1px 1px; border-width:1.5px}
   .a2-g-who .chip .pic{--s:20px}
   .a2-g-num{padding-bottom:10px; --nt-w:40px; --nt-h:36px; --nt-fs:21px}
-  .a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-who, .a2-sh[data-k="2"] .a2-g-num{border-radius:0 0 12px 12px}
+  .a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-mk, .a2-sh[data-k="2"] .a2-g-num,
+  .a2-sh[data-k="3"] .a2-g-who{border-radius:0 0 12px 12px}
 
   .a2-pairs{grid-template-columns:minmax(0,1fr); gap:8px}
   .a2-pair{padding:8px 10px 10px; gap:6px; border-radius:14px; border-width:1.5px}
@@ -1102,7 +1120,7 @@ button.chip:hover{border-color:var(--rubric)}
 }
 </style>
 <style>
-/* Act 3, "With numbers" (round 2): the scenes onefilm and twofilms. Class names start with a3-.
+/* Act 3, "With numbers": the scenes onefilm and twofilms. Class names start with a3-.
    Every number, row, stack and slot comes from Store.N (notation.css); this file only lays them out: one idea per
    step, large and calm, with room around it. Sizes of the notation's forms change only through its custom
    properties (--nt-w, --nt-h, --nt-fs and so on), and only inside these scenes. */
@@ -1118,21 +1136,52 @@ button.chip:hover{border-color:var(--rubric)}
 .a3-read{margin:0; max-width:56ch; min-height:2.7em; font-size:19px; line-height:1.35; color:var(--ink); text-wrap:balance}
 .a3-read.a3-cue{color:var(--muted); font-style:italic}
 .a3-replay{font-size:15px; padding:2px 14px 4px}
+.a3-btns{display:flex; flex-wrap:wrap; justify-content:center; gap:10px}
+.a3-compute{font-size:17px; padding:4px 22px 6px}
 .a3-live .a3-stage, .a3-live .a3-say{animation:a3-in .45s ease both}
 
-/* THE FIVE MARKS BECOME NUMBERS */
-.a3-five{display:flex; justify-content:center; gap:22px; margin:8px 0}
-.a3-fig{margin:0; width:132px; display:grid; justify-items:center; align-content:start; gap:8px}
-.a3-mk{display:inline-grid; place-items:center}
-.a3-fig .vote{min-width:100px; min-height:72px; padding:10px 14px; border-radius:15px; border-width:2px}
-.a3-fig .vote .mk{width:40px; height:40px}
-.a3-fig .vote .mk.tick2, .a3-fig .vote .mk.cross2{width:50px}
-.a3-w{font-size:18px; color:var(--ink)}
-.a3-why{min-height:2.5em; font-size:16px; line-height:1.25; font-style:italic; color:var(--rubric); text-wrap:balance;
-  opacity:0; translate:0 6px; transition:opacity .5s ease, translate .5s ease}
-.a3-why.on{opacity:1; translate:0 0}
-.a3-after{opacity:0; transition:opacity .7s ease}
-.a3-after.on{opacity:1}
+/* ONE FILM: five pairs side by side, a Yes or No box under each, then the four operations (version 4) */
+.a3-say .chip{vertical-align:baseline; translate:0 -2px}
+.a3-pairs{display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:18px 30px; max-width:100%; margin:2px 0}
+.a3-col{display:grid; justify-items:center; gap:8px}
+.a3-pairs .nt-wrap, .a3-pairs .nt-tab{--nt-w:60px; --nt-h:48px; --nt-fs:27px; --nt-sx:8px; --nt-sy:5px; --nt-xg:24px; --nt-rg:11px}
+.a3-pairs .nt-res > td.nt-pc{transition:border-top-color .35s ease}
+/* the rule over a product appears with its ×, when the pair is multiplied (step 3) */
+.a3-col:not(.a3-on) .nt-res > td.nt-pc{border-top-color:transparent}
+/* the strongest products, 4 and -4, are drawn solid, as their answers are */
+.a3-pairs .nt-n.nt-prod[data-lv="3"][data-t="2"]{background:var(--like); border-color:var(--like); color:var(--leaf)}
+.a3-pairs .nt-n.nt-prod[data-lv="3"][data-t="-2"]{background:var(--dislike); border-color:var(--dislike); color:var(--leaf)}
+/* the box: Yes and No to tap; once answered, the answer in the colour and strength of the product */
+.a3-agree{display:flex; align-items:center; justify-content:center; gap:6px; box-sizing:border-box; width:130px; height:50px;
+  padding:4px; border:1.5px dashed var(--rule); border-radius:14px}
+.a3-yn{font-size:16px; padding:3px 13px 5px; touch-action:manipulation}
+.a3-yn.a3-miss{border-color:var(--muted); color:var(--muted); text-decoration:line-through; text-decoration-thickness:2px; opacity:.6}
+.a3-ans{display:none; font-size:22px; font-weight:700; line-height:1}
+.a3-agree.a3-set{border-style:solid}
+.a3-agree.a3-set .a3-yn{display:none}
+.a3-agree.a3-set .a3-ans{display:inline}
+.a3-agree.a3-set[data-s="yes"][data-lv="1"]{background:var(--like-bg); border-color:var(--like); color:var(--like)}
+.a3-agree.a3-set[data-s="yes"][data-lv="2"]{background:var(--like-bg2); border-color:var(--like); border-width:2px; color:var(--like)}
+.a3-agree.a3-set[data-s="yes"][data-lv="3"]{background:var(--like); border-color:var(--like); border-width:2px; color:var(--leaf)}
+.a3-agree.a3-set[data-s="no"][data-lv="1"]{background:var(--dislike-bg); border-color:var(--dislike); color:var(--dislike)}
+.a3-agree.a3-set[data-s="no"][data-lv="2"]{background:var(--dislike-bg2); border-color:var(--dislike); border-width:2px; color:var(--dislike)}
+.a3-agree.a3-set[data-s="no"][data-lv="3"]{background:var(--dislike); border-color:var(--dislike); border-width:2px; color:var(--leaf)}
+/* Reveal all and the question share one place; what is not shown yet keeps its room, so nothing moves */
+.a3-pairv .a3-read{min-height:1.4em}
+.a3-foot{display:grid; justify-items:center; align-items:start}
+.a3-foot > *{grid-area:1 / 1}
+.a3-gone{visibility:hidden}
+/* the question and the four operations */
+.a3-ask{display:grid; justify-items:center; gap:12px}
+.a3-ask.a3-in{animation:a3-in .5s ease both}
+.a3-big{margin:0; max-width:32em; font-size:29px; font-weight:600; line-height:1.2; text-wrap:balance}
+.a3-ops{display:flex; justify-content:center; gap:16px}
+.a3-op{width:66px; height:56px; padding:0 0 4px; border:2px solid var(--rubric); border-radius:14px; background:var(--leaf); color:var(--rubric);
+  font-family:var(--serif); font-size:34px; font-weight:600; line-height:1; cursor:pointer; touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent; transition:opacity .3s ease, background-color .3s ease, color .3s ease}
+.a3-op.a3-no{border-color:var(--rule); color:var(--muted); text-decoration:line-through; text-decoration-thickness:2px; cursor:default}
+.a3-op.a3-yes{background:var(--rubric); color:var(--leaf); box-shadow:0 0 0 3px var(--leaf), 0 0 0 5px var(--rubric)}
+.a3-ops.a3-solved .a3-op:not(.a3-yes){opacity:.35; cursor:default}
 
 /* YOUR TURN: what to do or the hint, Show me, and the keypad of results */
 .a3-fb{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 14px; min-height:1.5em; max-width:72ch}
@@ -1182,12 +1231,14 @@ button.chip:hover{border-color:var(--rubric)}
   .a3-say{font-size:23px}
   .a3-read, .a3-fbt{font-size:20.5px}
   .a3-kick{font-size:18px}
-  .a3-fig{width:150px}
-  .a3-fig .vote{min-width:112px; min-height:80px}
-  .a3-fig .vote .mk{width:44px; height:44px}
-  .a3-fig .vote .mk.tick2, .a3-fig .vote .mk.cross2{width:55px}
-  .a3-w{font-size:19.5px}
-  .a3-why{font-size:17px}
+  .a3-pairs{gap:20px 36px}
+  .a3-pairs .nt-wrap, .a3-pairs .nt-tab{--nt-w:66px; --nt-h:52px; --nt-fs:29px; --nt-xg:26px; --nt-rg:12px}
+  .a3-pairs .nt-tab .rt-who{font-size:20px}
+  .a3-agree{width:140px; height:54px}
+  .a3-yn{font-size:17px}
+  .a3-ans{font-size:24px}
+  .a3-big{font-size:32px}
+  .a3-op{width:72px; height:62px; font-size:38px}
   .a3-key{--nt-w:58px; --nt-h:50px; --nt-fs:25px}
   .a3-title{font-size:34px}
 }
@@ -1196,8 +1247,14 @@ button.chip:hover{border-color:var(--rubric)}
   .a3-view{gap:12px}
   .a3-say{font-size:20px}
   .a3-read, .a3-fbt{font-size:18px}
-  .a3-five{margin:4px 0}
-  .a3-fig .vote{min-height:66px}
+  .a3-pairv{gap:10px}
+  .a3-pairs .nt-wrap, .a3-pairs .nt-tab{--nt-w:54px; --nt-h:40px; --nt-fs:24px; --nt-sy:4px; --nt-xg:18px; --nt-rg:8px}
+  .a3-pairs .nt-tab .rt-who{font-size:18px}
+  .a3-col{gap:6px}
+  .a3-agree{height:40px}
+  .a3-big{font-size:25px}
+  .a3-ask{gap:9px}
+  .a3-op{width:58px; height:48px; font-size:30px}
   .a3-key{--nt-w:52px; --nt-h:44px; --nt-fs:22px}
   .a3-title{font-size:28px}
   .a3-stage .nt-wrap.nt-lg, .a3-stage .nt-lg .nt-tab{--nt-w:66px; --nt-h:46px; --nt-fs:28px; --nt-xg:20px; --nt-rg:10px}
@@ -1216,13 +1273,26 @@ button.chip:hover{border-color:var(--rubric)}
   .a3-read{min-height:2.6em}
   .a3-fb{min-height:2.6em; gap:4px 10px}
   .a3-replay, .a3-showme{font-size:14px; padding:2px 12px 4px}
-  .a3-five{display:grid; grid-template-columns:auto auto minmax(0, 1fr); align-items:center; gap:8px 12px; width:100%; max-width:330px; margin:2px 0}
-  .a3-fig{display:contents}
-  .a3-fig .vote{min-width:68px; min-height:46px; padding:6px 8px; border-radius:11px}
-  .a3-fig .vote .mk{width:26px; height:26px}
-  .a3-fig .vote .mk.tick2, .a3-fig .vote .mk.cross2{width:33px}
-  .a3-w{font-size:15.5px; text-align:left}
-  .a3-why{min-height:0; font-size:14.5px; text-align:left}
+  .a3-pairs{gap:10px 14px; max-width:350px; margin:0}
+  .a3-pairs .nt-wrap, .a3-pairs .nt-tab{--nt-w:38px; --nt-h:32px; --nt-fs:18px; --nt-sx:4px; --nt-sy:3px; --nt-xg:14px; --nt-rg:5px}
+  .a3-pairs .nt-tab .rt-who{font-size:13.5px}
+  .a3-pairs .nt-tab .rt-who .pic{--s:20px; margin-right:4px}
+  .a3-col{gap:6px}
+  .a3-agree{width:98px; height:34px; gap:4px; padding:3px; border-radius:10px}
+  .a3-yn{font-size:13.5px; padding:1px 9px 3px}
+  .a3-ans{font-size:17px}
+  .a3-big{font-size:19px}
+  .a3-ask{gap:8px}
+  .a3-ops{gap:10px}
+  .a3-op{width:48px; height:38px; font-size:25px; border-radius:11px; padding-bottom:3px}
+  .a3-op.a3-yes{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--rubric)}
+  /* on a phone the view starts at the top and grows downwards; the products need the room of the question */
+  .scene-inner:has(.a3-pairv:not([hidden])){margin-top:0}
+  .a3-pairv{align-content:start; gap:8px}
+  .a3-pairv .a3-read{min-height:2.6em}
+  .a3-pairv .a3-gone{display:none}
+  .a3-pairv[data-k="2"] .a3-big{display:none}
+  .a3-compute{font-size:15px; padding:3px 18px 5px}
   .a3-pad{max-width:270px; gap:6px 4px}
   .a3-key{--nt-w:46px; --nt-h:40px; --nt-fs:20px}
   .a3-rules{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px}
@@ -1242,14 +1312,15 @@ button.chip:hover{border-color:var(--rubric)}
 }
 @media (prefers-reduced-motion: reduce){
   .a3-live .a3-stage, .a3-live .a3-say, .a3-live .a3-card{animation:none}
-  .a3-why, .a3-after, .a3-key .nt-n{transition:none}
+  .a3-ask.a3-in{animation:none}
+  .a3-key .nt-n, .a3-op, .a3-pairs .nt-res > td.nt-pc{transition:none}
 }
 </style>
 <style>
 /* Act 4 of Once Upon a Video Store: The nearest neighbour (owner: the act 2 agent). Classes start with a4-.
    The two boards, the number cells and the key belong to the notation (notation.css). This file lays them out,
    sizes them through the notation's custom properties, and keeps the Love Actually column hidden until the
-   prediction (step 5). */
+   prediction (step 5). The last part styles the notebook slide (scene notebook). */
 .a4-near{display:grid; justify-items:center; align-content:start; gap:14px; text-align:center}
 .a4-cap{margin:0; max-width:40em; font-size:21px; line-height:1.35; text-wrap:balance}
 .a4-term{color:var(--rubric)}
@@ -1269,8 +1340,6 @@ button.chip:hover{border-color:var(--rubric)}
 .a4-later{margin:0; font-size:17px; color:var(--muted)}
 .a4-inl{--nt-w:40px; --nt-h:30px; --nt-fs:18px; margin:0 3px}
 .a4-big{margin:4px 0 0; max-width:30em; font-size:26px; font-weight:600; line-height:1.25; text-wrap:balance}
-.a4-py{margin:0; font-size:19px; color:var(--muted)}
-.a4-colab{color:var(--rubric); font-weight:600; text-decoration:underline; text-underline-offset:3px; white-space:nowrap}
 .a4-res:not(.a4-wait) .a4-say, .a4-say.a4-in{animation:a4-rise .5s ease both}
 @keyframes a4-rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
@@ -1284,14 +1353,25 @@ button.chip:hover{border-color:var(--rubric)}
 /* Act 1 again: the key, then Zoe's board */
 .a4-key{margin-top:-2px}
 
+/* The notebook slide: the three functions, the challenge, Open in Colab */
+.a4-nb{display:grid; justify-items:center; align-content:center; gap:18px; min-height:100%; text-align:center}
+.a4-tasks{margin:0; padding:0; list-style:none; display:grid; grid-template-columns:auto auto minmax(0, 1fr); align-items:baseline;
+  gap:12px 14px; text-align:left; max-width:100%}
+.a4-tasks li{display:contents}
+.a4-tn{color:var(--rubric); font-weight:600; font-size:21px}
+.a4-fn{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size:18px; color:var(--rubric); background:var(--bg);
+  border:1.5px solid var(--rule); border-radius:8px; padding:3px 9px}
+.a4-tw{font-size:20px; line-height:1.3}
+.a4-colab{display:inline-block; font-size:20px; font-weight:600; padding:7px 28px 9px; text-decoration:none; white-space:nowrap}
+
 /* Short screens: the projector at 720p. A slightly lower board, so that the prediction (step 5) fits with its result
    under the board (larger numbers overflow there by about 56 px). */
 @media (max-height: 760px){
   .a4-near{gap:10px}
+  .a4-nb{gap:14px}
   .a4-cap{font-size:20px}
   .a4-say{font-size:19px}
   .a4-big{font-size:23px}
-  .a4-py{font-size:17px}
 }
 @media (max-height: 760px) and (min-width: 561px){
   .a4-near .nt-board.nt-tab, .a4-near .nt-boardw{--nt-h:31px; --nt-sy:3px; --nt-fs:20px; --nt-xg:14px; --nt-rg:6px}
@@ -1305,6 +1385,10 @@ button.chip:hover{border-color:var(--rubric)}
   .a4-big{font-size:29px}
   .a4-near .nt-board.nt-tab, .a4-near .nt-boardw{--nt-w:62px; --nt-h:44px; --nt-fs:25px; --nt-sx:14px; --nt-xg:20px; --nt-rg:9px; --nt-eqw:26px}
   .a4-near .nt-board .rt-who{font-size:20px}
+  .a4-nb{gap:22px}
+  .a4-tn, .a4-tw{font-size:22px}
+  .a4-fn{font-size:20px}
+  .a4-colab{font-size:22px}
 }
 /* Phones */
 @media (max-width: 560px){
@@ -1314,9 +1398,14 @@ button.chip:hover{border-color:var(--rubric)}
   .a4-later{font-size:14.5px}
   .a4-inl{--nt-w:32px; --nt-h:26px; --nt-fs:15px}
   .a4-big{font-size:19px}
-  .a4-py{font-size:15px}
   .a4-bd, .a4-one{gap:7px}
   .a4-big{margin-top:0}
+  .a4-nb{gap:12px}
+  .a4-tasks{grid-template-columns:auto minmax(0, 1fr); gap:4px 8px}
+  .a4-tn{font-size:16px; grid-row:span 2}
+  .a4-fn{font-size:14.5px; justify-self:start; padding:2px 7px}
+  .a4-tw{font-size:15.5px; margin-bottom:6px}
+  .a4-colab{font-size:17px; padding:6px 22px 8px}
 }
 @media (prefers-reduced-motion: reduce){
   .a4-near .nt-board [data-f="love"]{transition:none}
@@ -1449,14 +1538,18 @@ button.chip:hover{border-color:var(--rubric)}
 
   // Act 3 teaches (Carlos, 2026-11-03, replacing a guessing puzzle): worked examples are shown slowly,
   // then the participants work the next ones themselves. Each pair is [top row, bottom row].
-  // One film, Jaws (the agreement on one film is the product): shown Kai and Tom -1, Pia and Kai 2,
-  // Jana and Pia 0; yours Pia and Rosa -4, Rosa and Tom 2.
+  // One film, Jaws (the agreement on one film is the product; version 4, 2026-11-10): five pairs side by side,
+  // the room says yes or no for each, names the operation, then sees the products: Kai and Tom -1 (liked and
+  // disliked), Ivo and Pia 4 (both loved), Ivo and Rosa -4 (loved and hated), Pia and Kai 2 (loved and liked),
+  // Pia and Tom -2 (loved and disliked). Yours Pia and Rosa -4, Rosa and Tom 2 (both dislike: they agree).
+  // The rule's four cards: Pia and Kai 2, Kai and Tom -1, Jana and Pia 0 (neutral), Pia and Rosa -4.
   // Two films, Jaws and The Shining: shown Kai and Pia 2 + 2 = 4 (agree on both), Kai and Tom -1 + -4 = -5
   // (opposite on both), Kai and Ivo 2 + -4 = -2 (mixed); yours Pia and Jana 0 + 1 = 1 (neutral),
   // Tom and Rosa 2 + 2 = 4 (both dislike both films: they agree), Ivo and Pia 4 + -2 = 2 (mixed).
   var EXAMPLES = {
-    one: { films: ["jaws"], shown: [["kai", "tom"], ["pia", "kai"], ["jana", "pia"]],
-           yours: [["pia", "rosa"], ["rosa", "tom"]] },
+    one: { films: ["jaws"], pairs: [["kai", "tom"], ["ivo", "pia"], ["ivo", "rosa"], ["pia", "kai"], ["pia", "tom"]],
+           yours: [["pia", "rosa"], ["rosa", "tom"]],
+           rule: [["pia", "kai"], ["kai", "tom"], ["jana", "pia"], ["pia", "rosa"]] },
     two: { films: ["jaws", "shining"], shown: [["kai", "pia"], ["kai", "tom"], ["kai", "ivo"]],
            yours: [["pia", "jana"], ["tom", "rosa"], ["ivo", "pia"]] }
   };
@@ -1651,22 +1744,24 @@ button.chip:hover{border-color:var(--rubric)}
   })();
 
   /* SCENE ENGINE */
-  var ACT_NAMES = { 1: "Ticks and crosses", 2: "Shades of opinion", 3: "With numbers", 4: "The nearest neighbour" };
+  // Act 2 is "Converting ratings into numbers" since version 4 (Carlos, 2026-11-10; "Shades of opinion" before).
+  var ACT_NAMES = { 1: "Ticks and crosses", 2: "Converting ratings into numbers", 3: "With numbers", 4: "The nearest neighbour" };
 
   // Section cards (Carlos, 2026-11-03: "a scene that shows that we're transitioning now into a new section").
   // The engine puts one leaf of its own before acts 2, 3 and 4: the leaf turns violet, then the act's numeral,
   // its name, one line and a small motif come in one after another. Act 1 opens with the cover instead.
   var ACT_INTRO = {
     2: { kicker: "Act two", motif: "marks",
-         line: "Ticks and crosses are not enough. People love, like, shrug, dislike and hate." },
+         line: "A computer works only with numbers, so every rating must become a number." },
+    // Act 3 asks which operation measures agreement, so its card shows all four and names none.
     3: { kicker: "Act three", motif: "ops",
-         line: "Every mark becomes a number. Multiply and add, and you can measure how much two customers agree." },
+         line: "One number that says how much two customers agree." },
     4: { kicker: "Act four", motif: "neighbour",
          line: "Which customer is most like Vera? Their opinion is the store's best guess." }
   };
   function introMotif(kind) {
     if (kind === "marks") return LEVELS.map(function (r) { return vote(r); });
-    if (kind === "ops") return ["×", "+"].map(function (o) { return el("span", "act-op", o); });
+    if (kind === "ops") return ["+", MINUS, "×", "÷"].map(function (o) { return el("span", "act-op", o); });
     if (kind === "neighbour") {
       var link = el("span", "act-link");
       link.setAttribute("aria-hidden", "true");
@@ -2871,9 +2966,12 @@ button.chip:hover{border-color:var(--rubric)}
 /* Act 1 of Once Upon a Video Store, "Ticks and crosses". Owner: agent 1. Class names start with a1-.
    store     the title screen, the store's four films, the round 1 table, then the two kinds of customer
    newcomer  Zoe and the quiz "Will Zoe like Love Actually?"; the reason, the method, what a computer sees
-   numbers   a tick is 1 and a cross is minus 1; then the marks of the table fold away and numbers take their place
    similar   the quiz "What measures how similar two customers are?", Zoe's matches counted cell by cell,
              the prediction from her nearest neighbours, and what Zoe said once she had seen the film
+   numbers   a tick is 1 and a cross is minus 1; then the marks of the table fold away and numbers take their place.
+             Since version 4 (Carlos, 2026-11-10) it is the FIRST scene of act 2, "Converting ratings into numbers":
+             act 1 introduces the method in ticks and crosses and ends with the recipe. Its code stays here because it
+             uses act 1's table and styles; this file loads before act2.js, so it comes first in act 2.
    A quiz shows its answer after the participant's own pick; moving past the quiz with Next shows it as well. */
 (function () {
   "use strict";
@@ -3249,88 +3347,7 @@ button.chip:hover{border-color:var(--rubric)}
     step: function (k) { showNew(k, false); }
   });
 
-  /* 3. numbers: a tick is 1 and a cross is minus 1; then the marks leave the table and the numbers take their place.
-     The key and the wave are the notation's (Store.N): the key draws each mark, "=", its number in its badge, and
-     N.convert folds every mark of the table away and unfolds its number, in the mark's colours, diagonal by diagonal.
-     The wave plays when Next arrives at the last step; Back, the pager and a reload draw each step at once. */
-  var NU = null;
-  var NUM_Q = [
-    ["A computer works with numbers.", "Which number for a tick, and which for a cross?"],
-    ["The natural choice:", "a tick is 1, a cross is " + S.num(-1) + "."],
-    ["The ticks and crosses are gone.", "The computer sees only numbers."]
-  ];
-  var NUM_NOTE = [
-    "",
-    "Opposite opinions get opposite numbers. A cross is an opinion too: the customer watched the film and disliked it.",
-    "Every customer is now a row of numbers. Zoe's question mark stays: it is the number to predict."
-  ];
-  var WAVE_LEAD = 450;   // the new words rise first, then the wave starts: one motion at a time
-
-  function stopWave(finish) {
-    if (NU.timer) { clearTimeout(NU.timer); NU.timer = 0; }
-    if (NU.h) { if (finish) NU.h.finish(); else NU.h.cancel(); NU.h = null; }
-  }
-  // The marks of the table become numbers. animate false draws the numbers at once.
-  function wave(animate) {
-    stopWave(false);
-    S.N.unconvert(NU.t);
-    NU.h = S.N.convert(NU.t, { animate: animate !== false });
-  }
-
-  S.define("numbers", {
-    act: 1,
-    title: "Ticks and crosses become numbers",
-    steps: 3,
-    build: function (inner) {
-      var root = el("div", "a1-num");
-      var map = el("div", "a1-map");
-      var q = el("p", "a1-mq");
-      var key = S.N.legend([1, -1]);
-      key.classList.add("a1-key");
-      var nums = Array.prototype.slice.call(key.querySelectorAll(".nt-n"));
-      var note = el("p", "a1-mnote");
-      var again = el("button", "btn quiet a1-rewave", "Replay the wave");
-      again.type = "button";
-      again.addEventListener("click", function () { if (NU.last === 2) wave(true); });
-      map.appendChild(q);
-      map.appendChild(key);
-      map.appendChild(note);
-      map.appendChild(again);
-      var t = bigTable({ people: REG, films: FILMS, newcomer: ZOE, hide: zoeUnseen });
-      var tw = el("div", "a1-twrap");
-      tw.appendChild(t);
-      root.appendChild(map);
-      root.appendChild(tw);
-      inner.appendChild(root);
-      NU = { root: root, q: q, nums: nums, note: note, t: t, h: null, timer: 0, last: null };
-    },
-    enter: function () { if (NU) NU.last = null; },
-    leave: function () { if (NU) stopWave(true); },
-    step: function (k) {
-      var was = NU.last;
-      NU.last = k;
-      NU.root.dataset.k = String(k);
-      NU.q.textContent = "";
-      NUM_Q[k].forEach(function (line) { NU.q.appendChild(el("span", "a1-line", line)); });
-      NU.note.textContent = NUM_NOTE[k];
-      if (motion && was !== null && was !== k) { replay(NU.q, "a1-in"); replay(NU.note, "a1-in"); }
-      // The key: "?" in the notation's slots until the numbers are chosen; they pop in when Next reveals them.
-      NU.nums.forEach(function (c) {
-        var r = Number(c.parentNode.dataset.r);
-        if (k === 0) S.N.setSlot(c, null);
-        else if (was === 0) S.N.setSlot(c, r, true);
-        else { c.classList.remove("nt-slot", "nt-right"); S.N.setCell(c, r); }
-      });
-      // The table: marks until the last step, numbers only from then on. Zoe's "?" stays a "?".
-      stopWave(false);
-      S.N.unconvert(NU.t);
-      if (k !== 2) return;
-      if (was === 1 && motion) NU.timer = setTimeout(function () { NU.timer = 0; wave(true); }, WAVE_LEAD);
-      else wave(false);
-    }
-  });
-
-  /* 4. similar: what measures similarity? Then Zoe's matches, counted cell by cell, and the prediction */
+  /* 3. similar: what measures similarity? Then Zoe's matches, counted cell by cell, and the prediction */
   var SI = null;
   var pick = null;               // the id of the answer the participant picked, null not yet
   var timers = [];
@@ -3567,17 +3584,104 @@ button.chip:hover{border-color:var(--rubric)}
       SI.panels.forEach(function (p, i) { if (i === k && motion && was !== k) replay(p, "a1-in"); });
     }
   });
+
+  /* 4. numbers (act 2, its first scene): a tick is 1 and a cross is minus 1; then the marks leave the table and the
+     numbers take their place.
+     The key and the wave are the notation's (Store.N): the key draws each mark, "=", its number in its badge, and
+     N.convert folds every mark of the table away and unfolds its number, in the mark's colours, diagonal by diagonal.
+     The wave plays when Next arrives at the last step; Back, the pager and a reload draw each step at once.
+     Zoe's row has her own verdict on Love Actually, given at the end of act 1 (scene similar), so it has no "?". */
+  var NU = null;
+  var NUM_Q = [
+    ["A computer works with numbers.", "Which number for a tick, and which for a cross?"],
+    ["The natural choice:", "a tick is 1, a cross is " + S.num(-1) + "."],
+    ["The ticks and crosses are gone.", "The computer sees only numbers."]
+  ];
+  var NUM_NOTE = [
+    "",
+    "Opposite opinions get opposite numbers. A cross is an opinion too: the customer watched the film and disliked it.",
+    "Every customer is now a row of numbers."
+  ];
+  var WAVE_LEAD = 450;   // the new words rise first, then the wave starts: one motion at a time
+
+  function stopWave(finish) {
+    if (NU.timer) { clearTimeout(NU.timer); NU.timer = 0; }
+    if (NU.h) { if (finish) NU.h.finish(); else NU.h.cancel(); NU.h = null; }
+  }
+  // The marks of the table become numbers. animate false draws the numbers at once.
+  function wave(animate) {
+    stopWave(false);
+    S.N.unconvert(NU.t);
+    NU.h = S.N.convert(NU.t, { animate: animate !== false });
+  }
+
+  S.define("numbers", {
+    act: 2,
+    title: "Ticks and crosses become numbers",
+    steps: 3,
+    build: function (inner) {
+      var root = el("div", "a1-num");
+      var map = el("div", "a1-map");
+      var q = el("p", "a1-mq");
+      var key = S.N.legend([1, -1]);
+      key.classList.add("a1-key");
+      var nums = Array.prototype.slice.call(key.querySelectorAll(".nt-n"));
+      var note = el("p", "a1-mnote");
+      var again = el("button", "btn quiet a1-rewave", "Replay the wave");
+      again.type = "button";
+      again.addEventListener("click", function () { if (NU.last === 2) wave(true); });
+      map.appendChild(q);
+      map.appendChild(key);
+      map.appendChild(note);
+      map.appendChild(again);
+      var t = bigTable({ people: REG, films: FILMS, newcomer: ZOE,
+                         rating: function (p, f) { return zoeUnseen(p, f) ? LATER : S.rating(p, f); } });
+      var tw = el("div", "a1-twrap");
+      tw.appendChild(t);
+      root.appendChild(map);
+      root.appendChild(tw);
+      inner.appendChild(root);
+      NU = { root: root, q: q, nums: nums, note: note, t: t, h: null, timer: 0, last: null };
+    },
+    enter: function () { if (NU) NU.last = null; },
+    leave: function () { if (NU) stopWave(true); },
+    step: function (k) {
+      var was = NU.last;
+      NU.last = k;
+      NU.root.dataset.k = String(k);
+      NU.q.textContent = "";
+      NUM_Q[k].forEach(function (line) { NU.q.appendChild(el("span", "a1-line", line)); });
+      NU.note.textContent = NUM_NOTE[k];
+      if (motion && was !== null && was !== k) { replay(NU.q, "a1-in"); replay(NU.note, "a1-in"); }
+      // The key: "?" in the notation's slots until the numbers are chosen; they pop in when Next reveals them.
+      NU.nums.forEach(function (c) {
+        var r = Number(c.parentNode.dataset.r);
+        if (k === 0) S.N.setSlot(c, null);
+        else if (was === 0) S.N.setSlot(c, r, true);
+        else { c.classList.remove("nt-slot", "nt-right"); S.N.setCell(c, r); }
+      });
+      // The table: marks until the last step, numbers only from then on.
+      stopWave(false);
+      S.N.unconvert(NU.t);
+      if (k !== 2) return;
+      if (was === 1 && motion) NU.timer = setTimeout(function () { NU.timer = 0; wave(true); }, WAVE_LEAD);
+      else wave(false);
+    }
+  });
 })();
 </script>
 <script>
-/* Act 2 of Once Upon a Video Store: Shades of opinion. Owner: the act 2 agent (see BRIEF.md).
-   Class names start with a2-. Two scenes, both on round 2:
-     shades  the store's new card with five marks; five customers rate Jaws, one mark each; the two numbers we
-             already know (a tick 1, a cross -1, the other three still "?"); then why counting exact matches breaks:
+/* Act 2 of Once Upon a Video Store: Converting ratings into numbers ("Shades of opinion" until version 4).
+   Owner: the act 2 agent (see BRIEF.md). Class names start with a2-.
+   The act opens with the scene numbers of act1.js (a tick is 1, a cross -1, the round 1 table becomes numbers); this
+   file adds two scenes on round 2:
+     shades  version 4 (Carlos, 2026-11-10): people usually rate on five levels, drawn as stars; the store's five marks
+             are the same levels (five stars two ticks, one star two crosses); each mark gets its number, all five at
+             once (2, 1, 0, -1, -2); five customers rate Jaws, one mark each; then why counting exact matches breaks:
              Pia and Kai, Pia and Rosa, the same count for a pair that agrees and for a pair that is opposite.
      twin    the six regulars and Vera on three films, marks only. Tap the customer most similar to Vera (Kai); then
              "Why Kai?", a second multiple choice; then Kai and Pia beside Vera, film by film, and the bridge to act 3.
-   The only numbers in this act are a tick 1 and a cross -1: act 3 finds the other three. No globals. */
+   No globals. */
 (function () {
   "use strict";
   var S = window.Store;
@@ -3585,7 +3689,6 @@ button.chip:hover{border-color:var(--rubric)}
 
   var el = S.el;
   var motion = !S.reducedMotion;
-  var NBSP = String.fromCharCode(160);
   var R2 = S.ROUND2;
   var SH = R2.shades;
   var VERA = R2.newcomer;
@@ -3616,21 +3719,44 @@ button.chip:hover{border-color:var(--rubric)}
   // The customer of the shades line who gave Jaws the mark r.
   function giver(r) { return SH.people.filter(function (p) { return S.rating(p, SH.film) === r; })[0]; }
 
-  /* SCENE 5: shades. The store's card is a grid of five columns, love on the left and hate on the right, built row
-     by row so the cells of a row line up: the marks, their words, then the customers (step 2 on), then the numbers
-     (step 3 on). Steps 4 and 5 swap the card for two pairs of customers on Jaws. */
+  /* SCENE: shades. The card is a grid of five columns, love on the left and hate on the right, built row by row so
+     the cells of a row line up: the stars and their words (step 1), the marks (step 2), the numbers (step 3), the
+     customers (step 4). Steps 5 and 6 swap the card for two pairs of customers on Jaws. */
   var SHD = { last: null };
+  var STARS = { "2": 5, "1": 4, "0": 3, "-1": 2, "-2": 1 };    // the natural mapping: five stars are two ticks
+  var SHADES_TITLE = ["From stars to numbers", "From stars to numbers", "From stars to numbers",
+                      "Five marks", "Five marks", "Five marks"];
   var SHADES_SAY = [
-    function () { return ["The store's new card has ", b("five marks"), ", so customers can say how much they liked a film."]; },
+    function () { return ["People often rate a film on ", b("five levels"), ", from loved it to hated it, drawn as stars."]; },
+    function () { return ["The video store draws the same five levels as ", b("marks"), "."]; },
+    function () { return ["Each mark becomes a ", b("number"), ". The stronger the opinion, the further from 0: above 0 for liking, below 0 for disliking."]; },
     function () { return ["Five customers rate ", b("Jaws"), ", and each of them picks a different mark."]; },
-    function () { return ["Two numbers we know already: a tick is ", b("1"), " and a cross is ", b(S.num(-1)), ". The other three marks get their numbers in act" + NBSP + "3."]; },
     function () { return ["Counting exact matches gives both pairs the same score: ", b("no match"), "."]; },
     function () { return ["One pair agrees, the other is opposite, and counting gives both the same 0."]; }
   ];
-  var SHADES_BIG = [null, null, null,
+  var SHADES_BIG = [null, null, null, null,
     function () { return ["Are the two pairs equally similar?"]; },
     function () { return [el("span", "a2-line", "Counting cannot see shades."), make("span", "a2-line", ["We need a ", b("better measure"), " of similarity."])]; }
   ];
+  // n of five stars, the rest drawn empty. Drawn here: a star is a rating's picture, never a number.
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var STAR_D = "M12 2L14.59 9.04L22.08 9.33L16.19 13.96L18.23 21.18L12 17L5.77 21.18L7.81 13.96L1.92 9.33L9.41 9.04Z";
+  function stars(n) {
+    var s = el("span", "a2-stars");
+    s.setAttribute("role", "img");
+    s.setAttribute("aria-label", n + (n === 1 ? " star" : " stars") + " of 5");
+    for (var i = 0; i < 5; i++) {
+      var svg = document.createElementNS(SVGNS, "svg");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("class", "a2-star" + (i < n ? " on" : ""));
+      svg.setAttribute("aria-hidden", "true");
+      var p = document.createElementNS(SVGNS, "path");
+      p.setAttribute("d", STAR_D);
+      svg.appendChild(p);
+      s.appendChild(svg);
+    }
+    return s;
+  }
 
   function pairCard(a, c, agree) {
     var sec = el("section", "a2-pair " + (agree ? "agree" : "oppose"));
@@ -3650,8 +3776,8 @@ button.chip:hover{border-color:var(--rubric)}
 
   S.define("shades", {
     act: 2,
-    title: "Five marks",
-    steps: 5,
+    title: "From stars to numbers",
+    steps: 6,
     build: function (inner) {
       var root = el("div", "a2-sh");
       SHD.root = root;
@@ -3673,24 +3799,26 @@ button.chip:hover{border-color:var(--rubric)}
         grid.appendChild(c);
         return c;
       }
-      S.LEVELS.forEach(function (r) {
+      S.LEVELS.forEach(function (r) { cell("a2-g-st", r).appendChild(stars(STARS[String(r)])); });
+      S.LEVELS.forEach(function (r) { cell("a2-g-wd", r, S.word(r)); });
+      S.LEVELS.forEach(function (r, i) {
         var c = cell("a2-g-mk", r);
-        c.appendChild(quietVote(r));
+        var v = quietVote(r);
+        v.style.setProperty("--a2-i", String(i));
+        c.appendChild(v);
         c.appendChild(el("span", "a2-mname", S.markName(r)));
       });
-      S.LEVELS.forEach(function (r) { cell("a2-g-wd", r, S.word(r)); });
+      // The numbers in the notation's own badges, all five at once (Carlos, 2026-11-10: no question marks).
+      S.LEVELS.forEach(function (r, i) {
+        var n = S.N.cell(r);
+        n.style.setProperty("--a2-i", String(i));
+        n.setAttribute("aria-label", S.markName(r) + ": " + S.spoken(r));
+        cell("a2-g-num", r).appendChild(n);
+      });
       S.LEVELS.forEach(function (r, i) {
         var ch = S.chip(giver(r));
         ch.style.setProperty("--a2-i", String(i));
         cell("a2-g-who", r).appendChild(ch);
-      });
-      // The numbers in the notation's own badges: a tick 1 and a cross -1 as number cells, the three new ones as slots.
-      S.LEVELS.forEach(function (r, i) {
-        var known = r === 1 || r === -1;
-        var n = known ? S.N.cell(r) : S.N.slot();
-        n.style.setProperty("--a2-i", String(i));
-        n.setAttribute("aria-label", S.markName(r) + ": " + (known ? S.spoken(r) : "not known yet"));
-        cell("a2-g-num", r).appendChild(n);
       });
       card.appendChild(grid);
 
@@ -3703,19 +3831,22 @@ button.chip:hover{border-color:var(--rubric)}
       inner.appendChild(root);
     },
     enter: function () { SHD.last = null; },
-    step: function (k) {
+    step: function (k, api) {
       var from = SHD.last;
       SHD.last = k;
+      api.setTitle(SHADES_TITLE[k]);
       SHD.root.dataset.k = String(k);
-      SHD.card.hidden = k >= 3;
-      SHD.pairs.hidden = k < 3;
-      SHD.big.hidden = k < 3;
+      SHD.card.hidden = k >= 4;
+      SHD.pairs.hidden = k < 4;
+      SHD.big.hidden = k < 4;
       setText(SHD.say, SHADES_SAY[k]());
       if (SHADES_BIG[k]) setText(SHD.big, SHADES_BIG[k]());
-      SHD.root.classList.remove("a2-pop", "a2-popn");
+      // Each new row pops in, column by column, when Next brings it.
+      SHD.root.classList.remove("a2-popm", "a2-popn", "a2-pop");
       if (motion && from === k - 1) {
-        if (k === 1) replay(SHD.root, "a2-pop");
+        if (k === 1) replay(SHD.root, "a2-popm");
         if (k === 2) replay(SHD.root, "a2-popn");
+        if (k === 3) replay(SHD.root, "a2-pop");
       }
     }
   });
@@ -3945,19 +4076,25 @@ button.chip:hover{border-color:var(--rubric)}
 })();
 </script>
 <script>
-/* Act 3, "With numbers": the inner product, taught slowly (round 2, 2026-11-03).
-   Carlos on version 1: "we are not going to make a game here. We're going to teach them." So the scenes show
-   worked examples one at a time, then the participants work the next ones and enter only the results.
+/* Act 3, "With numbers": the inner product, taught slowly.
+   Round 2 (2026-11-03), Carlos on version 1: "we are not going to make a game here. We're going to teach them." So
+   the scenes show worked examples, then the participants work the next ones and enter only the results.
+   Version 4 (Carlos, 2026-11-10): act 2 turns the marks into numbers, so this act starts with the agreement on one
+   film. The room says yes or no for five pairs, names the operation, and only then sees the products.
 
    Scene onefilm, "How much do they agree?"
-     steps 1 to 3   the five marks become numbers: first the tick and the cross (known from act 1), then two
-                    ticks, two crosses and neutral, one at a time, each with its reason
-     steps 4 to 6   worked examples on Jaws (Store.EXAMPLES.one.shown), one stack each, played once
-     steps 7, 8     your turn (EXAMPLES.one.yours): the product is a slot, answered on a keypad of results
-     step 9         the rule: four small stacks, each with its example
+     step 1         five pairs on Jaws side by side (Store.EXAMPLES.one.pairs), a Yes or No box under each, and
+                    Reveal all. An answer takes the colour of its pair's product, in three strengths (1, 2 and 4,
+                    the last drawn solid), while the product itself stays hidden.
+     step 2         "Which arithmetic operation helps to measure agreement?" and the four operations to tap
+     step 3         the × is the answer: it appears in each pair, and the products come out one pair after
+                    another, between the pair and its answer, in the colour of the answer
+     steps 4, 5     your turn (EXAMPLES.one.yours): the product is a slot, answered on a keypad of results
+     step 6         the rule: four small stacks, each with its example (EXAMPLES.one.rule)
    Scene twofilms, "And with two films?"
      step 1         each customer is a row of two numbers
-     steps 2 to 4   worked examples (EXAMPLES.two.shown), each stack played beat by beat, with a line per beat
+     steps 2 to 4   worked examples (EXAMPLES.two.shown). Each stack waits with its numbers until Compute is
+                    pressed, so the room guesses first (version 4); then it plays beat by beat, a line per beat.
      steps 5 to 7   your turn (EXAMPLES.two.yours): both products and the sum are slots, answered in order
      step 8         the name, the inner product, and one three-film stack played once
 
@@ -3994,11 +4131,6 @@ button.chip:hover{border-color:var(--rubric)}
     x.addEventListener("click", fn);
     return x;
   }
-  function put(node, kids) {
-    node.textContent = "";
-    kids.forEach(function (k) { node.appendChild(typeof k === "string" ? document.createTextNode(k) : k); });
-    return node;
-  }
   // Timers of a scene that one call cancels: wait() resolves false once stop() has been called.
   function Seq() {
     var q = { tok: 0, timers: [] };
@@ -4008,6 +4140,15 @@ button.chip:hover{border-color:var(--rubric)}
       return new Promise(function (res) { q.timers.push(setTimeout(function () { res(t === q.tok); }, ms)); });
     };
     return q;
+  }
+  // A short motion of a button or a box: "pop" for a right answer, "shake" for a wrong one.
+  function bump(node, kind) {
+    if (!MOTION || !node || !node.animate) return;
+    var k = kind === "shake"
+      ? [{ transform: "translateX(0px)" }, { transform: "translateX(-6px)" }, { transform: "translateX(5px)" },
+         { transform: "translateX(-3px)" }, { transform: "translateX(0px)" }]
+      : [{ transform: "scale(1)" }, { transform: "scale(1.12)" }, { transform: "scale(1)" }];
+    node.animate(k, { duration: kind === "shake" ? 420 : 480, easing: "ease" });
   }
 
   /* WORDS THAT READ A RESULT, made from the ratings */
@@ -4192,64 +4333,138 @@ button.chip:hover{border-color:var(--rubric)}
 
   /* SCENE onefilm */
   var ONE = S.EXAMPLES.one, F1 = ONE.films;
-  var O = { last: null, Q: Seq(), ex: [], you: [], views: [] };
-  var NMARK = 3;
-  var STEPS1 = NMARK + ONE.shown.length + ONE.yours.length + 1;
+  var O = { last: null, Q: Seq(), cols: [], you: [], views: [] };
+  var NPAIR = 3;                                         // the pairs view: the answers, the operation, the products
+  var STEPS1 = NPAIR + ONE.yours.length + 1;
+  var TIMES = N.TIMES;
+  var OPS = [["+", "plus"], [M, "minus"], [TIMES, "times"], ["÷", "divided by"]];
+  var CUE1 = "Multiply the two numbers of each pair.";
+  var END1 = "Each product matches its answer, in sign and in strength.";
+  // The strength of a product in three shades, shared by the product and its answer: 1, 2, and 4 (drawn solid).
+  // The five pairs all have an opinion on Jaws, so no product is 0.
+  function level(p) { var a = Math.abs(p); return a >= 4 ? 3 : (a >= 2 ? 2 : 1); }
 
-  // The five marks become numbers. Each mark keeps its words and gets a reason once it is a number.
-  var WHY = { "2": "twice a tick", "1": "as in act 1", "0": "no opinion: the middle", "-1": "as in act 1", "-2": "twice a cross" };
-  var FIRST = [1, -1], NEWM = [2, -2, 0];
-  var SAYM = [
-    function () { return ["Five marks, from ", b("loved it"), " to ", b("hated it"), ". To compute with them, we turn each one into a number."]; },
-    function () { return ["First the two we know from act 1: a tick is ", b("1"), " and a cross is ", b(num(-1)), "."]; },
-    function () { return ["Then the three new ones, one at a time."]; }
-  ];
-  var MK = { figs: [], h: null };
-  function marksView() {
-    MK.say = el("p", "a3-say");
-    var row = el("div", "a3-five");
-    MK.figs = S.LEVELS.map(function (r) {
-      var box = el("span", "a3-mk");
-      box.appendChild(S.vote(r));
-      var why = el("span", "a3-why", WHY[String(r)]);
-      row.appendChild(h("figure", "a3-fig", [box, el("figcaption", "a3-w", S.word(r)), why]));
-      return { r: r, box: box, why: why };
-    });
-    MK.sum = el("p", "a3-read a3-after", "The stronger the opinion, the further its number from 0: above 0 for liking, below 0 for disliking.");
-    MK.view = view("a3-marks", [MK.say, row, MK.sum]);
-    return MK.view;
+  // A pair: its stack (the numbers only until step 3) and the box for Yes or No under it.
+  function pairCol(pair) {
+    var C = { pair: pair, p: S.inner(pair[0], pair[1], F1) };
+    C.yes = C.p > 0;
+    C.st = N.stack({ top: pair[0], bottom: pair[1], films: F1, heads: "none", pace: 0.75 });
+    var lv = String(level(C.p));
+    Array.prototype.forEach.call(C.st.el.querySelectorAll(".nt-prod"), function (c) { c.dataset.lv = lv; });
+    C.ybtn = button("Yes", "a3-yn", function () { answer(C, true); });
+    C.nbtn = button("No", "a3-yn", function () { answer(C, false); });
+    C.ans = el("span", "a3-ans", C.yes ? "Yes" : "No");
+    C.box = h("div", "a3-agree", [C.ybtn, C.nbtn, C.ans]);
+    C.box.dataset.lv = lv;
+    C.box.dataset.s = C.yes ? "yes" : "no";
+    C.box.setAttribute("role", "group");
+    C.box.setAttribute("aria-label", "Do " + nm(pair[0]) + " and " + nm(pair[1]) + " agree?");
+    C.col = h("div", "a3-col", [C.st.el, C.box]);
+    return C;
   }
-  function fig(r) { for (var i = 0; i < MK.figs.length; i++) if (MK.figs[i].r === r) return MK.figs[i]; return null; }
-  function isNum(f) { return !f.box.querySelector(".vote"); }
-  function marksAt(k, live) {
-    if (MK.h) { MK.h.cancel(); MK.h = null; }
-    put(MK.say, SAYM[k]());
-    function want(f) { return FIRST.indexOf(f.r) >= 0 ? k >= 1 : k >= 2; }
-    MK.figs.forEach(function (f) { if (!want(f) && isNum(f)) N.unconvert(f.box); });
-    var mine = k === 1 ? FIRST : (k === 2 ? NEWM : []);
-    var flip = live ? mine.map(fig).filter(function (f) { return !isNum(f); }) : [];
-    MK.figs.forEach(function (f) { if (want(f) && !isNum(f) && flip.indexOf(f) < 0) N.convert(f.box, { animate: false }); });
-    var gap = k === 1 ? 1000 : 1800;
-    if (flip.length) MK.h = N.convert(flip.map(function (f) { return f.box.querySelector(".vote"); }), { stagger: gap });
-    MK.figs.forEach(function (f) {
-      var i = flip.indexOf(f);
-      f.why.style.transitionDelay = i >= 0 ? (i * gap + 500) + "ms" : "0ms";
-      f.why.classList.toggle("on", want(f));
+  function isSet(C) { return C.box.classList.contains("a3-set"); }
+  function setAnswer(C, on) {
+    C.box.classList.toggle("a3-set", on);
+    C.ybtn.classList.remove("a3-miss");
+    C.nbtn.classList.remove("a3-miss");
+  }
+  // A right answer shows in the colour of the product; a wrong one is struck through and waits for the other.
+  function answer(C, yes) {
+    if (isSet(C)) return;
+    if (yes === C.yes) { setAnswer(C, true); bump(C.box, "pop"); }
+    else { var x = yes ? C.ybtn : C.nbtn; x.classList.add("a3-miss"); bump(x, "shake"); }
+    paintAll();
+  }
+  function allSet() { return O.cols.every(isSet); }
+  function paintAll() { O.all.textContent = allSet() ? "Hide the answers" : "Reveal all"; }
+  function revealAll(on) { O.cols.forEach(function (C) { setAnswer(C, on); }); paintAll(); }
+
+  // The four operations. Only the × is right; a wrong one is struck through.
+  function opsRow() {
+    O.ops = el("div", "a3-ops");
+    O.ops.setAttribute("role", "group");
+    O.ops.setAttribute("aria-label", "The four operations");
+    O.opb = OPS.map(function (o) {
+      var x = el("button", "a3-op", o[0]);
+      x.type = "button";
+      x.setAttribute("aria-label", o[1]);
+      x.addEventListener("click", function () { pickOp(x, o[0] === TIMES); });
+      O.ops.appendChild(x);
+      return x;
     });
-    MK.sum.style.transitionDelay = k === 2 && flip.length ? ((flip.length - 1) * gap + 1600) + "ms" : "0ms";
-    MK.sum.classList.toggle("on", k === 2);
+    return O.ops;
+  }
+  function pickOp(x, right) {
+    if (O.ops.classList.contains("a3-solved")) return;
+    if (right) { solveOps(); bump(x, "pop"); }
+    else if (!x.classList.contains("a3-no")) { x.classList.add("a3-no"); bump(x, "shake"); }
+  }
+  function solveOps() {
+    O.ops.classList.add("a3-solved");
+    O.opb.forEach(function (x) { x.classList.toggle("a3-yes", x.textContent === TIMES); });
+  }
+  function resetOps() {
+    O.ops.classList.remove("a3-solved");
+    O.opb.forEach(function (x) { x.classList.remove("a3-yes", "a3-no"); });
   }
 
-  function exView1(pair, i) {
-    var X = Shown(O.Q, pair, F1, { size: "lg" });
-    var who = nm(pair[0]) + " and " + nm(pair[1]);
-    var lead = i === 0
-      ? ["How much do " + who + " agree on " + ft(F1[0]) + "? ", b("Multiply"), " their two numbers."]
-      : [who + " on " + ft(F1[0]) + ": multiply the two numbers."];
-    X.view = view("a3-ex", [kicker("Example " + (i + 1) + " of " + ONE.shown.length), h("p", "a3-say", lead), X.box,
-                            h("div", "a3-under", [X.line, X.replay])]);
-    return X;
+  function pairsView() {
+    O.cols = ONE.pairs.map(pairCol);
+    O.all = button("Reveal all", "quiet a3-all", function () { revealAll(!allSet()); });
+    O.big = el("p", "a3-big", "Which arithmetic operation helps to measure agreement?");
+    O.ask = h("div", "a3-ask", [O.big, opsRow()]);
+    O.read = el("p", "a3-read");
+    O.replay = button("Replay", "quiet a3-replay", function () { O.Q.stop(); stopCols(); playProducts(250); });
+    O.under = h("div", "a3-under", [O.read, O.replay]);
+    // Reveal all and the question share one place; the place of the question and of the line under it is kept
+    // from step 1 on, so the pairs never move (on a phone the view starts at the top instead).
+    O.pv = view("a3-pairv", [
+      h("p", "a3-say", ["Five pairs of customers rated ", S.chip(F1[0], { long: true }), ". Does each pair agree?"]),
+      h("div", "a3-pairs", O.cols.map(function (C) { return C.col; })),
+      h("div", "a3-foot", [O.all, O.ask]),
+      O.under
+    ]);
+    return O.pv;
   }
+  function stopCols() { O.cols.forEach(function (C) { C.st.stop(); }); }
+  // All pairs before (done false) or after (done true) their product; the rule over a product shows with its ×.
+  function colsAt(done) {
+    O.cols.forEach(function (C) { C.st.show(done ? C.st.beats : 0); C.col.classList.toggle("a3-on", done); });
+  }
+  function readLine(text, isCue) { O.read.textContent = text; O.read.classList.toggle("a3-cue", !!isCue); }
+  // The products come out one pair after another, each answer box nodding as its product lands.
+  function playProducts(delay) {
+    var Q = O.Q, i = 0;
+    colsAt(false);
+    O.replay.hidden = true;
+    readLine(CUE1, true);
+    function one() {
+      if (i >= O.cols.length) { readLine(END1); O.replay.hidden = false; return; }
+      var C = O.cols[i++];
+      C.col.classList.add("a3-on");
+      C.st.forward().then(function (ok) {
+        if (!ok) return;
+        bump(C.box, "pop");
+        Q.wait(350).then(function (go) { if (go) one(); });
+      });
+    }
+    Q.wait(delay).then(function (go) { if (go) one(); });
+  }
+  function pairsAt(k, live) {
+    O.pv.dataset.k = String(k);
+    O.all.classList.toggle("a3-gone", k !== 0);
+    O.ask.classList.toggle("a3-gone", k < 1);
+    O.under.classList.toggle("a3-gone", k < 2);
+    // The answers stay as the room left them on step 1; from step 2 on, all of them show.
+    if (k >= 1) revealAll(true); else paintAll();
+    if (k === 1) resetOps(); else if (k === 2) solveOps();
+    O.ask.classList.toggle("a3-in", k === 1 && live);
+    if (k === 1 && live) S.reveal(O.ask);
+    if (k < 2) { colsAt(false); return; }
+    if (live) { playProducts(700); S.reveal(O.under); }
+    else { colsAt(true); readLine(END1); O.replay.hidden = false; }
+  }
+
   function youView1(pair, i) {
     var Y = Yours(pair, F1);
     Y.view = view("a3-you", [kicker("Your turn: " + (i + 1) + " of " + ONE.yours.length),
@@ -4257,18 +4472,16 @@ button.chip:hover{border-color:var(--rubric)}
                              Y.box, Y.fb, Y.pad]);
     return Y;
   }
+  // The rule: one card per case, each with its example from EXAMPLES.one.rule, in this order.
   function ruleView1() {
-    var pairs = ONE.shown.concat(ONE.yours).map(function (pr) { return { a: pr[0], c: pr[1], p: S.inner(pr[0], pr[1], F1) }; });
-    function first(test) { for (var i = 0; i < pairs.length; i++) if (test(pairs[i].p)) return pairs[i]; return null; }
-    var far = pairs.reduce(function (m, x) { return Math.abs(x.p) > Math.abs(m.p) ? x : m; }, pairs[0]);
     var grid = el("div", "a3-rules");
-    [["a3-pos", "Same side", "a positive number: they agree", first(function (p) { return p > 0; })],
-     ["a3-neg", "Opposite sides", "a negative number: they disagree", first(function (p) { return p < 0; })],
-     ["a3-zero", "Neutral", "0: we cannot tell", first(function (p) { return p === 0; })],
-     ["a3-far", "Stronger opinions", "a number further from 0", far]
+    [["a3-pos", "Same side", "a positive number: they agree"],
+     ["a3-neg", "Opposite sides", "a negative number: they disagree"],
+     ["a3-zero", "Neutral", "0: we cannot tell"],
+     ["a3-far", "Stronger opinions", "a number further from 0"]
     ].forEach(function (c, i) {
-      if (!c[3]) return;
-      var st = N.stack({ top: c[3].a, bottom: c[3].c, films: F1, heads: "pic", resLabel: "agree" });
+      var pr = ONE.rule[i];
+      var st = N.stack({ top: pr[0], bottom: pr[1], films: F1, heads: "pic", resLabel: "agree" });
       st.end();
       var card = h("section", "a3-card " + c[0], [h("h3", "", [c[1]]), el("p", "a3-cw", c[2]), h("div", "a3-mini", [st.el])]);
       card.style.setProperty("--i", String(i));
@@ -4277,37 +4490,32 @@ button.chip:hover{border-color:var(--rubric)}
     O.rule = view("a3-rule", [h("p", "a3-say", ["On one film, ", b("multiply the two numbers"), ". The product says how much two customers agree."]), grid]);
     return O.rule;
   }
-  function stopAll1() {
-    O.Q.stop();
-    if (MK.h) { MK.h.cancel(); MK.h = null; }
-    O.ex.forEach(function (X) { X.st.stop(); });
-  }
+  function stopAll1() { O.Q.stop(); stopCols(); }
 
   S.define("onefilm", {
     act: 3, title: "How much do they agree?", steps: STEPS1,
     build: function (inner) {
-      O.views.push(marksView());
-      ONE.shown.forEach(function (pr, i) { var X = exView1(pr, i); O.ex.push(X); O.views.push(X.view); });
+      O.views.push(pairsView());
       ONE.yours.forEach(function (pr, i) { var Y = youView1(pr, i); O.you.push(Y); O.views.push(Y.view); });
       O.views.push(ruleView1());
       O.views.forEach(function (v) { inner.appendChild(v); });
     },
-    enter: function () { O.last = null; },
+    enter: function () { O.last = null; revealAll(false); resetOps(); },
     step: function (k) {
       var was = O.last, live = MOTION && k > 0 && was === k - 1;
       O.last = k;
       stopAll1();
-      var ie = k - NMARK, iy = ie - O.ex.length;
-      var on = k < NMARK ? MK.view : (ie < O.ex.length ? O.ex[ie].view : (iy < O.you.length ? O.you[iy].view : O.rule));
+      var iy = k - NPAIR;
+      var on = k < NPAIR ? O.pv : (iy < O.you.length ? O.you[iy].view : O.rule);
       O.views.forEach(function (v) { v.hidden = v !== on; });
-      on.classList.toggle("a3-live", live);
-      if (k < NMARK) marksAt(k, live);
-      else if (ie < O.ex.length) { if (live) play(O.ex[ie], 600); else endState(O.ex[ie]); }
+      // The pairs view stays on screen for three steps, so only the later views fade in as a whole.
+      on.classList.toggle("a3-live", live && k >= NPAIR);
+      if (k < NPAIR) pairsAt(k, live);
       else if (iy < O.you.length) enterYours(O.you[iy]);
     },
     leave: function () { stopAll1(); },
     onkey: function (e, api) {
-      var iy = api.step - NMARK - O.ex.length;
+      var iy = api.step - NPAIR;
       return iy >= 0 && iy < O.you.length ? keyYours(O.you[iy], e) : false;
     }
   });
@@ -4316,6 +4524,7 @@ button.chip:hover{border-color:var(--rubric)}
   var TWO = S.EXAMPLES.two, F2 = TWO.films, F3 = S.ROUND2.films;
   var T = { last: null, Q: Seq(), ex: [], you: [], views: [] };
   var STEPS2 = 1 + TWO.shown.length + TWO.yours.length + 1;
+  var GUESS = "Guess the result, then press Compute.";
 
   function rowsView2() {
     var p = TWO.shown[0];
@@ -4332,9 +4541,25 @@ button.chip:hover{border-color:var(--rubric)}
     var who = nm(pair[0]) + " and " + nm(pair[1]);
     var lead = i === 0 ? [who + ": ", b("multiply film by film"), ", then ", b("add"), " the products."]
                        : [who + ": multiply film by film, then add."];
+    X.compute = button("Compute", "primary a3-compute", function () { compute2(X); });
     X.view = view("a3-ex", [kicker("Example " + (i + 1) + " of " + TWO.shown.length), h("p", "a3-say", lead), X.box,
-                            h("div", "a3-under", [X.line, X.replay])]);
+                            h("div", "a3-under", [X.line, h("div", "a3-btns", [X.compute, X.replay])])]);
     return X;
+  }
+  // Nothing is computed before Compute is pressed: the room guesses first. A computed example stays computed until
+  // the scene is left.
+  function compute2(X) {
+    X.done = true;
+    X.compute.hidden = true;
+    X.replay.hidden = false;
+    X.Q.stop();
+    play(X, 200);
+  }
+  function arrive2(X) {
+    X.compute.hidden = !!X.done;
+    X.replay.hidden = !X.done;
+    if (X.done) endState(X);
+    else { X.st.show(0); say(X, GUESS, true); }
   }
   function youView2(pair, i) {
     var Y = Yours(pair, F2);
@@ -4369,7 +4594,7 @@ button.chip:hover{border-color:var(--rubric)}
       T.views.push(nameView2());
       T.views.forEach(function (v) { inner.appendChild(v); });
     },
-    enter: function () { T.last = null; },
+    enter: function () { T.last = null; T.ex.forEach(function (X) { X.done = false; }); },
     step: function (k) {
       var was = T.last, live = MOTION && k > 0 && was === k - 1;
       T.last = k;
@@ -4379,7 +4604,7 @@ button.chip:hover{border-color:var(--rubric)}
       T.views.forEach(function (v) { v.hidden = v !== on; });
       on.classList.toggle("a3-live", live);
       if (k === 0) return;
-      if (ie < T.ex.length) { if (live) play(T.ex[ie], 700); else endState(T.ex[ie]); }
+      if (ie < T.ex.length) arrive2(T.ex[ie]);
       else if (iy < T.you.length) enterYours(T.you[iy]);
       else if (live) play(T.three, 900);
       else endState(T.three);
@@ -4394,18 +4619,20 @@ button.chip:hover{border-color:var(--rubric)}
 </script>
 <script>
 /* Act 4 of Once Upon a Video Store: The nearest neighbour. Owner: the act 2 agent (see BRIEF.md and BRIEF-r2.md).
-   Class names start with a4-. One scene, nearest, drawn in the notation of NOTATION.md (Store.N): the board of act 4
-   with Vera's row on top, then a small board of act 1 with Zoe's row on top. Seven steps, one idea each:
+   Class names start with a4-. Two scenes. The first, nearest, is drawn in the notation of NOTATION.md (Store.N): the
+   board of act 4 with Vera's row on top, then a small board of act 1 with Zoe's row on top. Seven steps, one idea each:
      1 the ratings in marks: Vera on top, the six regulars below (Love Actually waits, hidden)
      2 the marks become numbers: the notation's wave over the whole board
      3 Vera's inner products appear in their column, top to bottom, without their working
      4 sorted by inner product: Kai ends right under Vera, her nearest neighbour
      5 Love Actually appears: the participant copies Kai's number into Vera's "?"; a week later she watched it
      6 back to act 1: Zoe on top, Max and Lea below, and their inner products
-     7 a match adds 1 and a mismatch -1: the counting of act 1 was the inner product all along; next, Python
+     7 a match adds 1 and a mismatch -1: the counting of act 1 was the inner product all along
    Act 3 taught the inner product, so this act never works one out on screen (Carlos, 2026-11-06: "Don't calculate
    it in front of the participants"): the rows stand one on top of the other and the inner products appear.
    A step reached from the step before plays its motion; any other arrival (Back, the pager) draws it at once.
+   The second scene, notebook, is one slide that introduces the notebook in Colab: its three functions, the
+   challenge, and the link (Carlos, 2026-11-10: the notebook on "a separate slide"; until then a line under step 7).
    No globals. */
 (function () {
   "use strict";
@@ -4442,7 +4669,7 @@ button.chip:hover{border-color:var(--rubric)}
   // The notebook of this game in Colab, student version (Carlos, 2026-11-06: each game carries its notebook).
   var COLAB = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/01_cx_nearest_neighbours_student.ipynb";
   function colabLink() {
-    var a = el("a", "a4-colab", "Open in Colab");
+    var a = el("a", "btn primary a4-colab", "Open in Colab");
     a.href = COLAB;
     a.target = "_blank";
     a.rel = "noopener";
@@ -4593,8 +4820,7 @@ button.chip:hover{border-color:var(--rubric)}
                                              b(name(ONE[1])), " on " + HOW_MANY[m1] + "."]);
       X.rule = make("div", "a4-rule", [
         make("p", "a4-say", ["So the inner product is the matches minus the mismatches."]),
-        make("p", "a4-big", ["The counting of act 1 was the ", term("inner product"), " all along."]),
-        make("p", "a4-py", [el("span", "em", "🐍"), " Next: you write this in Python. ", colabLink()])
+        make("p", "a4-big", ["The counting of act 1 was the ", term("inner product"), " all along."])
       ]);
       put(one, [X.key, X.bd1.el, X.oneSay, X.rule]);
       root.appendChild(one);
@@ -4650,6 +4876,33 @@ button.chip:hover{border-color:var(--rubric)}
       X.bd1.stop();
       api.setTitle(TITLE);
     }
+  });
+
+  /* SCENE notebook: the notebook in Colab, on a slide of its own. The three functions are the notebook's three
+     tasks and the challenge is its last part (source/notebook/cells_main.py and cells_challenge.py). */
+  var TASKS = [
+    ["inner_product", "How much do two customers agree?"],
+    ["nearest_customer", "Which customer agrees most with a newcomer?"],
+    ["predict", "Copy that customer's rating of a film the newcomer has not seen."]
+  ];
+  S.define("notebook", {
+    act: 4,
+    title: "Your turn, in Python",
+    steps: 1,
+    build: function (inner) {
+      var list = el("ol", "a4-tasks");
+      TASKS.forEach(function (t, i) {
+        list.appendChild(make("li", "", [el("span", "a4-tn", String(i + 1)), el("code", "a4-fn", t[0]), el("span", "a4-tw", t[1])]));
+      });
+      inner.appendChild(make("div", "a4-nb", [
+        make("p", "a4-cap", ["In the notebook, a computer does what you did: three short Python functions, about 30 minutes."]),
+        list,
+        make("p", "a4-say", ["Then a challenge: let the ", b("k nearest customers"), " vote."]),
+        colabLink(),
+        make("p", "a4-later", ["To keep your work in Colab: File, Save a copy in Drive."])
+      ]));
+    },
+    step: function () {}
   });
 })();
 </script>
