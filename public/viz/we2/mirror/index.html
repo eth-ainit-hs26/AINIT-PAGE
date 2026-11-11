@@ -789,6 +789,38 @@ sub, sup { font-size: .65em; line-height: 0; }
 .s5-emos { font-size: 1.1rem; letter-spacing: 1px; }
 .s5-nw { white-space: nowrap; }
 
+/* The dark bar and the light bar (round 11, finished 2026-11-11): one bar per row on a track that holds 2, the left
+   half for the estimate. While the dark bar is built, the left half is cut in one piece per dot, dashed, and a tap
+   fills a piece. */
+.mb-extra.s5-xcol { display: flex; align-items: center; }
+.s5-xb { display: flex; align-items: center; gap: 6px; width: 100%; }
+.s5-xtrack { position: relative; display: flex; flex: 1 1 auto; min-width: 0; height: 20px; border-radius: 10px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.s5-xtrack > i { display: block; height: 100%; flex: none; }
+.s5-xtrack .e { background: var(--c-ucb); }
+.s5-xtrack .b { background: var(--c-ucb); opacity: .36; }
+.s5-xb.ring .s5-xtrack { box-shadow: inset 0 0 0 1.5px var(--c-ucb), 0 0 0 3px color-mix(in srgb, var(--c-ucb) 25%, transparent); }
+.s5-pcs { position: absolute; left: 0; top: 0; bottom: 0; width: 50%; display: flex; gap: 2px; padding: 2px; }
+.s5-piece { flex: 1 1 0; min-width: 0; border-radius: 7px; border: 1.5px dashed var(--c-ucb); }
+.s5-piece.on { background: var(--c-ucb); border-style: solid; }
+.s5-piece.nw { animation: s5piece .5s cubic-bezier(.3, 1.5, .5, 1); }
+@keyframes s5piece { from { transform: scale(.4); opacity: .3; } to { transform: none; opacity: 1; } }
+.s5-xsum { flex: none; width: 2.4em; text-align: right; font-weight: 600; }
+.s5-xsum.nw { animation: fadein .45s ease; }
+.s5-xstar { flex: none; width: 1.1em; font-family: var(--emoji); font-size: 1rem; line-height: 1; text-align: center; }
+.s5-xstar:not(:empty) { animation: mbpop .45s ease-out both; }
+/* In the line under the board: a number of the dark bar on dark, a number of the light bar on light. */
+.s5-eqe, .s5-eqb { display: inline-block; border-radius: 6px; padding: 0 6px 1px; line-height: 1.25; }
+.s5-eqe { background: var(--c-ucb); color: var(--leaf); }
+.s5-eqb { background: color-mix(in srgb, var(--c-ucb) 36%, var(--leaf)); color: var(--fg); }
+@media (max-width: 560px) {
+  .s5-xb { gap: 4px; }
+  .s5-xtrack { height: 16px; border-radius: 8px; }
+  .s5-pcs { gap: 1.5px; padding: 1.5px; }
+  .s5-piece { border-radius: 5px; border-width: 1px; }
+  .s5-xsum { width: 2.3em; }
+  .s5-xstar { font-size: .85rem; }
+}
+
 /* What the Queen's mirror knows (a secondary button). */
 .s5-pcards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 520px; }
 .s5-pc { background: var(--leaf); border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 4px 6px; text-align: center; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
@@ -797,7 +829,8 @@ sub, sup { font-size: .65em; line-height: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .s5-flash, .s5-numin .s5-sum, .s5-numin .s5-est, .s5-numin .s5-bon,
-  .s5-bonin .s5-bon, .s5-bonin .s5-hb, .s5-sumin .s5-sum, .s5-sumin .s5-hs { animation: none; }
+  .s5-bonin .s5-bon, .s5-bonin .s5-hb, .s5-sumin .s5-sum, .s5-sumin .s5-hs,
+  .s5-piece.nw, .s5-xsum.nw, .s5-xstar:not(:empty) { animation: none; }
 }
 </style>
 <style>
@@ -3079,7 +3112,10 @@ sub, sup { font-size: .65em; line-height: 0; }
    total rate (round 7), the scene "The real UCB" (round 8) and moved the final race to Rapunzel's (round 8).
    Round 9 (2026-11-06, main session): the heads drawn by the engine, the words above or below the pictures, and on a
    wide screen the column estimate + bonus drawn as a bar, the estimate solid and the bonus light.
-   Round 10 (2026-11-06, main session): the first scene is a movie (anim.js), the bars race; the sum's bars line up. */
+   Round 10 (2026-11-06, main session): the first scene is a movie (anim.js), the bars race; the sum's bars line up.
+   Round 11 (2026-11-06, main session): before the movie, one scene builds the dark bar and the light bar slowly
+   (Carlos: "one scene explaining slowly how the dark bar and the light bar are computed before the demo"). Paused that
+   day, finished on 2026-11-11 (Carlos: "Yes, finish it"). */
 (function () {
   "use strict";
   const MB = window.MB, P = MB.P, PR = MB.PRODUCTS, T = MB.SEASON, K = PR.length;
@@ -3318,7 +3354,114 @@ sub, sup { font-size: .65em; line-height: 0; }
     }
   });
 
+  // The dark bar and the light bar (round 11), in the movie's notation, on the board of the race season after
+  // XT = 10 mornings. Chapters 1 to 3 build the bar of the row with the most dots (the vacuum, 4 dots, 3 taps): the
+  // dark half of its track splits into one piece per dot and each tap flies into a piece (3/4); the light bar shrinks
+  // with each dot counted (1/√1 to 1/√4); the two add up (1.25). Chapters 4 and 5 do the same, faster, for the next
+  // row with the most dots (the mattress, 1/3) and the first row with one dot (the ladder, 0/1). Chapter 6 adds the
+  // last rows and lights the longest bar, the product the mirror shows on morning 11.
+  const XT = 10, XR = rowsAt(XT), XN = nums(XR), XCOLS = Math.max(...XR.map((r) => r.length)), XLEAD = leadOf(XN);
+  const XS = (() => {
+    const by = XN.map((x, k) => k).sort((a, b) => XN[b].n - XN[a].n || a - b);
+    return [by[0], by[1], by.find((k) => XN[k].n === 1 && k !== by[0] && k !== by[1])];
+  })();
+  const XREST = XN.map((x, k) => k).filter((k) => !XS.includes(k));
+  const XCHIPS = ["Dark bar", "Light bar", "Whole bar", "The longest"];
+  const EQE = (h) => `<span class="s5-eqe">${h}</span>`; // a number of the dark bar
+  const EQB = (h) => `<span class="s5-eqb">${h}</span>`; // a number of the light bar
+  const root = (n) => { const r = Math.sqrt(n); return `1/√${n} = ${Number.isInteger(r) && r > 1 ? `1/${r} = ` : ""}${dec(1 / r)}`; };
+  const dots = (n) => `${n} dot${n === 1 ? "" : "s"}`;
+  // A row's bar on a track that holds 2, its left half for the estimate. s: {} an empty track; { pcs, fill, nw } the
+  // left half in pcs pieces, the first fill of them dark (nw the newest); { e, b } the dark and the light bar; sum (the
+  // number after the bar), ring (the whole bar outlined, its sum new), best (outlined, with ✨). The pieces are
+  // s5-piece: s5-pc is the card of a product in "What the Queen's mirror knows".
+  function xbar(k, s) {
+    s = s || {};
+    const e = s.pcs ? 0 : s.e || 0, b = s.b || 0;
+    const pcs = s.pcs ? `<span class="s5-pcs">${Array.from({ length: s.pcs }, (_, j) => `<i class="s5-piece${j < s.fill ? " on" : ""}${s.nw === j ? " nw" : ""}" data-j="${j}"></i>`).join("")}</span>` : "";
+    return `<span class="s5-xb${s.ring || s.best ? " ring" : ""}"><span class="s5-xtrack"><i class="e"${s.pcs ? "" : ` data-mk="xe${k}"`} style="width:${(e * 50).toFixed(2)}%"></i><i class="b" data-mk="xb${k}" style="width:${(b * 50).toFixed(2)}%"></i>${pcs}</span><span class="s5-xsum${s.sum === undefined ? "" : " on"}${s.ring ? " nw" : ""}">${s.sum === undefined ? "" : dec(s.sum)}</span><span class="s5-xstar" aria-hidden="true">${s.best ? "✨" : ""}</span></span>`;
+  }
+  const xboard = (st, o) => MB.board({ rows: XR, cols: XCOLS, est: false, highlight: o.hl, dim: o.hl !== undefined, fresh: o.fresh || null,
+    left: [{ head: "", width: narrow() ? 158 : 290, cls: "s5-xcol", cells: XR.map((r, k) => xbar(k, st[k])) }],
+    aria: `Cinderella's board after ${XT} mornings with UCB: a bar left of each product, the estimate dark and the bonus light, then one dot per showing` });
+  const whole = (k) => ({ e: XN[k].e, b: XN[k].b, sum: XN[k].s });
+  // The bars built before chapter ch.
+  function built(ch) {
+    const st = {}, [a, m, l] = XS;
+    if (ch >= 1) st[a] = { e: XN[a].e };
+    if (ch >= 2) st[a] = { e: XN[a].e, b: XN[a].b };
+    if (ch >= 3) st[a] = whole(a);
+    if (ch >= 4) st[m] = whole(m);
+    if (ch >= 5) st[l] = whole(l);
+    return st;
+  }
+  // The frames of one part of a row's bar; st is changed in place, so the next part starts from it.
+  function darkFrames(k, st, slow) {
+    const x = XN[k], F = [], cp = () => Object.assign({}, st);
+    st[k] = { pcs: x.n, fill: 0 };
+    F.push({ ms: slow ? 1500 : 1000, p: { board: xboard(cp(), { hl: k }), line: `${dots(x.n)}, ${x.n} piece${x.n === 1 ? "" : "s"}.` } });
+    let f = 0;
+    XR[k].forEach((tap, j) => {
+      if (!tap) return;
+      const to = f;
+      F.push({ ms: slow ? 820 : 600, p: f ? {} : { line: "Each tap fills a piece." },
+        fx: (A) => A.fly(`.mb-row[data-k="${k}"] .mb-cell:nth-child(${j + 1})`, `.mb-row[data-k="${k}"] .s5-piece[data-j="${to}"]`, MB.dot(true), { ms: slow ? 640 : 460, s1: 1.45, s2: 0.9 }) });
+      f += 1;
+      st[k] = { pcs: x.n, fill: f, nw: f - 1 };
+      F.push({ ms: slow ? 420 : 300, p: { board: xboard(cp(), { hl: k }) } });
+    });
+    st[k] = { e: x.e };
+    F.push({ ms: slow ? 1700 : 1300, p: { board: xboard(cp(), { hl: k }), line: `${EQE(MB.phat)} = ${x.t}/${x.n} = ${dec(x.e)}${x.t ? "" : ": no tap, no dark bar"}` } });
+    return F;
+  }
+  function lightFrames(k, st, slow, last) {
+    const x = XN[k], F = [];
+    for (let c = 1; c <= x.n; c++) {
+      st[k] = { e: x.e, b: hund(1 / Math.sqrt(c)) / 100 };
+      F.push({ ms: slow ? 1250 : 800, p: { board: xboard(Object.assign({}, st), { hl: k, fresh: { row: k, col: c - 1 } }),
+        line: `${dots(c)}: ${EQB("bonus")} = ${root(c)}${c === x.n && last ? `<br>${last}` : ""}` } });
+    }
+    return F;
+  }
+  function wholeFrames(k, st, slow) {
+    const x = XN[k];
+    st[k] = Object.assign(whole(k), { ring: true });
+    const F = [{ ms: slow ? 1900 : 1400, p: { board: xboard(Object.assign({}, st), { hl: k }), line: `${EQE(dec(x.e))} + ${EQB(dec(x.b))} = ${dec(x.s)}` } }];
+    st[k] = whole(k);
+    return F;
+  }
+  const BARS = MB.movie({
+    key: "bars",
+    frames(step) {
+      const st = built(step), [a, m, l] = XS;
+      const open = (on, hl, line) => ({ ms: 1300, p: { parts: MB.mvChips(XCHIPS, on), dev: KEY, mid: `After ${XT} mornings`, cin: MB.mvCin(null),
+        board: xboard(Object.assign({}, st), hl === null ? {} : { hl }), line } });
+      const chip = (on) => ({ ms: 10, p: { parts: MB.mvChips(XCHIPS, on) } });
+      const about = (k) => `${up(the(k))}: ${dots(XN[k].n)}, ${XN[k].t ? `${XN[k].t} tap${XN[k].t === 1 ? "" : "s"}` : "no tap"}.`;
+      if (step === 0) return [open(0, a, `The dark bar: the estimate ${MB.phat}, the share of taps.`)].concat(darkFrames(a, st, true));
+      if (step === 1) return [open(1, a, "The light bar: the bonus 1/√n, with n the number of dots.")].concat(lightFrames(a, st, true, "The more dots, the shorter the light bar."));
+      if (step === 2) return [open(2, a, "The whole bar: the estimate + the bonus.")].concat(wholeFrames(a, st, true));
+      if (step === 3 || step === 4) {
+        const k = step === 3 ? m : l;
+        return [open(0, k, about(k))].concat(darkFrames(k, st, false), [chip(1)], lightFrames(k, st, false), [chip(2)], wholeFrames(k, st, false));
+      }
+      const F = [open(3, null, `${up(MB.join(XREST.map(the)))}: ${XREST.every((k) => XN[k].n === 1 && !XN[k].t) ? "1 dot each, no tap." : "their bars."}`)];
+      XREST.forEach((k) => { st[k] = whole(k); });
+      const same = XREST.every((k) => XN[k].s === XN[XREST[0]].s && XN[k].e === XN[XREST[0]].e);
+      F.push({ ms: 1500, p: { board: xboard(Object.assign({}, st), {}), line: same ? `${EQE(dec(XN[XREST[0]].e))} + ${EQB(dec(XN[XREST[0]].b))} = ${dec(XN[XREST[0]].s)} each.` : MB.join(XREST.map((k) => `${the(k)} ${dec(XN[k].s)}`)) + "." } });
+      st[XLEAD] = Object.assign(whole(XLEAD), { best: true });
+      F.push({ ms: 1700, p: { board: xboard(Object.assign({}, st), {}), line: `The longest bar: ${the(XLEAD)}, ${dec(XN[XLEAD].s)}.` } });
+      F.push({ ms: 1000, p: { mid: `Morning ${XT + 1}` }, fx: (A) => A.fly(`.mb-row[data-k="${XLEAD}"] .mb-prod`, ".mv-cin .glass", MB.tile(PR[XLEAD], "md"), { ms: 820, s2: 0.75 }) });
+      F.push({ ms: 1200, p: { cin: MB.mvCin(XLEAD, null, true), line: `The longest bar: ${the(XLEAD)}, ${dec(XN[XLEAD].s)}. The mirror shows it on morning ${XT + 1}.` } });
+      return F;
+    }
+  });
+
   const scenes = [
+    {
+      key: "ucb-bars", title: "The dark bar and the light bar", steps: 6,
+      render(el, step) { BARS.render(el, step); }
+    },
     {
       key: "ucb-idea", title: "A bonus for exploring", steps: 3,
       render(el, step) { MOVIE.render(el, step); }
