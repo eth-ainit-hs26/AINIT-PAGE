@@ -1075,6 +1075,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* YOUR TURN's card (2026-11-11, Carlos's seventeenth message): a section card's look, a kicker, the title, one line, the
    motif: Ida's two numbers times Paddington's */
 .s2-ycard .act-title{font-size:clamp(40px, 8vh, 68px)}
+/* On a phone the motif needs two lines (about 540 px on one): Ida's two numbers and the times sign, then Paddington's
+   two numbers, so that neither pair is cut in two (2026-11-12) */
+@media (max-width: 739px){
+  .s2-ycard .act-motif{row-gap:4px}
+  .s2-ycard .act-motif::after{content:""; flex-basis:100%; height:0; order:1}
+  .s2-ycard .act-motif > :nth-child(n+5){order:2}
+}
 </style>
 </head>
 <body>
@@ -5765,7 +5772,7 @@ button.chip:hover{border-color:var(--rubric)}
       var card = el("div", "act-card s2-ycard");
       card.appendChild(el("p", "act-kicker", "Part two, your turn"));
       card.appendChild(el("p", "act-title", "Your turn"));
-      card.appendChild(el("p", "act-line", "One rating: Ida rated Paddington " + MF.num(MF.rating(S2.corner[0], S2.corner[1])) +
+      card.appendChild(el("p", "act-line", "One rating: Ida rated Paddington\u00a0" + MF.num(MF.rating(S2.corner[0], S2.corner[1])) +
                           ". Guess Ida's two numbers and Paddington's two, then make the loss small yourself, one number at a time."));
       var m = el("div", "act-motif");
       [MF.chip(MF.get(S2.corner[0])), N.slot(), N.slot(), el("span", "act-op", "×"), N.slot(), N.slot(), MF.chip(MF.get(S2.corner[1]))]
