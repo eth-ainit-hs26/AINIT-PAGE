@@ -487,7 +487,6 @@ export const weekends: Weekend[] = [
           { label: 'Nearest neighbors, cold intro', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
           { label: 'Once Upon a Video Store', url: viz(2, 'video-store') },
           { label: 'Business cases, Etsy and Airbnb', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors-handout.pdf') },
         ],
       },
       { 
@@ -516,7 +515,6 @@ export const weekends: Weekend[] = [
           { label: 'Matchmaker part three, the whole picture', url: viz(2, 'matchmaker-part-3') },
           { label: 'Matchmaker optional part, gradient descent up close', url: viz(2, 'matchmaker-optional') },
           { label: 'Business case, Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization-handout.pdf') },
           {
             label: 'Lecture notes, nearest neighbors and matrix factorization',
             url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
@@ -545,7 +543,6 @@ export const weekends: Weekend[] = [
           { label: 'Bandits, cold intro', url: deck(2, 'ainit-hs26-bandits-cold-intro.pdf') },
           { label: 'Once Upon a Mirror', url: viz(2, 'mirror') },
           { label: "Business cases, Spotify's home page and Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-bandits-handout.pdf') },
         ],
       },
       { 
@@ -576,7 +573,6 @@ export const weekends: Weekend[] = [
           { label: 'Handout', url: deck(2, 'ainit-hs26-computing-clusters-handout.pdf') },
           { label: 'Matchmaker on a Grid', url: viz(2, 'matchmaker-grid') },
           { label: "Business case, LinkedIn's ads", url: deck(2, 'ainit-hs26-business-cases-parallelized-mf.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-parallelized-mf-handout.pdf') },
         ],
       },
     ],
@@ -599,7 +595,6 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Large-scale computing', url: SOON },
       { group: 'Lecture slides', label: 'Guest lecture: Joachim M. Buhmann', url: SOON },
       { group: 'Business cases', label: 'All six cases', url: deck(2, 'ainit-hs26-business-cases.pdf') },
-      { group: 'Business cases', label: 'All six cases (Handout)', url: deck(2, 'ainit-hs26-business-cases-handout.pdf') },
       { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb')},
       { group: 'Coding exercises', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
       { group: 'Coding exercises', label: 'Matrix factorization (Part 3+4 (Optional))', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
@@ -624,7 +619,8 @@ export const weekends: Weekend[] = [
       file: 'ainit-hs26-weekend-2.zip',
       note: 'Slides, games, lecture notes and the semester cheat sheet, numbered as on this page, the handouts in a folder of their own. The games open the coding exercises in Colab.',
       // The combined case deck repeats the four block decks: it stays in the Materials list without a number, and out of the ZIP.
-      extras: [deck(2, 'ainit-hs26-business-cases.pdf'), deck(2, 'ainit-hs26-business-cases-handout.pdf')],
+      // No handouts of the business cases since 2026-11-11 (Carlos: "Remove also the handouts for the business cases").
+      extras: [deck(2, 'ainit-hs26-business-cases.pdf')],
     },
   },
   {
