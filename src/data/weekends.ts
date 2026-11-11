@@ -174,7 +174,6 @@ export const weekends: Weekend[] = [
         // note on the schedule facts above.
         links: [
           { label: 'Opening slides', url: deck(1, 'ainit-hs26-cold-intro.pdf') },
-          { label: 'Opening handout', url: deck(1, 'ainit-hs26-cold-intro-handout.pdf') },
           { label: 'Introduction & administration slides', url: deck(1, 'ainit-hs26-introduction-and-administration.pdf') },
         ],
       },
@@ -380,9 +379,8 @@ export const weekends: Weekend[] = [
       // The opening of the course, "The Word, the Thought, the Power, the Act": four blocks, four voices,
       // one order. The official cold intro (the Title sequence, a dark film-titles look), built from
       // cold-intro/intro-slides in w1-lecture-material and published on 2026-10-14 at Carlos's
-      // instruction. The handout is one page per slide.
+      // instruction. No handout since 2026-11-11 (Carlos: "drop the handouts for all the cold intros").
       { group: 'Lecture slides', label: 'Course opening: the Word, the Thought, the Power, the Act', url: deck(1, 'ainit-hs26-cold-intro.pdf') },
-      { group: 'Lecture slides', label: 'Course opening (Handout)', url: deck(1, 'ainit-hs26-cold-intro-handout.pdf') },
       { group: 'Lecture slides', label: 'Course introduction and administration', url: deck(1, 'ainit-hs26-introduction-and-administration.pdf') },
       { group: 'Lecture slides', label: 'Language models with the Ge\'ez games', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games.pdf') },
       { group: 'Lecture slides', label: 'Language models with the Ge\'ez games (Handout)', url: deck(1, 'ainit-hs26-language-models-with-the-geez-games-handout.pdf') },
@@ -455,17 +453,19 @@ export const weekends: Weekend[] = [
     id: 'we2',
     number: 2,
     title: 'Representation Learning',
-    theme: 'Nearest neighbors, matrix factorization, bandits, and computing clusters',
+    theme: 'Nearest neighbors, matrix factorization, bandits, and large-scale computing',
     dates: '13–14 November 2026',
     startISO: '2026-11-13',
     fridayRoom: 'HG D 7.2',
     saturdayRoom: 'HG D 7.2',
     project: 'Recommender for online retail',
     summary:
-      'This weekend introduces representation learning through recommendation systems: the inner product and nearest neighbors, matrix factorization, and bandit algorithms, then matrix factorization on computing clusters. Guest lecture on Saturday.',
+      'This weekend introduces representation learning through recommendation systems: the inner product and nearest neighbors, matrix factorization, and bandit algorithms, then large-scale computing, from computing clusters to matrix factorization on many computers. Guest lecture on Saturday.',
     // Agenda from the Syllabus tab of the master spreadsheet, read on 2026-11-06 (Carlos's instruction that day),
-    // and his message of the same afternoon for Saturday: Buhmann from 09:00 to 12:00, the project intro at 12:00,
-    // the coding bazaar at 13:00. Each day's first row stays at 08:15, the Vorlesungsverzeichnis time (see the
+    // and his message of the same afternoon for Saturday: Buhmann from 09:00 to 12:00. His message of 2026-11-11:
+    // computing clusters (the Saturday 08:15 block until then) merged with parallelized matrix factorization into
+    // the Friday 16:00 block "Large-scale computing", the project intro at Saturday 08:15, the coding bazaar at
+    // 12:00, and no handouts for the cold intros. Each day's first row stays at 08:15, the Vorlesungsverzeichnis time (see the
     // schedule facts above), where the spreadsheet says 08:00; the break rows keep the programme office's venues.
     // The chips are the weekend's visualizations (pages in public/viz/we2/, copied from the private repository
     // eth-ainit-hs26/w2-cx-private; each game opens its own Colab notebooks) and the business cases (public/slides/we2/,
@@ -485,7 +485,6 @@ export const weekends: Weekend[] = [
         links: [
           { label: 'Semester cheat sheet', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
           { label: 'Nearest neighbors, cold intro', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-handout.pdf') },
           { label: 'Once Upon a Video Store', url: viz(2, 'video-store') },
           { label: 'Business cases, Etsy and Airbnb', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf') },
           { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors-handout.pdf') },
@@ -544,7 +543,6 @@ export const weekends: Weekend[] = [
         // three drafts (the fox, Graunt, Bernoulli) on 2026-11-11, for the course site.
         links: [
           { label: 'Bandits, cold intro', url: deck(2, 'ainit-hs26-bandits-cold-intro.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-bandits-cold-intro-handout.pdf') },
           { label: 'Once Upon a Mirror', url: viz(2, 'mirror') },
           { label: "Business cases, Spotify's home page and Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
           { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-bandits-handout.pdf') },
@@ -565,9 +563,17 @@ export const weekends: Weekend[] = [
       { time: '15:30', title: 'Coffee break at Polysnack, until 16:00', type: 'break' },
       {
         time: '16:00',
-        title: 'Parallelized matrix factorization',
+        title: 'Large-scale computing',
         type: 'lecture',
+        // Computing clusters and parallelized matrix factorization in one block (Carlos, 2026-11-11), in this order:
+        // the cold intro "Dividing a computation, 1793" (FDD's section of that name, from cold-intro-deck/ of the
+        // public repository eth-ainit-hs26/w2-recsys-bandits-lecture), the first block of FDD weekend 7 ported into
+        // Codex plates (clusters-deck/ of the same repository; both published at Carlos's instruction of 2026-11-10,
+        // on the Saturday 08:15 row until 2026-11-11), then the Grid and the case.
         links: [
+          { label: 'Large-scale computing, cold intro', url: deck(2, 'ainit-hs26-computing-clusters-cold-intro.pdf') },
+          { label: 'Computing clusters', url: deck(2, 'ainit-hs26-computing-clusters.pdf') },
+          { label: 'Handout', url: deck(2, 'ainit-hs26-computing-clusters-handout.pdf') },
           { label: 'Matchmaker on a Grid', url: viz(2, 'matchmaker-grid') },
           { label: "Business case, LinkedIn's ads", url: deck(2, 'ainit-hs26-business-cases-parallelized-mf.pdf') },
           { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-parallelized-mf-handout.pdf') },
@@ -575,26 +581,12 @@ export const weekends: Weekend[] = [
       },
     ],
     saturday: [
-      {
-        time: '08:15',
-        title: 'Computing clusters',
-        type: 'lecture',
-        // The first block of FDD weekend 7 ported into Codex plates, from clusters-deck/ of the public repository
-        // eth-ainit-hs26/w2-recsys-bandits-lecture, and its cold intro "Dividing a computation, 1793" (FDD's section
-        // of that name, from cold-intro-deck/ of the same repository), published at Carlos's instruction of 2026-11-10.
-        links: [
-          { label: 'Computing clusters, cold intro', url: deck(2, 'ainit-hs26-computing-clusters-cold-intro.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-computing-clusters-cold-intro-handout.pdf') },
-          { label: 'Computing clusters', url: deck(2, 'ainit-hs26-computing-clusters.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-computing-clusters-handout.pdf') },
-        ],
-      },
+      { time: '08:15', title: 'Project intro: Recommender for online retail', type: 'project' },
       { time: '09:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '10:00', title: 'Coffee break at HG E30.0075, until 10:30', type: 'break' },
       { time: '10:30', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '11:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
-      { time: '12:00', title: 'Project intro: Recommender for online retail', type: 'project' },
-      { time: '13:00', title: 'Coding bazaar', type: 'lab' },
+      { time: '12:00', title: 'Coding bazaar', type: 'lab' },
     ],
     // The Materials list. Every deck and visualization on the agenda is listed by the page itself, numbered, under
     // "Slides and visualizations" (src/lib/materials.ts), so it is not repeated here; a deck or visualization added
@@ -604,7 +596,7 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors', url: SOON },
       { group: 'Lecture slides', label: 'Matrix product and matrix factorization', url: SOON },
       { group: 'Lecture slides', label: 'Bandits', url: SOON },
-      { group: 'Lecture slides', label: 'Parallelized matrix factorization', url: SOON },
+      { group: 'Lecture slides', label: 'Large-scale computing', url: SOON },
       { group: 'Lecture slides', label: 'Guest lecture: Joachim M. Buhmann', url: SOON },
       { group: 'Business cases', label: 'All six cases', url: deck(2, 'ainit-hs26-business-cases.pdf') },
       { group: 'Business cases', label: 'All six cases (Handout)', url: deck(2, 'ainit-hs26-business-cases-handout.pdf') },

@@ -121,7 +121,7 @@ function check(weekend, lib) {
     if (!m.name.trim() || BAD_NAME.test(m.name)) {
       say(`the label "${m.name}" of ${m.url} cannot be a file name (no < > : " / \\ | ? *, no dot or space at the end); change the label`);
     } else if (GENERIC.test(m.name.trim())) {
-      say(`the label "${m.name}" of ${m.url} does not name the material, and it is the name of its file, "${m.fileName}"; name the material, for example "Computing clusters, cold intro"`);
+      say(`the label "${m.name}" of ${m.url} does not name the material, and it is the name of its file, "${m.fileName}"; name the material, for example "Large-scale computing, cold intro"`);
     }
     if (!existsSync(inPublic(m.url))) say(`"${m.name}" links ${m.url}, and public/${rel(m.url)} does not exist`);
     if (m.handout) {
