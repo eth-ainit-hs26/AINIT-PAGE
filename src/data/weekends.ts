@@ -474,7 +474,12 @@ export const weekends: Weekend[] = [
           { label: 'Cases: Etsy, Airbnb', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf') },
         ],
       },
-      { time: '09:00', title: 'Inner product and nearest neighbors', type: 'exercise' },
+      { 
+        time: '09:00', 
+        title: 'Inner product and nearest neighbors', 
+        type: 'exercise',
+        url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb'),
+      },
       {
         time: '10:00',
         title: 'Matrix product and matrix factorization',
@@ -495,7 +500,15 @@ export const weekends: Weekend[] = [
           { label: 'Case: Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
         ],
       },
-      { time: '12:00', title: 'Matrix factorization', type: 'exercise' },
+      { 
+        time: '12:00', 
+        title: 'Matrix factorization', 
+        type: 'exercise',
+        links: [
+          { label: "Part 1+2", url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
+          { label: "Part 3+4 (Optional)", url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
+        ]
+      },
       { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
       {
         time: '14:00',
@@ -506,7 +519,18 @@ export const weekends: Weekend[] = [
           { label: "Cases: Spotify's home page, Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
         ],
       },
-      { time: '15:00', title: 'Bandits', type: 'exercise' },
+      { 
+        time: '15:00', 
+        title: 'Bandits', 
+        type: 'exercise',
+        links: [
+          { label: "1) Estimates", url: colab('w2-cx-public', '03_cx_bandits_1_estimates_student.ipynb') },
+          { label: "2) Random", url: colab('w2-cx-public', '03_cx_bandits_2_random_student.ipynb') },
+          { label: "3) Explore-then-exploit", url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_student.ipynb') },
+          { label: "4) Epsilon-greedy", url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb') },
+          { label: "5) UCB", url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb') },
+        ]
+      },
       { time: '15:30', title: 'Coffee break at Polysnack, until 16:00', type: 'break' },
       {
         time: '16:00',
@@ -559,9 +583,14 @@ export const weekends: Weekend[] = [
       { group: 'Business cases', label: 'Matrix product and matrix factorization: Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
       { group: 'Business cases', label: "Bandits: Spotify's home page, Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
       { group: 'Business cases', label: "Parallelized matrix factorization: LinkedIn's ads", url: deck(2, 'ainit-hs26-business-cases-parallelized-mf.pdf') },
-      { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: SOON },
-      { group: 'Coding exercises', label: 'Matrix factorization', url: SOON },
-      { group: 'Coding exercises', label: 'Bandits', url: SOON },
+      { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb')},
+      { group: 'Coding exercises', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
+      { group: 'Coding exercises', label: 'Matrix factorization (Part 3+4 (Optional))', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Estimates', url: colab('w2-cx-public', '03_cx_bandits_1_estimates_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Random', url: colab('w2-cx-public', '03_cx_bandits_2_random_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Explore-then-exploit', url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Epsilon-greedy', url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: UCB', url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb') },
       { group: 'Visualizations', label: 'Once Upon a Video Store (game)', url: viz(2, 'video-store') },
       { group: 'Visualizations', label: 'Matchmaker, part one: matrix multiplication', url: viz(2, 'matchmaker-part-1') },
       { group: 'Visualizations', label: 'Matchmaker, part two: matrix factorization', url: viz(2, 'matchmaker-part-2') },
@@ -571,7 +600,7 @@ export const weekends: Weekend[] = [
       { group: 'Visualizations', label: 'Matchmaker on a Grid (visualization)', url: viz(2, 'matchmaker-grid') },
       { group: 'Project', label: 'Recommender for online retail: project description', url: SOON },
       { group: 'Project', label: 'Recommender for online retail: Colab notebook', url: SOON },
-      { group: 'Project', label: 'Recommender for online retail: grading scheme', url: SOON },
+      // { group: 'Project', label: 'Recommender for online retail: grading scheme', url: SOON },
     ],
   },
   {
@@ -618,7 +647,7 @@ export const weekends: Weekend[] = [
       { group: 'Coding exercises', label: 'SARSA', url: SOON },
       { group: 'Project', label: 'RL vehicle routing: project description', url: SOON },
       { group: 'Project', label: 'RL vehicle routing: Colab notebook', url: SOON },
-      { group: 'Project', label: 'RL vehicle routing: grading scheme', url: SOON },
+      // { group: 'Project', label: 'RL vehicle routing: grading scheme', url: SOON },
     ],
   },
 ];
