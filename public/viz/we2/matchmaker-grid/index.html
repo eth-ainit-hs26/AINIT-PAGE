@@ -74,6 +74,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .words b{font-weight:600}
 .words .rub{color:var(--rubric)}
 .words .och{color:var(--ochre)}
+.words .nw{white-space:nowrap}   /* a worked formula stays on one line */
 
 /* number cells: the colour of their matrix (data-m: u customers' numbers, v films' numbers, p predictions,
    r ratings, l losses), the shade of their slice (data-s: 0 light, 1 medium, 2 strong) */
@@ -182,7 +183,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .cutx{position:absolute; z-index:4}
 .n.tried{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--green)}
 .n.moved{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--ochre)}
-/* the grasshopper's what-if, beside B2: the number, the average loss, the slope, the new number */
+/* the grasshopper's what-if, beside B2: the number, the total loss, the slope, the new number */
 .wif{position:absolute; left:100%; top:0; margin-left:14px; display:grid; grid-template-columns:auto auto; gap:3px 10px; align-items:center;
   padding:6px 11px; border:1.5px solid var(--green); border-radius:10px; background:var(--leaf); font-size:13px; white-space:nowrap}
 .wif .lab{font-size:12px; font-style:italic; color:var(--muted)}
@@ -222,9 +223,9 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .ctl .btn{font-style:normal; min-width:84px}
 .grid3 .kA{justify-self:end}
 .grid3 .kB{align-self:end; justify-self:start}
-.avg{align-self:end; justify-self:center; display:flex; flex-direction:column; align-items:center; gap:4px; padding-bottom:6px}
-.avg .cap{font-size:13px; font-style:italic; color:var(--muted); white-space:nowrap}
-.avg .ring{min-width:74px; height:44px; padding:0 10px; display:grid; place-items:center; border:4px double var(--rubric); border-radius:999px;
+.tot{align-self:end; justify-self:center; display:flex; flex-direction:column; align-items:center; gap:4px; padding-bottom:6px}
+.tot .cap{font-size:13px; font-style:italic; color:var(--muted); white-space:nowrap}
+.tot .ring{min-width:74px; height:44px; padding:0 10px; display:grid; place-items:center; border:4px double var(--rubric); border-radius:999px;
   background:var(--leaf); color:var(--loss); font-size:20px; font-weight:700; font-variant-numeric:lining-nums tabular-nums}
 .gauge i{border:1px solid var(--rule); border-radius:1.5px}
 .gauge i.on{background:var(--muted); border-color:var(--muted)}
@@ -904,7 +905,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
 
   /* SLIDES 3 and 4 share one board: the A computers (customers' slices) on the left, the B computers (films'
-     slices) on top, the C computers (blocks of ratings) in between, the average loss in the corner. Slide 3 ends on
+     slices) on top, the C computers (blocks of ratings) in between, the total loss in the corner. Slide 3 ends on
      the board with which slide 4 begins. */
   function wordsRow(ctx) {
     var head = ctx.root.appendChild(el("div", { class: "wordsrow" }));
@@ -915,8 +916,8 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     ctx.box = ctx.root.appendChild(el("div", { class: "fitbox" }));
     ctx.fitin = ctx.box.appendChild(el("div", { class: "fitin" }));
     var g = ctx.grid = ctx.fitin.appendChild(el("div", { class: "grid3" }));
-    ctx.avg = g.appendChild(el("div", { class: "avg" }, [el("div", { class: "cap", text: "average loss" }), el("div", { class: "ring" })]));
-    ctx.ringEl = ctx.avg.lastChild;
+    ctx.tot = g.appendChild(el("div", { class: "tot" }, [el("div", { class: "cap", text: "total loss" }), el("div", { class: "ring" })]));
+    ctx.ringEl = ctx.tot.lastChild;
     ctx.B = [0, 1, 2].map(function (bj) {
       var b = panel("B", [], blockCols(bj));
       b.label.textContent = "B" + (bj + 1);
@@ -1259,7 +1260,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     ctx.hdrR.forEach(function (e) { e.classList.toggle("off", k !== 0); });
     ctx.hdrF.forEach(function (e) { e.classList.toggle("off", k !== 3); });
     ctx.cutR.concat(ctx.cutF).forEach(function (e) { e.classList.remove("on"); });
-    ctx.avg.style.visibility = "hidden";
+    ctx.tot.style.visibility = "hidden";
   }
   var ANIM2 = [
     function (ctx, token) { state2(ctx, -1); wait(80, token).then(function () { state2(ctx, 0); }, function () {}); },
@@ -1374,23 +1375,24 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   }
 
   /* the what-if of steps 8 to 10: one number of one B computer (data.js: hop), a hop of eps, the slope, the move */
-  function avgLoss(U, V) {
+  function totalLoss(U, V) {
+    // the loss of a guess: the TOTAL of the 36 squared differences since 2026-11-11 (their average until then)
     var t = 0;
     for (var i = 0; i < N; i++) for (var j = 0; j < N; j++) t += Math.pow(G.R[i][j] - (U[i][0] * V[j][0] + U[i][1] * V[j][1]), 2);
-    return t / (N * N);
+    return t;
   }
   var HOP = { film: G.hop.film, k: G.hop.k, bj: Math.floor(G.hop.film / 2), j: G.hop.film % 2 };
   var V1 = G.V0.map(function (r) { return r.slice(); });
   V1[HOP.film][HOP.k] = Math.round((V1[HOP.film][HOP.k] + G.eps) * 1e9) / 1e9;
-  var W = { x0: G.V0[HOP.film][HOP.k], x1: V1[HOP.film][HOP.k], a0: avgLoss(G.U0, G.V0), a1: avgLoss(G.U0, V1) };
-  W.slope = (W.a1 - W.a0) / G.eps;
+  var W = { x0: G.V0[HOP.film][HOP.k], x1: V1[HOP.film][HOP.k], l0: totalLoss(G.U0, G.V0), l1: totalLoss(G.U0, V1) };
+  W.slope = (W.l1 - W.l0) / G.eps;
   W.next = W.x0 - G.alpha * W.slope;
   var VNEXT = G.V0.map(function (r) { return r.slice(); });
   VNEXT[HOP.film][HOP.k] = W.next;
   var HOPNAME = FILMS[HOP.film].t + (/s$/.test(FILMS[HOP.film].t) ? "' " : "'s ") + (HOP.k === 0 ? "first" : "second") + " number";
   var COLC = "C1" + (HOP.bj + 1) + ", C2" + (HOP.bj + 1) + " and C3" + (HOP.bj + 1);
 
-  /* step 11: the run. RUN[r] holds both tables and the average loss after r rounds (r = 0 to G.play). A round as in
+  /* step 11: the run. RUN[r] holds both tables and the total loss after r rounds (r = 0 to G.play). A round as in
      tools/make_data.py: every number's slope from a hop of eps at the same guess (in closed form, equal to the hop),
      then every number moves at once to x - alpha * slope. */
   function slopesAt(U, V) {
@@ -1398,39 +1400,39 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     for (var i = 0; i < N; i++) su.push([0, 1].map(function (k) {
       var t = 0;
       for (var j = 0; j < N; j++) t += -2 * V[j][k] * (G.R[i][j] - P[i][j]) + G.eps * V[j][k] * V[j][k];
-      return t / (N * N);
+      return t;
     }));
     for (var j2 = 0; j2 < N; j2++) sv.push([0, 1].map(function (k) {
       var t = 0;
       for (var i2 = 0; i2 < N; i2++) t += -2 * U[i2][k] * (G.R[i2][j2] - P[i2][j2]) + G.eps * U[i2][k] * U[i2][k];
-      return t / (N * N);
+      return t;
     }));
     return { u: su, v: sv };
   }
   var RUN = (function () {
-    var U = G.U0, V = G.V0, out = [{ U: U, V: V, avg: avgLoss(U, V) }];
+    var U = G.U0, V = G.V0, out = [{ U: U, V: V, loss: totalLoss(U, V) }];
     for (var r = 1; r <= G.play; r++) {
       var s = slopesAt(U, V);
       U = U.map(function (u, i) { return u.map(function (x, k) { return x - G.alpha * s.u[i][k]; }); });
       V = V.map(function (v, j) { return v.map(function (x, k) { return x - G.alpha * s.v[j][k]; }); });
-      out.push({ U: U, V: V, avg: avgLoss(U, V) });
+      out.push({ U: U, V: V, loss: totalLoss(U, V) });
     }
     return out;
   })();
-  function fmtAvg(a) { return num(a, a < 0.1 ? 4 : 2); }
-  function roundText(r) { return "round " + r + " of " + G.play + (r === G.play ? ": the average loss stops falling" : ""); }
+  function fmtLoss(a) { return num(a, a < 0.1 ? 4 : 2); }
+  function roundText(r) { return "round " + r + " of " + G.play + (r === G.play ? ": the total loss stops falling" : ""); }
   var CH = { w: 186, h: 90, x0: 32, x1: 176, y0: 20, y1: 68 };
   function chartX(t) { return CH.x0 + (CH.x1 - CH.x0) * t / G.play; }
-  function chartY(a) { return CH.y1 - (CH.y1 - CH.y0) * a / RUN[0].avg; }
+  function chartY(a) { return CH.y1 - (CH.y1 - CH.y0) * a / RUN[0].loss; }
   function buildChart() {
     var box = el("div", { class: "chart" });
-    var s = svgEl("svg", { viewBox: "0 0 " + CH.w + " " + CH.h, width: CH.w, height: CH.h, "aria-label": "average loss, round by round" });
+    var s = svgEl("svg", { viewBox: "0 0 " + CH.w + " " + CH.h, width: CH.w, height: CH.h, "aria-label": "total loss, round by round" });
     box.appendChild(s);
     function txt(x, y, t, cls, anchor) { svgEl("text", { x: x, y: y, "text-anchor": anchor || "start" }, s, cls).textContent = t; }
-    txt(CH.x0, 13, "average loss", "ct");
+    txt(CH.x0, 13, "total loss", "ct");
     svgEl("line", { x1: CH.x0, y1: CH.y1, x2: CH.x1, y2: CH.y1 }, s, "ax");
     svgEl("line", { x1: CH.x0, y1: CH.y0, x2: CH.x0, y2: CH.y1 }, s, "ax");
-    txt(CH.x0 - 4, CH.y0 + 3, num(RUN[0].avg, 2), "tk", "end");
+    txt(CH.x0 - 4, CH.y0 + 3, num(RUN[0].loss, 2), "tk", "end");
     txt(CH.x0 - 4, CH.y1 + 3, "0", "tk", "end");
     txt(CH.x0, CH.y1 + 14, "0", "tk", "middle");
     txt(CH.x1, CH.y1 + 14, String(G.play), "tk", "middle");
@@ -1439,10 +1441,10 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   }
   function chartAt(ch, r) {
     var pts = [];
-    for (var t = 0; t <= r; t++) pts.push(chartX(t).toFixed(1) + "," + chartY(RUN[t].avg).toFixed(1));
+    for (var t = 0; t <= r; t++) pts.push(chartX(t).toFixed(1) + "," + chartY(RUN[t].loss).toFixed(1));
     ch.line.setAttribute("points", pts.join(" "));
     ch.dot.setAttribute("cx", chartX(r).toFixed(1));
-    ch.dot.setAttribute("cy", chartY(RUN[r].avg).toFixed(1));
+    ch.dot.setAttribute("cy", chartY(RUN[r].loss).toFixed(1));
   }
   function paren(x, d) { var t = num(x, d); return x < 0 ? "(" + t + ")" : t; }
 
@@ -1453,17 +1455,17 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     "<b>1.</b> Every A computer sends a copy of its numbers to the 3 C computers of its row.",
     "<b>2.</b> Every B computer sends a copy of its numbers to the 3 C computers of its column.",
     "<b>3.</b> Every C computer multiplies its two copies: its 4 predictions.",
-    "<b>4.</b> Every C computer computes its 4 losses and their sum. The nine sums divided by 36 give the average loss.",
+    "<b>4.</b> Every C computer computes its 4 losses and their sum. The nine sums add up to the total loss.",
     "<b>5.</b> One grasshopper on B" + (HOP.bj + 1) + " tries a small change of " + HOPNAME + ": from " +
       num(W.x0) + " to " + num(W.x1) + ".",
     "Only the C computers of B" + (HOP.bj + 1) + "'s column use that number: " + COLC + ". Each gets the new copy and " +
       "recomputes 2 predictions, 2 losses and its sum. The other computers wait.",
-    "The three new sums go to B" + (HOP.bj + 1) + ". With the six other sums unchanged, the average loss goes from " +
-      num(W.a0, 2) + " to " + num(W.a1, 4) + ".",
-    "<b>6.</b> The slope: the change of the loss divided by the change of the number, (" + num(W.a1, 4) + " " + MINUS + " " +
-      num(W.a0, 2) + ") / " + num(G.eps) + " = " + num(W.slope, 2) + ".",
-    "<b>7.</b> B" + (HOP.bj + 1) + " moves the number against the slope, " + num(G.alpha) + " times the slope: " + num(W.x0) + " " +
-      MINUS + " " + num(G.alpha) + " " + TIMES + " " + paren(W.slope, 2) + " = " + num(W.next, 2) + ". " + COLC +
+    "The three new sums go to B" + (HOP.bj + 1) + ". With the six other sums unchanged, the total loss goes from " +
+      num(W.l0, 2) + " to " + num(W.l1, 4) + ".",
+    "<b>6.</b> The slope: the change of the loss divided by the change of the number, <span class=\"nw\">(" + num(W.l1, 4) + " " + MINUS + " " +
+      num(W.l0, 2) + ") / " + num(G.eps) + " = " + num(W.slope, 2) + ".</span>",
+    "<b>7.</b> B" + (HOP.bj + 1) + " moves the number against the slope, " + num(G.alpha, 3) + " times the slope: <span class=\"nw\">" + num(W.x0) + " " +
+      MINUS + " " + num(G.alpha, 3) + " " + TIMES + " " + paren(W.slope, 2) + " = " + num(W.next, 2) + ".</span> " + COLC +
       " go back to the old copy, " + num(W.x0) + ".",
     "<b>8.</b> Round after round: every number of A and B does its what-if and moves, the copies go out, the C computers " +
       "predict. The predictions come close to the ratings."
@@ -1472,7 +1474,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     "Only one column", "The loss before and after", "The slope", "The update", "The run"];
   var ORDER = [[0, 0], [0, 1], [1, 0], [1, 1]];
   function eachC(ctx, f) { for (var bi = 0; bi < 3; bi++) for (var bj = 0; bj < 3; bj++) f(ctx.C[bi][bj], bi, bj); }
-  function avgOf(ctx) { var t = 0; eachC(ctx, function (c) { t += c.total; }); return t / 36; }
+  function totalOf(ctx) { var t = 0; eachC(ctx, function (c) { t += c.total; }); return t; }
   function popEl(e) {
     if (reduced()) return;
     e.animate([{ transform: "scale(.5)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: 0.7 }, { transform: "scale(1)", opacity: 1 }],
@@ -1503,7 +1505,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
       ctx.wif = b2.box.appendChild(el("div", { class: "wif" }));
       ctx.wifRows = [
         ["number", [num(W.x0), ARROW, num(W.x1)], ""],
-        ["average loss", [num(W.a0, 2), ARROW, num(W.a1, 4)], "loss"],
+        ["total loss", [num(W.l0, 2), ARROW, num(W.l1, 4)], "loss"],
         ["slope", [num(W.slope, 2)], "sl"],
         ["new number", [num(W.next, 2)], "mv"]
       ].map(function (r) {
@@ -1523,7 +1525,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
       ctx.words.innerHTML = WORDS3[step];
       ctx.B.forEach(function (b, bj) {
         var mine = bj === HOP.bj;
-        b.extra = mine ? (k >= 10 ? 4 : k >= 9 ? 3 : k >= 7 ? 1 : 0) : 0;   // B2 keeps the old number, the two averages, the slope
+        b.extra = mine ? (k >= 10 ? 4 : k >= 9 ? 3 : k >= 7 ? 1 : 0) : 0;   // B2 keeps the old number, the two totals, the slope
         fillPanel(b, U, mine && k >= 7 ? (k >= 11 ? VNEXT : V1) : V, { B: true });
         bandsP(b, [], mine && k >= 7 && k <= 10 ? [HOP.j] : []);
       });
@@ -1537,8 +1539,8 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
       });
       dimOthers(ctx, k >= 7 && k <= 10);     // B2 and its column play the what-if; the update (k 11) ends with all back
       ctx.box.classList.toggle("cam", k >= 7 && k <= 11);
-      ctx.avg.style.visibility = k >= 6 ? "" : "hidden";
-      ctx.ringEl.textContent = num(trial ? W.a0 : avgOf(ctx), 2);     // the what-if leaves the average loss as it was
+      ctx.tot.style.visibility = k >= 6 ? "" : "hidden";
+      ctx.ringEl.textContent = num(trial ? W.l0 : totalOf(ctx), 2);     // the what-if leaves the total loss as it was
       ctx.ringEl.style.visibility = "";
       ctx.k = k;
       ctx.hop.style.visibility = k >= 7 && k <= 11 ? "" : "hidden";
@@ -1578,7 +1580,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     hopCell(ctx).classList.add("moved");
     ctx.A.forEach(function (a) { fillPanel(a, G.U0, G.V0, { A: true }); bandsP(a, [], []); });
     eachC(ctx, function (c) { fillPanel(c, G.U0, G.V0, FULL); bandsP(c, [], []); });
-    ctx.ringEl.textContent = fmtAvg(RUN[0].avg);
+    ctx.ringEl.textContent = fmtLoss(RUN[0].loss);
     chartAt(ctx.chart, 0);
     ctx.roundEl.textContent = roundText(0);
     runButton(ctx);
@@ -1588,7 +1590,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
     ctx.B.forEach(function (b) { fillPanel(b, st.U, st.V, { B: true }); });
     ctx.A.forEach(function (a) { fillPanel(a, st.U, st.V, { A: true }); });
     eachC(ctx, function (c) { fillPanel(c, st.U, st.V, FULL); });
-    ctx.ringEl.textContent = fmtAvg(st.avg);
+    ctx.ringEl.textContent = fmtLoss(st.loss);
     chartAt(ctx.chart, r);
     ctx.roundEl.textContent = roundText(r);
   }
@@ -1666,7 +1668,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
         eachC(ctx, function (c, bi, bj) { fly(c.sum, ctx.ringEl, 800, 90 * (3 * bi + bj), token, landed, true); });
       });
     }).then(function () {
-      ctx.ringEl.textContent = fmtAvg(s1.avg);
+      ctx.ringEl.textContent = fmtLoss(s1.loss);
       popEl(ctx.ringEl);
       chartAt(ctx.chart, 1);
       ctx.roundEl.textContent = roundText(1);
@@ -1791,7 +1793,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   }
   function whenAll(n, f) { var left = n; return function () { if (--left === 0) f(); }; }
   function sumsToB(ctx) {
-    // the three new sums fly to B2's what-if: the average loss after the change
+    // the three new sums fly to B2's what-if: the total loss after the change
     var token = ctx.token, r = ctx.wifRows[1];
     rowOn(r, false);
     var landed = whenAll(3, function () { rowOn(r, true); popEl(r.v); });

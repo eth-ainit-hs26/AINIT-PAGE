@@ -1343,14 +1343,19 @@ button.chip:hover{border-color:var(--rubric)}
   // `start` is the first guess of the board (Carlos's sketch of 2026-11-05), one row per customer and per film over the
   // two DIMS. Ida -1 -2 and Paddington -1 2 were chosen for the corner of the earlier version (prediction -3 against
   // the rating 2, loss 25); the other six numbers were drawn with Python's random.Random(2026).randint(-2, 2): Raj -2 0,
-  // Elsa 2 2, The Martian -2 -1. Predictions -3 4 / 2 4 / 2 -6, losses 25 9 / 9 4 / 1 16, average 32/3 (10.67).
-  // The descent of part two (MF.Z, nudge-math.js): one number at a time, the average loss before and after adding eps,
-  // the number moved by alpha times the change of the average over eps, against it. The Martian's second number, -1:
-  // the average 10.6667 before, 10.6201 after -0.99, so it goes up to -0.5347 and the average falls to 8.7838. Every
-  // number in turn, the customers' rows first, is a round: below tol after 99 rounds. alpha 0.1 is the largest of 0.1,
-  // 0.15 and 0.2 with which the participant's corner never lets the loss grow when the right way is chosen (0.15 does
-  // from 40 of the 625 keypad guesses, 0.2 from 188); cornerTol is where the corner counts as done (from 624 of the 625
-  // keypad guesses, in 5 moves at the median and 30 at most; the guess of four zeros cannot move).
+  // Elsa 2 2, The Martian -2 -1. Predictions -3 4 / 2 4 / 2 -6, losses 25 9 / 9 4 / 1 16, their total 64. The loss of a
+  // guess is the TOTAL of its ratings' losses since 2026-11-11 (Carlos: "replace ... the average loss with the total
+  // loss so that we stay consistent with the literature"; the average, 32/3, until then).
+  // The descent of part two (MF.Z, nudge-math.js): one number at a time, the total loss before and after adding eps,
+  // the number moved by alpha times the change of the total over eps, against it. The Martian's second number, -1:
+  // the total 64 before, 63.7208 after -0.99, so it goes up to -0.4416 and the total falls to 50.8593. Every number in
+  // turn, the customers' rows first, is a round: below tol (0.001) after 77 rounds, below 1, 0.1 and 0.01 after rounds
+  // 18, 35 and 56; no round raises the total. alpha 0.02 is section 3's step size; on the total the old 0.1 overshoots
+  // (The Martian's second would jump to 1.79). The descent cannot get the total below about 0.0003, because a hop of eps
+  // measures each slope a little off, so tol is 0.001. The participant's corner (one rating, its total is its loss)
+  // keeps the hidden cornerAlpha 0.1: the right choice never lets the loss grow (0.15 does from 40 of the 625 keypad
+  // guesses, 0.2 from 188); cornerTol is where the corner counts as done (from 624 of the 625 keypad guesses, in 5
+  // moves at the median and 30 at most; the guess of four zeros cannot move).
   // ../tools/check_s2.js asserts these numbers.
   var S2 = {
     people: ["ida", "raj", "elsa"],
@@ -1363,8 +1368,9 @@ button.chip:hover{border-color:var(--rubric)}
     },
     nudge: ["f", 1, 1],                       // the number of the worked example: The Martian's second number
     eps: 0.01,
-    alpha: 0.1,
-    tol: 0.0001,
+    alpha: 0.02,
+    tol: 0.001,
+    cornerAlpha: 0.1,
     cornerTol: 0.01,
     // A start where hops of one whole unit get stuck, kept for the optional section 3: Ida -3 -3 and Paddington -3 2
     // predict 3 against the rating 2, loss 1, and every hop of 1 on any of the four numbers makes the loss bigger
@@ -1390,24 +1396,26 @@ button.chip:hover{border-color:var(--rubric)}
   };
 
   // Section 4: many customers, many films. The first guess is section 2's (S2.start). The column is Ida, Raj and Elsa
-  // with `film` alone (three ratings); the table is both films (six ratings). The loss of a table is the AVERAGE of
-  // the squared differences over its known ratings (Carlos: "we aggregate all these losses by computing the
-  // average"). Every number moves against the slope of that average, all at once, by alpha times its slope. The slope
-  // of a number is the average, over the ratings, of what each rating alone gives it: -2 times the partner times the
-  // difference when the rating contains the number (section 3's rule), 0 when it does not. MF.T (table-math.js) does
-  // the arithmetic; notebook/data.py holds the same numbers (FILM4, ALPHA4, TOL4, MAX4) and asserts what they give:
-  // the column's losses 25, 9, 1 and their average 35/3, one step to 4.594, below tol after 13 steps; the table's
-  // average 32/3, one step to 1.966, below tol after 52 steps, the loss falling at every step of both runs.
+  // with `film` alone (three ratings); the table is both films (six ratings). The loss of a table is the TOTAL of the
+  // squared differences over its known ratings since 2026-11-11 (their average until then, Carlos: "we aggregate all
+  // these losses by computing the average"; on 2026-11-11: "replace ... the average loss with the total loss so that
+  // we stay consistent with the literature"). Every number moves against the slope of that total, all at once, by
+  // alpha times its slope. The slope of a number is the sum, over the ratings, of what each rating alone gives it: -2
+  // times the partner times the difference when the rating contains the number (section 3's rule), 0 when it does
+  // not. alpha is 0.02, part two's and section 3's. MF.T (table-math.js) does the arithmetic; notebook/data.py holds
+  // the same numbers (FILM4, ALPHA4, TOL4, MAX4) and asserts what they give: the column's losses 25, 9, 1 and their
+  // total 35, one step to 16.889, below tol after 41 steps; the table's total 64, one step to 19.681, below tol after
+  // 118 steps, the loss falling at every step of both runs.
   var S4 = {
     film: "paddington",
-    alpha: 0.2,
+    alpha: 0.02,
     tol: 0.0001,
     max: 1000                 // the most steps a run may take before it gives up (a few guesses get stuck at 5/6)
   };
 
   // Section 5's data is MF.S5, set by s5-data.js (loaded right after table-math.js): real ratings of 26 MovieLens
   // users for 20 films, every one known, and two runs of gradient descent on them (10 users and 12 films with 5
-  // numbers per row, then all of them with 8), each with its seeded first guess and the best possible average loss.
+  // numbers per row, then all of them with 8), each with its seeded first guess and the best possible loss.
   // The file is generated by ../tools/s5_movielens.py from MovieLens ml-latest-small and carries the dataset's
   // citation and licence conditions; ../tools/check_s5.js checks that MF.T.run in the browser equals the run there.
 
@@ -1677,7 +1685,7 @@ button.chip:hover{border-color:var(--rubric)}
     2: { kicker: "Section two", motif: "unknown",
          line: "In real life nobody fills in a profile. The Matchmaker sees only ratings, and has to find the numbers behind them." },
     3: { kicker: "Section three, optional", motif: "hop", optional: true, skipTo: 5, skip: "Skip sections 3 and 4",
-         line: "In part two each number moved against nabla, the slope of the average loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
+         line: "In part two each number moved against nabla, the slope of the total loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
     4: { kicker: "Section four, optional", motif: "many", optional: true, skipTo: 5, skip: "Skip to section 5",
          line: "One customer and one film were the warm-up. Now every customer and every film, all at once." },
     5: { kicker: "Section five", motif: "loop",
@@ -1690,9 +1698,9 @@ button.chip:hover{border-color:var(--rubric)}
   var COLAB_OPT = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/02_cx_matrix_factorization_optional_student.ipynb";
   var PYTHON = {
     1: { part: 1, url: COLAB, what: "Teach a computer to multiply two matrices: one score, then one row, then the whole table." },
-    2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their average." },
+    2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their total." },
     3: { part: 3, url: COLAB_OPT, optional: true, what: "Let the computer feel the slope with a tiny hop, then hop downhill: gradient descent." },
-    4: { part: 4, url: COLAB_OPT, optional: true, what: "The average loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
+    4: { part: 4, url: COLAB_OPT, optional: true, what: "The total loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
   };
   function introMotif(kind) {
     var N = window.MF && window.MF.N;
@@ -1946,8 +1954,9 @@ button.chip:hover{border-color:var(--rubric)}
       }
       var b = el("button", s.intro ? "intro" : s.python ? "py" : "", s.intro || s.python ? "" : String(s.num));
       b.type = "button";
-      b.title = s.intro ? ACT_NAMES[s.act] : s.title;
-      b.setAttribute("aria-label", s.intro ? ACT_NAMES[s.act] : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
+      // a card inside a section (s.card, part two's "Your turn" since 2026-11-11) is named by its own title
+      b.title = s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.title;
+      b.setAttribute("aria-label", s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
       b.addEventListener("click", function () { go(i, 0); });
       groups[s.act].appendChild(b);
       dots.push(b);
@@ -3737,7 +3746,11 @@ button.chip:hover{border-color:var(--rubric)}
         var ly = (Pp.body.t + Pp.body.b) / 2;
         paintArrow("pr", [[Pp.out.r + GAP, ly], [R.out.l - GAP, ly]], null);
       } else paintArrow("pr", null);
-      if (S && Pp && R) {
+      if (S && R && S.out.l > R.out.r + 12) {
+        // the losses on the right of the ratings (part two's desk layout since 2026-11-10): one arrow straight in
+        paintArrow("rs", run(R.out.r, S.out.l, R.body.cy), "r");
+        paintArrow("ps", null);
+      } else if (S && Pp && R) {
         var yj = (Math.max(Pp.out.b, R.out.b) + S.out.t) / 2;
         if (S.out.t - Math.max(Pp.out.b, R.out.b) > 14) {
           paintArrow("rs", [[Pp.body.cx, Pp.out.b + 3], [Pp.body.cx, yj], [R.body.cx, yj], [R.body.cx, R.out.b + 3]], null);

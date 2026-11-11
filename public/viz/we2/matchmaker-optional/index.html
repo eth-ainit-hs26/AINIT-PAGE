@@ -1252,7 +1252,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* MF.L, the table view of section 4 (loss.js). Owned by S4-A (BRIEF-s4.md, LOSS.md). Classes start with lv-.
    Since 2026-11-06 the parts stand in part two's textbook cross (M.cross, layout "textbook", MATRIX.md): the films'
    matrix turned above the predictions, the customers on their left, the ratings on the right of the predictions, the
-   losses under those two, the average loss in its double violet ring on the right of the losses; the desk and the
+   losses under those two, the total loss in its double violet ring on the right of the losses; the desk and the
    words beside or under it. One prediction as part one shows a score: the customer's row and the film's column
    outlined (an SVG over the cross), its worked line on the desk. Captions: the model in ink, the forward pass in
    violet (--g-fwd); the update in ochre (--g-move). */
@@ -1312,7 +1312,7 @@ button.chip:hover{border-color:var(--rubric)}
 @keyframes lv-moved{0%{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5px var(--g-move)} 70%{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5px var(--g-move)}
   100%{box-shadow:0 0 0 0 transparent}}
 
-/* the average loss in its ring */
+/* the total loss in its ring */
 .lv-avgp{display:grid; justify-items:center; gap:6px; align-self:center; padding:0 4px}
 .lv-avgcap{white-space:nowrap}
 .lv-ring{position:relative; display:grid; place-items:center; padding:6px 2px 2px}
@@ -1379,7 +1379,7 @@ button.chip:hover{border-color:var(--rubric)}
   .lv-room .mx.lv-guesses, .lv-room .mx.lv-predictions, .lv-room .mx.lv-ratings{--mx-py:5px}
   .lv-room .mx.lv-guesses .mx-ch, .lv-room .mx.lv-predictions .mx-ch, .lv-room .mx.lv-ratings .mx-ch{padding-bottom:6px}
 }
-/* Phones: the same stack, tighter; the average on the right of the losses for one film, under them for two (as in
+/* Phones: the same stack, tighter; the total on the right of the losses for one film, under them for two (as in
    part two); the desk under everything */
 @media (max-width: 560px){
   .lv-cross{--mx-xcg:8px; --mx-xrg:4px; --mx-xjoin:14px}
@@ -1458,7 +1458,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s4-showme{font-size:16px}
 .s4-showme[hidden]{display:none}
 
-/* the run: the step count, a trail of the averages, Pause and Play */
+/* the run: the step count, a trail of the total losses, Pause and Play */
 .s4-runrow{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px 22px}
 .s4-runrow[hidden]{display:none}
 .s4-count, .s4-trail{margin:0; display:inline-flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 2px}
@@ -1624,6 +1624,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s4d-trail{display:flex; flex-wrap:wrap; justify-content:center; gap:5px; max-width:960px}
 .s4d .nt-n.s4d-tc{--nt-w:58px; --nt-h:30px; --nt-fs:15px; border-radius:8px}
 .s4d .nt-n.s4d-tc.s4d-now{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--g-fwd, var(--rubric))}
+.s4d-tdots{align-self:center; color:var(--muted); font-size:17px; letter-spacing:.1em; padding:0 2px}
 
 @media (prefers-reduced-motion: reduce){
   .s4d-key .nt-n, .s4d-picking .s4d-tap .nt-n{transition:none}
@@ -1747,12 +1748,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Once Upon a Matchmaker: the shared base, owned by the main session.
    The scene engine (copied from Once Upon a Video Store), the data and the helpers that every section uses.
    Each agent's scenes live in their own file (sec1.js, ...) and register with MF.define; dev.html then calls
-   MF.start(). The engine adds a section card before sections 2 to 5 and a leaf "Your turn in Python" at the
-   end of sections 1 to 4 (PYTHON below), so agents never build those.
+   MF.start(). The engine adds a section card before sections 1 to 5 and a leaf "Your turn in Python" at the
+   end of sections 1 to 4 (PYTHON below), so agents never build those. Section 0 is the preface of part one
+   (sec0.js, since 2026-11-10): the cover and matrix factorization at a glance, with no card and no Python leaf.
 
    A scene:
      MF.define("key", {
-       act: 1,                       // the SECTION, 1 to 5 (the video store called them acts; `section: 1` works too);
+       act: 1,                       // the SECTION, 0 to 5 (the video store called them acts; `section: 1` works too);
                                      // scenes are shown section by section, in the order they were defined
                                      // (or in the order PLACE in this file lists them, as in section 3)
        title: "A newcomer",          // the heading of the leaf and the tooltip in the pager
@@ -1805,7 +1807,18 @@ button.chip:hover{border-color:var(--rubric)}
     { id: "paddington", t: "Paddington", short: "Paddington", y: 2014, g: "🐻", d: "#F3E0C7", sec: 2,
       sum: "A young bear from Peru travels to London, where the Brown family takes him in." },
     { id: "martian", t: "The Martian", short: "The Martian", y: 2015, g: "🥔", d: "#F7D2C4", sec: 2,
-      sum: "An astronaut left behind on Mars after a storm grows potatoes and works out how to stay alive until a rescue can reach him." }
+      sum: "An astronaut left behind on Mars after a storm grows potatoes and works out how to stay alive until a rescue can reach him." },
+    // Section 0, the preface of part one: five films that four customers rated, some of them.
+    { id: "jaws", t: "Jaws", short: "Jaws", y: 1975, g: "🦈", d: "#D6E8F7", sec: 0,
+      sum: "A great white shark attacks swimmers off a summer resort island, and the police chief goes to sea with a scientist and a shark hunter to kill it." },
+    { id: "toystory", t: "Toy Story", short: "Toy Story", y: 1995, g: "🤠", d: "#FFF0B8", sec: 0,
+      sum: "A cowboy doll is jealous when a space ranger toy becomes his boy's favourite, until the two are lost together and must find their way home." },
+    { id: "titanic", t: "Titanic", short: "Titanic", y: 1997, g: "🚢", d: "#CFE3F5", sec: 0,
+      sum: "A poor artist and a rich young woman fall in love on board the Titanic during its first voyage in 1912." },
+    { id: "jurassic", t: "Jurassic Park", short: "Jurassic Park", y: 1993, g: "🦖", d: "#D8EDD3", sec: 0,
+      sum: "Dinosaurs cloned for a theme park on an island break loose during a tour before the park opens." },
+    { id: "frozen", t: "Frozen", short: "Frozen", y: 2013, g: "⛄", d: "#E4D7F2", sec: 0,
+      sum: "A princess sets out with an ice harvester and a snowman to find her sister, whose magic has trapped their kingdom in an endless winter." }
   ];
 
   // Customers. n name, d tile colour, sec the section that introduces them.
@@ -1816,14 +1829,21 @@ button.chip:hover{border-color:var(--rubric)}
     // Section 2: three customers who filled in no profile; they only rated two films.
     { id: "ida",  n: "Ida",  d: "#D8EDD3", sec: 2 },
     { id: "raj",  n: "Raj",  d: "#E4D7F2", sec: 2 },
-    { id: "elsa", n: "Elsa", d: "#D6E8F7", sec: 2 }
+    { id: "elsa", n: "Elsa", d: "#D6E8F7", sec: 2 },
+    // Section 0, the preface of part one: four customers known only by their ratings.
+    { id: "ada",  n: "Ada",  d: "#E2E8C9", sec: 0 },
+    { id: "hugo", n: "Hugo", d: "#FFE1C6", sec: 0 },
+    { id: "nora", n: "Nora", d: "#F3E0C7", sec: 0 },
+    { id: "tom",  n: "Tom",  d: "#F7D2C4", sec: 0 }
   ];
 
   // Section 2: the two columns of a guessed embedding. Nobody filled in a profile, so these columns have no
   // names: they mean whatever the guessing makes of them. Drawn as numbered tiles; isAxis() is true for them.
+  // The preface (section 0) uses three: d3 is its own.
   var DIMS = [
     { id: "d1", t: "First number", short: "First", g: "①", d: "#EFE6D2", dim: true },
-    { id: "d2", t: "Second number", short: "Second", g: "②", d: "#EFE6D2", dim: true }
+    { id: "d2", t: "Second number", short: "Second", g: "②", d: "#EFE6D2", dim: true },
+    { id: "d3", t: "Third number", short: "Third", g: "③", d: "#EFE6D2", dim: true }
   ];
 
   // Every known number, row by row: V[row][column]. A customer's profile and a film's critic answers are rows
@@ -1842,6 +1862,21 @@ button.chip:hover{border-color:var(--rubric)}
     ida:  { paddington:  2, martian:  1 },
     raj:  { paddington: -1, martian:  2 },
     elsa: { paddington:  1, martian: -2 }
+  };
+
+  // Section 0, the preface of part one (sec0.js; Carlos, 2026-11-10): four customers rated some of five films. The
+  // right two tables of embeddings, three numbers each, are shown at once ("Here we cheat a bit"), and their product
+  // gives back every known rating and fills the six holes. Invented numbers from ../tools/s0_preface.py (seed
+  // 20261110): every number of the two tables is -1, 0 or 1, every number of their product between -2 and 2. The
+  // product, rows Ada, Hugo, Nora, Tom, columns Jaws, Toy Story, Titanic, Jurassic Park, Frozen, a hole in brackets:
+  //   Ada 0 [-2] -1 [1] -2  /  Hugo 1 [2] [2] -2 1  /  Nora -1 -2 -2 2 [-1]  /  Tom -2 1 [-1] 1 2
+  var S0 = {
+    people: ["ada", "hugo", "nora", "tom"],
+    films: ["jaws", "toystory", "titanic", "jurassic", "frozen"],
+    dims: ["d1", "d2", "d3"],
+    c: [[0, 1, 1], [1, -1, -1], [-1, 1, 1], [-1, -1, 0]],                    // one row per customer
+    f: [[1, 1, -1], [0, -1, -1], [1, 0, -1], [-1, 0, 1], [-1, -1, -1]],     // one row per film, drawn turned
+    holes: [[0, 1], [0, 3], [1, 1], [1, 2], [2, 4], [3, 2]]                  // [customer, film]: not rated
   };
 
   // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
@@ -1878,14 +1913,19 @@ button.chip:hover{border-color:var(--rubric)}
   // `start` is the first guess of the board (Carlos's sketch of 2026-11-05), one row per customer and per film over the
   // two DIMS. Ida -1 -2 and Paddington -1 2 were chosen for the corner of the earlier version (prediction -3 against
   // the rating 2, loss 25); the other six numbers were drawn with Python's random.Random(2026).randint(-2, 2): Raj -2 0,
-  // Elsa 2 2, The Martian -2 -1. Predictions -3 4 / 2 4 / 2 -6, losses 25 9 / 9 4 / 1 16, average 32/3 (10.67).
-  // The descent of part two (MF.Z, nudge-math.js): one number at a time, the average loss before and after adding eps,
-  // the number moved by alpha times the change of the average over eps, against it. The Martian's second number, -1:
-  // the average 10.6667 before, 10.6201 after -0.99, so it goes up to -0.5347 and the average falls to 8.7838. Every
-  // number in turn, the customers' rows first, is a round: below tol after 99 rounds. alpha 0.1 is the largest of 0.1,
-  // 0.15 and 0.2 with which the participant's corner never lets the loss grow when the right way is chosen (0.15 does
-  // from 40 of the 625 keypad guesses, 0.2 from 188); cornerTol is where the corner counts as done (from 624 of the 625
-  // keypad guesses, in 5 moves at the median and 30 at most; the guess of four zeros cannot move).
+  // Elsa 2 2, The Martian -2 -1. Predictions -3 4 / 2 4 / 2 -6, losses 25 9 / 9 4 / 1 16, their total 64. The loss of a
+  // guess is the TOTAL of its ratings' losses since 2026-11-11 (Carlos: "replace ... the average loss with the total
+  // loss so that we stay consistent with the literature"; the average, 32/3, until then).
+  // The descent of part two (MF.Z, nudge-math.js): one number at a time, the total loss before and after adding eps,
+  // the number moved by alpha times the change of the total over eps, against it. The Martian's second number, -1:
+  // the total 64 before, 63.7208 after -0.99, so it goes up to -0.4416 and the total falls to 50.8593. Every number in
+  // turn, the customers' rows first, is a round: below tol (0.001) after 77 rounds, below 1, 0.1 and 0.01 after rounds
+  // 18, 35 and 56; no round raises the total. alpha 0.02 is section 3's step size; on the total the old 0.1 overshoots
+  // (The Martian's second would jump to 1.79). The descent cannot get the total below about 0.0003, because a hop of eps
+  // measures each slope a little off, so tol is 0.001. The participant's corner (one rating, its total is its loss)
+  // keeps the hidden cornerAlpha 0.1: the right choice never lets the loss grow (0.15 does from 40 of the 625 keypad
+  // guesses, 0.2 from 188); cornerTol is where the corner counts as done (from 624 of the 625 keypad guesses, in 5
+  // moves at the median and 30 at most; the guess of four zeros cannot move).
   // ../tools/check_s2.js asserts these numbers.
   var S2 = {
     people: ["ida", "raj", "elsa"],
@@ -1898,8 +1938,9 @@ button.chip:hover{border-color:var(--rubric)}
     },
     nudge: ["f", 1, 1],                       // the number of the worked example: The Martian's second number
     eps: 0.01,
-    alpha: 0.1,
-    tol: 0.0001,
+    alpha: 0.02,
+    tol: 0.001,
+    cornerAlpha: 0.1,
     cornerTol: 0.01,
     // A start where hops of one whole unit get stuck, kept for the optional section 3: Ida -3 -3 and Paddington -3 2
     // predict 3 against the rating 2, loss 1, and every hop of 1 on any of the four numbers makes the loss bigger
@@ -1925,24 +1966,26 @@ button.chip:hover{border-color:var(--rubric)}
   };
 
   // Section 4: many customers, many films. The first guess is section 2's (S2.start). The column is Ida, Raj and Elsa
-  // with `film` alone (three ratings); the table is both films (six ratings). The loss of a table is the AVERAGE of
-  // the squared differences over its known ratings (Carlos: "we aggregate all these losses by computing the
-  // average"). Every number moves against the slope of that average, all at once, by alpha times its slope. The slope
-  // of a number is the average, over the ratings, of what each rating alone gives it: -2 times the partner times the
-  // difference when the rating contains the number (section 3's rule), 0 when it does not. MF.T (table-math.js) does
-  // the arithmetic; notebook/data.py holds the same numbers (FILM4, ALPHA4, TOL4, MAX4) and asserts what they give:
-  // the column's losses 25, 9, 1 and their average 35/3, one step to 4.594, below tol after 13 steps; the table's
-  // average 32/3, one step to 1.966, below tol after 52 steps, the loss falling at every step of both runs.
+  // with `film` alone (three ratings); the table is both films (six ratings). The loss of a table is the TOTAL of the
+  // squared differences over its known ratings since 2026-11-11 (their average until then, Carlos: "we aggregate all
+  // these losses by computing the average"; on 2026-11-11: "replace ... the average loss with the total loss so that
+  // we stay consistent with the literature"). Every number moves against the slope of that total, all at once, by
+  // alpha times its slope. The slope of a number is the sum, over the ratings, of what each rating alone gives it: -2
+  // times the partner times the difference when the rating contains the number (section 3's rule), 0 when it does
+  // not. alpha is 0.02, part two's and section 3's. MF.T (table-math.js) does the arithmetic; notebook/data.py holds
+  // the same numbers (FILM4, ALPHA4, TOL4, MAX4) and asserts what they give: the column's losses 25, 9, 1 and their
+  // total 35, one step to 16.889, below tol after 41 steps; the table's total 64, one step to 19.681, below tol after
+  // 118 steps, the loss falling at every step of both runs.
   var S4 = {
     film: "paddington",
-    alpha: 0.2,
+    alpha: 0.02,
     tol: 0.0001,
     max: 1000                 // the most steps a run may take before it gives up (a few guesses get stuck at 5/6)
   };
 
   // Section 5's data is MF.S5, set by s5-data.js (loaded right after table-math.js): real ratings of 26 MovieLens
   // users for 20 films, every one known, and two runs of gradient descent on them (10 users and 12 films with 5
-  // numbers per row, then all of them with 8), each with its seeded first guess and the best possible average loss.
+  // numbers per row, then all of them with 8), each with its seeded first guess and the best possible loss.
   // The file is generated by ../tools/s5_movielens.py from MovieLens ml-latest-small and carries the dataset's
   // citation and licence conditions; ../tools/check_s5.js checks that MF.T.run in the browser equals the run there.
 
@@ -2164,9 +2207,11 @@ button.chip:hover{border-color:var(--rubric)}
   })();
 
   /* SCENE ENGINE */
-  // The five sections (the engine's word for them is still "act"). Their plan is source/PLAN.md.
+  // The five sections (the engine's word for them is still "act"). Their plan is source/PLAN.md. Section 0 is the
+  // preface of part one (Carlos, 2026-11-10: "We need to add a section before all these sections"); only game 1
+  // holds it.
   var SECTIONS = [1, 2, 3, 4, 5];
-  var ACT_NAMES = { 1: "Matrix multiplication", 2: "Matrix factorization", 3: "Smaller hops",
+  var ACT_NAMES = { 0: "Matrix factorization at a glance", 1: "Matrix multiplication", 2: "Matrix factorization", 3: "Smaller hops",
                     4: "Many customers, many films", 5: "The whole picture" };
 
   // The four games (Carlos, 2026-11-05: "Section one on its own becomes its own visualization ... it's now a
@@ -2176,7 +2221,7 @@ button.chip:hover{border-color:var(--rubric)}
   // interaction tests expect. sections: the sections the game holds; tag: the words beside the brand; cards: what a
   // section card says in this game (kicker, its numeral, no skip button); back: the last line of a Python leaf.
   var GAMES = {
-    "1": { sections: [1], tag: "Part one: matrix multiplication",
+    "1": { sections: [0, 1], tag: "Part one: matrix multiplication",
            back: { 1: "Then open part two of the Matchmaker: matrix factorization." } },
     "2": { sections: [2], tag: "Part two: matrix factorization",
            cards: { 2: { kicker: "Once Upon a Matchmaker, part two", num: 2 } },
@@ -2198,16 +2243,19 @@ button.chip:hover{border-color:var(--rubric)}
   }
 
   // Section cards (Carlos, 2026-11-03: "there are section dividers"). The engine puts one leaf of its own before
-  // sections 2 to 5: the leaf turns violet, then the section's numeral, its name, one line and a small motif come
-  // in one after another. Section 1 opens with the cover instead. Sections 3 and 4 are optional (Carlos, 2026-11-04:
+  // sections 1 to 5: the leaf turns violet, then the section's numeral, its name, one line and a small motif come
+  // in one after another. Until 2026-11-10 section 1 opened with the cover instead; since then the cover and the
+  // preface (section 0, no card) come first, and section 1 has its card. Sections 3 and 4 are optional (Carlos, 2026-11-04:
   // "The part of the gradient should be marked as optional and allow the possibility to skip it. Same for part 4."):
   // their cards say so and carry a button to section 5, every leaf of theirs carries the tag "optional", and their
   // leaves "Your turn in Python" open the optional notebook.
   var ACT_INTRO = {
+    1: { kicker: "Section one", motif: "product",
+         line: "How two tables, one row per customer and one column per film, give a score for every customer and every film." },
     2: { kicker: "Section two", motif: "unknown",
          line: "In real life nobody fills in a profile. The Matchmaker sees only ratings, and has to find the numbers behind them." },
     3: { kicker: "Section three, optional", motif: "hop", optional: true, skipTo: 5, skip: "Skip sections 3 and 4",
-         line: "In part two each number moved against nabla, the slope of the average loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
+         line: "In part two each number moved against nabla, the slope of the total loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
     4: { kicker: "Section four, optional", motif: "many", optional: true, skipTo: 5, skip: "Skip to section 5",
          line: "One customer and one film were the warm-up. Now every customer and every film, all at once." },
     5: { kicker: "Section five", motif: "loop",
@@ -2220,13 +2268,19 @@ button.chip:hover{border-color:var(--rubric)}
   var COLAB_OPT = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/02_cx_matrix_factorization_optional_student.ipynb";
   var PYTHON = {
     1: { part: 1, url: COLAB, what: "Teach a computer to multiply two matrices: one score, then one row, then the whole table." },
-    2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their average." },
+    2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their total." },
     3: { part: 3, url: COLAB_OPT, optional: true, what: "Let the computer feel the slope with a tiny hop, then hop downhill: gradient descent." },
-    4: { part: 4, url: COLAB_OPT, optional: true, what: "The average loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
+    4: { part: 4, url: COLAB_OPT, optional: true, what: "The total loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
   };
   function introMotif(kind) {
     var N = window.MF && window.MF.N;
     if (kind === "unknown" && N) return [N.slot(), N.slot(), el("span", "act-op", "×"), N.slot(), N.slot()];
+    // Section 1: a 2 x 3 matrix times a 3 x 2 one gives a 2 x 2 one, drawn as little squares (MF.M.grid).
+    var Mx = window.MF && window.MF.M;
+    if (kind === "product" && Mx && Mx.grid) {
+      return [Mx.grid(2, 3, { label: false }), el("span", "act-op", "×"), Mx.grid(3, 2, { label: false }),
+              el("span", "act-op", "="), Mx.grid(2, 2, { label: false })];
+    }
     if (kind === "hop") {
       // Section 3's grasshopper (MF.H.glyph, hopper.js), the emoji until that file draws one.
       var H = window.MF && window.MF.H, gh = el("span", "act-op act-hopper");
@@ -2309,7 +2363,7 @@ button.chip:hover{border-color:var(--rubric)}
   function define(key, spec) {
     if (KEYS[key]) { console.warn("MF: scene defined twice: " + key); return; }
     spec.key = key;
-    spec.act = spec.section || spec.act || 1;
+    spec.act = spec.section !== undefined ? spec.section : spec.act !== undefined ? spec.act : 1;
     spec.steps = Math.max(1, spec.steps || 1);
     // The section card has order -1 and the Python leaf 1e6, so a listed scene (between -1 and 0) comes right after
     // the card and before the unlisted scenes of its section.
@@ -2470,8 +2524,9 @@ button.chip:hover{border-color:var(--rubric)}
       }
       var b = el("button", s.intro ? "intro" : s.python ? "py" : "", s.intro || s.python ? "" : String(s.num));
       b.type = "button";
-      b.title = s.intro ? ACT_NAMES[s.act] : s.title;
-      b.setAttribute("aria-label", s.intro ? ACT_NAMES[s.act] : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
+      // a card inside a section (s.card, part two's "Your turn" since 2026-11-11) is named by its own title
+      b.title = s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.title;
+      b.setAttribute("aria-label", s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
       b.addEventListener("click", function () { go(i, 0); });
       groups[s.act].appendChild(b);
       dots.push(b);
@@ -2501,7 +2556,7 @@ button.chip:hover{border-color:var(--rubric)}
 
   window.MF = {
     // data
-    AXES: AXES, DIMS: DIMS, FILMS: FILMS, PEOPLE: PEOPLE, V: V, S1: S1, S2: S2, S3: S3, S4: S4, PLACE: PLACE,
+    AXES: AXES, DIMS: DIMS, FILMS: FILMS, PEOPLE: PEOPLE, V: V, S0: S0, S1: S1, S2: S2, S3: S3, S4: S4, PLACE: PLACE,
     LEVELS: LEVELS, KIND: KIND, WORD: WORD, CRITIC_WORD: CRITIC_WORD, MARKNAME: MARKNAME, MINUS: MINUS,
     ACT_NAMES: ACT_NAMES, SECTIONS: SECTIONS, COLAB: COLAB, COLAB_OPT: COLAB_OPT, PYTHON: PYTHON, GAMES: GAMES,
     game: function () { return GAME; },
@@ -4261,7 +4316,11 @@ button.chip:hover{border-color:var(--rubric)}
         var ly = (Pp.body.t + Pp.body.b) / 2;
         paintArrow("pr", [[Pp.out.r + GAP, ly], [R.out.l - GAP, ly]], null);
       } else paintArrow("pr", null);
-      if (S && Pp && R) {
+      if (S && R && S.out.l > R.out.r + 12) {
+        // the losses on the right of the ratings (part two's desk layout since 2026-11-10): one arrow straight in
+        paintArrow("rs", run(R.out.r, S.out.l, R.body.cy), "r");
+        paintArrow("ps", null);
+      } else if (S && Pp && R) {
         var yj = (Math.max(Pp.out.b, R.out.b) + S.out.t) / 2;
         if (S.out.t - Math.max(Pp.out.b, R.out.b) > 14) {
           paintArrow("rs", [[Pp.body.cx, Pp.out.b + 3], [Pp.body.cx, yj], [R.body.cx, yj], [R.body.cx, R.out.b + 3]], null);
@@ -6355,8 +6414,10 @@ button.chip:hover{border-color:var(--rubric)}
 })(typeof window !== "undefined" ? window : null);
 </script>
 <script>
-/* The arithmetic of section 4, many customers and many films: the average loss of a whole table, the slope of every
-   number, one step of all of them at once, and the loop. MF.T in the browser and a module that node can require().
+/* The arithmetic of section 4, many customers and many films: the total loss of a whole table, the slope of every
+   number, one step of all of them at once, and the loop. The loss of a table is the TOTAL of its ratings' losses since
+   2026-11-11 (Carlos: "replace ... the average loss with the total loss so that we stay consistent with the
+   literature"; Koren, Bell and Volinsky 2009, equation 2); it was their average until then, and every slope with it. MF.T in the browser and a module that node can require().
    Written by the main session from notebook/data.py (table_loss, rating_slopes, table_slopes, table_step, factorize
    and _section4_checks, which assert the numbers below exactly). Owned by S4-B from 2026-11-03 (BRIEF-s4d.md): it may
    add to it, and its check script (../tools/check_table.js) asserts every number the section 4 scenes show. Keep the
@@ -6372,9 +6433,9 @@ button.chip:hover{border-color:var(--rubric)}
    T.ratings(people, films, rating)    R from MF.rating (or the function given): a row per customer, null where unknown
    T.predict(c, f)                     P[i][j], the inner product of customer row i and film row j (the product c f)
    T.table(c, f, R)                    { P, D, S, sum, n, loss }: the predictions, the differences (rating minus
-                                       prediction), the squares, their sum, the number of known ratings, the average
-                                       (D and S are null where R is null)
-   T.loss(c, f, R)                     the average loss, T.table(...).loss
+                                       prediction), the squares, their sum, the number of known ratings, the loss,
+                                       which is the sum (D and S are null where R is null)
+   T.loss(c, f, R)                     the total loss, T.table(...).loss
    T.touches(R, which, r)              the known ratings [i, j] whose prediction contains row r of that matrix: the
                                        customer's row for "c", the film's column for "f"
    T.partner(c, f, which, r, k, i, j)  the number that multiplies this one in the stack of rating (i, j)
@@ -6383,7 +6444,7 @@ button.chip:hover{border-color:var(--rubric)}
                                        times the difference when it touches, 0 when it does not; miss is the
                                        prediction minus the rating, so the same slope is 2 times the partner times
                                        the miss (the rule as the scenes write it since 2026-11-06)
-   T.slope(c, f, R, which, r, k)       the slope of the average loss for that number: the average of those slopes
+   T.slope(c, f, R, which, r, k)       the slope of the total loss for that number: the sum of those slopes
    T.slopes(c, f, R)                   { c: rows of slopes, f: rows of slopes }, every slope on the same guess
    T.step(c, f, R, alpha)              every slope measured first, then every number moved by alpha times its slope
                                        against it: { c, f, slopes, loss } (slopes before the step, loss after)
@@ -6403,18 +6464,19 @@ button.chip:hover{border-color:var(--rubric)}
                                        slope, to the old number minus the step (alpha defaults to MF.S4)
    T.rises(states)                     how many steps of a run (T.run(...).states) made the loss bigger
 
-   What they give (asserted in notebook/data.py), from MF.S2.start with alpha 0.2:
-   The column (Ida, Raj, Elsa with Paddington): predictions -3, 2, 2; losses 25, 9, 1; average 35/3. What each rating
-   gives Paddington's first number: 10, -12, 4 (average 2/3); its second: 20, 0, 4 (average 8); Ida's first: 10, 0, 0
-   (average 10/3); Raj's second: 0, 12, 0 (average 4). The slopes: Ida 10/3 and -20/3, Raj -2 and 4, Elsa -2/3 and
-   4/3, Paddington 2/3 and 8. One step: Ida -5/3 and -2/3, Raj -1.6 and -0.8, Elsa 32/15 and 26/15, Paddington
-   -17/15 and 0.4, the average 4.594 (Elsa's own loss rises from 1 to 7.42). Below tol after 13 steps.
-   The table (both films): predictions -3 4 / 2 4 / 2 -6; losses 25 9 / 9 4 / 1 16; average 32/3. One step: 1.966.
-   Below tol after 52 steps, the loss falling at every step; the product then gives every rating within 0.02.
-   A few guesses get stuck at 5/6 (3 of 2,000 random keypad guesses): run reports reached false for them. */
+   What they give (asserted in notebook/data.py), from MF.S2.start with alpha 0.02:
+   The column (Ida, Raj, Elsa with Paddington): predictions -3, 2, 2; losses 25, 9, 1; total 35. What each rating
+   gives Paddington's first number: 10, -12, 4 (sum 2); its second: 20, 0, 4 (sum 24); Ida's first: 10, 0, 0 (sum
+   10); Raj's second: 0, 12, 0 (sum 12). The slopes: Ida 10 and -20, Raj -6 and 12, Elsa -2 and 4, Paddington 2 and
+   24. One step: Ida -1.2 and -1.6, Raj -1.88 and -0.24, Elsa 2.04 and 1.92, Paddington -1.04 and 1.52, the total
+   16.889 (every rating's loss falls, Elsa's from 1 to 0.0413; the second step raises Elsa's to 0.139 while the total
+   falls). Below tol after 41 steps.
+   The table (both films): predictions -3 4 / 2 4 / 2 -6; losses 25 9 / 9 4 / 1 16; total 64. One step: 19.681.
+   Below tol after 118 steps, the loss falling at every step; the product then gives every rating within 0.01.
+   A few guesses get stuck at the total 5 (3 of 2,000 random keypad guesses): run reports reached false for them. */
 (function (root) {
   "use strict";
-  var DEF = { alpha: 0.2, tol: 0.0001, max: 1000 };
+  var DEF = { alpha: 0.02, tol: 0.0001, max: 1000 };
   function cfg() {
     var S4 = root && root.MF && root.MF.S4;
     return S4 ? { alpha: S4.alpha, tol: S4.tol, max: S4.max } : DEF;
@@ -6450,7 +6512,7 @@ button.chip:hover{border-color:var(--rubric)}
         sum += d * d; n++;
       }
     }
-    return { P: P, D: D, S: S, sum: sum, n: n, loss: n ? sum / n : 0 };
+    return { P: P, D: D, S: S, sum: sum, n: n, loss: sum };
   }
   function loss(c, f, R) { return table(c, f, R).loss; }
   function touches(R, which, r) {
@@ -6475,19 +6537,18 @@ button.chip:hover{border-color:var(--rubric)}
   function slope(c, f, R, which, r, k) {
     var a = asks(c, f, R, which, r, k), s = 0;
     a.forEach(function (x) { s += x.slope; });
-    return a.length ? s / a.length : 0;
+    return s;
   }
   function slopes(c, f, R) {
     // The same sums as data.table_slopes: every known rating adds its share to the four numbers of its stack.
-    var n = 0, gc = c.map(function (row) { return row.map(function () { return 0; }); });
+    var gc = c.map(function (row) { return row.map(function () { return 0; }); });
     var gf = f.map(function (row) { return row.map(function () { return 0; }); });
-    for (var i = 0; i < c.length; i++) for (var j = 0; j < f.length; j++) if (known(R, i, j)) n++;
-    for (i = 0; i < c.length; i++) for (j = 0; j < f.length; j++) {
+    for (var i = 0; i < c.length; i++) for (var j = 0; j < f.length; j++) {
       if (!known(R, i, j)) continue;
       var d = R[i][j] - inner(c[i], f[j]);
       for (var k = 0; k < c[i].length; k++) {
-        gc[i][k] += FACTOR * f[j][k] * d / n;
-        gf[j][k] += FACTOR * c[i][k] * d / n;
+        gc[i][k] += FACTOR * f[j][k] * d;
+        gf[j][k] += FACTOR * c[i][k] * d;
       }
     }
     return { c: gc, f: gf };
@@ -6549,10 +6610,11 @@ button.chip:hover{border-color:var(--rubric)}
    MATRIX.md; the stack of his sketch of 2026-11-05 before): the customer embeddings, one row per customer, on the left
    of the predictions; the film embeddings turned, one column per film, ABOVE the predictions (a customer's row band in
    violet, a film's column band in ochre, crossing at the prediction), the ratings on their right with a plain line
-   between the two, the losses under the predictions and the ratings, and the average loss in a double ring on the
+   between the two, the losses under the predictions and the ratings, and the total loss in a double ring on the
    right of the losses, with arrows from the customers and the films to the predictions, from the predictions and the
-   ratings into the losses, from the losses to the average. No differences: a loss comes straight from its prediction
-   and its rating. Until 2026-11-05 it was the cross of 2026-11-04. Beside or under the board a desk: one prediction
+   ratings into the losses, from the losses to the total (the average until 2026-11-11, Carlos's fifteenth message;
+   the internal names of that part, "average", "avg", avgText and V.average, stay). No differences: a loss comes
+   straight from its prediction and its rating. Until 2026-11-05 it was the cross of 2026-11-04. Beside or under the board a desk: one prediction
    worked as part one shows a score (since the port of 2026-11-06: the customer's row and the film's column outlined in
    the board, the worked line of M.workLine on the desk, the sum flying into its cell), or one loss worked as
    (prediction - rating) squared, the prediction on the left of the rating as on the board (Carlos, 2026-11-06).
@@ -6565,7 +6627,7 @@ button.chip:hover{border-color:var(--rubric)}
                       a row per customer and per film (default MF.S2.start; the films' rows are drawn as columns);
                       o.ratings: R (default from MF.V); o.parts: how many parts show at first (default all);
                       o.size "sm" (default) or "md"; o.places: decimals on the page (default 2), o.lossPlaces for
-                      losses and the average (default 2)
+                      losses and the total loss (default 2)
                       Added by S4-A: o.avgPlaces (default o.lossPlaces) and o.tol (default MF.S4.tol) for the ring;
                       o.dec: true gives every number cell room for two decimals, so a run never shifts the layout
                       (o.layout, o.phoneFold and o.phonePredictionsBelow belonged to the layout before the cross and
@@ -6585,7 +6647,7 @@ button.chip:hover{border-color:var(--rubric)}
    V.matrix(part)     the MF.M matrix of "c", "f" (the guesses), "p", "r", "s" (predictions, ratings, losses), so
                       a scene can use its bands, rings and dimming (MATRIX.md); "f" is turned, its calls stay logical
    V.cell(part, i, j) the td of one entry of those matrices (logical: film j's number i is V.cell("f", j, i));
-                      V.cell("avg") the ring of the average
+                      V.cell("avg") the ring of the total loss
    V.guessCells()     the tds of every guessed number in reading order, the customers' rows first: for MF.H.team
    V.mark(list)       rings entries: [{ part, i, j, tone }], tone "a" (violet), "b" (ochre) or "slope" (green);
                       null clears every ring
@@ -6613,9 +6675,9 @@ button.chip:hover{border-color:var(--rubric)}
                       squared; o.ask [i, j] makes the loss the room's slot (o.diff is ignored since 2026-11-04)
    V.lossWork(i, j, o) one loss, played: the prediction and then the rating fly onto the desk, the loss comes and
                       flies into its cell (o.pace); a Promise
-   V.fill(o)          the predictions, the losses and the average filled fast, as a wave (o.pace); a Promise
-   V.land(o)          every loss flies into the ring, which counts their sum, divides by their number and shows the
-                      average (o.pace); a Promise. V.average(on) draws the ring empty (false) or full (true) at once
+   V.fill(o)          the predictions, the losses and the total loss filled fast, as a wave (o.pace); a Promise
+   V.land(o)          every loss flies into the ring, which adds them up and shows the total loss (o.pace); a
+                      Promise. V.average(on) draws the ring empty (false) or full (true) at once
    V.desk(mode)       "line" (one prediction's worked line), "loss" or null: which desk shows beside the board
                       (V.work, V.pair and V.lossWork open their own); the desk takes room only while it shows
    V.slot(part)       the room's slot of the moment ("p" or "s"), or null
@@ -6650,7 +6712,7 @@ button.chip:hover{border-color:var(--rubric)}
     if (v !== 0 && value(t) === 0) return ABOUT + "0";
     return t;
   }
-  // The average in its ring: `places` decimals from 0.1 on, 4 below 0.1, two significant digits below 0.001,
+  // The total loss in its ring: `places` decimals from 0.1 on, 4 below 0.1, two significant digits below 0.001,
   // "about 0" below tol.
   function avgText(v, places, tol) {
     var a = Math.abs(v);
@@ -6804,7 +6866,7 @@ button.chip:hover{border-color:var(--rubric)}
       group(x === "r" ? "ratings" : "losses", [mats[x].el]);
     });
     var ga = group("average", [el("div", "lv-avgp")]);
-    ga.appendChild(el("p", "mx-cap lv-fwd lv-avgcap", "Average loss"));
+    ga.appendChild(el("p", "mx-cap lv-fwd lv-avgcap", "Total loss"));
     var ring = el("div", "lv-ring mx-xbody");
     var avgCell = N.cell(0, { cls: "lv-avgn" });
     var tag = el("span", "lv-tag");
@@ -7007,7 +7069,7 @@ button.chip:hover{border-color:var(--rubric)}
     }
     // The arrows follow the parts, as in part two: into the predictions with the guesses and the predictions, the
     // line between the predictions and the ratings with both, into the losses with the predictions, the ratings and the
-    // losses, into the average with the losses and the average.
+    // losses, into the total loss with the losses and the total.
     function arrows() {
       var g = partOn("guesses"), p = partOn("predictions"), r = partOn("ratings"), s = partOn("losses"), a = partOn("average");
       X.arrows({ cp: g && p, fp: g && p, pr: p && r, rs: p && r && s, ps: p && r && s, sa: s && a });
@@ -7316,16 +7378,14 @@ button.chip:hover{border-color:var(--rubric)}
         }]);
         at += Math.max(380, 620 * pace) + (q === 0 ? 120 * pace : 0);
       });
+      // The running sum is the total loss once the last loss has landed (no division since 2026-11-11)
       at += dur + 260 * pace;
-      acts.push([at, function () { tag.textContent = DIV + " " + list.length; pop(tag, 420); }]);
-      at += TEMPO.tag * pace + 400 * pace;
       acts.push([at, function () { avgCell.classList.remove("lv-sum"); end(); pop(avgCell, 600); }]);
       return seq.run(acts, at + 300).then(function (ok) {
         if (ok && my === tok) arrived(my);
         return ok && my === tok;
       });
     }
-    var DIV = "÷";
     function desk(mode) { setDesk(mode || null); return api; }
     function slot(part) {
       if (part === "p" && S.askP) { var a = S.askP.split(","); return C.item(+a[0], +a[1]); }
@@ -9342,7 +9402,8 @@ button.chip:hover{border-color:var(--rubric)}
   /* SCENE 1: THREE CUSTOMERS, ONE FILM
      The first half had one customer and one film. Raj and Elsa join Ida: three ratings of one film. We make a
      guess (part two's first guess), compute the three predictions (Ida's slowly, Raj's faster, the room Elsa's), the
-     three losses (the same), and aggregate them into their average, the one number the Matchmaker now makes small. */
+     three losses (the same), and aggregate them into their total, the one number the Matchmaker now makes small (the
+     average until 2026-11-11, Carlos's fifteenth message: the total, as in the literature). */
   var CO = null;
   var COL = (function () {
     var m = T.matrices(S2.start, PEOPLE, [FILM]), R = T.ratings(PEOPLE, [FILM]);
@@ -9426,12 +9487,12 @@ button.chip:hover{border-color:var(--rubric)}
     } else if (name4 === "lRoom") {
       words(S, ["Your turn: " + elsa + "."], []);
     } else if (name4 === "average") {
-      words(S, [rub("And we aggregate all these losses by computing the average.")],
-        ["Add the " + count(n) + " losses and divide by " + count(n) + "."]);
+      words(S, [rub("And we aggregate all these losses by computing the total.")],
+        ["Add the " + count(n) + " losses."]);
     } else {
-      words(S, ["One number for the whole column: the average loss."],
+      words(S, ["One number for the whole column: the total loss."],
         ["This is the number the Matchmaker now makes small."],
-        ["It stays comparable when more customers join, because it is an average."]);
+        ["It is 0 only when every prediction equals its rating."]);
     }
   }
   function coStep(k, live) {
@@ -9511,7 +9572,7 @@ button.chip:hover{border-color:var(--rubric)}
       RL.draw();
       return;
     }
-    // the average, then the last line
+    // the total loss, then the last line
     V.predict(all3);
     V.losses("all");
     V.desk(null);
@@ -9544,9 +9605,9 @@ button.chip:hover{border-color:var(--rubric)}
 
   /* SCENE 4: MANY FILMS
      The Martian joins: the whole table of part two, six ratings. The approach is the same: the guesses, six
-     predictions, six losses, their average, filled fast. One grasshopper for every number of the two matrices, said in
+     predictions, six losses, their total, filled fast. One grasshopper for every number of the two matrices, said in
      a sentence and shown once, standing still. Then the loop runs fast: the numbers change, the predictions settle on
-     the ratings, the average falls below MF.S4.tol. The product of the two matrices gives the ratings: they were
+     the ratings, the total loss falls below MF.S4.tol. The product of the two matrices gives the ratings: they were
      factorized. Another guess gives other numbers and the same ratings. */
   var TB = null;
   var TB_STEPS = ["ratings", "same", "team", "run", "result", "name", "other", "next"];
@@ -9606,7 +9667,7 @@ button.chip:hover{border-color:var(--rubric)}
     var vals = [];
     for (var q = 0; q <= j; q++) vals.push(r.states[q].loss);
     put(S.count, [el("span", "s4-cl", "Step"), el("b", "s4-cn", String(j))]);
-    put(S.trail, [el("span", "s4-cl", "Average loss: ")].concat(trail(vals)));
+    put(S.trail, [el("span", "s4-cl", "Total loss: ")].concat(trail(vals)));
     S.play.textContent = S.playing ? "Pause" : (j >= r.steps ? "Replay" : (j > 0 ? "Play on" : "Play"));
     S.root.classList.toggle("s4-ended", j >= r.steps);
     S.V.el.classList.toggle("lv-running", !!S.playing);
@@ -9643,7 +9704,7 @@ button.chip:hover{border-color:var(--rubric)}
     var S = TB, r = S.cur;
     if (!r) return;
     if (st === "run") {
-      put(S.say, ["After " + r.steps + " steps the average loss is below " + MF.num(S4.tol) + "."]);
+      put(S.say, ["After " + r.steps + " steps the total loss is below " + MF.num(S4.tol) + "."]);
     } else if (st === "other") {
       put(S.say, ["After " + r.steps + " steps: other numbers in both matrices, and the same ratings."]);
     }
@@ -9684,8 +9745,8 @@ button.chip:hover{border-color:var(--rubric)}
     if (st === "same") {
       V.set(START.c, START.f);
       var t = T.table(START.c, START.f, TR);
-      words(S, [rub("The approach is the same:"), " guess, predict, compare, square, average."],
-        [count(t.n).charAt(0).toUpperCase() + count(t.n).slice(1) + " losses this time, and one average loss."]);
+      words(S, [rub("The approach is the same:"), " guess, predict, compare, square, add up."],
+        [count(t.n).charAt(0).toUpperCase() + count(t.n).slice(1) + " losses this time, and one total loss."]);
       if (live) {
         V.showParts(["guesses", "ratings"]);
         V.fill({ pace: 1 });
@@ -9700,7 +9761,7 @@ button.chip:hover{border-color:var(--rubric)}
       V.average(true);
       team(true);
       words(S, ["One grasshopper for every number of the two matrices: " + count(nGuess) + ". All hop at once, again and again."],
-        ["Each feels which way its number should move to make the average loss smaller, and moves a little that way, as in the first half."]);
+        ["Each feels which way its number should move to make the total loss smaller, and moves a little that way, as in the first half."]);
       return;
     }
     V.showParts(PARTS_ALL);
@@ -9803,7 +9864,8 @@ button.chip:hover{border-color:var(--rubric)}
    ochre and the ratings it sits in in violet (V.mark). What each rating alone says is drawn as section 3 drew the
    rule: a column of three cells multiplied down (2, the partner, the prediction minus the rating: since 2026-11-06 the
    prediction always stands before its rating, as on the board), here one column per rating side by side, the says
-   under their rules, then their average. Every slope is green (--g-slope), every move ochre.
+   under their rules, then their sum (their average until 2026-11-11, when the loss became the total of the ratings'
+   losses, Carlos's fifteenth message). Every slope is green (--g-slope), every move ochre.
 
    Every step sets its whole state; motion plays only when a step is reached from the step before; Back, the pager
    and leaving draw the end state at once and stop every timer. The room's answers survive Back and Next. */
@@ -9834,11 +9896,12 @@ button.chip:hover{border-color:var(--rubric)}
   var TAB1 = T.table(STEP.c, STEP.f, R);
   function updOf(o) { return T.update(numAt(o), slopeAt(o), ALPHA); }
   var RUN = T.run(START.c, START.f, R, ALPHA);
-  // Why 0.2 here when section 3 stepped by 0.02: the steps the whole table needs with each (52 and 597).
-  var TABLE = (function () {
-    var m = T.matrices(S2.start, PEOPLE, S2.films);
-    return { big: T.run(m.c, m.f, T.ratings(PEOPLE, S2.films), ALPHA).steps, small: T.run(m.c, m.f, T.ratings(PEOPLE, S2.films), S3.alpha).steps };
-  })();
+  // A second step from the first (the question of scene together): Elsa's loss rises while the total falls.
+  var STEP2 = T.step(STEP.c, STEP.f, R, ALPHA);
+  var TAB2 = T.table(STEP2.c, STEP2.f, R);
+  // The step size is the one of part two and of section 3 (MF.S2.alpha, MF.S3.alpha); the line says so only then.
+  var SAME_ALPHA = S2.alpha === ALPHA && S3.alpha === ALPHA;
+  function sumOf(xs) { return xs.reduce(function (s, x) { return s + x; }, 0); }
 
   /* WORDS */
   function poss(n) { return n + (/s$/.test(n) ? "'" : "'s"); }
@@ -9851,7 +9914,7 @@ button.chip:hover{border-color:var(--rubric)}
   var COUNT = ["no", "one", "two", "three", "four", "five", "six"];
   function listWords(xs) { return xs.length < 2 ? xs.join("") : xs.slice(0, -1).join(", ") + " and " + xs[xs.length - 1]; }
   function say(x) { return x > 0 ? "smaller" : x < 0 ? "bigger" : "nothing"; }
-  // Rounded for the page: at most 2 decimals. An average loss is written by the view's own ring format, MF.L.avgText
+  // Rounded for the page: at most 2 decimals. A total loss is written by the view's own ring format, MF.L.avgText
   // (2 decimals from 0.1 on, 4 below 0.1, two significant digits below 0.001, about 0 below the tolerance), so the
   // trail of the run reads like the ring.
   function r2(x) { var r = parseFloat(x.toFixed(2)); return r === 0 ? 0 : r; }
@@ -10167,7 +10230,7 @@ button.chip:hover{border-color:var(--rubric)}
 
   /* =====================================================================================================
      SCENE shared: which ratings a number sits in; section 3's rule for one rating; what each rating alone says to
-     Paddington's first number, their average; Paddington's second; Ida's first; the room, Raj's second; all eight. */
+     Paddington's first number, their sum; Paddington's second; Ida's first; the room, Raj's second; all eight. */
   var A = { last: null, k: 0, tok: 0, Q: Seq(), ans: {}, pick: null, draft: "" };
   var ASTEPS = [
     { kind: "pick", lead: function () { return ["Tap a guessed number. Which ratings does it sit in?"]; } },
@@ -10179,7 +10242,7 @@ button.chip:hover{border-color:var(--rubric)}
     { kind: "asks", at: PAD1, cols: [0, 1, 2], play: [2], found: [],
       lead: function () { return [poss(who(2)) + " rating alone."]; } },
     { kind: "asks", at: PAD1, cols: [0, 1, 2], avg: true, found: [PAD1],
-      lead: function () { return ["The loss is the average of the three losses, so the slope is the average of what they say."]; } },
+      lead: function () { return ["The loss is the total of the three losses, so the slope is the sum of what they say."]; } },
     { kind: "asks", at: PAD2, cols: [0, 1, 2], play: [0, 1, 2], pace: 0.45, avg: true, found: [PAD1, PAD2],
       lead: function () { return [cap(nameOf(PAD2)) + ": the same three ratings."]; } },
     { kind: "asks", at: IDA1, cols: [0, 1, 2], play: [0, 1, 2], pace: 0.55, avg: true, found: [PAD1, PAD2, IDA1],
@@ -10188,9 +10251,11 @@ button.chip:hover{border-color:var(--rubric)}
       lead: function () { return ["Your turn: the slope of " + nameOf(RAJ2) + "."]; } },
     { kind: "all", lead: function () { return ["Every number's slope, on the guess as it is."]; } }
   ];
-  // The three says of a number, the average, the room's keys.
+  // The three says of a number, their sum (the slope, the room's answer), the room's keys: the sum, half of it and the
+  // average (the old loss's slope, a slip), each with both signs, and 0.
   var RAJ_ASKS = asksOf(RAJ2).map(function (a) { return a.slope; });
-  var RAJ_SUM = RAJ_ASKS.reduce(function (s, x) { return s + x; }, 0);
+  var RAJ_SUM = sumOf(RAJ_ASKS);
+  var RAJ_AVG = r2(T.average(RAJ_ASKS));
   var ROOM_A_KEYS = (function () {
     var a = T.average(RAJ_ASKS), s = RAJ_SUM, list = [-s, -s / 2, -a, 0, a, s / 2, s].map(r2), out = [];
     list.forEach(function (x) { if (out.indexOf(x) < 0) out.push(x); });
@@ -10198,7 +10263,7 @@ button.chip:hover{border-color:var(--rubric)}
   })();
 
   // The stack of the three ratings' says: a column per rating, the rows 2, partner, prediction minus rating, the says under
-  // the rules, and the average after them.
+  // the rules, and their sum after them (AK.avg keeps its old name).
   var AK = {};
   function asksView() {
     var wrap = el("div", "nt-wrap s4d-asksw");
@@ -10212,7 +10277,7 @@ button.chip:hover{border-color:var(--rubric)}
       hr.appendChild(th);
       return th;
     });
-    AK.avgHead = el("th", "s4d-avgh", "average");
+    AK.avgHead = el("th", "s4d-avgh", "sum");
     hr.appendChild(AK.avgHead);
     thead.appendChild(hr);
     t.appendChild(thead);
@@ -10268,7 +10333,7 @@ button.chip:hover{border-color:var(--rubric)}
     AK.el = wrap;
     return wrap;
   }
-  // Fill the stack for number o: the columns in `cols` show their inputs and says; avg shows the average.
+  // Fill the stack for number o: the columns in `cols` show their inputs and says; avg shows their sum.
   function asksDraw(o, cols, avg, room) {
     var list = asksOf(o);
     PEOPLE.forEach(function (p, i) {
@@ -10299,7 +10364,7 @@ button.chip:hover{border-color:var(--rubric)}
     } else {
       if (AK.slot && AK.slot.parentNode) AK.avgHold.removeChild(AK.slot);
       if (!AK.avg.parentNode) AK.avgHold.appendChild(AK.avg);
-      N.setCell(AK.avg, r2(T.average(list.map(function (q) { return q.slope; }))));
+      N.setCell(AK.avg, r2(sumOf(list.map(function (q) { return q.slope; }))));
       AK.avg.classList.add("s4d-slope");
       off(AK.avgHold, !avg);
     }
@@ -10337,7 +10402,7 @@ button.chip:hover{border-color:var(--rubric)}
     acts.push([t4, function () { col.forEach(function (c) { c.cell.classList.remove("nt-hot"); if (c.x) c.x.classList.remove("nt-on"); }); }]);
     return S.Q.run(acts, t4).then(function (ok) { return ok && my === S.tok; });
   }
-  // The says fly into the average, which lands.
+  // The says fly into their sum, which lands.
   function playAvg(S) {
     var my = S.tok;
     off(AK.avgHead, false);
@@ -10371,7 +10436,7 @@ button.chip:hover{border-color:var(--rubric)}
 
   var AV = {};
   function sharedLine(s) {
-    var o = s.at, list = asksOf(o), xs = list.map(function (q) { return q.slope; }), avg = T.average(xs);
+    var o = s.at, list = asksOf(o), xs = list.map(function (q) { return q.slope; }), sum = sumOf(xs);
     if (s.kind !== "asks") return [];
     if (s.room) return [];
     if (!s.avg) {
@@ -10386,13 +10451,14 @@ button.chip:hover{border-color:var(--rubric)}
     }
     if (same(o, IDA1)) {
       var zeros = list.filter(function (q) { return !q.touches; }).map(function (q) { return poss(who(q.i)); });
-      return [listWords(zeros) + " ratings say 0, and they still count: the average divides by all " + COUNT[list.length] + "."];
+      var own = list.filter(function (q) { return q.touches; }).map(function (q) { return poss(who(q.i)); });
+      return [listWords(zeros) + " ratings say 0 and add nothing. The slope is what " + listWords(own) + " rating says, ", ri(sum, "s4d-slope"), "."];
     }
     if (same(o, PAD2)) {
       var nil = list.filter(function (q) { return q.touches && q.partner === 0; }).map(function (q) { return who(q.i); });
-      return [(nil.length ? poss(nil[0]) + " second number is 0, so his rating says 0. The slope is " : "The slope of " + nameOf(o) + " is "), ri(avg, "s4d-slope"), "."];
+      return [(nil.length ? poss(nil[0]) + " second number is 0, so his rating says 0. The slope is " : "The slope of " + nameOf(o) + " is "), ri(sum, "s4d-slope"), "."];
     }
-    return ["The slope of " + nameOf(o) + " is ", ri(avg, "s4d-slope"), ": a small push to " + say(avg) + "."];
+    return ["The slope of " + nameOf(o) + " is ", ri(sum, "s4d-slope"), ": a small push to " + say(sum) + "."];
   }
   function pickLine() {
     var o = A.pick;
@@ -10408,10 +10474,13 @@ button.chip:hover{border-color:var(--rubric)}
       keys: ROOM_A_KEYS, answer: r2(slopeAt(RAJ2)),
       slot: function () { return AK.slot; },
       state: function () { return ASTEPS[A.k].room ? roomState(A) : null; },
-      ask: function () { return ["Tap the slope: the average of what the three ratings say."]; },
+      ask: function () { return ["Tap the slope: the sum of what the three ratings say."]; },
       hint: function (tries) {
-        if (tries < TRIES) return [b("Not quite."), " The slope is the average of the three says, the 0s included."];
-        return [b("Not quite."), " Add ", ni(RAJ_ASKS[0]), ", ", ni(RAJ_ASKS[1]), " and ", ni(RAJ_ASKS[2]), ", then divide by " + COUNT[RAJ_ASKS.length] + "."];
+        var last = roomState(A).last;
+        if (tries < TRIES && last !== undefined && Math.abs(last - RAJ_AVG) < 1e-9 && RAJ_AVG !== r2(RAJ_SUM))
+          return [b("Not quite."), " That is their average. The loss is a total, so the slope is their sum."];
+        if (tries < TRIES) return [b("Not quite."), " The slope is the sum of the three says."];
+        return [b("Not quite."), " Add ", ni(RAJ_ASKS[0]), ", ", ni(RAJ_ASKS[1]), " and ", ni(RAJ_ASKS[2]), "."];
       },
       right: function (how) {
         return [b(how === "shown" ? "Here it is." : "Right!"), " The slope of " + nameOf(RAJ2) + " is ", ri(slopeAt(RAJ2), "s4d-slope"), "."];
@@ -10456,7 +10525,7 @@ button.chip:hover{border-color:var(--rubric)}
     if (s.kind === "rule") { marks(A.V, null); put(A.line, []); return; }
     if (s.kind === "all") {
       marks(A.V, null);
-      put(A.line, ["Each one is the average of what the three ratings say about it."]);
+      put(A.line, ["Each one is the sum of what the three ratings say about it."]);
       return;
     }
     // A step of the stack: its end state first, then the motion from the step before. Its line stands beside the
@@ -10473,7 +10542,7 @@ button.chip:hover{border-color:var(--rubric)}
       if (live && MOTION && s.avg && !s.play) { put(AV.sline, []); playAvg(A).then(function (ok) { if (ok && my === A.tok) put(AV.sline, sharedLine(s)); }); }
       return;
     }
-    // Live: the columns of this step play one after another, then the average.
+    // Live: the columns of this step play one after another, then their sum.
     var before = s.cols.filter(function (i) { return s.play.indexOf(i) < 0; });
     asksDraw(s.at, before, false, false);
     if (s.room) { asksDraw(s.at, before, false, false); off(AK.avgHead, true); off(AK.avgHold, true); AV.roomBox.hidden = true; }
@@ -10554,8 +10623,9 @@ button.chip:hover{border-color:var(--rubric)}
   });
 
   /* =====================================================================================================
-     SCENE together: new = old - 0.2 x slope; Paddington's second and Ida's first worked, Raj's second the room's;
-     all eight at once (every slope measured first); did every loss go down?; again and again, 13 steps. */
+     SCENE together: new = old - 0.02 x slope; Paddington's second and Ida's first worked, Raj's second the room's;
+     all eight at once (every slope measured first); a second step, and did every loss go down at each step? (Elsa's
+     rises at the second step while the total falls); again and again, 41 steps (TABLE.md has the numbers). */
   var G = { last: null, k: 0, tok: 0, Q: Seq(), ans: {}, draft: "", run: { at: 0, playing: false } };
   var GSTEPS = [
     { kind: "rule", lead: function () { return ["Every number moves against its slope: the new number is the old one minus ", ni(ALPHA), " times its slope."]; } },
@@ -10563,7 +10633,7 @@ button.chip:hover{border-color:var(--rubric)}
     { kind: "work", at: IDA1, lead: workLead },
     { kind: "work", at: RAJ2, room: true, lead: function () { return ["Your turn: the new value of " + nameOf(RAJ2) + "."]; } },
     { kind: "all", lead: function () { return ["All eight at once: every slope is measured on the old guess, then every number moves."]; } },
-    { kind: "ask", lead: function () { return ["Did every rating's loss go down?"]; } },
+    { kind: "ask", lead: function () { return ["A second step, the same way. Did every rating's loss go down at each step?"]; } },
     { kind: "run", lead: function () { return ["Again and again."]; } }
   ];
   function workLead() {
@@ -10582,9 +10652,8 @@ button.chip:hover{border-color:var(--rubric)}
     var B1 = Col({ rows: [{ label: "old", word: "old" }, { label: "step", word: "step", op: MINUS }], res: { label: "new", word: "new", cls: "s4d-move" } });
     var cols = h("div", "s4d-cols", [h("div", "s4d-colcap", [el("span", "s4d-glab", "the step"), A1.el]), el("span", "s4d-arrow", ARROW),
                                      h("div", "s4d-colcap", [el("span", "s4d-glab", "the new number"), B1.el])]);
-    var why = h("p", "s4d-line s4d-quiet", ["The first half stepped by ", ni(S3.alpha), ". Here each slope is divided by the number of ratings, so ", ni(ALPHA),
-                                             " works: ", ni(TABLE.big), " steps on the whole table, where ", ni(S3.alpha), " needs ", ni(TABLE.small), "."]);
-    return h("div", "s4d-v s4d-grulev", [cols, why]);
+    var why = SAME_ALPHA ? h("p", "s4d-line s4d-quiet", ["The same step size as in part two and in the first half."]) : null;
+    return h("div", "s4d-v s4d-grulev", why ? [cols, why] : [cols]);
   }
   // A worked update: the two columns, filled for number o.
   function workCols(o, slot) {
@@ -10645,7 +10714,8 @@ button.chip:hover{border-color:var(--rubric)}
     });
     return G.room;
   }
-  // The question after the step: the three losses and their average, before the step and after it.
+  // The question after two steps: the three losses and their total, before the first step, after it and after the
+  // second. A loss that rose since the row above is ringed once the question is answered.
   var QA = {};
   function askView() {
     var t = el("table", "s4d-qt");
@@ -10661,14 +10731,15 @@ button.chip:hover{border-color:var(--rubric)}
     });
     var tha = el("th", "s4d-qavgc");
     tha.scope = "col";
-    tha.appendChild(el("span", "s4d-wtn", "average"));
+    tha.appendChild(el("span", "s4d-wtn", "total"));
     hr.appendChild(tha);
     var thead = el("thead");
     thead.appendChild(hr);
     t.appendChild(thead);
     var tb = el("tbody");
     QA.cells = [];
-    [["before", TAB0], ["after", TAB1]].forEach(function (row, r) {
+    var rows = [["before", TAB0], ["step 1", TAB1], ["step 2", TAB2]];
+    rows.forEach(function (row, r) {
       var tr = el("tr"), th = el("th", "s4d-wth", row[0]);
       th.scope = "row";
       tr.appendChild(th);
@@ -10676,7 +10747,8 @@ button.chip:hover{border-color:var(--rubric)}
         var td = el("td");
         td.appendChild(N.cell(r2(row[1].S[i][0])));
         tr.appendChild(td);
-        if (r === 1) QA.cells.push({ td: td, up: TAB1.S[i][0] > TAB0.S[i][0] });
+        if (r > 0) QA.cells.push({ td: td, i: i, step: r, from: rows[r - 1][1].S[i][0], to: row[1].S[i][0],
+                                   up: row[1].S[i][0] > rows[r - 1][1].S[i][0] });
       });
       var ta = el("td", "s4d-qavgc");
       ta.appendChild(N.cell(r2(row[1].loss)));
@@ -10691,19 +10763,20 @@ button.chip:hover{border-color:var(--rubric)}
     return h("div", "s4d-v s4d-askv", [t, h("div", "s4d-qside", [QA.btns, QA.fb])]);
   }
   function qState() { return roomState(G); }
+  var STEP_WORD = ["", "first", "second"];
   function drawQ(live) {
-    var st = qState(), up = PEOPLE.filter(function (p, i) { return QA.cells[i].up; });
+    var st = qState(), up = QA.cells.filter(function (c) { return c.up; });
     QA.cells.forEach(function (c) { c.td.classList.toggle("s4d-rose", !!st.done && c.up); });
     QA.btns.hidden = !!st.done;
     if (!st.done) {
-      put(QA.fb, st.tries ? [b("Not quite."), " Compare each loss before the step with the one after it."] : []);
+      put(QA.fb, st.tries ? [b("Not quite."), " Compare each loss with the one above it."] : []);
       return;
     }
     if (!up.length) { put(QA.fb, [b("Right."), " Every loss went down."]); return; }
-    var whose = up.map(function (p) { return poss(MF.get(p).n); });
-    var i0 = PEOPLE.indexOf(up[0]);
-    put(QA.fb, [b(st.how === "right" ? "Right." : "Look again."), " " + listWords(whose) + " loss went up, from ", ri(TAB0.S[i0][0]), " to ", ri(TAB1.S[i0][0]),
-                ". The step follows the slope of the average loss, which fell from ", ri(TAB0.loss), " to ", ri(TAB1.loss), "."]);
+    var c0 = up[0], tabs = [TAB0, TAB1, TAB2];
+    put(QA.fb, [b(st.how === "right" ? "Right." : "Look again."), " " + poss(who(c0.i)) + " loss went up at the " + STEP_WORD[c0.step] + " step, from ",
+                ri(c0.from), " to ", ri(c0.to), ". The step follows the slope of the total loss, which fell from ",
+                ri(tabs[c0.step - 1].loss), " to ", ri(tabs[c0.step].loss), "."]);
     if (live) QA.cells.forEach(function (c) { if (c.up) pop(c.td.firstChild, 480); });
   }
   function answerQ(yes) {
@@ -10715,16 +10788,26 @@ button.chip:hover{border-color:var(--rubric)}
     if (st.tries >= TRIES) { st.done = true; st.how = "shown"; drawQ(true); return; }
     drawQ(false);
   }
-  // The run on the column: the averages as a trail of cells, the step count, Play, Pause, Replay.
+  // The run on the column: the total losses as a short trail of cells (the first three, dots, the last two reached;
+  // on a phone the first two, dots, the last one: the trail of scene table, sec4.js), the step count, Play, Pause,
+  // Replay. RV.cells has a cell for every state; the trail shows the ones of trailIdx(j).
   var RV = {};
+  function narrow() { try { return window.matchMedia("(max-width: 560px)").matches; } catch (e) { return false; } }
+  function trailIdx(j) {
+    var n = j + 1, idx = [];
+    if (narrow() && n > 4) return [0, 1, -1, n - 1];
+    if (n > 6) return [0, 1, 2, -1, n - 2, n - 1];
+    for (var q = 0; q < n; q++) idx.push(q);
+    return idx;
+  }
   function runView() {
     RV.trail = el("div", "s4d-trail");
+    RV.dots = el("span", "s4d-tdots", "...");
     RV.cells = RUN.states.map(function (st, j) {
       var c = N.cell(r2(st.loss), { cls: "s4d-tc" });
       c.textContent = lossText(st.loss);
       c.dataset.v = String(st.loss);
       c.title = "step " + j;
-      RV.trail.appendChild(c);
       return c;
     });
     RV.count = N.cell(0, { cls: "s4d-count" });
@@ -10738,14 +10821,22 @@ button.chip:hover{border-color:var(--rubric)}
     G.run.at = j;
     G.V.set(st.c, st.f);
     N.setCell(RV.count, j);
-    RV.cells.forEach(function (c, n) { off(c, n > j); c.classList.toggle("s4d-now", n === j); });
+    RV.trail.textContent = "";
+    RV.cells.forEach(function (c) { c.classList.remove("s4d-now"); });
+    trailIdx(j).forEach(function (n) {
+      if (n < 0) { RV.trail.appendChild(RV.dots); return; }
+      var c = RV.cells[n];
+      off(c, false);
+      c.classList.toggle("s4d-now", n === j);
+      RV.trail.appendChild(c);
+    });
   }
   function runButtons() {
     var end = G.run.at >= RUN.steps;
     RV.play.textContent = G.run.playing ? "Pause" : (end ? "Play" : "Play");
     RV.play.disabled = end && !G.run.playing;
   }
-  var RUN_MS = 260;
+  var RUN_MS = 130;                                // 41 steps in about 5 seconds
   function tick(my) {
     if (my !== G.tok || !G.run.playing) return;
     if (G.run.at >= RUN.steps) { G.run.playing = false; runButtons(); runEnd(); return; }
@@ -10793,9 +10884,10 @@ button.chip:hover{border-color:var(--rubric)}
     put(G.line, []);
     GV.sl.draw(ORDER);
     GV.sl.cur(s.at || null);
-    // The guess: the old one until the step "all", the new one after it; the run starts from the old one.
-    var moved = s.kind === "all" || s.kind === "ask";
-    if (s.kind !== "run") G.V.set(moved ? STEP.c : START.c, moved ? STEP.f : START.f);
+    // The guess: the old one until the step "all", the new one after it, the one after a second step at the question;
+    // the run starts from the old one.
+    if (s.kind === "ask") G.V.set(STEP2.c, STEP2.f);
+    else if (s.kind !== "run") G.V.set(s.kind === "all" ? STEP.c : START.c, s.kind === "all" ? STEP.f : START.f);
     if (s.kind === "work") {
       G.V.mark([{ part: s.at[0], i: s.at[1], j: s.at[2], tone: "b" }]);
       if (s.room) {
@@ -10816,7 +10908,7 @@ button.chip:hover{border-color:var(--rubric)}
       if (live && MOTION) {
         G.V.set(START.c, START.f);
         G.V.mark([]);
-        put(G.line, ["Before the step, the average loss is ", ri(TAB0.loss), "."]);
+        put(G.line, ["Before the step, the total loss is ", ri(TAB0.loss), "."]);
         G.Q.run([[700, function () { G.V.set(STEP.c, STEP.f, { pop: true }); G.V.mark(ring); }],
                  [1500, function () { pop(cellIn(G.V.cell("avg"))); put(G.line, allLine()); }]], 1600);
       } else {
@@ -10828,6 +10920,11 @@ button.chip:hover{border-color:var(--rubric)}
     if (s.kind === "ask") {
       G.V.mark([]);
       drawQ(false);
+      if (live && MOTION) {
+        // The second step plays on the board: the guess of step 1, then every number moves again.
+        G.V.set(STEP.c, STEP.f);
+        G.Q.run([[600, function () { G.V.set(STEP2.c, STEP2.f, { pop: true }); }]], 700);
+      }
       return;
     }
     if (s.kind === "run") {
@@ -10838,7 +10935,7 @@ button.chip:hover{border-color:var(--rubric)}
     }
     G.V.mark([]);
   }
-  function allLine() { return ["The average loss goes from ", ri(TAB0.loss), " to ", ri(TAB1.loss), "."]; }
+  function allLine() { return ["The total loss goes from ", ri(TAB0.loss), " to ", ri(TAB1.loss), "."]; }
 
   MF.define("together", {
     act: 4, title: "Everyone moves at once", steps: GSTEPS.length,
@@ -10863,7 +10960,7 @@ button.chip:hover{border-color:var(--rubric)}
       root.appendChild(h("div", "s4d-right", [bench, G.line, GV.roomBox]));
       root.appendChild(G.layer);
       root.s4dTest = { V: G.V, G: G, steps: GSTEPS, slopes: GV.sl, room: function () { return roomG(); }, roomKeys: ROOM_G, run: RUN,
-                       step: STEP, q: QA, answerQ: answerQ, startRun: startRun, toggleRun: toggleRun, rv: RV, cols: function () { return { A: GV.A, B: GV.B }; } };
+                       step: STEP, step2: STEP2, q: QA, answerQ: answerQ, startRun: startRun, toggleRun: toggleRun, rv: RV, cols: function () { return { A: GV.A, B: GV.B }; } };
       inner.appendChild(root);
     },
     enter: function () { G.last = null; },

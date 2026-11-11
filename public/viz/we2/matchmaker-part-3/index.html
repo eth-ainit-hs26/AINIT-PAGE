@@ -856,7 +856,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* MF.L, the table view of section 4 (loss.js). Owned by S4-A (BRIEF-s4.md, LOSS.md). Classes start with lv-.
    Since 2026-11-06 the parts stand in part two's textbook cross (M.cross, layout "textbook", MATRIX.md): the films'
    matrix turned above the predictions, the customers on their left, the ratings on the right of the predictions, the
-   losses under those two, the average loss in its double violet ring on the right of the losses; the desk and the
+   losses under those two, the total loss in its double violet ring on the right of the losses; the desk and the
    words beside or under it. One prediction as part one shows a score: the customer's row and the film's column
    outlined (an SVG over the cross), its worked line on the desk. Captions: the model in ink, the forward pass in
    violet (--g-fwd); the update in ochre (--g-move). */
@@ -916,7 +916,7 @@ button.chip:hover{border-color:var(--rubric)}
 @keyframes lv-moved{0%{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5px var(--g-move)} 70%{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5px var(--g-move)}
   100%{box-shadow:0 0 0 0 transparent}}
 
-/* the average loss in its ring */
+/* the total loss in its ring */
 .lv-avgp{display:grid; justify-items:center; gap:6px; align-self:center; padding:0 4px}
 .lv-avgcap{white-space:nowrap}
 .lv-ring{position:relative; display:grid; place-items:center; padding:6px 2px 2px}
@@ -983,7 +983,7 @@ button.chip:hover{border-color:var(--rubric)}
   .lv-room .mx.lv-guesses, .lv-room .mx.lv-predictions, .lv-room .mx.lv-ratings{--mx-py:5px}
   .lv-room .mx.lv-guesses .mx-ch, .lv-room .mx.lv-predictions .mx-ch, .lv-room .mx.lv-ratings .mx-ch{padding-bottom:6px}
 }
-/* Phones: the same stack, tighter; the average on the right of the losses for one film, under them for two (as in
+/* Phones: the same stack, tighter; the total on the right of the losses for one film, under them for two (as in
    part two); the desk under everything */
 @media (max-width: 560px){
   .lv-cross{--mx-xcg:8px; --mx-xrg:4px; --mx-xjoin:14px}
@@ -1119,15 +1119,13 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-key .nt-n.s5-in{--nt-w:26px; --nt-h:21px; --nt-fs:14px}
 
 /* the run, in the board's top-right corner (the textbook cross's slot nb: on the right of the films' numbers, above the
-   ratings and the average): the step count over Play on the left, the curve on their right, about as tall as the
-   films' numbers beside it (--s5-ch); the average loss in its double violet ring stands in the board (in a row with
-   the count and Replay under the large curve on the last step of scene real); on a phone the run is a row under the
-   board */
+   ratings and the total): the step count over Play on the left, the curve on their right, about as tall as the
+   films' numbers beside it (--s5-ch); the total loss in its double violet ring stands in the board; on a phone the run
+   is a row under the board */
 .s5-strip{display:grid; grid-template-columns:auto minmax(0, 1fr); grid-template-areas:"count curve" "ctl curve"; align-items:center;
   gap:6px 16px; width:340px}
 .s5-strip[hidden]{display:none}
 .s5-strip > .s5-count{grid-area:count; align-self:end}
-.s5-strip > .s5-ringw{grid-area:ring}
 .s5-strip > .s5-ctl{grid-area:ctl; justify-content:flex-start; align-self:start}
 .s5-strip > .s5-curve{grid-area:curve; height:var(--s5-ch, 90px)}
 .s5-count{display:grid; justify-items:center; gap:0; margin:0}
@@ -1149,9 +1147,6 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-cti{fill:var(--ink); font-family:var(--serif); font-style:italic; font-size:14px}
 .s5-cp{fill:none; stroke:var(--g-fwd); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round}
 .s5-cd{fill:var(--g-fwd); stroke:var(--leaf); stroke-width:2}
-.s5-cb{stroke:var(--ochre); stroke-width:2; stroke-dasharray:7 5}
-.s5-cbt{fill:var(--ochre); font-family:var(--serif); font-style:italic; font-weight:600; font-size:14px}
-.s5-cb[hidden], .s5-cbt[hidden]{display:none}
 
 /* scene recap: the optional game's view (MF.L.view), the words above it, the run (count, Replay, a small curve) in the
    board's top-right corner */
@@ -1177,7 +1172,7 @@ button.chip:hover{border-color:var(--rubric)}
    words above it on every screen (Carlos, 2026-11-06: "the text must go above or below but not on the side"): the
    users' numbers on the left of the predictions, the films' numbers turned (one column per film) above them, their
    columns over the predictions' columns (one square size for the whole board), the ratings on the right of the
-   predictions, the losses under both, the average on the right of the losses. The films' pictures over the ratings are
+   predictions, the losses under both, the total on the right of the losses. The films' pictures over the ratings are
    left out on the board (too small to read at these sizes). */
 .s5-words{display:grid; justify-items:center; gap:4px; min-width:0}
 .s5-x{--mx-xcg:26px; --mx-xrg:8px}
@@ -1219,23 +1214,22 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-larger .s5-strip{--s5-ch:76px}
 .s5-larger .s5-x.s5-solo .s5-map{--sq:12px}
 .s5-larger .s5-x:not(.s5-solo) .s5-mg i{border-radius:1px}
-.s5-larger .s5-x:not(.s5-solo) .s5-mg i.s5-miss{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2.5px var(--g-move)}
-/* the last step of scene larger (of scene real until 2026-11-10): the curve takes the stage, the count, the ring and
-   Replay in a row under it */
-.s5-bigc .s5-read, .s5-bigc .s5-boards, .s5-bigc .s5-key{display:none}
-.s5-bigc .s5-strip{grid-template-columns:minmax(0, 1fr) auto auto auto minmax(0, 1fr);
-  grid-template-areas:"curve curve curve curve curve" ". count ring ctl ."; align-items:center; column-gap:44px; row-gap:10px;
-  width:min(100%, 900px)}
-.s5-bigc .s5-strip > .s5-curve{height:260px}
-.s5-bigc .s5-strip > .s5-ctl{justify-content:center}
+/* scene larger's board, three ratings hidden (2026-11-11): its squares are too small for the "?", so a hidden rating
+   is a violet square ringed in violet; the hidden ratings' predictions ringed a little thinner */
+.s5-larger .s5-x:not(.s5-solo) .s5-mg i[data-c="q"]{background:var(--rubric); box-shadow:0 0 0 1px var(--leaf), 0 0 0 3px var(--rubric);
+  position:relative; z-index:1}
+.s5-larger .s5-x:not(.s5-solo) .s5-mg i[data-c="q"]::after{content:none}
+.s5-larger .s5-x:not(.s5-solo) .s5-mg i.s5-hid{box-shadow:0 0 0 1px var(--leaf), 0 0 0 3px var(--g-move)}
 
-/* the last step of scene real: each hidden rating beside its prediction, one card per rating; the prediction ringed in
-   ochre as on the board */
+/* the last step of scenes real and larger: each hidden rating beside its prediction, one card per rating; the
+   prediction ringed in ochre as on the board. The cards of a row are as tall as the tallest, and the room a shorter
+   head leaves goes to its own row (1fr), so the predictions and the ratings stand level across the cards when a film's
+   name takes two lines (The Silence of the Lambs, scene larger) */
 .s5-reveal{display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch; gap:18px; width:100%; margin-top:10px}
 .s5-reveal[hidden]{display:none}
-.s5-rcard{display:grid; justify-items:center; align-content:start; gap:12px; width:236px; padding:14px 12px 12px;
+.s5-rcard{display:grid; grid-template-rows:1fr auto auto; justify-items:center; gap:12px; width:236px; padding:14px 12px 12px;
   border:1.5px solid var(--rule); border-radius:14px; background:var(--bg)}
-.s5-rhead{display:flex; align-items:center; gap:10px}
+.s5-rhead{display:flex; align-items:center; gap:10px; align-self:center}
 .s5-rwho p{margin:0; text-align:left}
 .s5-rfilm{font-size:19px; font-weight:600; line-height:1.15; color:var(--ink)}
 .s5-ruser{font-size:16px; line-height:1.2; color:var(--muted)}
@@ -1291,7 +1285,6 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-ring{padding:3px}
   .s5 .nt-n.s5-big{--nt-w:92px; --nt-h:42px; --nt-fs:27px}
   .s5-curve{height:66px}
-  .s5-bigc .s5-strip > .s5-curve{height:220px}
   .s5-reveal{gap:14px; margin-top:6px}
   .s5-rcard{width:216px; gap:9px; padding:11px 10px 10px}
   .s5-rfilm{font-size:17.5px}
@@ -1373,20 +1366,17 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-x .s5-ringw .s5-cl{font-size:11.5px}
   .s5-x .nt-n.s5-big{--nt-w:56px; --nt-h:30px; --nt-fs:17px; box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--g-fwd)}
   .s5-real .s5-x .s5-map{--sq:6px}
-  .s5-larger .s5-x .s5-map{--sq:3px; --gap:0px}
+  .s5-larger .s5-x .s5-map{--sq:4px; --gap:0px}   /* 3 px until 2026-11-11: two numbers per row left the room */
   .s5-larger .s5-x .s5-mg i, .s5-larger .s5-x:not(.s5-solo) .s5-mg i{border-radius:0}
   .s5-larger .s5-x.s5-solo .s5-map{--sq:9px; --gap:1px}
   .s5-larger .s5-x.s5-solo .s5-mg i{border-radius:1px}
   .s5-larger .s5-x.s5-solo .s5-mh{display:none}
-  .s5-bigc .s5-strip{grid-template-columns:auto auto auto; grid-template-areas:"curve curve curve" "count ring ctl"; column-gap:10px;
-    width:100%}
-  .s5-bigc .s5-strip > .s5-curve{height:190px}
   /* scene real: the hidden ratings' "?" too small to read on the phone's squares (the violet frame stays); a thinner
      ring on the predictions; the cards one under another, each in a row */
   .s5-real .s5-x .s5-mg i[data-c="q"]::after{content:none}
   .s5-real .s5-x .s5-mg i.s5-hid{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2.5px var(--g-move)}
   .s5-reveal{flex-direction:column; align-items:center; gap:8px; margin-top:4px}
-  .s5-rcard{width:100%; max-width:360px; grid-template-columns:auto 1fr; grid-template-areas:"head head" "pair miss";
+  .s5-rcard{width:100%; max-width:360px; grid-template-columns:auto 1fr; grid-template-rows:auto auto; grid-template-areas:"head head" "pair miss";
     align-items:center; gap:6px 10px; padding:8px 10px}
   .s5-rhead{grid-area:head}
   .s5-rpair{grid-area:pair; gap:12px}
@@ -1403,7 +1393,8 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-runrow{grid-template-columns:auto minmax(0, 1fr) auto; grid-template-areas:"count curve ctl"; gap:2px 10px; width:100%}
   .s5-runrow > .s5-curve{height:48px}
   .s5-runrow .s5-cn{font-size:19px}
-  .s5-larger .s5-x:not(.s5-solo) .s5-mg i.s5-miss{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2px var(--g-move)}
+  .s5-larger .s5-x:not(.s5-solo) .s5-mg i.s5-hid{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2.5px var(--g-move)}
+  .s5-larger .s5-x:not(.s5-solo) .s5-mg i[data-c="q"]{box-shadow:0 0 0 1px var(--leaf), 0 0 0 2.5px var(--rubric)}
   .s5-mcap .s5-long{display:none}
   .s5-pop .g-fnote{font-size:13px; max-width:none}
   .s5-chain{display:grid; grid-template-columns:1fr auto 1fr; gap:6px; width:100%}
@@ -1618,14 +1609,19 @@ button.chip:hover{border-color:var(--rubric)}
   // `start` is the first guess of the board (Carlos's sketch of 2026-11-05), one row per customer and per film over the
   // two DIMS. Ida -1 -2 and Paddington -1 2 were chosen for the corner of the earlier version (prediction -3 against
   // the rating 2, loss 25); the other six numbers were drawn with Python's random.Random(2026).randint(-2, 2): Raj -2 0,
-  // Elsa 2 2, The Martian -2 -1. Predictions -3 4 / 2 4 / 2 -6, losses 25 9 / 9 4 / 1 16, average 32/3 (10.67).
-  // The descent of part two (MF.Z, nudge-math.js): one number at a time, the average loss before and after adding eps,
-  // the number moved by alpha times the change of the average over eps, against it. The Martian's second number, -1:
-  // the average 10.6667 before, 10.6201 after -0.99, so it goes up to -0.5347 and the average falls to 8.7838. Every
-  // number in turn, the customers' rows first, is a round: below tol after 99 rounds. alpha 0.1 is the largest of 0.1,
-  // 0.15 and 0.2 with which the participant's corner never lets the loss grow when the right way is chosen (0.15 does
-  // from 40 of the 625 keypad guesses, 0.2 from 188); cornerTol is where the corner counts as done (from 624 of the 625
-  // keypad guesses, in 5 moves at the median and 30 at most; the guess of four zeros cannot move).
+  // Elsa 2 2, The Martian -2 -1. Predictions -3 4 / 2 4 / 2 -6, losses 25 9 / 9 4 / 1 16, their total 64. The loss of a
+  // guess is the TOTAL of its ratings' losses since 2026-11-11 (Carlos: "replace ... the average loss with the total
+  // loss so that we stay consistent with the literature"; the average, 32/3, until then).
+  // The descent of part two (MF.Z, nudge-math.js): one number at a time, the total loss before and after adding eps,
+  // the number moved by alpha times the change of the total over eps, against it. The Martian's second number, -1:
+  // the total 64 before, 63.7208 after -0.99, so it goes up to -0.4416 and the total falls to 50.8593. Every number in
+  // turn, the customers' rows first, is a round: below tol (0.001) after 77 rounds, below 1, 0.1 and 0.01 after rounds
+  // 18, 35 and 56; no round raises the total. alpha 0.02 is section 3's step size; on the total the old 0.1 overshoots
+  // (The Martian's second would jump to 1.79). The descent cannot get the total below about 0.0003, because a hop of eps
+  // measures each slope a little off, so tol is 0.001. The participant's corner (one rating, its total is its loss)
+  // keeps the hidden cornerAlpha 0.1: the right choice never lets the loss grow (0.15 does from 40 of the 625 keypad
+  // guesses, 0.2 from 188); cornerTol is where the corner counts as done (from 624 of the 625 keypad guesses, in 5
+  // moves at the median and 30 at most; the guess of four zeros cannot move).
   // ../tools/check_s2.js asserts these numbers.
   var S2 = {
     people: ["ida", "raj", "elsa"],
@@ -1638,8 +1634,9 @@ button.chip:hover{border-color:var(--rubric)}
     },
     nudge: ["f", 1, 1],                       // the number of the worked example: The Martian's second number
     eps: 0.01,
-    alpha: 0.1,
-    tol: 0.0001,
+    alpha: 0.02,
+    tol: 0.001,
+    cornerAlpha: 0.1,
     cornerTol: 0.01,
     // A start where hops of one whole unit get stuck, kept for the optional section 3: Ida -3 -3 and Paddington -3 2
     // predict 3 against the rating 2, loss 1, and every hop of 1 on any of the four numbers makes the loss bigger
@@ -1665,24 +1662,26 @@ button.chip:hover{border-color:var(--rubric)}
   };
 
   // Section 4: many customers, many films. The first guess is section 2's (S2.start). The column is Ida, Raj and Elsa
-  // with `film` alone (three ratings); the table is both films (six ratings). The loss of a table is the AVERAGE of
-  // the squared differences over its known ratings (Carlos: "we aggregate all these losses by computing the
-  // average"). Every number moves against the slope of that average, all at once, by alpha times its slope. The slope
-  // of a number is the average, over the ratings, of what each rating alone gives it: -2 times the partner times the
-  // difference when the rating contains the number (section 3's rule), 0 when it does not. MF.T (table-math.js) does
-  // the arithmetic; notebook/data.py holds the same numbers (FILM4, ALPHA4, TOL4, MAX4) and asserts what they give:
-  // the column's losses 25, 9, 1 and their average 35/3, one step to 4.594, below tol after 13 steps; the table's
-  // average 32/3, one step to 1.966, below tol after 52 steps, the loss falling at every step of both runs.
+  // with `film` alone (three ratings); the table is both films (six ratings). The loss of a table is the TOTAL of the
+  // squared differences over its known ratings since 2026-11-11 (their average until then, Carlos: "we aggregate all
+  // these losses by computing the average"; on 2026-11-11: "replace ... the average loss with the total loss so that
+  // we stay consistent with the literature"). Every number moves against the slope of that total, all at once, by
+  // alpha times its slope. The slope of a number is the sum, over the ratings, of what each rating alone gives it: -2
+  // times the partner times the difference when the rating contains the number (section 3's rule), 0 when it does
+  // not. alpha is 0.02, part two's and section 3's. MF.T (table-math.js) does the arithmetic; notebook/data.py holds
+  // the same numbers (FILM4, ALPHA4, TOL4, MAX4) and asserts what they give: the column's losses 25, 9, 1 and their
+  // total 35, one step to 16.889, below tol after 41 steps; the table's total 64, one step to 19.681, below tol after
+  // 118 steps, the loss falling at every step of both runs.
   var S4 = {
     film: "paddington",
-    alpha: 0.2,
+    alpha: 0.02,
     tol: 0.0001,
     max: 1000                 // the most steps a run may take before it gives up (a few guesses get stuck at 5/6)
   };
 
   // Section 5's data is MF.S5, set by s5-data.js (loaded right after table-math.js): real ratings of 26 MovieLens
   // users for 20 films, every one known, and two runs of gradient descent on them (10 users and 12 films with 5
-  // numbers per row, then all of them with 8), each with its seeded first guess and the best possible average loss.
+  // numbers per row, then all of them with 8), each with its seeded first guess and the best possible loss.
   // The file is generated by ../tools/s5_movielens.py from MovieLens ml-latest-small and carries the dataset's
   // citation and licence conditions; ../tools/check_s5.js checks that MF.T.run in the browser equals the run there.
 
@@ -1952,7 +1951,7 @@ button.chip:hover{border-color:var(--rubric)}
     2: { kicker: "Section two", motif: "unknown",
          line: "In real life nobody fills in a profile. The Matchmaker sees only ratings, and has to find the numbers behind them." },
     3: { kicker: "Section three, optional", motif: "hop", optional: true, skipTo: 5, skip: "Skip sections 3 and 4",
-         line: "In part two each number moved against nabla, the slope of the average loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
+         line: "In part two each number moved against nabla, the slope of the total loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
     4: { kicker: "Section four, optional", motif: "many", optional: true, skipTo: 5, skip: "Skip to section 5",
          line: "One customer and one film were the warm-up. Now every customer and every film, all at once." },
     5: { kicker: "Section five", motif: "loop",
@@ -1965,9 +1964,9 @@ button.chip:hover{border-color:var(--rubric)}
   var COLAB_OPT = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/02_cx_matrix_factorization_optional_student.ipynb";
   var PYTHON = {
     1: { part: 1, url: COLAB, what: "Teach a computer to multiply two matrices: one score, then one row, then the whole table." },
-    2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their average." },
+    2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their total." },
     3: { part: 3, url: COLAB_OPT, optional: true, what: "Let the computer feel the slope with a tiny hop, then hop downhill: gradient descent." },
-    4: { part: 4, url: COLAB_OPT, optional: true, what: "The average loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
+    4: { part: 4, url: COLAB_OPT, optional: true, what: "The total loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
   };
   function introMotif(kind) {
     var N = window.MF && window.MF.N;
@@ -2221,8 +2220,9 @@ button.chip:hover{border-color:var(--rubric)}
       }
       var b = el("button", s.intro ? "intro" : s.python ? "py" : "", s.intro || s.python ? "" : String(s.num));
       b.type = "button";
-      b.title = s.intro ? ACT_NAMES[s.act] : s.title;
-      b.setAttribute("aria-label", s.intro ? ACT_NAMES[s.act] : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
+      // a card inside a section (s.card, part two's "Your turn" since 2026-11-11) is named by its own title
+      b.title = s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.title;
+      b.setAttribute("aria-label", s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
       b.addEventListener("click", function () { go(i, 0); });
       groups[s.act].appendChild(b);
       dots.push(b);
@@ -4012,7 +4012,11 @@ button.chip:hover{border-color:var(--rubric)}
         var ly = (Pp.body.t + Pp.body.b) / 2;
         paintArrow("pr", [[Pp.out.r + GAP, ly], [R.out.l - GAP, ly]], null);
       } else paintArrow("pr", null);
-      if (S && Pp && R) {
+      if (S && R && S.out.l > R.out.r + 12) {
+        // the losses on the right of the ratings (part two's desk layout since 2026-11-10): one arrow straight in
+        paintArrow("rs", run(R.out.r, S.out.l, R.body.cy), "r");
+        paintArrow("ps", null);
+      } else if (S && Pp && R) {
         var yj = (Math.max(Pp.out.b, R.out.b) + S.out.t) / 2;
         if (S.out.t - Math.max(Pp.out.b, R.out.b) > 14) {
           paintArrow("rs", [[Pp.body.cx, Pp.out.b + 3], [Pp.body.cx, yj], [R.body.cx, yj], [R.body.cx, R.out.b + 3]], null);
@@ -5009,8 +5013,10 @@ button.chip:hover{border-color:var(--rubric)}
 })();
 </script>
 <script>
-/* The arithmetic of section 4, many customers and many films: the average loss of a whole table, the slope of every
-   number, one step of all of them at once, and the loop. MF.T in the browser and a module that node can require().
+/* The arithmetic of section 4, many customers and many films: the total loss of a whole table, the slope of every
+   number, one step of all of them at once, and the loop. The loss of a table is the TOTAL of its ratings' losses since
+   2026-11-11 (Carlos: "replace ... the average loss with the total loss so that we stay consistent with the
+   literature"; Koren, Bell and Volinsky 2009, equation 2); it was their average until then, and every slope with it. MF.T in the browser and a module that node can require().
    Written by the main session from notebook/data.py (table_loss, rating_slopes, table_slopes, table_step, factorize
    and _section4_checks, which assert the numbers below exactly). Owned by S4-B from 2026-11-03 (BRIEF-s4d.md): it may
    add to it, and its check script (../tools/check_table.js) asserts every number the section 4 scenes show. Keep the
@@ -5026,9 +5032,9 @@ button.chip:hover{border-color:var(--rubric)}
    T.ratings(people, films, rating)    R from MF.rating (or the function given): a row per customer, null where unknown
    T.predict(c, f)                     P[i][j], the inner product of customer row i and film row j (the product c f)
    T.table(c, f, R)                    { P, D, S, sum, n, loss }: the predictions, the differences (rating minus
-                                       prediction), the squares, their sum, the number of known ratings, the average
-                                       (D and S are null where R is null)
-   T.loss(c, f, R)                     the average loss, T.table(...).loss
+                                       prediction), the squares, their sum, the number of known ratings, the loss,
+                                       which is the sum (D and S are null where R is null)
+   T.loss(c, f, R)                     the total loss, T.table(...).loss
    T.touches(R, which, r)              the known ratings [i, j] whose prediction contains row r of that matrix: the
                                        customer's row for "c", the film's column for "f"
    T.partner(c, f, which, r, k, i, j)  the number that multiplies this one in the stack of rating (i, j)
@@ -5037,7 +5043,7 @@ button.chip:hover{border-color:var(--rubric)}
                                        times the difference when it touches, 0 when it does not; miss is the
                                        prediction minus the rating, so the same slope is 2 times the partner times
                                        the miss (the rule as the scenes write it since 2026-11-06)
-   T.slope(c, f, R, which, r, k)       the slope of the average loss for that number: the average of those slopes
+   T.slope(c, f, R, which, r, k)       the slope of the total loss for that number: the sum of those slopes
    T.slopes(c, f, R)                   { c: rows of slopes, f: rows of slopes }, every slope on the same guess
    T.step(c, f, R, alpha)              every slope measured first, then every number moved by alpha times its slope
                                        against it: { c, f, slopes, loss } (slopes before the step, loss after)
@@ -5057,18 +5063,19 @@ button.chip:hover{border-color:var(--rubric)}
                                        slope, to the old number minus the step (alpha defaults to MF.S4)
    T.rises(states)                     how many steps of a run (T.run(...).states) made the loss bigger
 
-   What they give (asserted in notebook/data.py), from MF.S2.start with alpha 0.2:
-   The column (Ida, Raj, Elsa with Paddington): predictions -3, 2, 2; losses 25, 9, 1; average 35/3. What each rating
-   gives Paddington's first number: 10, -12, 4 (average 2/3); its second: 20, 0, 4 (average 8); Ida's first: 10, 0, 0
-   (average 10/3); Raj's second: 0, 12, 0 (average 4). The slopes: Ida 10/3 and -20/3, Raj -2 and 4, Elsa -2/3 and
-   4/3, Paddington 2/3 and 8. One step: Ida -5/3 and -2/3, Raj -1.6 and -0.8, Elsa 32/15 and 26/15, Paddington
-   -17/15 and 0.4, the average 4.594 (Elsa's own loss rises from 1 to 7.42). Below tol after 13 steps.
-   The table (both films): predictions -3 4 / 2 4 / 2 -6; losses 25 9 / 9 4 / 1 16; average 32/3. One step: 1.966.
-   Below tol after 52 steps, the loss falling at every step; the product then gives every rating within 0.02.
-   A few guesses get stuck at 5/6 (3 of 2,000 random keypad guesses): run reports reached false for them. */
+   What they give (asserted in notebook/data.py), from MF.S2.start with alpha 0.02:
+   The column (Ida, Raj, Elsa with Paddington): predictions -3, 2, 2; losses 25, 9, 1; total 35. What each rating
+   gives Paddington's first number: 10, -12, 4 (sum 2); its second: 20, 0, 4 (sum 24); Ida's first: 10, 0, 0 (sum
+   10); Raj's second: 0, 12, 0 (sum 12). The slopes: Ida 10 and -20, Raj -6 and 12, Elsa -2 and 4, Paddington 2 and
+   24. One step: Ida -1.2 and -1.6, Raj -1.88 and -0.24, Elsa 2.04 and 1.92, Paddington -1.04 and 1.52, the total
+   16.889 (every rating's loss falls, Elsa's from 1 to 0.0413; the second step raises Elsa's to 0.139 while the total
+   falls). Below tol after 41 steps.
+   The table (both films): predictions -3 4 / 2 4 / 2 -6; losses 25 9 / 9 4 / 1 16; total 64. One step: 19.681.
+   Below tol after 118 steps, the loss falling at every step; the product then gives every rating within 0.01.
+   A few guesses get stuck at the total 5 (3 of 2,000 random keypad guesses): run reports reached false for them. */
 (function (root) {
   "use strict";
-  var DEF = { alpha: 0.2, tol: 0.0001, max: 1000 };
+  var DEF = { alpha: 0.02, tol: 0.0001, max: 1000 };
   function cfg() {
     var S4 = root && root.MF && root.MF.S4;
     return S4 ? { alpha: S4.alpha, tol: S4.tol, max: S4.max } : DEF;
@@ -5104,7 +5111,7 @@ button.chip:hover{border-color:var(--rubric)}
         sum += d * d; n++;
       }
     }
-    return { P: P, D: D, S: S, sum: sum, n: n, loss: n ? sum / n : 0 };
+    return { P: P, D: D, S: S, sum: sum, n: n, loss: sum };
   }
   function loss(c, f, R) { return table(c, f, R).loss; }
   function touches(R, which, r) {
@@ -5129,19 +5136,18 @@ button.chip:hover{border-color:var(--rubric)}
   function slope(c, f, R, which, r, k) {
     var a = asks(c, f, R, which, r, k), s = 0;
     a.forEach(function (x) { s += x.slope; });
-    return a.length ? s / a.length : 0;
+    return s;
   }
   function slopes(c, f, R) {
     // The same sums as data.table_slopes: every known rating adds its share to the four numbers of its stack.
-    var n = 0, gc = c.map(function (row) { return row.map(function () { return 0; }); });
+    var gc = c.map(function (row) { return row.map(function () { return 0; }); });
     var gf = f.map(function (row) { return row.map(function () { return 0; }); });
-    for (var i = 0; i < c.length; i++) for (var j = 0; j < f.length; j++) if (known(R, i, j)) n++;
-    for (i = 0; i < c.length; i++) for (j = 0; j < f.length; j++) {
+    for (var i = 0; i < c.length; i++) for (var j = 0; j < f.length; j++) {
       if (!known(R, i, j)) continue;
       var d = R[i][j] - inner(c[i], f[j]);
       for (var k = 0; k < c[i].length; k++) {
-        gc[i][k] += FACTOR * f[j][k] * d / n;
-        gf[j][k] += FACTOR * c[i][k] * d / n;
+        gc[i][k] += FACTOR * f[j][k] * d;
+        gf[j][k] += FACTOR * c[i][k] * d;
       }
     }
     return { c: gc, f: gf };
@@ -5199,16 +5205,15 @@ button.chip:hover{border-color:var(--rubric)}
    GENERATED by ../tools/s5_movielens.py from MovieLens ml-latest-small; do not edit by hand, run the script.
    MF.S5.source.licence holds the dataset's citation and licence conditions, which travel with this file.
    stars[i][j]: user users[i]'s stars for films[j] (0.5 to 5); a rating is stars minus shift (3).
-   runs[0] is the first users and films of the table, runs[1] the whole table: k numbers per row, alpha,
-   steps, the first guess c0 and f0 (seeded), best (the smallest average loss any two matrices with k
-   columns can reach, by the singular values), near (the first step within 1% of best), close (within
-   0.0001), end (loss, largest difference, ratings within half and a quarter of a star), start (the first
-   loss), and check (the loss at every 10th step, which tools/check_s5.js compares with MF.T.run).
-   runs[0] hides ratings: hidden lists them as [i, j] (drawn with hide_seed), its loss and its slopes leave
-   them out, its end counts only the known ratings, end.hidden holds the predictions for the hidden ones,
-   and best, near and close are null (the best possible needs every rating). */
+   runs[0] is the first users and films of the table, runs[1] the whole table. Each hides three ratings:
+   hidden lists them as [i, j] (drawn with hide_seed); its loss, the TOTAL of the known ratings' squared
+   differences, and its slopes leave them out. k numbers per row, alpha (on the total: alpha_average, the step
+   size on the average loss, divided by the number of known ratings), steps, the first guess c0 and f0 (seeded,
+   drawn between guess[0] and guess[1]), end (the total loss, the largest difference and the known ratings
+   within half and a quarter of a star, hidden: the predictions for the hidden ratings), start (the first
+   total loss), and check (the loss at every 10th step, which tools/check_s5.js compares with MF.T.run). */
 (function (root) {
-  var S5 = {"source":{"name":"MovieLens ml-latest-small","by":"GroupLens Research, University of Minnesota","url":"https://grouplens.org/datasets/movielens/","generated":"2018-09-26","sha256":{"ratings.csv":"aa289ca83157595d0df6aea1be6a4ded676ddc4385472e8313a8ed9805352646","movies.csv":"5a5f32dd9bb3797b8e728a1b98958789d2b13f294a69fdfbc5727f8a9611aa07"},"licence":["MovieLens ml-latest-small, GroupLens Research, University of Minnesota, generated on 26 September 2018.","F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems 5, 4: 19:1 to 19:19. https://doi.org/10.1145/2827872","Used under the dataset's licence: research use; no endorsement by the University of Minnesota or GroupLens is stated or implied; this transformation (520 ratings of 26 users for 20 films, stars minus 3) is distributed under the same conditions; no commercial or revenue-bearing use without GroupLens's permission."]},"shift":3,"users":[18,28,64,66,91,182,198,239,249,274,307,330,380,387,391,414,425,474,480,561,580,590,599,606,608,610],"films":[{"id":356,"title":"Forrest Gump (1994)","short":"Forrest Gump"},{"id":318,"title":"Shawshank Redemption, The (1994)","short":"The Shawshank Redemption"},{"id":296,"title":"Pulp Fiction (1994)","short":"Pulp Fiction"},{"id":593,"title":"Silence of the Lambs, The (1991)","short":"The Silence of the Lambs"},{"id":110,"title":"Braveheart (1995)","short":"Braveheart"},{"id":589,"title":"Terminator 2: Judgment Day (1991)","short":"Terminator 2"},{"id":480,"title":"Jurassic Park (1993)","short":"Jurassic Park"},{"id":47,"title":"Seven (a.k.a. Se7en) (1995)","short":"Seven"},{"id":50,"title":"Usual Suspects, The (1995)","short":"The Usual Suspects"},{"id":780,"title":"Independence Day (a.k.a. ID4) (1996)","short":"Independence Day"},{"id":32,"title":"Twelve Monkeys (a.k.a. 12 Monkeys) (1995)","short":"Twelve Monkeys"},{"id":260,"title":"Star Wars: Episode IV - A New Hope (1977)","short":"Star Wars"},{"id":1089,"title":"Reservoir Dogs (1992)","short":"Reservoir Dogs"},{"id":1196,"title":"Star Wars: Episode V - The Empire Strikes Back (1980)","short":"The Empire Strikes Back"},{"id":1210,"title":"Star Wars: Episode VI - Return of the Jedi (1983)","short":"Return of the Jedi"},{"id":2571,"title":"Matrix, The (1999)","short":"The Matrix"},{"id":2959,"title":"Fight Club (1999)","short":"Fight Club"},{"id":4993,"title":"Lord of the Rings: The Fellowship of the Ring, The (2001)","short":"The Fellowship of the Ring"},{"id":1214,"title":"Alien (1979)","short":"Alien"},{"id":1240,"title":"Terminator, The (1984)","short":"The Terminator"}],"stars":[[4.5,5.0,4.0,4.5,4.5,4.5,3.5,4.5,5.0,4.0,4.0,4.0,4.0,4.0,4.5,4.5,4.5,4.5,4.0,4.0],[4.0,3.5,4.5,2.5,3.5,4.5,2.5,3.0,3.5,3.0,3.5,4.0,3.0,4.0,4.0,4.0,3.5,3.0,3.5,4.5],[4.0,5.0,4.5,5.0,4.0,4.0,4.0,4.5,3.0,3.0,4.0,3.5,4.0,3.5,3.5,4.0,4.5,4.5,4.0,3.5],[5.0,4.5,5.0,4.0,5.0,4.0,3.0,5.0,4.0,3.5,5.0,2.5,4.0,4.0,3.0,5.0,5.0,5.0,4.0,4.0],[3.0,2.0,4.5,4.5,4.0,4.0,4.5,4.5,4.5,3.5,4.0,4.5,4.0,4.5,4.0,5.0,4.5,4.5,5.0,4.5],[5.0,4.5,5.0,4.5,3.5,2.0,3.5,4.0,4.5,1.5,4.0,3.5,5.0,3.0,2.5,5.0,5.0,3.0,4.5,2.0],[5.0,5.0,5.0,4.0,3.0,3.0,3.0,5.0,5.0,2.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,2.0,2.0,3.0],[5.0,5.0,5.0,3.5,4.5,3.5,4.0,5.0,4.5,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,4.0],[4.5,4.5,4.0,4.0,5.0,4.0,4.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,4.5,5.0,5.0,5.0,4.5,4.0],[4.5,4.5,5.0,4.0,4.5,4.5,3.5,4.0,4.0,3.5,4.0,3.0,4.5,4.5,4.0,4.0,5.0,3.0,4.0,4.0],[4.0,4.5,4.5,4.5,3.5,2.5,3.5,4.0,4.5,2.0,3.5,3.5,4.0,3.0,3.0,3.5,4.0,3.0,2.0,2.5],[5.0,4.5,4.0,5.0,3.5,3.5,2.0,3.0,5.0,2.5,5.0,4.0,2.5,5.0,5.0,3.5,4.0,3.5,4.0,2.5],[5.0,3.0,5.0,5.0,4.0,5.0,5.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,5.0,4.5,4.0,5.0,5.0,5.0],[4.0,3.5,5.0,4.0,3.5,3.5,3.0,4.5,4.5,2.0,3.5,4.5,4.5,4.5,4.0,4.0,4.5,3.0,4.0,4.0],[5.0,5.0,5.0,3.0,5.0,4.0,2.0,3.0,4.0,1.0,4.0,5.0,5.0,5.0,4.0,5.0,4.0,5.0,4.0,4.0],[5.0,5.0,5.0,4.0,5.0,5.0,4.0,4.0,5.0,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0],[5.0,5.0,4.0,4.0,4.0,3.5,3.5,4.5,4.5,3.5,4.0,3.0,3.5,3.0,3.0,3.5,4.5,4.5,4.0,3.0],[3.0,5.0,4.0,4.5,3.0,4.0,4.5,4.0,4.0,4.0,4.0,4.0,4.0,5.0,4.0,4.5,4.0,5.0,4.0,4.0],[5.0,5.0,4.0,4.5,5.0,4.5,5.0,4.5,3.5,3.0,4.0,4.5,4.0,5.0,3.5,5.0,4.5,3.5,5.0,4.0],[4.0,5.0,4.5,4.0,5.0,4.0,4.5,4.5,4.5,4.0,3.5,4.5,3.5,5.0,4.5,4.0,4.0,5.0,4.5,4.0],[4.0,5.0,5.0,4.5,4.5,4.0,4.0,5.0,5.0,3.0,5.0,4.0,5.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[5.0,4.5,4.5,3.5,4.0,4.5,4.0,3.0,4.5,4.0,3.0,5.0,4.0,5.0,4.5,4.0,3.5,4.5,4.5,4.5],[3.5,4.0,5.0,3.0,3.5,4.5,4.0,4.0,3.5,3.5,3.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,5.0,3.5],[4.0,3.5,5.0,4.5,3.5,3.5,2.5,3.0,4.5,2.5,4.0,4.5,5.0,4.5,4.5,5.0,5.0,4.5,4.0,4.0],[3.0,4.5,5.0,4.0,4.0,3.0,3.0,4.5,4.5,3.0,3.5,3.5,4.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[3.0,3.0,5.0,4.5,4.5,5.0,5.0,5.0,4.0,3.5,4.5,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.5,5.0]],"runs":[{"name":"small","users":10,"films":12,"k":2,"alpha":3,"steps":200,"seed":1,"hide_seed":1,"hidden":[[2,9],[1,4],[7,7]],"c0":[[-0.37,0.35],[0.26,-0.24],[0.0,-0.05],[0.15,0.29],[-0.41,-0.47],[0.34,-0.07],[0.26,-0.5],[-0.05,0.22],[-0.27,0.45],[0.4,-0.47]],"f0":[[-0.47,0.04],[0.44,-0.12],[-0.28,-0.08],[-0.47,-0.28],[-0.06,0.0],[-0.27,-0.27],[-0.28,-0.04],[-0.21,-0.48],[0.34,0.06],[0.14,-0.31],[0.49,0.36],[-0.38,-0.17]],"best":null,"near":null,"close":null,"end":{"loss":0.25086536262392417,"largest":1.772649786057978,"within_half":81,"within_quarter":48,"hidden":[0.672352306013165,0.6227970952582049,1.9847636790449537]},"start":1.8390872940170933,"every":10,"check":[1.8390872940170933,0.3044750041957047,0.2590643935446026,0.2540437813817596,0.25232099234287836,0.25157051752157084,0.2512171852084287,0.25104421638844676,0.2509574870633079,0.25091326904545835,0.2508904465622904,0.250878557970973,0.25087232192474956,0.2508690338570197,0.25086729347515047,0.2508663696690283,0.2508658782868727,0.2508656165200392,0.2508654769200221,0.25086540241262983,0.25086536262392417]},{"name":"large","users":26,"films":20,"k":8,"alpha":3,"steps":500,"seed":2,"c0":[[0.46,0.45,-0.44,-0.42,0.34,0.24,0.17,-0.19],[0.11,0.11,0.08,-0.34,-0.07,-0.11,0.22,0.49],[0.45,0.04,-0.06,-0.23,-0.46,-0.47,-0.04,-0.18],[-0.12,0.39,0.03,0.06,-0.26,-0.48,-0.17,-0.36],[0.01,0.5,0.17,-0.32,0.39,0.3,0.23,0.41],[0.26,0.29,-0.15,0.48,0.46,-0.34,0.25,0.22],[-0.04,0.03,-0.01,0.42,0.0,0.33,-0.15,0.38],[0.4,-0.04,0.07,0.42,0.22,-0.01,-0.28,-0.18],[0.2,-0.33,0.41,-0.23,0.41,-0.19,0.46,0.21],[0.0,0.02,0.15,0.09,-0.19,-0.29,0.01,0.43],[0.12,-0.42,0.32,0.23,0.41,-0.31,0.24,-0.44],[0.15,-0.23,-0.27,0.38,-0.39,0.02,0.35,-0.26],[-0.29,0.38,-0.08,0.22,-0.47,-0.14,-0.33,0.17],[-0.42,0.45,-0.47,0.23,-0.48,-0.24,0.31,-0.34],[-0.32,0.19,-0.11,-0.46,0.49,-0.35,-0.46,-0.16],[0.12,0.24,-0.39,-0.16,-0.47,-0.05,0.27,0.24],[0.4,0.26,0.36,0.21,-0.03,-0.27,0.16,-0.18],[-0.4,-0.05,0.37,-0.37,0.08,-0.11,0.01,-0.36],[0.46,-0.24,0.11,-0.08,-0.48,0.06,-0.36,-0.44],[-0.47,-0.34,-0.4,0.14,0.01,0.48,0.43,0.49],[-0.27,-0.06,-0.25,0.09,0.12,0.3,0.21,-0.24],[-0.08,0.03,-0.5,-0.46,-0.09,-0.39,0.22,-0.26],[-0.4,-0.32,-0.27,-0.28,0.02,-0.04,-0.19,0.14],[-0.29,0.41,0.46,0.23,-0.07,0.01,0.08,-0.45],[-0.08,0.03,-0.32,-0.41,0.3,-0.13,0.02,0.42],[0.11,-0.21,0.48,-0.13,-0.48,0.19,-0.4,-0.19]],"f0":[[0.34,0.17,-0.48,-0.05,-0.09,-0.01,-0.29,0.09],[-0.43,-0.22,-0.13,0.44,-0.42,0.25,-0.31,0.07],[-0.11,-0.04,0.25,-0.1,-0.38,-0.38,-0.42,0.35],[0.14,0.46,0.19,-0.48,0.16,0.28,0.22,0.0],[-0.14,-0.04,0.3,-0.23,0.03,-0.02,0.45,0.3],[0.43,0.34,-0.2,-0.27,-0.01,-0.24,-0.07,0.18],[0.42,0.09,0.32,-0.4,-0.14,0.5,-0.35,-0.08],[-0.43,-0.41,0.4,0.49,0.15,-0.37,-0.2,-0.27],[0.17,0.18,-0.06,0.02,-0.39,0.04,0.45,0.26],[-0.4,0.02,0.22,-0.24,0.39,-0.04,0.2,-0.1],[0.5,0.28,0.07,-0.36,-0.06,-0.47,0.1,0.38],[-0.32,0.01,-0.02,-0.1,0.21,0.44,0.21,-0.03],[0.46,-0.17,0.25,0.16,0.26,0.35,-0.28,0.12],[-0.1,0.17,0.48,0.13,-0.49,-0.04,0.21,0.38],[0.15,0.32,-0.48,0.44,0.23,0.11,0.41,0.38],[-0.4,0.32,0.27,-0.3,0.24,0.09,-0.31,0.3],[-0.36,0.11,-0.07,-0.25,0.07,-0.03,-0.3,0.47],[-0.43,-0.5,-0.01,0.34,0.16,0.25,-0.01,0.17],[-0.17,-0.23,0.0,-0.47,-0.42,0.25,-0.33,0.25],[0.28,-0.1,0.17,0.29,0.36,-0.37,-0.34,-0.12]],"best":0.06946921990638412,"near":236,"close":344,"end":{"loss":0.06947610459607549,"largest":0.9621963269518196,"within_half":491,"within_quarter":343},"start":1.991351010730769,"every":10,"check":[1.991351010730769,0.4556790231597761,0.24917990300599976,0.1812050234219615,0.1383708090391534,0.11291804240762357,0.09902694073164506,0.09117625084942632,0.08618405063952504,0.08265094117256502,0.07998044609763778,0.07789759432261692,0.07625305003710223,0.07494855266262847,0.07391078828966598,0.07308253114703277,0.07241890524747853,0.07188491480823192,0.07145338190344247,0.07110320811834096,0.07081797016526391,0.07058482448812016,0.07039367038661408,0.07023651679640533,0.07010700434632722,0.07000004388907288,0.06991154181783195,0.06983818999867028,0.06977730395650107,0.06972669729254045,0.06968458349699916,0.06964949863864738,0.06962024009409139,0.06959581770024999,0.06957541460345025,0.06955835573149133,0.06954408229787297,0.06953213110760018,0.06952211770519864,0.06951372261166205,0.06950668005505356,0.06950076872160812,0.06949580414932059,0.06949163246062104,0.0694881251896397,0.0694851750063027,0.06948269217679691,0.06948060162980928,0.06947884052198965,0.0694773562154806,0.06947610459607549]}]};
+  var S5 = {"source":{"name":"MovieLens ml-latest-small","by":"GroupLens Research, University of Minnesota","url":"https://grouplens.org/datasets/movielens/","generated":"2018-09-26","sha256":{"ratings.csv":"aa289ca83157595d0df6aea1be6a4ded676ddc4385472e8313a8ed9805352646","movies.csv":"5a5f32dd9bb3797b8e728a1b98958789d2b13f294a69fdfbc5727f8a9611aa07"},"licence":["MovieLens ml-latest-small, GroupLens Research, University of Minnesota, generated on 26 September 2018.","F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems 5, 4: 19:1 to 19:19. https://doi.org/10.1145/2827872","Used under the dataset's licence: research use; no endorsement by the University of Minnesota or GroupLens is stated or implied; this transformation (520 ratings of 26 users for 20 films, stars minus 3) is distributed under the same conditions; no commercial or revenue-bearing use without GroupLens's permission."]},"shift":3,"guess":[-0.5,0.5],"users":[18,28,64,66,91,182,198,239,249,274,307,330,380,387,391,414,425,474,480,561,580,590,599,606,608,610],"films":[{"id":356,"title":"Forrest Gump (1994)","short":"Forrest Gump"},{"id":318,"title":"Shawshank Redemption, The (1994)","short":"The Shawshank Redemption"},{"id":296,"title":"Pulp Fiction (1994)","short":"Pulp Fiction"},{"id":593,"title":"Silence of the Lambs, The (1991)","short":"The Silence of the Lambs"},{"id":110,"title":"Braveheart (1995)","short":"Braveheart"},{"id":589,"title":"Terminator 2: Judgment Day (1991)","short":"Terminator 2"},{"id":480,"title":"Jurassic Park (1993)","short":"Jurassic Park"},{"id":47,"title":"Seven (a.k.a. Se7en) (1995)","short":"Seven"},{"id":50,"title":"Usual Suspects, The (1995)","short":"The Usual Suspects"},{"id":780,"title":"Independence Day (a.k.a. ID4) (1996)","short":"Independence Day"},{"id":32,"title":"Twelve Monkeys (a.k.a. 12 Monkeys) (1995)","short":"Twelve Monkeys"},{"id":260,"title":"Star Wars: Episode IV - A New Hope (1977)","short":"Star Wars"},{"id":1089,"title":"Reservoir Dogs (1992)","short":"Reservoir Dogs"},{"id":1196,"title":"Star Wars: Episode V - The Empire Strikes Back (1980)","short":"The Empire Strikes Back"},{"id":1210,"title":"Star Wars: Episode VI - Return of the Jedi (1983)","short":"Return of the Jedi"},{"id":2571,"title":"Matrix, The (1999)","short":"The Matrix"},{"id":2959,"title":"Fight Club (1999)","short":"Fight Club"},{"id":4993,"title":"Lord of the Rings: The Fellowship of the Ring, The (2001)","short":"The Fellowship of the Ring"},{"id":1214,"title":"Alien (1979)","short":"Alien"},{"id":1240,"title":"Terminator, The (1984)","short":"The Terminator"}],"stars":[[4.5,5.0,4.0,4.5,4.5,4.5,3.5,4.5,5.0,4.0,4.0,4.0,4.0,4.0,4.5,4.5,4.5,4.5,4.0,4.0],[4.0,3.5,4.5,2.5,3.5,4.5,2.5,3.0,3.5,3.0,3.5,4.0,3.0,4.0,4.0,4.0,3.5,3.0,3.5,4.5],[4.0,5.0,4.5,5.0,4.0,4.0,4.0,4.5,3.0,3.0,4.0,3.5,4.0,3.5,3.5,4.0,4.5,4.5,4.0,3.5],[5.0,4.5,5.0,4.0,5.0,4.0,3.0,5.0,4.0,3.5,5.0,2.5,4.0,4.0,3.0,5.0,5.0,5.0,4.0,4.0],[3.0,2.0,4.5,4.5,4.0,4.0,4.5,4.5,4.5,3.5,4.0,4.5,4.0,4.5,4.0,5.0,4.5,4.5,5.0,4.5],[5.0,4.5,5.0,4.5,3.5,2.0,3.5,4.0,4.5,1.5,4.0,3.5,5.0,3.0,2.5,5.0,5.0,3.0,4.5,2.0],[5.0,5.0,5.0,4.0,3.0,3.0,3.0,5.0,5.0,2.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,2.0,2.0,3.0],[5.0,5.0,5.0,3.5,4.5,3.5,4.0,5.0,4.5,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,4.0],[4.5,4.5,4.0,4.0,5.0,4.0,4.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,4.5,5.0,5.0,5.0,4.5,4.0],[4.5,4.5,5.0,4.0,4.5,4.5,3.5,4.0,4.0,3.5,4.0,3.0,4.5,4.5,4.0,4.0,5.0,3.0,4.0,4.0],[4.0,4.5,4.5,4.5,3.5,2.5,3.5,4.0,4.5,2.0,3.5,3.5,4.0,3.0,3.0,3.5,4.0,3.0,2.0,2.5],[5.0,4.5,4.0,5.0,3.5,3.5,2.0,3.0,5.0,2.5,5.0,4.0,2.5,5.0,5.0,3.5,4.0,3.5,4.0,2.5],[5.0,3.0,5.0,5.0,4.0,5.0,5.0,5.0,4.0,4.0,5.0,5.0,4.0,5.0,5.0,4.5,4.0,5.0,5.0,5.0],[4.0,3.5,5.0,4.0,3.5,3.5,3.0,4.5,4.5,2.0,3.5,4.5,4.5,4.5,4.0,4.0,4.5,3.0,4.0,4.0],[5.0,5.0,5.0,3.0,5.0,4.0,2.0,3.0,4.0,1.0,4.0,5.0,5.0,5.0,4.0,5.0,4.0,5.0,4.0,4.0],[5.0,5.0,5.0,4.0,5.0,5.0,4.0,4.0,5.0,4.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0],[5.0,5.0,4.0,4.0,4.0,3.5,3.5,4.5,4.5,3.5,4.0,3.0,3.5,3.0,3.0,3.5,4.5,4.5,4.0,3.0],[3.0,5.0,4.0,4.5,3.0,4.0,4.5,4.0,4.0,4.0,4.0,4.0,4.0,5.0,4.0,4.5,4.0,5.0,4.0,4.0],[5.0,5.0,4.0,4.5,5.0,4.5,5.0,4.5,3.5,3.0,4.0,4.5,4.0,5.0,3.5,5.0,4.5,3.5,5.0,4.0],[4.0,5.0,4.5,4.0,5.0,4.0,4.5,4.5,4.5,4.0,3.5,4.5,3.5,5.0,4.5,4.0,4.0,5.0,4.5,4.0],[4.0,5.0,5.0,4.5,4.5,4.0,4.0,5.0,5.0,3.0,5.0,4.0,5.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[5.0,4.5,4.5,3.5,4.0,4.5,4.0,3.0,4.5,4.0,3.0,5.0,4.0,5.0,4.5,4.0,3.5,4.5,4.5,4.5],[3.5,4.0,5.0,3.0,3.5,4.5,4.0,4.0,3.5,3.5,3.0,5.0,5.0,5.0,5.0,5.0,5.0,4.0,5.0,3.5],[4.0,3.5,5.0,4.5,3.5,3.5,2.5,3.0,4.5,2.5,4.0,4.5,5.0,4.5,4.5,5.0,5.0,4.5,4.0,4.0],[3.0,4.5,5.0,4.0,4.0,3.0,3.0,4.5,4.5,3.0,3.5,3.5,4.0,4.0,4.0,5.0,5.0,4.5,4.0,3.5],[3.0,3.0,5.0,4.5,4.5,5.0,5.0,5.0,4.0,3.5,4.5,5.0,5.0,5.0,5.0,5.0,5.0,5.0,4.5,5.0]],"runs":[{"name":"small","users":10,"films":12,"k":2,"alpha":0.02564102564102564,"alpha_average":3,"steps":200,"seed":1,"hide_seed":1,"hidden":[[2,9],[1,4],[7,7]],"c0":[[-0.37,0.35],[0.26,-0.24],[0.0,-0.05],[0.15,0.29],[-0.41,-0.47],[0.34,-0.07],[0.26,-0.5],[-0.05,0.22],[-0.27,0.45],[0.4,-0.47]],"f0":[[-0.47,0.04],[0.44,-0.12],[-0.28,-0.08],[-0.47,-0.28],[-0.06,0.0],[-0.27,-0.27],[-0.28,-0.04],[-0.21,-0.48],[0.34,0.06],[0.14,-0.31],[0.49,0.36],[-0.38,-0.17]],"end":{"loss":29.35124742699913,"largest":1.7726497860579777,"within_half":81,"within_quarter":48,"hidden":[0.6723523060131651,0.622797095258205,1.9847636790449537]},"start":215.17321339999992,"every":10,"check":[215.17321339999992,35.62357549089745,30.3105340447185,29.723122421665874,29.521556104116762,29.433750550023785,29.39241066938615,29.372173317448272,29.36202598640703,29.356852478318622,29.354182247787982,29.352791282603846,29.352061665195695,29.351676961271302,29.3514733365926,29.351365251276313,29.351307759564108,29.35127713284458,29.351260799642585,29.351252082277696,29.35124742699913]},{"name":"large","users":26,"films":20,"k":2,"alpha":0.005802707930367505,"alpha_average":3,"steps":300,"seed":2,"hide_seed":1,"hidden":[[4,18],[25,2],[8,3]],"c0":[[0.46,0.45],[-0.44,-0.42],[0.34,0.24],[0.17,-0.19],[0.11,0.11],[0.08,-0.34],[-0.07,-0.11],[0.22,0.49],[0.45,0.04],[-0.06,-0.23],[-0.46,-0.47],[-0.04,-0.18],[-0.12,0.39],[0.03,0.06],[-0.26,-0.48],[-0.17,-0.36],[0.01,0.5],[0.17,-0.32],[0.39,0.3],[0.23,0.41],[0.26,0.29],[-0.15,0.48],[0.46,-0.34],[0.25,0.22],[-0.04,0.03],[-0.01,0.42]],"f0":[[0.0,0.33],[-0.15,0.38],[0.4,-0.04],[0.07,0.42],[0.22,-0.01],[-0.28,-0.18],[0.2,-0.33],[0.41,-0.23],[0.41,-0.19],[0.46,0.21],[0.0,0.02],[0.15,0.09],[-0.19,-0.29],[0.01,0.43],[0.12,-0.42],[0.32,0.23],[0.41,-0.31],[0.24,-0.44],[0.15,-0.23],[-0.27,0.38]],"end":{"loss":147.76622058374306,"largest":1.7575596648765204,"within_half":349,"within_quarter":197,"hidden":[1.4495549148092357,1.6038373227510523,1.2804880755804608]},"start":992.0007579299995,"every":10,"check":[992.0007579299995,252.81931241997816,195.02774942614928,179.03011509707034,163.37838342582398,155.2835729057022,151.62360278428258,149.80017546505727,148.8521015008675,148.35193268063045,148.08542247571762,147.94199133631412,147.86399738522144,147.82114401462508,147.79735846348754,147.78402718077643,147.77648577464578,147.77218218777324,147.76970603453842,147.76827033744433,147.76743192685012,147.76693905805334,147.76664754269214,147.76647415173233,147.7663704915917,147.7663082313466,147.76627067991652,147.76624794608267,147.76623413666232,147.7662257232221,147.76622058374306]}]};
   if (typeof module !== "undefined" && module.exports) module.exports = S5;
   if (root && root.MF) root.MF.S5 = S5;
 })(typeof window !== "undefined" ? window : null);
@@ -5222,10 +5227,11 @@ button.chip:hover{border-color:var(--rubric)}
    MATRIX.md; the stack of his sketch of 2026-11-05 before): the customer embeddings, one row per customer, on the left
    of the predictions; the film embeddings turned, one column per film, ABOVE the predictions (a customer's row band in
    violet, a film's column band in ochre, crossing at the prediction), the ratings on their right with a plain line
-   between the two, the losses under the predictions and the ratings, and the average loss in a double ring on the
+   between the two, the losses under the predictions and the ratings, and the total loss in a double ring on the
    right of the losses, with arrows from the customers and the films to the predictions, from the predictions and the
-   ratings into the losses, from the losses to the average. No differences: a loss comes straight from its prediction
-   and its rating. Until 2026-11-05 it was the cross of 2026-11-04. Beside or under the board a desk: one prediction
+   ratings into the losses, from the losses to the total (the average until 2026-11-11, Carlos's fifteenth message;
+   the internal names of that part, "average", "avg", avgText and V.average, stay). No differences: a loss comes
+   straight from its prediction and its rating. Until 2026-11-05 it was the cross of 2026-11-04. Beside or under the board a desk: one prediction
    worked as part one shows a score (since the port of 2026-11-06: the customer's row and the film's column outlined in
    the board, the worked line of M.workLine on the desk, the sum flying into its cell), or one loss worked as
    (prediction - rating) squared, the prediction on the left of the rating as on the board (Carlos, 2026-11-06).
@@ -5238,7 +5244,7 @@ button.chip:hover{border-color:var(--rubric)}
                       a row per customer and per film (default MF.S2.start; the films' rows are drawn as columns);
                       o.ratings: R (default from MF.V); o.parts: how many parts show at first (default all);
                       o.size "sm" (default) or "md"; o.places: decimals on the page (default 2), o.lossPlaces for
-                      losses and the average (default 2)
+                      losses and the total loss (default 2)
                       Added by S4-A: o.avgPlaces (default o.lossPlaces) and o.tol (default MF.S4.tol) for the ring;
                       o.dec: true gives every number cell room for two decimals, so a run never shifts the layout
                       (o.layout, o.phoneFold and o.phonePredictionsBelow belonged to the layout before the cross and
@@ -5258,7 +5264,7 @@ button.chip:hover{border-color:var(--rubric)}
    V.matrix(part)     the MF.M matrix of "c", "f" (the guesses), "p", "r", "s" (predictions, ratings, losses), so
                       a scene can use its bands, rings and dimming (MATRIX.md); "f" is turned, its calls stay logical
    V.cell(part, i, j) the td of one entry of those matrices (logical: film j's number i is V.cell("f", j, i));
-                      V.cell("avg") the ring of the average
+                      V.cell("avg") the ring of the total loss
    V.guessCells()     the tds of every guessed number in reading order, the customers' rows first: for MF.H.team
    V.mark(list)       rings entries: [{ part, i, j, tone }], tone "a" (violet), "b" (ochre) or "slope" (green);
                       null clears every ring
@@ -5286,9 +5292,9 @@ button.chip:hover{border-color:var(--rubric)}
                       squared; o.ask [i, j] makes the loss the room's slot (o.diff is ignored since 2026-11-04)
    V.lossWork(i, j, o) one loss, played: the prediction and then the rating fly onto the desk, the loss comes and
                       flies into its cell (o.pace); a Promise
-   V.fill(o)          the predictions, the losses and the average filled fast, as a wave (o.pace); a Promise
-   V.land(o)          every loss flies into the ring, which counts their sum, divides by their number and shows the
-                      average (o.pace); a Promise. V.average(on) draws the ring empty (false) or full (true) at once
+   V.fill(o)          the predictions, the losses and the total loss filled fast, as a wave (o.pace); a Promise
+   V.land(o)          every loss flies into the ring, which adds them up and shows the total loss (o.pace); a
+                      Promise. V.average(on) draws the ring empty (false) or full (true) at once
    V.desk(mode)       "line" (one prediction's worked line), "loss" or null: which desk shows beside the board
                       (V.work, V.pair and V.lossWork open their own); the desk takes room only while it shows
    V.slot(part)       the room's slot of the moment ("p" or "s"), or null
@@ -5323,7 +5329,7 @@ button.chip:hover{border-color:var(--rubric)}
     if (v !== 0 && value(t) === 0) return ABOUT + "0";
     return t;
   }
-  // The average in its ring: `places` decimals from 0.1 on, 4 below 0.1, two significant digits below 0.001,
+  // The total loss in its ring: `places` decimals from 0.1 on, 4 below 0.1, two significant digits below 0.001,
   // "about 0" below tol.
   function avgText(v, places, tol) {
     var a = Math.abs(v);
@@ -5477,7 +5483,7 @@ button.chip:hover{border-color:var(--rubric)}
       group(x === "r" ? "ratings" : "losses", [mats[x].el]);
     });
     var ga = group("average", [el("div", "lv-avgp")]);
-    ga.appendChild(el("p", "mx-cap lv-fwd lv-avgcap", "Average loss"));
+    ga.appendChild(el("p", "mx-cap lv-fwd lv-avgcap", "Total loss"));
     var ring = el("div", "lv-ring mx-xbody");
     var avgCell = N.cell(0, { cls: "lv-avgn" });
     var tag = el("span", "lv-tag");
@@ -5680,7 +5686,7 @@ button.chip:hover{border-color:var(--rubric)}
     }
     // The arrows follow the parts, as in part two: into the predictions with the guesses and the predictions, the
     // line between the predictions and the ratings with both, into the losses with the predictions, the ratings and the
-    // losses, into the average with the losses and the average.
+    // losses, into the total loss with the losses and the total.
     function arrows() {
       var g = partOn("guesses"), p = partOn("predictions"), r = partOn("ratings"), s = partOn("losses"), a = partOn("average");
       X.arrows({ cp: g && p, fp: g && p, pr: p && r, rs: p && r && s, ps: p && r && s, sa: s && a });
@@ -5989,16 +5995,14 @@ button.chip:hover{border-color:var(--rubric)}
         }]);
         at += Math.max(380, 620 * pace) + (q === 0 ? 120 * pace : 0);
       });
+      // The running sum is the total loss once the last loss has landed (no division since 2026-11-11)
       at += dur + 260 * pace;
-      acts.push([at, function () { tag.textContent = DIV + " " + list.length; pop(tag, 420); }]);
-      at += TEMPO.tag * pace + 400 * pace;
       acts.push([at, function () { avgCell.classList.remove("lv-sum"); end(); pop(avgCell, 600); }]);
       return seq.run(acts, at + 300).then(function (ok) {
         if (ok && my === tok) arrived(my);
         return ok && my === tok;
       });
     }
-    var DIV = "÷";
     function desk(mode) { setDesk(mode || null); return api; }
     function slot(part) {
       if (part === "p" && S.askP) { var a = S.askP.split(","); return C.item(+a[0], +a[1]); }
@@ -6033,23 +6037,31 @@ button.chip:hover{border-color:var(--rubric)}
 <script>
 /* Section 5, the whole picture: S5-A's scenes (BRIEF-s5.md, WHOLE.md). Classes start with s5-.
 
+   The loss of a guess is the TOTAL of its known ratings' losses since 2026-11-11 (Carlos: "replace ... the average
+   loss with the total loss so that we stay consistent with the literature"); MF.T gives the total and its slopes are
+   sums. Until then it was their average.
+
    recap   The whole method, on part two's table (MF.L.view, the textbook cross) with one rating unknown, Elsa's of
            Paddington (Carlos, 2026-11-10): we are given the rating matrix; we factorize it into two matrices whose
            product gives the known ratings and predicts the unknown one (ringed); their rows and columns are the
            embeddings (a customer's numbers form a row, a film's a column); we find them by gradient descent (a run
-           from the optional game's first guess replayed, every number moving at once, with a small curve of the
-           average loss). Game 3 stands alone: its words name parts one and two, never the optional game.
+           from part two's first guess replayed, every number moving at once with the step size of the optional
+           game, MF.S4.alpha, with a small curve of the total loss). Game 3 stands alone: its words name parts one
+           and two, never the optional game.
    schema  Popper's diagram (MF.G.schema) with the method written under its four boxes, then the loop.
    real    Real ratings, MF.S5.runs[0]: ten MovieLens users and twelve films, three ratings hidden (Carlos,
            2026-11-10), stars, then stars minus 3; then part two's textbook cross as maps of coloured squares
            (M.cross, layout "textbook"): the users' numbers 10 x 2, the films' numbers turned, 2 x 12, above the
            predictions; the first guess, its predictions (the hidden ratings' ringed) and losses; the 200 steps
            replayed; the result; the hidden ratings revealed beside their predictions.
-   larger  A larger table, MF.S5.runs[1]: 26 users and 20 films as a map of coloured squares, then the same cross with
-           eight numbers per user and per film (26 x 8 and 8 x 20); the 500 steps replayed, the result; the best
-           possible (every rating of this table is known, so the singular value decomposition gives it).
+   larger  A larger table, MF.S5.runs[1]: 26 users and 20 films as a map of coloured squares, three ratings hidden
+           (Carlos, 2026-11-11: "Could you do the same when you do the gradient descent for the larger matrix?"),
+           then the same cross with two numbers per user and per film (26 x 2 and 2 x 20); the 300 steps replayed,
+           the result; the hidden ratings revealed beside their predictions. (Until 2026-11-11 every rating was known,
+           eight numbers per row, 500 steps, and the last step showed the best possible, which needs every rating.)
    end     The whole picture: the method in one line of four cards, the dataset, the citation and the licence
-           conditions. (Until 2026-11-10 two more steps hid ratings of the larger table; scene real does that now.)
+           conditions. (Until 2026-11-10 two more steps hid ratings of the larger table; scenes real and larger
+           hide ratings now.)
 
    A part of a board whose numbers change during a run keeps the width of its widest number of the whole run (hold
    below; Carlos, 2026-11-10: the matrices were "vibrating" as the lengths of the numbers changed).
@@ -6068,7 +6080,7 @@ button.chip:hover{border-color:var(--rubric)}
   var SVGNS = "http://www.w3.org/2000/svg";
   var HALF = 0.5;                   // half a star: the criterion of run.end.within_half
   var NONE = "none";                // a square with nothing to show: the loss of a hidden rating
-  var REPLAY = [12000, 22000];      // ms for the replay of runs[0] and runs[1] at the normal speed
+  var REPLAY = [12000, 22000];      // ms for the replay of runs[0] (200 steps) and runs[1] (300 steps) at the normal speed
   var UID = 0;
 
   /* THE FILMS' PICTURES. MovieLens movieId to [emoji, pastel tile]: pictures only, since core.js knows no MovieLens
@@ -6140,7 +6152,8 @@ button.chip:hover{border-color:var(--rubric)}
     return c;
   }
   function num(x, places) { return paint(N.cell(x, { cls: "s5-in" }), x, places === undefined ? 2 : places); }
-  // The average loss as the game writes it (section 4's ring): 2 decimals from 0.1 on, 4 below.
+  // A loss as the game writes it (the ring of loss.js): 2 decimals from 0.1 on, 4 below; the total loss of a run and
+  // the loss of one rating alike. (The internal name is the average's, which the ring showed until 2026-11-11.)
   function avg(v) { return L && L.avgText ? L.avgText(v, 2, 0) : MF.dec(v, Math.abs(v) < 0.1 ? 4 : 2); }
   function lossCell(v, cls) {
     var c = N.cell(v, { cls: cls || "s5-in" });
@@ -6243,14 +6256,8 @@ button.chip:hover{border-color:var(--rubric)}
   // the stars and the ratings as the tables show them: a hidden rating gives null (its cell keeps its "?")
   function starsOf(d) { return function (i, j) { return d.isHid(i, j) ? null : d.stars[i][j]; }; }
   function ratingsOf(d) { return function (i, j) { return d.R[i][j]; }; }
-  // The range the first guesses were drawn from, read off both runs' first guesses.
-  function guessRange() {
-    var lo = Infinity, hi = -Infinity;
-    S5.runs.forEach(function (r) {
-      r.c0.concat(r.f0).forEach(function (row) { row.forEach(function (x) { lo = Math.min(lo, x); hi = Math.max(hi, x); }); });
-    });
-    return [lo, hi];
-  }
+  // The range the first guesses were drawn from (s5_movielens.py writes it; ../tools/check_s5.js checks the draws).
+  function guessRange() { return S5.guess.slice(); }
   // The top of the star scale, read off the stars.
   function topStar() {
     var t = 0;
@@ -6298,10 +6305,9 @@ button.chip:hover{border-color:var(--rubric)}
     return P;
   }
 
-  /* MF.W5.curve: the average loss against the step, an SVG drawn at the size of its box. o.losses (every step's loss),
-     o.best (a dashed line, shown with C.best(true)), o.small (fewer ticks). C.draw(j) draws the steps 0 to j and a dot
-     on step j; C.zoom(on, animate) moves the loss axis to a close view of the last three quarters of the run around
-     the best possible (on) or back to 0 up to the first loss (off). */
+  /* MF.W5.curve: the total loss against the step, an SVG drawn at the size of its box. o.losses (every step's loss),
+     o.small (fewer ticks). C.draw(j) draws the steps 0 to j and a dot on step j. (Until 2026-11-11 it also drew the
+     best possible as a dashed line and zoomed on it, for the last step of scene larger.) */
   function niceStep(span, n) {
     var raw = span / Math.max(1, n), p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), k = raw / p;
     return (k <= 1 ? 1 : k <= 2 ? 2 : k <= 2.5 ? 2.5 : k <= 5 ? 5 : 10) * p;
@@ -6317,31 +6323,24 @@ button.chip:hover{border-color:var(--rubric)}
     return 6;
   }
   function curve(o) {
-    var losses = o.losses, n = losses.length - 1, best = o.best;
-    var C = { j: n, zoomed: 0, bestOn: false, el: el("div", "s5-curve" + (o.cls ? " " + o.cls : "")) };
+    var losses = o.losses, n = losses.length - 1;
+    var C = { j: n, el: el("div", "s5-curve" + (o.cls ? " " + o.cls : "")) };
     var root = C.el;
     root.setAttribute("role", "img");
-    root.setAttribute("aria-label", "The average loss at every step");
+    root.setAttribute("aria-label", "The total loss at every step");
     var svg = sv("svg", { "aria-hidden": "true", focusable: "false" }, root);
     var id = "s5-clip-" + (++UID);
     var clipR = sv("rect", null, sv("clipPath", { id: id }, sv("defs", null, svg)));
     var gGrid = sv("g", null, svg, "s5-cg"), gAx = sv("g", null, svg, "s5-ca"), gTk = sv("g", null, svg, "s5-ct");
     var xT = sv("text", null, svg, "s5-cti"), yT = sv("text", null, svg, "s5-cti");
     xT.textContent = o.xlabel !== undefined ? o.xlabel : "step";
-    yT.textContent = o.ylabel !== undefined ? o.ylabel : "average loss";
+    yT.textContent = o.ylabel !== undefined ? o.ylabel : "total loss";
     var gPlot = sv("g", { "clip-path": "url(#" + id + ")" }, svg);
-    var bestL = sv("line", null, gPlot, "s5-cb"), path = sv("path", null, gPlot, "s5-cp");
-    var dot = sv("circle", { r: o.small ? 3.5 : 5 }, svg, "s5-cd"), bestT = sv("text", null, svg, "s5-cbt");
-    bestT.textContent = o.bestLabel || "best possible";
+    var path = sv("path", null, gPlot, "s5-cp");
+    var dot = sv("circle", { r: o.small ? 3.5 : 5 }, svg, "s5-cd");
     var yTop = niceTopOf(losses[0]);
-    // the close view: from the loss a quarter into the run down to a little below the best possible
-    var zTop = losses[Math.round(n / 4)], zBot = best !== undefined && best !== null ? best - (zTop - best) * 0.15 : 0;
-    var anim = null;
     function niceTopOf(v) { var st = niceStep(v, 4); return Math.ceil(v / st - 1e-9) * st; }
-    function range() {
-      var z = C.zoomed;
-      return [0 * (1 - z) + zBot * z, yTop * (1 - z) + zTop * z];
-    }
+    function range() { return [0, yTop]; }
     function draw() {
       var w = root.clientWidth, hh = root.clientHeight;
       if (!w || !hh) return;
@@ -6367,7 +6366,7 @@ button.chip:hover{border-color:var(--rubric)}
       });
       sv("line", { x1: X0, x2: X0, y1: Y1, y2: Y0 }, gAx);
       sv("line", { x1: X0, x2: X1, y1: Y0, y2: Y0 }, gAx);
-      // "step" in the corner, left of the step 0, on the line of the step numbers; "average loss" at the top right,
+      // "step" in the corner, left of the step 0, on the line of the step numbers; "total loss" at the top right,
       // where a falling curve never is
       xT.setAttribute("x", X0 - 8); xT.setAttribute("y", Y0 + (sm ? 14 : 17)); xT.setAttribute("text-anchor", "end");
       xT.style.display = sm ? "none" : "";
@@ -6378,35 +6377,8 @@ button.chip:hover{border-color:var(--rubric)}
       var dy = Y(losses[jj]);
       dot.setAttribute("cx", f1(X(jj)));
       dot.setAttribute("cy", f1(Math.max(Y1, Math.min(Y0, dy))));
-      var showBest = C.bestOn && best !== undefined && best !== null;
-      bestL.style.display = showBest ? "" : "none";
-      bestT.style.display = showBest ? "" : "none";
-      if (showBest) {
-        var by = f1(Y(best));
-        bestL.setAttribute("x1", X0); bestL.setAttribute("x2", X1); bestL.setAttribute("y1", by); bestL.setAttribute("y2", by);
-        // above the line, on the left: the close view starts a quarter into the run, so the curve is high there
-        bestT.setAttribute("x", f1(X0 + Math.max(8, (X1 - X0) * 0.05))); bestT.setAttribute("y", Math.max(Y1 + 10, by - 6));
-        bestT.setAttribute("text-anchor", "start");
-      }
     }
     C.draw = function (j) { if (j !== undefined) C.j = j; draw(); return C; };
-    C.best = function (on) { C.bestOn = !!on; draw(); return C; };
-    C.stop = function () { if (anim) { clearTimeout(anim.t); C.zoomed = anim.to; anim = null; draw(); } return C; };
-    C.zoom = function (on, animate) {
-      C.stop();
-      var to = on ? 1 : 0;
-      if (!animate || !MOTION || C.zoomed === to) { C.zoomed = to; draw(); return C; }
-      var from = C.zoomed, k = 0, K = 24;
-      anim = { to: to };
-      (function tick() {
-        k++;
-        var u = k / K, e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
-        C.zoomed = from + (to - from) * e;
-        draw();
-        if (k < K && anim) anim.t = setTimeout(tick, 28); else anim = null;
-      })();
-      return C;
-    };
     if (typeof ResizeObserver !== "undefined") { try { new ResizeObserver(function () { draw(); }).observe(root); } catch (e) {} }
     return C;
   }
@@ -6520,10 +6492,10 @@ button.chip:hover{border-color:var(--rubric)}
     return m;
   }
 
-  /* The average loss in the double violet ring of the loss view (loss.js), with its caption. */
+  /* The total loss in the double violet ring of the loss view (loss.js), with its caption. */
   function ring(label) {
     var w = el("div", "s5-ringw"), r = el("div", "s5-ring mx-xbody"), c = N.cell(0, { cls: "s5-big" });
-    w.appendChild(el("span", "s5-cl", label || "average loss"));
+    w.appendChild(el("span", "s5-cl", label || "total loss"));
     r.appendChild(c);
     w.appendChild(r);
     return { el: w, cell: c, set: function (v) { c.textContent = avg(v); c.dataset.t = N.tone(v); c.dataset.v = String(v); } };
@@ -6673,7 +6645,9 @@ button.chip:hover{border-color:var(--rubric)}
      this process, we eventually are able to predict the rating for the corresponding entry in the matrix"): Elsa's
      of Paddington, a "?" in the ratings. The run leaves it out (MF.T reads null as unknown: no loss, no slope), and the
      product of the two matrices predicts it, ringed in ochre. Two numbers per row could fit any value there, so the
-     number it settles on comes from the first guess; the words call it a prediction and nothing more. */
+     number it settles on comes from the first guess; the words call it a prediction and nothing more. The run is the
+     optional game's descent on the total loss with its step size, MF.S4.alpha (0.02, part two's too), and its
+     tolerance, MF.S4.tol (on the average until 2026-11-11, alpha 0.2: 42 steps to 1.02). */
   var RC = null;
   var RC_STEPS = ["given", "factor", "embed", "descent"];
   var P4 = S2.people, F4 = S2.films;
@@ -6682,9 +6656,9 @@ button.chip:hover{border-color:var(--rubric)}
     var st = T.matrices(S2.start, P4, F4), R = T.ratings(P4, F4).map(function (row) { return row.slice(); });
     var u = [P4.indexOf(UNKNOWN[0]), F4.indexOf(UNKNOWN[1])];
     R[u[0]][u[1]] = null;
-    var run = T.run(st.c, st.f, R, S4.alpha), e = run.states[run.steps], known = 0;
+    var run = T.run(st.c, st.f, R, S4.alpha, S4.max, S4.tol), e = run.states[run.steps], known = 0;
     R.forEach(function (row) { row.forEach(function (x) { if (x !== null) known++; }); });
-    return { start: st, R: R, u: u, known: known, run: run, losses: run.states.map(function (s) { return s.loss; }),
+    return { start: st, R: R, u: u, known: known, alpha: S4.alpha, run: run, losses: run.states.map(function (s) { return s.loss; }),
              guess: T.predict(e.c, e.f)[u[0]][u[1]] };
   })();
   // every text the run shows in the guesses, the predictions, the losses and the ring, as loss.js writes them
@@ -6760,7 +6734,7 @@ button.chip:hover{border-color:var(--rubric)}
     V.average(true);
     V.mark(ringed);
     words(S, [rub("And we find them by gradient descent:"), " " + REC.run.steps + " steps, every number moving at once."],
-      ["Guess, predict, average the " + count(REC.known) + " known losses, move every number a little, and again: the ringed prediction settles at ",
+      ["Guess, predict, add up the " + count(REC.known) + " known losses, move every number a little, and again: the ringed prediction settles at ",
        num(REC.guess), "."]);
     S.play.hidden = false;
     if (live) {
@@ -6816,7 +6790,7 @@ button.chip:hover{border-color:var(--rubric)}
   /* SCENE 2: POPPER'S DIAGRAM, introduced here, with the method written under its boxes */
   var PO = null;
   var PO_STEPS = ["schema", "write", "again"];
-  var PO_NOTES = ["the ratings", "a guess of the two matrices", "the average loss", "every number moved a little to lower the loss"];
+  var PO_NOTES = ["the ratings", "a guess of the two matrices", "the total loss", "every number moved a little to lower the loss"];
   function poStep(k, live) {
     var S = PO, st = PO_STEPS[k];
     S.k = k;
@@ -6834,7 +6808,7 @@ button.chip:hover{border-color:var(--rubric)}
     } else S.Sc.writeAll(PO_NOTES);
     if (st === "write") {
       words(S, ["The method, written under the boxes."],
-        ["Each number moves a little, up or down, whichever lowers the average loss."]);
+        ["Each number moves a little, up or down, whichever lowers the total loss."]);
       return;
     }
     words(S, [rub("And again:"), " round and round the loop, " + REC.run.steps + " times on the table of part two."],
@@ -6864,13 +6838,12 @@ button.chip:hover{border-color:var(--rubric)}
   });
 
   /* SCENES 3 AND 4 SHARE THE RUN: a strip with the step count, Play and the curve, in the board's top-right corner; the
-     ring of the average loss stands in the cross, on the right of the losses (in a row with the count and Replay under
-     the large curve on the last step of scene 3) */
+     ring of the total loss stands in the cross, on the right of the losses */
   function strip(S, d, total) {
     S.strip = el("div", "s5-strip");
     S.count = counter();
     S.ring = ring();
-    S.curve = curve({ losses: d.losses, best: d.run.best });
+    S.curve = curve({ losses: d.losses });
     S.ctl = el("div", "s5-ctl");
     S.play = button("Play", "primary s5-play", function () { S.player.toggle(); });
     S.ctl.appendChild(S.play);
@@ -6899,7 +6872,7 @@ button.chip:hover{border-color:var(--rubric)}
   }
   // the loss of every rating, (prediction - rating) squared: the squares of the losses' map; a hidden rating has none
   function lossesOf(d, P) { return function (i, j) { return d.R[i][j] === null ? NONE : lossOf(P[i][j], d.R[i][j]); }; }
-  // The ring keeps the width of the widest average loss of the run (the hold above).
+  // The ring keeps the width of the widest total loss of the run (the hold above).
   function ringHold(S, d) {
     if (!S.ringTexts) S.ringTexts = d.losses.map(avg);
     hold([[S.ring.cell, S.ring.cell]], S.ringTexts);
@@ -6910,25 +6883,13 @@ button.chip:hover{border-color:var(--rubric)}
     S.held = true;
     onHold(function () { if (S.root.getClientRects().length) { ringHold(S, d); S.X.redraw(); } });
   }
-  // The last step of scene larger (of scene real until 2026-11-10): the curve takes the stage, the count, the ring and
-  // Replay in a row under it; on the other steps the strip in the board's corner and the ring in the board.
-  function stage(S, on) {
-    S.root.classList.toggle("s5-bigc", on);
-    if (on) {
-      if (S.strip.parentNode !== S.root) S.root.insertBefore(S.strip, S.read);
-      if (S.ring.el.parentNode !== S.strip) S.strip.insertBefore(S.ring.el, S.ctl);
-    } else {
-      if (S.strip.parentNode !== S.stripSlot) S.stripSlot.appendChild(S.strip);
-      if (S.ring.el.parentNode !== S.ringSlot) S.ringSlot.appendChild(S.ring.el);
-    }
-  }
 
   /* THE TEXTBOOK CROSS OF SCENES 3 AND 4 (M.cross with layout "textbook" in matrix.js, as part two since 2026-11-06,
      Carlos's seventh message; part two's stack from 2026-11-05, the cross of 2026-11-04 before): maps of squares. The
      users' numbers on the left of the predictions, one row per user; the films' numbers turned, one column per film,
      above the predictions, their columns over the predictions' columns, so a prediction stands where its user's row
      meets its film's column; the ratings on the right of the predictions, the losses under the predictions and the
-     ratings, the average loss in its ring on the right of the losses; arrows show who makes what. The words stand above
+     ratings, the total loss in its ring on the right of the losses; arrows show who makes what. The words stand above
      the board on every screen (Carlos, 2026-11-06: "the text must go above or below but not on the side"); the step
      count, Play and the curve in the board's top-right corner (the slot nb, on the right of the films' numbers, above
      the ratings), under the board on a phone; a tapped square's line floats over the square (under the board on a
@@ -6960,7 +6921,7 @@ button.chip:hover{border-color:var(--rubric)}
       embed(S, st);
     };
   }
-  // The predictions, the losses and the average loss with their arrows: shown, or kept in their place unseen.
+  // The predictions, the losses and the total loss with their arrows: shown, or kept in their place unseen.
   function outputs(S, on) {
     [S.pP.el, S.pS.el, S.ring.el].forEach(function (e) { e.classList.toggle("s5-later", !on); });
     S.X.arrows({ cp: on, fp: on, pr: on, rs: on, ps: on, sa: on });
@@ -6988,7 +6949,7 @@ button.chip:hover{border-color:var(--rubric)}
     return t0 + (R + C - 1) * gap;
   }
   // The forward pass, played: the predictions with the arrows from the two matrices, then the losses with the
-  // arrows from the predictions and the ratings, then the average loss.
+  // arrows from the predictions and the ratings, then the total loss.
   function forward(S, t0) {
     outputs(S, false);
     var gap = Math.max(12, Math.round(700 / (S.pP.rows + S.pP.cols)));
@@ -7008,7 +6969,7 @@ button.chip:hover{border-color:var(--rubric)}
      can then predict them using matrix factorization"): a "?" in the table and in the ratings' map, no loss, left out
      of the run (null in d.R); their predictions ringed in ochre from the first product on; on the last step each hidden
      rating beside its prediction. Until 2026-11-10 every rating was known, five numbers per row, and the last step was
-     the best possible (scene larger has it now: it needs every rating). */
+     the best possible (scene larger had it until 2026-11-11; it needs every rating). */
   var RE = null;
   var RE_STEPS = ["stars", "numbers", "guess", "predict", "run", "result", "reveal"];
   function reStep(k, live) {
@@ -7065,7 +7026,10 @@ button.chip:hover{border-color:var(--rubric)}
     }
     starStyle(false);
     S.mR.paint(ratingsOf(d), 1);
-    if (st === "reveal") { reveal(S, d, live); return; }
+    if (st === "reveal") {
+      reveal(S, d, live, ["The method never saw these " + count(nh) + " ratings. A recommender is judged this way: on ratings it never saw."]);
+      return;
+    }
     if (!(live && st === "predict")) outputs(S, k >= 3);
     if (st === "guess") {
       S.player.reset();
@@ -7078,14 +7042,14 @@ button.chip:hover{border-color:var(--rubric)}
     if (st === "predict") {
       S.player.reset();
       words(S, [rub("Their product:"), " a prediction for every rating, the hidden ones too."],
-        ["The ringed squares predict the hidden ratings, which have no loss. The average loss of the " + d.known + " known ratings is ",
+        ["The ringed squares predict the hidden ratings, which have no loss. The total loss of the " + d.known + " known ratings is ",
          lossCell(d.losses[0]), "."]);
       if (live) forward(S, 150);
       return;
     }
     if (st === "run") {
       // while the run plays, what a step does; at its end (or reached at rest) what to do with the result
-      var during = ["At every step each of the " + d.numbers + " numbers moves a little, the way that makes the average loss smaller. The hidden ratings play no part."];
+      var during = ["At every step each of the " + d.numbers + " numbers moves a little, the way that makes the total loss smaller. The hidden ratings play no part."];
       var after = ["Every prediction has settled, the " + count(nh) + " ringed ones too. Tap a square to compare it with its rating."];
       S.during = function () { put(S.say, during); };
       S.after = function () { put(S.say, after); };
@@ -7095,7 +7059,7 @@ button.chip:hover{border-color:var(--rubric)}
       return;
     }
     S.player.end();
-    words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
+    words(S, ["After " + d.steps + " steps the total loss is ", lossCell(d.losses[d.steps]), "."],
       [d.within + " of the " + d.known + " known ratings are predicted within half a star. And the " + count(nh) + " hidden ones?"]);
   }
   function starStyle(on) {
@@ -7105,8 +7069,9 @@ button.chip:hover{border-color:var(--rubric)}
       if (c && !d.isHid(i, j)) c.classList.toggle("s5-st", on);
     }
   }
-  /* The last step: each hidden rating beside its prediction (the prediction first, as on the board), how far apart
-     they are, in reading order. Played, the cards come in one by one, each rating after its prediction. */
+  /* The last step of scenes real and larger: each hidden rating beside its prediction (the prediction first, as on the
+     board), how far apart they are, in reading order. Played, the cards come in one by one, each rating after its
+     prediction. */
   function revealCard(x) {
     var c = el("div", "s5-rcard"), head = el("div", "s5-rhead"), who = el("div", "s5-rwho");
     head.appendChild(tile(x.film));
@@ -7126,10 +7091,14 @@ button.chip:hover{border-color:var(--rubric)}
     c.appendChild(h("p", "s5-rmiss s5-late", ["missed by ", num(x.miss, 2)]));
     return c;
   }
-  function reveal(S, d, live) {
+  function cardsOf(d) {
+    var box = el("div", "s5-reveal");
+    d.reveal.forEach(function (x) { box.appendChild(revealCard(x)); });
+    return box;
+  }
+  function reveal(S, d, live, say) {
     S.player.end();
-    words(S, [rub("The hidden ratings,"), " beside their predictions."],
-      ["The method never saw these " + count(d.hid.length) + " ratings. A recommender is judged this way: on ratings it never saw."]);
+    words(S, [rub("The hidden ratings,"), " beside their predictions."], say);
     var cards = S.cards.querySelectorAll(".s5-rcard");
     S.cards.querySelectorAll(".s5-rcard, .s5-late").forEach(function (c) { c.style.visibility = ""; });
     if (!live) return;
@@ -7155,18 +7124,16 @@ button.chip:hover{border-color:var(--rubric)}
       crossOf(S, d, REPLAY[0]);
       S.boards = h("div", "s5-boards", [S.mR.el, S.X.el]);
       S.src = h("p", "s5-src", sourceLine());                // under the table of the first two steps
-      S.cards = el("div", "s5-reveal");
-      d.reveal.forEach(function (x) { S.cards.appendChild(revealCard(x)); });
+      S.cards = cardsOf(d);
       [S.words, S.boards, S.cards, S.src, S.read].forEach(function (x) { S.root.appendChild(x); });
       embed(S, d.states[0]);
       reader(S, d);
     },
     enter: function () { RE.last = null; },
-    leave: function () { RE.t.stop(); RE.curve.stop(); if (RE.player.playing) RE.player.end(); RE.player.pause(); },
+    leave: function () { RE.t.stop(); if (RE.player.playing) RE.player.end(); RE.player.pause(); },
     step: function (k) {
       var live = isLive(RE, k);
       RE.t.stop();
-      RE.curve.stop();
       Array.prototype.forEach.call(RE.root.querySelectorAll(".mx-c > .nt-n"), function (c) { c.style.visibility = ""; });
       unhideSquares(RE);
       reStep(k, live);
@@ -7181,61 +7148,61 @@ button.chip:hover{border-color:var(--rubric)}
     }
   });
 
-  /* SCENE 4: A LARGER TABLE, runs[1]: the ratings alone as a map of coloured squares, then the cross; every rating is
-     known, so the last step gives the best possible (scene real's last step until 2026-11-10, when it hid ratings) */
+  /* SCENE 4: A LARGER TABLE, runs[1]: the ratings alone as a map of coloured squares, then the cross. Three ratings
+     are hidden, as in scene real (Carlos, 2026-11-11: "Could you do the same when you do the gradient descent for the
+     larger matrix?"): a "?" in the map, no loss, left out of the run (null in d.R), their predictions ringed in ochre
+     from the first product on, and on the last step each beside its rating on a card. Until 2026-11-11 every rating
+     was known, eight numbers per row, 500 steps, the misses ringed, and the last step showed the best possible (the
+     singular value decomposition), which needs every rating. */
   var LG = null;
-  var LG_STEPS = ["table", "guess", "run", "result", "best"];
+  var LG_STEPS = ["table", "guess", "run", "result", "reveal"];
   function lgStep(k, live) {
-    var S = LG, d = S.d, r = d.run, st = LG_STEPS[k], big = st === "best";
+    var S = LG, d = S.d, r = d.run, st = LG_STEPS[k], nh = d.hid.length, rev = st === "reveal";
     S.k = k;
     S.player.pause();
     S.after = S.during = null;
     clearRead(S);
-    S.pP.mark(null);
-    S.curve.zoom(false);
-    S.curve.best(false);
     S.predOn = k >= 1;
-    stage(S, big);
+    S.pP.mark(k >= 1 ? d.hid : null, "s5-hid");
     S.root.classList.toggle("s5-k0", k === 0);           // the ratings alone, centred, with the key of the colours
-    S.root.classList.toggle("s5-xon", k >= 1 && !big);
+    S.root.classList.toggle("s5-xon", k >= 1 && !rev);
+    S.root.classList.toggle("s5-revon", rev);
     S.X.el.classList.toggle("s5-solo", k === 0);
-    S.X.el.hidden = big;
+    S.X.el.hidden = rev;
+    S.cards.hidden = !rev;
     S.strip.classList.toggle("s5-later", k === 0);
     S.key.hidden = k !== 0;
+    if (rev) {
+      reveal(S, d, live, ["The method never saw these " + count(nh) + " ratings either: each prediction comes from the other " + d.known + "."]);
+      return;
+    }
     if (!(live && st === "guess")) outputs(S, k >= 1);
     if (st === "table") {
       var uf = counts(r.users, r.films);
-      words(S, [uf[0] + " users and " + uf[1] + " films: " + d.ratings + " ratings, all known."],
-        ["A larger table from MovieLens, one square per rating. Tap a square to read it."]);
+      words(S, [uf[0] + " users and " + uf[1] + " films: " + d.ratings + " ratings. Again we hide " + count(nh) + " of them."],
+        ["A larger table from MovieLens, one square per rating. The method never sees the " + count(nh) + " marked ", qmark(),
+         ". Tap a square to read it."]);
       S.player.reset();
       return;
     }
     if (st === "guess") {
       S.player.reset();
       words(S, [cap(count(r.k)) + " numbers per user and per film, guessed at random."],
-        ["Their product gives the predictions, and with the ratings the losses: the average loss is ", lossCell(d.losses[0]), "."]);
-      if (live) forward(S, appear(S, [S.pU, S.pF], 150, 2) + 150);
+        ["Their product gives the predictions, the ringed ones for the hidden ratings. With the " + d.known + " known ratings, the losses: the total loss is ",
+         lossCell(d.losses[0]), "."]);
+      if (live) forward(S, appear(S, [S.pU, S.pF], 150, 6) + 150);
       return;
     }
     if (st === "run") {
       words(S, [rub("Gradient descent:"), " " + d.steps + " steps."],
-        ["At every step each of the " + d.numbers + " numbers moves a little. The predictions take on the pattern of the ratings, and the losses fade."]);
+        ["At every step each of the " + d.numbers + " numbers moves a little; the hidden ratings play no part. The predictions take on the pattern of the ratings, and the losses fade."]);
       if (live) { S.player.reset(); S.player.play(400); }
       else S.player.end();
       return;
     }
     S.player.end();
-    if (st === "result") {
-      S.pP.mark(d.misses);
-      words(S, ["After " + d.steps + " steps the average loss is ", lossCell(d.losses[d.steps]), "."],
-        [d.within + " of the " + d.ratings + " predictions come within half a star of their ratings; the ringed ones do not."]);
-      return;
-    }
-    words(S, [rub("Is that the right answer?")],
-      [cap(count(r.k)) + " numbers per user and per film cannot give back " + d.ratings + " real ratings exactly: the best possible is ", lossCell(r.best),
-       ". Another method, the singular value decomposition (part 4a of the next notebook), computes it exactly when every rating is known. Gradient descent knew nothing of it, and ends on it."]);
-    S.curve.best(true);
-    S.curve.zoom(true, live);
+    words(S, ["After " + d.steps + " steps the total loss is ", lossCell(d.losses[d.steps]), "."],
+      [d.within + " of the " + d.known + " known ratings are predicted within half a star. And the " + count(nh) + " hidden ones?"]);
   }
   MF.define("larger", {
     act: 5,
@@ -7262,16 +7229,16 @@ button.chip:hover{border-color:var(--rubric)}
         q.appendChild(num(v, 0));
         S.key.appendChild(q);
       });
-      [S.words, S.boards, S.key, S.read].forEach(function (x) { S.root.appendChild(x); });
+      S.cards = cardsOf(d);
+      [S.words, S.boards, S.key, S.cards, S.read].forEach(function (x) { S.root.appendChild(x); });
       embed(S, d.states[0]);
       reader(S, d);
     },
     enter: function () { LG.last = null; },
-    leave: function () { LG.t.stop(); LG.curve.stop(); if (LG.player.playing) LG.player.end(); LG.player.pause(); },
+    leave: function () { LG.t.stop(); if (LG.player.playing) LG.player.end(); LG.player.pause(); },
     step: function (k) {
       var live = isLive(LG, k);
       LG.t.stop();
-      LG.curve.stop();
       unhideSquares(LG);
       lgStep(k, live);
       holdOnResize(LG, LG.d);
@@ -7279,21 +7246,22 @@ button.chip:hover{border-color:var(--rubric)}
       LG.last = k;
     },
     onkey: function (e) {
-      if (LG.api.step >= 1 && (e.key === "p" || e.key === "P")) { LG.player.toggle(); return true; }
+      if (LG.api.step >= 1 && LG_STEPS[LG.api.step] !== "reveal" && (e.key === "p" || e.key === "P")) { LG.player.toggle(); return true; }
       return false;
     }
   });
 
   /* SCENE 5: THE WHOLE PICTURE: the method in one line of four cards, drawn from the larger table's run, and the
      dataset's lines. One step since 2026-11-10 (Carlos: scene real's hidden ratings replace the steps "unknown" and
-     "judge" that hid ratings of the larger table here). */
+     "judge" that hid ratings of the larger table here; scene larger hides three since 2026-11-11, and the first card
+     shows them as the run saw them). */
   var EN = null;
   var EN_STEPS = ["method"];
   function enStep(k, live) {
     var S = EN;
     S.k = k;
     words(S, [rub("The whole method:")], ["the ratings, factorized into two matrices, the embeddings, found by gradient descent."],
-      ["Nobody filled in these profiles. Their numbers have no names: any numbers whose product matches the ratings would do as well."]);
+      ["Nobody filled in these profiles. Their numbers have no names: any other numbers whose product fits the ratings as well would do."]);
     if (live) S.chain.querySelectorAll(".s5-card, .s5-arrow").forEach(function (c, q) {
       c.style.visibility = "hidden";
       S.t.later(200 + q * 260, function () { c.style.visibility = ""; pop(c); });
