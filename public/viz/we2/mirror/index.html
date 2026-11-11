@@ -627,6 +627,33 @@ sub, sup { font-size: .65em; line-height: 0; }
   .s1-urngrid th.who { padding-right: 2px; }
 }
 @media (prefers-reduced-motion: reduce) { .s1-an.go .s1-an-arr::before, .s1-strat.new .card, .s1-shop.new .card { animation: none; } }
+
+/* The exploration-exploitation dilemma (round 13): two branches leave the mirror, explore (violet) and exploit (ochre). */
+.s1-dil { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 600px; }
+.s1-fork { display: block; width: 100%; height: auto; margin-top: -2px; }
+.s1-fork path { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.s1-fork .xr { stroke: var(--accent); }
+.s1-fork .xt { stroke: var(--ochre); }
+.s1-brs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
+.s1-br { display: flex; flex-direction: column; align-items: center; gap: 7px; min-width: 0; padding: 12px 12px 14px; border-radius: 16px; background: var(--panel); box-shadow: inset 0 0 0 2px var(--c); text-align: center; }
+.s1-br.xr { --c: var(--accent); }
+.s1-br.xt { --c: var(--ochre); }
+.s1-br-lab { font-family: var(--display); font-size: 1.6rem; font-weight: 600; line-height: 1; color: var(--c); }
+.s1-br-prod { display: flex; align-items: center; gap: 8px; }
+.s1-br-name { font-size: .95rem; }
+.s1-br-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; max-width: 176px; min-height: 16px; }
+.s1-br-dots .mb-dot { width: 14px; }
+.s1-br .formula { font-size: 1.05rem; }
+.s1-br p { margin: 0; font-size: 1.02rem; line-height: 1.35; }
+.s1-dil-src { margin: 8px 0 0; }
+@media (max-width: 560px) {
+  .s1-brs { gap: 8px; }
+  .s1-br { padding: 9px 6px 11px; gap: 5px; }
+  .s1-br-lab { font-size: 1.3rem; }
+  .s1-br-prod { flex-direction: column; gap: 3px; }
+  .s1-br-name { font-size: .85rem; }
+  .s1-br p { font-size: .9rem; }
+}
 </style>
 <style>
 /* Section 2, Random (sec2.js). Its movies are styled in anim.css (round 10); the rate movie of round 12 adds the
@@ -650,29 +677,15 @@ sub, sup { font-size: .65em; line-height: 0; }
 <style>
 /* Section 3, estimate then exploit (sec3.js). */
 
-/* The four parts in one line, the current one lit (the walkthrough). */
-.steps.s3-parts { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 6px 16px; max-width: none; }
-.steps.s3-parts li { font-size: .95rem; gap: 7px; align-items: center; }
-.steps.s3-parts li::before { width: 22px; height: 22px; font-size: .85rem; }
-
-/* The walkthrough's board: the estimates fade in at the first estimates and are quiet once frozen. */
-.s3-walk { min-width: 0; width: 100%; }
-.s3-estin .mb-est { animation: fadein .5s ease; }
-.s3-frozen .mb-est, .s3-frozen .mb-est .mb-decv { color: var(--muted); }
-.s3-cap { min-height: 3em; }
+/* The movie (round 13): the timeline and the hat side by side above the board; the hat is lit during the test only. */
+.s3-dev { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px 18px; width: 100%; }
+.s3-dev .mv-tl { flex: 1 1 200px; max-width: 560px; }
+/* The fanned cards reach about 10px past the hat's box on each side: the padding keeps them on the leaf (phone). */
+.s3-hat { transition: opacity .3s ease; padding: 0 12px; }
+.s3-hat.dim { opacity: .35; filter: grayscale(.7); }
+.s3-hat .mv-hat { padding-top: 8px; }
 /* The last new part of a step is scrolled into view (core.js); keep it clear of the sticky nav bar. */
 .s3-sm { scroll-margin-bottom: 16px; }
-
-/* The highest estimate after each round: one line of small cells, "=" for a tie. */
-.s3-leads { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 10px; }
-.s3-lcap { font-size: .85rem; color: var(--muted); }
-.s3-lrow { display: flex; flex-wrap: wrap; gap: 6px; }
-.s3-lc { display: inline-flex; align-items: center; gap: 5px; min-width: 44px; min-height: 32px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-.s3-lc.empty { border-style: dashed; background: transparent; }
-.s3-lc.on { border: 2px solid var(--accent); background: var(--accent-soft); }
-.s3-ln { font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-.s3-le { font-size: 1.2rem; line-height: 1.2; white-space: nowrap; }
-.s3-eq { font-size: .9rem; color: var(--muted); margin: 0 1px; vertical-align: .15em; }
 
 /* The challenge round. */
 .s3-cols { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); width: 100%; max-width: 640px; }
@@ -702,6 +715,8 @@ sub, sup { font-size: .65em; line-height: 0; }
 .s3-tie { font-size: .7rem; color: var(--muted); margin-left: 3px; vertical-align: middle; }
 .s3-none { font-size: .8rem; color: var(--muted); }
 @media (max-width: 560px) {
+  .s3-dev { gap: 2px 10px; }
+  .s3-dev .mv-tl { flex-basis: 170px; }
   .s3-item { padding: 7px 2px 6px; }
   .s3-item .mb-tile.md { --s: 40px; }
   .s3-item .nm { font-size: .78rem; }
@@ -896,16 +911,18 @@ sub, sup { font-size: .65em; line-height: 0; }
     return play("random", p, u, () => ({ i: Math.floor(r() * K), phase: "random" }));
   }
 
-  // Estimate then exploit with n: n rounds of round robin (round 1 is the initialization), then the highest estimate
-  // every morning (a tie broken at random). The first exploit morning carries tied (the rows with the highest
-  // estimate) and the season carries winner, tied and testEnd (the first exploit morning, K * n). When K * n is at
-  // least T, every morning is round robin and winner is -1.
+  // Estimate then exploit with n (round 13, Carlos, 2026-11-11: "The estimate is basically the hat. So we play the
+  // hat for n rounds, and then we pick the top estimator"): initialize, then n mornings of the hat (a card from the
+  // hat, every product with the same chance, as Random does), then the highest estimate on every remaining morning, a
+  // tie broken at random. The hat's cards come from the strategy's stream, then the tie break. The first exploit
+  // morning carries tied (the rows with the highest estimate), and the season carries winner, tied and testEnd (the
+  // first exploit morning, K + n). When K + n is at least T, the test fills the season and winner is -1.
   function ete(p, u, seed, n) {
     const r = mulberry32(seed), K = p.length;
     let winner = -1, tied = [];
     const s = play("ete", p, u, (t, book) => {
       if (t < K) return { i: t, phase: "init" };
-      if (t < K * n) return { i: t % K, phase: "test" };
+      if (t < K + n) return { i: Math.floor(r() * K), phase: "test" };
       if (winner < 0) {
         tied = argmaxAll(estOf(book));
         winner = pickTie(tied, r);
@@ -913,7 +930,7 @@ sub, sup { font-size: .65em; line-height: 0; }
       }
       return { i: winner, phase: "exploit" };
     });
-    s.n = n; s.winner = winner; s.tied = tied; s.testEnd = Math.min(K * n, u.length);
+    s.n = n; s.winner = winner; s.tied = tied; s.testEnd = Math.min(K + n, u.length);
     return s;
   }
 
@@ -947,30 +964,45 @@ sub, sup { font-size: .65em; line-height: 0; }
     });
   }
 
-  // Estimate then exploit's average over all seasons, computed exactly (no simulation): in the test each product's
-  // taps are a binomial count of n showings; the winner has the highest count, a tie broken at random. Returns
-  // { rate, right }: the average rate of a season of T mornings, and the chance that the winner is the best product
-  // (right is null when the test fills the season). Section 3's lesson and tools/ete_exact.js use it.
-  function eteExact(p, n, T) {
-    const K = p.length, test = K * n, avg = p.reduce((s, v) => s + v, 0) / K;
-    if (test >= T) return { rate: avg, right: null };
-    const pmf = p.map((q) => { const v = []; let c = 1; for (let k = 0; k <= n; k++) { if (k > 0) c = (c * (n - k + 1)) / k; v.push(c * q ** k * (1 - q) ** (n - k)); } return v; });
-    const below = pmf.map((v) => { const c = [0]; for (let s = 0; s < v.length; s++) c.push(c[s] + v[s]); return c; });
-    const win = new Array(K).fill(0);
-    for (let k = 0; k < K; k++) {
-      for (let s = 0; s <= n; s++) {
-        let dp = [1]; // dp[m]: the chance that m other products also have s taps and none has more
-        for (let j = 0; j < K; j++) {
-          if (j === k) continue;
-          const nd = new Array(dp.length + 1).fill(0);
-          dp.forEach((v, m) => { nd[m] += v * below[j][s]; nd[m + 1] += v * pmf[j][s]; });
-          dp = nd;
-        }
-        win[k] += pmf[k][s] * dp.reduce((acc, v, m) => acc + v / (m + 1), 0);
+  // Estimate then exploit's average rate for every n from 0 to T - K, over S seasons: season s has the moods of seed
+  // 5000000 + s and the strategy's stream 7000000 + s, the same for every n, so the curve is smooth. Equal to the
+  // average of rate(ete(p, moods(5000000 + s, T), 7000000 + s, n)): n mornings of the hat take the stream's first n
+  // numbers and a tie break the next one, so one pass over a season serves every n. Returns { rate, right }, one entry
+  // per n: the average rate, and the share of seasons whose winner is the best product (null when the test fills the
+  // season). Section 3's last scene and tools/ete_avg.js use it.
+  function eteAverages(p, T, S) {
+    const K = p.length, N = T - K, best = p.indexOf(Math.max(...p));
+    const rate = new Float64Array(N + 1), right = new Float64Array(N + 1);
+    const u = new Float64Array(T), v = new Float64Array(N + 1), after = new Int32Array(K * (T + 1));
+    const shown = new Int32Array(K), taps = new Int32Array(K), est = new Float64Array(K), tied = new Int32Array(K);
+    for (let s = 0; s < S; s++) {
+      const m = mulberry32(5000000 + s), r = mulberry32(7000000 + s);
+      for (let t = 0; t < T; t++) u[t] = m();
+      for (let j = 0; j <= N; j++) v[j] = r();
+      // after[k * (T + 1) + t]: the customer's taps of product k on mornings t to T - 1
+      for (let k = 0; k < K; k++) {
+        const o = k * (T + 1);
+        after[o + T] = 0;
+        for (let t = T - 1; t >= 0; t--) after[o + t] = after[o + t + 1] + (u[t] < p[k] ? 1 : 0);
+      }
+      let sum = 0;
+      for (let k = 0; k < K; k++) { shown[k] = 1; taps[k] = u[k] < p[k] ? 1 : 0; sum += taps[k]; }
+      for (let n = 0; n <= N; n++) {
+        const t = K + n;
+        if (t >= T) { rate[n] += sum / T; break; }
+        // the highest estimate after n mornings of the hat, as argmaxAll and pickTie do, the tie broken with v[n]
+        let mx = -Infinity, nt = 0;
+        for (let k = 0; k < K; k++) { est[k] = taps[k] / shown[k]; if (est[k] > mx + TOL) mx = est[k]; }
+        for (let k = 0; k < K; k++) if (Math.abs(est[k] - mx) <= TOL) tied[nt++] = k;
+        const w = nt > 1 ? tied[Math.floor(v[n] * nt)] : tied[0];
+        rate[n] += (sum + after[w * (T + 1) + t]) / T;
+        if (w === best) right[n] += 1;
+        const i = Math.floor(v[n] * K); // morning t of a longer test: the next card from the hat
+        shown[i] += 1;
+        if (u[t] < p[i]) { taps[i] += 1; sum += 1; }
       }
     }
-    const best = p.indexOf(Math.max(...p));
-    return { rate: (test * avg + (T - test) * win.reduce((s, w, k) => s + w * p[k], 0)) / T, right: win[best] };
+    return { rate: Array.from(rate, (x) => x / S), right: Array.from(right, (x, n) => (K + n >= T ? null : x / S)) };
   }
 
   // Reading a season.
@@ -992,7 +1024,7 @@ sub, sup { font-size: .65em; line-height: 0; }
   }
   const rate = (season) => season.taps / season.T;
 
-  const sim = { mulberry32, TOL, argmaxAll, moods, queen, random, ete, eg, ucb, eteExact, rows, estimates, rateSoFar, rate };
+  const sim = { mulberry32, TOL, argmaxAll, moods, queen, random, ete, eg, ucb, eteAverages, rows, estimates, rateSoFar, rate };
   if (typeof module !== "undefined" && module.exports) module.exports = sim;
   if (root && typeof root === "object") { root.MB = root.MB || {}; root.MB.sim = sim; }
 })(typeof window !== "undefined" ? window : globalThis);
@@ -1040,7 +1072,7 @@ sub, sup { font-size: .65em; line-height: 0; }
   // The tiles of the collections' products, in the order of their items (the pastels of the Mirror Shop).
   MB.TILES = ["#FFE1C6", "#E4D7F2", "#D6E8F7", "#F7D9E3", "#D8EDD3", "#FFF0B8", "#D3EEEB"];
   MB.COLLECTIONS.forEach((c) => c.items.forEach((it, k) => { it.tile = MB.TILES[(k + (c.id === "hair" ? 2 : 0)) % MB.TILES.length]; }));
-  MB.ETE_N = 5;  // estimate then exploit's n in the race (its best n for Cinderella, PLAN.md)
+  MB.ETE_N = 20; // estimate then exploit's n in the race: 20 mornings of the hat, near its best n for Cinderella (PLAN.md)
   MB.EPS = 0.2;  // epsilon-greedy's epsilon (Carlos, 2026-11-06: "choose epsilon = 0.2 for the demo so we see more often the exploration part")
   // The race season: Cinderella and the Mirror Shop, one season for every comparison of the game. Its seed was
   // picked by tools/race_seed.js so the season is typical; each strategy has its own stream.
@@ -1974,7 +2006,7 @@ sub, sup { font-size: .65em; line-height: 0; }
   MB.mvPace = (j, start, floor, k) => Math.max(floor, Math.round(start * Math.pow(k || 0.9, j)));
 
   // The frames of morning t (counted from 0) of a movie's season. c, the movie's context: { M (the mornings), rowsAt
-  // (the board's rows after upto mornings), cols, board(upto, o) (o: pick, hop, lit, fresh, upd), dev(t, ph) (ph:
+  // (the board's rows after upto mornings), cols, board(upto, o) (o: pick, lit, fresh, upd), dev(t, ph) (ph:
   // "choose", "chosen" or "fast"), chips(t, beat) (beat: "choose", "show", "dot" or "fast"), src(t) (where the product
   // leaves from), and optional chooseOpt(t), chooseFx(A, t, mode), chooseMs(t, mode), tie(t) (the rows tied before a
   // draw at random), mid(t) }. mode: "slow" (every beat), "mid" (shorter beats), "quick" (no bead) or "fast" (one beat).
@@ -1998,13 +2030,15 @@ sub, sup { font-size: .65em; line-height: 0; }
         land(fastMs || 420)
       ];
     }
-    const slow = mode === "slow", F = [];
-    F.push({ ms: Z(c.chooseMs ? c.chooseMs(t, mode) : (slow ? 900 : 380)),
-      p: { mid, parts: c.chips(t, "choose"), dev: c.dev(t, "choose"), cin: MB.mvCin(null), board: c.board(t, c.chooseOpt ? c.chooseOpt(t) : {}) },
+    const slow = mode === "slow", F = [], opt = c.chooseOpt ? c.chooseOpt(t) : {};
+    // A tie (Carlos, 2026-11-11: "You simply show the ties and then pick one"): the choose beat lights the tied rows
+    // together, and the next beat picks one of them at once.
+    const tie = c.tie ? c.tie(t) : null, tied = !!tie && tie.length > 1;
+    const base = c.chooseMs ? c.chooseMs(t, mode) : (slow ? 900 : 380);
+    F.push({ ms: Z(tied ? Math.max(base, slow ? 1100 : 600) : base),
+      p: { mid, parts: c.chips(t, "choose"), dev: c.dev(t, "choose"), cin: MB.mvCin(null), board: c.board(t, tied ? Object.assign({}, opt, { lit: tie, pick: undefined }) : opt) },
       fx: c.chooseFx ? (A) => c.chooseFx(A, t, mode, z) : null });
-    const tie = c.tie ? c.tie(t) : null;
-    if (tie && tie.length > 1) tie.concat(tie, [i]).forEach((k) => F.push({ ms: Z(200), p: { board: c.board(t, { hop: k, lit: tie }) } }));
-    F.push({ ms: Z(slow ? 850 : 560), p: { dev: c.dev(t, "chosen"), board: c.board(t, { pick: i, lit: tie && tie.length > 1 ? [i] : (c.chooseOpt ? c.chooseOpt(t).lit : null) }) },
+    F.push({ ms: Z(slow ? 850 : 560), p: { dev: c.dev(t, "chosen"), board: c.board(t, { pick: i, lit: tied ? [i] : (opt.lit || null) }) },
       fx: (A) => A.fly(c.src(t), ".mv-cin .glass", tile, { ms: Z(slow ? 780 : 520), s2: 0.75 }) });
     if (slow) {
       F.push({ ms: Z(600), p: { parts: c.chips(t, "show"), cin: MB.mvCin(i, null, true) } });
@@ -2026,13 +2060,15 @@ sub, sup { font-size: .65em; line-height: 0; }
    tiles of art.js; the words above or below every picture.
    Round 12 (2026-11-10): the urn scene drawn from Carlos's slides of the earlier runs (showing an ad is drawing a
    ball, both rows animated); after the urns the participant is invited to play 15 mornings, reads their rate, meets
-   the Queen's mirror as an imagined reference, compares, and plays 15 new mornings against it. */
+   the Queen's mirror as an imagined reference, compares, and plays 15 new mornings against it.
+   Round 13 (2026-11-11): 30 mornings in each game, and the mirror's dilemma a scene of its own after the game, "The
+   exploration-exploitation dilemma", drawn on the participant's own board. */
 (function () {
   "use strict";
   const MB = window.MB, P = MB.P, PR = MB.PRODUCTS, CUST = MB.CUSTOMERS;
   const BEST = P.indexOf(Math.max(...P));
   const URN_W = 2, URN_N = 5; // the urn of Cinderella and the mattress: 2 orange balls of 5
-  const PLAY_N = 15;
+  const PLAY_N = 30; // the mornings of each game (15 until round 13)
   const EXCUSES = ["She lost a slipper.", "She was busy with the stepsisters.", "The pumpkin needed watering.",
     "She was feeding the mice.", "She was scrubbing the stairs.", "Not today, thank you."];
   const TAPS = ["She taps!", "She taps the glass.", "Tap! She wants it."];
@@ -2124,7 +2160,7 @@ sub, sup { font-size: .65em; line-height: 0; }
   }
 
 
-  // "1 tap in 15 mornings", "3 taps in 1 morning".
+  // "1 tap in 30 mornings", "3 taps in 1 morning".
   const tapsIn = (k, n) => `${k} ${k === 1 ? "tap" : "taps"} in ${n} ${n === 1 ? "morning" : "mornings"}`;
 
   // The participant's games (2026-11-10): PLAY_N mornings, each with a mood; Cinderella taps when the mood is below
@@ -2185,6 +2221,45 @@ sub, sup { font-size: .65em; line-height: 0; }
   }
   const notYet = (g) => `<div class="box"><p>${g.seq.length ? `You played ${g.seq.length} of ${PLAY_N} mornings.` : "You have not played yet."}</p>
     <div class="row"><button type="button" class="act" id="s1toplay">Back to the game</button></div></div>`;
+
+  // The exploration-exploitation dilemma (round 13). Carlos, 2026-11-11: "this part, the mirror's dilemma ... is so
+  // important and fundamental that we need to make a separate slide out of it ... call it the exploration-exploitation
+  // dilemma, and elaborate on it. The message is fine, the text is fine." Two branches leave the mirror, on the
+  // participant's own board; before a game, on a mirror's first EXAMPLE_N mornings at Cinderella's (the race season's
+  // hat: the mattress 2/3, the satnav never shown). Exploit: the highest estimate (more dots on a tie). Explore: the
+  // product with the fewest dots (the first on the board on a tie).
+  const EXAMPLE_N = 6;
+  function dilemmaBoard() {
+    const g = S.play;
+    if (g.seq.length) {
+      const rows = PR.map(() => []);
+      g.seq.forEach((m) => rows[m.i].push(m.tap));
+      return { rows, n: g.seq.length, mine: true };
+    }
+    const R = MB.sim.random(P, MB.sim.moods(MB.raceSeed("moods"), MB.SEASON), MB.raceSeed("random"));
+    return { rows: MB.sim.rows(R, EXAMPLE_N), n: EXAMPLE_N, mine: false };
+  }
+  function branches(rows) {
+    const est = rows.map(MB.estimate);
+    let xt = -1, xr = -1;
+    est.forEach((e, k) => {
+      if (e === null) return;
+      if (xt < 0 || e > est[xt] + 1e-9 || (Math.abs(e - est[xt]) <= 1e-9 && rows[k].length > rows[xt].length)) xt = k;
+    });
+    rows.forEach((r, k) => { if (k !== xt && (xr < 0 || r.length < rows[xr].length)) xr = k; });
+    return { xt, xr };
+  }
+  function branchCard(cls, label, k, row, text) {
+    const t = count(row), n = row.length;
+    return `<div class="s1-br ${cls}"><span class="s1-br-lab">${label}</span>
+      <div class="s1-br-prod">${MB.tile(PR[k], "md")}<span class="s1-br-name">${PR[k].short}</span></div>
+      <div class="s1-br-dots" role="img" aria-label="${n ? tapsIn(t, n) : "never shown"}">${n ? row.map((x) => MB.dot(x)).join("") : `<span class="muted small">never shown</span>`}</div>
+      <div class="formula">${MB.phat} = ${n ? `${t}/${n} = ${MB.dec(t / n)}` : "?"}</div>
+      <p>${text}</p></div>`;
+  }
+  const FORK = `<svg class="s1-fork" viewBox="0 0 560 60" aria-hidden="true">
+      <path class="xr" d="M280 4 C280 34 140 26 140 51"/><path class="xr" d="M131 43 L140 54 L149 43"/>
+      <path class="xt" d="M280 4 C280 34 420 26 420 51"/><path class="xt" d="M411 43 L420 54 L429 43"/></svg>`;
 
   const scenes = [
     {
@@ -2308,7 +2383,7 @@ sub, sup { font-size: .65em; line-height: 0; }
       }
     },
     {
-      key: "play", title: "Your turn: be Cinderella's mirror", steps: 2,
+      key: "play", title: "Your turn: be Cinderella's mirror", steps: 1,
       render(el, step) {
         const g = S.play, done = g.seq.length >= PLAY_N;
         let h = !g.on && !g.seq.length ? invite(false) : gameView(g, false);
@@ -2316,16 +2391,25 @@ sub, sup { font-size: .65em; line-height: 0; }
           h += `<div class="box"><strong>${tapsIn(count(g.seq.map((m) => m.tap)), PLAY_N)}.</strong>
             <div class="row"><button type="button" class="quiet" id="s1again">Play again</button></div></div>`;
         }
-        if (step >= 1) {
-          h += `<div class="box${MB.cls(step, 1)}"><strong>The mirror's dilemma</strong>
-            <p><b>Explore:</b> show a product you know little about, to learn how she reacts.</p>
-            <p><b>Exploit:</b> show the product with the highest estimate so far.</p>
-            <p class="muted">Explore too little and you may never find her favourite. Explore too much and you waste mornings.</p></div>`;
-        }
         el.innerHTML = h;
         g.fresh = false;
         bindGame(el, g);
         MB.on(el, "#s1again", () => { S.play = newGame(); S.play.on = true; MB.redraw(); });
+      }
+    },
+    {
+      key: "dilemma", title: "The exploration-exploitation dilemma", steps: 2,
+      render(el, step) {
+        const D = dilemmaBoard(), B = branches(D.rows);
+        let h = `<p class="say${MB.cls(step, 0)}">One ad each morning, so the mirror must choose.</p>
+          <div class="s1-dil${MB.cls(step, 0)}">${MB.mirror({ emo: "❓", name: "a question mark" }, "", { size: "xs", cap: false, label: "the mirror, choosing" })}${FORK}
+            <div class="s1-brs">${branchCard("xr", "Explore", B.xr, D.rows[B.xr], "Show a product you know little about, to learn how she reacts.")}${branchCard("xt", "Exploit", B.xt, D.rows[B.xt], "Show the product with the highest estimate so far.")}</div>
+            <p class="muted small s1-dil-src">${D.mine ? `From your ${D.n} ${D.n === 1 ? "morning" : "mornings"} at Cinderella's.` : `An example: a mirror's first ${D.n} mornings at Cinderella's.`}</p></div>`;
+        if (step >= 1) {
+          h += `<div class="box keybox${MB.cls(step, 1)}"><p>Explore too little and you may never find her favourite. Explore too much and you waste mornings.</p></div>
+            <p class="say${MB.cls(step, 1)}">A website faces it on every visit: the bestseller, or something new? Each strategy that follows is an answer to it.</p>`;
+        }
+        el.innerHTML = h;
       }
     },
     {
@@ -2534,12 +2618,19 @@ sub, sup { font-size: .65em; line-height: 0; }
    the test in turns, the highest estimate, the remaining mornings), the rate against the Queen's mirror and Random,
    the challenge round on the two collections of MB.COLLECTIONS (the participant chooses n), and why n is hard.
    Round 9 (2026-11-06, main session): the heads drawn by the engine, the portraits and tiles of art.js.
-   Round 10 (2026-11-06, main session): the first scene is a movie (anim.js) in place of its sentences and list. */
+   Round 10 (2026-11-06, main session): the first scene is a movie (anim.js) in place of its sentences and list.
+   Round 11 (2026-11-06, main session): the walkthrough of the race season is gone (Carlos: "the initial explanation
+   suffices"); the movie ends with the season's total rate and the comparison with the Queen's mirror follows.
+   Round 13 (2026-11-11, main session), Carlos: "The estimate is basically the hat. So we play the hat for n rounds,
+   and then we pick the top estimator." The test draws a card from the hat for n mornings after the initialization
+   (MB.sim.ete), in place of the products in turn; the race plays n = 20, so its test keeps 25 mornings; the
+   challenge offers n = 0 to 95 and the last chart is simulated (MB.sim.eteAverages). */
 (function () {
   "use strict";
   const MB = window.MB, P = MB.P, PR = MB.PRODUCTS, T = MB.SEASON, N = MB.ETE_N, K = PR.length;
-  const TEST = K * N, EX = T - TEST;  // the walkthrough's test (25 mornings) and its remaining mornings (75)
-  const NS = [1, 2, 3, 5, 10, 20];    // the n a participant can choose in the challenge round
+  const TEST = K + N, EX = T - TEST;  // the race season's test (5 + 20 = 25 mornings) and its remaining mornings (75)
+  const NS = [0, 3, 10, 25, 50, 95];  // the n a participant can choose in the challenge round (95: the whole season)
+  const AVG_S = 10000;                // the seasons behind the last chart
   const BEST = P.indexOf(Math.max(...P));
   const low = (s) => s.charAt(0).toLowerCase() + s.slice(1);
   const up = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -2553,76 +2644,22 @@ sub, sup { font-size: .65em; line-height: 0; }
       ete: MB.sim.ete(P, u, fresh ? MB.newSeed() : MB.raceSeed("ete"), N) };
   }
   const RACE = race(false), E = RACE.ete, WIN = E.winner;
-  const LONGEST = Math.max(...MB.sim.rows(E).map((r) => r.length));          // the winner's row at the end: 80
+  const LONGEST = Math.max(...MB.sim.rows(E).map((r) => r.length));          // the winner's row at the end: 78
+  const TCOLS = Math.max(...MB.sim.rows(E, TEST).map((r) => r.length));      // the longest row after the test: 8
   const FROZEN = MB.sim.rows(E, TEST).map((r) => MB.estText(r, "both"));     // the estimates after the test
+  const inTest = (t) => t >= K && t < TEST;
 
-  // After round r every product has r dots: the rows with the highest estimate, and their taps.
-  function lead(r) {
-    const rows = MB.sim.rows(E, K * r), top = MB.sim.argmaxAll(rows.map(MB.estimate));
-    return { top, taps: taps(rows[top[0]]) };
-  }
-  function leadText(r) {
-    const L = lead(r);
-    return L.top.length > 1 ? `A tie: ${MB.join(L.top.map(the))}, ${L.taps}/${r} each.`
-      : `${up(the(L.top[0]))} has the highest estimate, ${L.taps}/${r}.`;
-  }
-  // The rounds before the end of the test whose single leader is not the final winner (round 1 and round 3 here).
-  function earlyStops() {
-    const by = {};
-    for (let r = 1; r < N; r++) { const L = lead(r); if (L.top.length === 1 && L.top[0] !== WIN) (by[L.top[0]] = by[L.top[0]] || []).push(r); }
-    const said = Object.keys(by).map((i) => `${by[i].map((r) => `round ${r}`).join(" or ")} would have picked ${the(+i)}`);
-    return said.length ? `Stopping after ${said.join("; after ")}.` : "";
-  }
-  const mornings = (r) => `mornings ${K * (r - 1) + 1} to ${K * r}`;
-
-  // The four parts of the strategy: the full list (first scene) and the short labels lit during the walkthrough.
+  // The four parts of the strategy; the movie shows their short names, the current one lit.
   const PARTS = [
     ["Initialize", "show each product once."],
-    ["Test", "show the products in turn until each has n dots."],
+    ["Test", "draw a card from the hat for n mornings."],
     ["Highest estimate", "pick the product with the highest estimate."],
     ["Exploit", "show it on every remaining morning."]
   ];
-  // The walkthrough's steps: 0 the empty board, 1 initialize, 2 the first estimates, 3 .. N + 1 rounds 2 .. N,
-  // N + 2 the highest estimate, N + 3 the remaining mornings.
-  const W_STEPS = N + 4, W_PICK = N + 2, W_EXPL = N + 3;
-  const partOf = (k) => (k === 0 ? -1 : k <= 2 ? 0 : k <= N + 1 ? 1 : k === W_PICK ? 2 : 3);
-  // The round whose dots arrive one by one at step k (0 at the other steps).
-  const roundOf = (k) => (k === 1 ? 1 : k >= 3 && k <= N + 1 ? k - 1 : 0);
-
-  const W = { upto: 0, ex: 0, pop: false, playing: false };          // the walkthrough
   const R = { other: null };                                          // the rate scene's other season
   const CH = {};                                                      // the challenge, one entry per collection
   MB.COLLECTIONS.forEach((c) => { CH[c.id] = { n: null, cur: null, upto: 0, playing: false, runs: [], reveal: false }; });
   let AVG = null;                                                      // the averages of the last scene
-
-  function caption(k) {
-    if (k === 0) return `The board for n = ${N}: ${MB.words[N] || N} places in each row, one for each showing of the test. No dots yet, so every estimate is unknown.`;
-    if (k === 1) return `Initialize: ${mornings(1)} show each product once, from the top row down. Every strategy in this game starts like this.`;
-    if (k === 2) return `The first estimates: one dot each, so each estimate is 0 or 1. ${leadText(1)}`;
-    if (k <= N + 1) {
-      const r = k - 1;
-      const head = r === 2 ? `Test, round 2: ${mornings(2)}, the products in turn from the top row down.` : `Round ${r}: ${mornings(r)}.`;
-      return `${head}${r === N ? ` Every product now has ${N} dots: the test is over.` : ""} ${leadText(r)}`;
-    }
-    if (k === W_PICK) {
-      const rows = MB.sim.rows(E, TEST), t = taps(rows[WIN]);
-      const pick = E.tied.length > 1 ? `A tie: ${MB.join(E.tied.map(the))}. The mirror picks ${the(WIN)} at random.`
-        : `The mirror picks the product with the highest estimate: ${the(WIN)}, ${t}/${N} = ${MB.dec(t / N)}.`;
-      return `${pick} ${earlyStops()}`;
-    }
-    return `Exploit: ${the(WIN)} on every remaining morning, ${TEST + 1} to ${T}. The estimates no longer decide anything.`;
-  }
-
-  // The highest estimate after each round, a small record under the board; "=" joins the products of a tie.
-  function leaders(shown, mark) {
-    let h = `<div class="s3-leads" role="group" aria-label="The highest estimate after each round"><span class="s3-lcap">Highest estimate after round</span><span class="s3-lrow">`;
-    for (let r = 1; r <= N; r++) {
-      if (r > shown) { h += `<span class="s3-lc empty"><span class="s3-ln">${r}</span></span>`; continue; }
-      const L = lead(r), names = MB.join(L.top.map((i) => PR[i].name.toLowerCase()));
-      h += `<span class="s3-lc${mark && r === N ? " on" : ""}" title="Round ${r}: ${L.top.length > 1 ? `a tie, ${names}` : names}"><span class="s3-ln">${r}</span><span class="s3-le">${L.top.map((i) => PR[i].emo).join(`<span class="s3-eq">=</span>`)}</span></span>`;
-    }
-    return h + `</span></div>`;
-  }
 
   // The collections of the challenge round.
   const STORY = {
@@ -2647,7 +2684,7 @@ sub, sup { font-size: .65em; line-height: 0; }
   }
   function playSeason(col) {
     const C = CH[col.id], p = col.items.map((it) => it.p);
-    if (!C.n) return;
+    if (C.n === null) return;
     MB.stopTimers(); // a season still running ends now and is recorded
     finish(C);
     const u = MB.sim.moods(MB.newSeed(), T);
@@ -2660,11 +2697,9 @@ sub, sup { font-size: .65em; line-height: 0; }
     const s = C.cur, e = s.ete, it = col.items, n = s.n, upto = C.upto;
     const full = MB.sim.rows(e), cols = Math.max(...full.map((r) => r.length)), rows = MB.sim.rows(e, upto);
     const decided = e.winner >= 0 && upto >= e.testEnd;
-    const brackets = [{ from: 0, to: n - 1, label: `n = ${n}` }];
-    if (e.winner >= 0) brackets.push({ from: n, to: cols - 1, label: "exploit", cls: "muted" });
     let h = `<div class="s3-result s3-bars">`;
     h += MB.board({ items: it, rows, cols, estValues: upto > e.testEnd ? MB.sim.estimates(e, e.testEnd) : undefined,
-      highlight: decided ? e.winner : null, brackets, aria: `Estimate then exploit's season with n = ${n}: one row per product` });
+      highlight: decided ? e.winner : null, aria: `Estimate then exploit's season with n = ${n}: one row per product` });
     let line = "";
     if (e.winner < 0) line = upto >= T ? `With n = ${n} the test fills the whole season: no morning is left to exploit.` : "";
     else if (decided) {
@@ -2705,8 +2740,8 @@ sub, sup { font-size: .65em; line-height: 0; }
           <div class="${MB.cls(step, 0)}">${items(col, false)}</div>`;
         if (step >= 1) {
           h += `<div class="stack s3-pickn s3-sm${MB.cls(step, 1)}"><p class="say">Choose n, then play a season. Play each n a few times: one season can be lucky.</p>
-            <div class="s3-nrow"><span class="s3-nlab">n =</span><div class="opts" role="group" aria-label="n, the showings of each product in the test">${NS.map((n) => `<button type="button" class="s3-n" data-n="${n}" aria-pressed="${C.n === n}">${n}</button>`).join("")}</div></div>
-            <div class="row"><button type="button" class="act" id="s3go"${C.n ? "" : " disabled"}>${C.n ? `Play a season with n = ${C.n}` : "Choose n first"}</button>
+            <div class="s3-nrow"><span class="s3-nlab">n =</span><div class="opts" role="group" aria-label="n, the mornings of the hat in the test">${NS.map((n) => `<button type="button" class="s3-n" data-n="${n}" aria-pressed="${C.n === n}">${n}</button>`).join("")}</div></div>
+            <div class="row"><button type="button" class="act" id="s3go"${C.n === null ? " disabled" : ""}>${C.n === null ? "Choose n first" : `Play a season with n = ${C.n}`}</button>
               ${C.playing ? `<span class="muted">Morning ${C.upto} of ${T}</span>` : ""}</div></div>`;
           if (C.cur) h += result(col, C);
           h += record(col, C);
@@ -2719,77 +2754,86 @@ sub, sup { font-size: .65em; line-height: 0; }
     };
   }
 
-  // The average rate for every n from 1 to 20, exact (MB.sim.eteExact), for both collections.
+  // The average rate for every n from 0 to 95, for both collections: AVG_S seasons each (MB.sim.eteAverages), the
+  // same seasons for every n. near: the n within half a point (0.005) of the best average, a band on the chart.
   function averages() {
     if (AVG) return AVG;
     AVG = MB.COLLECTIONS.map((c) => {
-      const p = c.items.map((it) => it.p), v = [];
-      for (let n = 1; n <= 20; n++) v.push(MB.sim.eteExact(p, n, T).rate);
-      const mx = Math.max(...v), best = [];
-      v.forEach((x, k) => { if (x > mx - 0.0005) best.push(k + 1); }); // equal to three decimals: 5 and 6 for the ball
-      return { c, v, best };
+      const v = MB.sim.eteAverages(c.items.map((it) => it.p), T, AVG_S).rate, mx = Math.max(...v);
+      const near = [];
+      v.forEach((x, n) => { if (x > mx - 0.005) near.push(n); });
+      return { c, v, best: v.indexOf(mx), near };
     });
     return AVG;
   }
   const AVG_COL = ["--accent", "--fg"];
   function averagesChart() {
-    const A = averages(), lines = [];
+    const A = averages(), lines = [], X1 = T - K;
     // Averages only: the Queen's mirror is compared on played seasons (the challenge), never as an average line (Carlos).
     A.forEach((a, j) => {
-      lines.push({ pts: a.v.map((y, k) => [k + 1, y]), color: AVG_COL[j % AVG_COL.length] });
-      a.best.forEach((n) => lines.push({ pts: [[n, a.v[n - 1]]], color: AVG_COL[j % AVG_COL.length], dot: true }));
+      const col = AVG_COL[j % AVG_COL.length];
+      lines.push({ pts: a.near.map((n) => [n, a.v[n]]), color: col, width: 11, opacity: 0.22 });
+      lines.push({ pts: a.v.map((y, n) => [n, y]), color: col });
+      lines.push({ pts: [[a.best, a.v[a.best]]], color: col, dot: true });
     });
-    const svg = MB.lineChart({ x0: 1, x1: 20, y0: 0, y1: 1, xTicks: NS.concat([15]).sort((a, b) => a - b), yTicks: [0, 0.2, 0.4, 0.6, 0.8, 1],
-      xLabel: "n", yLabel: "average rate", lines, aria: "The average rate of estimate then exploit for every n from 1 to 20, for both collections" });
-    const lg = A.map((a, j) => `<span class="mb-lg"><span class="sw" style="--sw:var(${AVG_COL[j % AVG_COL.length]})"></span>${MB.face(custOf(a.c).id, "xs")}${a.c.title}, best n: <b>${a.best.join(" or ")}</b></span>`).join("");
+    const svg = MB.lineChart({ x0: 0, x1: X1, y0: 0, y1: 1, xTicks: NS, yTicks: [0, 0.2, 0.4, 0.6, 0.8, 1],
+      xLabel: "n", yLabel: "average rate", lines, aria: `The average rate of estimate then exploit for every n from 0 to ${X1}, for both collections` });
+    const lg = A.map((a, j) => `<span class="mb-lg"><span class="sw" style="--sw:var(${AVG_COL[j % AVG_COL.length]})"></span>${MB.face(custOf(a.c).id, "xs")}${a.c.title}, best n: <b>${a.near[0]} to ${a.near[a.near.length - 1]}</b></span>`).join("");
     return `<div class="mb-chart">${svg}<div class="mb-legend">${lg}</div></div>`;
   }
 
-  // The movie (round 10, anim.js): the race season with n = 5. Chapter 1, the test: round 1 one morning at a time
-  // (initialize), then rounds 2 to 5 faster, the products in turn from the top row down. Chapter 2: a medal flies from
-  // the end of the test to the highest estimate, the other rows go quiet, and the remaining mornings show the winner.
-  // Above the board, the season as a line: the test, then the remaining mornings.
+  // The movie (round 10, anim.js; round 13, the hat): the race season with n = 20. Chapter 1, the test: initialize one
+  // morning at a time, then a card from the hat on each of the next 20 mornings, the first two beat by beat, then faster.
+  // Chapter 2: a medal flies from the end of the test to the highest estimate, the other rows go quiet, and the remaining
+  // mornings show the winner, faster and faster. Above the board, the season as a line (the test, then the remaining
+  // mornings) and the hat, lit during the test.
   const CHIPS = PARTS.map((p) => p[0]);
   const pc = (x) => `${(100 * x / T).toFixed(2)}%`;
   const timeline = (done) => `<div class="mv-tl" role="img" aria-label="Morning ${done} of ${T}: the test is mornings 1 to ${TEST}, then the remaining mornings">
       <div class="mv-tlbar"><i class="mv-tlx" style="left:${pc(TEST)};width:${pc(EX)}"></i><b class="mv-tlf" data-mk="tl" style="width:${pc(done)}"></b><span class="mv-tlcut" style="left:${pc(TEST)}"></span></div>
       <div class="mv-tllab"><span class="${done <= TEST ? "on" : ""}" style="width:${pc(TEST)}">Test</span><span class="${done > TEST ? "on" : ""}" style="width:${pc(EX)}">Exploit</span></div></div>`;
-  const WIN_T = taps(MB.sim.rows(E, TEST)[WIN]);
+  // The timeline and the hat; ph "choose": the card is still in the hat.
+  const devOf = (t, ph) => `<div class="s3-dev">${timeline(ph === "choose" ? t : t + 1)}<div class="s3-hat${inTest(t) ? "" : " dim"}">${MB.mvHat(inTest(t) && ph !== "choose" ? E.mornings[t].i : -1, true)}</div></div>`;
+  const WIN_ROW = MB.sim.rows(E, TEST)[WIN], WIN_T = taps(WIN_ROW);
   // long: the board of the whole season (chapter 2); o.decided: the medal is on the winner and the other rows are quiet.
   const mctx = (long) => ({
-    M: E.mornings, cols: long ? LONGEST : N, rowsAt: (u) => MB.sim.rows(E, u),
-    board: (upto, o) => MB.board({ rows: MB.sim.rows(E, upto), estFormat: "both", cols: long ? LONGEST : N, slots: long ? 0 : N,
+    M: E.mornings, cols: long ? LONGEST : TCOLS, rowsAt: (u) => MB.sim.rows(E, u),
+    board: (upto, o) => MB.board({ rows: MB.sim.rows(E, upto), estFormat: "both", cols: long ? LONGEST : TCOLS,
       pick: o.pick, highlight: o.decided ? WIN : o.pick, dim: !!o.decided, fresh: o.fresh || null,
       badges: o.decided ? { [WIN]: o.medal ? `<span class="mv-medal">🥇</span>` : "🥇" } : null,
       estValues: long && upto > TEST ? FROZEN : undefined, cls: o.glow ? "mv-estglow" : "",
       aria: "Cinderella's board with estimate then exploit: one row per product, one dot per showing" }),
-    dev: (t, ph) => timeline(ph === "choose" ? t : t + 1),
+    dev: devOf,
     chips: (t) => MB.mvChips(CHIPS, t < K ? 0 : t < TEST ? 1 : 3),
-    src: (t) => `.mb-row[data-k="${E.mornings[t].i}"] .mb-prod`,
-    chooseOpt: (t) => ({ pick: E.mornings[t].i, decided: t >= TEST })
+    src: (t) => (inTest(t) ? `.mv-hat .mv-card[data-i="${E.mornings[t].i}"]` : `.mb-row[data-k="${E.mornings[t].i}"] .mb-prod`),
+    chooseOpt: (t) => (inTest(t) ? {} : { pick: E.mornings[t].i, decided: t >= TEST }),
+    chooseFx: (A, t) => { if (inTest(t)) A.wiggle(".mv-hatic"); },
+    chooseMs: (t, mode) => (inTest(t) ? (mode === "slow" ? 950 : 640) : (mode === "slow" ? 900 : 380))
   });
   const MOVIE = MB.movie({
     key: "ete",
     frames(step) {
       if (step === 0) {
         const c = mctx(false);
-        const F = [{ ms: 900, p: { parts: MB.mvChips(CHIPS, 0), dev: timeline(0), mid: "Morning 1", cin: MB.mvCin(null), board: c.board(0, {}),
-          line: `First a test: every product n = ${N} times, in turn.` } }];
+        const F = [{ ms: 900, p: { parts: MB.mvChips(CHIPS, 0), dev: devOf(0, "choose"), mid: "Morning 1", cin: MB.mvCin(null), board: c.board(0, {}),
+          line: `First a test: initialize, then n = ${N} cards from the hat.` } }];
         ["slow", "slow", "mid", "mid", "mid"].forEach((mode, t) => F.push(...MB.mvMorning(c, t, mode)));
-        for (let t = K; t < TEST; t++) F.push(...MB.mvMorning(c, t, "fast", MB.mvPace(t - K, 300, 150, 0.95)));
+        F.push({ ms: 1300, p: { parts: MB.mvChips(CHIPS, 1), dev: devOf(K, "choose"), mid: `Morning ${K + 1}`,
+          line: `Test: on each of the next ${N} mornings, a card from the hat.` } });
+        for (let t = K; t < TEST; t++) F.push(...MB.mvMorning(c, t, t < K + 2 ? "mid" : "fast", MB.mvPace(t - K - 2, 520, 150, 0.9)));
         return F;
       }
       const c = mctx(true), D = (o) => Object.assign({ decided: true }, o);
       const pick = E.tied.length > 1 ? `A tie: ${MB.join(E.tied.map(the))}. The mirror picks ${the(WIN)} at random.`
-        : `The highest estimate after the test: ${the(WIN)}, ${WIN_T}/${N}.`;
+        : `The highest estimate after the test: ${the(WIN)}, ${WIN_T}/${WIN_ROW.length}.`;
       const F = [
-        { ms: 1500, p: { parts: MB.mvChips(CHIPS, 2), dev: timeline(TEST), mid: `After morning ${TEST}`, cin: MB.mvCin(null), board: c.board(TEST, { glow: true }), line: pick } },
+        { ms: 1500, p: { parts: MB.mvChips(CHIPS, 2), dev: devOf(TEST, "choose"), mid: `After morning ${TEST}`, cin: MB.mvCin(null), board: c.board(TEST, { glow: true }), line: pick } },
         { ms: 1050, fx: (A) => A.fly(".mv-tl .mv-tlcut", `.mb-row[data-k="${WIN}"] .mb-prod`, `<span class="mv-medalfly">🥇</span>`, { ms: 1000, s0: 0.6, s1: 1.5, s2: 0.7 }) },
         { ms: 1300, p: { board: c.board(TEST, D({ medal: true })), line: `Then ${the(WIN)} on every remaining morning, ${TEST + 1} to ${T}.` } }
       ];
       F.push(...MB.mvMorning(Object.assign({}, c, { board: (u, o) => c.board(u, D(o)) }), TEST, "mid"));
       for (let t = TEST + 1; t < T; t++) F.push(...MB.mvMorning(Object.assign({}, c, { board: (u, o) => c.board(u, D(o)) }), t, "fast", MB.mvPace(t - TEST - 1, 260, 45, 0.92)));
-      F.push({ ms: 400, p: { parts: MB.mvChips(CHIPS, 3), board: c.board(T, D({})) } });
+      F.push({ ms: 400, p: { parts: MB.mvChips(CHIPS, 3), board: c.board(T, D({})), after: MB.totalRate("ete", E) }, done: MB.showTotal });
       return F;
     }
   });
@@ -2798,58 +2842,6 @@ sub, sup { font-size: .65em; line-height: 0; }
     {
       key: "ete-idea", title: "First a test", steps: 2,
       render(el, step) { MOVIE.render(el, step); }
-    },
-    {
-      key: "ete-walk", title: `Cinderella's season, n = ${N}`, steps: W_STEPS,
-      render(el, step) {
-        if (MB.isFresh()) {
-          W.pop = false;
-          W.playing = false;
-          const r = roundOf(step);
-          if (r) {
-            // The round's dots arrive one by one, from the top row down.
-            const a = K * (r - 1);
-            if (MB.still) W.upto = a + K;
-            else {
-              W.upto = a;
-              MB.later(() => MB.animate(K, 340, (k) => { W.upto = a + k; W.pop = true; MB.redraw(); }), 300);
-            }
-          } else W.upto = step === 0 ? 0 : step === 2 ? K : TEST;
-        }
-        const expl = step === W_EXPL, decided = step >= W_PICK;
-        const upto = expl ? TEST + W.ex : W.upto, rows = MB.sim.rows(E, upto);
-        const m = upto > 0 ? E.mornings[upto - 1] : null;
-        const brackets = [{ from: 0, to: N - 1, label: `n = ${N}` }];
-        if (expl) brackets.push({ from: N, to: LONGEST - 1, label: "remaining mornings", cls: "muted" });
-        const board = MB.board({
-          rows, estFormat: "both", cols: expl ? LONGEST : N, slots: expl ? 0 : N,
-          estValues: step === 1 ? rows.map(() => null) : expl ? FROZEN : undefined,
-          highlight: decided ? WIN : null, dim: decided, brackets,
-          fresh: W.pop && m ? { row: m.i, col: rows[m.i].length - 1 } : null,
-          aria: "Cinderella's board: one row per product, one dot per showing"
-        });
-        W.pop = false;
-        const part = partOf(step);
-        // Board, then the record of rounds, then the caption: the board keeps its place from step to step, and the
-        // last new part (s3-sm) is scrolled into view clear of the sticky nav bar.
-        let h = `<ol class="steps s3-parts" aria-label="The four parts">${PARTS.map((p, j) => `<li${j === part ? ` class="on" aria-current="step"` : ""}>${p[0]}</li>`).join("")}</ol>
-          <div class="s3-walk s3-bars${step === 2 && MB.isFresh() ? " s3-estin" : ""}${expl ? " s3-frozen" : ""}">${board}</div>`;
-        if (step >= 2) h += `<div class="${MB.cls(step, 2)}">${leaders(Math.min(N, Math.floor(Math.min(upto, TEST) / K)), decided)}</div>`;
-        h += `<p class="say s3-cap s3-sm${MB.cls(step, step)}">${caption(step)}</p>`;
-        if (step === 0) h += `<p class="say s3-sm${MB.cls(step, 0)}">One dot per showing: ${MB.KEY}</p>`;
-        if (expl) {
-          const done = W.ex >= EX;
-          h += `<div class="row s3-sm${MB.cls(step, W_EXPL)}"><button type="button" class="act" id="s3play"${done ? " disabled" : ""}>${done ? "Season played" : W.ex ? `Morning ${TEST + W.ex} of ${T}` : `Play mornings ${TEST + 1} to ${T}`}</button></div>`;
-          if (done) h += MB.totalRate("ete", E);
-        }
-        el.innerHTML = h;
-        MB.on(el, "#s3play", () => {
-          if (W.playing || W.ex >= EX) return;
-          W.playing = true;
-          const start = W.ex;
-          MB.animate(EX - start, 40, (k) => { W.ex = start + k; W.pop = true; MB.redraw(); }, () => { W.playing = false; MB.redraw(); MB.showTotal(); });
-        });
-      }
     },
     {
       key: "ete-rate", title: "Against the Queen's mirror", steps: 2,
@@ -2863,7 +2855,7 @@ sub, sup { font-size: .65em; line-height: 0; }
         if (step >= 1) {
           const after = R.other ? `After the test it shows only ${the(w)}${w === BEST ? ", Cinderella's favourite" : ""}.`
             : `After the test it shows only ${the(w)}${w === BEST ? ", Cinderella's favourite," : ""} and its rate climbs.`;
-          h += `<p class="say s3-sm${MB.cls(step, 1)}">During the test, estimate then exploit shows every product equally often, as Random does. ${after}</p>`;
+          h += `<p class="say s3-sm${MB.cls(step, 1)}">During the test, estimate then exploit draws a card from the hat, as Random does. ${after}</p>`;
         }
         el.innerHTML = h;
         MB.on(el, "#s3again", () => { R.other = race(true); MB.redraw(); });
@@ -2873,7 +2865,7 @@ sub, sup { font-size: .65em; line-height: 0; }
     {
       key: "ete-challenge", title: "The challenge round", steps: 2,
       render(el, step) {
-        let h = `<ul class="rules${MB.cls(step, 0)}"><li>Two new collections, one for each customer.</li><li>You choose n.</li>
+        let h = `<ul class="rules${MB.cls(step, 0)}"><li>Two new collections, one for each customer.</li><li>You choose n, the mornings of the hat in the test.</li>
             <li>Estimate then exploit plays a season with your n. The Queen's mirror and Random play the same season.</li></ul>
           <div class="s3-cols${MB.cls(step, 0)}">${MB.COLLECTIONS.map((c) => `<div class="card">${MB.face(custOf(c).id, "md")}<div class="name">${c.title}</div><div class="s3-emos">${c.items.map((it) => MB.tile(it, "sm")).join("")}</div></div>`).join("")}</div>`;
         if (step >= 1) h += `<div class="box keybox s3-sm${MB.cls(step, 1)}"><p><strong>Your goal:</strong> for each collection, the n with the highest rate.</p><p>A single season can be lucky, so play each n a few times.</p></div>`;
@@ -2884,13 +2876,14 @@ sub, sup { font-size: .65em; line-height: 0; }
     {
       key: "ete-hard", title: "Choosing n is hard", steps: 4,
       render(el, step) {
+        if (step < 3 && !AVG && MB.isFresh()) MB.later(averages, 400); // the chart's seasons, ready before step 3
         const ball = MB.COLLECTIONS.find((c) => c.id === "ball"), hair = MB.COLLECTIONS.find((c) => c.id === "hair");
         const fav = (c) => c.items.reduce((b, it) => (it.p > b.p ? it : b), c.items[0]);
-        let h = `<p class="say s3-sm${MB.cls(step, 0)}"><b>A large n</b> wastes mornings on exploration: the test keeps showing products the customer rarely taps.${hair ? ` For ${low(hair.title)}, n = 20 spends the whole season on the test.` : ""}</p>`;
-        if (step >= 1) h += `<p class="say s3-sm${MB.cls(step, 1)}"><b>A small n</b> risks not exploring enough: after a few showings, a weaker product can have the highest estimate.${ball ? ` For the ball, n = 1 usually misses the ${low(fav(ball).name)}.` : ""}</p>`;
+        let h = `<p class="say s3-sm${MB.cls(step, 0)}"><b>A large n</b> wastes mornings on exploration: the test keeps showing products the customer rarely taps.${hair ? ` For ${low(hair.title)}, n = ${NS[NS.length - 1]} spends the whole season on the test.` : ""}</p>`;
+        if (step >= 1) h += `<p class="say s3-sm${MB.cls(step, 1)}"><b>A small n</b> risks not exploring enough: after a few showings, a weaker product can have the highest estimate.${ball ? ` For the ball, n = 0 usually misses the ${low(fav(ball).name)}.` : ""}</p>`;
         if (step >= 2) h += `<div class="box keybox s3-sm${MB.cls(step, 2)}"><p class="formula">The best n depends on the probabilities, and the mirror does not know them.</p></div>`;
         if (step >= 3) {
-          h += `<div class="stack s3-sm${MB.cls(step, 3)}"><p class="say">The average rate over many seasons, for every n from 1 to 20:</p>${averagesChart()}
+          h += `<div class="stack s3-sm${MB.cls(step, 3)}"><p class="say">The average rate over ${AVG_S.toLocaleString("en-US")} seasons, for every n from 0 to ${T - K}:</p>${averagesChart()}
             <p class="say">Section 4: a strategy that never stops exploring.</p></div>`;
         }
         el.innerHTML = h;
@@ -3101,9 +3094,10 @@ sub, sup { font-size: .65em; line-height: 0; }
   // The walkthrough: UCB on Cinderella's race season (MB.RACE).
   const U = MB.sim.ucb(P, MB.sim.moods(MB.raceSeed("moods"), T), MB.raceSeed("ucb"));
   // The final race is at Rapunzel's (Carlos, 2026-11-06, round 8: "Race on Rapunzel"). Her ladder, 0.8, stands far above
-  // her other products, so UCB soon stops exploring them: UCB is first of the four learners in 80% of her seasons and
-  // in 42% of Cinderella's (PLAN.md, section Round 8). On the race season: Queen 78, UCB 70, epsilon-greedy 67, estimate
-  // then exploit 62, Random 32. Every mirror on one season: the race season, or another one with fresh seeds.
+  // her other products, so UCB soon stops exploring them: UCB is first of the four learners in 79% of her seasons and
+  // in 42% of Cinderella's (PLAN.md, sections Round 8 and Round 13). On the race season: Queen 78, UCB 70,
+  // epsilon-greedy 67, estimate then exploit 61 (62 before round 13's hat), Random 32. Every mirror on one season: the
+  // race season, or another one with fresh seeds.
   const ORDER = ["queen", "random", "ete", "eg", "ucb"], RAP = MB.CUSTOMERS[1], RP = RAP.p;
   const LADDER = RP.indexOf(Math.max(...RP));
   function race(fresh) {
@@ -3291,7 +3285,7 @@ sub, sup { font-size: .65em; line-height: 0; }
   const uctx = {
     M: U.mornings, cols: MCOLS, rowsAt,
     board: (upto, o) => {
-      const N = nums(rowsAt(upto)), lit = [].concat(o.lit || []), ring = o.hop !== undefined ? o.hop : o.pick;
+      const N = nums(rowsAt(upto)), lit = [].concat(o.lit || []), ring = o.pick;
       return MB.board({ rows: rowsAt(upto), cols: MCOLS, est: false, pick: ring, highlight: ring, fresh: o.fresh || null,
         left: [{ head: "", width: narrow() ? 96 : 168, cls: "mv-ucbcol", cells: N.map((x, k) => ubar(x, k, lit.includes(k))) }],
         aria: "UCB's board: one bar per product, the estimate solid and the bonus light, then one dot per showing" });
