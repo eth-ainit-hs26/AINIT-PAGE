@@ -35,6 +35,13 @@
      and the loss violet, a move or update ochre, a slope green. */
   --g-fwd:var(--rubric); --g-move:var(--ochre); --g-slope:#2F7D62;
 }
+/* Text scale (2026-11-11). Carlos shows the games from his iPad on the projector and asked for words the size of the
+   slides' words; the matrices keep their sizes. On a screen at least 1080 x 740 px, the size of every word of 18 px or
+   less is multiplied by --tx; larger type grows by a share that falls to nothing at 44 px. The sizes are written as
+   calc(V * var(--tx)) or calc(V * (1 + (var(--tx) - 1) * w)). The tables, stacks, badges, pictures, the top bar and
+   Back and Next keep their sizes, and so does a phone (--tx is 1 there). */
+:root{--tx:1}
+@media (min-width: 1080px) and (min-height: 740px){ :root{--tx:1.4} }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
@@ -100,19 +107,19 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 @keyframes enter{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 @media (prefers-reduced-motion: reduce){ .scene.active{animation:none} }
 .scene-head{display:flex; align-items:center; gap:14px}
-.scene-head .scene-no{font-size:34px}
-.scene-head h2{font-size:28px; line-height:1.1}
-.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; white-space:nowrap}
+.scene-head .scene-no{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
+.scene-head h2{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615)); line-height:1.1}
+.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); white-space:nowrap}
 /* The leaves of an optional section (3 and 4) carry this tag beside their title. */
 .scene-head .opt-tag{flex:none; color:var(--ochre); border:1.5px solid var(--ochre); border-radius:999px; padding:0 10px 2px;
-  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; line-height:1.3; white-space:nowrap}
+  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); line-height:1.3; white-space:nowrap}
 .scene-body{flex:1; display:flex; flex-direction:column; min-height:0}
 .scene-inner{margin:auto 0; padding-top:12px; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; width:100%}
-.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:15px}
-.say{text-align:center; color:var(--muted); font-style:italic; font-size:17px}
-.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:18px}
+.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:calc(15px * var(--tx))}
+.say{text-align:center; color:var(--muted); font-style:italic; font-size:calc(17px * var(--tx))}
+.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:calc(18px * var(--tx))}
 .btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:4px 16px 6px;
-  font-size:16px; line-height:1.2; cursor:pointer}
+  font-size:calc(16px * var(--tx)); line-height:1.2; cursor:pointer}
 .btn.primary{background:var(--rubric); color:var(--leaf)}
 .btn.quiet{border-style:dashed}
 .btn:disabled{opacity:.4; cursor:default}
@@ -147,10 +154,10 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 
 /* Chips: a small picture and a name */
 .chip{display:inline-flex; align-items:center; gap:6px; padding:2px 10px 2px 2px; border:1.5px solid var(--rule); border-radius:999px;
-  background:var(--leaf); font-size:15.5px; line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
+  background:var(--leaf); font-size:calc(15.5px * var(--tx)); line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
 .chip .pic{--s:26px}
 .chip .chip-n{overflow:hidden; text-overflow:ellipsis}
-.chip .chip-tag{font-size:12px; color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
+.chip .chip-tag{font-size:calc(12px * var(--tx)); color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
 button.chip{cursor:pointer}
 button.chip:hover{border-color:var(--rubric)}
 .chip.on{border-color:var(--rubric); box-shadow:0 0 0 2px var(--rubric)}
@@ -160,9 +167,9 @@ button.chip:hover{border-color:var(--rubric)}
 .fcard{display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:16px; row-gap:2px; align-items:center; align-content:center;
   padding:14px 16px; border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); text-align:left}
 .fcard .pic{grid-row:1 / span 2}
-.fcard h3{font-size:22px; line-height:1.15}
+.fcard h3{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.15}
 .fcard h3 .yr{color:var(--muted); font-weight:400; font-size:.8em; margin-left:6px}
-.fcard .sum{font-size:16.5px; line-height:1.38}
+.fcard .sum{font-size:calc(16.5px * var(--tx)); line-height:1.38}
 
 /* The ratings table: customers in rows, films in columns, one badge per cell.
    .on and .dim work on rows (tr) and on cells (td); .rt-new is the newcomer below a gap; .q is a "?" cell. */
@@ -197,9 +204,9 @@ button.chip:hover{border-color:var(--rubric)}
 .scene.intro .scene-head{display:none}
 .act-card{display:grid; justify-items:center; text-align:center; gap:10px; padding:8px 0}
 .act-no{font-size:clamp(64px, 15vh, 128px); line-height:1; color:var(--card-soft); font-variant-numeric:lining-nums}
-.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--card-soft)}
+.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--card-soft)}
 .act-title{font-style:italic; font-weight:500; font-size:clamp(42px, 9vh, 76px); line-height:1.04; text-wrap:balance}
-.act-line{max-width:36ch; font-size:22px; line-height:1.38; text-wrap:balance}
+.act-line{max-width:36ch; font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.38; text-wrap:balance}
 .act-motif{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:12px; margin-top:10px}
 .act-motif .vote{min-width:66px; padding:9px 10px}
 .act-motif .vote[data-r="0"]{background:var(--leaf)}
@@ -231,13 +238,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: a laptop browser or the projector at 720p */
 @media (max-height: 760px){
   .scene{padding:12px 22px 14px}
-  .scene-head .scene-no{font-size:30px}
-  .scene-head h2{font-size:25px}
+  .scene-head .scene-no{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538))}
+  .scene-head h2{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731))}
   .scene-inner{gap:10px; padding-top:8px}
   .fcard{padding:10px 14px}
-  .fcard h3{font-size:20px}
-  .fcard .sum{font-size:15.5px}
-  .bubble{font-size:17px; padding:7px 16px}
+  .fcard h3{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .fcard .sum{font-size:calc(15.5px * var(--tx))}
+  .bubble{font-size:calc(17px * var(--tx)); padding:7px 16px}
   .rt{border-spacing:6px 4px}
 }
 @media (max-width: 760px){
@@ -310,20 +317,22 @@ button.chip:hover{border-color:var(--rubric)}
    violet card, so here it takes the card's own light colours (dashed, as everything unknown in the game). */
 .act-motif .nt-n.nt-slot{background:transparent; border-color:var(--card-soft); color:var(--card-ink)}
 .act-skip{margin-top:6px; padding:8px 20px; border-radius:999px; border:1.5px solid var(--card-soft); background:transparent;
-  color:var(--card-ink); font-size:19px; cursor:pointer}
+  color:var(--card-ink); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); cursor:pointer}
 .act-skip:hover{background:var(--card-rule)}
 /* An optional section's card carries the skip button as well: a little less air, so it fits 1280x720. */
 .act-card.opt{gap:6px}
 .act-card.opt .act-motif{margin-top:4px}
 .py-card{display:grid; justify-items:center; text-align:center; gap:14px; padding:10px 0; max-width:50ch; margin:0 auto}
-.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--ochre)}
-.py-what{font-size:clamp(24px, 4.2vh, 34px); line-height:1.25; font-style:italic; text-wrap:balance}
+.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--ochre)}
+.py-what{font-size:calc(clamp(24px, 4.2vh, 34px) * (1 + (var(--tx) - 1) * 0.385)); line-height:1.25; font-style:italic; text-wrap:balance}
 .py-open{display:inline-block; padding:12px 26px; border-radius:999px; background:var(--rubric); color:var(--leaf);
-  font-size:21px; text-decoration:none; font-weight:500}
+  font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); text-decoration:none; font-weight:500}
 .py-open:hover{filter:brightness(1.08)}
-.py-how, .py-back{font-size:18px; color:var(--muted); max-width:42ch}
+.py-how, .py-back{font-size:calc(18px * var(--tx)); color:var(--muted); max-width:42ch}
 .pager button.py{width:11px; height:11px; border-radius:3px; background:transparent; border:2px solid var(--ochre); margin:0 3px}
 .pager button.py[aria-current="step"]{background:var(--ochre)}
+/* Text scale (above): on the large screens the leaf widens with its words, so that they keep their lines */
+@media (min-width: 1080px) and (min-height: 740px){ .py-card{max-width:calc(50ch * var(--tx))} }
 @media (max-width: 560px){
   .py-what{font-size:22px}
   .py-open{font-size:18px; padding:10px 20px}
@@ -795,9 +804,9 @@ button.chip:hover{border-color:var(--rubric)}
 /* POPPER'S SCHEMA: the sentence, four boxes with arrows, the loop over the top, Popper's words, the beats */
 .g-sch{--g-bw:86px; --g-bh:56px; --g-arc:36px; display:grid; justify-items:center; gap:10px; width:100%}
 .g-quote{display:grid; justify-items:center; gap:4px; text-align:center}
-.g-qt{font-size:clamp(28px, 5.4vh, 42px); line-height:1.15; font-weight:500; text-wrap:balance}
+.g-qt{font-size:calc(clamp(28px, 5.4vh, 42px) * (1 + (var(--tx) - 1) * 0.077)); line-height:1.15; font-weight:500; text-wrap:balance}
 .g-qr{color:var(--rubric); font-style:italic}
-.g-src{font-size:15.5px; color:var(--muted); text-align:center; text-wrap:balance}
+.g-src{font-size:calc(15.5px * var(--tx)); color:var(--muted); text-align:center; text-wrap:balance}
 .g-flow{position:relative; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); width:min(100%, 900px);
   padding-top:var(--g-arc); margin-top:8px}
 .g-fcol{position:relative; display:grid; justify-items:center; align-content:start; gap:3px; text-align:center; padding:0 4px; min-width:0}
@@ -810,18 +819,18 @@ button.chip:hover{border-color:var(--rubric)}
   height:2px; background:var(--ink); transform-origin:left center}
 .g-farrow::after{content:""; position:absolute; right:-2px; top:50%; border-left:10px solid var(--ink); border-top:6px solid transparent;
   border-bottom:6px solid transparent; transform:translateY(-50%)}
-.g-flab{font-size:18px; line-height:1.2; font-weight:500}
-.g-fbeat{font-size:18px; line-height:1.2; color:var(--rubric); font-style:italic; margin-top:3px}
-.g-fnote{font-size:17px; line-height:1.25; color:var(--ochre); font-weight:600; margin-top:4px}
+.g-flab{font-size:calc(18px * var(--tx)); line-height:1.2; font-weight:500}
+.g-fbeat{font-size:calc(18px * var(--tx)); line-height:1.2; color:var(--rubric); font-style:italic; margin-top:3px}
+.g-fnote{font-size:calc(17px * var(--tx)); line-height:1.25; color:var(--ochre); font-weight:600; margin-top:4px}
 .g-fnote.g-empty{display:none}
 .g-again{position:absolute; top:6px; left:12.5%; right:12.5%; height:calc(var(--g-arc) - 6px); border:2px solid var(--muted); border-bottom:0;
   border-radius:16px 16px 0 0}
 .g-again::after{content:""; position:absolute; left:-7px; bottom:-3px; border-top:10px solid var(--muted); border-left:6px solid transparent;
   border-right:6px solid transparent}
 .g-againl{position:absolute; left:50%; top:0; transform:translate(-50%, -58%); background:var(--leaf); padding:0 10px; font-style:italic;
-  color:var(--muted); font-size:17px; white-space:nowrap}
+  color:var(--muted); font-size:calc(17px * var(--tx)); white-space:nowrap}
 .g-ssrc{margin-top:2px}
-.g-sline{font-size:clamp(22px, 3.8vh, 28px); line-height:1.25; font-weight:500; text-align:center; text-wrap:balance; margin-top:4px}
+.g-sline{font-size:calc(clamp(22px, 3.8vh, 28px) * (1 + (var(--tx) - 1) * 0.615)); line-height:1.25; font-weight:500; text-align:center; text-wrap:balance; margin-top:4px}
 .g-sch:not(.g-on-quote) .g-quote{visibility:hidden}
 .g-sch:not(.g-on-boxes) .g-fbox, .g-sch:not(.g-on-boxes) .g-farrow, .g-sch:not(.g-on-boxes) .g-flab,
 .g-sch:not(.g-on-boxes) .g-ssrc, .g-sch:not(.g-on-boxes) .g-fnote{visibility:hidden}
@@ -830,11 +839,11 @@ button.chip:hover{border-color:var(--rubric)}
 .g-sch:not(.g-on-line) .g-sline{visibility:hidden}
 .g-sch-sm{--g-bw:58px; --g-bh:40px; --g-arc:26px}
 .g-sch-sm .g-fbox{font-size:21px}
-.g-sch-sm .g-flab, .g-sch-sm .g-fbeat, .g-sch-sm .g-fnote{font-size:14px}
+.g-sch-sm .g-flab, .g-sch-sm .g-fbeat, .g-sch-sm .g-fnote{font-size:calc(14px * var(--tx))}
 .g-sch-sm{gap:6px}
-.g-sch-sm .g-qt{font-size:22px}
-.g-sch-sm .g-src{font-size:12.5px}
-.g-sch-sm .g-sline{font-size:17px}
+.g-sch-sm .g-qt{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+.g-sch-sm .g-src{font-size:calc(12.5px * var(--tx))}
+.g-sch-sm .g-sline{font-size:calc(17px * var(--tx))}
 @media (max-width: 560px){
   .g-sch{--g-bw:56px; --g-bh:42px; --g-arc:30px; gap:8px}
   .g-qt{font-size:25px}
@@ -950,11 +959,11 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* the words */
 .s3-note{display:grid; gap:6px; justify-items:center; text-align:center; width:100%; max-width:64rem; margin:0 auto}
-.s3-lead{font-size:23px; line-height:1.3; text-wrap:balance; max-width:74ch}
-.s3-say{font-size:19px; line-height:1.38; color:var(--muted); text-wrap:balance; max-width:84ch}
+.s3-lead{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); line-height:1.3; text-wrap:balance; max-width:74ch}
+.s3-say{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.38; color:var(--muted); text-wrap:balance; max-width:84ch}
 .s3-say .nt-n.s3-in{--nt-fs:17px}
 .s3-rub{color:var(--rubric); font-weight:600; font-style:italic}
-.s3 .s3-say .s3-rub{font-size:23px}
+.s3 .s3-say .s3-rub{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808))}
 .s3-nw{white-space:nowrap}
 .s3 .nt-n.s3-in{--nt-w:34px; --nt-h:28px; --nt-fs:18px; border-radius:8px; margin:0 .08em; vertical-align:-.12em; padding:0 6px}
 .s3-ctl{display:flex; flex-wrap:wrap; gap:12px 16px; justify-content:center; align-items:center}
@@ -971,16 +980,16 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* up or down: two large answers */
 .s3-ch{display:inline-flex; align-items:center; justify-content:center; gap:10px; min-width:150px; padding:7px 28px 9px;
-  border-radius:999px; border:2px solid var(--rubric); background:var(--leaf); color:var(--rubric); font-size:22px; font-weight:600;
+  border-radius:999px; border:2px solid var(--rubric); background:var(--leaf); color:var(--rubric); font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); font-weight:600;
   font-family:inherit; cursor:pointer; transition:background .2s ease, transform .15s ease}
 .s3-ch:hover{background:var(--bg); transform:translateY(-1px)}
-.s3-arrow{font-size:25px; line-height:1}
+.s3-arrow{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); line-height:1}
 .s3-pick{display:inline-grid; place-items:center; min-width:110px; padding:7px 18px; border-radius:14px; border:2px solid var(--rubric);
   background:var(--leaf); cursor:pointer; transition:background .2s ease, transform .15s ease}
 .s3-pick:hover{background:var(--bg); transform:translateY(-1px)}
 .s3-pick .nt-n.s3-in{--nt-fs:21px; --nt-h:32px}
 .s3-pick.s3-tried{opacity:.38; cursor:default; transform:none; text-decoration:line-through}
-.s3-again{font-size:15px}
+.s3-again{font-size:calc(15px * var(--tx))}
 
 /* labels on the ground: the hop, the change and the slope, green like the triangle */
 .s3-gl{display:inline-flex; align-items:center; gap:6px; color:var(--g-slope); font-style:italic; font-size:17px; font-weight:600;
@@ -999,14 +1008,14 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* descent: the trail of losses, Play and Pause, the way on */
 .s3-trow{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 18px}
-.s3-trail{font-size:18px; line-height:1.5; max-width:70ch; text-wrap:balance}
+.s3-trail{font-size:calc(18px * var(--tx)); line-height:1.5; max-width:70ch; text-wrap:balance}
 .s3-trail[hidden]{display:none}
 .s3-trail .nt-n.s3-in{--nt-fs:16px; --nt-h:26px; --nt-w:30px}
 .s3-arr{color:var(--muted)}
 .s3-dots{color:var(--muted); letter-spacing:.1em}
 .s3-about{font-style:italic; color:var(--rubric); white-space:nowrap}
-.s3-play{min-width:120px; font-size:17px}
-.s3-way{font-size:18px; color:var(--ochre); max-width:62ch; text-wrap:balance; font-style:italic}
+.s3-play{min-width:120px; font-size:calc(17px * var(--tx))}
+.s3-way{font-size:calc(18px * var(--tx)); color:var(--ochre); max-width:62ch; text-wrap:balance; font-style:italic}
 
 @media (prefers-reduced-motion: reduce){
   .s3-rise{animation:none}
@@ -1023,12 +1032,12 @@ button.chip:hover{border-color:var(--rubric)}
   .s3-dia .g-x.mx-cross.mx-x-tb{--mx-xcg:28px; --mx-xrg:6px; --mx-xjoin:14px}
   .s3-dia .g-x.mx-x-tb > .mx-xf{margin-bottom:calc(22px - var(--mx-xrg))}
   .s3-note{gap:4px}
-  .s3-lead{font-size:21px}
-  .s3-say{font-size:17.5px}
-  .s3 .s3-say .s3-rub{font-size:21px}
-  .s3-ch{font-size:20px; padding:5px 24px 7px; min-width:136px}
-  .s3-trail{font-size:16.5px}
-  .s3-way{font-size:16.5px}
+  .s3-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .s3-say{font-size:calc(17.5px * var(--tx))}
+  .s3 .s3-say .s3-rub{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .s3-ch{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); padding:5px 24px 7px; min-width:136px}
+  .s3-trail{font-size:calc(16.5px * var(--tx))}
+  .s3-way{font-size:calc(16.5px * var(--tx))}
   .s3-descent .s3-dia .g-sm .mx, .s3-feel .s3-dia .g-sm .mx{--nt-h:27px; --nt-fs:16px}
   .s3-descent .s3-dia .g-dia, .s3-feel .s3-dia .g-dia{gap:6px}
   .s3-descent .s3-gbox{height:272px}
@@ -1070,8 +1079,8 @@ button.chip:hover{border-color:var(--rubric)}
    reaches the cells outside the diagram too), an update or move in ochre, the partner, the rating and the prediction ringed in the rubric violet.
    Scene eps shows the grasshopper's hop of 0.01 with its numbers and the triangle of the hop (MF.H.ground). */
 .s3d{position:relative; display:grid; gap:10px; justify-items:center; width:100%; min-width:0}
-.s3d-lead{font-size:23px; line-height:1.3; text-align:center; text-wrap:balance; max-width:64ch}
-.s3d-line{font-size:19px; line-height:1.35; text-align:center; text-wrap:balance; max-width:62ch}
+.s3d-lead{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); line-height:1.3; text-align:center; text-wrap:balance; max-width:64ch}
+.s3d-line{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; text-wrap:balance; max-width:62ch}
 .s3d-quiet{color:var(--muted)}
 .s3d-nw{white-space:nowrap}
 .s3d-b{font-weight:700; color:var(--rubric)}
@@ -1134,9 +1143,9 @@ button.chip:hover{border-color:var(--rubric)}
 .s3d-key:focus-visible{outline:2px solid var(--rubric); outline-offset:1px}
 @media (hover: hover){ .s3d-key:hover .nt-n{box-shadow:0 0 0 2px var(--rubric)} }
 .s3d-fbw{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 12px}
-.s3d-fb{font-size:19px; line-height:1.3; text-align:center; text-wrap:balance; max-width:60ch}
+.s3d-fb{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.3; text-align:center; text-wrap:balance; max-width:60ch}
 .s3d-hint .s3d-b{color:var(--muted)}
-.s3d-showme{font-size:15px; padding:2px 14px 4px}
+.s3d-showme{font-size:calc(15px * var(--tx)); padding:2px 14px 4px}
 
 /* Scene update: the rule and why the minus; the four numbers and the two columns; the diagram; the gradient */
 .s3d-rulev{display:grid; gap:16px; justify-items:center}
@@ -1149,7 +1158,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s3d-parrow{position:absolute; bottom:-10px; font-size:28px; font-weight:700; line-height:1; color:var(--ochre)}
 .s3d-parrow.s3d-pright{right:4px}
 .s3d-parrow.s3d-pleft{left:4px}
-.s3d-pcap{font-size:18.5px; line-height:1.3; text-align:center; text-wrap:balance}
+.s3d-pcap{font-size:calc(18.5px * (1 + (var(--tx) - 1) * 0.981)); line-height:1.3; text-align:center; text-wrap:balance}
 .s3d-rise > .s3d-panel{animation:s3d-rise .5s ease both}
 @keyframes s3d-rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 .s3d-workv{display:grid; gap:10px; justify-items:center}
@@ -1173,9 +1182,9 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
   .s3d{gap:8px}
-  .s3d-lead{font-size:22px}
-  .s3d-line{font-size:18px}
-  .s3d-fb{font-size:18px}
+  .s3d-lead{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+  .s3d-line{font-size:calc(18px * var(--tx))}
+  .s3d-fb{font-size:calc(18px * var(--tx))}
   .s3d .s3d-colw, .s3d .s3d-colw .nt-tab{--nt-h:40px; --nt-xg:18px; --nt-rg:8px}
 }
 /* A phone */
@@ -1432,9 +1441,9 @@ button.chip:hover{border-color:var(--rubric)}
    with s4-. The table view itself is loss.css (classes lv-). The words sit under the view, in its note. */
 .s4{display:grid; justify-items:center; width:100%; min-width:0}
 .s4 .lv-note{gap:4px}
-.s4-lead{font-size:23px; line-height:1.28; text-wrap:balance; max-width:74ch; margin:0}
-.s4-say{font-size:19px; line-height:1.36; color:var(--muted); text-wrap:balance; max-width:84ch; margin:0}
-.s4-aside{font-size:17px; line-height:1.34; color:var(--muted); font-style:italic; text-wrap:balance; max-width:84ch; margin:0}
+.s4-lead{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); line-height:1.28; text-wrap:balance; max-width:74ch; margin:0}
+.s4-say{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.36; color:var(--muted); text-wrap:balance; max-width:84ch; margin:0}
+.s4-aside{font-size:calc(17px * var(--tx)); line-height:1.34; color:var(--muted); font-style:italic; text-wrap:balance; max-width:84ch; margin:0}
 .s4-lead:empty, .s4-say:empty, .s4-aside:empty{display:none}
 .s4-rub{color:var(--rubric); font-weight:600; font-style:italic}
 .s4-nw{white-space:nowrap}
@@ -1453,31 +1462,31 @@ button.chip:hover{border-color:var(--rubric)}
 .s4-key:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .s4-key .nt-n{--nt-w:42px; --nt-h:34px; --nt-fs:19px; min-width:var(--nt-w); min-height:var(--nt-h); font-size:var(--nt-fs)}
 .s4-fbw{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 12px}
-.s4-fb{margin:0; font-size:19px; line-height:1.34; text-wrap:balance; max-width:58ch}
-.s4-done .s4-fb{font-size:21px}
-.s4-showme{font-size:16px}
+.s4-fb{margin:0; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.34; text-wrap:balance; max-width:58ch}
+.s4-done .s4-fb{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+.s4-showme{font-size:calc(16px * var(--tx))}
 .s4-showme[hidden]{display:none}
 
 /* the run: the step count, a trail of the total losses, Pause and Play */
 .s4-runrow{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px 22px}
 .s4-runrow[hidden]{display:none}
 .s4-count, .s4-trail{margin:0; display:inline-flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 2px}
-.s4-cl{color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600; font-size:17px; margin-right:6px}
-.s4-cn{display:inline-block; min-width:2.6ch; font-size:26px; font-weight:700; color:var(--ink); font-variant-numeric:lining-nums tabular-nums}
+.s4-cl{color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600; font-size:calc(17px * var(--tx)); margin-right:6px}
+.s4-cn{display:inline-block; min-width:2.6ch; font-size:calc(26px * (1 + (var(--tx) - 1) * 0.692)); font-weight:700; color:var(--ink); font-variant-numeric:lining-nums tabular-nums}
 .s4-arr{color:var(--muted); margin:0 2px}
 .s4-dots{color:var(--muted); letter-spacing:.1em}
 .s4-trail .nt-n.s4-in{--nt-w:44px; --nt-h:26px; --nt-fs:16px}
 .s4-play{min-width:7.5em}
-.s4-other{font-size:16px}
+.s4-other{font-size:calc(16px * var(--tx))}
 
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
-  .s4-lead{font-size:21px}
-  .s4-say{font-size:18px}
-  .s4-aside{font-size:16px}
-  .s4-fb{font-size:18px}
+  .s4-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .s4-say{font-size:calc(18px * var(--tx))}
+  .s4-aside{font-size:calc(16px * var(--tx))}
+  .s4-fb{font-size:calc(18px * var(--tx))}
   .s4-key .nt-n{--nt-w:38px; --nt-h:30px; --nt-fs:18px}
-  .s4-cn{font-size:23px}
+  .s4-cn{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808))}
 }
 /* Phones */
 @media (max-width: 560px){
@@ -1500,14 +1509,18 @@ button.chip:hover{border-color:var(--rubric)}
 @media (prefers-reduced-motion: reduce){
   .s4-key{transition:none}
 }
+
+/* Text scale (core.css): on the large screens the words of Many films grow by 1.2, so that its third step (a
+   grasshopper on every number) fits with its two lines under the board on an 11-inch iPad */
+@media (min-width: 1080px) and (min-height: 740px){ .scene[data-key="table"]{--tx:1.2} }
 </style>
 <style>
 /* Section 4, many customers and many films: S4-B's scenes shared and together (sec4d.js), classes s4d-.
    Colours follow section 3 (GUESS.md, sec3d.css): a slope green (--g-slope), a move or update ochre (--ochre, the
    view's tone "b"), the ratings a number sits in violet (the view's tone "a"). The view itself is S4-A's (loss.css). */
 .s4d{position:relative; display:grid; gap:8px; justify-items:center; width:100%; min-width:0}
-.s4d-lead{font-size:23px; line-height:1.3; text-align:center; text-wrap:balance; max-width:76ch; margin:0}
-.s4d-line{font-size:19px; line-height:1.35; text-align:center; text-wrap:balance; max-width:66ch; margin:0}
+.s4d-lead{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); line-height:1.3; text-align:center; text-wrap:balance; max-width:76ch; margin:0}
+.s4d-line{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; text-wrap:balance; max-width:66ch; margin:0}
 .s4d-say:empty{display:none}
 .s4d-quiet{color:var(--muted)}
 .s4d-nw{white-space:nowrap}
@@ -1580,7 +1593,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s4d-sl .nt-n.s4d-cur{box-shadow:0 0 0 2.5px var(--leaf), 0 0 0 5.5px var(--ochre)}
 .s4d-side{display:grid; justify-items:center; gap:8px; max-width:540px}
 .s4d-sl .mx-rn{display:none}
-.s4d-sline{font-size:18px; max-width:30em}
+.s4d-sline{font-size:calc(18px * var(--tx)); max-width:30em}
 
 /* The guessed numbers can be tapped in the first step of shared */
 .s4d-picking .s4d-tap{cursor:pointer}
@@ -1597,9 +1610,9 @@ button.chip:hover{border-color:var(--rubric)}
 .s4d-key:focus-visible{outline:2px solid var(--rubric); outline-offset:1px}
 @media (hover: hover){ .s4d-key:hover .nt-n{box-shadow:0 0 0 2px var(--rubric)} }
 .s4d-fbw{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 12px}
-.s4d-fb{font-size:19px; line-height:1.3; text-align:center; text-wrap:balance; max-width:62ch; margin:0}
+.s4d-fb{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.3; text-align:center; text-wrap:balance; max-width:62ch; margin:0}
 .s4d-hint .s4d-b{color:var(--muted)}
-.s4d-showme{font-size:15px; padding:2px 14px 4px}
+.s4d-showme{font-size:calc(15px * var(--tx)); padding:2px 14px 4px}
 
 /* Scene together: the rule, the worked updates, the question, the run */
 .s4d-grulev{display:grid; gap:8px; justify-items:center; max-width:660px}
@@ -1616,11 +1629,11 @@ button.chip:hover{border-color:var(--rubric)}
 .s4d-qside{display:grid; gap:8px; justify-items:center; max-width:470px}
 .s4d-qbtns{display:flex; gap:12px}
 .s4d-qbtns[hidden]{display:none}
-.s4d-qbtn{font-size:18px; padding:4px 18px 6px}
+.s4d-qbtn{font-size:calc(18px * var(--tx)); padding:4px 18px 6px}
 .s4d-runv{display:grid; gap:10px; justify-items:center; width:100%}
 .s4d-runtop{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px 12px}
 .s4d .nt-n.s4d-count{--nt-w:52px; --nt-h:40px; --nt-fs:24px}
-.s4d-play, .s4d-replay{font-size:15px; padding:2px 14px 4px}
+.s4d-play, .s4d-replay{font-size:calc(15px * var(--tx)); padding:2px 14px 4px}
 .s4d-trail{display:flex; flex-wrap:wrap; justify-content:center; gap:5px; max-width:960px}
 .s4d .nt-n.s4d-tc{--nt-w:58px; --nt-h:30px; --nt-fs:15px; border-radius:8px}
 .s4d .nt-n.s4d-tc.s4d-now{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4px var(--g-fwd, var(--rubric))}
@@ -1647,8 +1660,8 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
   .s4d{row-gap:6px}
-  .s4d-lead{font-size:21px}
-  .s4d-line, .s4d-fb{font-size:17.5px}
+  .s4d-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .s4d-line, .s4d-fb{font-size:calc(17.5px * var(--tx))}
   .s4d .s4d-asksw, .s4d .s4d-asks{--nt-h:30px; --nt-fs:20px; --nt-xg:11px; --nt-rg:4px}
   .s4d-ah .pic{--s:20px}
   /* the room's turn of shared: its keys take the place of the slopes found so far */
@@ -1659,7 +1672,7 @@ button.chip:hover{border-color:var(--rubric)}
   .s4d-grulev .s4d-quiet .nt-n.s4d-in{--nt-h:23px; --nt-fs:15.5px}
   .s4d-key{--nt-w:46px; --nt-h:30px}
   .s4d-pad{gap:4px}
-  .s4d-grulev .s4d-quiet{font-size:16px; line-height:1.3}
+  .s4d-grulev .s4d-quiet{font-size:calc(16px * var(--tx)); line-height:1.3}
 }
 /* A phone */
 @media (max-width: 560px){

@@ -23,6 +23,13 @@
   --emoji:"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
   --gut:max(16px, env(safe-area-inset-left, 0px)); --gut-r:max(16px, env(safe-area-inset-right, 0px));
 }
+/* Text scale (2026-11-11). Carlos shows the games from his iPad on the projector and asked for words the size of the
+   slides' words; the matrices keep their sizes. On a screen at least 1080 x 740 px, the size of every word of 18 px or
+   less is multiplied by --tx; larger type grows by a share that falls to nothing at 44 px. The sizes are written as
+   calc(V * var(--tx)) or calc(V * (1 + (var(--tx) - 1) * w)). The tables, stacks, badges, pictures, the top bar and
+   Back and Next keep their sizes, and so does a phone (--tx is 1 there). */
+:root{--tx:1}
+@media (min-width: 1080px) and (min-height: 740px){ :root{--tx:1.4} }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
@@ -68,9 +75,9 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 
 /* a slide: its title and words above the picture */
 .slide{max-width:1180px; margin:0 auto}
-.slide h2{margin:0 0 4px; font-size:27px; font-weight:600; text-wrap:balance}
-.slide h2 .kick{font-size:15px; font-weight:500; color:var(--rubric); letter-spacing:.06em; text-transform:uppercase; margin-right:10px}
-.words{min-height:3.0em; font-size:19px; max-width:72ch; text-wrap:pretty; margin-bottom:8px}
+.slide h2{margin:0 0 4px; font-size:calc(27px * (1 + (var(--tx) - 1) * 0.654)); font-weight:600; text-wrap:balance}
+.slide h2 .kick{font-size:calc(15px * var(--tx)); font-weight:500; color:var(--rubric); letter-spacing:.06em; text-transform:uppercase; margin-right:10px}
+.words{min-height:3.0em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); max-width:72ch; text-wrap:pretty; margin-bottom:8px}
 .words b{font-weight:600}
 .words .rub{color:var(--rubric)}
 .words .och{color:var(--ochre)}
@@ -115,13 +122,13 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .pad button.ok{background:var(--rubric); border-color:var(--rubric); color:var(--leaf); min-width:64px}
 .pad button:disabled{opacity:.35; cursor:default}
 .row{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px}
-.btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:3px 16px 5px; font-size:16px; cursor:pointer}
+.btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:3px 16px 5px; font-size:calc(16px * var(--tx)); cursor:pointer}
 .btn:disabled{opacity:.35; cursor:default}
-.note{font-size:17px; color:var(--muted); min-height:1.4em; text-align:center}
+.note{font-size:calc(17px * var(--tx)); color:var(--muted); min-height:1.4em; text-align:center}
 .note .work{color:var(--ink); font-variant-numeric:lining-nums tabular-nums}
-.count{font-size:16px; color:var(--muted); font-style:italic}
+.count{font-size:calc(16px * var(--tx)); color:var(--muted); font-style:italic}
 .choices{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
-.choices button{min-width:64px; height:44px; border-radius:12px; border:1.5px solid var(--rubric); background:var(--leaf); color:var(--rubric); font-size:22px; font-weight:600; cursor:pointer}
+.choices button{min-width:64px; height:44px; border-radius:12px; border:1.5px solid var(--rubric); background:var(--leaf); color:var(--rubric); font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); font-weight:600; cursor:pointer}
 .choices button.no{border-color:var(--rule); color:var(--muted); text-decoration:line-through; text-decoration-thickness:2px}
 .choices button.yes{background:var(--rubric); color:var(--leaf)}
 
@@ -218,7 +225,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .chart .cl{fill:none; stroke:var(--loss); stroke-width:2; stroke-linejoin:round; stroke-linecap:round}
 .chart .cd{fill:var(--loss)}
 .wordsrow{display:flex; flex-wrap:wrap; align-items:flex-start; column-gap:28px}
-.ctl{display:flex; align-items:center; gap:12px; margin:2px 0 8px; font-size:16px; color:var(--muted); font-style:italic;
+.ctl{display:flex; align-items:center; gap:12px; margin:2px 0 8px; font-size:calc(16px * var(--tx)); color:var(--muted); font-style:italic;
   font-variant-numeric:lining-nums tabular-nums}
 .ctl .btn{font-style:normal; min-width:84px}
 .grid3 .kA{justify-self:end}
@@ -250,7 +257,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .tbl .cap{font-size:14px; font-style:italic; color:var(--muted); white-space:nowrap; padding-bottom:4px; place-self:end center}
 .tbl .n.gone{opacity:.16}
 .tbl .n.over{box-shadow:0 0 0 2px var(--leaf), 0 0 0 4.5px var(--loss)}
-.left{min-height:1.5em; font-size:17px; font-style:italic; font-weight:600; color:var(--loss); text-align:center}
+.left{min-height:1.5em; font-size:calc(17px * var(--tx)); font-style:italic; font-weight:600; color:var(--loss); text-align:center}
 .pool{display:grid; grid-template-columns:repeat(5, auto); gap:12px}
 .pc{display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 9px 5px; border:1.5px solid var(--rule);
   border-radius:12px; background:var(--leaf); transition:border-color .35s ease}
@@ -261,7 +268,7 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
 .pc .cnt{font-size:13px; color:var(--muted); font-variant-numeric:lining-nums tabular-nums}
 .pc.full{border-color:var(--loss)}
 .pc.full .cnt{color:var(--loss); font-weight:600}
-.total{font-size:17px; font-style:italic; color:var(--ink); font-variant-numeric:lining-nums tabular-nums}
+.total{font-size:calc(17px * var(--tx)); font-style:italic; color:var(--ink); font-variant-numeric:lining-nums tabular-nums}
 
 @media (max-width:640px){
   .pboard{grid-template-columns:auto}
@@ -276,6 +283,18 @@ button:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
   .cross .film{font-size:19px}
   .pad button{min-width:34px; height:38px; font-size:18px}
   .navbtn{min-width:76px; padding:4px 12px 6px}
+}
+/* Large screens, with the text scale: the lines of the words closer together and slide 4's Play and its round on the
+   line of the title, so that the larger words leave the boards of slides 3 and 4 their size at 1180 x 746 and slide 1
+   fits; the button keeps one width for Play, Pause and Replay. */
+@media (min-width: 1080px) and (min-height: 740px){
+  .slide{position:relative}
+  .slide h2{line-height:1.1; margin-bottom:0}
+  .words{line-height:1.25; min-height:2.5em; margin-bottom:2px}
+  .note{line-height:1.25; min-height:1.25em}
+  .btn{line-height:1.2}
+  .ctl{position:absolute; top:0; right:0; width:21.5em; margin:0; white-space:nowrap}
+  .ctl .btn{min-width:4.4em}
 }
 </style>
 </head>

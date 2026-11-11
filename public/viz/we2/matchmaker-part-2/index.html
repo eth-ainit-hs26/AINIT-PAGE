@@ -35,6 +35,13 @@
      and the loss violet, a move or update ochre, a slope green. */
   --g-fwd:var(--rubric); --g-move:var(--ochre); --g-slope:#2F7D62;
 }
+/* Text scale (2026-11-11). Carlos shows the games from his iPad on the projector and asked for words the size of the
+   slides' words; the matrices keep their sizes. On a screen at least 1080 x 740 px, the size of every word of 18 px or
+   less is multiplied by --tx; larger type grows by a share that falls to nothing at 44 px. The sizes are written as
+   calc(V * var(--tx)) or calc(V * (1 + (var(--tx) - 1) * w)). The tables, stacks, badges, pictures, the top bar and
+   Back and Next keep their sizes, and so does a phone (--tx is 1 there). */
+:root{--tx:1}
+@media (min-width: 1080px) and (min-height: 740px){ :root{--tx:1.4} }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
@@ -100,19 +107,19 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 @keyframes enter{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 @media (prefers-reduced-motion: reduce){ .scene.active{animation:none} }
 .scene-head{display:flex; align-items:center; gap:14px}
-.scene-head .scene-no{font-size:34px}
-.scene-head h2{font-size:28px; line-height:1.1}
-.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; white-space:nowrap}
+.scene-head .scene-no{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
+.scene-head h2{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615)); line-height:1.1}
+.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); white-space:nowrap}
 /* The leaves of an optional section (3 and 4) carry this tag beside their title. */
 .scene-head .opt-tag{flex:none; color:var(--ochre); border:1.5px solid var(--ochre); border-radius:999px; padding:0 10px 2px;
-  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; line-height:1.3; white-space:nowrap}
+  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); line-height:1.3; white-space:nowrap}
 .scene-body{flex:1; display:flex; flex-direction:column; min-height:0}
 .scene-inner{margin:auto 0; padding-top:12px; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; width:100%}
-.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:15px}
-.say{text-align:center; color:var(--muted); font-style:italic; font-size:17px}
-.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:18px}
+.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:calc(15px * var(--tx))}
+.say{text-align:center; color:var(--muted); font-style:italic; font-size:calc(17px * var(--tx))}
+.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:calc(18px * var(--tx))}
 .btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:4px 16px 6px;
-  font-size:16px; line-height:1.2; cursor:pointer}
+  font-size:calc(16px * var(--tx)); line-height:1.2; cursor:pointer}
 .btn.primary{background:var(--rubric); color:var(--leaf)}
 .btn.quiet{border-style:dashed}
 .btn:disabled{opacity:.4; cursor:default}
@@ -147,10 +154,10 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 
 /* Chips: a small picture and a name */
 .chip{display:inline-flex; align-items:center; gap:6px; padding:2px 10px 2px 2px; border:1.5px solid var(--rule); border-radius:999px;
-  background:var(--leaf); font-size:15.5px; line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
+  background:var(--leaf); font-size:calc(15.5px * var(--tx)); line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
 .chip .pic{--s:26px}
 .chip .chip-n{overflow:hidden; text-overflow:ellipsis}
-.chip .chip-tag{font-size:12px; color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
+.chip .chip-tag{font-size:calc(12px * var(--tx)); color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
 button.chip{cursor:pointer}
 button.chip:hover{border-color:var(--rubric)}
 .chip.on{border-color:var(--rubric); box-shadow:0 0 0 2px var(--rubric)}
@@ -160,9 +167,9 @@ button.chip:hover{border-color:var(--rubric)}
 .fcard{display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:16px; row-gap:2px; align-items:center; align-content:center;
   padding:14px 16px; border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); text-align:left}
 .fcard .pic{grid-row:1 / span 2}
-.fcard h3{font-size:22px; line-height:1.15}
+.fcard h3{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.15}
 .fcard h3 .yr{color:var(--muted); font-weight:400; font-size:.8em; margin-left:6px}
-.fcard .sum{font-size:16.5px; line-height:1.38}
+.fcard .sum{font-size:calc(16.5px * var(--tx)); line-height:1.38}
 
 /* The ratings table: customers in rows, films in columns, one badge per cell.
    .on and .dim work on rows (tr) and on cells (td); .rt-new is the newcomer below a gap; .q is a "?" cell. */
@@ -197,9 +204,9 @@ button.chip:hover{border-color:var(--rubric)}
 .scene.intro .scene-head{display:none}
 .act-card{display:grid; justify-items:center; text-align:center; gap:10px; padding:8px 0}
 .act-no{font-size:clamp(64px, 15vh, 128px); line-height:1; color:var(--card-soft); font-variant-numeric:lining-nums}
-.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--card-soft)}
+.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--card-soft)}
 .act-title{font-style:italic; font-weight:500; font-size:clamp(42px, 9vh, 76px); line-height:1.04; text-wrap:balance}
-.act-line{max-width:36ch; font-size:22px; line-height:1.38; text-wrap:balance}
+.act-line{max-width:36ch; font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.38; text-wrap:balance}
 .act-motif{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:12px; margin-top:10px}
 .act-motif .vote{min-width:66px; padding:9px 10px}
 .act-motif .vote[data-r="0"]{background:var(--leaf)}
@@ -231,13 +238,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: a laptop browser or the projector at 720p */
 @media (max-height: 760px){
   .scene{padding:12px 22px 14px}
-  .scene-head .scene-no{font-size:30px}
-  .scene-head h2{font-size:25px}
+  .scene-head .scene-no{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538))}
+  .scene-head h2{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731))}
   .scene-inner{gap:10px; padding-top:8px}
   .fcard{padding:10px 14px}
-  .fcard h3{font-size:20px}
-  .fcard .sum{font-size:15.5px}
-  .bubble{font-size:17px; padding:7px 16px}
+  .fcard h3{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .fcard .sum{font-size:calc(15.5px * var(--tx))}
+  .bubble{font-size:calc(17px * var(--tx)); padding:7px 16px}
   .rt{border-spacing:6px 4px}
 }
 @media (max-width: 760px){
@@ -310,20 +317,22 @@ button.chip:hover{border-color:var(--rubric)}
    violet card, so here it takes the card's own light colours (dashed, as everything unknown in the game). */
 .act-motif .nt-n.nt-slot{background:transparent; border-color:var(--card-soft); color:var(--card-ink)}
 .act-skip{margin-top:6px; padding:8px 20px; border-radius:999px; border:1.5px solid var(--card-soft); background:transparent;
-  color:var(--card-ink); font-size:19px; cursor:pointer}
+  color:var(--card-ink); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); cursor:pointer}
 .act-skip:hover{background:var(--card-rule)}
 /* An optional section's card carries the skip button as well: a little less air, so it fits 1280x720. */
 .act-card.opt{gap:6px}
 .act-card.opt .act-motif{margin-top:4px}
 .py-card{display:grid; justify-items:center; text-align:center; gap:14px; padding:10px 0; max-width:50ch; margin:0 auto}
-.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--ochre)}
-.py-what{font-size:clamp(24px, 4.2vh, 34px); line-height:1.25; font-style:italic; text-wrap:balance}
+.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--ochre)}
+.py-what{font-size:calc(clamp(24px, 4.2vh, 34px) * (1 + (var(--tx) - 1) * 0.385)); line-height:1.25; font-style:italic; text-wrap:balance}
 .py-open{display:inline-block; padding:12px 26px; border-radius:999px; background:var(--rubric); color:var(--leaf);
-  font-size:21px; text-decoration:none; font-weight:500}
+  font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); text-decoration:none; font-weight:500}
 .py-open:hover{filter:brightness(1.08)}
-.py-how, .py-back{font-size:18px; color:var(--muted); max-width:42ch}
+.py-how, .py-back{font-size:calc(18px * var(--tx)); color:var(--muted); max-width:42ch}
 .pager button.py{width:11px; height:11px; border-radius:3px; background:transparent; border:2px solid var(--ochre); margin:0 3px}
 .pager button.py[aria-current="step"]{background:var(--ochre)}
+/* Text scale (above): on the large screens the leaf widens with its words, so that they keep their lines */
+@media (min-width: 1080px) and (min-height: 740px){ .py-card{max-width:calc(50ch * var(--tx))} }
 @media (max-width: 560px){
   .py-what{font-size:22px}
   .py-open{font-size:18px; padding:10px 20px}
@@ -729,7 +738,7 @@ button.chip:hover{border-color:var(--rubric)}
 @keyframes s2-in{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 .s2-still, .s2-still *{transition:none !important}
 /* two lines kept for every lead, so the board never moves when the words change */
-.s2-lead{font-size:21px; line-height:1.3; text-align:center; max-width:66ch; min-height:2.6em; text-wrap:balance; font-weight:500}
+.s2-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); line-height:1.3; text-align:center; max-width:66ch; min-height:2.6em; text-wrap:balance; font-weight:500}
 
 /* THE BOARD */
 .s2-x{--mx-xcg:42px; --mx-xrg:12px}
@@ -840,7 +849,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s2-sq{margin-left:-2px}
 .s2-tools{display:flex; flex-wrap:wrap; gap:8px}
 .s2-tools:not(:has(button:not([hidden]))){display:none}
-.s2-count{font-size:17px; font-weight:600; color:var(--g-move); min-height:1.3em; margin:0}
+.s2-count{font-size:calc(17px * var(--tx)); font-weight:600; color:var(--g-move); min-height:1.3em; margin:0}
 /* again: one row above the board, the counter, the lead in the middle, the buttons; the side columns keep their width,
    so the lead and the buttons stay in place while the counter changes */
 .s2-head{display:grid; grid-template-columns:1fr minmax(0, 54ch) 1fr; align-items:center; column-gap:22px; width:100%}
@@ -848,7 +857,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s2-head > .s2-tools{justify-self:start; flex-wrap:nowrap}
 /* again: the averages carry up to five decimals ("6.33557"), so their boxes are wider */
 .s2-ag .s2-ava .nt-n.s2-bn{--nt-w:86px}
-.s2-msg{font-size:17px; line-height:1.35; margin:0}
+.s2-msg{font-size:calc(17px * var(--tx)); line-height:1.35; margin:0}
 .s2-keys{display:flex; flex-wrap:wrap; gap:6px}
 .s2-keys[hidden], .s2-ud[hidden]{display:none}
 .s2-key{min-width:48px; font-size:19px; font-weight:600; padding:4px 10px 6px}
@@ -923,7 +932,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* The projector at 720p */
 @media (max-height: 760px){
   .s2-sc{gap:6px}
-  .s2-lead{font-size:18.5px; min-height:2.6em}
+  .s2-lead{font-size:calc(18.5px * (1 + (var(--tx) - 1) * 0.981)); min-height:2.6em}
   .s2-x{--mx-xrg:8px}
   .s2-x{--mx-xjoin:14px}
   .s2-x .mx{--nt-w:54px; --nt-h:27px; --nt-fs:17px; --mx-py:1.5px}
@@ -934,7 +943,7 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-x .mx-ch .pic{--s:24px}
   .s2-x .nt-n.s2-bn{--nt-h:34px; --nt-fs:19px; --nt-w:64px}
   .s2-lcell .nt-n{--nt-h:31px; --nt-fs:18px; --nt-w:44px}
-  .s2-msg, .s2-count{font-size:16px}
+  .s2-msg, .s2-count{font-size:calc(16px * var(--tx))}
   .s2-ag .s2-ava .nt-n.s2-bn{--nt-w:78px}
   .s2-x{--s2-r3:125px; --s2-ph:125px; --s2-rh:58px}
   .s2-ptk{font-size:14px}
@@ -1082,6 +1091,10 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-ycard .act-motif::after{content:""; flex-basis:100%; height:0; order:1}
   .s2-ycard .act-motif > :nth-child(n+5){order:2}
 }
+
+/* Text scale (core.css): on the large screens the two buttons of Again and again stand one under the other, each on
+   one line, in the side column of the row above the board */
+@media (min-width: 1080px) and (min-height: 740px){ .s2-head > .s2-tools{flex-wrap:wrap} .s2-head > .s2-tools > *{white-space:nowrap} }
 </style>
 </head>
 <body>

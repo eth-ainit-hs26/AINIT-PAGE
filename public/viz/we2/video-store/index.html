@@ -32,6 +32,13 @@
   --gut:max(16px, env(safe-area-inset-left, 0px));
   --gut-r:max(16px, env(safe-area-inset-right, 0px));
 }
+/* Text scale (2026-11-11). Carlos shows the games from his iPad on the projector and asked for words the size of the
+   slides' words; the matrices keep their sizes. On a screen at least 1080 x 740 px, the size of every word of 18 px or
+   less is multiplied by --tx; larger type grows by a share that falls to nothing at 44 px. The sizes are written as
+   calc(V * var(--tx)) or calc(V * (1 + (var(--tx) - 1) * w)). The tables, stacks, badges, pictures, the top bar and
+   Back and Next keep their sizes, and so does a phone (--tx is 1 there). */
+:root{--tx:1}
+@media (min-width: 1080px) and (min-height: 740px){ :root{--tx:1.4} }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
@@ -93,16 +100,16 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 @keyframes enter{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 @media (prefers-reduced-motion: reduce){ .scene.active{animation:none} }
 .scene-head{display:flex; align-items:center; gap:14px}
-.scene-head .scene-no{font-size:34px}
-.scene-head h2{font-size:28px; line-height:1.1}
-.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; white-space:nowrap}
+.scene-head .scene-no{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
+.scene-head h2{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615)); line-height:1.1}
+.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); white-space:nowrap}
 .scene-body{flex:1; display:flex; flex-direction:column; min-height:0}
 .scene-inner{margin:auto 0; padding-top:12px; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; width:100%}
-.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:15px}
-.say{text-align:center; color:var(--muted); font-style:italic; font-size:17px}
-.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:18px}
+.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:calc(15px * var(--tx))}
+.say{text-align:center; color:var(--muted); font-style:italic; font-size:calc(17px * var(--tx))}
+.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:calc(18px * var(--tx))}
 .btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:4px 16px 6px;
-  font-size:16px; line-height:1.2; cursor:pointer}
+  font-size:calc(16px * var(--tx)); line-height:1.2; cursor:pointer}
 .btn.primary{background:var(--rubric); color:var(--leaf)}
 .btn.quiet{border-style:dashed}
 .btn:disabled{opacity:.4; cursor:default}
@@ -137,10 +144,10 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 
 /* Chips: a small picture and a name */
 .chip{display:inline-flex; align-items:center; gap:6px; padding:2px 10px 2px 2px; border:1.5px solid var(--rule); border-radius:999px;
-  background:var(--leaf); font-size:15.5px; line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
+  background:var(--leaf); font-size:calc(15.5px * var(--tx)); line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
 .chip .pic{--s:26px}
 .chip .chip-n{overflow:hidden; text-overflow:ellipsis}
-.chip .chip-tag{font-size:12px; color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
+.chip .chip-tag{font-size:calc(12px * var(--tx)); color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
 button.chip{cursor:pointer}
 button.chip:hover{border-color:var(--rubric)}
 .chip.on{border-color:var(--rubric); box-shadow:0 0 0 2px var(--rubric)}
@@ -150,9 +157,9 @@ button.chip:hover{border-color:var(--rubric)}
 .fcard{display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:16px; row-gap:2px; align-items:center; align-content:center;
   padding:14px 16px; border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); text-align:left}
 .fcard .pic{grid-row:1 / span 2}
-.fcard h3{font-size:22px; line-height:1.15}
+.fcard h3{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.15}
 .fcard h3 .yr{color:var(--muted); font-weight:400; font-size:.8em; margin-left:6px}
-.fcard .sum{font-size:16.5px; line-height:1.38}
+.fcard .sum{font-size:calc(16.5px * var(--tx)); line-height:1.38}
 
 /* The ratings table: customers in rows, films in columns, one badge per cell.
    .on and .dim work on rows (tr) and on cells (td); .rt-new is the newcomer below a gap; .q is a "?" cell. */
@@ -187,9 +194,9 @@ button.chip:hover{border-color:var(--rubric)}
 .scene.intro .scene-head{display:none}
 .act-card{display:grid; justify-items:center; text-align:center; gap:10px; padding:8px 0}
 .act-no{font-size:clamp(64px, 15vh, 128px); line-height:1; color:var(--card-soft); font-variant-numeric:lining-nums}
-.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--card-soft)}
+.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--card-soft)}
 .act-title{font-style:italic; font-weight:500; font-size:clamp(42px, 9vh, 76px); line-height:1.04; text-wrap:balance}
-.act-line{max-width:36ch; font-size:22px; line-height:1.38; text-wrap:balance}
+.act-line{max-width:36ch; font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.38; text-wrap:balance}
 .act-motif{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:12px; margin-top:10px}
 .act-motif .vote{min-width:66px; padding:9px 10px}
 .act-motif .vote[data-r="0"]{background:var(--leaf)}
@@ -221,13 +228,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: a laptop browser or the projector at 720p */
 @media (max-height: 760px){
   .scene{padding:12px 22px 14px}
-  .scene-head .scene-no{font-size:30px}
-  .scene-head h2{font-size:25px}
+  .scene-head .scene-no{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538))}
+  .scene-head h2{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731))}
   .scene-inner{gap:10px; padding-top:8px}
   .fcard{padding:10px 14px}
-  .fcard h3{font-size:20px}
-  .fcard .sum{font-size:15.5px}
-  .bubble{font-size:17px; padding:7px 16px}
+  .fcard h3{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .fcard .sum{font-size:calc(15.5px * var(--tx))}
+  .bubble{font-size:calc(17px * var(--tx)); padding:7px 16px}
   .rt{border-spacing:6px 4px}
 }
 @media (max-width: 760px){
@@ -448,9 +455,9 @@ button.chip:hover{border-color:var(--rubric)}
 .a1-popin .vote{animation:a1-pop .5s cubic-bezier(.3,.75,.3,1.2) both}
 
 /* Shared words */
-.a1-eye{color:var(--rubric); font-variant-caps:all-small-caps; letter-spacing:.09em; font-weight:600; font-size:19px; line-height:1}
-.a1-q{font-size:31px; font-weight:600; line-height:1.15; text-wrap:balance}
-.a1-big{font-size:29px; font-weight:600; line-height:1.22; text-wrap:balance}
+.a1-eye{color:var(--rubric); font-variant-caps:all-small-caps; letter-spacing:.09em; font-weight:600; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1}
+.a1-q{font-size:calc(31px * (1 + (var(--tx) - 1) * 0.500)); font-weight:600; line-height:1.15; text-wrap:balance}
+.a1-big{font-size:calc(29px * (1 + (var(--tx) - 1) * 0.577)); font-weight:600; line-height:1.22; text-wrap:balance}
 .a1-rub{color:var(--rubric)}
 .a1-sr{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
 .a1-in{animation:a1-rise .35s ease both}
@@ -475,7 +482,7 @@ button.chip:hover{border-color:var(--rubric)}
 .a1-opts{display:flex; flex-wrap:wrap; gap:12px}
 .a1-opt, .a1-mo{border:2px solid var(--rule); background:var(--leaf); cursor:pointer;
   transition:border-color .15s ease, box-shadow .15s ease, opacity .25s ease}
-.a1-opt{display:inline-flex; align-items:center; gap:11px; padding:9px 22px 10px 11px; border-radius:16px; font-size:24px; line-height:1}
+.a1-opt{display:inline-flex; align-items:center; gap:11px; padding:9px 22px 10px 11px; border-radius:16px; font-size:calc(24px * (1 + (var(--tx) - 1) * 0.769)); line-height:1}
 .a1-opt .vote{padding:5px 8px}
 .a1-opt .vote .mk{width:27px; height:27px}
 .a1-opt:hover, .a1-mo:hover{border-color:var(--rubric)}
@@ -490,17 +497,17 @@ button.chip:hover{border-color:var(--rubric)}
 .a1-out > *{grid-area:1 / 1; min-width:0}
 .a1-out:not(.is-done){border-style:dashed; background:transparent}
 .a1-out:not(.is-done) .a1-ans, .a1-out.is-done .a1-wait{visibility:hidden}
-.a1-wait{justify-self:center; text-align:center; color:var(--muted); font-style:italic; font-size:19px}
+.a1-wait{justify-self:center; text-align:center; color:var(--muted); font-style:italic; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962))}
 .a1-ans{display:grid; gap:6px; align-content:start; justify-items:start}
 .a1-res{display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; width:100%}
-.a1-tag{font-weight:700; font-size:26px; line-height:1.1}
+.a1-tag{font-weight:700; font-size:calc(26px * (1 + (var(--tx) - 1) * 0.692)); line-height:1.1}
 .a1-tag.ok{color:var(--rubric)}
 .a1-tag.no{color:var(--ochre)}
-.a1-verdict{display:inline-flex; align-items:center; gap:9px; font-size:23px; font-weight:600; line-height:1.15}
-.a1-why, .a1-right{font-size:20px; line-height:1.32}
+.a1-verdict{display:inline-flex; align-items:center; gap:9px; font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); font-weight:600; line-height:1.15}
+.a1-why, .a1-right{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); line-height:1.32}
 .a1-right{color:var(--muted)}
-.a1-again{margin-left:auto; font-size:15px}
-.a1-redo{justify-self:start; font-size:15px; margin-top:2px}
+.a1-again{margin-left:auto; font-size:calc(15px * var(--tx))}
+.a1-redo{justify-self:start; font-size:calc(15px * var(--tx)); margin-top:2px}
 
 /* 1. store: the title screen */
 .scene[data-key="store"].a1-coverstep .scene-head{display:none}
@@ -518,7 +525,7 @@ button.chip:hover{border-color:var(--rubric)}
 .a1-shelf .pic:nth-child(even){rotate:3deg}
 .a1-title{font-size:clamp(46px, 7.2vw, 112px); line-height:1; font-weight:500; letter-spacing:-.012em}
 .a1-title em{color:var(--rubric); white-space:nowrap}
-.a1-tagline{font-size:clamp(19px, 2.1vw, 30px); font-style:italic; color:var(--muted); line-height:1.3; max-width:40ch}
+.a1-tagline{font-size:calc(clamp(19px, 2.1vw, 30px) * (1 + (var(--tx) - 1) * 0.739)); font-style:italic; color:var(--muted); line-height:1.3; max-width:40ch}
 .a1-cast{display:flex; justify-content:center; gap:clamp(8px, 1.4vw, 18px)}
 .a1-cast .pic{--s:clamp(42px, 7vh, 60px)}
 .a1-cover.a1-in .pic{animation:a1-drop .45s cubic-bezier(.2,.7,.2,1) both; animation-delay:calc(var(--a1-i) * 55ms)}
@@ -530,21 +537,21 @@ button.chip:hover{border-color:var(--rubric)}
   width:100%; max-width:1140px; margin:0 auto}
 .a1-films.a1-in{animation:none}
 .a1-kind{grid-row:1 / span 3; display:grid; grid-template-rows:subgrid}
-.a1-kind-h{font-size:27px; font-weight:600; color:var(--rubric); text-align:center; line-height:1.1}
+.a1-kind-h{font-size:calc(27px * (1 + (var(--tx) - 1) * 0.654)); font-weight:600; color:var(--rubric); text-align:center; line-height:1.1}
 .scene[data-key="store"] .fcard{background:var(--leaf); padding:16px 20px; column-gap:20px; border-width:2px}
 .scene[data-key="store"] .fcard .pic{--s:clamp(64px, 11vh, 92px)}
-.scene[data-key="store"] .fcard h3{font-size:27px}
-.scene[data-key="store"] .fcard .sum{font-size:19.5px; line-height:1.36}
+.scene[data-key="store"] .fcard h3{font-size:calc(27px * (1 + (var(--tx) - 1) * 0.654))}
+.scene[data-key="store"] .fcard .sum{font-size:calc(19.5px * (1 + (var(--tx) - 1) * 0.942)); line-height:1.36}
 .a1-short{display:none; grid-column:2}
 .a1-films.a1-in .fcard{animation:a1-drop .4s cubic-bezier(.2,.7,.2,1) both; animation-delay:calc(var(--a1-i) * 90ms)}
 
 /* 1. store: the table, the question, the two kinds */
 .a1-board{display:grid; justify-items:center; gap:14px}
 .a1-board.a1-in{animation:a1-fade .4s ease both}
-.a1-lead{font-size:27px; line-height:1.22; text-align:center; max-width:46ch; min-height:50px; display:flex; align-items:center;
+.a1-lead{font-size:calc(27px * (1 + (var(--tx) - 1) * 0.654)); line-height:1.22; text-align:center; max-width:46ch; min-height:50px; display:flex; align-items:center;
   justify-content:center; text-wrap:balance}
-.a1-lead.a1-ask{font-size:38px; font-weight:600; color:var(--rubric)}
-.a1-legend{display:flex; flex-wrap:wrap; justify-content:center; gap:8px 28px; color:var(--muted); font-size:19px}
+.a1-lead.a1-ask{font-size:calc(38px * (1 + (var(--tx) - 1) * 0.231)); font-weight:600; color:var(--rubric)}
+.a1-legend{display:flex; flex-wrap:wrap; justify-content:center; gap:8px 28px; color:var(--muted); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962))}
 .a1-key{display:inline-flex; align-items:center; gap:8px}
 .a1-key .vote{padding:3px 6px; min-width:38px}
 .a1-kinds th{padding:0 4px 5px; visibility:hidden}
@@ -560,29 +567,29 @@ button.chip:hover{border-color:var(--rubric)}
 .a1-glab-pics .pic{--s:30px}
 
 /* 2. newcomer */
-.a1-who{font-size:21px; line-height:1.5}
+.a1-who{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); line-height:1.5}
 .a1-who .chip{margin-right:6px}
 .a1-how{display:grid; gap:22px}
 .a1-how li{display:grid; grid-template-columns:auto minmax(0,1fr); gap:8px 16px; align-items:center}
 .a1-n{display:grid; place-items:center; width:46px; height:46px; border-radius:50%; background:var(--rubric); color:var(--leaf);
-  font-size:25px; font-weight:600; line-height:1}
+  font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); font-weight:600; line-height:1}
 .a1-how .a1-n{grid-row:1 / span 2}
-.a1-how .a1-t{font-size:30px; font-weight:600; line-height:1.15}
+.a1-how .a1-t{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538)); font-weight:600; line-height:1.15}
 .a1-x{display:flex; flex-wrap:wrap; align-items:center; gap:8px}
-.a1-x .chip{font-size:18px}
+.a1-x .chip{font-size:calc(18px * var(--tx))}
 .a1-x .chip .pic{--s:30px}
 .a1-x .vote{padding:5px 9px}
 .a1-x .vote .mk{width:24px; height:24px}
-.a1-xw{font-size:19px; color:var(--muted)}
+.a1-xw{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--muted)}
 .a1-new .rt-film > *{transition:filter .5s ease, opacity .5s ease}
 .a1-new.a1-blind .rt-film > *{filter:blur(7px); opacity:.5}
 .a1-new .a1-panel:nth-child(3){gap:18px}
-.a1-new .a1-panel:nth-child(3) .a1-big{font-size:34px}
+.a1-new .a1-panel:nth-child(3) .a1-big{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
 
 /* 3. numbers */
 .a1-num{display:grid; grid-template-columns:minmax(0, 440px) auto; align-items:center; justify-content:center; gap:20px 64px; width:100%}
 .a1-map{display:grid; gap:20px; align-content:center}
-.a1-mq{font-size:30px; font-weight:600; line-height:1.18; min-height:3.54em; display:flex; flex-direction:column; justify-content:flex-end}
+.a1-mq{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538)); font-weight:600; line-height:1.18; min-height:3.54em; display:flex; flex-direction:column; justify-content:flex-end}
 .a1-line{display:block; text-wrap:balance}
 /* the key is the notation's legend (Store.N.legend), drawn large: each mark, "=", its number in a badge of the same size */
 .a1-num .nt-legend{--nt-w:96px; --nt-h:70px; --nt-fs:46px; flex-direction:column; flex-wrap:nowrap; align-items:flex-start; gap:16px}
@@ -591,7 +598,7 @@ button.chip:hover{border-color:var(--rubric)}
 .a1-num .nt-lg .vote .mk{width:42px; height:42px}
 .a1-num .nt-lg .nt-n{border-width:2px; border-radius:16px}
 .a1-num .nt-lg-eq{font-size:46px; line-height:1}
-.a1-mnote{font-size:21px; line-height:1.35; min-height:4.05em}
+.a1-mnote{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); line-height:1.35; min-height:4.05em}
 .a1-num[data-k="2"] .a1-mq{color:var(--rubric)}
 .a1-rewave{justify-self:start}
 .a1-num:not([data-k="2"]) .a1-rewave{visibility:hidden}
@@ -606,25 +613,25 @@ button.chip:hover{border-color:var(--rubric)}
 .a1-sim[data-k="0"] .a1-cnt-h, .a1-sim[data-k="0"] .a1-cnt{visibility:hidden}
 .a1-mc{display:grid; gap:9px}
 .a1-mo{display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:12px; text-align:left;
-  padding:8px 16px 9px 9px; border-radius:14px; font-size:21px; line-height:1.2}
+  padding:8px 16px 9px 9px; border-radius:14px; font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); line-height:1.2}
 .a1-l{display:grid; place-items:center; width:32px; height:32px; border-radius:50%; border:1.5px solid var(--rule); background:var(--bg);
-  color:var(--rubric); font-weight:600; font-size:18px; line-height:1}
+  color:var(--rubric); font-weight:600; font-size:calc(18px * var(--tx)); line-height:1}
 .a1-mo.is-answer .a1-l{background:var(--rubric); border-color:var(--rubric); color:var(--leaf)}
-.a1-sum{font-size:22px; line-height:1.3; color:var(--rubric); font-weight:600; visibility:hidden}
+.a1-sum{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.3; color:var(--rubric); font-weight:600; visibility:hidden}
 .a1-sim[data-k="1"].a1-counted .a1-sum{visibility:visible; animation:a1-rise .35s ease both}
-.a1-predict{display:flex; align-items:center; gap:14px; font-size:25px; font-weight:600; line-height:1.25;
+.a1-predict{display:flex; align-items:center; gap:14px; font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); font-weight:600; line-height:1.25;
   border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); padding:12px 18px 13px}
 .a1-predict .vote{padding:6px 10px}
 .a1-predict .vote .mk{width:28px; height:28px}
-.a1-said{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; font-size:25px; line-height:1.25}
+.a1-said{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); line-height:1.25}
 .a1-said .vote{padding:6px 10px}
 .a1-said .vote .mk{width:28px; height:28px}
 .rt td.rt-c.a1-real .vote{border-width:2px; animation-duration:.6s}
 .a1-recipe{border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); padding:12px 18px 14px; display:grid; gap:9px}
-.a1-rec-h{color:var(--rubric); font-variant-caps:all-small-caps; letter-spacing:.09em; font-weight:600; font-size:19px; line-height:1}
+.a1-rec-h{color:var(--rubric); font-variant-caps:all-small-caps; letter-spacing:.09em; font-weight:600; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1}
 .a1-recipe ol{display:grid; gap:8px}
-.a1-recipe li{display:flex; align-items:center; gap:12px; font-size:20px; line-height:1.25}
-.a1-recipe .a1-n{width:30px; height:30px; font-size:17px; flex:none}
+.a1-recipe li{display:flex; align-items:center; gap:12px; font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); line-height:1.25}
+.a1-recipe .a1-n{width:30px; height:30px; font-size:calc(17px * var(--tx)); flex:none}
 
 @media (prefers-reduced-motion: reduce){
   .a1-in, .a1-board.a1-in, .a1-popin .vote, .a1-cnt.a1-bump, .a1-sim[data-k="1"].a1-counted .a1-sum,
@@ -646,48 +653,48 @@ button.chip:hover{border-color:var(--rubric)}
   .a1-bigt .q{min-width:70px; height:45px; font-size:23px}
   .a1-new, .a1-sim{gap:16px 44px}
   .a1-panel{gap:11px}
-  .a1-q{font-size:27px}
-  .a1-big{font-size:26px}
-  .a1-eye{font-size:17.5px}
-  .a1-opt{font-size:22px; padding:8px 20px 9px 10px}
+  .a1-q{font-size:calc(27px * (1 + (var(--tx) - 1) * 0.654))}
+  .a1-big{font-size:calc(26px * (1 + (var(--tx) - 1) * 0.692))}
+  .a1-eye{font-size:calc(17.5px * var(--tx))}
+  .a1-opt{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); padding:8px 20px 9px 10px}
   .a1-opt .vote .mk{width:24px; height:24px}
   .a1-out{padding:9px 14px 10px}
-  .a1-tag{font-size:23px}
-  .a1-verdict{font-size:21px}
-  .a1-why, .a1-right{font-size:18px}
-  .a1-wait{font-size:17.5px}
-  .a1-who{font-size:19px}
+  .a1-tag{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808))}
+  .a1-verdict{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .a1-why, .a1-right{font-size:calc(18px * var(--tx))}
+  .a1-wait{font-size:calc(17.5px * var(--tx))}
+  .a1-who{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962))}
   .a1-how{gap:18px}
-  .a1-how .a1-t{font-size:26px}
-  .a1-n{width:40px; height:40px; font-size:22px}
-  .a1-new .a1-panel:nth-child(3) .a1-big{font-size:30px}
-  .a1-kind-h{font-size:24px}
+  .a1-how .a1-t{font-size:calc(26px * (1 + (var(--tx) - 1) * 0.692))}
+  .a1-n{width:40px; height:40px; font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+  .a1-new .a1-panel:nth-child(3) .a1-big{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538))}
+  .a1-kind-h{font-size:calc(24px * (1 + (var(--tx) - 1) * 0.769))}
   .scene[data-key="store"] .fcard{padding:12px 16px}
-  .scene[data-key="store"] .fcard h3{font-size:24px}
-  .scene[data-key="store"] .fcard .sum{font-size:17.5px}
-  .a1-lead{font-size:24px; min-height:42px}
-  .a1-lead.a1-ask{font-size:33px}
+  .scene[data-key="store"] .fcard h3{font-size:calc(24px * (1 + (var(--tx) - 1) * 0.769))}
+  .scene[data-key="store"] .fcard .sum{font-size:calc(17.5px * var(--tx))}
+  .a1-lead{font-size:calc(24px * (1 + (var(--tx) - 1) * 0.769)); min-height:42px}
+  .a1-lead.a1-ask{font-size:calc(33px * (1 + (var(--tx) - 1) * 0.423))}
   .a1-board{gap:10px}
-  .a1-legend{font-size:17.5px}
+  .a1-legend{font-size:calc(17.5px * var(--tx))}
   .a1-kind-t{font-size:18px}
   .a1-glab-t{font-size:21px}
   .a1-glab-pics .pic{--s:26px}
-  .a1-mq{font-size:26px}
+  .a1-mq{font-size:calc(26px * (1 + (var(--tx) - 1) * 0.692))}
   .a1-num .nt-legend{--nt-w:84px; --nt-h:60px; --nt-fs:40px; gap:12px}
   .a1-num .nt-lg .vote{min-width:84px; min-height:60px; padding:10px 15px}
   .a1-num .nt-lg .vote .mk{width:36px; height:36px}
   .a1-num .nt-lg-eq{font-size:40px}
   .a1-map{gap:16px}
-  .a1-mnote{font-size:19px}
-  .a1-mo{font-size:19px; padding:6px 14px 7px 8px}
-  .a1-l{width:29px; height:29px; font-size:16.5px}
+  .a1-mnote{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962))}
+  .a1-mo{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); padding:6px 14px 7px 8px}
+  .a1-l{width:29px; height:29px; font-size:calc(16.5px * var(--tx))}
   .a1-mc{gap:7px}
   .rt td.a1-cnt{font-size:30px}
-  .a1-sum{font-size:20px}
-  .a1-predict{font-size:22px; padding:10px 16px 11px}
-  .a1-said{font-size:22px}
+  .a1-sum{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .a1-predict{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); padding:10px 16px 11px}
+  .a1-said{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
   .a1-recipe{padding:10px 16px 12px; gap:7px}
-  .a1-recipe li{font-size:18px}
+  .a1-recipe li{font-size:calc(18px * var(--tx))}
   .a1-recipe ol{gap:6px}
 }
 
@@ -806,6 +813,15 @@ button.chip:hover{border-color:var(--rubric)}
   .a1-recipe li{font-size:14px; gap:8px}
   .a1-recipe .a1-n{width:22px; height:22px; font-size:13px}
 }
+
+/* Text scale (core.css): the quiz of scene similar is the tallest panel of the act, so on the large screens its words
+   grow by 1.2 and its gaps are a little tighter */
+@media (min-width: 1080px) and (min-height: 740px){
+  .scene[data-key="similar"]{--tx:1.2}
+  .a1-sim .a1-panel{gap:10px}
+  .a1-sim .a1-mc{gap:6px}
+  .a1-sim .a1-mo{padding-top:6px; padding-bottom:7px}
+}
 </style>
 <style>
 /* Act 2 of Once Upon a Video Store: Converting ratings into numbers. Owner: the act 2 agent. Class names start
@@ -813,9 +829,9 @@ button.chip:hover{border-color:var(--rubric)}
    neutral, orange for the cross and the two crosses, the doubled marks a shade stronger. Its rows since version 4:
    stars, words, marks, numbers. The twin table shows the same stars, then marks, then numbers (version 5). */
 
-.a2-say{font-size:20px; max-width:64ch}
+.a2-say{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); max-width:64ch}
 .a2-say b{color:var(--rubric); font-weight:600}
-.a2-big{font-size:31px; font-weight:600; line-height:1.18; text-align:center; max-width:32ch; text-wrap:balance; justify-self:center}
+.a2-big{font-size:calc(31px * (1 + (var(--tx) - 1) * 0.500)); font-weight:600; line-height:1.18; text-align:center; max-width:32ch; text-wrap:balance; justify-self:center}
 .a2-big b{color:var(--rubric)}
 @keyframes a2-pop{from{opacity:0; transform:translateY(-10px) scale(.7)} to{opacity:1; transform:none}}
 @keyframes a2-rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
@@ -824,7 +840,7 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-sh{display:grid; gap:16px; width:100%; max-width:1060px; margin:0 auto; justify-items:center}
 .a2-card{width:100%; border:2px solid var(--rule); border-radius:20px; background:var(--bg); padding:12px 18px 18px; display:grid; gap:10px}
 .a2-card-head{display:flex; align-items:center; justify-content:flex-end; gap:8px 14px; flex-wrap:wrap; min-height:44px}
-.a2-card-q{font-size:25px; font-weight:600; font-style:italic; color:var(--rubric); line-height:1.1}
+.a2-card-q{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); font-weight:600; font-style:italic; color:var(--rubric); line-height:1.1}
 .a2-grid{display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); column-gap:12px}
 .a2-cell{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:6px 6px; min-width:0}
 .a2-cell[data-r="2"]{background:var(--like-bg2)}
@@ -888,36 +904,36 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-ask{display:grid; align-items:center}
 .a2-ask > *{grid-area:1 / 1; min-width:0}
 .a2-ask:not(.a2-asking) .a2-q1, .a2-ask.a2-asking .a2-lead{visibility:hidden}
-.a2-lead{font-size:29px; line-height:1.25; text-wrap:balance}
+.a2-lead{font-size:calc(29px * (1 + (var(--tx) - 1) * 0.577)); line-height:1.25; text-wrap:balance}
 .a2-lead b{color:var(--rubric)}
 .a2-lead.a2-in, .a2-q1.a2-in{animation:a2-rise .4s ease both}
 
 .a2-qbox{display:grid; gap:12px; align-content:center}
-.a2-q{font-size:31px; line-height:1.15}
+.a2-q{font-size:calc(31px * (1 + (var(--tx) - 1) * 0.500)); line-height:1.15}
 .a2-q b{color:var(--rubric)}
-.a2-hint{color:var(--muted); font-style:italic; font-size:19px; margin-top:-6px}
+.a2-hint{color:var(--muted); font-style:italic; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); margin-top:-6px}
 .a2-out{border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); padding:12px 16px 14px; display:grid; align-items:center}
 .a2-out > *{grid-area:1 / 1; min-width:0}
 .a2-out:not(.is-done){border-style:dashed; background:transparent}
 .a2-out:not(.is-done) .a2-ans, .a2-out.is-done .a2-wait{visibility:hidden}
-.a2-wait{justify-self:center; text-align:center; color:var(--muted); font-style:italic; font-size:18.5px}
+.a2-wait{justify-self:center; text-align:center; color:var(--muted); font-style:italic; font-size:calc(18.5px * (1 + (var(--tx) - 1) * 0.981))}
 .a2-ans{display:grid; gap:8px; align-content:start}
 .a2-ans.a2-in{animation:a2-rise .35s ease both}
 .a2-res{display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px}
-.a2-tag{font-weight:700; font-size:25px; line-height:1.1}
+.a2-tag{font-weight:700; font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); line-height:1.1}
 .a2-tag.ok{color:var(--rubric)}
 .a2-tag.no{color:var(--ochre)}
-.a2-head{font-size:22px; font-weight:600; line-height:1.2}
-.a2-head .chip{font-size:18px; border-color:var(--rubric); box-shadow:0 0 0 1.5px var(--rubric); margin:0 2px}
-.a2-again{margin-left:auto; font-size:14px; padding:2px 12px 4px}
-.a2-body{font-size:19.5px; line-height:1.38}
-.a2-body .chip{margin-right:2px; font-size:16.5px}
+.a2-head{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); font-weight:600; line-height:1.2}
+.a2-head .chip{font-size:calc(18px * var(--tx)); border-color:var(--rubric); box-shadow:0 0 0 1.5px var(--rubric); margin:0 2px}
+.a2-again{margin-left:auto; font-size:calc(14px * var(--tx)); padding:2px 12px 4px}
+.a2-body{font-size:calc(19.5px * (1 + (var(--tx) - 1) * 0.942)); line-height:1.38}
+.a2-body .chip{margin-right:2px; font-size:calc(16.5px * var(--tx))}
 
 .a2-opts{display:grid; gap:10px}
 .a2-opt{display:flex; align-items:center; gap:12px; text-align:left; padding:9px 16px 10px 10px; border:2px solid var(--rule); border-radius:14px;
-  background:var(--leaf); font-size:20px; line-height:1.25; cursor:pointer; transition:border-color .15s ease, box-shadow .15s ease, opacity .25s ease}
+  background:var(--leaf); font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); line-height:1.25; cursor:pointer; transition:border-color .15s ease, box-shadow .15s ease, opacity .25s ease}
 .a2-opt-l{flex:none; width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:var(--bg); border:1.5px solid var(--rule);
-  color:var(--rubric); font-weight:700; font-size:17px; line-height:1}
+  color:var(--rubric); font-weight:700; font-size:calc(17px * var(--tx)); line-height:1}
 .a2-opt:hover{border-color:var(--rubric)}
 .a2-opt[aria-disabled="true"]{cursor:default}
 .a2-opt[aria-disabled="true"]:hover{border-color:var(--rule)}
@@ -932,9 +948,9 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-cmps{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:26px; width:100%; max-width:1000px}
 .a2-cmp{border:2px solid var(--rule); border-radius:20px; background:var(--bg); padding:12px 16px 14px; display:grid; gap:8px; justify-items:center; align-content:start; min-width:0}
 .a2-cmp-h{display:flex; align-items:center; gap:8px; font-weight:400}
-.a2-cmp-h .chip{font-size:19px; padding:2px 13px 2px 2px; border-width:2px}
+.a2-cmp-h .chip{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); padding:2px 13px 2px 2px; border-width:2px}
 .a2-cmp-h .chip .pic{--s:30px}
-.a2-and{color:var(--muted); font-style:italic; font-size:19px}
+.a2-and{color:var(--muted); font-style:italic; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962))}
 .a2-ct{border-spacing:10px 5px}
 .a2-ct tr[data-p="vera"] .rt-who{color:var(--rubric)}
 .a2-ct tfoot td{padding-top:4px}
@@ -942,9 +958,9 @@ button.chip:hover{border-color:var(--rubric)}
   padding:2px 10px 4px; border-radius:999px; border:1.5px solid}
 .a2-side.agree{color:var(--like); background:var(--like-bg); border-color:var(--like)}
 .a2-side.oppose{color:var(--dislike); background:var(--dislike-bg); border-color:var(--dislike)}
-.a2-cmp-v{font-size:19.5px; text-align:center; line-height:1.3; text-wrap:balance}
+.a2-cmp-v{font-size:calc(19.5px * (1 + (var(--tx) - 1) * 0.942)); text-align:center; line-height:1.3; text-wrap:balance}
 .a2-cmp-v b{color:var(--rubric)}
-.a2-next{color:var(--muted); font-style:italic; font-size:19px; margin-top:-8px}
+.a2-next{color:var(--muted); font-style:italic; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); margin-top:-8px}
 
 @media (prefers-reduced-motion: reduce){
   .a2-sh.a2-popm .a2-g-mk .vote, .a2-sh.a2-popn .a2-g-num .nt-n,
@@ -954,11 +970,11 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
-  .a2-say{font-size:18.5px}
-  .a2-big{font-size:27px}
+  .a2-say{font-size:calc(18.5px * (1 + (var(--tx) - 1) * 0.981))}
+  .a2-big{font-size:calc(27px * (1 + (var(--tx) - 1) * 0.654))}
   .a2-sh{gap:12px}
   .a2-card{padding:10px 16px 14px; gap:8px}
-  .a2-card-q{font-size:23px}
+  .a2-card-q{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808))}
   .a2-sh{--a2-star:20px}
   .a2-g-st{padding-top:12px; padding-bottom:2px}
   .a2-g-mk{padding-top:2px; padding-bottom:10px; gap:5px}
@@ -968,26 +984,26 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-g-wd{font-size:23px; padding-bottom:10px}
   .a2-g-num{padding-bottom:12px; --nt-h:46px; --nt-fs:29px}
   .a2-tt{border-spacing:8px 4px}
-  .a2-lead{font-size:26px}
-  .a2-q{font-size:28px}
-  .a2-opt{font-size:19px; padding:7px 14px 8px 9px}
+  .a2-lead{font-size:calc(26px * (1 + (var(--tx) - 1) * 0.692))}
+  .a2-q{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615))}
+  .a2-opt{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); padding:7px 14px 8px 9px}
   .a2-opts{gap:8px}
-  .a2-body{font-size:18.5px}
+  .a2-body{font-size:calc(18.5px * (1 + (var(--tx) - 1) * 0.981))}
   .a2-bridge{gap:14px}
   .a2-ct{border-spacing:10px 4px}
 }
 
 /* Tall projector screens, such as 1440x900: one size larger */
 @media (min-height: 860px) and (min-width: 1200px){
-  .a2-say{font-size:22px}
-  .a2-big{font-size:35px}
+  .a2-say{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+  .a2-big{font-size:calc(35px * (1 + (var(--tx) - 1) * 0.346))}
   .a2-sh{gap:20px; --a2-star:26px}
-  .a2-card-q{font-size:28px}
+  .a2-card-q{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615))}
   .a2-g-wd{font-size:28px}
   .a2-mname{font-size:18px}
   .a2-g-num{--nt-w:70px; --nt-h:58px; --nt-fs:36px}
   .a2-tw{--a2-star:17px}
-  .a2-lead{font-size:32px}
+  .a2-lead{font-size:calc(32px * (1 + (var(--tx) - 1) * 0.462))}
   .a2-tw-main{grid-template-columns:auto minmax(0,540px); gap:24px 48px}
   .a2-tt{border-spacing:10px 8px}
   .a2-tt .rt-who .chip{font-size:20px}
@@ -997,15 +1013,15 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-tt .rt-c .vote .mk.tick2, .a2-tt .rt-c .vote .mk.cross2,
   .a2-ct .rt-c .vote .mk.tick2, .a2-ct .rt-c .vote .mk.cross2{width:34px}
   .a2-tt .rt-film, .a2-ct .rt-film{font-size:16px}
-  .a2-q{font-size:34px}
-  .a2-hint{font-size:20px}
-  .a2-opt{font-size:22px}
-  .a2-tag{font-size:27px}
-  .a2-head{font-size:24px}
-  .a2-body{font-size:21px}
-  .a2-cmp-v{font-size:21px}
+  .a2-q{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
+  .a2-hint{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .a2-opt{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+  .a2-tag{font-size:calc(27px * (1 + (var(--tx) - 1) * 0.654))}
+  .a2-head{font-size:calc(24px * (1 + (var(--tx) - 1) * 0.769))}
+  .a2-body{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .a2-cmp-v{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
   .a2-side{font-size:18px}
-  .a2-next{font-size:21px}
+  .a2-next{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
 }
 
 /* Narrow screens: the question below the table */
@@ -1078,6 +1094,9 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-cmp-v{font-size:14.5px}
   .a2-next{font-size:14.5px; margin-top:-4px}
 }
+
+/* Text scale (core.css): on the large screens the twin's words grow by 1.3, so that the question fits beside the table */
+@media (min-width: 1080px) and (min-height: 740px){ .scene[data-key="twin"]{--tx:1.3} }
 </style>
 <style>
 /* Act 3, "With numbers": the scenes onefilm and twofilms. Class names start with a3-.
@@ -1088,16 +1107,16 @@ button.chip:hover{border-color:var(--rubric)}
 /* ONE VIEW PER STEP */
 .a3-view{display:grid; justify-items:center; align-content:center; gap:16px; text-align:center}
 .a3-view[hidden]{display:none}
-.a3-kick{margin:0; color:var(--ochre); font-weight:600; font-size:17px; font-variant-caps:all-small-caps; letter-spacing:.1em; line-height:1}
-.a3-say{margin:0; max-width:64ch; font-size:21px; line-height:1.35; text-wrap:balance}
+.a3-kick{margin:0; color:var(--ochre); font-weight:600; font-size:calc(17px * var(--tx)); font-variant-caps:all-small-caps; letter-spacing:.1em; line-height:1}
+.a3-say{margin:0; max-width:64ch; font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); line-height:1.35; text-wrap:balance}
 .a3-say b{color:var(--rubric); font-weight:600}
 .a3-stage{display:grid; justify-items:center; max-width:100%}
 .a3-under{display:grid; justify-items:center; gap:6px}
-.a3-read{margin:0; max-width:56ch; min-height:2.7em; font-size:19px; line-height:1.35; color:var(--ink); text-wrap:balance}
+.a3-read{margin:0; max-width:56ch; min-height:2.7em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; color:var(--ink); text-wrap:balance}
 .a3-read.a3-cue{color:var(--muted); font-style:italic}
-.a3-replay{font-size:15px; padding:2px 14px 4px}
+.a3-replay{font-size:calc(15px * var(--tx)); padding:2px 14px 4px}
 .a3-btns{display:flex; flex-wrap:wrap; justify-content:center; gap:10px}
-.a3-compute{font-size:17px; padding:4px 22px 6px}
+.a3-compute{font-size:calc(17px * var(--tx)); padding:4px 22px 6px}
 .a3-live .a3-stage, .a3-live .a3-say{animation:a3-in .45s ease both}
 
 /* ONE FILM: five pairs side by side, a Yes or No box under each, then the four operations (version 4) */
@@ -1134,7 +1153,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* the question and the four operations */
 .a3-ask{display:grid; justify-items:center; gap:12px}
 .a3-ask.a3-in{animation:a3-in .5s ease both}
-.a3-big{margin:0; max-width:32em; font-size:29px; font-weight:600; line-height:1.2; text-wrap:balance}
+.a3-big{margin:0; max-width:32em; font-size:calc(29px * (1 + (var(--tx) - 1) * 0.577)); font-weight:600; line-height:1.2; text-wrap:balance}
 .a3-ops{display:flex; justify-content:center; gap:16px}
 .a3-op{width:66px; height:56px; padding:0 0 4px; border:2px solid var(--rubric); border-radius:14px; background:var(--leaf); color:var(--rubric);
   font-family:var(--serif); font-size:34px; font-weight:600; line-height:1; cursor:pointer; touch-action:manipulation;
@@ -1145,9 +1164,9 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* YOUR TURN: what to do or the hint, Show me, and the keypad of results */
 .a3-fb{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 14px; min-height:1.5em; max-width:72ch}
-.a3-fbt{margin:0; font-size:19px; line-height:1.35; text-wrap:balance}
+.a3-fbt{margin:0; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-wrap:balance}
 .a3-fb.a3-hint .a3-fbt{color:var(--rubric)}
-.a3-showme{font-size:15px; padding:2px 14px 4px}
+.a3-showme{font-size:calc(15px * var(--tx)); padding:2px 14px 4px}
 .a3-showme[hidden], .a3-pad[hidden]{display:none}
 .a3-pad{display:flex; flex-wrap:wrap; justify-content:center; gap:6px}
 .a3-key{--nt-w:54px; --nt-h:46px; --nt-fs:23px; padding:2px; border:0; border-radius:12px; background:none; cursor:pointer;
@@ -1161,8 +1180,8 @@ button.chip:hover{border-color:var(--rubric)}
 .a3-rules{display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px; width:100%; max-width:1060px}
 .a3-card{display:grid; justify-items:center; align-content:start; gap:6px; padding:14px 8px 12px; border:1.5px solid var(--rule);
   border-radius:16px; background:var(--bg)}
-.a3-card h3{margin:0; font-size:20px; font-weight:600; line-height:1.2}
-.a3-cw{margin:0; font-size:16px; line-height:1.25; color:var(--muted); font-style:italic; text-wrap:balance}
+.a3-card h3{margin:0; font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); font-weight:600; line-height:1.2}
+.a3-cw{margin:0; font-size:calc(16px * var(--tx)); line-height:1.25; color:var(--muted); font-style:italic; text-wrap:balance}
 .a3-pos h3{color:var(--like)}
 .a3-neg h3{color:var(--dislike)}
 .a3-zero h3{color:var(--muted)}
@@ -1180,7 +1199,7 @@ button.chip:hover{border-color:var(--rubric)}
 .a3-vecs .nt-tab .rt-film .pic{--s:44px}
 
 /* THE NAME */
-.a3-title{margin:0; font-size:31px; font-weight:600; line-height:1.15}
+.a3-title{margin:0; font-size:calc(31px * (1 + (var(--tx) - 1) * 0.500)); font-weight:600; line-height:1.15}
 .a3-title em{color:var(--rubric)}
 
 @keyframes a3-in{from{opacity:0; translate:0 8px}}
@@ -1188,35 +1207,35 @@ button.chip:hover{border-color:var(--rubric)}
 /* Large screens: 1440x900 and up */
 @media (min-height: 861px) and (min-width: 1300px){
   .a3-view{gap:20px}
-  .a3-say{font-size:23px}
-  .a3-read, .a3-fbt{font-size:20.5px}
-  .a3-kick{font-size:18px}
+  .a3-say{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808))}
+  .a3-read, .a3-fbt{font-size:calc(20.5px * (1 + (var(--tx) - 1) * 0.904))}
+  .a3-kick{font-size:calc(18px * var(--tx))}
   .a3-pairs{gap:20px 36px}
   .a3-pairs .nt-wrap, .a3-pairs .nt-tab{--nt-w:66px; --nt-h:52px; --nt-fs:29px; --nt-xg:26px; --nt-rg:12px}
   .a3-pairs .nt-tab .rt-who{font-size:20px}
   .a3-agree{width:140px; height:54px}
   .a3-yn{font-size:17px}
   .a3-ans{font-size:24px}
-  .a3-big{font-size:32px}
+  .a3-big{font-size:calc(32px * (1 + (var(--tx) - 1) * 0.462))}
   .a3-op{width:72px; height:62px; font-size:38px}
   .a3-key{--nt-w:58px; --nt-h:50px; --nt-fs:25px}
-  .a3-title{font-size:34px}
+  .a3-title{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
 }
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
   .a3-view{gap:12px}
-  .a3-say{font-size:20px}
-  .a3-read, .a3-fbt{font-size:18px}
+  .a3-say{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .a3-read, .a3-fbt{font-size:calc(18px * var(--tx))}
   .a3-pairv{gap:10px}
   .a3-pairs .nt-wrap, .a3-pairs .nt-tab{--nt-w:54px; --nt-h:40px; --nt-fs:24px; --nt-sy:4px; --nt-xg:18px; --nt-rg:8px}
   .a3-pairs .nt-tab .rt-who{font-size:18px}
   .a3-col{gap:6px}
   .a3-agree{height:40px}
-  .a3-big{font-size:25px}
+  .a3-big{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731))}
   .a3-ask{gap:9px}
   .a3-op{width:58px; height:48px; font-size:30px}
   .a3-key{--nt-w:52px; --nt-h:44px; --nt-fs:22px}
-  .a3-title{font-size:28px}
+  .a3-title{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615))}
   .a3-stage .nt-wrap.nt-lg, .a3-stage .nt-lg .nt-tab{--nt-w:66px; --nt-h:46px; --nt-fs:28px; --nt-xg:20px; --nt-rg:10px}
   .a3-stage .nt-lg .rt-film .pic{--s:38px}
   .a3-vecs .nt-tab{--nt-w:66px; --nt-h:48px; --nt-fs:28px}
@@ -1282,7 +1301,7 @@ button.chip:hover{border-color:var(--rubric)}
    through the notation's custom properties, and sets the Love Actually column apart on the right (version 5).
    The last part styles the notebook slide (scene notebook). */
 .a4-near{display:grid; justify-items:center; align-content:start; gap:14px; text-align:center}
-.a4-cap{margin:0; max-width:40em; font-size:21px; line-height:1.35; text-wrap:balance}
+.a4-cap{margin:0; max-width:40em; font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); line-height:1.35; text-wrap:balance}
 .a4-cap .a4-line{display:block}
 .a4-term{color:var(--rubric)}
 .a4-film{font-style:italic}
@@ -1297,8 +1316,8 @@ button.chip:hover{border-color:var(--rubric)}
 .a4-gone{visibility:hidden}
 .a4-wait{visibility:hidden}
 .a4-res{display:grid; justify-items:center; gap:6px}
-.a4-say{margin:0; max-width:38em; font-size:20px; line-height:1.35; text-wrap:balance}
-.a4-later{margin:0; font-size:17px; color:var(--muted)}
+.a4-say{margin:0; max-width:38em; font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); line-height:1.35; text-wrap:balance}
+.a4-later{margin:0; font-size:calc(17px * var(--tx)); color:var(--muted)}
 .a4-inl{--nt-w:40px; --nt-h:30px; --nt-fs:18px; margin:0 3px}
 .a4-res:not(.a4-wait) .a4-say, .a4-say.a4-in{animation:a4-rise .5s ease both}
 @keyframes a4-rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
@@ -1315,19 +1334,19 @@ button.chip:hover{border-color:var(--rubric)}
 .a4-tasks{margin:0; padding:0; list-style:none; display:grid; grid-template-columns:auto auto minmax(0, 1fr); align-items:baseline;
   gap:12px 14px; text-align:left; max-width:100%}
 .a4-tasks li{display:contents}
-.a4-tn{color:var(--rubric); font-weight:600; font-size:21px}
-.a4-fn{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size:18px; color:var(--rubric); background:var(--bg);
+.a4-tn{color:var(--rubric); font-weight:600; font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+.a4-fn{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size:calc(18px * var(--tx)); color:var(--rubric); background:var(--bg);
   border:1.5px solid var(--rule); border-radius:8px; padding:3px 9px}
-.a4-tw{font-size:20px; line-height:1.3}
-.a4-colab{display:inline-block; font-size:20px; font-weight:600; padding:7px 28px 9px; text-decoration:none; white-space:nowrap}
+.a4-tw{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); line-height:1.3}
+.a4-colab{display:inline-block; font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); font-weight:600; padding:7px 28px 9px; text-decoration:none; white-space:nowrap}
 
 /* Short screens: the projector at 720p. A slightly lower board, so that the prediction (step 5) fits with its result
    under the board (larger numbers overflow there by about 56 px). */
 @media (max-height: 760px){
   .a4-near{gap:10px}
   .a4-nb{gap:14px}
-  .a4-cap{font-size:20px}
-  .a4-say{font-size:19px}
+  .a4-cap{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .a4-say{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962))}
   .a4-near .nt-board [data-f="love"]{padding-left:40px}
 }
 @media (max-height: 760px) and (min-width: 561px){
@@ -1337,15 +1356,15 @@ button.chip:hover{border-color:var(--rubric)}
 /* Tall screens: the projector at 900p and up. Larger numbers, the same board. */
 @media (min-height: 860px) and (min-width: 1200px){
   .a4-near{gap:18px}
-  .a4-cap{font-size:23px}
-  .a4-say{font-size:22px}
+  .a4-cap{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808))}
+  .a4-say{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
   .a4-near .nt-board [data-f="love"]{padding-left:60px}
   .a4-near .nt-board.nt-tab, .a4-near .nt-boardw{--nt-w:62px; --nt-h:44px; --nt-fs:25px; --nt-sx:14px; --nt-xg:20px; --nt-rg:9px; --nt-eqw:26px}
   .a4-near .nt-board .rt-who{font-size:20px}
   .a4-nb{gap:22px}
-  .a4-tn, .a4-tw{font-size:22px}
-  .a4-fn{font-size:20px}
-  .a4-colab{font-size:22px}
+  .a4-tn, .a4-tw{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+  .a4-fn{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .a4-colab{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
 }
 /* Phones */
 @media (max-width: 560px){

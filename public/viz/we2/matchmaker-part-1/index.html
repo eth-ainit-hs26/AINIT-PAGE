@@ -35,6 +35,13 @@
      and the loss violet, a move or update ochre, a slope green. */
   --g-fwd:var(--rubric); --g-move:var(--ochre); --g-slope:#2F7D62;
 }
+/* Text scale (2026-11-11). Carlos shows the games from his iPad on the projector and asked for words the size of the
+   slides' words; the matrices keep their sizes. On a screen at least 1080 x 740 px, the size of every word of 18 px or
+   less is multiplied by --tx; larger type grows by a share that falls to nothing at 44 px. The sizes are written as
+   calc(V * var(--tx)) or calc(V * (1 + (var(--tx) - 1) * w)). The tables, stacks, badges, pictures, the top bar and
+   Back and Next keep their sizes, and so does a phone (--tx is 1 there). */
+:root{--tx:1}
+@media (min-width: 1080px) and (min-height: 740px){ :root{--tx:1.4} }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
@@ -100,19 +107,19 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 @keyframes enter{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 @media (prefers-reduced-motion: reduce){ .scene.active{animation:none} }
 .scene-head{display:flex; align-items:center; gap:14px}
-.scene-head .scene-no{font-size:34px}
-.scene-head h2{font-size:28px; line-height:1.1}
-.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; white-space:nowrap}
+.scene-head .scene-no{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
+.scene-head h2{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615)); line-height:1.1}
+.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); white-space:nowrap}
 /* The leaves of an optional section (3 and 4) carry this tag beside their title. */
 .scene-head .opt-tag{flex:none; color:var(--ochre); border:1.5px solid var(--ochre); border-radius:999px; padding:0 10px 2px;
-  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; line-height:1.3; white-space:nowrap}
+  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); line-height:1.3; white-space:nowrap}
 .scene-body{flex:1; display:flex; flex-direction:column; min-height:0}
 .scene-inner{margin:auto 0; padding-top:12px; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; width:100%}
-.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:15px}
-.say{text-align:center; color:var(--muted); font-style:italic; font-size:17px}
-.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:18px}
+.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:calc(15px * var(--tx))}
+.say{text-align:center; color:var(--muted); font-style:italic; font-size:calc(17px * var(--tx))}
+.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:calc(18px * var(--tx))}
 .btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:4px 16px 6px;
-  font-size:16px; line-height:1.2; cursor:pointer}
+  font-size:calc(16px * var(--tx)); line-height:1.2; cursor:pointer}
 .btn.primary{background:var(--rubric); color:var(--leaf)}
 .btn.quiet{border-style:dashed}
 .btn:disabled{opacity:.4; cursor:default}
@@ -147,10 +154,10 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 
 /* Chips: a small picture and a name */
 .chip{display:inline-flex; align-items:center; gap:6px; padding:2px 10px 2px 2px; border:1.5px solid var(--rule); border-radius:999px;
-  background:var(--leaf); font-size:15.5px; line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
+  background:var(--leaf); font-size:calc(15.5px * var(--tx)); line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
 .chip .pic{--s:26px}
 .chip .chip-n{overflow:hidden; text-overflow:ellipsis}
-.chip .chip-tag{font-size:12px; color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
+.chip .chip-tag{font-size:calc(12px * var(--tx)); color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
 button.chip{cursor:pointer}
 button.chip:hover{border-color:var(--rubric)}
 .chip.on{border-color:var(--rubric); box-shadow:0 0 0 2px var(--rubric)}
@@ -160,9 +167,9 @@ button.chip:hover{border-color:var(--rubric)}
 .fcard{display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:16px; row-gap:2px; align-items:center; align-content:center;
   padding:14px 16px; border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); text-align:left}
 .fcard .pic{grid-row:1 / span 2}
-.fcard h3{font-size:22px; line-height:1.15}
+.fcard h3{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.15}
 .fcard h3 .yr{color:var(--muted); font-weight:400; font-size:.8em; margin-left:6px}
-.fcard .sum{font-size:16.5px; line-height:1.38}
+.fcard .sum{font-size:calc(16.5px * var(--tx)); line-height:1.38}
 
 /* The ratings table: customers in rows, films in columns, one badge per cell.
    .on and .dim work on rows (tr) and on cells (td); .rt-new is the newcomer below a gap; .q is a "?" cell. */
@@ -197,9 +204,9 @@ button.chip:hover{border-color:var(--rubric)}
 .scene.intro .scene-head{display:none}
 .act-card{display:grid; justify-items:center; text-align:center; gap:10px; padding:8px 0}
 .act-no{font-size:clamp(64px, 15vh, 128px); line-height:1; color:var(--card-soft); font-variant-numeric:lining-nums}
-.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--card-soft)}
+.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--card-soft)}
 .act-title{font-style:italic; font-weight:500; font-size:clamp(42px, 9vh, 76px); line-height:1.04; text-wrap:balance}
-.act-line{max-width:36ch; font-size:22px; line-height:1.38; text-wrap:balance}
+.act-line{max-width:36ch; font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.38; text-wrap:balance}
 .act-motif{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:12px; margin-top:10px}
 .act-motif .vote{min-width:66px; padding:9px 10px}
 .act-motif .vote[data-r="0"]{background:var(--leaf)}
@@ -231,13 +238,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: a laptop browser or the projector at 720p */
 @media (max-height: 760px){
   .scene{padding:12px 22px 14px}
-  .scene-head .scene-no{font-size:30px}
-  .scene-head h2{font-size:25px}
+  .scene-head .scene-no{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538))}
+  .scene-head h2{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731))}
   .scene-inner{gap:10px; padding-top:8px}
   .fcard{padding:10px 14px}
-  .fcard h3{font-size:20px}
-  .fcard .sum{font-size:15.5px}
-  .bubble{font-size:17px; padding:7px 16px}
+  .fcard h3{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .fcard .sum{font-size:calc(15.5px * var(--tx))}
+  .bubble{font-size:calc(17px * var(--tx)); padding:7px 16px}
   .rt{border-spacing:6px 4px}
 }
 @media (max-width: 760px){
@@ -310,20 +317,22 @@ button.chip:hover{border-color:var(--rubric)}
    violet card, so here it takes the card's own light colours (dashed, as everything unknown in the game). */
 .act-motif .nt-n.nt-slot{background:transparent; border-color:var(--card-soft); color:var(--card-ink)}
 .act-skip{margin-top:6px; padding:8px 20px; border-radius:999px; border:1.5px solid var(--card-soft); background:transparent;
-  color:var(--card-ink); font-size:19px; cursor:pointer}
+  color:var(--card-ink); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); cursor:pointer}
 .act-skip:hover{background:var(--card-rule)}
 /* An optional section's card carries the skip button as well: a little less air, so it fits 1280x720. */
 .act-card.opt{gap:6px}
 .act-card.opt .act-motif{margin-top:4px}
 .py-card{display:grid; justify-items:center; text-align:center; gap:14px; padding:10px 0; max-width:50ch; margin:0 auto}
-.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--ochre)}
-.py-what{font-size:clamp(24px, 4.2vh, 34px); line-height:1.25; font-style:italic; text-wrap:balance}
+.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--ochre)}
+.py-what{font-size:calc(clamp(24px, 4.2vh, 34px) * (1 + (var(--tx) - 1) * 0.385)); line-height:1.25; font-style:italic; text-wrap:balance}
 .py-open{display:inline-block; padding:12px 26px; border-radius:999px; background:var(--rubric); color:var(--leaf);
-  font-size:21px; text-decoration:none; font-weight:500}
+  font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); text-decoration:none; font-weight:500}
 .py-open:hover{filter:brightness(1.08)}
-.py-how, .py-back{font-size:18px; color:var(--muted); max-width:42ch}
+.py-how, .py-back{font-size:calc(18px * var(--tx)); color:var(--muted); max-width:42ch}
 .pager button.py{width:11px; height:11px; border-radius:3px; background:transparent; border:2px solid var(--ochre); margin:0 3px}
 .pager button.py[aria-current="step"]{background:var(--ochre)}
+/* Text scale (above): on the large screens the leaf widens with its words, so that they keep their lines */
+@media (min-width: 1080px) and (min-height: 740px){ .py-card{max-width:calc(50ch * var(--tx))} }
 @media (max-width: 560px){
   .py-what{font-size:22px}
   .py-open{font-size:18px; padding:10px 20px}
@@ -744,19 +753,19 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* 2. Recommender systems today: two sentences, the second the larger */
 .s0-today{display:grid; justify-items:center; gap:28px; text-align:center; max-width:30em; margin:0 auto; padding:12px 0}
-.s0-was{font-size:25px; line-height:1.35; color:var(--muted); text-wrap:balance}
-.s0-now{font-size:36px; line-height:1.22; font-weight:500; text-wrap:balance}
+.s0-was{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); line-height:1.35; color:var(--muted); text-wrap:balance}
+.s0-now{font-size:calc(36px * (1 + (var(--tx) - 1) * 0.308)); line-height:1.22; font-weight:500; text-wrap:balance}
 .s0-now em{color:var(--rubric); font-style:italic}
 
 /* 3. At a glance: one line, the board, the words under it */
 .s0-gl{display:grid; justify-items:center; gap:12px; width:100%}
-.s0-lead{font-size:23px; line-height:1.3; text-align:center; max-width:60ch; text-wrap:balance; font-weight:500}
+.s0-lead{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); line-height:1.3; text-align:center; max-width:60ch; text-wrap:balance; font-weight:500}
 .s0-under{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px 20px; max-width:100%}
 .s0-under:not(:has(> :not([hidden]))){display:none}
 .s0-films{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 8px; width:100%}
-.s0-films .chip{font-size:16px}
-.s0-note{font-size:15px; color:var(--muted); font-style:italic; text-align:center}
-.s0-read{font-size:19px; line-height:1.35; text-align:center; max-width:70ch; text-wrap:balance}
+.s0-films .chip{font-size:calc(16px * var(--tx))}
+.s0-note{font-size:calc(15px * var(--tx)); color:var(--muted); font-style:italic; text-align:center}
+.s0-read{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; max-width:70ch; text-wrap:balance}
 
 /* The board: MF.M's textbook cross (MATRIX.md) with three layouts of its own. Every number cell keeps one width, so
    the films' columns line up with the columns under them (the ratings', then the product's). */
@@ -791,18 +800,18 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
   .s0-today{gap:20px}
-  .s0-was{font-size:22px}
-  .s0-now{font-size:31px}
+  .s0-was{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+  .s0-now{font-size:calc(31px * (1 + (var(--tx) - 1) * 0.500))}
   .s0-gl{gap:9px}
-  .s0-lead{font-size:21px}
-  .s0-read{font-size:17.5px}
+  .s0-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .s0-read{font-size:calc(17.5px * var(--tx))}
   .s0-cover{gap:14px}
   .s0-x{--mx-xrg:16px}
   .s0-x .mx{--nt-h:28px; --nt-fs:18px; --mx-py:2px}
   .s0-x .mx td.mx-c{line-height:1}
   .s0-x .mx-ch .pic{--s:24px}
   .s0-x .mx-cap{font-size:15.5px}
-  .s0-films .chip{font-size:15px}
+  .s0-films .chip{font-size:calc(15px * var(--tx))}
 }
 /* Phones: the product under the films, the ratings under the customers and the product */
 @media (max-width: 560px){
@@ -839,6 +848,10 @@ button.chip:hover{border-color:var(--rubric)}
   .s0-in, .s0-rise, .s0-cover.s0-in .pic, .s0-cover.s0-in .s0-heart, .s0-x td.mx-c.s0-pop > .nt-n{animation:none}
   .s0-x .s0-mp, .s0-x .s0-mp td.mx-c > .nt-n, .s0-fly{transition:none}
 }
+
+/* Text scale (core.css): on the large screens the two sentences of Recommender systems today widen with their words,
+   so that they keep their lines */
+@media (min-width: 1080px) and (min-height: 740px){ .s0-today{max-width:calc(30em * var(--tx))} }
 </style>
 <style>
 /* Section 1, "Matrix multiplication" (part one of the Matchmaker). Built by agent S1-A on 2026-11-03, rewritten by the
@@ -859,8 +872,8 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-in{animation:s1-in .45s cubic-bezier(.2,.7,.2,1) both}
 @keyframes s1-in{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
 .s1-still, .s1-still *{transition:none !important}
-.s1-lead{font-size:23px; line-height:1.3; text-align:center; max-width:60ch; text-wrap:balance; font-weight:500}
-.s1-read, .s1-cue{font-size:19px; line-height:1.35; text-align:center; max-width:58ch; text-wrap:balance; color:var(--ink)}
+.s1-lead{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); line-height:1.3; text-align:center; max-width:60ch; text-wrap:balance; font-weight:500}
+.s1-read, .s1-cue{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; max-width:58ch; text-wrap:balance; color:var(--ink)}
 .s1-read{display:grid; gap:4px}
 .s1-ra b, .s1-rb b{font-weight:700}
 .s1-rub{color:var(--rubric); font-weight:700}
@@ -872,18 +885,18 @@ button.chip:hover{border-color:var(--rubric)}
 /* 1. The opening (2026-11-10): the website, how it works (a login and the form of the three questions), the profiles,
    a film critic's form for one film, the critic's answers, the two tables. The cover is the preface's (sec0.css). */
 .s1-step{display:grid; justify-items:center; gap:12px; width:100%}
-.s1-note{font-size:15px; color:var(--muted); font-style:italic; text-align:center}
+.s1-note{font-size:calc(15px * var(--tx)); color:var(--muted); font-style:italic; text-align:center}
 /* a browser window on the website */
 .s1-site{width:min(100%, 760px); border:1.5px solid var(--rule); border-radius:16px; background:var(--bg); overflow:hidden}
 .s1-bar{display:flex; align-items:center; gap:7px; padding:8px 14px; border-bottom:1.5px solid var(--rule); background:var(--leaf)}
 .s1-bar i{width:11px; height:11px; border-radius:50%; background:var(--rule)}
-.s1-url{margin-left:12px; padding:1px 16px 3px; border-radius:999px; border:1.5px solid var(--rule); color:var(--rubric); font-style:italic; font-size:16px; line-height:1.3}
+.s1-url{margin-left:12px; padding:1px 16px 3px; border-radius:999px; border:1.5px solid var(--rule); color:var(--rubric); font-style:italic; font-size:calc(16px * var(--tx)); line-height:1.3}
 .s1-siteb{display:grid; justify-items:center; gap:16px; padding:20px 24px 22px}
 .s1-sides{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:18px; width:100%}
 .s1-side{display:grid; justify-items:center; gap:10px}
-.s1-sh{font-size:21px; font-weight:600}
+.s1-sh{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); font-weight:600}
 .s1-chips{display:flex; flex-wrap:wrap; justify-content:center; gap:8px}
-.s1-chips .chip{font-size:16.5px}
+.s1-chips .chip{font-size:calc(16.5px * var(--tx))}
 .s1-yr{color:var(--muted); font-size:.85em; margin-left:2px}
 .s1-heart-sm{font-size:44px; line-height:1}
 /* the login, then the name of the customer who logged in */
@@ -891,20 +904,20 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-loginrow, .s1-me{display:flex; align-items:center; gap:10px}
 .s1-who.s1-logged .s1-loginrow, .s1-who:not(.s1-logged) .s1-me{display:none}
 .s1-field{display:inline-flex; align-items:center; gap:8px; min-width:220px; padding:5px 12px; border:1.5px solid var(--rule); border-radius:10px;
-  background:var(--leaf); font-size:19px; line-height:1.2}
-.s1-flab{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:15px}
+  background:var(--leaf); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.2}
+.s1-flab{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:calc(15px * var(--tx))}
 .s1-typed{font-weight:600}
 .s1-caret{width:2px; height:1.1em; background:var(--rubric); animation:s1-blink 1s steps(1) infinite}
 @keyframes s1-blink{50%{opacity:0}}
-.s1-login{padding:5px 18px 7px; border-radius:999px; background:var(--rubric); color:var(--leaf); font-size:16px; line-height:1.2; transition:transform .12s ease, box-shadow .12s ease}
+.s1-login{padding:5px 18px 7px; border-radius:999px; background:var(--rubric); color:var(--leaf); font-size:calc(16px * var(--tx)); line-height:1.2; transition:transform .12s ease, box-shadow .12s ease}
 .s1-login.s1-press{transform:translateY(2px); box-shadow:0 0 0 4px color-mix(in srgb, var(--rubric) 30%, transparent)}
-.s1-me{font-size:20px; font-weight:600}
-.s1-metag{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:15px}
+.s1-me{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); font-weight:600}
+.s1-metag{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:calc(15px * var(--tx))}
 /* the form: three questions, five marks each, the words of the marks over their columns */
 .s1-form{display:grid; gap:8px; width:min(100%, 680px)}
 .s1-fline{display:grid; grid-template-columns:minmax(0,1fr) repeat(5, 60px); align-items:center; column-gap:6px}
 .s1-fw{font-size:14px; line-height:1.1; color:var(--muted); font-style:italic; text-align:center}
-.s1-fq{display:flex; align-items:center; gap:10px; font-size:19.5px; line-height:1.25; text-align:left}
+.s1-fq{display:flex; align-items:center; gap:10px; font-size:calc(19.5px * (1 + (var(--tx) - 1) * 0.942)); line-height:1.25; text-align:left}
 .s1-fg{font-size:24px}
 .s1-fo{display:grid; place-items:center; transition:opacity .3s ease}
 .s1-fo .vote{min-width:50px; min-height:36px; border-radius:10px}
@@ -918,9 +931,9 @@ button.chip:hover{border-color:var(--rubric)}
 /* the critic's card: the film, then the same form */
 .s1-crit{display:grid; justify-items:center; gap:16px; width:min(100%, 760px); padding:16px 22px 20px; border:1.5px solid var(--rule); border-radius:16px; background:var(--bg)}
 .s1-film{display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:14px; width:min(100%, 680px)}
-.s1-film h3{font-size:22px; line-height:1.15}
+.s1-film h3{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.15}
 .s1-film h3 .yr{color:var(--muted); font-weight:400; font-size:.8em; margin-left:6px}
-.s1-filmsum{font-size:16px; line-height:1.35; color:var(--muted)}
+.s1-filmsum{font-size:calc(16px * var(--tx)); line-height:1.35; color:var(--muted)}
 /* one table alone, shown row by row (the profiles) or column by column (the critic's answers, turned) */
 .s1-one .mx td, .s1-one .mx th{transition:opacity .4s ease}
 .s1-one .mx-dimout .mx-out{opacity:0}
@@ -933,7 +946,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-key{gap:8px 20px}
 .s1-tside{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px 22px; max-width:100%}
 .s1-tside:not(:has(> :not([hidden]))){display:none}
-.s1-tabs .s1-read{font-size:19px; max-width:62ch}
+.s1-tabs .s1-read{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); max-width:62ch}
 .s1-ra{color:var(--rubric)}
 .s1-rb{color:var(--ochre)}
 
@@ -945,7 +958,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* 2. From profiles to scores */
 .s1-sc{gap:10px}
 .s1-sc .mx-note{gap:8px}
-.s1-sc .s1-cue{font-size:18px; max-width:34ch}
+.s1-sc .s1-cue{font-size:calc(18px * var(--tx)); max-width:34ch}
 .s1-sc .mx-c.s1-best > .nt-n{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5.5px var(--rubric)}
 .s1-sc .mx-c.s1-best{background:color-mix(in srgb, var(--rubric) 10%, transparent); border-radius:12px}
 @media (min-width: 901px){
@@ -966,7 +979,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-mul[data-k="5"] .mx-ma th.mx-rh .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--rubric)}
 .s1-mul[data-k="5"] .mx-ma .mx-sc, .s1-mul[data-k="5"] .mx-mb .mx-sr{color:var(--muted)}
 .s1-mul[data-k="6"] .mx-mc .mx-cap{color:var(--rubric)}
-.s1-std{font-size:19px; line-height:1.35; text-align:center; max-width:100%; text-wrap:balance}
+.s1-std{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; max-width:100%; text-wrap:balance}
 
 /* 4. A bigger product */
 .s1-bg{gap:12px}
@@ -986,16 +999,16 @@ button.chip:hover{border-color:var(--rubric)}
   cursor:pointer; color:var(--ink); transition:border-color .2s ease, opacity .25s ease, box-shadow .2s ease}
 .s1-opt:hover:not([aria-disabled="true"]){border-color:var(--rubric)}
 .s1-opt[aria-disabled="true"]{cursor:default}
-.s1-optl{font-weight:700; color:var(--rubric); font-size:18px; line-height:1}
+.s1-optl{font-weight:700; color:var(--rubric); font-size:calc(18px * var(--tx)); line-height:1}
 .s1-opt.is-wrong{opacity:.45; border-style:dashed}
 .s1-opt.is-wrong .mx-shape{text-decoration:line-through; text-decoration-thickness:2px}
 .s1-opt.is-right{border-color:var(--rubric); box-shadow:0 0 0 3px var(--rubric)}
 .s1-opt.is-other{opacity:.45}
 .s1-gpair{display:inline-flex; align-items:center; gap:10px}
-.s1-and{font-style:italic; color:var(--muted); font-size:17px}
+.s1-and{font-style:italic; color:var(--muted); font-size:calc(17px * var(--tx))}
 .s1-qout{display:grid; justify-items:center; gap:8px; min-height:3.2em}
-.s1-wait{color:var(--muted); font-style:italic; font-size:17px}
-.s1-msg{font-size:19px; line-height:1.35; text-align:center; max-width:56ch; text-wrap:balance}
+.s1-wait{color:var(--muted); font-style:italic; font-size:calc(17px * var(--tx))}
+.s1-msg{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; max-width:56ch; text-wrap:balance}
 .s1-tag{margin-right:4px}
 .s1-tag.ok{color:var(--rubric)}
 .s1-tag.no{color:var(--ochre)}
@@ -1006,11 +1019,11 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-hbody{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px 44px; width:100%}
 .s1-hyou{display:grid; justify-items:center; gap:10px; width:min(100%, 300px)}
 .s1-hline{display:flex; align-items:center; gap:10px}
-.s1-hlab{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:17px}
+.s1-hlab{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:calc(17px * var(--tx))}
 .s1-hentry{display:inline-flex}
 .s1-hentry .nt-n{min-width:58px; min-height:44px; font-size:26px}
 .s1-hminus{color:var(--dislike); font-weight:700; font-size:26px}
-.s1-hcount{font-size:16px; color:var(--muted); margin-left:6px; font-variant-numeric:lining-nums tabular-nums; white-space:nowrap}
+.s1-hcount{font-size:calc(16px * var(--tx)); color:var(--muted); margin-left:6px; font-variant-numeric:lining-nums tabular-nums; white-space:nowrap}
 .s1-hpad{display:grid; grid-template-columns:repeat(4, 58px); gap:8px}
 .s1-hkey{height:46px; padding:0; border:1.5px solid var(--rule); border-radius:12px; background:var(--bg); color:var(--ink); cursor:pointer;
   font:inherit; font-size:23px; font-weight:600; font-variant-numeric:lining-nums tabular-nums; transition:border-color .15s ease, translate .1s ease}
@@ -1021,7 +1034,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-hok{grid-column:1 / -1; justify-content:center}
 .s1-hpad.s1-padoff .s1-hkey, .s1-hpad.s1-padoff .s1-hok{opacity:.4; cursor:default}
 @media (hover: hover){ .s1-hkey:hover{border-color:var(--rubric)} }
-.s1-hmsg{font-size:17px; line-height:1.35; text-align:center; text-wrap:balance; min-height:2.7em}
+.s1-hmsg{font-size:calc(17px * var(--tx)); line-height:1.35; text-align:center; text-wrap:balance; min-height:2.7em}
 .s1-hand .mx-c.s1-hcell{cursor:pointer}
 .s1-hand .mx-c.s1-hcell:focus-visible{outline:2px solid var(--rubric); outline-offset:-3px; border-radius:10px}
 .s1-hand .mx-c.s1-hshown > .nt-n{outline:2px dashed var(--muted); outline-offset:-4px}
@@ -1030,19 +1043,19 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
   .s1-mm, .s1-sc, .s1-mul, .s1-bg, .s1-hand{gap:9px}
-  .s1-lead{font-size:21px}
-  .s1-read, .s1-cue{font-size:17.5px}
-  .s1-tabs .s1-read{font-size:17.5px}
+  .s1-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
+  .s1-read, .s1-cue{font-size:calc(17.5px * var(--tx))}
+  .s1-tabs .s1-read{font-size:calc(17.5px * var(--tx))}
   .s1-step{gap:9px}
   .s1-siteb{gap:12px; padding:16px 22px 18px}
-  .s1-fq{font-size:18.5px}
+  .s1-fq{font-size:calc(18.5px * (1 + (var(--tx) - 1) * 0.981))}
   .s1-form{gap:6px}
   .s1-crit{gap:12px; padding:12px 20px 16px}
-  .s1-filmsum{font-size:15.5px}
-  .s1-sc .s1-cue{font-size:17px}
+  .s1-filmsum{font-size:calc(15.5px * var(--tx))}
+  .s1-sc .s1-cue{font-size:calc(17px * var(--tx))}
   .s1-hkey{height:42px}
   .s1-hpad{gap:7px}
-  .s1-hmsg{font-size:16.5px}
+  .s1-hmsg{font-size:calc(16.5px * var(--tx))}
   .s1-tabs .mx, .s1-sc .mx, .s1-mul .mx, .s1-hand .mx{--nt-w:46px; --nt-h:31px; --nt-fs:21px}
   .s1-tabs .mx-ch .pic, .s1-sc .mx-ch .pic, .s1-mul .mx-ch .pic{--s:24px}
   .s1-tabs .mx-c > .vote{min-height:31px}
@@ -1055,7 +1068,7 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-tabs .s1-read{max-width:min(100%, 100ch)}
   .s1-bg .mx-sm{--nt-w:38px; --nt-h:25px; --nt-fs:17px}
   .s1-bg .mx-stk:not(.s1-lone){--mx-srg:6px}
-  .s1-std{font-size:17.5px}
+  .s1-std{font-size:calc(17.5px * var(--tx))}
   .s1-mul{gap:6px}
   .s1-mul .mx{--nt-h:29px}
   .s1-mul .mx-ch .pic{--s:22px}

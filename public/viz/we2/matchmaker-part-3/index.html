@@ -35,6 +35,13 @@
      and the loss violet, a move or update ochre, a slope green. */
   --g-fwd:var(--rubric); --g-move:var(--ochre); --g-slope:#2F7D62;
 }
+/* Text scale (2026-11-11). Carlos shows the games from his iPad on the projector and asked for words the size of the
+   slides' words; the matrices keep their sizes. On a screen at least 1080 x 740 px, the size of every word of 18 px or
+   less is multiplied by --tx; larger type grows by a share that falls to nothing at 44 px. The sizes are written as
+   calc(V * var(--tx)) or calc(V * (1 + (var(--tx) - 1) * w)). The tables, stacks, badges, pictures, the top bar and
+   Back and Next keep their sizes, and so does a phone (--tx is 1 there). */
+:root{--tx:1}
+@media (min-width: 1080px) and (min-height: 740px){ :root{--tx:1.4} }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1A1720; --leaf:#231E2A; --ink:#EEE7D8; --muted:#A99FB3; --rule:#3D3548;
@@ -100,19 +107,19 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 @keyframes enter{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 @media (prefers-reduced-motion: reduce){ .scene.active{animation:none} }
 .scene-head{display:flex; align-items:center; gap:14px}
-.scene-head .scene-no{font-size:34px}
-.scene-head h2{font-size:28px; line-height:1.1}
-.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; white-space:nowrap}
+.scene-head .scene-no{font-size:calc(34px * (1 + (var(--tx) - 1) * 0.385))}
+.scene-head h2{font-size:calc(28px * (1 + (var(--tx) - 1) * 0.615)); line-height:1.1}
+.scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); white-space:nowrap}
 /* The leaves of an optional section (3 and 4) carry this tag beside their title. */
 .scene-head .opt-tag{flex:none; color:var(--ochre); border:1.5px solid var(--ochre); border-radius:999px; padding:0 10px 2px;
-  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; line-height:1.3; white-space:nowrap}
+  font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:calc(15px * var(--tx)); line-height:1.3; white-space:nowrap}
 .scene-body{flex:1; display:flex; flex-direction:column; min-height:0}
 .scene-inner{margin:auto 0; padding-top:12px; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; width:100%}
-.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:15px}
-.say{text-align:center; color:var(--muted); font-style:italic; font-size:17px}
-.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:18px}
+.scene-error{border:1.5px dashed var(--dislike); color:var(--dislike); border-radius:10px; padding:8px 12px; font-size:calc(15px * var(--tx))}
+.say{text-align:center; color:var(--muted); font-style:italic; font-size:calc(17px * var(--tx))}
+.bubble{justify-self:center; max-width:62ch; text-align:center; background:var(--bg); border:1.5px solid var(--rule); border-radius:16px; padding:9px 18px; font-size:calc(18px * var(--tx))}
 .btn{border:1.5px solid var(--rubric); color:var(--rubric); background:transparent; border-radius:999px; padding:4px 16px 6px;
-  font-size:16px; line-height:1.2; cursor:pointer}
+  font-size:calc(16px * var(--tx)); line-height:1.2; cursor:pointer}
 .btn.primary{background:var(--rubric); color:var(--leaf)}
 .btn.quiet{border-style:dashed}
 .btn:disabled{opacity:.4; cursor:default}
@@ -147,10 +154,10 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 
 /* Chips: a small picture and a name */
 .chip{display:inline-flex; align-items:center; gap:6px; padding:2px 10px 2px 2px; border:1.5px solid var(--rule); border-radius:999px;
-  background:var(--leaf); font-size:15.5px; line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
+  background:var(--leaf); font-size:calc(15.5px * var(--tx)); line-height:1.1; white-space:nowrap; max-width:100%; min-width:0; vertical-align:middle}
 .chip .pic{--s:26px}
 .chip .chip-n{overflow:hidden; text-overflow:ellipsis}
-.chip .chip-tag{font-size:12px; color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
+.chip .chip-tag{font-size:calc(12px * var(--tx)); color:var(--ochre); font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600}
 button.chip{cursor:pointer}
 button.chip:hover{border-color:var(--rubric)}
 .chip.on{border-color:var(--rubric); box-shadow:0 0 0 2px var(--rubric)}
@@ -160,9 +167,9 @@ button.chip:hover{border-color:var(--rubric)}
 .fcard{display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:16px; row-gap:2px; align-items:center; align-content:center;
   padding:14px 16px; border:1.5px solid var(--rule); border-radius:14px; background:var(--bg); text-align:left}
 .fcard .pic{grid-row:1 / span 2}
-.fcard h3{font-size:22px; line-height:1.15}
+.fcard h3{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.15}
 .fcard h3 .yr{color:var(--muted); font-weight:400; font-size:.8em; margin-left:6px}
-.fcard .sum{font-size:16.5px; line-height:1.38}
+.fcard .sum{font-size:calc(16.5px * var(--tx)); line-height:1.38}
 
 /* The ratings table: customers in rows, films in columns, one badge per cell.
    .on and .dim work on rows (tr) and on cells (td); .rt-new is the newcomer below a gap; .q is a "?" cell. */
@@ -197,9 +204,9 @@ button.chip:hover{border-color:var(--rubric)}
 .scene.intro .scene-head{display:none}
 .act-card{display:grid; justify-items:center; text-align:center; gap:10px; padding:8px 0}
 .act-no{font-size:clamp(64px, 15vh, 128px); line-height:1; color:var(--card-soft); font-variant-numeric:lining-nums}
-.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--card-soft)}
+.act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--card-soft)}
 .act-title{font-style:italic; font-weight:500; font-size:clamp(42px, 9vh, 76px); line-height:1.04; text-wrap:balance}
-.act-line{max-width:36ch; font-size:22px; line-height:1.38; text-wrap:balance}
+.act-line{max-width:36ch; font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.38; text-wrap:balance}
 .act-motif{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:12px; margin-top:10px}
 .act-motif .vote{min-width:66px; padding:9px 10px}
 .act-motif .vote[data-r="0"]{background:var(--leaf)}
@@ -231,13 +238,13 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: a laptop browser or the projector at 720p */
 @media (max-height: 760px){
   .scene{padding:12px 22px 14px}
-  .scene-head .scene-no{font-size:30px}
-  .scene-head h2{font-size:25px}
+  .scene-head .scene-no{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538))}
+  .scene-head h2{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731))}
   .scene-inner{gap:10px; padding-top:8px}
   .fcard{padding:10px 14px}
-  .fcard h3{font-size:20px}
-  .fcard .sum{font-size:15.5px}
-  .bubble{font-size:17px; padding:7px 16px}
+  .fcard h3{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923))}
+  .fcard .sum{font-size:calc(15.5px * var(--tx))}
+  .bubble{font-size:calc(17px * var(--tx)); padding:7px 16px}
   .rt{border-spacing:6px 4px}
 }
 @media (max-width: 760px){
@@ -310,20 +317,22 @@ button.chip:hover{border-color:var(--rubric)}
    violet card, so here it takes the card's own light colours (dashed, as everything unknown in the game). */
 .act-motif .nt-n.nt-slot{background:transparent; border-color:var(--card-soft); color:var(--card-ink)}
 .act-skip{margin-top:6px; padding:8px 20px; border-radius:999px; border:1.5px solid var(--card-soft); background:transparent;
-  color:var(--card-ink); font-size:19px; cursor:pointer}
+  color:var(--card-ink); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); cursor:pointer}
 .act-skip:hover{background:var(--card-rule)}
 /* An optional section's card carries the skip button as well: a little less air, so it fits 1280x720. */
 .act-card.opt{gap:6px}
 .act-card.opt .act-motif{margin-top:4px}
 .py-card{display:grid; justify-items:center; text-align:center; gap:14px; padding:10px 0; max-width:50ch; margin:0 auto}
-.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--ochre)}
-.py-what{font-size:clamp(24px, 4.2vh, 34px); line-height:1.25; font-style:italic; text-wrap:balance}
+.py-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); color:var(--ochre)}
+.py-what{font-size:calc(clamp(24px, 4.2vh, 34px) * (1 + (var(--tx) - 1) * 0.385)); line-height:1.25; font-style:italic; text-wrap:balance}
 .py-open{display:inline-block; padding:12px 26px; border-radius:999px; background:var(--rubric); color:var(--leaf);
-  font-size:21px; text-decoration:none; font-weight:500}
+  font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); text-decoration:none; font-weight:500}
 .py-open:hover{filter:brightness(1.08)}
-.py-how, .py-back{font-size:18px; color:var(--muted); max-width:42ch}
+.py-how, .py-back{font-size:calc(18px * var(--tx)); color:var(--muted); max-width:42ch}
 .pager button.py{width:11px; height:11px; border-radius:3px; background:transparent; border:2px solid var(--ochre); margin:0 3px}
 .pager button.py[aria-current="step"]{background:var(--ochre)}
+/* Text scale (above): on the large screens the leaf widens with its words, so that they keep their lines */
+@media (min-width: 1080px) and (min-height: 740px){ .py-card{max-width:calc(50ch * var(--tx))} }
 @media (max-width: 560px){
   .py-what{font-size:22px}
   .py-open{font-size:18px; padding:10px 20px}
@@ -795,9 +804,9 @@ button.chip:hover{border-color:var(--rubric)}
 /* POPPER'S SCHEMA: the sentence, four boxes with arrows, the loop over the top, Popper's words, the beats */
 .g-sch{--g-bw:86px; --g-bh:56px; --g-arc:36px; display:grid; justify-items:center; gap:10px; width:100%}
 .g-quote{display:grid; justify-items:center; gap:4px; text-align:center}
-.g-qt{font-size:clamp(28px, 5.4vh, 42px); line-height:1.15; font-weight:500; text-wrap:balance}
+.g-qt{font-size:calc(clamp(28px, 5.4vh, 42px) * (1 + (var(--tx) - 1) * 0.077)); line-height:1.15; font-weight:500; text-wrap:balance}
 .g-qr{color:var(--rubric); font-style:italic}
-.g-src{font-size:15.5px; color:var(--muted); text-align:center; text-wrap:balance}
+.g-src{font-size:calc(15.5px * var(--tx)); color:var(--muted); text-align:center; text-wrap:balance}
 .g-flow{position:relative; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); width:min(100%, 900px);
   padding-top:var(--g-arc); margin-top:8px}
 .g-fcol{position:relative; display:grid; justify-items:center; align-content:start; gap:3px; text-align:center; padding:0 4px; min-width:0}
@@ -810,18 +819,18 @@ button.chip:hover{border-color:var(--rubric)}
   height:2px; background:var(--ink); transform-origin:left center}
 .g-farrow::after{content:""; position:absolute; right:-2px; top:50%; border-left:10px solid var(--ink); border-top:6px solid transparent;
   border-bottom:6px solid transparent; transform:translateY(-50%)}
-.g-flab{font-size:18px; line-height:1.2; font-weight:500}
-.g-fbeat{font-size:18px; line-height:1.2; color:var(--rubric); font-style:italic; margin-top:3px}
-.g-fnote{font-size:17px; line-height:1.25; color:var(--ochre); font-weight:600; margin-top:4px}
+.g-flab{font-size:calc(18px * var(--tx)); line-height:1.2; font-weight:500}
+.g-fbeat{font-size:calc(18px * var(--tx)); line-height:1.2; color:var(--rubric); font-style:italic; margin-top:3px}
+.g-fnote{font-size:calc(17px * var(--tx)); line-height:1.25; color:var(--ochre); font-weight:600; margin-top:4px}
 .g-fnote.g-empty{display:none}
 .g-again{position:absolute; top:6px; left:12.5%; right:12.5%; height:calc(var(--g-arc) - 6px); border:2px solid var(--muted); border-bottom:0;
   border-radius:16px 16px 0 0}
 .g-again::after{content:""; position:absolute; left:-7px; bottom:-3px; border-top:10px solid var(--muted); border-left:6px solid transparent;
   border-right:6px solid transparent}
 .g-againl{position:absolute; left:50%; top:0; transform:translate(-50%, -58%); background:var(--leaf); padding:0 10px; font-style:italic;
-  color:var(--muted); font-size:17px; white-space:nowrap}
+  color:var(--muted); font-size:calc(17px * var(--tx)); white-space:nowrap}
 .g-ssrc{margin-top:2px}
-.g-sline{font-size:clamp(22px, 3.8vh, 28px); line-height:1.25; font-weight:500; text-align:center; text-wrap:balance; margin-top:4px}
+.g-sline{font-size:calc(clamp(22px, 3.8vh, 28px) * (1 + (var(--tx) - 1) * 0.615)); line-height:1.25; font-weight:500; text-align:center; text-wrap:balance; margin-top:4px}
 .g-sch:not(.g-on-quote) .g-quote{visibility:hidden}
 .g-sch:not(.g-on-boxes) .g-fbox, .g-sch:not(.g-on-boxes) .g-farrow, .g-sch:not(.g-on-boxes) .g-flab,
 .g-sch:not(.g-on-boxes) .g-ssrc, .g-sch:not(.g-on-boxes) .g-fnote{visibility:hidden}
@@ -830,11 +839,11 @@ button.chip:hover{border-color:var(--rubric)}
 .g-sch:not(.g-on-line) .g-sline{visibility:hidden}
 .g-sch-sm{--g-bw:58px; --g-bh:40px; --g-arc:26px}
 .g-sch-sm .g-fbox{font-size:21px}
-.g-sch-sm .g-flab, .g-sch-sm .g-fbeat, .g-sch-sm .g-fnote{font-size:14px}
+.g-sch-sm .g-flab, .g-sch-sm .g-fbeat, .g-sch-sm .g-fnote{font-size:calc(14px * var(--tx))}
 .g-sch-sm{gap:6px}
-.g-sch-sm .g-qt{font-size:22px}
-.g-sch-sm .g-src{font-size:12.5px}
-.g-sch-sm .g-sline{font-size:17px}
+.g-sch-sm .g-qt{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+.g-sch-sm .g-src{font-size:calc(12.5px * var(--tx))}
+.g-sch-sm .g-sline{font-size:calc(17px * var(--tx))}
 @media (max-width: 560px){
   .g-sch{--g-bw:56px; --g-bh:42px; --g-arc:30px; gap:8px}
   .g-qt{font-size:25px}
@@ -1037,15 +1046,15 @@ button.chip:hover{border-color:var(--rubric)}
    Three sizes: the default (1440x900), max-height 760px (the projector at 720p; it also matches the phone frame),
    max-width 560px (the phone, last, so it wins). */
 .s5{display:grid; justify-items:center; align-content:start; gap:8px; width:100%; min-width:0}
-.s5-lead{font-size:24px; line-height:1.26; text-align:center; text-wrap:balance; max-width:60ch; margin:0}
-.s5-say{font-size:19px; line-height:1.34; color:var(--muted); text-align:center; text-wrap:balance; max-width:78ch; margin:0}
-.s5-aside{font-size:17px; line-height:1.3; color:var(--muted); font-style:italic; text-align:center; text-wrap:balance; max-width:80ch; margin:0}
+.s5-lead{font-size:calc(24px * (1 + (var(--tx) - 1) * 0.769)); line-height:1.26; text-align:center; text-wrap:balance; max-width:60ch; margin:0}
+.s5-say{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.34; color:var(--muted); text-align:center; text-wrap:balance; max-width:78ch; margin:0}
+.s5-aside{font-size:calc(17px * var(--tx)); line-height:1.3; color:var(--muted); font-style:italic; text-align:center; text-wrap:balance; max-width:80ch; margin:0}
 .s5-lead:empty, .s5-say:empty, .s5-aside:empty{display:none}
 .s5-rub{color:var(--rubric); font-weight:600; font-style:italic}
 .s5-nw{white-space:nowrap}
 .s5 .nt-n.s5-in{--nt-w:34px; --nt-h:27px; --nt-fs:18px; border-radius:8px; margin:0 .08em; vertical-align:-.12em; padding:0 6px}
-.s5-src{font-size:14.5px; line-height:1.3; color:var(--muted); text-align:center; text-wrap:balance; max-width:90ch; margin:0}
-.s5-read{font-size:16px; line-height:1.3; color:var(--ink); text-align:center; min-height:1.3em; margin:0}
+.s5-src{font-size:calc(14.5px * var(--tx)); line-height:1.3; color:var(--muted); text-align:center; text-wrap:balance; max-width:90ch; margin:0}
+.s5-read{font-size:calc(16px * var(--tx)); line-height:1.3; color:var(--ink); text-align:center; min-height:1.3em; margin:0}
 .s5-read .nt-n.s5-in{--nt-w:30px; --nt-h:23px; --nt-fs:15px}
 .s5-ctl{display:flex; flex-wrap:wrap; gap:8px 12px; justify-content:center; align-items:center}
 .s5-ctl:empty{display:none}
@@ -1159,10 +1168,13 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-runrow .s5-cn{font-size:24px}
 /* the corner of the cross (slot nb): its foot level with the films' last row, its left edge with the ratings' */
 .s5-x > .mx-xnb, .s5-recap .lv-cross > .mx-xnb{align-self:end; justify-self:start}
+/* Text scale (core.css): the run (step count, Play or Replay, the curve) stands in the board's corner and keeps its
+   size with the board */
+.s5-strip, .s5-runrow{--tx:1}
 
 /* scene schema: Popper's diagram with the method written under its boxes, the loop drawn in ochre on its last step */
 .s5-pop .g-sch{gap:8px}
-.s5-pop .g-fnote{font-size:18px; color:var(--ochre); max-width:13em}
+.s5-pop .g-fnote{font-size:calc(18px * var(--tx)); color:var(--ochre); max-width:13em}
 .s5-pop .g-sline{display:none}
 .s5-pop.s5-again .g-again{border-color:var(--ochre); border-width:3px}
 .s5-pop.s5-again .g-again::after{border-top-color:var(--ochre)}
@@ -1231,16 +1243,16 @@ button.chip:hover{border-color:var(--rubric)}
   border:1.5px solid var(--rule); border-radius:14px; background:var(--bg)}
 .s5-rhead{display:flex; align-items:center; gap:10px; align-self:center}
 .s5-rwho p{margin:0; text-align:left}
-.s5-rfilm{font-size:19px; font-weight:600; line-height:1.15; color:var(--ink)}
-.s5-ruser{font-size:16px; line-height:1.2; color:var(--muted)}
+.s5-rfilm{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); font-weight:600; line-height:1.15; color:var(--ink)}
+.s5-ruser{font-size:calc(16px * var(--tx)); line-height:1.2; color:var(--muted)}
 .s5-rcard .pic.s5-tile{--s:46px}
 .s5-rpair{display:flex; justify-content:center; align-items:flex-start; gap:20px}
 .s5-rp, .s5-rv{display:grid; justify-items:center; gap:5px}
 .s5-rp .s5-cl{color:var(--g-fwd)}
 .s5 .s5-rcard .nt-n.s5-in{--nt-w:68px; --nt-h:44px; --nt-fs:26px; margin:0; vertical-align:middle}
 .s5 .s5-rp .nt-n.s5-in{box-shadow:0 0 0 2.5px var(--leaf), 0 0 0 5px var(--g-move)}
-.s5-rs{font-size:14px; color:var(--muted)}
-.s5-rmiss{margin:0; font-size:17px; color:var(--muted)}
+.s5-rs{font-size:calc(14px * var(--tx)); color:var(--muted)}
+.s5-rmiss{margin:0; font-size:calc(17px * var(--tx)); color:var(--muted)}
 .s5 .s5-rmiss .nt-n.s5-in{--nt-w:40px; --nt-h:28px; --nt-fs:17px; margin-left:.2em}
 .s5-rcard.s5-pop, .s5 .s5-rcard .nt-n.s5-pop{animation:s5-pop .5s cubic-bezier(.3,.75,.3,1.25) both}
 
@@ -1248,7 +1260,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-chain{display:flex; flex-wrap:nowrap; align-items:center; justify-content:center; gap:10px}
 .s5-card{display:grid; justify-items:center; align-content:start; gap:8px; width:190px; padding:12px 10px 10px; border:1.5px solid var(--rule);
   border-radius:14px; background:var(--bg); text-align:center}
-.s5-card p{margin:0; font-size:18px; line-height:1.2; text-wrap:balance}
+.s5-card p{margin:0; font-size:calc(18px * var(--tx)); line-height:1.2; text-wrap:balance}
 .s5-card .s5-cardpic{display:flex; gap:6px; align-items:flex-start; justify-content:center; min-height:110px}
 .s5-card .s5-map{--sq:4px; --gap:0px}
 .s5-card .s5-mg{padding:2px; position:relative}
@@ -1262,19 +1274,19 @@ button.chip:hover{border-color:var(--rubric)}
 .s5-card .s5-cti{font-size:11.5px}
 .s5-arrow{font-size:28px; color:var(--rubric); flex:none}
 .s5-lic{display:grid; gap:2px; max-width:110ch; margin-top:4px; padding-top:6px; border-top:1px solid var(--rule)}
-.s5-lic p{font-size:12.5px; line-height:1.3; color:var(--muted); text-align:center; margin:0}
+.s5-lic p{font-size:calc(12.5px * var(--tx)); line-height:1.3; color:var(--muted); text-align:center; margin:0}
 
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
   .s5{gap:6px}
-  .s5-lead{font-size:21px; max-width:76ch}
-  .s5-say{font-size:17.5px; max-width:96ch}
+  .s5-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); max-width:76ch}
+  .s5-say{font-size:calc(17.5px * var(--tx)); max-width:96ch}
   .s5-words .s5-lead{max-width:92ch}
   .s5-words .s5-say{max-width:118ch}
   .s5-end > .s5-say{max-width:118ch}
-  .s5-aside{font-size:15.5px}
-  .s5-src{font-size:13.5px}
-  .s5-read{font-size:15px}
+  .s5-aside{font-size:calc(15.5px * var(--tx))}
+  .s5-src{font-size:calc(13.5px * var(--tx))}
+  .s5-read{font-size:calc(15px * var(--tx))}
   .s5 .nt-n.s5-in{--nt-w:32px; --nt-h:24px; --nt-fs:16.5px}
   .s5-strip{gap:4px 12px; width:300px}
   .s5 .mx.s5-mx{--nt-w:36px; --nt-h:22px; --nt-fs:14.5px; --mx-py:1px; --mx-px:1px}
@@ -1287,12 +1299,12 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-curve{height:66px}
   .s5-reveal{gap:14px; margin-top:6px}
   .s5-rcard{width:216px; gap:9px; padding:11px 10px 10px}
-  .s5-rfilm{font-size:17.5px}
-  .s5-ruser{font-size:15px}
+  .s5-rfilm{font-size:calc(17.5px * var(--tx))}
+  .s5-ruser{font-size:calc(15px * var(--tx))}
   .s5-rcard .pic.s5-tile{--s:40px}
   .s5 .s5-rcard .nt-n.s5-in{--nt-w:60px; --nt-h:38px; --nt-fs:23px}
   .s5 .s5-rmiss .nt-n.s5-in{--nt-w:36px; --nt-h:25px; --nt-fs:15.5px}
-  .s5-rmiss{font-size:15.5px}
+  .s5-rmiss{font-size:calc(15.5px * var(--tx))}
   .s5-read .nt-n.s5-in{--nt-w:26px; --nt-h:19px; --nt-fs:13.5px}
   .s5-runrow{gap:2px 12px; width:270px}
   .s5-runrow > .s5-curve{height:46px}
@@ -1308,13 +1320,13 @@ button.chip:hover{border-color:var(--rubric)}
   .s5-larger .s5-x .s5-mg{padding:1px}
   .s5-larger .s5-x.s5-solo .s5-map{--sq:9px}
   .s5-larger .s5-x.s5-solo .s5-mg{padding:3px}
-  .s5-pop .g-fnote{font-size:16px}
+  .s5-pop .g-fnote{font-size:calc(16px * var(--tx))}
   .s5-card{width:178px; padding:10px 8px 8px}
-  .s5-card p{font-size:16.5px}
+  .s5-card p{font-size:calc(16.5px * var(--tx))}
   .s5-card .s5-cardpic{min-height:96px}
   .s5-card .s5-map{--sq:3.5px}
   .s5-card .s5-curve{height:84px}
-  .s5-lic p{font-size:12px}
+  .s5-lic p{font-size:calc(12px * var(--tx))}
 }
 /* 720p on a desk only (the phone frame also matches max-height 760px): the recap's board (MF.L.view, agent c's
    loss.css) pinned here, its cells, the films' pictures, the gaps of its cross, so that it fits under the words; its
@@ -1410,6 +1422,14 @@ button.chip:hover{border-color:var(--rubric)}
 }
 @media (prefers-reduced-motion: reduce){
   .s5 .mx-c > .nt-n.s5-pop, .s5-rcard.s5-pop, .s5 .s5-rcard .nt-n.s5-pop{animation:none}
+}
+
+/* Text scale (core.css): on the large screens the words of three scenes grow less, so that their boards fit on an
+   11-inch iPad: The whole method by 1.35, Real ratings by 1.3, A larger table by 1.2 */
+@media (min-width: 1080px) and (min-height: 740px){
+  .scene[data-key="recap"]{--tx:1.35}
+  .scene[data-key="real"]{--tx:1.3}
+  .scene[data-key="larger"]{--tx:1.2}
 }
 </style>
 </head>
