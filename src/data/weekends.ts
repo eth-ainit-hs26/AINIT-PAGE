@@ -541,6 +541,9 @@ export const weekends: Weekend[] = [
       { time: '13:00', title: 'Coding bazaar', type: 'lab' },
     ],
     resources: [
+      // The semester cheat sheet, also by the title on the home page: the three weekends on one A3 page, from
+      // cheat-sheet/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11).
+      { group: 'Cheat sheet', label: 'The semester on one page, all three weekends', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors', url: SOON },
       { group: 'Lecture slides', label: 'Matrix product and matrix factorization', url: SOON },
       { group: 'Lecture slides', label: 'Bandits', url: SOON },

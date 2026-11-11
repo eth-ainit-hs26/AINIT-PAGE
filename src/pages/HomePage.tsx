@@ -72,6 +72,23 @@ export function HomePage() {
                 weekend 1 schedule.
               */}
               {/*
+                The semester on one A3 page: every concept of the three weekends
+                with what it is, when to use it and its use in industry. It sits by
+                the title because it covers all three weekends; weekend 2's
+                Materials list has it too. Source: cheat-sheet/ of the public
+                repository eth-ainit-hs26/w2-recsys-bandits-lecture, published at
+                Carlos's yes of 2026-11-11.
+              */}
+              <a
+                className="btn btn--ghost"
+                href={deck(2, 'ainit-hs26-cheat-sheet.pdf')}
+                target="_blank"
+                rel="noopener noreferrer"
+                download=""
+              >
+                Semester cheat sheet (PDF)
+              </a>
+              {/*
                 The recordings of the whole course unit, 275-0004-00L, on the ETH
                 video portal.
               */}
