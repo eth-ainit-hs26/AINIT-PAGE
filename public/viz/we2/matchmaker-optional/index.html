@@ -29,7 +29,6 @@
   --dislike-bg2:#F2D3BC;
   --serif:"EB Garamond", Garamond, "Iowan Old Style", "Times New Roman", serif;
   --emoji:"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-  --geez:"Kefa", "Noto Sans Ethiopic", "Nyala", "Ebrima", serif;
   --gut:max(16px, env(safe-area-inset-left, 0px));
   --gut-r:max(16px, env(safe-area-inset-right, 0px));
   /* The colours of the guessing diagram and of section 3 (GUESS.md, HOPPER.md), defined once here: the forward pass
@@ -62,7 +61,7 @@ p{margin:0}
 ol,ul{margin:0; padding:0; list-style:none}
 button{font:inherit; color:inherit}
 button:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--rubric); outline-offset:2px}
-.geez{font-family:var(--geez); color:var(--rubric); line-height:1}
+.scene-no{color:var(--rubric); line-height:1; font-variant-numeric:lining-nums tabular-nums}
 .sprite{position:absolute; width:0; height:0; overflow:hidden}
 .em{font-family:var(--emoji); font-style:normal; line-height:1}
 .sc{font-variant-caps:all-small-caps; letter-spacing:.09em}
@@ -77,7 +76,7 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 .pager .act{display:flex; align-items:center; gap:4px}
 .pager .act + .act{margin-left:6px; padding-left:10px; border-left:1px solid var(--rule)}
 .pager button{width:28px; height:28px; border-radius:50%; border:1.5px solid var(--rule); background:var(--leaf); color:var(--rubric);
-  font-family:var(--geez); font-size:13px; line-height:1; padding:0; cursor:pointer; flex:none}
+  font-size:15px; font-variant-numeric:lining-nums tabular-nums; line-height:1; padding:0; cursor:pointer; flex:none}
 .pager button[aria-current="step"]{background:var(--rubric); border-color:var(--rubric); color:var(--leaf)}
 .pager.fold .act:not(.here) button:not(:first-child){display:none}
 .themebtn{width:32px; height:32px; border-radius:50%; border:1.5px solid var(--rule); background:transparent; padding:0; cursor:pointer;
@@ -101,7 +100,7 @@ button:focus-visible, input:focus-visible, select:focus-visible{outline:2px soli
 @keyframes enter{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 @media (prefers-reduced-motion: reduce){ .scene.active{animation:none} }
 .scene-head{display:flex; align-items:center; gap:14px}
-.scene-head .geez{font-size:34px}
+.scene-head .scene-no{font-size:34px}
 .scene-head h2{font-size:28px; line-height:1.1}
 .scene-head .actname{margin-left:auto; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.09em; font-size:15px; white-space:nowrap}
 /* The leaves of an optional section (3 and 4) carry this tag beside their title. */
@@ -197,7 +196,7 @@ button.chip:hover{border-color:var(--rubric)}
 @keyframes card-wipe{from{clip-path:inset(0 100% 0 0)} to{clip-path:inset(0 0 0 0)}}
 .scene.intro .scene-head{display:none}
 .act-card{display:grid; justify-items:center; text-align:center; gap:10px; padding:8px 0}
-.act-geez{font-family:var(--geez); font-size:clamp(64px, 15vh, 128px); line-height:1; color:var(--card-soft)}
+.act-no{font-size:clamp(64px, 15vh, 128px); line-height:1; color:var(--card-soft); font-variant-numeric:lining-nums}
 .act-kicker{font-variant-caps:all-small-caps; letter-spacing:.24em; font-size:19px; color:var(--card-soft)}
 .act-title{font-style:italic; font-weight:500; font-size:clamp(42px, 9vh, 76px); line-height:1.04; text-wrap:balance}
 .act-line{max-width:36ch; font-size:22px; line-height:1.38; text-wrap:balance}
@@ -214,14 +213,14 @@ button.chip:hover{border-color:var(--rubric)}
 .act-q{width:44px; height:44px; border-radius:50%; border:2px dashed var(--card-soft); display:grid; place-items:center;
   font-size:24px; font-weight:700; color:var(--card-ink)}
 .act-card.play > *{animation:act-in .7s cubic-bezier(.2,.7,.2,1) both}
-.act-card.play .act-geez{animation-name:act-geez; animation-duration:.9s; animation-delay:.45s}
+.act-card.play .act-no{animation-name:act-no; animation-duration:.9s; animation-delay:.45s}
 .act-card.play .act-kicker{animation-delay:.75s}
 .act-card.play .act-title{animation-delay:.9s}
 .act-card.play .act-line{animation-delay:1.2s}
 .act-card.play .act-motif{animation:none}
 .act-card.play .act-motif > *{animation:act-pop .5s cubic-bezier(.3,1.5,.5,1) both; animation-delay:calc(1.5s + var(--j) * .14s)}
 @keyframes act-in{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none}}
-@keyframes act-geez{from{opacity:0; transform:scale(.55) rotate(-10deg)} to{opacity:1; transform:none}}
+@keyframes act-no{from{opacity:0; transform:scale(.55) rotate(-10deg)} to{opacity:1; transform:none}}
 @keyframes act-pop{from{opacity:0; transform:scale(.4)} to{opacity:1; transform:none}}
 .pager button.intro{width:11px; height:11px; border-radius:2px; transform:rotate(45deg); background:var(--rule); border:none; margin:0 4px}
 .pager button.intro[aria-current="step"]{background:var(--rubric)}
@@ -232,7 +231,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: a laptop browser or the projector at 720p */
 @media (max-height: 760px){
   .scene{padding:12px 22px 14px}
-  .scene-head .geez{font-size:30px}
+  .scene-head .scene-no{font-size:30px}
   .scene-head h2{font-size:25px}
   .scene-inner{gap:10px; padding-top:8px}
   .fcard{padding:10px 14px}
@@ -263,7 +262,7 @@ button.chip:hover{border-color:var(--rubric)}
   .steps i{width:6px; height:6px}
   .scene{padding:10px 10px 12px}
   .scene-head{gap:10px}
-  .scene-head .geez{font-size:24px}
+  .scene-head .scene-no{font-size:24px}
   .scene-head h2{font-size:21px}
   .scene-inner{gap:10px; padding-top:8px}
   .say{font-size:14.5px}
@@ -1772,13 +1771,6 @@ button.chip:hover{border-color:var(--rubric)}
 
   var MINUS = "−";
   var SVGNS = "http://www.w3.org/2000/svg";
-  var DIG = ["", "፩", "፪", "፫", "፬", "፭", "፮", "፯", "፰", "፱"];
-  // Ge'ez numerals 1 to 99: the sign of the tens, then the digit (21 is the sign of 20, then the sign of 1).
-  var TENS = ["", "\u1372", "\u1373", "\u1374", "\u1375", "\u1376", "\u1377", "\u1378", "\u1379", "\u137A"];
-  function geez(n) {
-    if (n >= 1 && n <= 99 && n === Math.floor(n)) return TENS[Math.floor(n / 10)] + DIG[n % 10];
-    return String(n);
-  }
 
   /* DATA. Invented for the lesson: the profiles, the critic's answers and the ratings are not real data.
      The notebook uses the same numbers (notebook/data.py; notebook/build.py stops if the two disagree).
@@ -2256,7 +2248,7 @@ button.chip:hover{border-color:var(--rubric)}
       act: a, title: ACT_NAMES[a], intro: true,
       build: function (inner) {
         var card = el("div", "act-card" + (info.optional ? " opt" : ""));
-        var g = el("div", "act-geez", geez(info.num || a));
+        var g = el("div", "act-no", String(info.num || a));
         g.setAttribute("aria-hidden", "true");
         card.appendChild(g);
         card.appendChild(el("p", "act-kicker", info.kicker));
@@ -2456,7 +2448,7 @@ button.chip:hover{border-color:var(--rubric)}
       sec.dataset.act = String(s.act);
       sec.setAttribute("aria-labelledby", "h-" + s.key);
       var head = el("header", "scene-head");
-      var g = el("span", "geez", s.intro || s.python ? "" : geez(s.num));
+      var g = el("span", "scene-no", s.intro || s.python ? "" : String(s.num));
       g.setAttribute("aria-hidden", "true");
       head.appendChild(g);
       var h = el("h2", "", s.title);
@@ -2476,7 +2468,7 @@ button.chip:hover{border-color:var(--rubric)}
         groups[s.act].title = ACT_NAMES[s.act];
         nav.appendChild(groups[s.act]);
       }
-      var b = el("button", s.intro ? "intro" : s.python ? "py" : "", s.intro || s.python ? "" : geez(s.num));
+      var b = el("button", s.intro ? "intro" : s.python ? "py" : "", s.intro || s.python ? "" : String(s.num));
       b.type = "button";
       b.title = s.intro ? ACT_NAMES[s.act] : s.title;
       b.setAttribute("aria-label", s.intro ? ACT_NAMES[s.act] : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
@@ -2517,7 +2509,7 @@ button.chip:hover{border-color:var(--rubric)}
     matches: matches, longName: longName,
     // helpers
     el: el, num: num, dec: dec, signed: signed, word: word, markName: markName, spoken: spoken, mark: mark, vote: vote,
-    pic: pic, chip: chip, filmCard: filmCard, table: table, fill: fill, reveal: reveal, geez: geez,
+    pic: pic, chip: chip, filmCard: filmCard, table: table, fill: fill, reveal: reveal,
     reducedMotion: reduced,
     // engine
     define: define, start: start, go: go, next: next, back: back,
