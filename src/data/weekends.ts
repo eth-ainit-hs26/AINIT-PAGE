@@ -507,6 +507,7 @@ export const weekends: Weekend[] = [
         links: [
           { label: "Part 1+2", url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
           { label: "Part 3+4 (Optional)", url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
+          { label: "Recommendation System", url: colab('w2-cx-public', '02_cx_recsys_student.ipynb') },
         ]
       },
       { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
@@ -586,6 +587,7 @@ export const weekends: Weekend[] = [
       { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb')},
       { group: 'Coding exercises', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
       { group: 'Coding exercises', label: 'Matrix factorization (Part 3+4 (Optional))', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
+      { group: 'Coding exercises', label: 'Recommendation System', url: colab('w2-cx-public', '02_cx_recsys_student.ipynb') },
       { group: 'Coding exercises', label: 'Bandits: Estimates', url: colab('w2-cx-public', '03_cx_bandits_1_estimates_student.ipynb') },
       { group: 'Coding exercises', label: 'Bandits: Random', url: colab('w2-cx-public', '03_cx_bandits_2_random_student.ipynb') },
       { group: 'Coding exercises', label: 'Bandits: Explore-then-exploit', url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_student.ipynb') },
