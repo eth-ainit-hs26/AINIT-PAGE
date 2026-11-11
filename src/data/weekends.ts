@@ -469,7 +469,11 @@ export const weekends: Weekend[] = [
         time: '08:15',
         title: 'The inner product and nearest neighbors',
         type: 'lecture',
+        // The cold intro "Birds with the same wings" (Zhanguo ce, Qi 3), from cold-intro-deck/ of the public
+        // repository eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's instruction of 2026-11-11.
         links: [
+          { label: 'Cold intro', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
+          { label: 'Cold intro handout', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-handout.pdf') },
           { label: 'Once Upon a Video Store (game)', url: viz(2, 'video-store') },
           { label: 'Cases: Etsy, Airbnb', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf') },
         ],
@@ -569,6 +573,8 @@ export const weekends: Weekend[] = [
       // The semester cheat sheet, also by the title on the home page: the three weekends on one A3 page, from
       // cheat-sheet/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11).
       { group: 'Cheat sheet', label: 'The semester on one page, all three weekends', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
+      { group: 'Lecture slides', label: 'The inner product and nearest neighbors, cold intro: Birds with the same wings', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
+      { group: 'Lecture slides', label: 'The inner product and nearest neighbors, cold intro (Handout)', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-handout.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors', url: SOON },
       { group: 'Lecture slides', label: 'Matrix product and matrix factorization', url: SOON },
       { group: 'Lecture slides', label: 'Bandits', url: SOON },
