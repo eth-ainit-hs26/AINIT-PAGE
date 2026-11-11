@@ -316,7 +316,11 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* 2. THE CONVERSION: the mark folds away like the flap of a station board and its number unfolds with a ring
    in its colour. The motions themselves are in notation.js (Web Animations); this keeps the number on top. */
-.nt-n.nt-flip-in{position:relative; z-index:2}
+.nt-n.nt-flip-in, .vote.nt-flip-in{position:relative; z-index:2}
+/* a mark that unfolds in a wave (N.flipWave) rings in its own colour, as a number does */
+.vote.nt-flip-in{color:var(--muted)}
+.vote.nt-flip-in[data-r="1"], .vote.nt-flip-in[data-r="2"]{color:var(--like)}
+.vote.nt-flip-in[data-r="-1"], .vote.nt-flip-in[data-r="-2"]{color:var(--dislike)}
 
 /* 3 and 4. VECTORS AND STACKS: tables whose rows are customers and whose columns are films */
 .nt-wrap{position:relative; display:inline-block; max-width:100%; vertical-align:top}
@@ -807,24 +811,20 @@ button.chip:hover{border-color:var(--rubric)}
 /* Act 2 of Once Upon a Video Store: Converting ratings into numbers. Owner: the act 2 agent. Class names start
    with a2-. The card of five levels is tinted column by column: blue for the two ticks and the tick, grey for
    neutral, orange for the cross and the two crosses, the doubled marks a shade stronger. Its rows since version 4:
-   stars, words, marks, numbers, customers. */
+   stars, words, marks, numbers. The twin table shows the same stars, then marks, then numbers (version 5). */
 
 .a2-say{font-size:20px; max-width:64ch}
 .a2-say b{color:var(--rubric); font-weight:600}
 .a2-big{font-size:31px; font-weight:600; line-height:1.18; text-align:center; max-width:32ch; text-wrap:balance; justify-self:center}
 .a2-big b{color:var(--rubric)}
-.a2-big .a2-line{display:block}
 @keyframes a2-pop{from{opacity:0; transform:translateY(-10px) scale(.7)} to{opacity:1; transform:none}}
 @keyframes a2-rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
 /* shades: the card */
 .a2-sh{display:grid; gap:16px; width:100%; max-width:1060px; margin:0 auto; justify-items:center}
 .a2-card{width:100%; border:2px solid var(--rule); border-radius:20px; background:var(--bg); padding:12px 18px 18px; display:grid; gap:10px}
-.a2-card-head{display:flex; align-items:center; justify-content:space-between; gap:8px 14px; flex-wrap:wrap; min-height:44px}
+.a2-card-head{display:flex; align-items:center; justify-content:flex-end; gap:8px 14px; flex-wrap:wrap; min-height:44px}
 .a2-card-q{font-size:25px; font-weight:600; font-style:italic; color:var(--rubric); line-height:1.1}
-.a2-card-film .chip{font-size:20px; padding:3px 16px 3px 3px; border-width:2px}
-.a2-card-film .chip .pic{--s:36px}
-.a2-sh[data-k="0"] .a2-card-film, .a2-sh[data-k="1"] .a2-card-film, .a2-sh[data-k="2"] .a2-card-film{visibility:hidden}
 .a2-grid{display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); column-gap:12px}
 .a2-cell{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:6px 6px; min-width:0}
 .a2-cell[data-r="2"]{background:var(--like-bg2)}
@@ -832,9 +832,10 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-cell[data-r="0"]{background:color-mix(in srgb, var(--muted) 14%, var(--leaf))}
 .a2-cell[data-r="-1"]{background:var(--dislike-bg)}
 .a2-cell[data-r="-2"]{background:var(--dislike-bg2)}
-/* the stars: five per column, the rating filled in gold, the rest empty */
-.a2-sh{--a2-gold:#D99608; --a2-star:22px}
-:root[data-theme="dark"] .a2-sh{--a2-gold:#F0C24B}
+/* the stars: five per rating, the rating filled in gold, the rest empty (the card, and the twin table's first step) */
+.a2-sh, .a2-tw{--a2-gold:#D99608}
+:root[data-theme="dark"] .a2-sh, :root[data-theme="dark"] .a2-tw{--a2-gold:#F0C24B}
+.a2-sh{--a2-star:22px}
 .a2-g-st{border-radius:18px 18px 0 0; padding-top:16px; padding-bottom:4px}
 .a2-stars{display:inline-flex; gap:2px; line-height:0}
 .a2-star{width:var(--a2-star); height:var(--a2-star); fill:none; stroke:var(--a2-gold); stroke-width:1.7; stroke-linejoin:round}
@@ -845,44 +846,13 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-g-mk .vote .mk.tick2, .a2-g-mk .vote .mk.cross2{width:48px}
 .a2-mname{font-size:16.5px; color:var(--muted); font-variant-caps:all-small-caps; letter-spacing:.06em; font-weight:600; line-height:1.1}
 .a2-g-wd{font-size:25px; font-weight:600; line-height:1.1; padding-bottom:14px}
-.a2-g-who{padding-bottom:14px}
-.a2-g-who .chip{font-size:19px; padding:3px 13px 3px 3px; border-width:2px}
-.a2-g-who .chip .pic{--s:32px}
 /* the number row: the notation's cells and slots (Store.N), sized here through its custom properties */
 .a2-g-num{padding-bottom:16px; --nt-w:62px; --nt-h:52px; --nt-fs:32px}
 /* the rows arrive one step at a time; the last row shown rounds the bottom of the columns */
-.a2-sh[data-k="0"] .a2-g-mk, .a2-sh[data-k="0"] .a2-g-num, .a2-sh[data-k="0"] .a2-g-who,
-.a2-sh[data-k="1"] .a2-g-num, .a2-sh[data-k="1"] .a2-g-who, .a2-sh[data-k="2"] .a2-g-who{display:none}
-.a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-mk, .a2-sh[data-k="2"] .a2-g-num,
-.a2-sh[data-k="3"] .a2-g-who{border-radius:0 0 18px 18px}
-.a2-sh.a2-popm .a2-g-mk .vote, .a2-sh.a2-pop .a2-g-who .chip, .a2-sh.a2-popn .a2-g-num .nt-n{animation:a2-pop .45s cubic-bezier(.3,.75,.3,1.25) both;
+.a2-sh[data-k="0"] .a2-g-mk, .a2-sh[data-k="0"] .a2-g-num, .a2-sh[data-k="1"] .a2-g-num{display:none}
+.a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-mk, .a2-sh[data-k="2"] .a2-g-num{border-radius:0 0 18px 18px}
+.a2-sh.a2-popm .a2-g-mk .vote, .a2-sh.a2-popn .a2-g-num .nt-n{animation:a2-pop .45s cubic-bezier(.3,.75,.3,1.25) both;
   animation-delay:calc(var(--a2-i, 0) * 110ms)}
-
-/* shades: two pairs on Jaws */
-.a2-pairs{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:24px; width:100%}
-.a2-pair{border:2px solid var(--rule); border-radius:20px; background:var(--bg); padding:16px 20px 16px; display:grid; gap:12px; align-content:start; min-width:0}
-.a2-pair-who{display:grid; gap:10px}
-.a2-pr{display:flex; align-items:center; gap:14px; min-width:0}
-.a2-pr .chip{font-size:21px; padding:3px 15px 3px 3px; border-width:2px; min-width:104px}
-.a2-pr .chip .pic{--s:36px}
-.a2-pr .vote{min-width:68px; padding:7px 9px}
-.a2-pr .vote .mk{width:30px; height:30px}
-.a2-pr .vote .mk.tick2, .a2-pr .vote .mk.cross2{width:38px}
-.a2-pr-w{font-size:23px}
-.a2-cnt{display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px; border-top:1.5px dashed var(--rule); padding-top:10px; font-size:21px}
-.a2-cnt-q{color:var(--muted)}
-.a2-cnt-a{font-size:30px; color:var(--ochre); line-height:1}
-.a2-cnt-s{margin-left:auto; font-variant-caps:all-small-caps; letter-spacing:.06em; font-weight:600; color:var(--ochre);
-  border:1.5px solid var(--ochre); border-radius:999px; padding:1px 13px 3px; font-size:19px}
-.a2-truth{border-radius:13px; padding:8px 14px 10px; font-size:21px; line-height:1.3; visibility:hidden; border:1.5px solid}
-.a2-pair.agree .a2-truth{background:var(--like-bg); border-color:var(--like)}
-.a2-pair.agree .a2-truth b{color:var(--like)}
-.a2-pair.oppose .a2-truth{background:var(--dislike-bg); border-color:var(--dislike)}
-.a2-pair.oppose .a2-truth b{color:var(--dislike)}
-.a2-sh[data-k="5"] .a2-truth{visibility:visible; animation:a2-rise .4s ease both}
-.a2-sh[data-k="5"] .a2-pair.oppose .a2-truth{animation-delay:.18s}
-.a2-sh[data-k="4"] .a2-big{color:var(--rubric)}
-.a2-sh[data-k="5"] .a2-big{animation:a2-rise .45s ease .3s both}
 
 /* twin: the table with tappable names, the question beside it */
 .a2-tw{width:100%; max-width:1110px; margin:0 auto}
@@ -898,12 +868,29 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-tt .rt-c .vote .mk, .a2-ct .rt-c .vote .mk{width:24px; height:24px}
 .a2-tt .rt-c .vote .mk.tick2, .a2-tt .rt-c .vote .mk.cross2,
 .a2-ct .rt-c .vote .mk.tick2, .a2-ct .rt-c .vote .mk.cross2{width:30px}
-.a2-tw[data-k="0"]:not(.is-picked) .a2-tt tbody tr[data-p]:not(.rt-new){cursor:pointer}
-.a2-tw[data-k="0"]:not(.is-picked) .a2-tt tbody tr[data-p]:not(.rt-new):hover .chip{border-color:var(--rubric); box-shadow:0 0 0 2px var(--rubric)}
-.a2-tw[data-k="0"]:not(.is-picked) .a2-tt tbody tr[data-p]:not(.rt-new):hover .vote{border-color:var(--rubric)}
+.a2-tw.a2-ready[data-k="1"]:not(.is-picked) .a2-tt tbody tr[data-p]:not(.rt-new){cursor:pointer}
+.a2-tw.a2-ready[data-k="1"]:not(.is-picked) .a2-tt tbody tr[data-p]:not(.rt-new):hover .chip{border-color:var(--rubric); box-shadow:0 0 0 2px var(--rubric)}
+.a2-tw.a2-ready[data-k="1"]:not(.is-picked) .a2-tt tbody tr[data-p]:not(.rt-new):hover .nt-n{border-color:var(--rubric)}
 .a2-tt button.chip:disabled{cursor:default; opacity:1}
 .a2-tt .chip.a2-mine{border-style:dashed; border-color:var(--ochre); box-shadow:0 0 0 1.5px var(--ochre)}
-.a2-tw[data-k="1"] .a2-tt tr.dim.a2-keep{opacity:.55}
+.a2-tw[data-k="2"] .a2-tt tr.dim.a2-keep{opacity:.55}
+/* a highlighted row: its numbers ringed, as its marks were (core.css rings the marks) */
+.a2-tt tr.on td .nt-n{box-shadow:0 0 0 2.5px var(--rubric)}
+
+/* twin, step 1: every rating as stars, lying over the place of its mark, so that no cell moves when the stars
+   become marks and the marks become numbers (version 5). A film column is at least as wide as five stars. */
+.a2-tw{--a2-star:15px}
+.a2-tt td.rt-c{position:relative; width:calc(5 * var(--a2-star) + 12px)}
+.a2-tst{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none}
+.a2-tst .a2-stars{gap:1px}
+.a2-tt td.rt-c:not(.a2-st) .a2-tst, .a2-tt td.rt-c.a2-st .vote{visibility:hidden}
+/* steps 1 and 2: the line beside the stars and the waves, then the question, in one place */
+.a2-ask{display:grid; align-items:center}
+.a2-ask > *{grid-area:1 / 1; min-width:0}
+.a2-ask:not(.a2-asking) .a2-q1, .a2-ask.a2-asking .a2-lead{visibility:hidden}
+.a2-lead{font-size:29px; line-height:1.25; text-wrap:balance}
+.a2-lead b{color:var(--rubric)}
+.a2-lead.a2-in, .a2-q1.a2-in{animation:a2-rise .4s ease both}
 
 .a2-qbox{display:grid; gap:12px; align-content:center}
 .a2-q{font-size:31px; line-height:1.15}
@@ -960,9 +947,8 @@ button.chip:hover{border-color:var(--rubric)}
 .a2-next{color:var(--muted); font-style:italic; font-size:19px; margin-top:-8px}
 
 @media (prefers-reduced-motion: reduce){
-  .a2-sh.a2-popm .a2-g-mk .vote, .a2-sh.a2-pop .a2-g-who .chip, .a2-sh.a2-popn .a2-g-num .nt-n,
-  .a2-sh[data-k="5"] .a2-truth, .a2-sh[data-k="5"] .a2-big,
-  .a2-ans.a2-in{animation:none}
+  .a2-sh.a2-popm .a2-g-mk .vote, .a2-sh.a2-popn .a2-g-num .nt-n,
+  .a2-lead.a2-in, .a2-q1.a2-in, .a2-ans.a2-in{animation:none}
   .a2-opt{transition:none}
 }
 
@@ -980,12 +966,9 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-g-mk .vote .mk{width:33px; height:33px}
   .a2-g-mk .vote .mk.tick2, .a2-g-mk .vote .mk.cross2{width:42px}
   .a2-g-wd{font-size:23px; padding-bottom:10px}
-  .a2-g-who{padding-bottom:10px}
   .a2-g-num{padding-bottom:12px; --nt-h:46px; --nt-fs:29px}
-  .a2-pair{padding:12px 18px 14px; gap:10px}
-  .a2-pr .vote .mk{width:27px; height:27px}
-  .a2-pr .vote .mk.tick2, .a2-pr .vote .mk.cross2{width:34px}
   .a2-tt{border-spacing:8px 4px}
+  .a2-lead{font-size:26px}
   .a2-q{font-size:28px}
   .a2-opt{font-size:19px; padding:7px 14px 8px 9px}
   .a2-opts{gap:8px}
@@ -1002,13 +985,9 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-card-q{font-size:28px}
   .a2-g-wd{font-size:28px}
   .a2-mname{font-size:18px}
-  .a2-g-who .chip{font-size:21px}
-  .a2-g-who .chip .pic{--s:36px}
   .a2-g-num{--nt-w:70px; --nt-h:58px; --nt-fs:36px}
-  .a2-pr .chip{font-size:23px}
-  .a2-pr-w{font-size:25px}
-  .a2-cnt{font-size:23px}
-  .a2-truth{font-size:23px}
+  .a2-tw{--a2-star:17px}
+  .a2-lead{font-size:32px}
   .a2-tw-main{grid-template-columns:auto minmax(0,540px); gap:24px 48px}
   .a2-tt{border-spacing:10px 8px}
   .a2-tt .rt-who .chip{font-size:20px}
@@ -1032,6 +1011,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* Narrow screens: the question below the table */
 @media (max-width: 900px){
   .a2-tw-main{grid-template-columns:minmax(0,1fr); gap:10px}
+  .a2-lead{align-self:start; padding-top:6px}
   .a2-cmps{gap:14px}
 }
 
@@ -1043,8 +1023,6 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-card{padding:8px 6px 10px; gap:6px; border-radius:14px; border-width:1.5px}
   .a2-card-head{min-height:32px; padding:0 4px; gap:6px}
   .a2-card-q{font-size:17px}
-  .a2-card-film .chip{font-size:15px; padding:2px 10px 2px 2px; border-width:1.5px}
-  .a2-card-film .chip .pic{--s:26px}
   .a2-grid{column-gap:4px}
   .a2-cell{padding:4px 2px}
   .a2-sh{--a2-star:11px}
@@ -1057,27 +1035,8 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-g-mk .vote .mk.tick2, .a2-g-mk .vote .mk.cross2{width:27px}
   .a2-mname{font-size:12px; letter-spacing:.02em}
   .a2-g-wd{font-size:14.5px; padding-bottom:8px; line-height:1.1}
-  .a2-g-who{padding-bottom:8px}
-  .a2-g-who .chip{font-size:12.5px; gap:3px; padding:1px 6px 1px 1px; border-width:1.5px}
-  .a2-g-who .chip .pic{--s:20px}
   .a2-g-num{padding-bottom:10px; --nt-w:40px; --nt-h:36px; --nt-fs:21px}
-  .a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-mk, .a2-sh[data-k="2"] .a2-g-num,
-  .a2-sh[data-k="3"] .a2-g-who{border-radius:0 0 12px 12px}
-
-  .a2-pairs{grid-template-columns:minmax(0,1fr); gap:8px}
-  .a2-pair{padding:8px 10px 10px; gap:6px; border-radius:14px; border-width:1.5px}
-  .a2-pair-who{gap:5px}
-  .a2-pr{gap:8px}
-  .a2-pr .chip{font-size:15px; min-width:72px; padding:2px 10px 2px 2px; border-width:1.5px}
-  .a2-pr .chip .pic{--s:24px}
-  .a2-pr .vote{min-width:46px; padding:4px 6px}
-  .a2-pr .vote .mk{width:20px; height:20px}
-  .a2-pr .vote .mk.tick2, .a2-pr .vote .mk.cross2{width:25px}
-  .a2-pr-w{font-size:16px}
-  .a2-cnt{font-size:15.5px; padding-top:6px; gap:2px 8px}
-  .a2-cnt-a{font-size:21px}
-  .a2-cnt-s{font-size:14.5px; padding:0 9px 2px}
-  .a2-truth{font-size:15.5px; padding:5px 10px 6px; border-radius:10px}
+  .a2-sh[data-k="0"] .a2-g-wd, .a2-sh[data-k="1"] .a2-g-mk, .a2-sh[data-k="2"] .a2-g-num{border-radius:0 0 12px 12px}
 
   .a2-tt{border-spacing:4px 4px}
   .a2-tt .rt-who .chip{font-size:14.5px; min-width:64px; padding:1px 8px 1px 1px; border-width:1.5px}
@@ -1088,7 +1047,9 @@ button.chip:hover{border-color:var(--rubric)}
   .a2-tt .rt-c .vote .mk, .a2-ct .rt-c .vote .mk{width:19px; height:19px}
   .a2-tt .rt-c .vote .mk.tick2, .a2-tt .rt-c .vote .mk.cross2,
   .a2-ct .rt-c .vote .mk.tick2, .a2-ct .rt-c .vote .mk.cross2{width:24px}
-  .a2-tw[data-k="1"] .a2-tt tr.dim:not(.a2-keep){display:none}
+  .a2-tw[data-k="2"] .a2-tt tr.dim:not(.a2-keep){display:none}
+  .a2-tw{--a2-star:10px}
+  .a2-lead{font-size:18px; text-align:center}
   .a2-qbox{gap:6px}
   .a2-q{font-size:20px; text-align:center}
   .a2-hint{font-size:14.5px; text-align:center; margin-top:-4px}
@@ -1317,14 +1278,15 @@ button.chip:hover{border-color:var(--rubric)}
 </style>
 <style>
 /* Act 4 of Once Upon a Video Store: The nearest neighbour (owner: the act 2 agent). Classes start with a4-.
-   The two boards, the number cells and the key belong to the notation (notation.css). This file lays them out,
-   sizes them through the notation's custom properties, and keeps the Love Actually column hidden until the
-   prediction (step 5). The last part styles the notebook slide (scene notebook). */
+   The board and the number cells belong to the notation (notation.css). This file lays the board out, sizes it
+   through the notation's custom properties, and sets the Love Actually column apart on the right (version 5).
+   The last part styles the notebook slide (scene notebook). */
 .a4-near{display:grid; justify-items:center; align-content:start; gap:14px; text-align:center}
 .a4-cap{margin:0; max-width:40em; font-size:21px; line-height:1.35; text-wrap:balance}
+.a4-cap .a4-line{display:block}
 .a4-term{color:var(--rubric)}
 .a4-film{font-style:italic}
-.a4-bd, .a4-one{display:grid; justify-items:center; gap:12px; max-width:100%}
+.a4-bd{display:grid; justify-items:center; gap:12px; max-width:100%}
 .a4-bd{position:relative}
 .a4-bar{display:flex; flex-wrap:wrap; justify-content:center; gap:10px}
 /* the buttons and the result share one place, so the result appears where the Copy button was */
@@ -1334,23 +1296,19 @@ button.chip:hover{border-color:var(--rubric)}
 .a4-near[data-k="0"] .nt-iph, .a4-near[data-k="1"] .nt-iph{visibility:hidden}
 .a4-gone{visibility:hidden}
 .a4-wait{visibility:hidden}
-.a4-res, .a4-rule{display:grid; justify-items:center; gap:6px}
+.a4-res{display:grid; justify-items:center; gap:6px}
 .a4-say{margin:0; max-width:38em; font-size:20px; line-height:1.35; text-wrap:balance}
 .a4-later{margin:0; font-size:17px; color:var(--muted)}
 .a4-inl{--nt-w:40px; --nt-h:30px; --nt-fs:18px; margin:0 3px}
-.a4-big{margin:4px 0 0; max-width:30em; font-size:26px; font-weight:600; line-height:1.25; text-wrap:balance}
 .a4-res:not(.a4-wait) .a4-say, .a4-say.a4-in{animation:a4-rise .5s ease both}
 @keyframes a4-rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
 /* The copy of Kai's number on its way up to Vera's "?" (in the page's own layer, above the leaf) */
 .a4-ghost{position:fixed; margin:0; z-index:60; pointer-events:none; box-shadow:0 6px 16px rgba(42,36,50,.22)}
 
-/* Love Actually waits for the prediction; then it fades in where it always was, so no row moves */
-.a4-near .nt-board [data-f="love"]{transition:opacity .5s ease, visibility .5s}
-.a4-near:not(.a4-love) .nt-board [data-f="love"]{opacity:0; visibility:hidden}
-
-/* Act 1 again: the key, then Zoe's board */
-.a4-key{margin-top:-2px}
+/* Love Actually stands apart on the right, past the inner product column, from the first step on (Carlos,
+   2026-11-11: "far apart to the right, so it doesn't cause confusions when we do the inner product calculations") */
+.a4-near .nt-board [data-f="love"]{padding-left:48px}
 
 /* The notebook slide: the three functions, the challenge, Open in Colab */
 .a4-nb{display:grid; justify-items:center; align-content:center; gap:18px; min-height:100%; text-align:center}
@@ -1370,7 +1328,7 @@ button.chip:hover{border-color:var(--rubric)}
   .a4-nb{gap:14px}
   .a4-cap{font-size:20px}
   .a4-say{font-size:19px}
-  .a4-big{font-size:23px}
+  .a4-near .nt-board [data-f="love"]{padding-left:40px}
 }
 @media (max-height: 760px) and (min-width: 561px){
   .a4-near .nt-board.nt-tab, .a4-near .nt-boardw{--nt-h:31px; --nt-sy:3px; --nt-fs:20px; --nt-xg:14px; --nt-rg:6px}
@@ -1381,7 +1339,7 @@ button.chip:hover{border-color:var(--rubric)}
   .a4-near{gap:18px}
   .a4-cap{font-size:23px}
   .a4-say{font-size:22px}
-  .a4-big{font-size:29px}
+  .a4-near .nt-board [data-f="love"]{padding-left:60px}
   .a4-near .nt-board.nt-tab, .a4-near .nt-boardw{--nt-w:62px; --nt-h:44px; --nt-fs:25px; --nt-sx:14px; --nt-xg:20px; --nt-rg:9px; --nt-eqw:26px}
   .a4-near .nt-board .rt-who{font-size:20px}
   .a4-nb{gap:22px}
@@ -1396,9 +1354,8 @@ button.chip:hover{border-color:var(--rubric)}
   .a4-say{font-size:16px; line-height:1.3}
   .a4-later{font-size:14.5px}
   .a4-inl{--nt-w:32px; --nt-h:26px; --nt-fs:15px}
-  .a4-big{font-size:19px}
-  .a4-bd, .a4-one{gap:7px}
-  .a4-big{margin-top:0}
+  .a4-bd{gap:7px}
+  .a4-near .nt-board [data-f="love"]{padding-left:14px}
   .a4-nb{gap:12px}
   .a4-tasks{grid-template-columns:auto minmax(0, 1fr); gap:4px 8px}
   .a4-tn{font-size:16px; grid-row:span 2}
@@ -1407,7 +1364,6 @@ button.chip:hover{border-color:var(--rubric)}
   .a4-colab{font-size:17px; padding:6px 22px 8px}
 }
 @media (prefers-reduced-motion: reduce){
-  .a4-near .nt-board [data-f="love"]{transition:none}
   .a4-res:not(.a4-wait) .a4-say, .a4-say.a4-in{animation:none}
 }
 </style>
@@ -1525,9 +1481,7 @@ button.chip:hover{border-color:var(--rubric)}
   var ROUND1 = { people: ["lea", "max", "nina", "omar"], films: ["jaws", "shining", "notting", "love"],
                  newcomer: "zoe", unseen: "love" };
   var ROUND2 = { people: ["ivo", "pia", "tom", "kai", "jana", "rosa"], films: ["jaws", "shining", "notting"],
-                 newcomer: "vera", unseen: "love",
-                 // Scene "Five marks": one film and five customers, each with a different mark, love to hate.
-                 shades: { film: "jaws", people: ["pia", "kai", "jana", "tom", "rosa"] } };
+                 newcomer: "vera", unseen: "love" };
 
   // Act 3 teaches (Carlos, 2026-11-03, replacing a guessing puzzle): worked examples are shown slowly,
   // then the participants work the next ones themselves. Each pair is [top row, bottom row].
@@ -1982,6 +1936,7 @@ button.chip:hover{border-color:var(--rubric)}
    N.legend(levels, opts)     the key: each mark, "=", its number (opts.words adds loved it, liked it, ...)
    N.convert(target, opts)    marks become numbers in a split-flap wave; returns { done, finish(), cancel() }
    N.unconvert(target)        numbers made by convert become marks again, at once (for Back)
+   N.flipWave(items, opts)    the same wave for any picture that becomes another (act 2: stars become marks)
    N.vector(p, films, opts)   a customer as a row: name on the left, numbers in film order, film pictures above
    N.stack(opts)              two rows stacked; the products flow out film by film, then the sum (a controller)
    N.board(opts)              act 4: the newcomer on top, the regulars below, an inner product column, sorting;
@@ -2305,6 +2260,57 @@ button.chip:hover{border-color:var(--rubric)}
       if (c.parentNode) c.parentNode.replaceChild(v, c);
     });
     return cells.length;
+  }
+  // The same split-flap wave for any picture that becomes another (version 5: act 2's stars become marks, before
+  // convert turns the marks into numbers). items: [{ face, swap }]. Each face folds away; swap() puts the new picture
+  // in its place and returns it; the new picture unfolds with the ring. In a table the wave runs along the diagonals.
+  // Returns { done, finish(), cancel() }: finish swaps the rest at once, cancel leaves every face as it is.
+  function diagonal(node, i) {
+    var td = node && node.closest ? node.closest("td, th") : null;
+    if (!td) return i;
+    var tr = td.parentNode, sec = tr.parentNode && tr.parentNode.tagName === "TBODY" ? 1 : 0;
+    return (typeof tr.sectionRowIndex === "number" ? tr.sectionRowIndex : 0) + td.cellIndex + sec;
+  }
+  function flipWave(items, opts) {
+    opts = opts || {};
+    var pending = items.slice(), made = [], timers = [], resolve, pace = opts.pace || 1;
+    var H = {};
+    H.done = new Promise(function (r) { resolve = r; });
+    function now(it) {
+      var i = pending.indexOf(it);
+      if (i < 0) return null;
+      pending.splice(i, 1);
+      var c = it.swap();
+      stopAnims(it.face);
+      if (c) made.push(c);
+      return c;
+    }
+    function clean() {
+      items.forEach(function (it) { stopAnims(it.face); });
+      made.forEach(function (c) { c.classList.remove("nt-flip-in"); stopAnims(c); });
+    }
+    function end(ok) { timers.forEach(clearTimeout); timers = []; resolve(ok); }
+    H.finish = function () { pending.slice().forEach(now); clean(); end(true); };
+    H.cancel = function () { pending = []; clean(); end(false); };
+    if (opts.animate === false || !MOTION || !items.length) { H.finish(); return H; }
+    var keys = items.map(function (it, i) { return diagonal(it.face, i); });
+    var min = Math.min.apply(null, keys);
+    var gap = (opts.stagger !== undefined ? opts.stagger : TEMPO.wave) * pace;
+    var fo = TEMPO.flipOut * pace, fi = TEMPO.flipIn * pace, rp = TEMPO.ripple * pace, last = 0;
+    items.forEach(function (it, i) {
+      var t0 = (keys[i] - min) * gap;
+      timers.push(later(function () { if (pending.indexOf(it) >= 0) flash(it.face, "fold", fo, "forwards"); }, t0));
+      timers.push(later(function () {
+        var c = now(it);
+        if (!c) return;
+        c.classList.add("nt-flip-in");
+        flash(c, "unfold", fi);
+        flash(c, "ripple", rp);
+      }, t0 + fo));
+      last = Math.max(last, t0 + fo + Math.max(fi, rp));
+    });
+    timers.push(later(function () { clean(); end(true); }, last + 40));
+    return H;
   }
 
   /* 3. ROWS: a customer as a vector */
@@ -2949,7 +2955,7 @@ button.chip:hover{border-color:var(--rubric)}
   S.N = {
     TIMES: TIMES, PLUS: PLUS, EQUALS: EQUALS, WORDS: WORDS, TEMPO: TEMPO,
     tone: tone, cell: cell, setCell: setCell, slot: slot, setSlot: setSlot, draft: draft, fill: fill, legend: legend,
-    convert: convert, unconvert: unconvert,
+    convert: convert, unconvert: unconvert, flipWave: flipWave,
     vector: vector, stack: stack, board: board,
     freeze: freeze
   };
@@ -3668,12 +3674,15 @@ button.chip:hover{border-color:var(--rubric)}
    Owner: the act 2 agent (see BRIEF.md). Class names start with a2-.
    The act opens with the scene numbers of act1.js (a tick is 1, a cross -1, the round 1 table becomes numbers); this
    file adds two scenes on round 2:
-     shades  version 4 (Carlos, 2026-11-10): people usually rate on five levels, drawn as stars; the store's five marks
-             are the same levels (five stars two ticks, one star two crosses); each mark gets its number, all five at
-             once (2, 1, 0, -1, -2); five customers rate Jaws, one mark each; then why counting exact matches breaks:
-             Pia and Kai, Pia and Rosa, the same count for a pair that agrees and for a pair that is opposite.
-     twin    the six regulars and Vera on three films, marks only. Tap the customer most similar to Vera (Kai); then
-             "Why Kai?", a second multiple choice; then Kai and Pia beside Vera, film by film, and the bridge to act 3.
+     shades  people usually rate on five levels, drawn as stars; the store's five marks are the same levels (five stars
+             two ticks, one star two crosses); each mark gets its number, all five at once (2, 1, 0, -1, -2).
+             Version 4 went on with "Five marks": five customers on Jaws and two pairs that counting could not tell
+             apart. Carlos dropped those three steps on 2026-11-11.
+     twin    version 5 (Carlos, 2026-11-11: "show first the stars, then the stars are converted into ticks and
+             crosses, then the ticks and crosses are converted into numbers"): the six regulars and Vera on three
+             films, in stars; on Next the stars become marks and the marks become numbers, two waves; then, in numbers
+             only, tap the customer most similar to Vera (Kai); "Why Kai?", a second multiple choice; then Kai and Pia
+             beside Vera, film by film, and the bridge to act 3.
    No globals. */
 (function () {
   "use strict";
@@ -3683,7 +3692,6 @@ button.chip:hover{border-color:var(--rubric)}
   var el = S.el;
   var motion = !S.reducedMotion;
   var R2 = S.ROUND2;
-  var SH = R2.shades;
   var VERA = R2.newcomer;
   // Vera's taste twin. The ratings in core.js make it Kai (inner product 6, the largest), and every line below
   // is written for him.
@@ -3709,27 +3717,15 @@ button.chip:hover{border-color:var(--rubric)}
     v.setAttribute("aria-hidden", "true");
     return v;
   }
-  // The customer of the shades line who gave Jaws the mark r.
-  function giver(r) { return SH.people.filter(function (p) { return S.rating(p, SH.film) === r; })[0]; }
 
   /* SCENE: shades. The card is a grid of five columns, love on the left and hate on the right, built row by row so
-     the cells of a row line up: the stars and their words (step 1), the marks (step 2), the numbers (step 3), the
-     customers (step 4). Steps 5 and 6 swap the card for two pairs of customers on Jaws. */
+     the cells of a row line up: the stars and their words (step 1), the marks (step 2), the numbers (step 3). */
   var SHD = { last: null };
   var STARS = { "2": 5, "1": 4, "0": 3, "-1": 2, "-2": 1 };    // the natural mapping: five stars are two ticks
-  var SHADES_TITLE = ["From stars to numbers", "From stars to numbers", "From stars to numbers",
-                      "Five marks", "Five marks", "Five marks"];
   var SHADES_SAY = [
     function () { return ["People often rate a film on ", b("five levels"), ", from loved it to hated it, drawn as stars."]; },
     function () { return ["The video store draws the same five levels as ", b("marks"), "."]; },
-    function () { return ["Each mark becomes a ", b("number"), ". The stronger the opinion, the further from 0: above 0 for liking, below 0 for disliking."]; },
-    function () { return ["Five customers rate ", b("Jaws"), ", and each of them picks a different mark."]; },
-    function () { return ["Counting exact matches gives both pairs the same score: ", b("no match"), "."]; },
-    function () { return ["One pair agrees, the other is opposite, and counting gives both the same 0."]; }
-  ];
-  var SHADES_BIG = [null, null, null, null,
-    function () { return ["Are the two pairs equally similar?"]; },
-    function () { return [el("span", "a2-line", "Counting cannot see shades."), make("span", "a2-line", ["We need a ", b("better measure"), " of similarity."])]; }
+    function () { return ["Each mark becomes a ", b("number"), ". The stronger the opinion, the further from 0: above 0 for liking, below 0 for disliking."]; }
   ];
   // n of five stars, the rest drawn empty. Drawn here: a star is a rating's picture, never a number.
   var SVGNS = "http://www.w3.org/2000/svg";
@@ -3751,37 +3747,17 @@ button.chip:hover{border-color:var(--rubric)}
     return s;
   }
 
-  function pairCard(a, c, agree) {
-    var sec = el("section", "a2-pair " + (agree ? "agree" : "oppose"));
-    var two = el("div", "a2-pair-who");
-    [a, c].forEach(function (p) {
-      var r = S.rating(p, SH.film);
-      two.appendChild(make("div", "a2-pr", [S.chip(p), quietVote(r), el("span", "a2-pr-w", S.word(r))]));
-    });
-    sec.appendChild(two);
-    sec.appendChild(make("p", "a2-cnt", [el("span", "a2-cnt-q", "Same mark?"), b("No", "a2-cnt-a"),
-      el("span", "a2-cnt-s", "0 matches")]));
-    sec.appendChild(make("p", "a2-truth", agree
-      ? [b("They agree."), " Both liked Jaws."]
-      : [b("They disagree."), " One loved Jaws, the other hated it."]));
-    return sec;
-  }
-
   S.define("shades", {
     act: 2,
     title: "From stars to numbers",
-    steps: 6,
+    steps: 3,
     build: function (inner) {
       var root = el("div", "a2-sh");
       SHD.root = root;
       SHD.say = el("p", "bubble a2-say");
 
       var card = el("div", "a2-card");
-      SHD.card = card;
       var head = el("div", "a2-card-head");
-      SHD.film = el("span", "a2-card-film");
-      SHD.film.appendChild(S.chip(SH.film, { long: true }));
-      head.appendChild(SHD.film);
       head.appendChild(el("span", "a2-card-q", "How did you like it?"));
       card.appendChild(head);
 
@@ -3808,61 +3784,112 @@ button.chip:hover{border-color:var(--rubric)}
         n.setAttribute("aria-label", S.markName(r) + ": " + S.spoken(r));
         cell("a2-g-num", r).appendChild(n);
       });
-      S.LEVELS.forEach(function (r, i) {
-        var ch = S.chip(giver(r));
-        ch.style.setProperty("--a2-i", String(i));
-        cell("a2-g-who", r).appendChild(ch);
-      });
       card.appendChild(grid);
 
-      SHD.pairs = el("div", "a2-pairs");
-      SHD.pairs.appendChild(pairCard("pia", "kai", true));
-      SHD.pairs.appendChild(pairCard("pia", "rosa", false));
-      SHD.big = el("p", "a2-big");
-
-      put(root, [SHD.say, card, SHD.pairs, SHD.big]);
+      put(root, [SHD.say, card]);
       inner.appendChild(root);
     },
     enter: function () { SHD.last = null; },
-    step: function (k, api) {
+    step: function (k) {
       var from = SHD.last;
       SHD.last = k;
-      api.setTitle(SHADES_TITLE[k]);
       SHD.root.dataset.k = String(k);
-      SHD.card.hidden = k >= 4;
-      SHD.pairs.hidden = k < 4;
-      SHD.big.hidden = k < 4;
       setText(SHD.say, SHADES_SAY[k]());
-      if (SHADES_BIG[k]) setText(SHD.big, SHADES_BIG[k]());
       // Each new row pops in, column by column, when Next brings it.
-      SHD.root.classList.remove("a2-popm", "a2-popn", "a2-pop");
+      SHD.root.classList.remove("a2-popm", "a2-popn");
       if (motion && from === k - 1) {
         if (k === 1) replay(SHD.root, "a2-popm");
         if (k === 2) replay(SHD.root, "a2-popn");
-        if (k === 3) replay(SHD.root, "a2-pop");
       }
     }
   });
 
-  /* SCENE 6: twin. Step 1: tap the customer most similar to Vera (a row or its name); the answer shows only after
-     the tap. Step 2: "Why Kai?", three reasons. Step 3: Kai and Pia beside Vera, film by film, and the bridge. */
-  var TW = { k: 0, pick: null, why: null };
+  /* SCENE: twin. Step 1: the table in stars. Step 2: the stars become marks and the marks become numbers, two waves
+     (only when Next comes from step 1; any other arrival draws the numbers at once); then the question: tap the
+     customer most similar to Vera; the answer shows only after the tap. Step 3: "Why Kai?", three reasons. Step 4:
+     Kai and Pia beside Vera, film by film, and the bridge. From the question on, the ratings are numbers only. */
+  var TW = { k: -1, last: null, pick: null, why: null, ready: false, tok: 0, timers: [], h: null };
+  var WAVE_LEAD = 450;   // the line rises first, then its wave starts: one motion at a time (as in act 1's numbers)
+  var WAVE_REST = 600;   // between the two waves
+  var LEAD = [
+    function () { return ["Six regulars and a newcomer, ", b("Vera"), ", rate three films with stars."]; },
+    function () { return ["The stars become ", b("marks"), "."]; },
+    function () { return ["The marks become ", b("numbers"), "."]; }
+  ];
   var WHYNOT = {
     ivo: ["Ivo loved Jaws, like Vera, but he hated The Shining, which she liked."],
-    pia: ["Pia gives Vera's exact marks on Jaws and The Shining, but she ", b("loves Notting Hill"), ", which Vera dislikes."],
+    pia: ["Pia gives Vera's exact numbers on Jaws and The Shining, but she ", b("loves Notting Hill"), ", which Vera dislikes."],
     tom: ["Tom disliked Jaws and hated The Shining, and Vera enjoyed both. They agree only on Notting Hill."],
-    jana: ["Jana shares Vera's tick for The Shining. On the other two films she is neutral, so she tells us little."],
+    jana: ["Jana rates The Shining 1, like Vera. Her other two ratings are 0, so she tells us little."],
     rosa: ["Rosa is Vera's opposite: she hated Jaws, disliked The Shining and loved Notting Hill."]
   };
+  // Before the tap the answer box holds the longest answer, invisible, so that it keeps its height.
+  function plain(parts) { return parts.map(function (x) { return typeof x === "string" ? x : x.textContent; }).join(""); }
+  var LONGEST = Object.keys(WHYNOT).reduce(function (a, p) { return plain(WHYNOT[p]).length > plain(WHYNOT[a]).length ? p : a; });
   var WHY = [
-    { t: "Kai gives the same marks as Vera on the most films.", ok: false,
-      fb: ["Kai gives Vera's exact mark on ", b("no film"), ". Pia does on two, and she loves Notting Hill, which Vera dislikes."] },
+    { t: "Kai gives the same numbers as Vera on the most films.", ok: false,
+      fb: ["Kai gives Vera's exact number on ", b("no film"), ". Pia does on two, and she loves Notting Hill, which Vera dislikes."] },
     { t: "Kai likes what Vera likes and dislikes what Vera dislikes. Only how strongly differs.", ok: true,
       fb: ["Kai is on Vera's side on every film: he liked Jaws (she loved it), loved The Shining (she liked it) and hated Notting Hill (she disliked it)."] },
     { t: "Kai has the strongest opinions.", ok: false,
       fb: ["Ivo, Pia and Rosa have opinions just as strong, and Rosa is Vera's opposite."] }
   ];
   var BEST = String.fromCharCode(65 + WHY.map(function (w) { return w.ok; }).indexOf(true));
+
+  // Timers that a new step or leaving the scene cuts short; TW.h is the wave in flight.
+  function later(fn, ms) {
+    var me = TW.tok;
+    TW.timers.push(setTimeout(function () { if (me === TW.tok) fn(); }, ms));
+  }
+  function halt() {
+    TW.tok++;
+    TW.timers.forEach(clearTimeout);
+    TW.timers = [];
+    if (TW.h) { TW.h.cancel(); TW.h = null; }
+  }
+  // The table's three faces, drawn at once: 0 stars, 1 marks, 2 numbers. Each cell keeps its stars and its mark;
+  // the class a2-st says which one shows, and the notation turns the marks into numbers and back.
+  function faces(f) {
+    S.N.unconvert(TW.table);
+    TW.cells.forEach(function (td) { td.classList.toggle("a2-st", f === 0); });
+    if (f === 2) S.N.convert(TW.table, { animate: false });
+  }
+  function lead(i, fresh) {
+    setText(TW.lead, LEAD[i]());
+    if (fresh && motion) replay(TW.lead, "a2-in");
+  }
+  // The question takes the place of the line once the numbers are in; only then can a customer be tapped.
+  function asking(on, fresh) {
+    TW.ready = on;
+    TW.ask.classList.toggle("a2-asking", on);
+    TW.root.classList.toggle("a2-ready", on);
+    R2.people.forEach(function (id) { TW.chips[id].disabled = !on; });
+    if (on && fresh && motion) replay(TW.q1, "a2-in");
+  }
+  // Step 2 reached from step 1: the stars become marks, the marks become numbers, then the question.
+  function play() {
+    lead(1, true);
+    later(function () {
+      var h = TW.h = S.N.flipWave(TW.cells.map(function (td) {
+        return { face: td._stars, swap: function () { td.classList.remove("a2-st"); return td.querySelector(".vote"); } };
+      }));
+      h.done.then(function (ok) {
+        if (!ok || TW.h !== h) return;
+        TW.h = null;
+        later(function () {
+          lead(2, true);
+          later(function () {
+            var h2 = TW.h = S.N.convert(TW.table);
+            h2.done.then(function (ok2) {
+              if (!ok2 || TW.h !== h2) return;
+              TW.h = null;
+              later(function () { asking(true, true); }, 300);
+            });
+          }, WAVE_LEAD);
+        }, WAVE_REST);
+      });
+    }, WAVE_LEAD);
+  }
 
   // An answer box: a waiting line until the participant acts, then the answer, laid out from the start so that
   // nothing moves when it appears.
@@ -3897,6 +3924,7 @@ button.chip:hover{border-color:var(--rubric)}
       var tr = TW.rows[id], c = TW.chips[id];
       tr.classList.toggle("on", done && id === TWIN);
       tr.classList.toggle("dim", done && id !== TWIN && id !== p);
+      tr.classList.remove("a2-keep");
       c.classList.toggle("on", done && id === TWIN);
       c.classList.toggle("a2-mine", done && id === p && !right);
       c.setAttribute("aria-pressed", done && id === p ? "true" : "false");
@@ -3905,9 +3933,8 @@ button.chip:hover{border-color:var(--rubric)}
     TW.o1.tag.textContent = right ? "Right!" : "Not quite.";
     TW.o1.tag.className = "a2-tag " + (right ? "ok" : "no");
     setText(TW.o1.head, ["Vera's taste twin is ", S.chip(TWIN), "."]);
-    // Before the tap the box holds the longest answer, invisible, so that it keeps its height.
-    setText(TW.o1.body, !done ? [S.chip("jana"), " "].concat(WHYNOT.jana)
-      : (right ? ["Yet he never gives her exact mark. Why is he the most similar?"] : [S.chip(p), " "].concat(WHYNOT[p])));
+    setText(TW.o1.body, !done ? [S.chip(LONGEST), " "].concat(WHYNOT[LONGEST])
+      : (right ? ["Yet he never gives her exact number. Why is he the most similar?"] : [S.chip(p), " "].concat(WHYNOT[p])));
     showOut(TW.o1, done, fresh);
   }
   function renderWhy(fresh) {
@@ -3927,7 +3954,8 @@ button.chip:hover{border-color:var(--rubric)}
     showOut(TW.o2, done, fresh);
   }
 
-  // Vera and one other customer on the three films, with "agree" or "disagree" under every film.
+  // Vera and one other customer on the three films, with "agree" or "disagree" under every film. The marks become
+  // numbers when the bridge is drawn (step 4), once the table is on screen and its badges can be measured.
   function compare(other, verdict) {
     var box = el("section", "a2-cmp");
     box.appendChild(make("h3", "a2-cmp-h", [S.chip(other), el("span", "a2-and", "and"), S.chip(VERA)]));
@@ -3952,7 +3980,7 @@ button.chip:hover{border-color:var(--rubric)}
   S.define("twin", {
     act: 2,
     title: "Who is Vera's taste twin?",
-    steps: 3,
+    steps: 4,
     build: function (inner, api) {
       var root = el("div", "a2-tw");
       TW.root = root;
@@ -3975,9 +4003,17 @@ button.chip:hover{border-color:var(--rubric)}
         th.appendChild(c);
         TW.chips[p] = c;
       });
-      // A tap anywhere on a regular's row, or on the name, picks that customer. Only on the first step.
+      // Every rating also as stars, lying over its mark; they show in step 1 only.
+      TW.cells = Array.prototype.slice.call(t.querySelectorAll("td.rt-c"));
+      TW.cells.forEach(function (td) {
+        var s = el("span", "a2-tst");
+        s.appendChild(stars(STARS[td.dataset.r]));
+        td.appendChild(s);
+        td._stars = s;
+      });
+      // A tap anywhere on a regular's row, or on the name, picks that customer: on step 2, once the numbers are in.
       t.addEventListener("click", function (e) {
-        if (TW.k !== 0 || TW.pick !== null) return;
+        if (TW.k !== 1 || !TW.ready || TW.pick !== null) return;
         var tr = e.target.closest("tr[data-p]");
         if (!tr || !t.contains(tr) || tr.dataset.p === VERA) return;
         TW.pick = tr.dataset.p;
@@ -3988,6 +4024,9 @@ button.chip:hover{border-color:var(--rubric)}
       tw.appendChild(t);
 
       var side = el("div", "a2-tw-side");
+      // The line of steps 1 and 2 and the question share one place, so nothing moves when the question comes.
+      TW.ask = el("div", "a2-ask");
+      TW.lead = el("p", "a2-lead");
       TW.q1 = el("div", "a2-qbox a2-q1");
       TW.q1.appendChild(make("h3", "a2-q", ["Who is most similar to ", b("Vera"), "?"]));
       TW.q1.appendChild(el("p", "a2-hint", "Tap a customer in the table."));
@@ -3997,6 +4036,7 @@ button.chip:hover{border-color:var(--rubric)}
         TW.chips[R2.people[0]].focus();
       });
       TW.q1.appendChild(TW.o1.box);
+      put(TW.ask, [TW.lead, TW.q1]);
 
       TW.q2 = el("div", "a2-qbox a2-q2");
       TW.q2.appendChild(make("h3", "a2-q", ["Why ", b("Kai"), "?"]));
@@ -4024,14 +4064,15 @@ button.chip:hover{border-color:var(--rubric)}
         TW.opts[0].focus();
       });
       TW.q2.appendChild(TW.o2.box);
-      put(side, [TW.q1, TW.q2]);
+      put(side, [TW.ask, TW.q2]);
       put(main, [tw, side]);
 
       var br = el("div", "a2-bridge");
       TW.bridge = br;
       var cmps = el("div", "a2-cmps");
       cmps.appendChild(compare(TWIN, ["On Vera's side on ", b("every film"), ", only more or less strongly."]));
-      cmps.appendChild(compare("pia", ["Vera's exact marks on two films, but ", b("opposite"), " on Notting Hill."]));
+      cmps.appendChild(compare("pia", ["Vera's exact numbers on two films, but ", b("opposite"), " on Notting Hill."]));
+      TW.cmpTables = Array.prototype.slice.call(cmps.querySelectorAll("table.a2-ct"));
       br.appendChild(cmps);
       br.appendChild(make("p", "a2-big", ["We need a ", b("number"), " for how much two ratings agree, film by film."]));
       br.appendChild(el("p", "a2-next", "Act 3 finds it."));
@@ -4039,16 +4080,32 @@ button.chip:hover{border-color:var(--rubric)}
       put(root, [main, br]);
       inner.appendChild(root);
     },
+    enter: function () { TW.last = null; },
+    leave: function () { halt(); },
     step: function (k) {
+      var was = TW.last;
+      TW.last = k;
       TW.k = k;
+      halt();
       TW.root.dataset.k = String(k);
-      TW.main.hidden = k === 2;
-      TW.bridge.hidden = k !== 2;
-      TW.q1.hidden = k !== 0;
-      TW.q2.hidden = k !== 1;
-      if (k === 0) renderPick(false);
-      else {
-        // Steps 2 and 3 take Kai as known: his row and Vera's stand out, Pia stays for the contrast.
+      TW.main.hidden = k === 3;
+      TW.bridge.hidden = k !== 3;
+      TW.ask.hidden = k > 1;
+      TW.q2.hidden = k !== 2;
+      asking(false, false);
+      if (k === 0) {
+        // the stars; the question starts afresh
+        TW.pick = null;
+        renderPick(false);
+        faces(0);
+        lead(0, false);
+      } else if (k === 1) {
+        renderPick(false);
+        if (was === 0 && motion) { faces(0); play(); }
+        else { faces(2); asking(true, false); }
+      } else {
+        // Steps 3 and 4 take Kai as known: his row and Vera's stand out, Pia stays for the contrast.
+        faces(2);
         TW.root.classList.remove("is-picked");
         R2.people.forEach(function (id) {
           TW.rows[id].classList.toggle("on", id === TWIN);
@@ -4058,12 +4115,9 @@ button.chip:hover{border-color:var(--rubric)}
           TW.chips[id].classList.remove("a2-mine");
         });
         TW.rows[VERA].classList.add("on");
-        if (k === 1) renderWhy(false);
+        if (k === 2) renderWhy(false);
+        else TW.cmpTables.forEach(function (ct) { S.N.unconvert(ct); S.N.convert(ct, { animate: false }); });
       }
-      R2.people.forEach(function (id) {
-        TW.chips[id].disabled = k !== 0;
-        if (k === 0) TW.rows[id].classList.remove("a2-keep");
-      });
     }
   });
 })();
@@ -4613,40 +4667,38 @@ button.chip:hover{border-color:var(--rubric)}
 <script>
 /* Act 4 of Once Upon a Video Store: The nearest neighbour. Owner: the act 2 agent (see BRIEF.md and BRIEF-r2.md).
    Class names start with a4-. Two scenes. The first, nearest, is drawn in the notation of NOTATION.md (Store.N): the
-   board of act 4 with Vera's row on top, then a small board of act 1 with Zoe's row on top. Seven steps, one idea each:
-     1 the ratings in marks: Vera on top, the six regulars below (Love Actually waits, hidden)
+   board of act 4 with Vera's row on top. Love Actually stands apart on the right from the first step, the regulars'
+   ratings in it and Vera's "?" (Carlos, 2026-11-11: "far apart to the right, so it doesn't cause confusions when we
+   do the inner product calculations"). Five steps, one idea each:
+     1 the ratings in marks: Vera on top, the six regulars below; will Vera like Love Actually?
      2 the marks become numbers: the notation's wave over the whole board
      3 Vera's inner products appear in their column, top to bottom, without their working
      4 sorted by inner product: Kai ends right under Vera, her nearest neighbour
-     5 Love Actually appears: the participant copies Kai's number into Vera's "?"; a week later she watched it
-     6 back to act 1: Zoe on top, Max and Lea below, and their inner products
-     7 a match adds 1 and a mismatch -1: the counting of act 1 was the inner product all along
+     5 the participant copies Kai's Love Actually number into Vera's "?"; a week later she watched it
+   Until version 4 two more steps went back to act 1 (Zoe, Max and Lea: a match adds 1, a mismatch -1); Carlos
+   dropped them on 2026-11-11, so the prediction leads straight to the notebook.
    Act 3 taught the inner product, so this act never works one out on screen (Carlos, 2026-11-06: "Don't calculate
    it in front of the participants"): the rows stand one on top of the other and the inner products appear.
    A step reached from the step before plays its motion; any other arrival (Back, the pager) draws it at once.
    The second scene, notebook, is one slide that introduces the notebook in Colab: its three functions, the
-   challenge, and the link (Carlos, 2026-11-10: the notebook on "a separate slide"; until then a line under step 7).
+   challenge, and the link (Carlos, 2026-11-10: the notebook on "a separate slide").
    No globals. */
 (function () {
   "use strict";
   var S = window.Store;
   if (!S || !S.N) return;
 
-  var N = S.N, el = S.el, num = S.num;
+  var N = S.N, el = S.el;
   var motion = !S.reducedMotion;
   var R2 = S.ROUND2;
   var REG = R2.people, FILMS = R2.films, V = R2.newcomer, LOVE = R2.unseen;
-  var R1 = S.ROUND1, Z = R1.newcomer;
-  var R1F = R1.films.filter(function (f) { return f !== R1.unseen; });
-  var ONE = ["max", "lea"];                       // act 1: Max matched Zoe on all three films, Lea on none
   function name(p) { return S.get(p).n; }
 
   var TITLE = "Vera's nearest neighbour";
   var TITLES = ["Vera and the regulars", "From marks to numbers", "Vera's inner products", "Vera's nearest neighbour",
-                "A prediction for Vera", "Back to act 1", "The inner product, all along"];
-  var COPY_STEP = 4, ONE_STEP = 5;                // the prediction, and act 1 again (counted from 0)
+                "A prediction for Vera"];
+  var COPY_STEP = 4;                              // the prediction (counted from 0)
   var FUT = { "2": "love it", "1": "like it", "0": "shrug", "-1": "dislike it", "-2": "hate it" };
-  var HOW_MANY = ["none", "one film", "two films", "all three films"];
 
   /* SMALL HELPERS */
   function put(parent, parts) {
@@ -4736,36 +4788,15 @@ button.chip:hover{border-color:var(--rubric)}
     }, 450);
   }
 
-  /* STEP 6: act 1's board; its two inner products appear, then the line that reads them */
-  function one(live) {
-    var me = X.tok, all = ONE.length;
-    if (!live || !motion) {
-      X.bd1.show({ numbers: true, done: all, band: false, sorted: false });
-      X.oneSay.classList.remove("a4-wait");
-      return;
-    }
-    X.bd1.show({ numbers: true, done: 0, band: false, sorted: false });
-    X.oneSay.classList.add("a4-wait");
-    later(function () {
-      X.bd1.reveal().then(function (ok) {
-        if (!ok || me !== X.tok) return;
-        later(function () {
-          X.oneSay.classList.remove("a4-wait");
-          S.reveal(X.oneSay);
-        }, 250);
-      });
-    }, 400);
-  }
-
   S.define("nearest", {
     act: 4,
     title: TITLE,
-    steps: 7,
+    steps: 5,
     build: function (inner) {
       var root = el("div", "a4-near");
       X.root = root;
 
-      // the board: Vera on top, the regulars below, the inner product column, Love Actually (hidden until step 5)
+      // the board: Vera on top, the regulars below, the inner product column, and Love Actually apart on the right
       X.bd = N.board({ top: V, people: REG, films: FILMS, more: [LOVE], marks: true });
       X.nn = X.bd.ranked[0];
       var vtd = X.bd.cell(V, LOVE);
@@ -4773,16 +4804,16 @@ button.chip:hover{border-color:var(--rubric)}
       X.vslot = vtd.querySelector(".nt-slot");
       X.vslot.setAttribute("aria-label", "Vera's number for " + S.get(LOVE).t + ": to predict");
 
-      var film = el("i", "a4-film", S.get(LOVE).t);
+      function film() { return el("i", "a4-film", S.get(LOVE).t); }
+      function line(parts) { return make("span", "a4-line", parts); }
       var kl = S.rating(X.nn, LOVE), payoff = S.LATER[V] && S.LATER[V][LOVE];
       X.caps = [
-        ["Vera, the newcomer, on top. The six regulars below, on the same three films."],
+        [line(["Will Vera like ", film(), "? She has not seen it."]),
+         line(["The six regulars have rated all four films. Find the one with the nearest taste, and copy that rating."])],
         ["The marks become numbers. From here on, only numbers."],
-        ["Each regular's ", term("inner product"), " with Vera, worked out as in act 3."],
+        ["Each regular's ", term("inner product"), " with Vera, on the three films she has seen."],
         ["Sorted by inner product: ", b(name(X.nn)), ", the taste twin of act 2, is Vera's ", term("nearest neighbour"), "."],
-        ["Vera has not seen ", film, ". Her nearest neighbour, ", b(name(X.nn)), ", has."],
-        ["Back to act 1, where every mark was a tick or a cross."],
-        ["With ticks and crosses only, each film adds 1 for a ", b("match"), " and " + num(-1) + " for a ", b("mismatch"), "."]
+        ["Vera has not seen ", film(), ". Her nearest neighbour, ", b(name(X.nn)), ", has."]
       ].map(function (parts) { return make("p", "a4-cap", parts); });
       put(root, X.caps);
 
@@ -4802,22 +4833,6 @@ button.chip:hover{border-color:var(--rubric)}
       bdBox.appendChild(X.act);
       root.appendChild(bdBox);
 
-      // act 1 again: the key of its two marks, then Zoe on top of Max and Lea, in the board of act 4
-      var one = el("div", "a4-one");
-      X.one = one;
-      X.key = N.legend([1, -1]);
-      X.key.classList.add("a4-key");
-      X.bd1 = N.board({ top: Z, people: ONE, films: R1F });
-      var m0 = S.matches(ONE[0], Z, R1F), m1 = S.matches(ONE[1], Z, R1F);
-      X.oneSay = make("p", "a4-say a4-wait", ["In act 1, ", b(name(ONE[0])), " matched " + name(Z) + " on " + HOW_MANY[m0] + ", and ",
-                                             b(name(ONE[1])), " on " + HOW_MANY[m1] + "."]);
-      X.rule = make("div", "a4-rule", [
-        make("p", "a4-say", ["So the inner product is the matches minus the mismatches."]),
-        make("p", "a4-big", ["The counting of act 1 was the ", term("inner product"), " all along."])
-      ]);
-      put(one, [X.key, X.bd1.el, X.oneSay, X.rule]);
-      root.appendChild(one);
-
       inner.appendChild(root);
     },
     enter: function () { X.last = null; },
@@ -4829,9 +4844,6 @@ button.chip:hover{border-color:var(--rubric)}
       api.setTitle(TITLES[k]);
       X.root.dataset.k = String(k);
       X.caps.forEach(function (c, i) { c.hidden = i !== k; });
-      X.bdBox.hidden = k >= ONE_STEP;
-      X.one.hidden = k < ONE_STEP;
-      X.root.classList.toggle("a4-love", k === COPY_STEP);
 
       // the Copy button, and the result in its place
       X.act.hidden = k !== COPY_STEP;
@@ -4854,19 +4866,10 @@ button.chip:hover{border-color:var(--rubric)}
         if (live) { bd.show({ numbers: true, done: all, band: false, sorted: false }); bd.sort(true); }
         else bd.show({ numbers: true, done: all, sorted: true });
       } else bd.show({ numbers: true, done: all, sorted: true });
-
-      // act 1 again
-      X.key.hidden = k !== ONE_STEP;
-      X.oneSay.hidden = k !== ONE_STEP;
-      X.rule.hidden = k !== ONE_STEP + 1;
-      if (k === ONE_STEP) one(live);
-      else if (k > ONE_STEP) X.bd1.show({ numbers: true, done: ONE.length, band: false, sorted: false });
-      else X.bd1.stop();
     },
     leave: function (api) {
       halt();
       X.bd.stop();
-      X.bd1.stop();
       api.setTitle(TITLE);
     }
   });
