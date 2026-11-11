@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { weekends, getWeekend, weekendRoom } from '../data/weekends';
+import { weekends, getWeekend, weekendRoom, downloadZip } from '../data/weekends';
 import { ScheduleTable } from '../components/ScheduleTable';
 import type { Resource } from '../types';
 import { downloadKind } from '../lib/links';
@@ -121,6 +121,19 @@ export function WeekendPage() {
             )}
           </dl>
           <p className="wdetail-head__summary">{weekend.summary}</p>
+          {/*
+            The whole weekend in one ZIP, numbered in the order to work through
+            it (Carlos, 2026-11-11). At the top, so it is the first thing a
+            participant sees on the weekend's page.
+          */}
+          {weekend.download && (
+            <div className="wdetail-head__cta">
+              <a className="btn" href={downloadZip(weekend.download.file)} download="">
+                Download all slides and visualizations (ZIP)
+              </a>
+              <p className="wdetail-head__note">{weekend.download.note}</p>
+            </div>
+          )}
         </header>
 
         <div className="days">

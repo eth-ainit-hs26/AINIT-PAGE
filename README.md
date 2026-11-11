@@ -39,6 +39,16 @@ SOON                                         // not uploaded yet, renders greyed
 Links set to `SOON` render as "Soon" instead of a clickable link, so an agenda
 can go live before its materials exist.
 
+A weekend with a `download` field gets a button at the top of its page that
+downloads all its slides and visualizations as one ZIP, numbered in the order
+of the field's `items`; each deck's `handout` goes to the ZIP's `Handouts`
+folder under the same number. `npm run build` writes the ZIP to
+`dist/downloads/` with [`scripts/build-downloads.mjs`](scripts/build-downloads.mjs),
+from the files in `public/`, so it always holds what the site serves. When you
+add a deck or a visualization to such a weekend, add it to `items` too, at its
+place in the agenda. A missing file stops the build with its item's number.
+`npm run dev` does not serve the ZIP; `npm run build` then `npm run preview` does.
+
 The calendar is derived: [`src/data/calendar.ts`](src/data/calendar.ts) builds
 the events from each weekend's `startISO`, and `src/lib/ics.ts` turns those into
 the download. Do not hand-maintain calendar events.

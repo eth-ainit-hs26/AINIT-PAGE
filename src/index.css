@@ -552,6 +552,17 @@ h3 {
   font-size: 1.02rem;
   margin: 0;
 }
+/* The weekend's "download all" button under the summary, and its one line. */
+.wdetail-head__cta {
+  margin-top: 24px;
+}
+.wdetail-head__note {
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 720px;
+}
 .wdetail-meta {
   display: flex;
   gap: 36px;

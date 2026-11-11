@@ -137,6 +137,15 @@ export const exercise = (n: number, file: string): string =>
 export const app = (n: number, file: string): string =>
   `${import.meta.env.BASE_URL}apps/we${n}/${file}`;
 
+/**
+ * A weekend's "download all" ZIP, from `downloads/`. Not in public/: the
+ * build writes it, see the `download` field of a weekend and
+ * scripts/build-downloads.mjs. `npm run dev` does not serve it; `npm run build`
+ * then `npm run preview` does.
+ */
+export const downloadZip = (file: string): string =>
+  `${import.meta.env.BASE_URL}downloads/${file}`;
+
 export const weekends: Weekend[] = [
   {
     id: 'we1',
@@ -573,6 +582,9 @@ export const weekends: Weekend[] = [
       // The semester cheat sheet, also by the title on the home page: the three weekends on one A3 page, from
       // cheat-sheet/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11).
       { group: 'Cheat sheet', label: 'The semester on one page, all three weekends', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
+      // The lecture notes of the Friday blocks 08:15 to 12:00, from lecture-notes/ of the same public repository,
+      // published with the download of the weekend at Carlos's instruction of 2026-11-11.
+      { group: 'Lecture notes', label: 'Nearest neighbors, matrix product, matrix factorization', url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors, cold intro: Birds with the same wings', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors, cold intro (Handout)', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-handout.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors', url: SOON },
@@ -610,6 +622,66 @@ export const weekends: Weekend[] = [
       { group: 'Project', label: 'Recommender for online retail: Colab notebook', url: SOON },
       // { group: 'Project', label: 'Recommender for online retail: grading scheme', url: SOON },
     ],
+    // The button at the top of the page: every deck and visualization of the weekend, the lecture notes and the
+    // cheat sheet in one ZIP, numbered in the order to work through them; the coding exercises stay out (Carlos,
+    // 2026-11-11). The order is the agenda's, chip by chip; the cheat sheet comes first, as the map of the
+    // semester, and the lecture notes after the last material of the morning they cover. A NEW DECK OR
+    // VISUALIZATION OF THIS WEEKEND GOES HERE TOO, at its place in the agenda. The handouts of the four case decks
+    // are served only through the ZIP; they are the builds of cases-deck/block<N>-<name>-handout.pdf.
+    // The combined case deck and its handout stay out: they repeat the four block decks.
+    download: {
+      file: 'ainit-hs26-weekend-2.zip',
+      note: 'Slides, visualizations, lecture notes and the semester cheat sheet, numbered in the order to work through them. The coding exercises are on Colab.',
+      items: [
+        { name: 'Semester cheat sheet', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
+        {
+          name: 'Nearest neighbors, cold intro',
+          url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf'),
+          handout: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-handout.pdf'),
+        },
+        { name: 'Once Upon a Video Store', url: viz(2, 'video-store') },
+        {
+          name: 'Business cases, Etsy and Airbnb',
+          url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf'),
+          handout: deck(2, 'ainit-hs26-business-cases-nearest-neighbors-handout.pdf'),
+        },
+        { name: 'Matchmaker part one, matrix multiplication', url: viz(2, 'matchmaker-part-1') },
+        { name: 'Matchmaker part two, matrix factorization', url: viz(2, 'matchmaker-part-2') },
+        { name: 'Matchmaker part three, the whole picture', url: viz(2, 'matchmaker-part-3') },
+        { name: 'Matchmaker optional part, gradient descent up close', url: viz(2, 'matchmaker-optional') },
+        {
+          name: 'Business case, Spotify',
+          url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf'),
+          handout: deck(2, 'ainit-hs26-business-cases-matrix-factorization-handout.pdf'),
+        },
+        {
+          name: 'Lecture notes, nearest neighbors and matrix factorization',
+          url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
+        },
+        { name: 'Once Upon a Mirror', url: viz(2, 'mirror') },
+        {
+          name: "Business cases, Spotify's home page and Amazon Payments",
+          url: deck(2, 'ainit-hs26-business-cases-bandits.pdf'),
+          handout: deck(2, 'ainit-hs26-business-cases-bandits-handout.pdf'),
+        },
+        { name: 'Matchmaker on a Grid', url: viz(2, 'matchmaker-grid') },
+        {
+          name: "Business case, LinkedIn's ads",
+          url: deck(2, 'ainit-hs26-business-cases-parallelized-mf.pdf'),
+          handout: deck(2, 'ainit-hs26-business-cases-parallelized-mf-handout.pdf'),
+        },
+        {
+          name: 'Computing clusters, cold intro',
+          url: deck(2, 'ainit-hs26-computing-clusters-cold-intro.pdf'),
+          handout: deck(2, 'ainit-hs26-computing-clusters-cold-intro-handout.pdf'),
+        },
+        {
+          name: 'Computing clusters',
+          url: deck(2, 'ainit-hs26-computing-clusters.pdf'),
+          handout: deck(2, 'ainit-hs26-computing-clusters-handout.pdf'),
+        },
+      ],
+    },
   },
   {
     id: 'we3',
