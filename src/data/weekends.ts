@@ -539,7 +539,12 @@ export const weekends: Weekend[] = [
         time: '14:00',
         title: 'Bandits',
         type: 'lecture',
+        // The cold intro "Estimating chances from the past" (John Graunt's Bills of Mortality, London, 1662), from
+        // cold-intro-deck/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture: Carlos chose it from
+        // three drafts (the fox, Graunt, Bernoulli) on 2026-11-11, for the course site.
         links: [
+          { label: 'Bandits, cold intro', url: deck(2, 'ainit-hs26-bandits-cold-intro.pdf') },
+          { label: 'Handout', url: deck(2, 'ainit-hs26-bandits-cold-intro-handout.pdf') },
           { label: 'Once Upon a Mirror', url: viz(2, 'mirror') },
           { label: "Business cases, Spotify's home page and Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
           { label: 'Handout', url: deck(2, 'ainit-hs26-business-cases-bandits-handout.pdf') },
