@@ -5,8 +5,8 @@
   "type": "module",
   "description": "HS 2026 — AI in Industry course website (ETH Zürich)",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/build-downloads.mjs",
+    "dev": "node scripts/sync-materials.mjs && vite",
+    "build": "node scripts/sync-materials.mjs && tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

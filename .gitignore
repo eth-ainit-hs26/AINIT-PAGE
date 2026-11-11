@@ -21,3 +21,7 @@ pnpm-debug.log*
 
 # typescript incremental build state
 tsconfig.tsbuildinfo
+
+# written by scripts/sync-materials.mjs before every dev and build
+public/downloads/
+src/data/generated/

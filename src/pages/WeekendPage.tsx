@@ -4,8 +4,13 @@ import { weekends, getWeekend, weekendRoom, downloadZip } from '../data/weekends
 import { ScheduleTable } from '../components/ScheduleTable';
 import type { Resource } from '../types';
 import { downloadKind } from '../lib/links';
+import { materialsIndex } from '../lib/materials';
 
-function ResourceLink({ resource }: { resource: Resource }) {
+/**
+ * One entry of the Materials list. A numbered material shows its number, `tag`,
+ * and a numbered PDF is saved under its numbered name, `download`.
+ */
+function ResourceLink({ resource, download, tag }: { resource: Resource; download?: string; tag?: string }) {
   const isPlaceholder = resource.url === '#';
   if (isPlaceholder) {
     return (
@@ -25,9 +30,12 @@ function ResourceLink({ resource }: { resource: Resource }) {
         href={resource.url}
         target="_blank"
         rel="noopener noreferrer"
-        {...(kind ? { download: '' } : {})}
+        {...(kind ? { download: download ?? '' } : {})}
       >
-        {resource.label}
+        <span>
+          {tag && <span className="reslink__num">{tag} </span>}
+          {resource.label}
+        </span>
         <span className="reslink__arrow">
           {kind === 'pdf'
             ? 'PDF ↓'
@@ -70,12 +78,21 @@ export function WeekendPage() {
       ? weekend.dates.split('–')
       : [weekend.dates, weekend.dates];
 
-  const hasRealResources = weekend.resources.some((r) => r.url !== '#');
   const room = weekendRoom(weekend);
+
+  // The weekend's decks and visualizations, numbered in the agenda's order, and
+  // the notebooks its games open, which the page leaves off (src/lib/materials.ts).
+  const materials = materialsIndex(weekend);
+  const numbered = materials.entries();
+  // The rest of the Materials list: what the numbered list does not already show.
+  const resources = weekend.resources.filter(
+    (r) => !materials.numbered(r.url) && !materials.hidden(r.url),
+  );
+  const hasRealResources = numbered.length > 0 || resources.some((r) => r.url !== '#');
 
   // Group resources by their optional `group`, preserving first-seen order.
   const resourceGroups: { name?: string; items: Resource[] }[] = [];
-  for (const r of weekend.resources) {
+  for (const r of resources) {
     let g = resourceGroups.find((x) => x.name === r.group);
     if (!g) {
       g = { name: r.group, items: [] };
@@ -83,7 +100,7 @@ export function WeekendPage() {
     }
     g.items.push(r);
   }
-  const isGrouped = resourceGroups.some((g) => g.name);
+  const isGrouped = numbered.length > 0 || resourceGroups.some((g) => g.name);
 
   return (
     <article className="section">
@@ -142,12 +159,14 @@ export function WeekendPage() {
             date={friDate.trim()}
             sessions={weekend.friday}
             room={weekend.fridayRoom}
+            materials={materials}
           />
           <ScheduleTable
             day="Saturday"
             date={satDate.trim()}
             sessions={weekend.saturday}
             room={weekend.saturdayRoom}
+            materials={materials}
           />
         </div>
 
@@ -158,6 +177,21 @@ export function WeekendPage() {
               ? 'Slides, notebooks and project descriptions for this weekend.'
               : 'Materials for this weekend will be linked here once they are uploaded.'}
           </p>
+          {numbered.length > 0 && (
+            <div className="resgroup">
+              <h3 className="resgroup__title">Slides and visualizations</h3>
+              <ul className="reslist">
+                {numbered.map((e) => (
+                  <ResourceLink
+                    key={e.url}
+                    resource={{ label: e.label, url: e.url }}
+                    download={e.download}
+                    tag={e.tag}
+                  />
+                ))}
+              </ul>
+            </div>
+          )}
           {isGrouped ? (
             resourceGroups.map((g, gi) => (
               <div className="resgroup" key={gi}>
@@ -171,7 +205,7 @@ export function WeekendPage() {
             ))
           ) : (
             <ul className="reslist">
-              {weekend.resources.map((r, i) => (
+              {resources.map((r, i) => (
                 <ResourceLink key={i} resource={r} />
               ))}
             </ul>

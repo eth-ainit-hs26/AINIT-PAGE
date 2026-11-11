@@ -31,33 +31,23 @@ export interface Resource {
 }
 
 /**
- * One step of a weekend's download: a deck or a visualization of this site.
- * Its number in the ZIP is its place in the list.
- */
-export interface DownloadItem {
-  /**
-   * Its name in the ZIP, after the number: "03 Once Upon a Video Store.html".
-   * A file name on every system, so none of < > : " / \ | ? *
-   */
-  name: string;
-  /** deck() of a PDF or viz() of a visualization, as linked on the page. */
-  url: string;
-  /** deck() of the deck's handout, filed in the ZIP's Handouts folder under the same number. */
-  handout?: string;
-}
-
-/**
- * Everything of a weekend in one ZIP, for the button at the top of its page.
- * scripts/build-downloads.mjs builds the ZIP from these files in public/ on
- * every `npm run build`, so it always holds what the site serves.
+ * Turns on the numbered materials of a weekend (src/lib/materials.ts): every
+ * deck and visualization on its agenda is numbered in the agenda's order, on the
+ * page, in the saved file names and in one ZIP behind a button at the top of
+ * the page. scripts/sync-materials.mjs builds the ZIP and checks the agenda
+ * against public/ before every `npm run dev` and `npm run build`.
  */
 export interface Download {
-  /** File name, served from downloads/, e.g. "ainit-hs26-weekend-2.zip". */
+  /** File name of the ZIP, served from downloads/, e.g. "ainit-hs26-weekend-2.zip". */
   file: string;
   /** One line under the button: what the ZIP holds. */
   note: string;
-  /** The steps in the order to work through them. */
-  items: DownloadItem[];
+  /**
+   * deck() or viz() links in the Materials list that are on purpose not on the
+   * agenda: shown without a number, left out of the ZIP. Any other deck or
+   * visualization of the weekend must be on the agenda, or the build stops.
+   */
+  extras?: string[];
 }
 
 export interface Weekend {

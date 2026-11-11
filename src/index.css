@@ -698,6 +698,12 @@ a.srow__title--link:hover {
 .srow__link .srow__ext {
   margin-left: 4px;
 }
+/* The number of a numbered material, as in its file name (src/lib/materials.ts). */
+.srow__num {
+  margin-right: 5px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
 .srow__meta {
   display: flex;
   align-items: center;
@@ -795,6 +801,10 @@ a.srow__title--link:hover {
 .reslink__arrow {
   color: var(--eth-blue);
   font-weight: 400;
+}
+.reslink__num {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
 }
 .reslink--placeholder {
   color: var(--ink-faint);
