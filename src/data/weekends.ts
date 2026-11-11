@@ -478,8 +478,9 @@ export const weekends: Weekend[] = [
         time: '08:15',
         title: 'The inner product and nearest neighbors',
         type: 'lecture',
-        // The cold intro "Birds with the same wings" (Zhanguo ce, Qi 3), from cold-intro-deck/ of the public
-        // repository eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's instruction of 2026-11-11.
+        // The cold intro "Searching through representations" (the story of Chunyu Kun, Zhanguo ce, Qi 3), from
+        // cold-intro-deck/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's
+        // instruction of 2026-11-11; its 8-frame rework replaced the 5-frame version the same evening, on his yes.
         links: [
           { label: 'Cold intro', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
           { label: 'Cold intro handout', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-handout.pdf') },
@@ -585,7 +586,7 @@ export const weekends: Weekend[] = [
       // The lecture notes of the Friday blocks 08:15 to 12:00, from lecture-notes/ of the same public repository,
       // published with the download of the weekend at Carlos's instruction of 2026-11-11.
       { group: 'Lecture notes', label: 'Nearest neighbors, matrix product, matrix factorization', url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf') },
-      { group: 'Lecture slides', label: 'The inner product and nearest neighbors, cold intro: Birds with the same wings', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
+      { group: 'Lecture slides', label: 'The inner product and nearest neighbors, cold intro: Searching through representations', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors, cold intro (Handout)', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-handout.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors', url: SOON },
       { group: 'Lecture slides', label: 'Matrix product and matrix factorization', url: SOON },
