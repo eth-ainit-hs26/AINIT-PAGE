@@ -481,13 +481,12 @@ export const weekends: Weekend[] = [
         time: '08:15',
         title: 'The inner product and nearest neighbors',
         type: 'lecture',
-        // The semester cheat sheet first, as the map of the semester (item 01 of the weekend), from cheat-sheet/ of
-        // the public repository eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11). Then the cold
-        // intro "Searching through representations" (the story of Chunyu Kun, Zhanguo ce, Qi 3) and the cases Etsy
-        // and Airbnb in one PDF, "Nearest neighbors" (Carlos, 2026-11-12: "they become now together number two, and
-        // I want you to call it nearest neighbors").
+        // The cold intro "Searching through representations" (the story of Chunyu Kun, Zhanguo ce, Qi 3) and the
+        // cases Etsy and Airbnb in one PDF, "Nearest neighbors" (Carlos, 2026-11-12: "they become now together number
+        // two, and I want you to call it nearest neighbors"). Number 01 since the semester cheat sheet left the agenda
+        // the same day (Carlos: "Drop the cheat sheet from the agenda of weekend 2. We'll keep it on the website."); it
+        // is in the Materials list below and by the title on the home page.
         links: [
-          { label: 'Semester cheat sheet', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
           { label: 'Nearest neighbors', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-and-cases.pdf') },
           { label: 'Once Upon a Video Store', url: viz(2, 'video-store') },
         ],
@@ -592,6 +591,11 @@ export const weekends: Weekend[] = [
     // here and not to the agenda stops the build, unless it is one of `download.extras`. A notebook that one of the
     // games opens is left off the page (Carlos, 2026-11-11), whatever this list says.
     resources: [
+      // The semester cheat sheet, the three weekends on one A3 page, from cheat-sheet/ of the public repository
+      // eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11), also by the title on the home page. Number
+      // 01 of the agenda from 9e0be17 (2026-11-11) until 2026-11-12, when Carlos asked: "Drop the cheat sheet from the
+      // agenda of weekend 2. We'll keep it on the website." Here since then without a number, as in ab95b28.
+      { group: 'Cheat sheet', label: 'The semester on one page, all three weekends', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
       { group: 'Lecture slides', label: 'The inner product and nearest neighbors', url: SOON },
       { group: 'Lecture slides', label: 'Matrix product and matrix factorization', url: SOON },
       { group: 'Lecture slides', label: 'Bandits', url: SOON },
@@ -626,7 +630,7 @@ export const weekends: Weekend[] = [
     // the build when the agenda and public/slides/we2/ or public/viz/we2/ disagree.
     download: {
       file: 'ainit-hs26-weekend-2.zip',
-      note: 'The slides and games of this page with their numbers, the semester cheat sheet among them, the lecture notes, and the handouts in a folder of their own. The games open the coding exercises in Colab.',
+      note: 'The slides and games of this page with their numbers, the lecture notes, and the handouts in a folder of their own. The games open the coding exercises in Colab.',
       // Beside the ZIP button since 2026-11-12, without a number, and in the ZIP (Carlos: "The lecture notes, nearest
       // neighbors, and matrix factorization. I want you to put that next to download all slides and visualizations").
       // The 11:00 row held them until then, number 10. From lecture-notes/ of the public repository
@@ -639,7 +643,9 @@ export const weekends: Weekend[] = [
       ],
       // The combined case deck repeats the four block decks: it stays in the Materials list without a number, and out of the ZIP.
       // No handouts of the business cases since 2026-11-11 (Carlos: "Remove also the handouts for the business cases").
-      extras: [deck(2, 'ainit-hs26-business-cases.pdf')],
+      // The semester cheat sheet the same way since 2026-11-12: off the agenda, in the Materials list without a number,
+      // out of the ZIP, and by the title on the home page.
+      extras: [deck(2, 'ainit-hs26-business-cases.pdf'), deck(2, 'ainit-hs26-cheat-sheet.pdf')],
     },
   },
   {

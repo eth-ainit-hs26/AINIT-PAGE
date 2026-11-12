@@ -75,7 +75,8 @@ export function HomePage() {
                 The semester on one A3 page: every concept of the three weekends
                 with what it is, when to use it and its use in industry. It sits by
                 the title because it covers all three weekends; weekend 2's
-                Materials list has it too. Source: cheat-sheet/ of the public
+                Materials list has it too, without a number (it left the weekend 2
+                agenda on 2026-11-12). Source: cheat-sheet/ of the public
                 repository eth-ainit-hs26/w2-recsys-bandits-lecture, published at
                 Carlos's yes of 2026-11-11.
               */}
