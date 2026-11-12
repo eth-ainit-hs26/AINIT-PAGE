@@ -1217,6 +1217,27 @@ button.chip:hover{border-color:var(--rubric)}
   .s2-ycard .act-motif > :nth-child(n+5){order:2}
 }
 
+/* ONE SMALL CHANGE, BY HAND (2026-11-12, Carlos's twenty-first message): the keys, the choice of ε and the buttons in the
+   note, under the customers; every number of the embeddings can be tapped. The number and the totals carry up to six
+   decimals, so their boxes are wider, as in Again and again. From 740 to 1119 px the update stands in the note's place:
+   the note gives it the room while it shows (the numbers can still be tapped on the board). */
+.s2-hd .s2-mc td.mx-c, .s2-hd .s2-mf td.mx-c{cursor:pointer}
+.s2-eps{display:flex; flex-wrap:wrap; align-items:center; gap:5px}
+.s2-eps[hidden]{display:none}
+.s2-eps .s2-ek{min-width:0; font-size:17px; padding:3px 9px 5px}
+.s2-epl{font-size:15px; font-variant-caps:all-small-caps; letter-spacing:.08em; font-weight:600; color:var(--g-move); margin-right:2px}
+.s2-hd .s2-nba .nt-n.s2-bn, .s2-hd .s2-ava .nt-n.s2-bn{--nt-w:86px}
+@media (max-height: 760px){ .s2-hd .s2-nba .nt-n.s2-bn, .s2-hd .s2-ava .nt-n.s2-bn{--nt-w:78px} }
+@media (min-width: 740px) and (max-width: 1119px){ .s2-hd.s2-upon .s2-note{visibility:hidden} }
+/* a phone: the note on top in one row when it fits (the choice of ε and Start again), without the word Add */
+@media (max-width: 739px){
+  .s2-hd .s2-nba .nt-n.s2-bn, .s2-hd .s2-ava .nt-n.s2-bn{--nt-w:64px}
+  .s2-hd .s2-note{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 10px}
+  .s2-hd .s2-epl{display:none}
+  .s2-eps{justify-content:center}
+  .s2-eps .s2-ek{font-size:15px; padding:2px 8px 4px}
+}
+
 /* Text scale (core.css): on the large screens the two buttons of Again and again stand one under the other, each on
    one line, in the side column of the row above the board */
 @media (min-width: 1080px) and (min-height: 740px){ .s2-head > .s2-tools{flex-wrap:wrap} .s2-head > .s2-tools > *{white-space:nowrap} }
@@ -5471,6 +5492,10 @@ button.chip:hover{border-color:var(--rubric)}
            on the right of the picture, under the total; an ochre arrow from its new number to the number (MF.Z.nudge)
    again   every number in turn, then again, round after round, until the total loss is about 0 (MF.Z.run); each move
            as One small change ends: picture, links, update
+   hand    (2026-11-12, his twenty-first message) after the card of your turn: One small change on the whole table, by
+           hand. The participant types the ten numbers of the embeddings or takes the first guess, taps a number and
+           chooses ε; the what-if comes at once as far as the slope; Next writes the update, Next moves the number, Next
+           lets them choose another (hClaim)
    yours   after a card of its own (since 2026-11-11, his seventeenth message: "a separate set that is clearly
            separated"), the corner Ida and Paddington: the participant types four numbers, then for each number reads
            its Before and After and the loss's, and chooses Up or Down; the game moves it by a hidden amount (MF.Z.move)
@@ -5725,7 +5750,8 @@ button.chip:hover{border-color:var(--rubric)}
       if (!on) { AV.bn.textContent = "?"; AV.bn.dataset.t = "q"; AV.bn.classList.add("nt-slot"); }
       else AV.bn.classList.remove("nt-slot");
       if (S.av && on) {
-        var tx = !isNum(S.av.after) ? [avgText(S.av.before), ""] :
+        // av.tx: the two texts, written by the scene (One small change by hand works them exactly)
+        var tx = !isNum(S.av.after) ? [avgText(S.av.before), ""] : S.av.tx ? S.av.tx :
                  S.av.d ? [fixN(S.av.before, S.av.d), fixN(S.av.after, S.av.d)] : pairText(S.av.before, S.av.after);
         paint(AV.bn, S.av.before, isNum(S.av.after) ? tx[0] : avgText(S.av.before));
         if (isNum(S.av.after)) paint(AV.an, S.av.after, tx[1]);
@@ -5746,8 +5772,11 @@ button.chip:hover{border-color:var(--rubric)}
       var id = rowId(n.which, n.r, ids);
       put(nbCap, [MF.pic(id, "xs"), h("span", "s2-nbn", [whose(n.which, n.r, ids) + ", "]), MF.get(DIMS[n.k]).g]);
       nbCap.setAttribute("aria-label", numberName(n.which, n.r, n.k, ids));
-      paint(NB.bn, n.x, fix2(n.x));
-      paint(NB.an, n.x + Z.EPS, fix2(n.x + Z.EPS));
+      // n.eps, n.plus, n.bt, n.at: another amount than Z.EPS, its label and the two texts (One small change by hand)
+      var e = n.eps || Z.EPS;
+      paint(NB.bn, n.x, n.bt || fix2(n.x));
+      paint(NB.an, n.x + e, n.at || fix2(n.x + e));
+      NB.plus.textContent = n.plus || "+" + Z.EPS;
       NB.plus.classList.toggle("s2-hot", !!n.hot);
     }
     function drawTgt() {
@@ -6490,10 +6519,10 @@ button.chip:hover{border-color:var(--rubric)}
     s.appendChild(el("span", "s2-sr", "∇"));
     return s;
   }
-  // A lead of this scene: ∇ drawn, w and α in italics, as in the formula.
+  // A lead of this scene: ∇ drawn, w, α and ε in italics, as in the formula.
   function setLead(node, text) {
     node.textContent = "";
-    var parts = text.split(/(α∇|∇|\bw\b|α)/);
+    var parts = text.split(/(α∇|∇|\bw\b|α|ε)/);
     parts.forEach(function (part, q) {
       if (!part) return;
       if (part === "α∇") {
@@ -6503,7 +6532,7 @@ button.chip:hover{border-color:var(--rubric)}
         node.appendChild(h("span", "s2-nw", kids));
       }
       else if (part === "∇") node.appendChild(nabla());
-      else if (part === "w" || part === "α") node.appendChild(el("i", "s2-var", part));
+      else if (part === "w" || part === "α" || part === "ε") node.appendChild(el("i", "s2-var", part));
       else node.appendChild(document.createTextNode(part));
     });
   }
@@ -6520,11 +6549,12 @@ button.chip:hover{border-color:var(--rubric)}
       return x;
     }
     function row(kids) { var r = el("span", "s2-fq"); kids.forEach(function (n) { r.appendChild(n); }); return r; }
-    var F = { w0: c(), g2: c(), w1: c("s2-w1") };
+    // F.eq, the sign of the last line: "≈" when the new number is rounded to two decimals (One small change by hand)
+    var F = { w0: c(), g2: c(), w1: c("s2-w1"), eq: op("=") };
     var an = h("span", "s2-nw", [sym("α", "s2-al"), sym("∇")]);
     [sym("w"), row([op("="), sym("w"), op(MF.MINUS), an]),
      el("span"), row([op("="), F.w0, op(MF.MINUS), el("span", "s2-gk", MF.num(Z.ALPHA)), op("×"), op("("), F.g2, op(")")]),
-     el("span"), row([op("="), F.w1])].forEach(function (n) { box.appendChild(n); });
+     el("span"), row([F.eq, F.w1])].forEach(function (n) { box.appendChild(n); });
     box.setAttribute("role", "img");
     F.box = box;
     F.cells = [F.w0, F.g2, F.w1];
@@ -6543,10 +6573,24 @@ button.chip:hover{border-color:var(--rubric)}
      change of the total loss (-0.28); the slope, ∇ (-28). The numbers are the chain's: the ticks Before and After, the
      legs, the slope. Labels are HTML, for the drawn ∇. P.set(mv, g, ch) draws a move: g the guess before it. */
   function lossAt(g, mv, x) { var g2 = Z.put(g.c, g.f, mv.which, mv.r, mv.k, x); return Z.table(g2.c, g2.f, R0).loss; }
-  function viewOf(mv) {
-    var e = Z.EPS, lo = Math.min(mv.lossBefore, mv.lossAfter), hi = Math.max(mv.lossBefore, mv.lossAfter);
+  // mv.eps (One small change by hand): another amount than Z.EPS. A large one bends the curve between Before and After
+  // and beyond them, so the view then takes in the whole curve over its width (g, the guess before the move).
+  function viewOf(mv, g) {
+    var e = mv.eps || Z.EPS, lo = Math.min(mv.lossBefore, mv.lossAfter), hi = Math.max(mv.lossBefore, mv.lossAfter);
     var d = hi - lo || Math.max(Math.abs(hi) * 1e-3, 1e-6);
-    return { x0: mv.from - e * 0.35, x1: mv.from + e * 1.45, y0: lo - d * 0.62, y1: hi + d * 0.5 };
+    var V = { x0: mv.from - e * 0.35, x1: mv.from + e * 1.45, y0: lo - d * 0.62, y1: hi + d * 0.5 };
+    if (mv.eps && g) {
+      var cmin = Infinity, cmax = -Infinity;
+      for (var q = 0; q <= 48; q++) {
+        var y = lossAt(g, mv, V.x0 + (V.x1 - V.x0) * q / 48);
+        cmin = Math.min(cmin, y);
+        cmax = Math.max(cmax, y);
+      }
+      var pad = (Math.max(cmax, V.y1) - Math.min(cmin, V.y0)) * 0.05;
+      if (cmin < V.y0) V.y0 = cmin - pad;
+      if (cmax > V.y1) V.y1 = cmax + pad;
+    }
+    return V;
   }
   MF.S2PLOT = { lossAt: lossAt, view: viewOf(NWMV), g: G0, mv: NWMV };   // for _try-s2.js
   function slopePlot() {
@@ -6592,13 +6636,13 @@ button.chip:hover{border-color:var(--rubric)}
     P.draw = function () {
       var w = root.clientWidth, hh = root.clientHeight, mv = P.mv, ch = P.ch;
       if (!w || !hh || !mv) return P;
-      var V = viewOf(mv), small = hh < 120, px = { l: small ? 52 : 60, r: w - 6, t: small ? 18 : 22, b: hh - (small ? 30 : 36) };
+      var V = viewOf(mv, P.g), small = hh < 120, px = { l: small ? 52 : 60, r: w - 6, t: small ? 18 : 22, b: hh - (small ? 30 : 36) };
       svg.setAttribute("viewBox", "0 0 " + w + " " + hh);
       function X(x) { return px.l + (x - V.x0) / (V.x1 - V.x0) * (px.r - px.l); }
       function Y(y) { return px.b - (y - V.y0) / (V.y1 - V.y0) * (px.b - px.t); }
       gAx.textContent = "";
       gGd.textContent = "";
-      var xb = X(mv.from), xa = X(mv.from + Z.EPS), yb = Y(mv.lossBefore), ya = Y(mv.lossAfter);
+      var xb = X(mv.from), xa = X(mv.from + (mv.eps || Z.EPS)), yb = Y(mv.lossBefore), ya = Y(mv.lossAfter);
       // axes, the ticks of Before and After on both, the guides from the two points to the axes
       line(gAx, "s2-pax", [px.l, px.b], [px.r, px.b]);
       line(gAx, "s2-pax", [px.l, px.t - 6], [px.l, px.b]);
@@ -6997,8 +7041,10 @@ button.chip:hover{border-color:var(--rubric)}
       var card = el("div", "act-card s2-ycard");
       card.appendChild(el("p", "act-kicker", "Part two, your turn"));
       card.appendChild(el("p", "act-title", "Your turn"));
-      card.appendChild(el("p", "act-line", "One rating: Ida rated Paddington\u00a0" + MF.num(MF.rating(S2.corner[0], S2.corner[1])) +
-                          ". Guess Ida's two numbers and Paddington's two, then make the loss small yourself, one number at a time."));
+      // since 2026-11-12 (Carlos's twenty-first message) two scenes: the whole table by hand, then the corner
+      card.appendChild(el("p", "act-line", "First the whole table: type the embeddings, then choose a number and how much to add to it. " +
+                          "Then one rating: Ida rated Paddington\u00a0" + MF.num(MF.rating(S2.corner[0], S2.corner[1])) +
+                          "; make its loss small yourself, one number at a time."));
       var m = el("div", "act-motif");
       [MF.chip(MF.get(S2.corner[0])), N.slot(), N.slot(), el("span", "act-op", "×"), N.slot(), N.slot(), MF.chip(MF.get(S2.corner[1]))]
         .forEach(function (x, j) { x.style.setProperty("--j", String(j)); m.appendChild(x); });
@@ -7014,6 +7060,326 @@ button.chip:hover{border-color:var(--rubric)}
       card.classList.add("play");
     }
   });
+  /* 4b. ONE SMALL CHANGE, BY HAND (Carlos, 2026-11-12, REQUEST.md twenty-first message: "give me the option to do it also
+     on a large one ... the option for me to input the embeddings there, and the option to pick one cell, and then the
+     epsilon"): the whole table, Ida, Raj and Elsa with Paddington and The Martian, after the card of your turn and before
+     the corner. The participant types the ten numbers of the embeddings (or takes the first guess), taps one of them and
+     chooses ε, how much to add to it. The what-if then comes at once, without motion, as far as the slope: the number's
+     Before and After, the totals' and their change, the picture with its two green links. Next writes the update, Next
+     moves the number, Next lets them choose another; tapping a number or an ε at any time starts a new change from the
+     board as it stands. Back walks the same way back, through every change made. The scene claims Next and Back while a
+     change is under way (hClaim): a listener on the footer's buttons that runs before the engine's, and onkey for the
+     keys; on the board as it stands with no change under way, Next and Back leave the scene as usual.
+     The arithmetic is exact: the numbers in thousandths and the totals in units of 10^-12, as integers (BigInt). The
+     totals show d decimals, from max(2, the decimals of ε) on, until their change shows two digits (6 at most), and the
+     change is the difference of the two totals shown; ∇ = change / ε is exact; so is w - 0.02 × ∇, which the board keeps
+     to two decimals, half away from zero: the update then writes ≈. From the first guess, The Martian's second number with
+     ε = 0.01 gives One small change's numbers: 64.00 and 63.72, -0.28, ∇ = -28, -1 - 0.02 × (-28) = -0.44. */
+  var HT = null;
+  var HEPS = [0, 1, 2, 3];                            // ε = 10^-m: 1, 0.1, 0.01, 0.001
+  var HSLOTS = Z.order(G0.c, G0.f);                   // the ten numbers in typing order, the customers' first
+  function hEmpty() { return { c: PEOPLE.map(function () { return [null, null]; }), f: FILMS.map(function () { return [null, null]; }) }; }
+  // phase: type, pick (no change under way), slope, formula, moved; sel the number chosen ([which, r, k]); m the ε
+  // chosen (10^-m), null before; ch the change under way (hChain); hist the changes made, each with the guess before it
+  var HS = { g: hEmpty(), active: 0, phase: "type", sel: null, m: null, ch: null, hist: [] };
+  function hAt(g, s) { return Z.at(g.c, g.f, s[0], s[1], s[2]); }
+  function hTyped() { return HSLOTS.every(function (s) { return isNum(hAt(HS.g, s)); }); }
+  function hAny() { return HSLOTS.some(function (s) { return isNum(hAt(HS.g, s)); }); }
+  function hName(s) { return numberName(s[0], s[1], s[2], IDS); }
+  function hEpsText(m) { return m ? "0." + "00".slice(0, m - 1) + "1" : "1"; }
+  function hGuess(g) { return { c: copy(g.c), f: copy(g.f) }; }
+  // BigInt, made on the first change, so a browser without it loses this scene alone
+  var BIG = null;
+  function big() {
+    if (BIG) return BIG;
+    var ten = BigInt(10), p = [BigInt(1)];
+    for (var q = 1; q <= 16; q++) p.push(p[q - 1] * ten);
+    return (BIG = { zero: BigInt(0), one: BigInt(1), two: BigInt(2), p: p });
+  }
+  // A number with at most three decimals in thousandths; the total loss in units of 10^-12 (the predictions in millionths).
+  function thou(v) { return BigInt(Math.round(v * 1000)); }
+  function totalU(c, f) {
+    var b = big(), s = b.zero;
+    for (var i = 0; i < c.length; i++) for (var j = 0; j < f.length; j++) {
+      var pr = b.zero;
+      for (var k = 0; k < c[i].length; k++) pr += c[i][k] * f[j][k];
+      var dd = pr - BigInt(R0[i][j]) * b.p[6];
+      s += dd * dd;
+    }
+    return s;
+  }
+  // a / 10^k, rounded half away from zero
+  function rnd(a, k) {
+    var b = big(), D = b.p[k], neg = a < b.zero, A = neg ? -a : a, q = A / D;
+    if ((A - q * D) * b.two >= D) q += b.one;
+    return neg ? -q : q;
+  }
+  // An integer in units of 10^-d as text with d decimals; trim drops trailing zeros.
+  function bigText(i, d, trim) {
+    var neg = i < big().zero, a = (neg ? -i : i).toString();
+    while (a.length <= d) a = "0" + a;
+    var t = d ? a.slice(0, a.length - d) + "." + a.slice(a.length - d) : a;
+    if (trim && d) t = t.replace(/0+$/, "").replace(/\.$/, "");
+    return (neg ? MF.MINUS : "") + t;
+  }
+  function bigNum(i, d) { return Number(i) / Math.pow(10, d); }
+  // One change: the number s of the guess g plus 10^-m. Its numbers, and their texts, in the form of a move of the run
+  // (the picture and the update take it as they take One small change's).
+  function hChain(g, s, m) {
+    var b = big();
+    var c = g.c.map(function (r) { return r.map(thou); }), f = g.f.map(function (r) { return r.map(thou); });
+    var M = s[0] === "c" ? c : f, xU = M[s[1]][s[2]], eU = b.p[3 - m];
+    var TB = totalU(c, f);
+    M[s[1]][s[2]] = xU + eU;
+    var TA = totalU(c, f);
+    M[s[1]][s[2]] = xU;
+    var d, aB, aA, dA;
+    for (d = Math.max(2, m); ; d++) {
+      aB = rnd(TB, 12 - d);
+      aA = rnd(TA, 12 - d);
+      dA = aA - aB;
+      if (dA >= b.p[1] || -dA >= b.p[1] || d >= 6) break;
+    }
+    // α∇ = 0.02 × dA × 10^(m - d) = 2 dA in units of 10^-q; the number in the same units; the new number to hundredths
+    var q = d - m + 2, w0U = q >= 3 ? xU * b.p[q - 3] : xU / b.p[3 - q], w1U = w0U - b.two * dA, w1 = rnd(w1U, q - 2);
+    var dn = Math.max(2, m);
+    function shown(u) { return dn >= 3 ? u * b.p[dn - 3] : u / b.p[3 - dn]; }
+    var sign = dA < b.zero ? -1 : dA > b.zero ? 1 : 0;
+    return {
+      which: s[0], r: s[1], k: s[2], m: m, eps: Math.pow(10, -m), d: d, from: bigNum(xU, 3), to: bigNum(w1, 2),
+      lossBefore: bigNum(TB, 12), lossAfter: bigNum(TA, 12), dA: bigNum(dA, d), g: bigNum(dA, d - m), w0: bigNum(xU, 3),
+      w1: bigNum(w1, 2), rounded: w1 * b.p[q - 2] !== w1U, sign: sign,
+      tag: sign < 0 ? TAG.smaller : sign > 0 ? TAG.larger : TAG.same, tagKind: sign < 0 ? "down" : sign > 0 ? "up" : "same",
+      t: { dX: hEpsText(m), plus: "+" + hEpsText(m), xB: bigText(shown(xU), dn), xA: bigText(shown(xU + eU), dn),
+           aB: bigText(aB, d), aA: bigText(aA, d), dA: bigText(dA, d), g: bigText(dA, d - m, true),
+           w0: bigText(xU, 3, true), w1: bigText(w1, 2, true) }
+    };
+  }
+  function hLead() {
+    var ph = HS.phase, ch = HS.ch;
+    if (ph === "type") return "Type your embeddings with the keys, one number at a time: the ringed one, or tap another. Or use the first guess.";
+    if (ph === "pick") {
+      if (HS.sel && HS.m === null) return hName(HS.sel) + " is " + MF.num(hAt(HS.g, HS.sel)) + ". Choose ε, how much to add to it.";
+      if (!HS.sel && HS.m !== null) return "Tap a number of the embeddings: ε = " + hEpsText(HS.m) + " is added to it.";
+      return "Tap a number of the embeddings, and choose ε, how much to add to it.";
+    }
+    var name = hName([ch.which, ch.r, ch.k]), e = ch.t.dX;
+    if (ph === "slope") {
+      if (!ch.sign) return "Add ε = " + e + " to " + name + ": the total loss stays at " + ch.t.aB + ". ∇ is 0.";
+      return "Add ε = " + e + " to " + name + ": the total loss changes by " + ch.t.dA + ". ∇ is " + ch.t.dA + " divided by " + e +
+             ", that is " + ch.t.g + ".";
+    }
+    if (ph === "formula") {
+      return "Call the number w. The update subtracts α∇, with α = " + MF.num(Z.ALPHA) + ". " +
+             (ch.sign < 0 ? "∇ is negative, so w goes up." : ch.sign > 0 ? "∇ is positive, so w goes down." : "∇ is 0, so w stays.");
+    }
+    if (ch.to === ch.from) return name + " stays at " + MF.num(ch.from) + ": the update rounds to 0 at two decimals. Next, another number.";
+    var now = Z.table(HS.g.c, HS.g.f, R0).loss, tx = pairText(ch.lossBefore, now);
+    return name + " moves from " + MF.num(ch.from) + " to " + MF.num(ch.to) + ", and the total loss " +
+           (now < ch.lossBefore ? "falls" : now > ch.lossBefore ? "grows" : "stays") + " from " + tx[0] + " to " + tx[1] + ". Next, another number.";
+  }
+  function hDraw(live) {
+    var B = HT.B, P = HT.P, F = HT.F, ph = HS.phase, typed = hTyped(), ch = HS.ch;
+    var change = ph === "slope" || ph === "formula" || ph === "moved", nb = null, av = null, tgt = null;
+    B.parts({ r: true, c: true, f: true, p: typed, s: typed, avg: typed });
+    if (ph === "type") tgt = HSLOTS[HS.active].slice();
+    else if (HS.sel) tgt = HS.sel.slice();
+    if (ph === "pick" && HS.sel) nb = { which: HS.sel[0], r: HS.sel[1], k: HS.sel[2], x: hAt(HS.g, HS.sel), after: false };
+    if (ph === "slope" || ph === "formula") {
+      nb = { which: ch.which, r: ch.r, k: ch.k, x: ch.from, eps: ch.eps, after: true, hot: ph === "slope", bt: ch.t.xB, at: ch.t.xA, plus: ch.t.plus };
+      av = { before: ch.lossBefore, after: ch.lossAfter, tx: [ch.t.aB, ch.t.aA], tag: ch.tag, tagKind: ch.tagKind, chg: ch.t.dA, hot: ph === "slope" };
+    }
+    if (change) {
+      // the picture and the update of the change: drawn on the guess before it (in moved, the guess the history keeps)
+      P.level(3).set(ch, ph === "moved" ? HS.hist[HS.hist.length - 1].g : HS.g, ch);
+      fillUpd(F, ch);
+      F.eq.textContent = ch.rounded ? ABOUT : "=";
+      if (ch.rounded) F.box.setAttribute("aria-label", F.box.getAttribute("aria-label").replace(/ is ([^ ]+)$/, " is about $1"));
+    }
+    P.el.classList.toggle("s2-pout", !change);
+    F.box.classList.toggle("s2-pout", ph !== "formula" && ph !== "moved");
+    B.set({ g: HS.g, p: typed ? "all" : null, s: typed ? "all" : null, avg: typed, nb: nb, av: av, tgt: tgt, cone: !!nb,
+            flow: ph === "slope" || ph === "formula", upd: ph === "moved" ? F.w1 : false,
+            links: ph === "slope" ? [[B.NB.plus, P.L.hop], [B.AV.plus, P.L.chg]] : null });
+    if (change) P.draw();
+    HT.root.dataset.phase = ph;
+    HT.root.classList.toggle("s2-upon", ph === "formula" || ph === "moved");
+    setLead(HT.lead, hLead());
+    if (live) replay(HT.lead, "s2-in"); else still(HT.root);
+    HT.keys.hidden = ph !== "type";
+    HT.eps.hidden = ph === "type";
+    HT.chips.forEach(function (b, q) { var on = HS.m === HEPS[q]; b.classList.toggle("primary", on); b.setAttribute("aria-pressed", on ? "true" : "false"); });
+    HT.first.hidden = ph !== "type";
+    HT.again.hidden = ph === "type" && !hAny();
+    HT.cells.forEach(function (td, q) {
+      if (td) td.setAttribute("aria-pressed", (ph === "type" ? q === HS.active : !!HS.sel && HSLOTS[q].join() === HS.sel.join()) ? "true" : "false");
+    });
+  }
+  // The motion of a step reached by Next: the update rises; then the update arrow draws itself to the number, which moves,
+  // and the predictions and the losses it takes part in, and the total, pop.
+  function hLive() {
+    var B = HT.B, ch = HS.ch;
+    if (!MOTION || !ch) return;
+    if (HS.phase === "formula") { rise(HT.F.box); return; }
+    if (HS.phase !== "moved") return;
+    B.drawIn(B.G.upd, 700);
+    anim(B.G.updH, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, delay: 650, fill: "backwards" });
+    pop(HT.F.w1, 420);
+    var c = B.guessCell(ch.which, ch.r, ch.k);
+    if (c && c.parentNode) replay(c.parentNode, "s2-moved");
+    for (var i = 0; i < PEOPLE.length; i++) for (var j = 0; j < FILMS.length; j++) {
+      if ((ch.which === "c" ? i : j) !== ch.r) continue;
+      [B.item("p", i, j), B.item("s", i, j)].forEach(function (n) { if (n) pop(n, 380); });
+    }
+    pop(B.AV.bn, 480);
+  }
+  // A change from the board as it stands: the number and ε chosen, or the board alone.
+  function hWhatIf() {
+    if (HS.sel && HS.m !== null) { HS.ch = hChain(HS.g, HS.sel, HS.m); HS.phase = "slope"; }
+    else { HS.ch = null; HS.phase = "pick"; }
+    hDraw(false);
+  }
+  function hTap(q) {
+    if (HS.phase === "type") { HS.active = q; hDraw(false); return; }
+    HS.sel = HSLOTS[q].slice();
+    hWhatIf();
+  }
+  function hEps(m) {
+    if (HS.phase === "type") return;
+    HS.m = m;
+    hWhatIf();
+  }
+  function hType(v) {
+    if (HS.phase !== "type") return;
+    var q = HS.active, s = HSLOTS[q], n = HSLOTS.length, next = -1;
+    (s[0] === "c" ? HS.g.c : HS.g.f)[s[1]][s[2]] = v;
+    for (var d = 1; d <= n; d++) { var t = (q + d) % n; if (!isNum(hAt(HS.g, HSLOTS[t]))) { next = t; break; } }
+    if (next >= 0) HS.active = next;
+    else { HS.phase = "pick"; HS.sel = null; HS.ch = null; HS.hist = []; }
+    hDraw(false);
+    var c = HT.B.guessCell(s[0], s[1], s[2]);
+    if (c) pop(c, 380);
+    if (next < 0) pop(HT.B.AV.bn, 480);
+  }
+  function hFirst() {
+    HS.g = hGuess(G0);
+    HS.phase = "pick";
+    HS.sel = null;
+    HS.ch = null;
+    HS.hist = [];
+    hDraw(false);
+  }
+  function hReset() {
+    HS.g = hEmpty();
+    HS.active = 0;
+    HS.phase = "type";
+    HS.sel = null;
+    HS.m = null;
+    HS.ch = null;
+    HS.hist = [];
+    hDraw(false);
+  }
+  // Next (dir 1) and Back (dir -1) inside a change; true when the scene used them.
+  function hClaim(dir) {
+    var ph = HS.phase, last = HS.hist[HS.hist.length - 1];
+    if (dir > 0) {
+      if (ph === "slope") { HS.phase = "formula"; hDraw(true); hLive(); return true; }
+      if (ph === "formula") {
+        HS.hist.push({ g: hGuess(HS.g), sel: HS.sel.slice(), m: HS.m, ch: HS.ch });
+        HS.g = Z.put(HS.g.c, HS.g.f, HS.ch.which, HS.ch.r, HS.ch.k, HS.ch.to);
+        HS.phase = "moved";
+        hDraw(true);
+        hLive();
+        return true;
+      }
+      if (ph === "moved") { HS.phase = "pick"; HS.sel = null; HS.ch = null; hDraw(true); return true; }
+      return false;
+    }
+    if (ph === "formula") { HS.phase = "slope"; hDraw(false); return true; }
+    if (ph === "moved") {
+      HS.hist.pop();
+      HS.g = last.g;
+      HS.sel = last.sel.slice();
+      HS.m = last.m;
+      HS.ch = last.ch;
+      HS.phase = "formula";
+      hDraw(false);
+      return true;
+    }
+    if (ph === "slope") { HS.phase = "pick"; HS.sel = null; HS.ch = null; hDraw(false); return true; }
+    if (ph === "pick" && HS.sel) { HS.sel = null; hDraw(false); return true; }
+    if (ph === "pick" && last) { HS.sel = last.sel.slice(); HS.m = last.m; HS.ch = last.ch; HS.phase = "moved"; hDraw(false); return true; }
+    return false;
+  }
+  MF.define("hand", {
+    act: 2, title: "One small change, by hand", steps: 1,
+    build: function (inner, api) {
+      var root = el("div", "s2-sc s2-hd");
+      var lead = el("p", "s2-lead");
+      lead.setAttribute("aria-live", "polite");
+      var P = slopePlot(), F = updBlock();
+      var B = board({ people: PEOPLE, films: FILMS, plot: P.el, upd: F.box });
+      var keys = el("div", "s2-keys");
+      S2.keypad.forEach(function (v) {
+        var b = button(MF.num(v), "s2-key", function () { hType(v); });
+        b.setAttribute("aria-label", "type " + MF.spoken(v));
+        keys.appendChild(b);
+      });
+      var eps = el("div", "s2-eps");
+      var epl = el("span", "s2-epl", "Add");
+      epl.setAttribute("aria-hidden", "true");
+      eps.appendChild(epl);
+      var chips = HEPS.map(function (m) {
+        var b = button(hEpsText(m), "s2-key s2-ek", function () { hEps(m); });
+        b.setAttribute("aria-label", "add " + hEpsText(m));
+        eps.appendChild(b);
+        return b;
+      });
+      var first = button("Use the first guess", "primary", function () { hFirst(); });
+      var again = button("Start again", "quiet", function () { hReset(); });
+      var tools = el("div", "s2-tools");
+      tools.appendChild(first);
+      tools.appendChild(again);
+      B.note.appendChild(keys);
+      B.note.appendChild(eps);
+      B.note.appendChild(tools);
+      root.appendChild(lead);
+      root.appendChild(B.el);
+      inner.appendChild(root);
+      // every number of the embeddings can be tapped: to type it, or to change it
+      var cells = HSLOTS.map(function (s, q) {
+        var td = B.m[s[0]].td(s[1], s[2]);
+        if (!td) return null;
+        td.setAttribute("role", "button");
+        td.tabIndex = 0;
+        td.setAttribute("aria-label", hName(s));
+        td.addEventListener("click", function () { hTap(q); });
+        td.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); hTap(q); } });
+        return td;
+      });
+      HT = { root: root, lead: lead, B: B, P: P, F: F, keys: keys, eps: eps, chips: chips, first: first, again: again, cells: cells, api: api, neg: false };
+      // Next and Back of the footer: the scene's while a change is under way (a listener that runs before the engine's)
+      document.addEventListener("click", function (e) {
+        if (!HT.api.active) return;
+        var b = e.target && e.target.closest ? e.target.closest("#next, #prev") : null;
+        if (!b || b.disabled) return;
+        if (hClaim(b.id === "next" ? 1 : -1)) { e.stopPropagation(); e.preventDefault(); }
+      }, true);
+    },
+    step: function () { hDraw(false); },
+    onkey: function (e) {
+      var t = e.target, free = !t || t === document.body || t === document.documentElement;
+      if (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && free)) { if (hClaim(1)) { e.preventDefault(); return true; } return false; }
+      if (e.key === "ArrowLeft" || e.key === "PageUp") { if (hClaim(-1)) { e.preventDefault(); return true; } return false; }
+      if (HS.phase === "type") {
+        var map = { "0": 0, "1": 1, "2": 2 };
+        if (e.key === "-" || e.key === "Subtract" || e.key === MF.MINUS) { HT.neg = true; return true; }
+        if (e.key in map) { var v = map[e.key] * (HT.neg ? -1 : 1); HT.neg = false; if (v === 0) v = 0; hType(v); return true; }
+      }
+      return false;
+    }
+  });
+
   var YT = null;
   var CORNER = { people: [S2.corner[0]], films: [S2.corner[1]] };
   var SLOTS = [["c", 0, 0], ["c", 0, 1], ["f", 0, 0], ["f", 0, 1]];
@@ -7184,7 +7550,8 @@ button.chip:hover{border-color:var(--rubric)}
   });
 
   // For the tests: the numbers the scenes show.
-  MF.S2T = { G0: G0, T0: T0, NW: NW, G1: G1, T1: T1, run: theRun, YS: YS, WL: WL, ORDER: ORDER, PLOTK: PLOTK, LAST: LAST };
+  MF.S2T = { G0: G0, T0: T0, NW: NW, G1: G1, T1: T1, run: theRun, YS: YS, WL: WL, ORDER: ORDER, PLOTK: PLOTK, LAST: LAST,
+             HS: HS, hChain: hChain };
 })();
 </script>
 <script>
