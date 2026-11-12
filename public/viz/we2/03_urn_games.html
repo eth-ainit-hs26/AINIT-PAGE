@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esther's Urns</title>
+<!-- Esther's Urns, the urn game of AINIT HS26 weekend 2 (rewritten 2026-11-10 by a TA with Claude).
+     The statistics before Once Upon a Mirror: the urn, the estimate, the bracket p-hat +- 1/sqrt(n), two urns, the
+     optimist's rule. One file, plain JS and inline SVG, opens from file://. #scene=N opens scene N; t switches the theme.
+     Colours and words follow Once Upon a Mirror: an orange ball is a sale (a tap), a white ball is none; p-hat is
+     "the estimate"; 1/sqrt(n) is the margin that becomes UCB's exploration bonus. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F9F4E3; --leaf: #FFFBF0; --panel: #F7F0DE; --fg: #2A2432; --muted: #6B6275; --line: #D8CBA9;
+  --accent: #58409A; --accent-soft: #ECE5F8; --ochre: #8F5A06; --gold: #D9A21B;
+  --urn: #E1813A; --urn-dark: #A4521A; --urn-band: #F3C552; --urn-window: #FFF6E6;
+  --tap: #F28A1E; --tap-edge: #B85C0C; --tap-hi: #FFD9A8;
+  --notap: #FFFFFF; --notap-mid: #F1ECE2; --notap-edge: #ADA291;
+  --yes: #2F7A4D; --yes-soft: #E1F0E6; --no: #9B3A3A; --no-soft: #F6E1E1; --you: #2B78C9;
+  --potter: #7A1F2B; --epl: #2E8C7E; --ulysses: #23406B;
+  --card: #58409A; --card-ink: #FFFBF0; --card-soft: #D8CDF4;
+  --serif: "EB Garamond", Garamond, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --geez: "Kefa", "Noto Sans Ethiopic", "Nyala", "Ebrima", serif;
+  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1A1720; --leaf: #231E2A; --panel: #2C2634; --fg: #EEE7D8; --muted: #A99FB3; --line: #3D3548;
+    --accent: #B9A6F3; --accent-soft: #352C4B; --ochre: #E3AA4C; --gold: #F0C150;
+    --urn-window: #3A2F26; --tap: #FF9C40; --tap-edge: #FFC58A; --tap-hi: #FFE2BF;
+    --notap: #3A3443; --notap-mid: #2E2935; --notap-edge: #CFC6B8;
+    --yes: #73D19A; --yes-soft: #20352A; --no: #EE9393; --no-soft: #3D2426; --you: #7EB6F2;
+    --potter: #D9677A; --epl: #5FD0BC; --ulysses: #8FB1E8;
+    --card: #2F2552; --card-ink: #EEE7D8; --card-soft: #B9A6F3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1A1720; --leaf: #231E2A; --panel: #2C2634; --fg: #EEE7D8; --muted: #A99FB3; --line: #3D3548;
+  --accent: #B9A6F3; --accent-soft: #352C4B; --ochre: #E3AA4C; --gold: #F0C150;
+  --urn-window: #3A2F26; --tap: #FF9C40; --tap-edge: #FFC58A; --tap-hi: #FFE2BF;
+  --notap: #3A3443; --notap-mid: #2E2935; --notap-edge: #CFC6B8;
+  --yes: #73D19A; --yes-soft: #20352A; --no: #EE9393; --no-soft: #3D2426; --you: #7EB6F2;
+  --potter: #D9677A; --epl: #5FD0BC; --ulysses: #8FB1E8;
+  --card: #2F2552; --card-ink: #EEE7D8; --card-soft: #B9A6F3;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--serif); font-size: 18px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+p { margin: 0 0 .7em; }
+.sc { font-variant-caps: all-small-caps; letter-spacing: .09em; }
+.mono { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.geez { font-family: var(--geez); color: var(--accent); }
+.ph { position: relative; display: inline-block; font-style: italic; padding-right: .05em; }
+.ph::after { content: "^"; position: absolute; left: .08em; top: -.42em; font-size: .85em; font-style: normal; }
+
+/* The frame */
+.app { min-height: 100vh; min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; }
+.top { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 5; }
+.brand { font-weight: 600; font-size: 19px; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.brand svg { width: 22px; height: 26px; }
+.where { color: var(--muted); font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.iconbtn { border: 1px solid var(--line); background: var(--leaf); border-radius: 999px; width: 36px; height: 36px; cursor: pointer; display: grid; place-items: center; flex: none; }
+.iconbtn svg { width: 18px; height: 18px; }
+main { padding: 22px 16px 28px; }
+.leaf { max-width: 1000px; margin: 0 auto; background: var(--leaf); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 0 0 4px var(--leaf), 0 0 0 5px var(--line), 0 10px 30px rgba(60, 40, 10, .08); padding: 26px 30px 30px; }
+.head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 4px; }
+.head .num { font-family: var(--geez); color: var(--accent); font-size: 30px; line-height: 1; }
+.head h2 { margin: 0; font-size: 30px; font-weight: 600; line-height: 1.15; }
+.kicker { color: var(--ochre); font-size: 15px; margin-bottom: 14px; }
+.lead { font-size: 19px; max-width: 760px; }
+.bottom { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 10px 16px 14px; border-top: 1px solid var(--line); background: var(--bg); position: sticky; bottom: 0; z-index: 5; }
+.nav { border: 1px solid var(--accent); background: var(--accent); color: var(--card-ink); border-radius: 999px; padding: 6px 18px; cursor: pointer; font-weight: 500; }
+.nav.back { background: transparent; color: var(--accent); }
+.nav:disabled { opacity: .35; cursor: default; }
+.pager { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 14px; }
+.pgroup { display: flex; gap: 5px; align-items: center; }
+.pdot { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: var(--leaf); cursor: pointer; font-family: var(--geez); font-size: 17px; color: var(--muted); display: grid; place-items: center; padding: 0; }
+.pdot.on { background: var(--accent); color: var(--card-ink); border-color: var(--accent); }
+.pdot.seen:not(.on) { color: var(--accent); border-color: var(--card-soft); }
+
+/* Shared parts */
+.btn { border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); border-radius: 8px; padding: 6px 14px; cursor: pointer; font-weight: 500; }
+.btn.primary { background: var(--accent); color: var(--card-ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--accent); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--accent); padding: 5px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--accent); }
+.seg button.on { background: var(--accent); color: var(--card-ink); }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.panel h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+.note { border-left: 3px solid var(--gold); background: var(--panel); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 14px 0; }
+.note.link { border-left-color: var(--accent); }
+.formula { font-size: 22px; text-align: center; margin: 8px 0; }
+.formula .big { font-size: 28px; font-weight: 600; }
+.status { font-weight: 500; min-height: 1.5em; }
+.status.good { color: var(--yes); }
+.status.bad { color: var(--no); }
+.center { text-align: center; }
+svg text { font-family: var(--serif); fill: var(--fg); }
+svg .mut { fill: var(--muted); }
+.stats { display: grid; grid-template-columns: auto auto; gap: 2px 14px; font-variant-numeric: tabular-nums; justify-content: start; }
+.stats b { font-weight: 600; }
+.hidden { display: none !important; }
+
+/* Balls and beads */
+.ball { display: inline-block; width: 16px; height: 16px; border-radius: 50%; vertical-align: middle; flex: none; }
+.ball.o { background: radial-gradient(circle at 34% 30%, var(--tap-hi), var(--tap) 55%, var(--tap-edge)); box-shadow: 0 0 0 1px var(--tap-edge); }
+.ball.w { background: radial-gradient(circle at 34% 30%, var(--notap), var(--notap-mid) 60%, var(--notap-edge)); box-shadow: 0 0 0 1px var(--notap-edge); }
+.ball.lg { width: 34px; height: 34px; }
+.ball.md { width: 24px; height: 24px; }
+.tray { display: flex; flex-wrap: wrap; gap: 4px; min-height: 22px; align-content: flex-start; padding: 8px; border: 1px dashed var(--line); border-radius: 8px; background: var(--leaf); }
+.tray .ball { width: 13px; height: 13px; }
+.tray.dense .ball { width: 8px; height: 8px; box-shadow: none; }
+.pop { animation: pop .3s ease-out; }
+@keyframes pop { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.flyer { position: fixed; z-index: 50; pointer-events: none; left: 0; top: 0; }
+.shake { animation: shake .35s; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+/* Books */
+.book { width: 54px; height: 76px; border-radius: 3px 6px 6px 3px; color: #FFF8EC; display: flex; flex-direction: column; justify-content: space-between; padding: 6px 5px 5px 9px; position: relative; box-shadow: inset 4px 0 0 rgba(0, 0, 0, .22), 0 3px 8px rgba(0, 0, 0, .18); font-size: 10.5px; line-height: 1.1; font-weight: 600; flex: none; }
+.book::after { content: ""; position: absolute; left: 9px; right: 5px; bottom: 16px; height: 1px; background: rgba(255, 248, 236, .6); }
+.book small { font-weight: 400; opacity: .85; font-size: 9px; }
+.book.potter { background: linear-gradient(160deg, #9B2C3B, #6A1824); }
+.book.epl { background: linear-gradient(160deg, #3AA392, #236F64); }
+.book.ulysses { background: linear-gradient(160deg, #2F5287, #1B3256); }
+.book.lg { width: 74px; height: 104px; font-size: 13px; padding: 8px 7px 7px 12px; }
+.book.lg small { font-size: 10.5px; }
+.c-potter { color: var(--potter); } .c-epl { color: var(--epl); } .c-ulysses { color: var(--ulysses); }
+
+/* Urns */
+.urn { width: 120px; height: 140px; display: block; }
+.urn.sm { width: 84px; height: 98px; }
+.urn.xs { width: 64px; height: 75px; }
+
+/* Cover */
+.cover { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+.cover h1 { font-size: 46px; line-height: 1.05; margin: 0 0 6px; font-weight: 600; }
+.cover .tag { font-style: italic; color: var(--ochre); font-size: 20px; margin-bottom: 16px; }
+.cover svg.shop { width: 100%; height: auto; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.chip { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 15px; background: var(--panel); }
+
+/* Scene 1: real and model rows */
+.rows { display: grid; gap: 6px; margin: 14px 0; }
+.row { display: grid; grid-template-columns: 120px minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr); align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.row .lab { font-variant-caps: all-small-caps; letter-spacing: .09em; color: var(--ochre); font-weight: 600; }
+.row .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; font-size: 15px; }
+.row .arrow { color: var(--muted); font-size: 22px; text-align: center; }
+.eq { text-align: center; font-size: 26px; color: var(--accent); line-height: 1; }
+.visitor { font-family: var(--emoji); font-size: 38px; line-height: 1; }
+.homepage { border: 1px solid var(--line); border-radius: 8px; background: var(--leaf); padding: 6px 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.homepage .bar { width: 100%; display: flex; gap: 3px; }
+.homepage .bar i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+.verdict { font-weight: 600; min-height: 1.5em; }
+.verdict.o { color: var(--tap-edge); }
+.verdict.w { color: var(--muted); }
+
+/* Charts */
+.chart { width: 100%; height: auto; display: block; }
+.axis { stroke: var(--line); stroke-width: 1; }
+.gridl { stroke: var(--line); stroke-width: 1; stroke-dasharray: 2 4; }
+
+/* Quiz */
+.quiz { border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin: 12px 0; background: var(--leaf); }
+.quiz .q { font-weight: 600; margin-bottom: 8px; }
+.quiz .opts { display: flex; flex-direction: column; gap: 6px; }
+.quiz .opt { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.quiz .opt:hover:not(:disabled) { border-color: var(--accent); }
+.quiz .opt.right { background: var(--yes-soft); border-color: var(--yes); }
+.quiz .opt.wrong { background: var(--no-soft); border-color: var(--no); text-decoration: line-through; text-decoration-color: var(--no); }
+.quiz .fb { margin-top: 8px; min-height: 0; }
+.quiz .fb.hint { color: var(--ochre); }
+.quiz .fb.ok { color: var(--yes); }
+
+/* Scene 7: the optimist */
+.urns3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 12px 0; }
+.ucol { border: 2px solid var(--line); border-radius: 12px; background: var(--panel); padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: border-color .2s, transform .2s; }
+.ucol:hover { border-color: var(--card-soft); }
+.ucol.best { border-color: var(--gold); }
+.ucol.pick { border-color: var(--accent); transform: translateY(-3px); }
+.ucol .title { font-weight: 600; font-size: 16px; text-align: center; line-height: 1.15; }
+.ucol .tray { width: 100%; min-height: 40px; }
+.ucol .nums { font-size: 15px; font-variant-numeric: tabular-nums; text-align: center; }
+.gauge { width: 100%; max-width: 130px; height: auto; }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+.step { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 15px; background: var(--leaf); }
+.step.on { border-color: var(--accent); background: var(--accent-soft); }
+.step b { color: var(--accent); }
+
+/* Scene 8 */
+table.map { border-collapse: collapse; width: 100%; margin: 10px 0 16px; }
+table.map th, table.map td { border-bottom: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: middle; }
+table.map th { font-variant-caps: all-small-caps; letter-spacing: .09em; color: var(--ochre); font-weight: 600; }
+.nextcards { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.nextcard { display: block; text-decoration: none; color: inherit; background: var(--card); color: var(--card-ink); border-radius: 10px; padding: 14px 16px; }
+.nextcard b { display: block; font-size: 19px; margin-bottom: 2px; }
+.nextcard span { color: var(--card-soft); font-size: 15px; }
+
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  .leaf { padding: 18px 16px 22px; box-shadow: none; }
+  main { padding: 12px 10px 20px; }
+  .head h2 { font-size: 25px; }
+  .cover, .grid2, .nextcards { grid-template-columns: minmax(0, 1fr); }
+  .cover h1 { font-size: 36px; }
+  .row { grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr); padding: 8px; gap: 4px; }
+  .row .lab { grid-column: 1 / -1; }
+  .urns3 { gap: 6px; }
+  .ucol { padding: 6px 4px; }
+  .ucol .title { font-size: 14px; }
+  .ucol .urn { display: none; }
+  .ucol .nums { font-size: 13px; }
+  .steps { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .where { display: none; }
+  .pager { gap: 4px 8px; }
+  .pdot { width: 24px; height: 24px; font-size: 12px; }
+  .nav { padding: 6px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pop, .shake { animation: none; }
+  .ucol { transition: none; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gO" cx="34%" cy="30%" r="70%"><stop offset="0" style="stop-color: var(--tap-hi)"/><stop offset=".55" style="stop-color: var(--tap)"/><stop offset="1" style="stop-color: var(--tap-edge)"/></radialGradient>
+    <radialGradient id="gW" cx="34%" cy="30%" r="70%"><stop offset="0" style="stop-color: var(--notap)"/><stop offset=".6" style="stop-color: var(--notap-mid)"/><stop offset="1" style="stop-color: var(--notap-edge)"/></radialGradient>
+    <linearGradient id="gUrn" x1="0" x2="1"><stop offset="0" style="stop-color: var(--urn-dark)"/><stop offset=".35" style="stop-color: var(--urn)"/><stop offset=".7" style="stop-color: var(--urn)"/><stop offset="1" style="stop-color: var(--urn-dark)"/></linearGradient>
+  </defs>
+</svg>
+<div class="app">
+  <header class="top">
+    <div class="brand"><svg viewBox="0 0 120 140" aria-hidden="true"><use href="#urnShape"/></svg>Esther's Urns</div>
+    <div class="where" id="where"></div>
+    <button class="iconbtn" id="theme" title="Light or dark (t)" aria-label="Switch light or dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+  </header>
+  <main><div class="leaf" id="leaf"></div></main>
+  <footer class="bottom">
+    <button class="nav back" id="back">Back</button>
+    <nav class="pager" id="pager" aria-label="Scenes"></nav>
+    <button class="nav" id="next">Next</button>
+  </footer>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="urnShape">
+      <rect x="40" y="128" width="40" height="9" rx="3" style="fill: var(--urn-dark)"/>
+      <path d="M42 26 L78 26 L80 36 C102 46 110 64 108 84 C106 108 96 124 84 132 L36 132 C24 124 14 108 12 84 C10 64 18 46 40 36 Z" fill="url(#gUrn)" style="stroke: var(--urn-dark)" stroke-width="2.5"/>
+      <rect x="33" y="15" width="54" height="13" rx="5" style="fill: var(--urn-band); stroke: var(--urn-dark)" stroke-width="2"/>
+      <path d="M22 50 C40 44 80 44 98 50" fill="none" style="stroke: var(--urn-band)" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </defs>
+</svg>
+<script>
+(function () {
+  "use strict";
+  // ---------- small tools ----------
+  const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const GEEZ = ["0", "፩", "፪", "፫", "፬", "፭", "፮", "፯", "፰", "፱", "፲"];
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+  const f2 = x => (Math.round(x * 100) / 100).toFixed(2);
+  const rand = () => Math.random();
+  const pick = arr => arr[Math.floor(rand() * arr.length)];
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+  const draw = p => (rand() < p ? 1 : 0);
+  const drawMany = (p, n) => { let k = 0; for (let i = 0; i < n; i++) k += draw(p); return k; };
+  const margin = n => 1 / Math.sqrt(n);
+  const clamp01 = x => Math.max(0, Math.min(1, x));
+  function el(html) { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+
+  // Timers of the current scene, cleared when the scene changes.
+  let timers = [];
+  function later(fn, ms) { const id = setTimeout(fn, RM ? 0 : ms); timers.push(id); return id; }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  let token = 0; // bumps on every scene change; an async run stops when its token is stale
+
+  const BOOKS = {
+    potter: { name: "Harry Potter", short: "Potter", by: "J. K. Rowling", cls: "potter" },
+    epl: { name: "Eat Pray Love", short: "Eat Pray Love", by: "E. Gilbert", cls: "epl" },
+    ulysses: { name: "Ulysses", short: "Ulysses", by: "J. Joyce", cls: "ulysses" }
+  };
+  const bookHTML = (id, size) => { const b = BOOKS[id]; return '<div class="book ' + b.cls + (size ? " " + size : "") + '" aria-label="' + b.name + '"><span>' + b.name + '</span><small>' + b.by + "</small></div>"; };
+  const ballHTML = (x, size) => '<span class="ball ' + (x ? "o" : "w") + (size ? " " + size : "") + '"></span>';
+
+  // An urn: balls is an array of 0/1 to show in its window, or null for a closed urn ("?").
+  function urnSVG(balls, cls) {
+    let inner = "";
+    if (balls) {
+      const n = balls.length, cols = 5, rows = Math.ceil(n / cols);
+      const r = rows <= 2 ? 6.2 : 4.6, w = 72, hgt = 58, x0 = 24, y0 = 58;
+      for (let i = 0; i < n; i++) {
+        const c = i % cols, rr = Math.floor(i / cols);
+        const cx = x0 + (w / cols) * (c + 0.5), cy = y0 + (hgt / rows) * (rr + 0.5);
+        inner += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + r + '" fill="url(#' + (balls[i] ? "gO" : "gW") + ')"/>';
+      }
+    } else {
+      inner = '<text x="60" y="100" text-anchor="middle" font-size="34" font-weight="600" style="fill: var(--urn-dark)">?</text>';
+    }
+    return '<svg class="urn ' + (cls || "") + '" viewBox="0 0 120 140" role="img" aria-label="' + (balls ? "an open urn" : "a closed urn") + '"><use href="#urnShape"/>' +
+      '<rect x="24" y="58" width="72" height="58" rx="14" style="fill: var(--urn-window); stroke: var(--urn-dark)" stroke-width="2"/>' + inner + "</svg>";
+  }
+  const urnBalls = (p, total) => { const k = Math.round(p * total); const a = []; for (let i = 0; i < total; i++) a.push(i < k ? 1 : 0); return shuffle(a); };
+
+  // A ball flies from one element to another (skipped with reduced motion).
+  function fly(fromEl, toEl, x, ms) {
+    return new Promise(res => {
+      if (RM || !fromEl || !toEl || !fromEl.getBoundingClientRect || !document.body.animate) { res(); return; }
+      const a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect();
+      const f = el('<span class="ball md flyer ' + (x ? "o" : "w") + '"></span>');
+      document.body.appendChild(f);
+      const x0 = a.left + a.width / 2 - 12, y0 = a.top + a.height * 0.35, x1 = b.left + b.width / 2 - 12, y1 = b.top + b.height / 2 - 12;
+      const anim = f.animate([
+        { transform: "translate(" + x0 + "px," + y0 + "px) scale(.4)", opacity: 0 },
+        { transform: "translate(" + x0 + "px," + (y0 - 40) + "px) scale(1)", opacity: 1, offset: 0.3 },
+        { transform: "translate(" + x1 + "px," + y1 + "px) scale(.8)", opacity: 1 }
+      ], { duration: ms || 650, easing: "ease-in-out" });
+      anim.onfinish = () => { f.remove(); res(); };
+    });
+  }
+  function addBeads(tray, xs, animate) {
+    const frag = document.createDocumentFragment();
+    xs.forEach(x => { const b = el(ballHTML(x)); if (animate) b.classList.add("pop"); frag.appendChild(b); });
+    tray.appendChild(frag);
+    tray.classList.toggle("dense", tray.children.length > 120);
+    while (tray.children.length > 400) tray.removeChild(tray.firstChild);
+  }
+
+  // A multiple choice question: a first wrong answer gives a hint and a second try; a second marks the right one.
+  function quiz(host, q) {
+    const box = el('<div class="quiz"><div class="q"></div><div class="opts"></div><div class="fb"></div></div>');
+    $(".q", box).innerHTML = q.text;
+    const fb = $(".fb", box);
+    let wrong = 0, done = false;
+    q.options.forEach((o, i) => {
+      const b = el('<button class="opt"></button>');
+      b.innerHTML = String.fromCharCode(97 + i) + ") " + o;
+      b.addEventListener("click", () => {
+        if (done || b.classList.contains("wrong")) return;
+        if (i === q.correct) {
+          b.classList.add("right"); done = true; fb.className = "fb ok"; fb.innerHTML = "Right. " + q.why;
+        } else {
+          b.classList.add("wrong"); wrong++;
+          if (wrong === 1) { fb.className = "fb hint"; fb.innerHTML = "Not quite. Hint: " + q.hint; }
+          else { done = true; $$(".opt", box)[q.correct].classList.add("right"); fb.className = "fb ok"; fb.innerHTML = "The answer is " + String.fromCharCode(97 + q.correct) + ". " + q.why; }
+        }
+      });
+      $(".opts", box).appendChild(b);
+    });
+    host.appendChild(box);
+  }
+  function seg(labels, onPick, start) {
+    const s = el('<div class="seg" role="group"></div>');
+    labels.forEach((l, i) => {
+      const b = el('<button type="button"></button>'); b.textContent = l;
+      if (i === (start || 0)) b.classList.add("on");
+      b.addEventListener("click", () => { $$("button", s).forEach(x => x.classList.remove("on")); b.classList.add("on"); onPick(i); });
+      s.appendChild(b);
+    });
+    return s;
+  }
+
+  // ---------- charts ----------
+  const W = 480;
+  // The estimate after each draw (series of [n, p-hat]), and p as a dashed line once revealed.
+  function estimateChart(series, p, guess) {
+    const H = 230, L = 40, R = 14, T = 12, B = 34;
+    const nMax = Math.max(10, series.length ? series[series.length - 1][0] : 0);
+    const nice = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
+    const xm = nice.find(v => v >= nMax) || nMax;
+    const X = n => L + (W - L - R) * n / xm, Y = v => T + (H - T - B) * (1 - v);
+    let s = '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="the estimate after each draw">';
+    [0, 0.25, 0.5, 0.75, 1].forEach(v => { s += '<line class="gridl" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"/><text class="mut" x="' + (L - 6) + '" y="' + (Y(v) + 5) + '" text-anchor="end" font-size="15">' + v + "</text>"; });
+    s += '<line class="axis" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"/>';
+    [0, xm / 2, xm].forEach(v => { s += '<text class="mut" x="' + X(v) + '" y="' + (H - 12) + '" text-anchor="middle" font-size="15">' + v + "</text>"; });
+    s += '<text class="mut" x="' + (W - R) + '" y="' + (H - 0) + '" text-anchor="end" font-size="15">draws</text>';
+    if (p != null) s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(p) + '" y2="' + Y(p) + '" style="stroke: var(--tap-edge)" stroke-width="2" stroke-dasharray="7 5"/><text x="' + (W - R - 4) + '" y="' + (Y(p) - 6) + '" text-anchor="end" font-size="14" style="fill: var(--tap-edge)">p = ' + f2(p) + "</text>";
+    if (guess != null) s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(guess) + '" y2="' + Y(guess) + '" style="stroke: var(--you)" stroke-width="1.5" stroke-dasharray="2 4"/><text x="' + (L + 6) + '" y="' + (Y(guess) - 6) + '" font-size="14" style="fill: var(--you)">your guess ' + f2(guess) + "</text>";
+    if (series.length) {
+      let pts = "";
+      const step = Math.max(1, Math.floor(series.length / 600));
+      for (let i = 0; i < series.length; i += step) pts += X(series[i][0]).toFixed(1) + "," + Y(series[i][1]).toFixed(1) + " ";
+      const last = series[series.length - 1];
+      pts += X(last[0]).toFixed(1) + "," + Y(last[1]).toFixed(1);
+      s += '<polyline points="' + pts + '" fill="none" style="stroke: var(--accent)" stroke-width="2.2" stroke-linejoin="round"/>';
+      s += '<circle cx="' + X(last[0]) + '" cy="' + Y(last[1]) + '" r="5" style="fill: var(--accent)"/>';
+    }
+    return s + "</svg>";
+  }
+
+  // A 0 to 1 strip: items {v, lo, hi, color, label}, stacked when they would overlap; p as a dashed line.
+  function stripSVG(items, p, opts) {
+    opts = opts || {};
+    const W = opts.w || 480;
+    const L = 24, R = 24, rowH = opts.rowH || 14, T = 14;
+    const placed = [];
+    items.forEach(it => {
+      let lvl = 0;
+      if (it.lo == null) { while (placed.some(q => q.lvl === lvl && Math.abs(q.v - it.v) < 0.022)) lvl++; }
+      else lvl = placed.length;
+      placed.push({ v: it.v, lvl: lvl, it: it });
+    });
+    const levels = Math.max(opts.minRows || 3, 1 + Math.max(0, ...placed.map(q => q.lvl)));
+    const H = T + levels * rowH + 40;
+    const X = v => L + (W - L - R) * v;
+    const base = H - 30;
+    let s = '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + (opts.aria || "estimates on a line from 0 to 1") + '">';
+    s += '<line class="axis" x1="' + L + '" x2="' + (W - R) + '" y1="' + base + '" y2="' + base + '"/>';
+    for (let v = 0; v <= 1.0001; v += 0.1) { const big = Math.abs(v * 10 - Math.round(v * 10)) < 1e-6 && Math.round(v * 10) % 5 === 0; s += '<line class="axis" x1="' + X(v) + '" x2="' + X(v) + '" y1="' + base + '" y2="' + (base + (big ? 7 : 4)) + '"/>'; if (big) s += '<text class="mut" x="' + X(v) + '" y="' + (base + 22) + '" text-anchor="middle" font-size="15">' + (Math.round(v * 10) / 10) + "</text>"; }
+    if (p != null) s += '<line x1="' + X(p) + '" x2="' + X(p) + '" y1="' + (T - 6) + '" y2="' + base + '" style="stroke: var(--tap-edge)" stroke-width="2" stroke-dasharray="6 4"/><text x="' + (X(p) + (p > 0.8 ? -5 : 5)) + '" y="' + (T + 2) + '" text-anchor="' + (p > 0.8 ? "end" : "start") + '" font-size="15" style="fill: var(--tap-edge)">p = ' + f2(p) + "</text>";
+    placed.forEach(q => {
+      const it = q.it, y = base - 10 - q.lvl * rowH, col = it.color || "var(--accent)";
+      if (it.lo != null) {
+        s += '<line x1="' + X(clamp01(it.lo)) + '" x2="' + X(clamp01(it.hi)) + '" y1="' + y + '" y2="' + y + '" style="stroke: ' + col + '" stroke-width="' + (opts.thick || 4) + '" stroke-linecap="round" opacity=".85"/>';
+        if (it.lo >= 0) s += '<line x1="' + X(it.lo) + '" x2="' + X(it.lo) + '" y1="' + (y - 6) + '" y2="' + (y + 6) + '" style="stroke: ' + col + '" stroke-width="2"/>';
+        if (it.hi <= 1) s += '<line x1="' + X(it.hi) + '" x2="' + X(it.hi) + '" y1="' + (y - 6) + '" y2="' + (y + 6) + '" style="stroke: ' + col + '" stroke-width="2"/>';
+      }
+      s += '<circle cx="' + X(it.v) + '" cy="' + y + '" r="' + (opts.dotR || 5.5) + '" style="fill: ' + col + '; stroke: var(--leaf)" stroke-width="1.5"/>';
+      if (it.label) s += '<text x="' + X(clamp01(it.hi != null ? it.hi : it.v)) + '" dx="10" y="' + (y + 5) + '" font-size="14" style="fill: ' + col + '">' + it.label + "</text>";
+    });
+    return s + "</svg>";
+  }
+
+  // 1 / square root of n for n from 1 to 100, with a marker at n.
+  function marginCurve(n) {
+    const H = 200, L = 40, R = 14, T = 14, B = 34, nm = 100;
+    const X = v => L + (W - L - R) * (v - 1) / (nm - 1), Y = v => T + (H - T - B) * (1 - v);
+    let s = '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="the margin one over the square root of n">';
+    [0, 0.5, 1].forEach(v => { s += '<line class="gridl" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"/><text class="mut" x="' + (L - 6) + '" y="' + (Y(v) + 5) + '" text-anchor="end" font-size="15">' + v + "</text>"; });
+    [1, 25, 50, 75, 100].forEach(v => { s += '<text class="mut" x="' + X(v) + '" y="' + (H - 12) + '" text-anchor="middle" font-size="15">' + v + "</text>"; });
+    s += '<text class="mut" x="' + (W - R) + '" y="' + H + '" text-anchor="end" font-size="15">draws n</text>';
+    let pts = "";
+    for (let v = 1; v <= nm; v += 0.5) pts += X(v).toFixed(1) + "," + Y(margin(v)).toFixed(1) + " ";
+    s += '<polyline points="' + pts + '" fill="none" style="stroke: var(--gold)" stroke-width="2.5"/>';
+    s += '<text x="' + X(14) + '" y="' + Y(0.5) + '" font-size="16" style="fill: var(--ochre)">margin = 1 / √n</text>';
+    if (n >= 1) {
+      const v = Math.min(n, nm);
+      s += '<circle cx="' + X(v) + '" cy="' + Y(margin(v)) + '" r="6" style="fill: var(--accent); stroke: var(--leaf)" stroke-width="2"/>';
+      s += '<text x="' + (X(v) + (v > 70 ? -10 : 10)) + '" y="' + (Y(margin(v)) - 10) + '" text-anchor="' + (v > 70 ? "end" : "start") + '" font-size="14" style="fill: var(--accent)">n = ' + n + ": " + f2(margin(n)) + "</text>";
+    }
+    return s + "</svg>";
+  }
+
+  // ---------- the scenes ----------
+  const SECTIONS = ["Welcome", "The urn", "The estimate", "How sure?", "Two books", "The optimist", "Back to the mirrors"];
+  const SCENES = [];
+  function scene(sec, title, kicker, render) { SCENES.push({ sec: sec, title: title, kicker: kicker, render: render }); }
+  function head(root, s, i) {
+    const inSec = SCENES.filter(x => x.sec === s.sec).indexOf(s) + 1;
+    const h = el('<div><div class="head"><span class="num"></span><h2></h2></div><div class="kicker sc"></div></div>');
+    $(".num", h).textContent = GEEZ[s.sec] || "";
+    $("h2", h).textContent = s.title;
+    $(".kicker", h).textContent = SECTIONS[s.sec] + (SCENES.filter(x => x.sec === s.sec).length > 1 ? " · part " + inSec : "");
+    root.appendChild(h);
+  }
+
+  // 0. The cover
+  scene(0, "", "", root => {
+    root.innerHTML =
+      '<div class="cover"><div>' +
+      '<h1>Esther\'s Urns</h1><div class="tag">What one visitor tells you, and what a hundred do.</div>' +
+      '<p class="lead">Esther runs a small online bookshop. Her homepage has room for <b>one</b> book. Each visitor either <b>buys</b> it or leaves. Which book should she show?</p>' +
+      "<p>Before she can choose, she must learn how well each book sells, and the only teachers are her visitors. In this game you will:</p>" +
+      '<div class="chips"><span class="chip">draw balls from an urn</span><span class="chip">make an estimate</span><span class="chip">see how sure you can be</span><span class="chip">tell two books apart</span><span class="chip">meet the optimist</span></div>' +
+      '<p class="muted">About 20 minutes, no code. Then <i>Once Upon a Mirror</i> turns these ideas into strategies. Esther, her shop and every number here are invented.</p>' +
+      '<div class="btns"><button class="btn primary" id="go">Start</button><span class="muted" style="font-size:15px">or use the arrow keys; press t for light or dark</span></div>' +
+      "</div><div>" + shopSVG() + "</div></div>";
+    $("#go", root).addEventListener("click", () => go(1));
+  });
+  function shopSVG() {
+    let stripes = "";
+    for (let i = 0; i < 8; i++) stripes += '<path d="M' + (40 + i * 40) + ' 70 h40 v34 q-20 14 -40 0 z" style="fill: ' + (i % 2 ? "var(--leaf)" : "var(--tap)") + '; stroke: var(--tap-edge)" stroke-width="1.5"/>';
+    return '<svg class="shop" viewBox="0 0 400 320" role="img" aria-label="Esther\'s bookshop with an urn in the window">' +
+      '<rect x="30" y="40" width="340" height="250" rx="6" style="fill: var(--panel); stroke: var(--line)" stroke-width="2"/>' +
+      '<rect x="60" y="14" width="280" height="40" rx="6" style="fill: var(--card)"/>' +
+      '<text x="200" y="42" text-anchor="middle" font-size="24" font-weight="600" style="fill: var(--card-ink)">Esther\'s Books</text>' + stripes +
+      '<rect x="56" y="122" width="190" height="140" rx="6" style="fill: var(--urn-window); stroke: var(--line)" stroke-width="2"/>' +
+      '<g transform="translate(70,150)"><rect width="26" height="92" rx="2" fill="#7A1F2B"/><rect x="30" y="8" width="24" height="84" rx="2" fill="#2E8C7E"/><rect x="58" y="-4" width="28" height="96" rx="2" fill="#23406B"/>' +
+      '<rect x="4" y="16" width="18" height="3" fill="#F3C552"/><rect x="34" y="22" width="16" height="3" fill="#F3C552"/><rect x="62" y="12" width="20" height="3" fill="#F3C552"/></g>' +
+      '<g transform="translate(160,138) scale(.68)"><use href="#urnShape"/><rect x="24" y="58" width="72" height="58" rx="14" style="fill: var(--urn-window); stroke: var(--urn-dark)" stroke-width="2"/>' +
+      '<circle cx="40" cy="74" r="6" fill="url(#gO)"/><circle cx="60" cy="74" r="6" fill="url(#gW)"/><circle cx="80" cy="74" r="6" fill="url(#gO)"/><circle cx="50" cy="96" r="6" fill="url(#gW)"/><circle cx="70" cy="96" r="6" fill="url(#gW)"/></g>' +
+      '<rect x="266" y="140" width="80" height="150" rx="4" style="fill: var(--card); opacity: .85"/><circle cx="332" cy="218" r="4" style="fill: var(--gold)"/>' +
+      '<line x1="20" y1="290" x2="380" y2="290" style="stroke: var(--line)" stroke-width="3"/></svg>';
+  }
+
+  // 1. A visitor is a ball
+  scene(1, "Every book is an urn", "", (root, s) => {
+    head(root, s);
+    const P = 0.4, balls = urnBalls(P, 10);
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">Picture an urn for <b>Harry Potter</b>. Inside are balls: an <b>orange</b> ball for a visitor who buys, a <b>white</b> ball for one who leaves. The share of orange balls is the book\'s chance of a sale, called <b>p</b>. Each visitor is one ball drawn from the urn and put back.</p>' +
+      '<div class="rows">' +
+      '<div class="row"><div class="lab">In the shop</div><div class="cell"><span class="visitor">🙂</span>a visitor</div><div class="arrow">→</div>' +
+      '<div class="cell"><div class="homepage"><div class="bar"><i></i><i></i><i></i></div>' + bookHTML("potter") + "</div>the homepage</div>" +
+      '<div class="arrow">→</div><div class="cell"><span class="verdict" id="v1">&nbsp;</span><span id="b1">' + ballHTML(1, "lg").replace("<span", '<span style="visibility:hidden"') + "</span></div></div>" +
+      '<div class="eq">=</div>' +
+      '<div class="row"><div class="lab">In the model</div><div class="cell" id="urnc">' + urnSVG(balls, "sm") + "Potter's urn</div><div class=\"arrow\">→</div>" +
+      '<div class="cell"><span id="drawn" style="min-height:34px">' + ballHTML(1, "lg").replace("<span", '<span style="visibility:hidden"') + "</span>one ball</div>" +
+      '<div class="arrow">→</div><div class="cell"><span class="verdict" id="v2">&nbsp;</span>back in the urn</div></div></div>' +
+      '<div class="btns"><button class="btn primary" id="one">Next visitor</button><button class="btn" id="ten">Ten visitors</button><span class="status" id="count"></span></div>' +
+      '<div class="tray" id="tray" aria-label="the balls drawn so far"></div>' +
+      '<div class="note">Here we may peek inside: 4 of the 10 balls are orange, so <b>p = 0.4</b>. Esther cannot peek. From the next scene on, every urn is closed, and the balls you draw are all she gets to see.</div>');
+    const tray = $("#tray", root);
+    let n = 0, k = 0, busy = false;
+    const upd = () => { $("#count", root).textContent = n ? k + " of " + n + " visitors bought" : ""; };
+    function show(x) {
+      $("#b1", root).innerHTML = ballHTML(x, "lg"); $("#drawn", root).innerHTML = ballHTML(x, "lg");
+      const v1 = $("#v1", root), v2 = $("#v2", root);
+      v1.textContent = x ? "Buys!" : "Leaves"; v1.className = "verdict " + (x ? "o" : "w");
+      v2.textContent = x ? "orange" : "white"; v2.className = "verdict " + (x ? "o" : "w");
+    }
+    async function one(fast) {
+      const x = draw(P), my = token;
+      if (!fast) await fly($("#urnc .urn", root), $("#drawn", root), x, 600);
+      if (my !== token) return;
+      show(x); n++; k += x; addBeads(tray, [x], true); upd();
+    }
+    $("#one", root).addEventListener("click", async () => { if (busy) return; busy = true; await one(false); busy = false; });
+    $("#ten", root).addEventListener("click", async () => {
+      if (busy) return; busy = true; const my = token;
+      for (let i = 0; i < 10 && my === token; i++) { await one(true); await new Promise(r => later(r, 140)); }
+      busy = false;
+    });
+  });
+
+  // 2. Draw and estimate
+  scene(2, "Count the orange balls", "", (root, s) => {
+    head(root, s);
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">This urn is closed. Draw balls and count. Your best guess of p is the share of orange balls so far, <b>the estimate</b>:</p>' +
+      '<div class="formula"><span class=ph>p</span> = orange balls / draws = <span class="big mono" id="frac">? / 0</span></div>' +
+      '<div class="grid2"><div>' +
+      '<div class="btns"><span id="urnc">' + urnSVG(null, "sm") + '</span><div style="display:flex;flex-direction:column;gap:8px"><button class="btn primary" id="d1">Draw 1</button><button class="btn" id="d10">Draw 10</button><button class="btn" id="d100">Draw 100</button></div></div>' +
+      '<div class="tray" id="tray"></div>' +
+      '<div class="panel" id="guessp" style="margin-top:12px"><h3>Your guess</h3><p class="muted" id="gwait">Draw at least 10 balls, then guess p.</p>' +
+      '<div id="gbox" class="hidden"><input type="range" id="gs" min="0" max="1" step="0.05" value="0.5" style="width:100%" aria-label="your guess of p"><div class="btns"><span>p is about <b class="mono" id="gv">0.50</b></span><button class="btn primary" id="reveal">Open the urn</button></div></div>' +
+      '<div class="status" id="gres"></div><div class="btns"><button class="btn hidden" id="again">A new closed urn</button></div></div>' +
+      '</div><div><div class="panel"><h3>The estimate after each draw</h3><div id="chart"></div></div><p class="muted" style="margin-top:8px" id="read"></p></div></div>');
+    let P, n, k, series, revealed, guess;
+    function reset() {
+      P = pick([0.3, 0.4, 0.6, 0.7]); n = 0; k = 0; series = []; revealed = false; guess = null;
+      $("#tray", root).innerHTML = ""; $("#urnc", root).innerHTML = urnSVG(null, "sm");
+      $("#gres", root).textContent = ""; $("#again", root).classList.add("hidden"); $("#reveal", root).disabled = false;
+      $("#read", root).textContent = ""; upd();
+    }
+    function upd() {
+      $("#frac", root).textContent = n ? k + " / " + n + " = " + f2(k / n) : "? / 0";
+      $("#chart", root).innerHTML = estimateChart(series, revealed ? P : null, revealed ? guess : null);
+      $("#gwait", root).classList.toggle("hidden", n >= 10 || revealed);
+      $("#gbox", root).classList.toggle("hidden", n < 10 || revealed);
+      if (n >= 30 && !revealed) $("#read", root).textContent = "Early on the line jumps with every ball. The more you draw, the calmer it gets.";
+    }
+    async function drawN(m) {
+      const xs = [];
+      for (let i = 0; i < m; i++) { const x = draw(P); xs.push(x); n++; k += x; series.push([n, k / n]); }
+      if (m === 1) { const my = token; await fly($("#urnc .urn", root), $("#tray", root), xs[0], 500); if (my !== token) return; }
+      addBeads($("#tray", root), xs, m <= 10); upd();
+    }
+    $("#d1", root).addEventListener("click", () => drawN(1));
+    $("#d10", root).addEventListener("click", () => drawN(10));
+    $("#d100", root).addEventListener("click", () => drawN(100));
+    $("#gs", root).addEventListener("input", e => { $("#gv", root).textContent = f2(+e.target.value); });
+    $("#reveal", root).addEventListener("click", () => {
+      guess = +$("#gs", root).value; revealed = true;
+      $("#urnc", root).innerHTML = urnSVG(urnBalls(P, 10), "sm");
+      const est = k / n, err = Math.abs(guess - P);
+      $("#gres", root).innerHTML = "p was <b>" + f2(P) + "</b>. Your guess: " + f2(guess) + ". The estimate after " + n + " draws: " + f2(est) + ". " + (err <= 0.1 ? "Close!" : "A fair miss: few balls can mislead.");
+      $("#again", root).classList.remove("hidden"); upd();
+      $("#read", root).textContent = "The dashed line is p. The estimate wanders around it and comes closer as the draws pile up. Try Draw 100 a few times.";
+    });
+    $("#again", root).addEventListener("click", reset);
+    reset();
+  });
+
+  // 3. Small samples lie
+  scene(2, "Ten assistants, ten estimates", "", (root, s) => {
+    head(root, s);
+    const P = 0.4;
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">Esther asks ten assistants each to watch a few visitors of Potter and report an estimate. Same book, same p (we peek: <b>p = 0.4</b>). Do they agree?</p>' +
+      '<div class="btns"><span>Each assistant watches</span><span id="segh"></span><button class="btn primary" id="ask">Ask ten new assistants</button></div>' +
+      '<div class="panel"><div id="strip"></div><p class="center status" id="range"></p></div>' +
+      '<p class="muted" style="margin-top:10px">Each dot is one assistant\'s estimate. The dashed line is p, which none of them can see.</p><div id="q"></div>');
+    const NS = [5, 25, 100];
+    let ni = 0;
+    function ask() {
+      const n = NS[ni], items = [];
+      let lo = 1, hi = 0;
+      for (let a = 0; a < 10; a++) { const v = drawMany(P, n) / n; items.push({ v: v }); lo = Math.min(lo, v); hi = Math.max(hi, v); }
+      $("#strip", root).innerHTML = stripSVG(items, P, { w: 900, minRows: 5, rowH: 18, dotR: 7, aria: "ten estimates of p" });
+      $("#range", root).textContent = "With " + n + " visitors each, the estimates run from " + f2(lo) + " to " + f2(hi) + ".";
+    }
+    $("#segh", root).appendChild(seg(["5 visitors", "25", "100"], i => { ni = i; ask(); }));
+    $("#ask", root).addEventListener("click", ask);
+    ask();
+    quiz($("#q", root), {
+      text: "An assistant watched 5 visitors of a new book, and 4 bought it: <span class=ph>p</span> = 0.8. What do you tell Esther?",
+      options: ["It is a bestseller: show it forever.", "Five visitors are too few. The estimate could be far from p.", "The estimate is wrong: it should be 4 / 4 = 1."],
+      correct: 1,
+      hint: "Look at how far the dots spread with 5 visitors each, for a book whose p is only 0.4.",
+      why: "With 5 visitors, estimates of the very same book land far apart. Small samples lie, by chance alone."
+    });
+  });
+
+  // 4. The bracket
+  scene(3, "A margin around the estimate", "", (root, s) => {
+    head(root, s);
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">An estimate needs a margin. A simple rule: after n draws, p is very likely inside the <b>bracket</b> from <span class=ph>p</span> minus 1/√n to <span class=ph>p</span> plus 1/√n. The margin <b>1/√n</b> shrinks as the draws pile up: fast at first, then slowly.</p>' +
+      '<div class="grid2"><div class="panel"><h3>The margin, 1 / √n</h3><div id="curve"></div></div>' +
+      '<div class="panel"><h3>Your urn</h3><div class="btns"><span id="urnc">' + urnSVG(null, "xs") + '</span><button class="btn primary" id="d1">Draw 1</button><button class="btn" id="d10">Draw 10</button><button class="btn" id="d100">Draw 100</button></div>' +
+      '<div id="strip"></div><div class="stats" id="st"></div><div class="btns"><button class="btn" id="open">Open the urn</button><button class="btn" id="fresh">A new urn</button></div></div></div>' +
+      '<div class="note link">Keep 1/√n in mind. In <i>Once Upon a Mirror</i> it comes back, under the name <b>exploration bonus</b>.</div><div id="q"></div>');
+    let P, n, k, open;
+    function reset() { P = pick([0.3, 0.4, 0.6, 0.7]); n = 0; k = 0; open = false; $("#urnc", root).innerHTML = urnSVG(null, "xs"); upd(); }
+    function upd() {
+      $("#curve", root).innerHTML = marginCurve(n);
+      const items = [];
+      if (n) { const v = k / n, m = margin(n); items.push({ v: v, lo: v - m, hi: v + m, color: "var(--accent)" }); }
+      $("#strip", root).innerHTML = stripSVG(items, open ? P : null, { minRows: 1, rowH: 18, thick: 6, dotR: 7, aria: "the estimate and its bracket" });
+      $("#st", root).innerHTML = n
+        ? "<span>draws n</span><b>" + n + "</b><span>estimate <span class=ph>p</span></span><b>" + k + " / " + n + " = " + f2(k / n) + "</b><span>margin 1/√n</span><b>" + f2(margin(n)) + "</b><span>bracket</span><b>" + f2(Math.max(0, k / n - margin(n))) + " to " + f2(Math.min(1, k / n + margin(n))) + "</b>"
+        : '<span class="muted">Draw a ball to start.</span><span></span>';
+    }
+    function drawN(m) { for (let i = 0; i < m; i++) { k += draw(P); n++; } upd(); }
+    $("#d1", root).addEventListener("click", () => drawN(1));
+    $("#d10", root).addEventListener("click", () => drawN(10));
+    $("#d100", root).addEventListener("click", () => drawN(100));
+    $("#open", root).addEventListener("click", () => { open = true; $("#urnc", root).innerHTML = urnSVG(urnBalls(P, 10), "xs"); upd(); });
+    $("#fresh", root).addEventListener("click", reset);
+    reset();
+    const q = $("#q", root);
+    quiz(q, { text: "After 25 draws, how wide is the whole bracket, from its left end to its right end?", options: ["0.2", "0.4", "0.04"], correct: 1, hint: "The margin is 1/√25 = 1/5 = 0.2, and the bracket reaches that far on both sides.", why: "1/√25 = 0.2 on each side, so 0.4 in all." });
+    quiz(q, { text: "To make the bracket half as wide, you need...", options: ["twice as many draws", "four times as many draws", "ten times as many draws"], correct: 1, hint: "Compare 1/√25 with 1/√100.", why: "√(4n) = 2√n, so four times the draws halve the margin. Certainty is expensive." });
+    quiz(q, { text: "How many draws give a whole bracket of 0.2?", options: ["25", "100", "400"], correct: 1, hint: "The whole bracket is 2/√n. Which n makes 2/√n = 0.2?", why: "2/√100 = 2/10 = 0.2." });
+  });
+
+  // 5. Does the bracket catch p?
+  scene(3, "Does the bracket catch p?", "", (root, s) => {
+    head(root, s);
+    const P = 0.4;
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">Twenty assistants each watch n visitors of Potter (we peek: <b>p = 0.4</b>) and draw their bracket. <span style="color:var(--yes)">Green</span> if it catches p, <span style="color:var(--no)">red</span> if it misses.</p>' +
+      '<div class="btns"><span>Each assistant watches</span><span id="segh"></span><button class="btn primary" id="more">Twenty more assistants</button></div>' +
+      '<div class="panel"><div id="strip"></div><p class="center status" id="tally"></p></div><div id="q"></div>');
+    const NS = [5, 25, 100];
+    let ni = 1, caught = 0, total = 0;
+    function more() {
+      const n = NS[ni], m = margin(n), items = [];
+      for (let a = 0; a < 20; a++) {
+        const v = drawMany(P, n) / n, ok = v - m <= P && P <= v + m;
+        caught += ok ? 1 : 0; total++;
+        items.push({ v: v, lo: v - m, hi: v + m, color: ok ? "var(--yes)" : "var(--no)" });
+      }
+      $("#strip", root).innerHTML = stripSVG(items, P, { w: 900, rowH: 12, thick: 3, dotR: 4, aria: "twenty brackets" });
+      $("#tally", root).textContent = "With " + n + " visitors each: caught p " + caught + " times in " + total + " (" + Math.round(100 * caught / total) + "%).";
+    }
+    $("#segh", root).appendChild(seg(["5 visitors", "25", "100"], i => { ni = i; caught = 0; total = 0; more(); }, 1));
+    $("#more", root).addEventListener("click", more);
+    more();
+    quiz($("#q", root), {
+      text: "Now and then a bracket is red. Was that assistant careless?",
+      options: ["Yes: an honest count always catches p.", "No: now and then an honest sample is unusual. The rule is built to catch p about 19 times in 20 or more.", "Yes: the margin should be 1/n."],
+      correct: 1,
+      hint: "Every assistant here followed the same rule on the same urn. Only luck differs.",
+      why: "The margin 1/√n is generous on purpose: press the button a few times and the tally stays near 95% or above, with 5, 25 or 100 visitors."
+    });
+  });
+
+  // 6. Which book is better?
+  scene(4, "Which book is better?", "", (root, s) => {
+    head(root, s);
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">Esther must choose between <b class="c-potter">Potter</b> and <b class="c-epl">Eat Pray Love</b>. She shows each to visitors in turn and watches both brackets. While the brackets overlap, she cannot tell which book is better.</p>' +
+      '<div class="btns"><span>The two books are</span><span id="segh"></span></div>' +
+      '<div class="grid2"><div>' +
+      '<div class="btns" style="justify-content:space-around">' +
+      '<div class="center">' + bookHTML("potter") + '<div id="uP">' + urnSVG(null, "xs") + '</div><div class="mono" id="sP"></div></div>' +
+      '<div class="center">' + bookHTML("epl") + '<div id="uE">' + urnSVG(null, "xs") + '</div><div class="mono" id="sE"></div></div></div>' +
+      '<div class="btns" style="justify-content:center"><button class="btn primary" id="d1">One visitor each</button><button class="btn" id="d10">Ten each</button><button class="btn" id="open">Open both urns</button><button class="btn" id="fresh">A new pair</button></div>' +
+      '</div><div class="panel"><div id="strip"></div><p class="status center" id="stat"></p><p class="center" id="cost"></p></div></div>' +
+      '<div class="note">Rule of thumb: two brackets stop overlapping once the gap between the books is bigger than 2/√n. A gap of 0.4 needs about 25 visitors per book; a gap of 0.1 needs about 400 per book.</div><div id="q"></div>');
+    let far = true, pP, pE, n, kP, kE, sepAt, open;
+    function reset() {
+      const pair = far ? [0.3, 0.7] : [0.45, 0.55];
+      if (rand() < 0.5) pair.reverse();
+      pP = pair[0]; pE = pair[1]; n = 0; kP = 0; kE = 0; sepAt = null; open = false;
+      $("#uP", root).innerHTML = urnSVG(null, "xs"); $("#uE", root).innerHTML = urnSVG(null, "xs"); $("#cost", root).textContent = "";
+      upd();
+    }
+    function upd() {
+      const items = [];
+      if (n) {
+        const m = margin(n), vP = kP / n, vE = kE / n;
+        items.push({ v: vP, lo: vP - m, hi: vP + m, color: "var(--potter)", label: "Potter" });
+        items.push({ v: vE, lo: vE - m, hi: vE + m, color: "var(--epl)", label: "Eat Pray Love" });
+        const sep = vP - m > vE + m || vE - m > vP + m;
+        if (sep && sepAt == null) sepAt = n;
+        const st = $("#stat", root);
+        if (sep) { st.className = "status center good"; st.textContent = "The brackets are apart after " + n + " visitors each: " + (vP > vE ? "Potter" : "Eat Pray Love") + " looks better."; }
+        else { st.className = "status center"; st.textContent = "After " + n + " visitors each the brackets overlap: you cannot tell yet." + (sepAt ? " (They were apart at " + sepAt + ", by luck.)" : ""); }
+      } else { $("#stat", root).textContent = "Show each book to a visitor to start."; $("#stat", root).className = "status center"; }
+      $("#strip", root).innerHTML = stripSVG(items, null, { minRows: 2, rowH: 34, thick: 7, dotR: 7.5, aria: "two brackets" });
+      $("#sP", root).textContent = n ? kP + " / " + n + " = " + f2(kP / n) : "";
+      $("#sE", root).textContent = n ? kE + " / " + n + " = " + f2(kE / n) : "";
+      if (open) {
+        const worse = pP < pE ? "Potter" : "Eat Pray Love", gap = Math.abs(pP - pE);
+        $("#cost", root).innerHTML = "p was " + f2(pP) + " for Potter and " + f2(pE) + " for Eat Pray Love. While testing, " + n + " visitors saw " + worse + ", the worse book: about <b>" + Math.round(n * gap) + " sales lost</b> compared with showing the better one all along.";
+      }
+    }
+    function drawN(m) { for (let i = 0; i < m; i++) { kP += draw(pP); kE += draw(pE); n++; } upd(); }
+    $("#segh", root).appendChild(seg(["far apart", "close"], i => { far = i === 0; reset(); }));
+    $("#d1", root).addEventListener("click", () => drawN(1));
+    $("#d10", root).addEventListener("click", () => drawN(10));
+    $("#open", root).addEventListener("click", () => { open = true; $("#uP", root).innerHTML = urnSVG(urnBalls(pP, 20), "xs"); $("#uE", root).innerHTML = urnSVG(urnBalls(pE, 20), "xs"); upd(); });
+    $("#fresh", root).addEventListener("click", reset);
+    reset();
+    const q = $("#q", root);
+    quiz(q, { text: "Esther decides to test each book on a fixed number of visitors, then show the winner to everybody else. With two <i>close</i> books and a <b>tiny</b> test, what can go wrong?", options: ["She may commit to the worse book.", "She shows the worse book to many visitors during the test.", "Nothing: a winner is a winner."], correct: 0, hint: "With a few visitors each, do the close brackets overlap?", why: "A tiny test cannot separate close books, so the winner is often the worse one, by luck." });
+    quiz(q, { text: "And with a <b>huge</b> test?", options: ["She may commit to the worse book.", "She shows the worse book to many visitors during the test.", "Nothing: the bigger the better."], correct: 1, hint: "Half of the test's visitors see the worse book. Look at the sales lost after you open the urns.", why: "Every test visitor who sees the worse book is a sale she may miss. In <i>Once Upon a Mirror</i> this is the hard choice of n in estimate then exploit." });
+  });
+
+  // 7. The optimist
+  scene(5, "The optimist's rule", "", (root, s) => {
+    head(root, s);
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">Three books, three closed urns. The optimist gives every book the benefit of the doubt: a book\'s <b>score</b> is the top of its bracket, <b><span class=ph>p</span> + 1/√n</b>. Then she always draws from the book with the highest score.</p>' +
+      '<div class="steps"><div class="step" id="st1"><b>1</b> Show each book once.</div><div class="step" id="st2"><b>2</b> Pick the highest score (a tie: any of them).</div><div class="step" id="st3"><b>3</b> One visitor: update that book\'s estimate and margin.</div><div class="step" id="st4"><b>4</b> Repeat.</div></div>' +
+      '<div class="urns3" id="cols"></div>' +
+      '<div class="btns" style="justify-content:center"><button class="btn primary" id="init">Show each book once</button><button class="btn" id="auto" disabled>Let the optimist run 100 visitors</button><button class="btn" id="fresh">New urns</button></div>' +
+      '<p class="status center" id="msg"></p><p class="center muted" id="read"></p>' +
+      '<div class="note link">In the gauges the solid part is the estimate and the light part the margin. A book shown rarely keeps a tall light part, so it gets another chance; a book that keeps disappointing sinks. In <i>Once Upon a Mirror</i> this score is the estimate plus the exploration bonus: <b>UCB</b>.</div>');
+    const IDS = ["ulysses", "epl", "potter"];
+    let ps, n, k, phase, yourPicks, last;
+    const score = i => k[i] / n[i] + margin(n[i]);
+    const best = () => { let m = -1; for (let i = 0; i < 3; i++) m = Math.max(m, score(i)); const b = []; for (let i = 0; i < 3; i++) if (Math.abs(score(i) - m) < 1e-9) b.push(i); return b; };
+    function gauge(i) {
+      const H = 150, Wd = 120, top = 10, base = 136, sc = v => base - (base - top) * Math.min(v, 2) / 2;
+      let g = '<svg class="gauge" viewBox="0 0 ' + Wd + " " + H + '" role="img" aria-label="estimate and margin">';
+      g += '<line x1="20" x2="110" y1="' + sc(1) + '" y2="' + sc(1) + '" class="gridl"/><text class="mut" x="16" y="' + (sc(1) + 4) + '" text-anchor="end" font-size="13">1</text>';
+      g += '<line x1="20" x2="110" y1="' + base + '" y2="' + base + '" class="axis"/><text class="mut" x="16" y="' + (base + 4) + '" text-anchor="end" font-size="13">0</text>';
+      g += '<text class="mut" x="16" y="' + (sc(2) + 8) + '" text-anchor="end" font-size="13">2</text>';
+      if (n[i]) {
+        const e = k[i] / n[i], m = margin(n[i]);
+        g += '<rect x="45" width="40" y="' + sc(e + m) + '" height="' + (sc(e) - sc(e + m)) + '" rx="3" style="fill: var(--' + IDS[i] + ')" opacity=".28"/>';
+        g += '<rect x="45" width="40" y="' + sc(e) + '" height="' + (base - sc(e)) + '" style="fill: var(--' + IDS[i] + ')"/>';
+        g += '<line x1="40" x2="90" y1="' + sc(e + m) + '" y2="' + sc(e + m) + '" style="stroke: var(--' + IDS[i] + ')" stroke-width="2.5"/>';
+      }
+      if (phase === "done") g += '<line x1="36" x2="94" y1="' + sc(ps[i]) + '" y2="' + sc(ps[i]) + '" style="stroke: var(--tap-edge)" stroke-width="2" stroke-dasharray="5 3"/>';
+      return g + "</svg>";
+    }
+    function render() {
+      $("#cols", root).innerHTML = IDS.map((id, i) =>
+        '<div class="ucol' + (last === i ? " pick" : "") + (phase === "done" && ps[i] === Math.max(...ps) ? " best" : "") + '" data-i="' + i + '" role="button" tabindex="0" aria-label="draw from ' + BOOKS[id].name + '">' +
+        '<div style="display:flex;align-items:center;gap:6px">' + bookHTML(id) + urnSVG(phase === "done" ? urnBalls(ps[i], 20) : null, "xs") + "</div>" + '<div class="title c-' + id + '">' + BOOKS[id].name + "</div>" + gauge(i) +
+        '<div class="nums">' + (n[i] ? "<span class=ph>p</span> " + k[i] + "/" + n[i] + " = " + f2(k[i] / n[i]) + "<br>+ 1/√" + n[i] + " = " + f2(margin(n[i])) + "<br><b>score " + f2(score(i)) + "</b>" : "not shown yet<br>&nbsp;<br>&nbsp;") +
+        (phase === "done" ? '<br><span style="color:var(--tap-edge)">p = ' + f2(ps[i]) + "</span>" : "") + "</div>" +
+        '<div class="tray" id="tr' + i + '"></div></div>').join("");
+      IDS.forEach((_, i) => { const tr = $("#tr" + i, root); addBeads(tr, beads[i].slice(-60), false); });
+      $$(".ucol", root).forEach(c => {
+        const i = +c.dataset.i;
+        c.addEventListener("click", () => choose(i, c));
+        c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(i, c); } });
+      });
+      ["st1", "st2", "st3", "st4"].forEach((id, j) => $("#" + id, root).classList.toggle("on", (phase === "init" && j === 0) || ((phase === "play" || phase === "auto") && j === 1)));
+    }
+    let beads;
+    function reset() {
+      ps = shuffle([0.2, 0.4, 0.55]); n = [0, 0, 0]; k = [0, 0, 0]; beads = [[], [], []]; phase = "init"; yourPicks = 0; last = null;
+      $("#init", root).disabled = false; $("#auto", root).disabled = true;
+      $("#msg", root).textContent = "First, step 1: show each book to one visitor."; $("#msg", root).className = "status center"; $("#read", root).textContent = "";
+      render();
+    }
+    function visit(i) { const x = draw(ps[i]); n[i]++; k[i] += x; beads[i].push(x); last = i; return x; }
+    $("#init", root).addEventListener("click", () => {
+      if (phase !== "init") return;
+      for (let i = 0; i < 3; i++) visit(i);
+      phase = "play"; last = null; $("#init", root).disabled = true; $("#auto", root).disabled = false;
+      $("#msg", root).textContent = "Your turn: click the book the optimist shows next (the highest score). 10 visitors.";
+      render();
+    });
+    function choose(i, c) {
+      if (phase !== "play") return;
+      const b = best();
+      if (b.indexOf(i) < 0) {
+        c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+        const bi = b[0];
+        $("#msg", root).className = "status center bad";
+        $("#msg", root).textContent = "Not this one: " + BOOKS[IDS[bi]].name + " has the highest score (" + f2(score(bi)) + " against " + f2(score(i)) + ").";
+        return;
+      }
+      const x = visit(i); yourPicks++;
+      $("#msg", root).className = "status center good";
+      $("#msg", root).textContent = "Right. " + BOOKS[IDS[i]].name + ": " + (x ? "a sale, its estimate goes up." : "no sale, its estimate goes down.") + " Its margin shrinks a little either way. " + (yourPicks < 10 ? (10 - yourPicks) + " to go." : "");
+      if (yourPicks >= 10) { $("#msg", root).textContent += " Well done: you followed the rule. Now let the optimist run on her own."; phase = "wait"; }
+      render();
+    }
+    $("#auto", root).addEventListener("click", async () => {
+      if (phase === "init" || phase === "auto" || phase === "done") return;
+      phase = "auto"; $("#auto", root).disabled = true; const my = token;
+      for (let t = 0; t < 100; t++) {
+        if (my !== token) return;
+        const b = best(); visit(pick(b));
+        if (t % 4 === 3 || RM) render();
+        await new Promise(r => later(r, Math.max(15, 120 - t * 3)));
+      }
+      phase = "done"; last = null; render();
+      const tot = n[0] + n[1] + n[2], bi = ps.indexOf(Math.max(...ps));
+      const won = n[bi] >= Math.max(...n);
+      $("#msg", root).className = "status center " + (won ? "good" : "bad");
+      $("#msg", root).textContent = "Open urns (dashed lines): the best book, " + BOOKS[IDS[bi]].name + " with p = " + f2(ps[bi]) + ", got " + n[bi] + " of " + tot + " visitors.";
+      $("#read", root).textContent = won
+        ? "The optimist tried every book, kept checking the ones whose margin was still tall, and gave most visitors to the best one. Press New urns: the books get new p each time."
+        : "Unlucky this time: the best book started with few sales, its score fell below another book's, and 100 visitors were not enough for the other margins to shrink below it. It happens in about 1 run in 10. Press New urns and watch how often the best book wins.";
+    });
+    $("#fresh", root).addEventListener("click", reset);
+    reset();
+  });
+
+  // 8. Back to the mirrors
+  scene(6, "From urns to mirrors", "", (root, s) => {
+    head(root, s);
+    const row = (a, b) => "<tr><td>" + a + "</td><td>" + b + "</td></tr>";
+    root.insertAdjacentHTML("beforeend",
+      '<p class="lead">Everything you did with urns comes back in <i>Once Upon a Mirror</i>, where magic mirrors show one ad each morning and a customer taps it or not.</p>' +
+      '<table class="map"><tr><th>In Esther\'s urns</th><th>In Once Upon a Mirror</th></tr>' +
+      row("a book and its urn", "a product, one row of the board") +
+      row(ballHTML(1) + " an orange ball, a sale", ballHTML(1) + " a tap") +
+      row(ballHTML(0) + " a white ball, no sale", ballHTML(0) + " no tap") +
+      row("p, the share of orange balls", "p, which only the Queen's mirror knows") +
+      row("<span class=ph>p</span> = orange balls / draws", "the estimate <span class=ph>p</span>") +
+      row("the margin 1/√n", "the exploration bonus 1/√n") +
+      row("test two books, then commit", "estimate then exploit, and its hard choice of n") +
+      row("the optimist's score <span class=ph>p</span> + 1/√n", "UCB") + "</table>" +
+      '<div class="nextcards"><a class="nextcard" href="https://eth-ainit-hs26.github.io/AINIT-PAGE/viz/we2/mirror/index.html" target="_blank" rel="noopener"><b>Play Once Upon a Mirror</b><span>Random, estimate then exploit, epsilon-greedy and UCB, as strategies.</span></a>' +
+      '<a class="nextcard" href="https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/03_cx_bandits_6_all_in_one_student.ipynb" target="_blank" rel="noopener"><b>Notebook: all the mirrors in one</b><span>Write each strategy in a few lines of Python, on Colab.</span></a></div>' +
+      '<p class="muted" style="margin-top:16px">What you can now explain: why a few visitors can mislead, why certainty costs four times the draws for half the margin, why close books are hard to tell apart, and why optimism is a good way to explore.</p>');
+  });
+
+  // ---------- the engine ----------
+  const leaf = $("#leaf"), pager = $("#pager");
+  const seen = new Set();
+  let cur = -1;
+  function buildPager() {
+    pager.innerHTML = "";
+    let g = null, lastSec = -1;
+    SCENES.forEach((s, i) => {
+      if (s.sec !== lastSec) { g = el('<div class="pgroup"></div>'); g.title = SECTIONS[s.sec]; pager.appendChild(g); lastSec = s.sec; }
+      const b = el('<button class="pdot" type="button"></button>');
+      b.textContent = i === 0 ? "✦" : GEEZ[i] || String(i);
+      b.title = (i === 0 ? "Welcome" : SECTIONS[s.sec] + ": " + s.title);
+      b.setAttribute("aria-label", "scene " + i + ", " + b.title);
+      b.addEventListener("click", () => go(i));
+      g.appendChild(b);
+    });
+  }
+  function go(i) {
+    i = Math.max(0, Math.min(SCENES.length - 1, i));
+    clearTimers(); token++;
+    cur = i; seen.add(i);
+    const s = SCENES[i];
+    leaf.innerHTML = "";
+    s.render(leaf, s);
+    $("#where").textContent = i === 0 ? "" : SECTIONS[s.sec] + " · " + s.title;
+    $("#back").disabled = i === 0;
+    $("#next").disabled = i === SCENES.length - 1;
+    $$(".pdot", pager).forEach((b, j) => { b.classList.toggle("on", j === i); b.classList.toggle("seen", seen.has(j)); if (j === i) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+    try { history.replaceState(null, "", "#scene=" + i); } catch (e) { /* file:// in some browsers */ }
+    window.scrollTo(0, 0);
+  }
+  $("#back").addEventListener("click", () => go(cur - 1));
+  $("#next").addEventListener("click", () => go(cur + 1));
+  document.addEventListener("keydown", e => {
+    const tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "ArrowRight") go(cur + 1);
+    else if (e.key === "ArrowLeft") go(cur - 1);
+    else if (e.key === "t") toggleTheme();
+  });
+  function toggleTheme() {
+    const r = document.documentElement;
+    const dark = r.dataset.theme ? r.dataset.theme === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    r.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("urns-theme", r.dataset.theme); } catch (e) { /* storage blocked */ }
+  }
+  $("#theme").addEventListener("click", toggleTheme);
+  try { const t = localStorage.getItem("urns-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) { /* storage blocked */ }
+  buildPager();
+  const m = /scene=(\d+)/.exec(location.hash);
+  go(m ? +m[1] : 0);
+})();
+</script>
+</body>
+</html>
