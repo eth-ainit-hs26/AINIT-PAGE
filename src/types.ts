@@ -48,6 +48,12 @@ export interface Download {
    * visualization of the weekend must be on the agenda, or the build stops.
    */
   extras?: string[];
+  /**
+   * Lecture notes (deck() links to PDFs): buttons beside the ZIP button, without a
+   * number, off the agenda, and in the ZIP's folder under their label (Carlos,
+   * 2026-11-12). The label is the file name, so no colon.
+   */
+  notes?: Resource[];
 }
 
 export interface Weekend {

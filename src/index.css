@@ -556,6 +556,12 @@ h3 {
 .wdetail-head__cta {
   margin-top: 24px;
 }
+/* The ZIP button, then the lecture notes beside it (Carlos, 2026-11-12); they wrap on a phone. */
+.wdetail-head__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 .wdetail-head__note {
   margin: 12px 0 0;
   font-size: 0.9rem;

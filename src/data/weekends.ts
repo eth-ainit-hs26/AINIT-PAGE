@@ -472,21 +472,24 @@ export const weekends: Weekend[] = [
     // from cases-deck/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture), published at Carlos's
     // instruction of 2026-11-06: since 2026-11-09 one PDF per block with all the cases that follow it, on that block's
     // row ("for each block, put in one single deck all the slides with all the business cases"); before, one per case.
+    // Since 2026-11-12 each block's business cases come first on its row, and where the block has a cold intro, the
+    // two are one PDF named after the block (Carlos: "always put the cold intro with the business on top at the
+    // beginning before the rest of the material ... make that for each block the first chip"), made by
+    // cold-intro-and-cases/merge.py of the same public repository.
     friday: [
       {
         time: '08:15',
         title: 'The inner product and nearest neighbors',
         type: 'lecture',
-        // The cold intro "Searching through representations" (the story of Chunyu Kun, Zhanguo ce, Qi 3), from
-        // cold-intro-deck/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's
-        // instruction of 2026-11-11; its 8-frame rework replaced the 5-frame version the same evening, on his yes.
         // The semester cheat sheet first, as the map of the semester (item 01 of the weekend), from cheat-sheet/ of
-        // the same public repository (Carlos's yes, 2026-11-11).
+        // the public repository eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11). Then the cold
+        // intro "Searching through representations" (the story of Chunyu Kun, Zhanguo ce, Qi 3) and the cases Etsy
+        // and Airbnb in one PDF, "Nearest neighbors" (Carlos, 2026-11-12: "they become now together number two, and
+        // I want you to call it nearest neighbors").
         links: [
           { label: 'Semester cheat sheet', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
-          { label: 'Nearest neighbors, cold intro', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro.pdf') },
+          { label: 'Nearest neighbors', url: deck(2, 'ainit-hs26-nearest-neighbors-cold-intro-and-cases.pdf') },
           { label: 'Once Upon a Video Store', url: viz(2, 'video-store') },
-          { label: 'Business cases, Etsy and Airbnb', url: deck(2, 'ainit-hs26-business-cases-nearest-neighbors.pdf') },
         ],
       },
       { 
@@ -508,17 +511,13 @@ export const weekends: Weekend[] = [
         time: '11:00',
         title: 'Matrix product and matrix factorization',
         type: 'lecture',
-        // The lecture notes of the blocks 08:15 to 12:00 come last, after the morning they cover (lecture-notes/ of
-        // the same public repository, published at Carlos's instruction of 2026-11-11).
+        // The block's business case first (it has no cold intro), then the games. The lecture notes of the morning
+        // are beside the ZIP button since 2026-11-12 (`download.notes`).
         links: [
+          { label: 'Business case, Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
           { label: 'Matchmaker part two, matrix factorization', url: viz(2, 'matchmaker-part-2') },
           { label: 'Matchmaker part three, the whole picture', url: viz(2, 'matchmaker-part-3') },
           { label: 'Matchmaker optional part, gradient descent up close', url: viz(2, 'matchmaker-optional') },
-          { label: 'Business case, Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
-          {
-            label: 'Lecture notes, nearest neighbors and matrix factorization',
-            url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
-          },
         ],
       },
       { 
@@ -536,13 +535,12 @@ export const weekends: Weekend[] = [
         time: '14:00',
         title: 'Bandits',
         type: 'lecture',
-        // The cold intro "Estimating chances from the past" (John Graunt's Bills of Mortality, London, 1662), from
-        // cold-intro-deck/ of the public repository eth-ainit-hs26/w2-recsys-bandits-lecture: Carlos chose it from
-        // three drafts (the fox, Graunt, Bernoulli) on 2026-11-11, for the course site.
+        // The cold intro "Estimating chances from the past" (John Graunt's Bills of Mortality, London, 1662; Carlos
+        // chose it from three drafts on 2026-11-11) and the cases Spotify's home page and Amazon Payments, in one PDF
+        // since 2026-11-12.
         links: [
-          { label: 'Bandits, cold intro', url: deck(2, 'ainit-hs26-bandits-cold-intro.pdf') },
+          { label: 'Bandits', url: deck(2, 'ainit-hs26-bandits-cold-intro-and-cases.pdf') },
           { label: 'Once Upon a Mirror', url: viz(2, 'mirror') },
-          { label: "Business cases, Spotify's home page and Amazon Payments", url: deck(2, 'ainit-hs26-business-cases-bandits.pdf') },
         ],
       },
       { 
@@ -562,17 +560,16 @@ export const weekends: Weekend[] = [
         time: '16:00',
         title: 'Large-scale computing',
         type: 'lecture',
-        // Computing clusters and parallelized matrix factorization in one block (Carlos, 2026-11-11), in this order:
-        // the cold intro "Dividing a computation, 1793" (FDD's section of that name, from cold-intro-deck/ of the
-        // public repository eth-ainit-hs26/w2-recsys-bandits-lecture), the first block of FDD weekend 7 ported into
-        // Codex plates (clusters-deck/ of the same repository; both published at Carlos's instruction of 2026-11-10,
-        // on the Saturday 08:15 row until 2026-11-11), then the Grid and the case.
+        // Computing clusters and parallelized matrix factorization in one block (Carlos, 2026-11-11). Since 2026-11-12,
+        // in his order, "large-scale computing cold intro with business case, LinkedIn ads, then computing clusters":
+        // the cold intro "Dividing a computation, 1793" (FDD's section of that name) and the case LinkedIn's ads in one
+        // PDF, the first block of FDD weekend 7 ported into Codex plates (clusters-deck/ of the public repository
+        // eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's instruction of 2026-11-10), then the Grid.
         links: [
-          { label: 'Large-scale computing, cold intro', url: deck(2, 'ainit-hs26-computing-clusters-cold-intro.pdf') },
+          { label: 'Large-scale computing', url: deck(2, 'ainit-hs26-large-scale-computing-cold-intro-and-cases.pdf') },
           { label: 'Computing clusters', url: deck(2, 'ainit-hs26-computing-clusters.pdf') },
           { label: 'Handout', url: deck(2, 'ainit-hs26-computing-clusters-handout.pdf') },
           { label: 'Matchmaker on a Grid', url: viz(2, 'matchmaker-grid') },
-          { label: "Business case, LinkedIn's ads", url: deck(2, 'ainit-hs26-business-cases-parallelized-mf.pdf') },
         ],
       },
     ],
@@ -595,6 +592,11 @@ export const weekends: Weekend[] = [
       { group: 'Lecture slides', label: 'Large-scale computing', url: SOON },
       { group: 'Lecture slides', label: 'Guest lecture: Joachim M. Buhmann', url: SOON },
       { group: 'Business cases', label: 'All six cases', url: deck(2, 'ainit-hs26-business-cases.pdf') },
+      {
+        group: 'Lecture notes',
+        label: 'Nearest neighbors and matrix factorization',
+        url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
+      },
       { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb')},
       { group: 'Coding exercises', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
       { group: 'Coding exercises', label: 'Matrix factorization (Part 3+4 (Optional))', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
@@ -617,7 +619,17 @@ export const weekends: Weekend[] = [
     // the build when the agenda and public/slides/we2/ or public/viz/we2/ disagree.
     download: {
       file: 'ainit-hs26-weekend-2.zip',
-      note: 'Slides, games, lecture notes and the semester cheat sheet, numbered as on this page, the handouts in a folder of their own. The games open the coding exercises in Colab.',
+      note: 'The slides and games of this page with their numbers, the semester cheat sheet among them, the lecture notes, and the handouts in a folder of their own. The games open the coding exercises in Colab.',
+      // Beside the ZIP button since 2026-11-12, without a number, and in the ZIP (Carlos: "The lecture notes, nearest
+      // neighbors, and matrix factorization. I want you to put that next to download all slides and visualizations").
+      // The 11:00 row held them until then, number 10. From lecture-notes/ of the public repository
+      // eth-ainit-hs26/w2-recsys-bandits-lecture.
+      notes: [
+        {
+          label: 'Lecture notes, nearest neighbors and matrix factorization',
+          url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
+        },
+      ],
       // The combined case deck repeats the four block decks: it stays in the Materials list without a number, and out of the ZIP.
       // No handouts of the business cases since 2026-11-11 (Carlos: "Remove also the handouts for the business cases").
       extras: [deck(2, 'ainit-hs26-business-cases.pdf')],

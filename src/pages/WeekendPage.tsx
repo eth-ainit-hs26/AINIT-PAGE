@@ -145,9 +145,16 @@ export function WeekendPage() {
           */}
           {weekend.download && (
             <div className="wdetail-head__cta">
-              <a className="btn" href={downloadZip(weekend.download.file)} download="">
-                Download all slides and visualizations (ZIP)
-              </a>
+              <div className="wdetail-head__buttons">
+                <a className="btn" href={downloadZip(weekend.download.file)} download="">
+                  Download all slides and visualizations (ZIP)
+                </a>
+                {(weekend.download.notes ?? []).map((n) => (
+                  <a key={n.url} className="btn btn--ghost" href={n.url} download={`${n.label}.pdf`}>
+                    {n.label} (PDF)
+                  </a>
+                ))}
+              </div>
               <p className="wdetail-head__note">{weekend.download.note}</p>
             </div>
           )}

@@ -8,7 +8,7 @@
 //      what disagrees (check() below);
 //   3. writes that weekend's ZIP, public/downloads/<file>: one folder named after the ZIP, in it the decks and
 //      visualizations of the agenda, numbered and named as on the page, "<NN> <name>.pdf" and "<NN> <name>.html",
-//      and "Handouts/<NN> <name> (handout).pdf". The scripts a visualization loads with
+//      the lecture notes of `download.notes` as "<label>.pdf", and "Handouts/<NN> <name> (handout).pdf". The scripts a visualization loads with
 //      <script src="x.js"></script> are written into its page, so that it is one file that opens from the
 //      participant's laptop; a visualization folder with any other file goes in as a folder, "<NN> <name>/".
 //
@@ -148,10 +148,22 @@ function check(weekend, lib) {
     if (linked.has(rel(url))) say(`${url} is on the agenda and in download.extras; remove it from download.extras`);
   }
 
-  // The Materials list links no deck or visualization that the agenda leaves out, unless it is an extra.
+  // Lecture notes: PDFs of this site beside the ZIP button, off the agenda, in the ZIP under their label.
+  const notes = new Set();
+  for (const n of download.notes ?? []) {
+    if (!lib.isLocalMaterial(n.url) || !lib.isPdf(n.url)) say(`download.notes lists ${n.url}, which is no PDF of this site`);
+    else if (!existsSync(inPublic(n.url))) say(`download.notes lists ${n.url}, and public/${rel(n.url)} does not exist; remove it`);
+    if (!n.label.trim() || BAD_NAME.test(n.label)) {
+      say(`the label "${n.label}" of ${n.url} in download.notes cannot be a file name (no < > : " / \\ | ? *, no dot or space at the end); change the label`);
+    }
+    if (linked.has(rel(n.url)) || extras.has(rel(n.url))) say(`${n.url} is in download.notes and also on the agenda or in download.extras; keep it in one place`);
+    notes.add(rel(n.url));
+  }
+
+  // The Materials list links no deck or visualization that the agenda leaves out, unless it is an extra or a note.
   for (const r of weekend.resources) {
-    if (lib.isLocalMaterial(r.url) && !linked.has(rel(r.url)) && !extras.has(rel(r.url))) {
-      say(`the Materials list links "${r.label}", ${r.url}, which is on no row of the agenda; link it on the agenda at its place, or add it to download.extras`);
+    if (lib.isLocalMaterial(r.url) && !linked.has(rel(r.url)) && !extras.has(rel(r.url)) && !notes.has(rel(r.url))) {
+      say(`the Materials list links "${r.label}", ${r.url}, which is on no row of the agenda; link it on the agenda at its place, or add it to download.extras or download.notes`);
     }
   }
 
@@ -169,8 +181,8 @@ function check(weekend, lib) {
     }
   }
   for (const file of onSite) {
-    if (!linked.has(file.url) && !extras.has(file.url)) {
-      say(`${file.shown} is on no row of the agenda; link it at its place in src/data/weekends.ts, add it to download.extras to keep it off the agenda, or delete it`);
+    if (!linked.has(file.url) && !extras.has(file.url) && !notes.has(file.url)) {
+      say(`${file.shown} is on no row of the agenda; link it at its place in src/data/weekends.ts, add it to download.extras or download.notes to keep it off the agenda, or delete it`);
     }
   }
   return problems;
@@ -296,12 +308,13 @@ function writeZip(weekend, materials, when) {
     else steps.push(...visualization(inPublic(m.url), `${folder}/${m.tag} ${m.name}`));
     if (m.handout) handouts.push({ name: `${folder}/Handouts/${m.handout.fileName}`, data: readFileSync(inPublic(m.handout.url)) });
   }
-  const entries = withFolders([...steps, ...handouts]);
+  const notes = (weekend.download.notes ?? []).map((n) => ({ name: `${folder}/${n.label}.pdf`, data: readFileSync(inPublic(n.url)) }));
+  const entries = withFolders([...steps, ...notes, ...handouts]);
   const archive = zip(entries, when);
   mkdirSync(DOWNLOADS, { recursive: true });
   writeFileSync(join(DOWNLOADS, weekend.download.file), archive);
   console.log(
-    `downloads/${weekend.download.file}: ${materials.length} numbered, ${handouts.length} handouts, ${(archive.length / 1e6).toFixed(1)} MB`,
+    `downloads/${weekend.download.file}: ${materials.length} numbered, ${notes.length} lecture notes, ${handouts.length} handouts, ${(archive.length / 1e6).toFixed(1)} MB`,
   );
   for (const e of entries) if (!e.name.endsWith('/')) console.log(`  ${e.name}`);
 }

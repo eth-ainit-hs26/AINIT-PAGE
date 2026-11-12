@@ -65,8 +65,11 @@ The rules of such a weekend:
 - The Materials list (`resources`) lists what the agenda does not: slides marked
   Soon, notebooks, the project. A file kept off the agenda on purpose goes in
   `download.extras`: shown in the Materials list without a number, left out of the ZIP.
+- Lecture notes go in `download.notes` (since 2026-11-12, Carlos: "put that next
+  to download all slides and visualizations"): a button each beside the ZIP
+  button, no number, in the ZIP under their label, and in the Materials list.
 - Every file in `public/slides/we<N>/` and every folder in `public/viz/we<N>/`
-  is on the agenda or in `download.extras`.
+  is on the agenda, in `download.extras` or in `download.notes`.
 
 [`scripts/sync-materials.mjs`](scripts/sync-materials.mjs) runs before every
 `npm run dev` and `npm run build`. It checks these rules, the files in `public/`
