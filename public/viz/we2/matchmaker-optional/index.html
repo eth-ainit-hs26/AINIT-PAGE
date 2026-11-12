@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Matchmaker: Gradient Descent</title>
+<title>Streaming Service: Gradient Descent</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1741,7 +1741,7 @@ button.chip:hover{border-color:var(--rubric)}
 
 <div class="app">
   <header class="topbar">
-    <span class="brand"><span class="pre">Once Upon a </span><em>Matchmaker</em></span>
+    <span class="brand"><span class="pre">Once Upon a </span><em>Streaming Service</em></span>
     <nav class="pager" id="pager" aria-label="Scenes"></nav>
     <button type="button" class="themebtn" id="themebtn" aria-label="Switch between light and dark (key t)" title="Light or dark (t)">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
@@ -1787,36 +1787,28 @@ button.chip:hover{border-color:var(--rubric)}
   var MINUS = "−";
   var SVGNS = "http://www.w3.org/2000/svg";
 
-  /* DATA. Invented for the lesson: the profiles, the critic's answers and the ratings are not real data.
+  /* DATA. Invented for the lesson: the profiles and the ratings are not real data.
      The notebook uses the same numbers (notebook/data.py; notebook/build.py stops if the two disagree).
      Each section's agents use only the data of their section; the main session adds a section's data before
      its agents start. Change a number only together with every scene and notebook part that uses it. */
 
-  // The three axes of a profile, each a question answered with the five marks. A positive number leans to
-  // `pos`, a negative one to `neg`. g is the axis picture, gpos and gneg the pictures of its two ends,
-  // d the tile colour, t the full name, short the label for table heads.
+  // The three questions of the Matchmaker's form (part one, since 2026-11-12), each answered with the five marks: how
+  // much a lady or a gentleman likes a pastime. Chosen by an agent at Carlos's request ("I need an agent that thinks
+  // about the three possible questions for the matchmaking service"): three pastimes in three places (the ballroom,
+  // the library, the park), so that one person can love one and hate another, and agreeing on one, in love or in
+  // hate, is a good sign. g is the picture, d the tile colour, t the full name, short the label for table heads, ask the
+  // question on the form, obj the words of a profile read aloud. Until 2026-11-12 the axes were the films' real or
+  // fiction, comedy or drama, action or calm.
   var AXES = [
-    { id: "real", t: "Real or fiction", short: "Real", pos: "real", neg: "fiction", g: "📰", gpos: "📰", gneg: "🐉",
-      d: "#D6E8F7", ask: "Do you like real stories?", critic: "Did it really happen?" },
-    { id: "comedy", t: "Comedy or drama", short: "Comedy", pos: "comedy", neg: "drama", g: "😂", gpos: "😂", gneg: "😢",
-      d: "#FFF0B8", ask: "Do you like comedies?", critic: "Is it made to make you laugh?" },
-    { id: "action", t: "Action or calm", short: "Action", pos: "action", neg: "calm", g: "💥", gpos: "💥", gneg: "🍵",
-      d: "#FFE1C6", ask: "Do you like action?", critic: "Is it full of action?" }
+    { id: "dancing", t: "Dancing", short: "Dancing", g: "💃", d: "#F3DDF0", ask: "Do you like dancing?", obj: "dancing" },
+    { id: "reading", t: "Reading", short: "Reading", g: "📖", d: "#F3E0C7", ask: "Do you like reading?", obj: "reading" },
+    { id: "walks", t: "Long walks", short: "Walks", g: "🌳", d: "#D8EDD3", ask: "Do you like long walks?", obj: "long walks" }
   ];
 
   // Films. t title, short label, y release year, g emoji, d tile colour, sum a one-line summary (checkable facts),
   // sec the section that introduces it.
   var FILMS = [
-    // Section 1: four films, each described by the critic on the three axes.
-    { id: "intouchables", t: "The Intouchables", short: "Intouchables", y: 2011, g: "🪂", d: "#D8EDD3", sec: 1,
-      sum: "After a paragliding accident leaves a rich Parisian paralysed, he hires a young man from the suburbs as his carer, and the two become friends. Based on a true story." },
-    { id: "apollo13", t: "Apollo 13", short: "Apollo 13", y: 1995, g: "🚀", d: "#D6E8F7", sec: 1,
-      sum: "In 1970 an oxygen tank explodes on the way to the Moon, and three astronauts and mission control fight to bring the crew home. Based on the real mission." },
-    { id: "mib", t: "Men in Black", short: "Men in Black", y: 1997, g: "👽", d: "#E2E8C9", sec: 1,
-      sum: "Two agents of a secret agency keep watch on the aliens who live in secret on Earth, and hunt a giant alien bug that has landed in New York." },
-    { id: "interstellar", t: "Interstellar", short: "Interstellar", y: 2014, g: "🪐", d: "#E4D7F2", sec: 1,
-      sum: "With crops failing on Earth, a former pilot leads a crew through a wormhole to look for a new home for humanity." },
-    // Section 2: two films that no critic has described; only the customers' ratings are known.
+    // Section 2: two films; only the customers' ratings are known.
     { id: "paddington", t: "Paddington", short: "Paddington", y: 2014, g: "🐻", d: "#F3E0C7", sec: 2,
       sum: "A young bear from Peru travels to London, where the Brown family takes him in." },
     { id: "martian", t: "The Martian", short: "The Martian", y: 2015, g: "🥔", d: "#F7D2C4", sec: 2,
@@ -1834,11 +1826,18 @@ button.chip:hover{border-color:var(--rubric)}
       sum: "A princess sets out with an ice harvester and a snowman to find her sister, whose magic has trapped their kingdom in an endless winter." }
   ];
 
-  // Customers. n name, d tile colour, sec the section that introduces them.
+  // People. n name, d tile colour, sec the section that introduces them. Part one's are the Matchmaker's clients since
+  // 2026-11-12, four ladies and five gentlemen (kind); the others are the streaming service's customers.
   var PEOPLE = [
-    { id: "sara", n: "Sara", d: "#F7D9E3", sec: 1 },
-    { id: "leo",  n: "Leo",  d: "#CFE3F5", sec: 1 },
-    { id: "maya", n: "Maya", d: "#FFF0B8", sec: 1 },
+    { id: "clara",   n: "Clara",   d: "#F7D9E3", sec: 1, kind: "lady" },
+    { id: "eliza",   n: "Eliza",   d: "#FFE1C6", sec: 1, kind: "lady" },
+    { id: "harriet", n: "Harriet", d: "#E4D7F2", sec: 1, kind: "lady" },
+    { id: "rose",    n: "Rose",    d: "#F7D2C4", sec: 1, kind: "lady" },
+    { id: "arthur",  n: "Arthur",  d: "#CFE3F5", sec: 1, kind: "gent" },
+    { id: "felix",   n: "Felix",   d: "#D8EDD3", sec: 1, kind: "gent" },
+    { id: "george",  n: "George",  d: "#FFF0B8", sec: 1, kind: "gent" },
+    { id: "oscar",   n: "Oscar",   d: "#D6E8F7", sec: 1, kind: "gent" },
+    { id: "walter",  n: "Walter",  d: "#E2E8C9", sec: 1, kind: "gent" },
     // Section 2: three customers who filled in no profile; they only rated two films.
     { id: "ida",  n: "Ida",  d: "#D8EDD3", sec: 2 },
     { id: "raj",  n: "Raj",  d: "#E4D7F2", sec: 2 },
@@ -1859,18 +1858,20 @@ button.chip:hover{border-color:var(--rubric)}
     { id: "d3", t: "Third number", short: "Third", g: "③", d: "#EFE6D2", dim: true }
   ];
 
-  // Every known number, row by row: V[row][column]. A customer's profile and a film's critic answers are rows
-  // over the axes (2 two ticks, 1 a tick, 0 a shrug, -1 a cross, -2 two crosses).
+  // Every known number, row by row: V[row][column]. A profile is a row over the questions (2 two ticks, 1 a tick, 0 a
+  // shrug, -1 a cross, -2 two crosses).
   var V = {
-    // Section 1, the profiles (customers fill them in).
-    sara: { real:  2, comedy:  1, action: -2 },   // loves real stories, likes comedy, hates action
-    leo:  { real: -2, comedy:  2, action:  2 },   // hates real stories (loves fiction), loves comedy and action
-    maya: { real:  1, comedy: -2, action:  1 },   // likes real stories, hates comedy (loves drama), likes action
-    // Section 1, the critic's answers for each film.
-    intouchables: { real:  2, comedy:  1, action: -1 },
-    apollo13:     { real:  2, comedy: -2, action:  1 },
-    mib:          { real: -2, comedy:  1, action:  2 },
-    interstellar: { real: -2, comedy: -2, action:  0 },
+    // Section 1, the Matchmaker's clients (invented, ../tools/s1_matchmaking.py, seed 20261112): the ladies ...
+    clara:   { dancing:  2, reading: -1, walks: -2 },   // loves dancing, dislikes reading, hates long walks
+    eliza:   { dancing:  1, reading: -1, walks:  2 },
+    harriet: { dancing: -2, reading:  1, walks: -2 },
+    rose:    { dancing: -2, reading:  2, walks:  2 },
+    // ... and the gentlemen, on the same form.
+    arthur:  { dancing:  1, reading: -2, walks:  1 },
+    felix:   { dancing: -2, reading:  2, walks:  1 },
+    george:  { dancing: -2, reading:  2, walks: -2 },
+    oscar:   { dancing:  2, reading: -2, walks: -2 },
+    walter:  { dancing: -1, reading:  0, walks:  2 },
     // Section 2, the ratings, the five marks as numbers: one row per customer, one number per film.
     ida:  { paddington:  2, martian:  1 },
     raj:  { paddington: -1, martian:  2 },
@@ -1892,17 +1893,18 @@ button.chip:hover{border-color:var(--rubric)}
     holes: [[0, 1], [0, 3], [1, 1], [1, 2], [2, 4], [3, 2]]                  // [customer, film]: not rated
   };
 
-  // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
-  // film's column over the three axes (kept here one row per film; the game draws the films turned). Scores (rows
-  // Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
-  //   Sara  7  0 -7 -6     Leo  -4 -6 10  0     Maya  -1  7 -2  2
-  // Suggested worked examples: Sara and The Intouchables 4 + 1 + 2 = 7 (agree on all three axes),
-  // Leo and Apollo 13 -4 - 4 + 2 = -6, Sara and Apollo 13 4 - 2 - 2 = 0 (the products cancel).
+  // Section 1, Once Upon a Matchmaker (since 2026-11-12). The compatibility of a lady and a gentleman is the inner
+  // product of their rows over the three questions; the game draws the gentlemen's table turned, one column per
+  // gentleman, above the table of compatibilities. Rows Clara, Eliza, Harriet, Rose; columns Arthur, Felix, George,
+  // Oscar, Walter:
+  //   Clara 2 -8 -2 10 -6  /  Eliza 5 -2 -8 0 3  /  Harriet -6 4 10 -2 -2  /  Rose -4 10 4 -12 6
+  // Each lady has one best match, four different gentlemen: Clara and Oscar, Eliza and Arthur, Harriet and George,
+  // Rose and Felix; Walter is left over. The worked example is the first pair, Clara and Arthur: 2 + 2 - 2 = 2.
   var S1 = {
-    people: ["sara", "leo", "maya"],
-    films: ["intouchables", "apollo13", "mib", "interstellar"],
-    axes: ["real", "comedy", "action"],
-    worked: [["sara", "intouchables"], ["leo", "apollo13"], ["sara", "apollo13"]],
+    ladies: ["clara", "eliza", "harriet", "rose"],
+    gents: ["arthur", "felix", "george", "oscar", "walter"],
+    axes: ["dancing", "reading", "walks"],
+    worked: [["clara", "arthur"]],
     // Scene 4, a bigger product: two plain matrices of invented numbers, A 5 x 4 and B 4 x 6 as drawn (B kept one
     // row per column of the drawing). Their product (every row of A with every column of B) is 5 x 6:
     //   -3  6  4 -3  1 -2  /  3 -4  5 -2  6 -2  /  -2  5 -3  3 -3  0  /  4 -4 -3  3 -2  3  /  0  5  4 -2  0  0
@@ -2002,8 +2004,7 @@ button.chip:hover{border-color:var(--rubric)}
   // The file is generated by ../tools/s5_movielens.py from MovieLens ml-latest-small and carries the dataset's
   // citation and licence conditions; ../tools/check_s5.js checks that MF.T.run in the browser equals the run there.
 
-  // The five marks. For a profile they say how much the customer likes the axis's `pos` end; for a film, how
-  // much the film is that end, in the critic's view.
+  // The five marks. For a profile they say how much the lady or the gentleman likes the pastime of the question.
   var KIND = { "2": "tick2", "1": "tick", "0": "wave", "-1": "cross", "-2": "cross2" };
   var WORD = { "2": "love it", "1": "like it", "0": "don't mind", "-1": "dislike it", "-2": "hate it" };
   var CRITIC_WORD = { "2": "very much", "1": "rather", "0": "half and half", "-1": "rather not", "-2": "not at all" };
@@ -2020,8 +2021,8 @@ button.chip:hover{border-color:var(--rubric)}
   function isFilm(x) { if (typeof x === "string") x = get(x); return !!x.g; }
   function isAxis(x) { return !!BY[idOf(x)] && (AXES.indexOf(BY[idOf(x)]) >= 0 || DIMS.indexOf(BY[idOf(x)]) >= 0); }
   function isPerson(x) { return !!BY[idOf(x)] && PEOPLE.indexOf(BY[idOf(x)]) >= 0; }
-  // The number in row p, column f (a profile or critic value when f is an axis, a rating when f is a film);
-  // null when it is not known. The name `rating` is the video store's, which notation.js calls.
+  // The number in row p, column f (a profile's answer when f is a question, a rating when f is a film); null when it
+  // is not known. The name `rating` is the video store's, which notation.js calls.
   function rating(p, f) {
     var row = V[idOf(p)];
     var v = row ? row[idOf(f)] : undefined;
@@ -2033,7 +2034,7 @@ button.chip:hover{border-color:var(--rubric)}
     cols.forEach(function (c) { s += rating(a, c) * rating(b, c); });
     return s;
   }
-  // The Matchmaker's score of customer p and film f: the inner product of their rows over the axes.
+  // The compatibility of lady p and gentleman f: the inner product of their rows over the questions.
   function score(p, f, axes) { return inner(p, f, axes || S1.axes); }
   // How many columns two rows have with exactly the same number.
   function matches(a, b, cols) {
@@ -2230,23 +2231,33 @@ button.chip:hover{border-color:var(--rubric)}
   // The four games (Carlos, 2026-11-05: "Section one on its own becomes its own visualization ... it's now a
   // trilogy. Matrix multiplication, matrix factorization, and then the whole picture", and "an optional
   // visualization that goes into the details ... a separate application"). Each shell (game1.html, game2.html,
-  // game2opt.html, game3.html) calls MF.start({ game: key }); MF.start() alone shows all five sections, as the
+  // game2opt.html; game3.html until 2026-11-12) calls MF.start({ game: key }); MF.start() alone shows all five sections, as the
   // interaction tests expect. sections: the sections the game holds; tag: the words beside the brand; cards: what a
   // section card says in this game (kicker, its numeral, no skip button); back: the last line of a Python leaf.
+  // Since 2026-11-12 (Carlos: "We're going to come up with a story ... four ladies, five guys have registered into a
+  // matchmaking service"; "for the matrix factorization, matchmaker part 2, matchmaker part 3, and matchmaker optional
+  // part, we call it ... once upon a streaming service") part one is Once Upon a Matchmaker and the other three games
+  // are Once Upon a Streaming Service; the parts keep their numbers. Section 0 is each game's prologue: game 1's cover
+  // and "Recommender systems today", game 2's cover and the overview "Matrix factorization at a glance" (moved there
+  // from part one the same day). A scene with `games` shows only in those games. names: a section's name in this game.
+  // Since 2026-11-12 (Carlos: "merge matchmaker part 2 matrix factorization with matchmaker part 3, the whole picture")
+  // part two holds section 5 after section 2, and three games are built: game3.html is gone. "3", section 5 alone,
+  // stays only for the interaction test _try-s5.html. A card's num counts the carded sections of its game.
   var GAMES = {
-    "1": { sections: [0, 1], tag: "Part one: matrix multiplication",
-           back: { 1: "Then open part two of the Matchmaker: matrix factorization." } },
-    "2": { sections: [2], tag: "Part two: matrix factorization",
-           cards: { 2: { kicker: "Once Upon a Matchmaker, part two", num: 2 } },
-           back: { 2: "Then open part three of the Matchmaker: the whole picture." } },
+    "1": { sections: [0, 1], tag: "Part one: matrix multiplication", names: { 0: "Prologue" },
+           back: { 1: "Then open part two, Once Upon a Streaming Service: matrix factorization." } },
+    "2": { sections: [0, 2, 5], tag: "Part two: matrix factorization",
+           cards: { 2: { kicker: "Once Upon a Streaming Service, part two", num: 1 },
+                    5: { kicker: "Once Upon a Streaming Service, part two", num: 2 } },
+           back: { 2: "Then come back here for the second half: the whole picture." } },
     "2opt": { sections: [3, 4], tag: "Optional: gradient descent up close",
               cards: { 3: { kicker: "Gradient descent, optional", num: 1, skip: null },
                        4: { kicker: "Gradient descent, optional", num: 2, skip: null } },
               back: { 3: "Then come back here for the second half: many customers, many films.",
-                      4: "That is the end of the Matchmaker." } },  // played after part three (Carlos, 2026-11-06)
-    "3": { sections: [5], tag: "Part three: the whole picture",
-           cards: { 5: { kicker: "Once Upon a Matchmaker, part three", num: 3 } } }
+                      4: "That is the end of the Streaming Service." } },  // played after part two (Carlos, 2026-11-06)
+    "3": { sections: [5] }  // section 5 alone, for _try-s5.html only (no shell since 2026-11-12)
   };
+  function actName(a) { return (GAME && GAME.names && GAME.names[a]) || ACT_NAMES[a]; }
   var GAME = null;
   function cardInfo(a) {
     var info = {}, base = ACT_INTRO[a] || {}, over = (GAME && GAME.cards && GAME.cards[a]) || {};
@@ -2264,9 +2275,9 @@ button.chip:hover{border-color:var(--rubric)}
   // leaves "Your turn in Python" open the optional notebook.
   var ACT_INTRO = {
     1: { kicker: "Section one", motif: "product",
-         line: "How two tables, one row per customer and one column per film, give a score for every customer and every film." },
+         line: "How two tables, one row per lady and one row per gentleman, give the compatibility of every lady with every gentleman." },
     2: { kicker: "Section two", motif: "unknown",
-         line: "In real life nobody fills in a profile. The Matchmaker sees only ratings, and has to find the numbers behind them." },
+         line: "At a streaming service nobody fills in a profile. It sees only ratings, and has to find the numbers behind them." },
     3: { kicker: "Section three, optional", motif: "hop", optional: true, skipTo: 5, skip: "Skip sections 3 and 4",
          line: "In part two each number moved against nabla, the slope of the total loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
     4: { kicker: "Section four, optional", motif: "many", optional: true, skipTo: 5, skip: "Skip to section 5",
@@ -2280,7 +2291,7 @@ button.chip:hover{border-color:var(--rubric)}
   var COLAB = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/02_cx_matrix_factorization_student.ipynb";
   var COLAB_OPT = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/02_cx_matrix_factorization_optional_student.ipynb";
   var PYTHON = {
-    1: { part: 1, url: COLAB, what: "Teach a computer to multiply two matrices: one score, then one row, then the whole table." },
+    1: { part: 1, url: COLAB, what: "Teach a computer to multiply two matrices: one compatibility, then one lady's row, then the whole table." },
     2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their total." },
     3: { part: 3, url: COLAB_OPT, optional: true, what: "Let the computer feel the slope with a tiny hop, then hop downhill: gradient descent." },
     4: { part: 4, url: COLAB_OPT, optional: true, what: "The total loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
@@ -2312,14 +2323,14 @@ button.chip:hover{border-color:var(--rubric)}
   function introScene(a) {
     var info = cardInfo(a);
     return {
-      act: a, title: ACT_NAMES[a], intro: true,
+      act: a, title: actName(a), intro: true,
       build: function (inner) {
         var card = el("div", "act-card" + (info.optional ? " opt" : ""));
         var g = el("div", "act-no", String(info.num || a));
         g.setAttribute("aria-hidden", "true");
         card.appendChild(g);
         card.appendChild(el("p", "act-kicker", info.kicker));
-        card.appendChild(el("p", "act-title", ACT_NAMES[a]));
+        card.appendChild(el("p", "act-title", actName(a)));
         card.appendChild(el("p", "act-line", info.line));
         var m = el("div", "act-motif");
         introMotif(info.motif).forEach(function (x, j) { x.style.setProperty("--j", String(j)); m.appendChild(x); });
@@ -2474,8 +2485,9 @@ button.chip:hover{border-color:var(--rubric)}
     GAME = (cfg && GAMES[cfg.game]) || null;
     if (GAME) {
       SECTIONS = GAME.sections.slice();
-      // A scene of a section that this game does not hold is dropped, so a shell may load a shared file.
-      REG = REG.filter(function (s) { return SECTIONS.indexOf(s.act) >= 0; });
+      // A scene of a section that this game does not hold is dropped, so a shell may load a shared file; so is a scene
+      // that names other games (sec0.js holds the prologues of games 1 and 2).
+      REG = REG.filter(function (s) { return SECTIONS.indexOf(s.act) >= 0 && (!s.games || s.games.indexOf(cfg.game) >= 0); });
       KEYS = {};
       REG.forEach(function (s) { KEYS[s.key] = s; });
       var brand = document.querySelector(".topbar .brand");
@@ -2488,7 +2500,7 @@ button.chip:hover{border-color:var(--rubric)}
     stepsEl = document.getElementById("steps");
     // A section that is not built yet still gets a leaf, so the pager shows the whole lesson.
     SECTIONS.forEach(function (a) {
-      if (!REG.some(function (s) { return s.act === a; })) define("sec" + a + "-todo", { act: a, title: ACT_NAMES[a],
+      if (!REG.some(function (s) { return s.act === a; })) define("sec" + a + "-todo", { act: a, title: actName(a),
         build: function (inner) { inner.appendChild(el("p", "say", "Section " + a + " is being built.")); } });
     });
     // The section cards come first in their section (order -1), the Python leaves last (order 1e6).
@@ -2522,7 +2534,7 @@ button.chip:hover{border-color:var(--rubric)}
       h.id = "h-" + s.key;
       head.appendChild(h);
       if (ACT_INTRO[s.act] && ACT_INTRO[s.act].optional) head.appendChild(el("span", "opt-tag", "optional"));
-      head.appendChild(el("span", "actname", ACT_NAMES[s.act]));
+      head.appendChild(el("span", "actname", actName(s.act)));
       sec.appendChild(head);
       var body = el("div", "scene-body"), inner = el("div", "scene-inner");
       body.appendChild(inner);
@@ -2532,14 +2544,14 @@ button.chip:hover{border-color:var(--rubric)}
       s.inner = inner;
       if (!groups[s.act]) {
         groups[s.act] = el("span", "act");
-        groups[s.act].title = ACT_NAMES[s.act];
+        groups[s.act].title = actName(s.act);
         nav.appendChild(groups[s.act]);
       }
       var b = el("button", s.intro ? "intro" : s.python ? "py" : "", s.intro || s.python ? "" : String(s.num));
       b.type = "button";
       // a card inside a section (s.card, part two's "Your turn" since 2026-11-11) is named by its own title
-      b.title = s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.title;
-      b.setAttribute("aria-label", s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
+      b.title = s.intro ? (s.card ? s.title : actName(s.act)) : s.title;
+      b.setAttribute("aria-label", s.intro ? (s.card ? s.title : actName(s.act)) : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
       b.addEventListener("click", function () { go(i, 0); });
       groups[s.act].appendChild(b);
       dots.push(b);
@@ -9504,7 +9516,7 @@ button.chip:hover{border-color:var(--rubric)}
         ["Add the " + count(n) + " losses."]);
     } else {
       words(S, ["One number for the whole column: the total loss."],
-        ["This is the number the Matchmaker now makes small."],
+        ["This is the number the streaming service now makes small."],
         ["It is 0 only when every prediction equals its rating."]);
     }
   }

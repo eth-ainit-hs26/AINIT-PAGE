@@ -502,9 +502,11 @@ export const weekends: Weekend[] = [
         time: '10:00',
         title: 'Matrix product and matrix factorization',
         type: 'lecture',
-        // Once Upon a Matchmaker, four games: part one here, the rest at 11:00, the optional one last
-        // (Carlos, 2026-11-06).
-        links: [{ label: 'Matchmaker part one, matrix multiplication', url: viz(2, 'matchmaker-part-1') }],
+        // Part one here, Once Upon a Matchmaker; part two and the optional part at 11:00, the optional one last
+        // (Carlos, 2026-11-06). Since 2026-11-12 three games: part three, the whole picture, is the second half of
+        // part two (Carlos: "merge matchmaker part 2 matrix factorization with matchmaker part 3, the whole
+        // picture"), and parts two and optional are Once Upon a Streaming Service (w2-cx-private 57cac74, 1e1048f).
+        links: [{ label: 'Once Upon a Matchmaker, matrix multiplication', url: viz(2, 'matchmaker-part-1') }],
       },
       { time: '10:30', title: 'Coffee break outside the classroom, until 11:00', type: 'break' },
       {
@@ -515,9 +517,8 @@ export const weekends: Weekend[] = [
         // are beside the ZIP button since 2026-11-12 (`download.notes`).
         links: [
           { label: 'Business case, Spotify', url: deck(2, 'ainit-hs26-business-cases-matrix-factorization.pdf') },
-          { label: 'Matchmaker part two, matrix factorization', url: viz(2, 'matchmaker-part-2') },
-          { label: 'Matchmaker part three, the whole picture', url: viz(2, 'matchmaker-part-3') },
-          { label: 'Matchmaker optional part, gradient descent up close', url: viz(2, 'matchmaker-optional') },
+          { label: 'Once Upon a Streaming Service, matrix factorization', url: viz(2, 'matchmaker-part-2') },
+          { label: 'Once Upon a Streaming Service, optional, gradient descent up close', url: viz(2, 'matchmaker-optional') },
         ],
       },
       { 

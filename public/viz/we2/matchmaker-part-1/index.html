@@ -730,8 +730,9 @@ button.chip:hover{border-color:var(--rubric)}
 }
 </style>
 <style>
-/* Section 0, the preface of part one, "Matrix factorization at a glance" (sec0.js), built by the main session on
-   2026-11-10. Only game1.html loads it. Classes start with s0-. */
+/* Section 0, the prologue of games 1 and 2 (sec0.js), built by the main session on 2026-11-10 as the preface of part
+   one; since 2026-11-12 game1.html (the cover and "Recommender systems today") and game2.html (the cover and "Matrix
+   factorization at a glance") load it. Classes start with s0-. */
 .s0-in{animation:s0-in .45s cubic-bezier(.2,.7,.2,1) both}
 .s0-rise{animation:s0-in .55s cubic-bezier(.2,.7,.2,1) both}
 @keyframes s0-in{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
@@ -751,11 +752,11 @@ button.chip:hover{border-color:var(--rubric)}
 @keyframes s0-pop{from{opacity:0; transform:scale(.4)} to{opacity:1; transform:none}}
 @keyframes s0-beat{0%,100%{transform:scale(1)} 30%{transform:scale(1.22)} 60%{transform:scale(.96)}}
 
-/* 2. Recommender systems today: two sentences, the second the larger */
+/* 2. Recommender systems today (game 1): two sentences, the first the larger */
 .s0-today{display:grid; justify-items:center; gap:28px; text-align:center; max-width:30em; margin:0 auto; padding:12px 0}
-.s0-was{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); line-height:1.35; color:var(--muted); text-wrap:balance}
+.s0-then{font-size:calc(25px * (1 + (var(--tx) - 1) * 0.731)); line-height:1.35; text-wrap:balance}
 .s0-now{font-size:calc(36px * (1 + (var(--tx) - 1) * 0.308)); line-height:1.22; font-weight:500; text-wrap:balance}
-.s0-now em{color:var(--rubric); font-style:italic}
+.s0-now em, .s0-then em{color:var(--rubric); font-style:italic}
 
 /* 3. At a glance: one line, the board, the words under it */
 .s0-gl{display:grid; justify-items:center; gap:12px; width:100%}
@@ -800,7 +801,7 @@ button.chip:hover{border-color:var(--rubric)}
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
   .s0-today{gap:20px}
-  .s0-was{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
+  .s0-then{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846))}
   .s0-now{font-size:calc(31px * (1 + (var(--tx) - 1) * 0.500))}
   .s0-gl{gap:9px}
   .s0-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
@@ -822,7 +823,7 @@ button.chip:hover{border-color:var(--rubric)}
   .s0-title{font-size:44px}
   .s0-cover{gap:14px}
   .s0-today{gap:16px}
-  .s0-was{font-size:18px}
+  .s0-then{font-size:18px}
   .s0-now{font-size:24px}
   .s0-gl{gap:8px}
   .s0-lead{font-size:17px}
@@ -854,23 +855,26 @@ button.chip:hover{border-color:var(--rubric)}
 @media (min-width: 1080px) and (min-height: 740px){ .s0-today{max-width:calc(30em * var(--tx))} }
 </style>
 <style>
-/* Section 1, "Matrix multiplication" (part one of the Matchmaker). Built by agent S1-A on 2026-11-03, rewritten by the
-   main session on 2026-11-05 for the stacked layout (M.stack) and the scene byhand, turned to the textbook layout of
-   M.stack on 2026-11-06 (the second matrix turned above the product). Class names start with s1-. */
-.s1-mm, .s1-sc, .s1-mul, .s1-bg, .s1-hand{display:grid; justify-items:center; gap:12px; width:100%}
+/* Section 1, "Matrix multiplication" (part one, Once Upon a Matchmaker). Built by agent S1-A on 2026-11-03, rewritten by
+   the main session on 2026-11-05 for the stacked layout (M.stack) and the scene byhand, turned to the textbook layout of
+   M.stack on 2026-11-06 (the second matrix turned above the product), and rewritten on 2026-11-12 for the matchmaking
+   story: the website of the 1990s, the two tables side by side, the question of compatibility, the turn of the
+   gentlemen's table and the desk of the first pair. Class names start with s1-. */
+.s1-mm, .s1-cp, .s1-pr, .s1-mul, .s1-bg, .s1-hand{display:grid; justify-items:center; gap:12px; width:100%}
 /* Every number cell of a product's stack keeps one width, so that the columns of the turned matrix line up with the
    columns of the product under it (MATRIX.md, The textbook cross, traps). */
-.s1-sc td.mx-c > .nt-n, .s1-mul td.mx-c > .nt-n, .s1-bg td.mx-c > .nt-n, .s1-hand td.mx-c > .nt-n{width:var(--nt-w)}
+.s1-pr td.mx-c > .nt-n, .s1-mul td.mx-c > .nt-n, .s1-bg td.mx-c > .nt-n, .s1-hand td.mx-c > .nt-n{width:var(--nt-w)}
 /* A stack keeps only the rows of its grid that a scene fills: an empty row of the template still takes a row gap. In
    the scenes bigger and byhand the first matrix has no column heads, so the tops of the first matrix and of the
    product are level: the second matrix gets room under it for the arrow down into the product (at least 14 px, the
    arrow is left out with less), which a larger row gap would also add under the worked line. */
-.s1-tabs .mx-stk.mx-stk-tb.mx-stk-two{grid-template-areas:". b" "a ."}
 .s1-mul .mx-stk.mx-stk-tb, .s1-bg .mx-stk.s1-lone{grid-template-areas:"b b" "a c"}
 .s1-hand .mx-stk.mx-stk-tb{grid-template-areas:"b b" "a c" "calc calc"}
 .s1-bg .mx-stk:not(.s1-lone) > .mx-ssb, .s1-hand .mx-stk > .mx-ssb{padding-bottom:20px}
 .s1-in{animation:s1-in .45s cubic-bezier(.2,.7,.2,1) both}
+.s1-rise{animation:s1-in .55s cubic-bezier(.2,.7,.2,1) both}
 @keyframes s1-in{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+@keyframes s1-fade{from{opacity:0} to{opacity:1}}
 .s1-still, .s1-still *{transition:none !important}
 .s1-lead{font-size:calc(23px * (1 + (var(--tx) - 1) * 0.808)); line-height:1.3; text-align:center; max-width:60ch; text-wrap:balance; font-weight:500}
 .s1-read, .s1-cue{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; max-width:58ch; text-wrap:balance; color:var(--ink)}
@@ -882,35 +886,50 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-later{visibility:hidden}
 .em{font-family:var(--emoji)}
 
-/* 1. The opening (2026-11-10): the website, how it works (a login and the form of the three questions), the profiles,
-   a film critic's form for one film, the critic's answers, the two tables. The cover is the preface's (sec0.css). */
+/* 1. The opening: the website, how it works (a login and the form of the three questions), the ladies, the gentlemen,
+   the two tables side by side. The cover is the prologue's (sec0.css). */
 .s1-step{display:grid; justify-items:center; gap:12px; width:100%}
 .s1-note{font-size:calc(15px * var(--tx)); color:var(--muted); font-style:italic; text-align:center}
-/* a browser window on the website */
-.s1-site{width:min(100%, 760px); border:1.5px solid var(--rule); border-radius:16px; background:var(--bg); overflow:hidden}
-.s1-bar{display:flex; align-items:center; gap:7px; padding:8px 14px; border-bottom:1.5px solid var(--rule); background:var(--leaf)}
-.s1-bar i{width:11px; height:11px; border-radius:50%; background:var(--rule)}
-.s1-url{margin-left:12px; padding:1px 16px 3px; border-radius:999px; border:1.5px solid var(--rule); color:var(--rubric); font-style:italic; font-size:calc(16px * var(--tx)); line-height:1.3}
-.s1-siteb{display:grid; justify-items:center; gap:16px; padding:20px 24px 22px}
+/* a window of the 1990s on the website: a grey face with bevelled edges, a title bar from navy to sky blue, the
+   address in a sunken field, then the page in a sunken frame. The bevels mix black and white into the face, so they
+   read in both themes. */
+.s1-site{--s1-win:color-mix(in srgb, var(--rule) 50%, var(--leaf)); --s1-hi:color-mix(in srgb, #fff 62%, var(--s1-win));
+  --s1-lo:color-mix(in srgb, #000 42%, var(--s1-win)); --s1-sys:Verdana, Tahoma, Geneva, sans-serif;
+  width:min(100%, 760px); padding:3px; background:var(--s1-win); border:2px solid; border-color:var(--s1-hi) var(--s1-lo) var(--s1-lo) var(--s1-hi);
+  box-shadow:1px 1px 0 var(--s1-lo)}
+.s1-bar{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:3px 4px 3px 9px;
+  background:linear-gradient(90deg, #0A246A, #3A6EA5 60%, #A6CAF0); color:#fff}
+.s1-bart{font-family:var(--s1-sys); font-weight:700; font-size:calc(14px * var(--tx)); letter-spacing:.01em; line-height:1.3}
+.s1-barb{display:flex; gap:3px}
+.s1-barb i{width:17px; height:15px; background:var(--s1-win); border:1.5px solid; border-color:var(--s1-hi) var(--s1-lo) var(--s1-lo) var(--s1-hi)}
+.s1-addr{display:flex; align-items:center; gap:8px; padding:5px 4px}
+.s1-alab{font-family:var(--s1-sys); font-size:calc(13px * var(--tx)); color:var(--ink)}
+.s1-url{flex:1; min-width:0; padding:1px 8px 2px; background:var(--leaf); border:2px solid; border-color:var(--s1-lo) var(--s1-hi) var(--s1-hi) var(--s1-lo);
+  font-family:var(--s1-sys); font-size:calc(13px * var(--tx)); line-height:1.35; color:var(--rubric)}
+.s1-siteb{display:grid; justify-items:center; gap:14px; padding:16px 22px 20px; background:var(--leaf);
+  border:2px solid; border-color:var(--s1-lo) var(--s1-hi) var(--s1-hi) var(--s1-lo)}
+.s1-welcome{font-size:calc(30px * (1 + (var(--tx) - 1) * 0.538)); line-height:1.1; font-weight:700; font-style:italic; color:var(--rubric);
+  text-align:center; text-shadow:2px 2px 0 color-mix(in srgb, var(--ochre) 40%, transparent)}
+.s1-hr{width:100%; height:0; margin:0; border:0; border-top:1px solid var(--s1-lo); border-bottom:1px solid var(--s1-hi)}
 .s1-sides{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:18px; width:100%}
 .s1-side{display:grid; justify-items:center; gap:10px}
 .s1-sh{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885)); font-weight:600}
 .s1-chips{display:flex; flex-wrap:wrap; justify-content:center; gap:8px}
 .s1-chips .chip{font-size:calc(16.5px * var(--tx))}
-.s1-yr{color:var(--muted); font-size:.85em; margin-left:2px}
 .s1-heart-sm{font-size:44px; line-height:1}
-/* the login, then the name of the customer who logged in */
+/* the login, then the name of the client who logged in */
 .s1-who{display:flex; justify-content:center; min-height:40px}
 .s1-loginrow, .s1-me{display:flex; align-items:center; gap:10px}
 .s1-who.s1-logged .s1-loginrow, .s1-who:not(.s1-logged) .s1-me{display:none}
-.s1-field{display:inline-flex; align-items:center; gap:8px; min-width:220px; padding:5px 12px; border:1.5px solid var(--rule); border-radius:10px;
-  background:var(--leaf); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.2}
-.s1-flab{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:calc(15px * var(--tx))}
+.s1-field{display:inline-flex; align-items:center; gap:8px; min-width:220px; padding:4px 10px; background:var(--leaf);
+  border:2px solid; border-color:var(--s1-lo) var(--s1-hi) var(--s1-hi) var(--s1-lo); font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.2}
+.s1-flab{font-family:var(--s1-sys); color:var(--muted); font-size:calc(13px * var(--tx))}
 .s1-typed{font-weight:600}
-.s1-caret{width:2px; height:1.1em; background:var(--rubric); animation:s1-blink 1s steps(1) infinite}
+.s1-caret{width:2px; height:1.1em; background:var(--ink); animation:s1-blink 1s steps(1) infinite}
 @keyframes s1-blink{50%{opacity:0}}
-.s1-login{padding:5px 18px 7px; border-radius:999px; background:var(--rubric); color:var(--leaf); font-size:calc(16px * var(--tx)); line-height:1.2; transition:transform .12s ease, box-shadow .12s ease}
-.s1-login.s1-press{transform:translateY(2px); box-shadow:0 0 0 4px color-mix(in srgb, var(--rubric) 30%, transparent)}
+.s1-login{padding:4px 16px 5px; background:var(--s1-win); color:var(--ink); border:2px solid; border-color:var(--s1-hi) var(--s1-lo) var(--s1-lo) var(--s1-hi);
+  font-family:var(--s1-sys); font-size:calc(14px * var(--tx)); line-height:1.2}
+.s1-login.s1-press{border-color:var(--s1-lo) var(--s1-hi) var(--s1-hi) var(--s1-lo); transform:translate(1px, 1px)}
 .s1-me{font-size:calc(20px * (1 + (var(--tx) - 1) * 0.923)); font-weight:600}
 .s1-metag{font-variant-caps:all-small-caps; letter-spacing:.08em; color:var(--muted); font-weight:600; font-size:calc(15px * var(--tx))}
 /* the form: three questions, five marks each, the words of the marks over their columns */
@@ -928,21 +947,14 @@ button.chip:hover{border-color:var(--rubric)}
 @keyframes s1-pick{from{transform:scale(.55)} to{transform:none}}
 .s1-form.s1-wait .s1-fline{visibility:hidden}
 .s1-form.s1-come .s1-fline{animation:s1-in .45s cubic-bezier(.2,.7,.2,1) both; animation-delay:calc(var(--s1-i, 0) * .12s)}
-/* the critic's card: the film, then the same form */
-.s1-crit{display:grid; justify-items:center; gap:16px; width:min(100%, 760px); padding:16px 22px 20px; border:1.5px solid var(--rule); border-radius:16px; background:var(--bg)}
-.s1-film{display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:14px; width:min(100%, 680px)}
-.s1-film h3{font-size:calc(22px * (1 + (var(--tx) - 1) * 0.846)); line-height:1.15}
-.s1-film h3 .yr{color:var(--muted); font-weight:400; font-size:.8em; margin-left:6px}
-.s1-filmsum{font-size:calc(16px * var(--tx)); line-height:1.35; color:var(--muted)}
-/* one table alone, shown row by row (the profiles) or column by column (the critic's answers, turned) */
+/* one table alone, shown row by row (the ladies, then the gentlemen) */
 .s1-one .mx td, .s1-one .mx th{transition:opacity .4s ease}
 .s1-one .mx-dimout .mx-out{opacity:0}
-
-/* 1. The profiles and, up and to the right of them, the critic's answers turned (one column per film); the words
-   under them */
+/* the two tables side by side, as they were filled in, and the words under them */
 .s1-tabs{display:grid; justify-items:center; gap:12px; width:100%}
-.s1-tabs .mx-stk{--mx-scg:34px}
-.s1-tabs .mx-cap{font-size:17px}
+.s1-two{display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:12px 52px; max-width:100%}
+.s1-two .mx-cap{font-size:17px}
+.s1-emb .mx{--mx-ta:color-mix(in srgb, var(--rubric) 26%, transparent); --mx-tb:color-mix(in srgb, var(--ochre) 32%, transparent)}
 .s1-key{gap:8px 20px}
 .s1-tside{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px 22px; max-width:100%}
 .s1-tside:not(:has(> :not([hidden]))){display:none}
@@ -955,20 +967,58 @@ button.chip:hover{border-color:var(--rubric)}
 .act-motif .mx-gbox::before, .act-motif .mx-gbox::after{border-color:var(--card-ink)}
 .act-motif .mx-gbox i{border-color:var(--card-soft); background:color-mix(in srgb, var(--card-soft) 22%, transparent)}
 
-/* 2. From profiles to scores */
-.s1-sc{gap:10px}
-.s1-sc .mx-note{gap:8px}
-.s1-sc .s1-cue{font-size:calc(18px * var(--tx)); max-width:34ch}
-.s1-sc .mx-c.s1-best > .nt-n{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5.5px var(--rubric)}
-.s1-sc .mx-c.s1-best{background:color-mix(in srgb, var(--rubric) 10%, transparent); border-radius:12px}
-@media (min-width: 901px){
-  .s1-sc .mx-stk-side .s1-cue{text-align:left}
-  .s1-sc .mx-stk-side .s1-tools{justify-content:flex-start}
-}
+/* 2. How compatible? Clara's row and Arthur's row, then three answers in words */
+.s1-cp{gap:14px}
+.s1-cpm .mx-cap{display:none}
+.s1-opts.s1-opts-t{display:grid; grid-template-columns:repeat(3, minmax(0, 15em)); align-items:stretch; gap:14px}
+.s1-otext{font-size:calc(18px * var(--tx)); line-height:1.3; text-wrap:balance}
+.s1-opts-t .s1-opt.is-wrong .s1-otext{text-decoration:line-through; text-decoration-thickness:1.5px}
 
-/* 3. Matrix multiplication. Step 3, the rule: the columns of the first (the axes on top of the customers) and the
-   rows of the second (the axes down the left of the films), and their counts in the two sizes. Step 5, the product's
-   shape: its rows from the first (violet), its columns from the second (ochre); the two inner counts fade. */
+/* 3. A table of compatibilities: one stack (M.stack, textbook) with two more slots, the gentlemen as they filled in
+   their table (g) and the desk of the first pair (desk), in three layouts set by a class on the stack (sec1.js) */
+.s1-pr{gap:10px}
+.s1-pr .mx-stk{--mx-scg:44px}
+.s1-ssg{grid-area:g}
+.s1-ssd{grid-area:desk; justify-self:center; align-self:start; display:flex; flex-direction:column; align-items:center; gap:8px}
+/* the idle desk keeps its width, so the columns stay put, and gives up its height */
+.s1-pr .s1-desk.mx-idle{height:0; overflow:hidden}
+.s1-pr .mx-stk.s1-lay0{grid-template-columns:auto auto; grid-template-areas:"a g" "note note"}
+.s1-pr .mx-stk.s1-lay1{grid-template-columns:auto auto; grid-template-areas:"a b" "note note"}
+.s1-pr .mx-stk.s1-lay2{grid-template-columns:auto auto; grid-template-areas:"b b" "a c" "desk desk"}
+.s1-pr .s1-lay0 > .mx-ssb, .s1-pr .s1-lay0 > .mx-ssc, .s1-pr .s1-lay0 > .s1-ssd,
+.s1-pr .s1-lay1 > .s1-ssg, .s1-pr .s1-lay1 > .mx-ssc, .s1-pr .s1-lay1 > .s1-ssd,
+.s1-pr .s1-lay2 > .s1-ssg{display:none}
+.s1-pr .s1-lay0 > .mx-ssa, .s1-pr .s1-lay0 > .s1-ssg, .s1-pr .s1-lay1 > .mx-ssa, .s1-pr .s1-lay1 > .mx-ssb{justify-self:center; align-self:start}
+@media (min-width: 901px){
+  /* the desk's slot spans both rows: the desk on top, the words and the buttons at the bottom, beside the product */
+  .s1-pr .mx-stk.s1-lay2{--mx-scg:30px; grid-template-columns:auto auto auto; grid-template-areas:"b b desk" "a c desk"}
+  .s1-pr .s1-lay2 > .s1-ssd{justify-self:start; align-self:stretch; justify-content:space-between; align-items:flex-start}
+  .s1-pr .s1-lay2 .s1-cue{text-align:left; contain:inline-size; align-self:stretch; max-width:none}
+  .s1-pr .s1-lay2 .s1-tools{justify-content:flex-start}
+  .s1-pr .s1-lay2 .s1-desk .nt-wrap{--nt-sx:10px; --nt-xg:12px; --nt-eqw:18px}
+}
+/* So that the desk stays inside the leaf from 901 px (an iPad across, 1440 x 900): the cells of the gentlemen and of
+   the product with the width and font of the projector's 720p, where -12 still fits, the ladies' (one digit each)
+   narrower, the columns closer, the desk a little narrower */
+@media (min-width: 901px){
+  .s1-pr .mx{--nt-w:46px; --nt-fs:21px}
+  .s1-pr .mx-ma{--nt-w:40px}
+  .s1-pr .mx-stk.s1-lay2{--mx-scg:24px}
+  .s1-pr .s1-lay2 .s1-desk .nt-wrap{--nt-w:42px; --nt-xg:9px}
+}
+/* the turn: the numbers of the turned table hidden until their copies land, its heads coming in */
+.s1-arr td.mx-c > .nt-n{visibility:hidden}
+.s1-hin th.mx-ch > *, .s1-hin th.mx-rh > *, .s1-hin > .mx-cap{animation:s1-fade .7s ease .55s both}
+/* the desk: the video store's stack, smaller */
+.s1-desk .nt-wrap{--nt-w:46px; --nt-h:36px; --nt-fs:21px; --nt-sx:14px; --nt-sy:4px; --nt-xg:16px; --nt-rg:8px; --nt-eqw:22px}
+.s1-desk .nt-tab .rt-film .pic{--s:26px}
+.s1-desk .nt-tab .rt-who{font-size:17px}
+.s1-pr .mx-c.s1-best > .nt-n{box-shadow:0 0 0 3px var(--leaf), 0 0 0 5.5px var(--rubric)}
+.s1-pr .mx-c.s1-best{background:color-mix(in srgb, var(--rubric) 10%, transparent); border-radius:12px}
+
+/* 4. Matrix multiplication. Step 3, the rule: the columns of the first (the questions on top of the ladies) and the
+   rows of the second (the questions down the left of the gentlemen), and their counts in the two sizes. Step 5, the
+   product's shape: its rows from the first (violet), its columns from the second (ochre); the two inner counts fade. */
 .s1-mul{gap:12px}
 .s1-mul[data-k="3"] .mx-ma th.mx-ch .pic, .s1-mul[data-k="3"] .mx-mb th.mx-rh .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--rubric)}
 .s1-mul[data-k="3"] .mx-ma .mx-sc, .s1-mul[data-k="3"] .mx-mb .mx-sr{color:var(--rubric); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:4px}
@@ -977,11 +1027,23 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-mul[data-k="5"] .mx-mb .mx-sc, .s1-mul[data-k="5"] .mx-mc .mx-sc{color:var(--ochre); font-weight:700}
 .s1-mul[data-k="5"] .mx-mb th.mx-ch .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--ochre)}
 .s1-mul[data-k="5"] .mx-ma th.mx-rh .pic{box-shadow:0 0 0 2px var(--leaf), 0 0 0 3.5px var(--rubric)}
+/* The rule's sentence: from 561 px in the corner above the ladies, taking the width its column has and adding none;
+   on a phone its copy under the stack */
+.s1-mul .s1-std2{display:none}
+@media (min-width: 561px){
+  .s1-mul .mx-stk.mx-stk-tb{grid-template-areas:"note b" "a c"}
+  .s1-mul .mx-stk > .mx-note{contain:inline-size; justify-self:stretch; align-self:center; display:grid; justify-items:center}
+  .s1-mul .mx-note .s1-std{text-align:center; text-wrap:balance}
+}
+@media (max-width: 560px){
+  .s1-mul .mx-stk > .mx-note{display:none}
+  .s1-mul .s1-std2:not([hidden]){display:block}
+}
 .s1-mul[data-k="5"] .mx-ma .mx-sc, .s1-mul[data-k="5"] .mx-mb .mx-sr{color:var(--muted)}
 .s1-mul[data-k="6"] .mx-mc .mx-cap{color:var(--rubric)}
 .s1-std{font-size:calc(19px * (1 + (var(--tx) - 1) * 0.962)); line-height:1.35; text-align:center; max-width:100%; text-wrap:balance}
 
-/* 4. A bigger product */
+/* 5. A bigger product */
 .s1-bg{gap:12px}
 .s1-bg .mx-t td.mx-c{line-height:1}
 .s1-why{display:grid; justify-items:center; gap:14px}
@@ -1014,7 +1076,7 @@ button.chip:hover{border-color:var(--rubric)}
 .s1-tag.no{color:var(--ochre)}
 .s1-qtools{display:flex; gap:10px}
 
-/* 5. By hand: the stack on the left, the keypad on the right (under it on a phone) */
+/* 6. By hand: the stack on the left, the keypad on the right (under it on a phone) */
 .s1-hand{gap:10px}
 .s1-hbody{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px 44px; width:100%}
 .s1-hyou{display:grid; justify-items:center; gap:10px; width:min(100%, 300px)}
@@ -1042,54 +1104,58 @@ button.chip:hover{border-color:var(--rubric)}
 
 /* Short screens: the projector at 720p */
 @media (max-height: 760px){
-  .s1-mm, .s1-sc, .s1-mul, .s1-bg, .s1-hand{gap:9px}
+  .s1-mm, .s1-cp, .s1-pr, .s1-mul, .s1-bg, .s1-hand{gap:9px}
   .s1-lead{font-size:calc(21px * (1 + (var(--tx) - 1) * 0.885))}
   .s1-read, .s1-cue{font-size:calc(17.5px * var(--tx))}
   .s1-tabs .s1-read{font-size:calc(17.5px * var(--tx))}
   .s1-step{gap:9px}
-  .s1-siteb{gap:12px; padding:16px 22px 18px}
+  .s1-siteb{gap:10px; padding:12px 20px 14px}
+  .s1-welcome{font-size:calc(26px * (1 + (var(--tx) - 1) * 0.692))}
   .s1-fq{font-size:calc(18.5px * (1 + (var(--tx) - 1) * 0.981))}
   .s1-form{gap:6px}
-  .s1-crit{gap:12px; padding:12px 20px 16px}
-  .s1-filmsum{font-size:calc(15.5px * var(--tx))}
-  .s1-sc .s1-cue{font-size:calc(17px * var(--tx))}
   .s1-hkey{height:42px}
   .s1-hpad{gap:7px}
   .s1-hmsg{font-size:calc(16.5px * var(--tx))}
-  .s1-tabs .mx, .s1-sc .mx, .s1-mul .mx, .s1-hand .mx{--nt-w:46px; --nt-h:31px; --nt-fs:21px}
-  .s1-tabs .mx-ch .pic, .s1-sc .mx-ch .pic, .s1-mul .mx-ch .pic{--s:24px}
+  .s1-tabs .mx, .s1-pr .mx, .s1-mul .mx, .s1-hand .mx, .s1-cp .mx{--nt-w:46px; --nt-h:31px; --nt-fs:21px}
+  .s1-tabs .mx-ch .pic, .s1-pr .mx-ch .pic, .s1-mul .mx-ch .pic{--s:24px}
   .s1-tabs .mx-c > .vote{min-height:31px}
-  /* the two tables and one line of words under them fit the 526 px of a 720p projector */
-  .s1-tabs .mx{--nt-h:28px; --mx-py:2px}
-  .s1-tabs .mx-c > .vote{min-height:28px; padding:2px 6px}
-  .s1-tabs .mx-stk{--mx-srg:6px}
   .s1-tabs{gap:8px}
   .s1-tabs .s1-key .vote{padding-top:2px; padding-bottom:2px}
   .s1-tabs .s1-read{max-width:min(100%, 100ch)}
+  .s1-pr .mx{--nt-h:29px; --mx-py:2px}
+  .s1-pr .mx-stk{--mx-srg:8px}
+  .s1-desk .nt-wrap{--nt-w:42px; --nt-h:31px; --nt-fs:19px; --nt-sx:12px; --nt-sy:3px; --nt-xg:14px; --nt-rg:6px; --nt-eqw:20px}
+  .s1-desk .nt-tab .rt-film .pic{--s:22px}
+  .s1-desk .nt-tab .rt-who{font-size:16px}
   .s1-bg .mx-sm{--nt-w:38px; --nt-h:25px; --nt-fs:17px}
   .s1-bg .mx-stk:not(.s1-lone){--mx-srg:6px}
   .s1-std{font-size:calc(17.5px * var(--tx))}
   .s1-mul{gap:6px}
   .s1-mul .mx{--nt-h:29px}
+  .s1-mul .mx-stk{--mx-srg:8px}
   .s1-mul .mx-ch .pic{--s:22px}
+  .s1-otext{font-size:calc(16.5px * var(--tx))}
 }
 /* Phones */
 @media (max-width: 560px){
-  .s1-mm, .s1-sc, .s1-mul, .s1-bg, .s1-hand{gap:8px}
+  .s1-mm, .s1-cp, .s1-pr, .s1-mul, .s1-bg, .s1-hand{gap:8px}
   .s1-lead{font-size:17px}
   .s1-read, .s1-cue{font-size:15px}
   .s1-step{gap:8px}
   .s1-note{font-size:13px}
-  .s1-site{border-radius:12px}
-  .s1-bar{padding:6px 10px}
-  .s1-url{font-size:14px}
-  .s1-siteb{padding:12px 10px 14px; gap:10px}
+  .s1-bar{padding:2px 3px 2px 7px}
+  .s1-bart{font-size:12.5px}
+  .s1-barb i{width:14px; height:12px}
+  .s1-alab, .s1-url{font-size:12px}
+  .s1-siteb{padding:10px 8px 12px; gap:8px}
+  .s1-welcome{font-size:21px}
   .s1-sides{grid-template-columns:minmax(0,1fr); gap:8px}
   .s1-sh{font-size:17px}
   .s1-chips{gap:5px}
   .s1-chips .chip{font-size:13.5px}
   .s1-heart-sm{font-size:28px}
-  .s1-field{min-width:160px; font-size:17px}
+  .s1-field{min-width:150px; font-size:17px}
+  .s1-login{font-size:12.5px; padding:3px 10px 4px}
   .s1-me{font-size:17px}
   .s1-form{gap:4px}
   .s1-fline{grid-template-columns:repeat(5, minmax(0,1fr)); row-gap:3px; column-gap:4px}
@@ -1099,25 +1165,36 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-fg{font-size:19px}
   .s1-fw{font-size:12px}
   .s1-fo .vote{min-width:42px; min-height:29px}
-  .s1-crit{padding:10px 10px 12px; gap:8px}
-  .s1-film{column-gap:10px}
-  .s1-film h3{font-size:18px}
-  .s1-filmsum{font-size:13.5px; line-height:1.3}
   .s1-tabs, .s1-tside{gap:6px}
-  .s1-tabs .mx{--nt-w:32px}
-  .s1-tabs .mx-stk{--mx-scg:8px}
-  .s1-tabs .mx-cap{font-size:14px}
+  /* the two tables side by side on a phone too, as Carlos asked; the wave's Replay is for the desk */
+  .s1-two{flex-wrap:nowrap; gap:8px 12px}
+  .s1-two .mx{--nt-w:28px; --mx-px:2px}
+  .s1-tside .s1-again{display:none}
+  .s1-two .mx-ct{display:none}
+  .s1-two .mx-cap{font-size:14px}
   .s1-tabs .s1-read{font-size:14.5px}
   .s1-key{gap:6px 10px}
-  .s1-sc .mx{--nt-w:33px; --nt-h:25px; --nt-fs:15.5px}
-  .s1-sc .mx-ch .pic{--s:20px}
-  .s1-sc .mx-cap{display:none}
-  .s1-sc .s1-cue{font-size:14.5px; line-height:1.3}
-  .s1-sc .mx-note{gap:4px}
-  .s1-sc .mx-mc .mx-rh .pic{display:none}
-  .s1-mul .mx{--nt-w:34px; --nt-h:27px; --nt-fs:16px}
+  .s1-cp .mx{--nt-w:34px; --nt-h:27px; --nt-fs:16px}
+  .s1-opts.s1-opts-t{grid-template-columns:minmax(0, 1fr); gap:6px; width:100%}
+  .s1-opts-t .s1-opt{grid-template-columns:auto minmax(0, 1fr); justify-items:start; text-align:left; column-gap:10px; padding:6px 10px 7px}
+  .s1-otext{font-size:14.5px}
+  .s1-pr .mx{--nt-w:30px; --nt-h:25px; --nt-fs:15px; --mx-px:3px; --mx-py:1.5px}
+  .s1-pr .mx-ch .pic{--s:20px}
+  .s1-pr .mx-ct{display:none}
+  .s1-pr .mx-cap{font-size:13px}
+  .s1-pr .mx-stk{--mx-scg:12px; --mx-srg:8px}
+  .s1-pr .mx-stk.s1-lay1{grid-template-columns:auto; grid-template-areas:"b" "a" "note"}
+  .s1-pr .s1-cue{font-size:14.5px; line-height:1.3}
+  .s1-desk .nt-wrap{--nt-w:32px; --nt-h:26px; --nt-fs:15px; --nt-sx:8px; --nt-sy:3px; --nt-xg:11px; --nt-rg:5px; --nt-eqw:15px}
+  .s1-desk .nt-tab .rt-film .pic{--s:20px}
+  .s1-desk .nt-tab .rt-who{font-size:13.5px}
+  /* on a phone the desk drops its row of question pictures (the tables above carry them) and Replay */
+  .s1-desk .nt-tab thead{display:none}
+  .s1-pr .s1-rp{display:none}
+  .s1-mul .mx{--nt-w:30px; --nt-h:26px; --nt-fs:15px; --mx-px:3px}
   .s1-mul .mx-cap{font-size:13px}
-  .s1-mul .mx-mc .mx-rh .pic{display:none}
+  .s1-mul .mx-ct{display:none}
+  .s1-mul .mx-stk{--mx-scg:12px}
   .s1-opts{gap:8px}
   .s1-std{font-size:15px}
   .s1-hole{min-width:32px; min-height:27px}
@@ -1154,8 +1231,8 @@ button.chip:hover{border-color:var(--rubric)}
   .s1-hmsg{font-size:14.5px; min-height:2.6em}
 }
 @media (prefers-reduced-motion: reduce){
-  .s1-in, .s1-form.s1-come .s1-fline, .s1-fo.s1-pop .vote, .s1-caret{animation:none}
-  .s1-fo, .s1-login, .s1-one .mx td, .s1-one .mx th{transition:none}
+  .s1-in, .s1-rise, .s1-hin th.mx-ch > *, .s1-hin th.mx-rh > *, .s1-hin > .mx-cap, .s1-form.s1-come .s1-fline, .s1-fo.s1-pop .vote, .s1-caret{animation:none}
+  .s1-fo, .s1-one .mx td, .s1-one .mx th{transition:none}
   .s1-opt, .s1-hkey{transition:none}
 }
 </style>
@@ -1217,36 +1294,28 @@ button.chip:hover{border-color:var(--rubric)}
   var MINUS = "−";
   var SVGNS = "http://www.w3.org/2000/svg";
 
-  /* DATA. Invented for the lesson: the profiles, the critic's answers and the ratings are not real data.
+  /* DATA. Invented for the lesson: the profiles and the ratings are not real data.
      The notebook uses the same numbers (notebook/data.py; notebook/build.py stops if the two disagree).
      Each section's agents use only the data of their section; the main session adds a section's data before
      its agents start. Change a number only together with every scene and notebook part that uses it. */
 
-  // The three axes of a profile, each a question answered with the five marks. A positive number leans to
-  // `pos`, a negative one to `neg`. g is the axis picture, gpos and gneg the pictures of its two ends,
-  // d the tile colour, t the full name, short the label for table heads.
+  // The three questions of the Matchmaker's form (part one, since 2026-11-12), each answered with the five marks: how
+  // much a lady or a gentleman likes a pastime. Chosen by an agent at Carlos's request ("I need an agent that thinks
+  // about the three possible questions for the matchmaking service"): three pastimes in three places (the ballroom,
+  // the library, the park), so that one person can love one and hate another, and agreeing on one, in love or in
+  // hate, is a good sign. g is the picture, d the tile colour, t the full name, short the label for table heads, ask the
+  // question on the form, obj the words of a profile read aloud. Until 2026-11-12 the axes were the films' real or
+  // fiction, comedy or drama, action or calm.
   var AXES = [
-    { id: "real", t: "Real or fiction", short: "Real", pos: "real", neg: "fiction", g: "📰", gpos: "📰", gneg: "🐉",
-      d: "#D6E8F7", ask: "Do you like real stories?", critic: "Did it really happen?" },
-    { id: "comedy", t: "Comedy or drama", short: "Comedy", pos: "comedy", neg: "drama", g: "😂", gpos: "😂", gneg: "😢",
-      d: "#FFF0B8", ask: "Do you like comedies?", critic: "Is it made to make you laugh?" },
-    { id: "action", t: "Action or calm", short: "Action", pos: "action", neg: "calm", g: "💥", gpos: "💥", gneg: "🍵",
-      d: "#FFE1C6", ask: "Do you like action?", critic: "Is it full of action?" }
+    { id: "dancing", t: "Dancing", short: "Dancing", g: "💃", d: "#F3DDF0", ask: "Do you like dancing?", obj: "dancing" },
+    { id: "reading", t: "Reading", short: "Reading", g: "📖", d: "#F3E0C7", ask: "Do you like reading?", obj: "reading" },
+    { id: "walks", t: "Long walks", short: "Walks", g: "🌳", d: "#D8EDD3", ask: "Do you like long walks?", obj: "long walks" }
   ];
 
   // Films. t title, short label, y release year, g emoji, d tile colour, sum a one-line summary (checkable facts),
   // sec the section that introduces it.
   var FILMS = [
-    // Section 1: four films, each described by the critic on the three axes.
-    { id: "intouchables", t: "The Intouchables", short: "Intouchables", y: 2011, g: "🪂", d: "#D8EDD3", sec: 1,
-      sum: "After a paragliding accident leaves a rich Parisian paralysed, he hires a young man from the suburbs as his carer, and the two become friends. Based on a true story." },
-    { id: "apollo13", t: "Apollo 13", short: "Apollo 13", y: 1995, g: "🚀", d: "#D6E8F7", sec: 1,
-      sum: "In 1970 an oxygen tank explodes on the way to the Moon, and three astronauts and mission control fight to bring the crew home. Based on the real mission." },
-    { id: "mib", t: "Men in Black", short: "Men in Black", y: 1997, g: "👽", d: "#E2E8C9", sec: 1,
-      sum: "Two agents of a secret agency keep watch on the aliens who live in secret on Earth, and hunt a giant alien bug that has landed in New York." },
-    { id: "interstellar", t: "Interstellar", short: "Interstellar", y: 2014, g: "🪐", d: "#E4D7F2", sec: 1,
-      sum: "With crops failing on Earth, a former pilot leads a crew through a wormhole to look for a new home for humanity." },
-    // Section 2: two films that no critic has described; only the customers' ratings are known.
+    // Section 2: two films; only the customers' ratings are known.
     { id: "paddington", t: "Paddington", short: "Paddington", y: 2014, g: "🐻", d: "#F3E0C7", sec: 2,
       sum: "A young bear from Peru travels to London, where the Brown family takes him in." },
     { id: "martian", t: "The Martian", short: "The Martian", y: 2015, g: "🥔", d: "#F7D2C4", sec: 2,
@@ -1264,11 +1333,18 @@ button.chip:hover{border-color:var(--rubric)}
       sum: "A princess sets out with an ice harvester and a snowman to find her sister, whose magic has trapped their kingdom in an endless winter." }
   ];
 
-  // Customers. n name, d tile colour, sec the section that introduces them.
+  // People. n name, d tile colour, sec the section that introduces them. Part one's are the Matchmaker's clients since
+  // 2026-11-12, four ladies and five gentlemen (kind); the others are the streaming service's customers.
   var PEOPLE = [
-    { id: "sara", n: "Sara", d: "#F7D9E3", sec: 1 },
-    { id: "leo",  n: "Leo",  d: "#CFE3F5", sec: 1 },
-    { id: "maya", n: "Maya", d: "#FFF0B8", sec: 1 },
+    { id: "clara",   n: "Clara",   d: "#F7D9E3", sec: 1, kind: "lady" },
+    { id: "eliza",   n: "Eliza",   d: "#FFE1C6", sec: 1, kind: "lady" },
+    { id: "harriet", n: "Harriet", d: "#E4D7F2", sec: 1, kind: "lady" },
+    { id: "rose",    n: "Rose",    d: "#F7D2C4", sec: 1, kind: "lady" },
+    { id: "arthur",  n: "Arthur",  d: "#CFE3F5", sec: 1, kind: "gent" },
+    { id: "felix",   n: "Felix",   d: "#D8EDD3", sec: 1, kind: "gent" },
+    { id: "george",  n: "George",  d: "#FFF0B8", sec: 1, kind: "gent" },
+    { id: "oscar",   n: "Oscar",   d: "#D6E8F7", sec: 1, kind: "gent" },
+    { id: "walter",  n: "Walter",  d: "#E2E8C9", sec: 1, kind: "gent" },
     // Section 2: three customers who filled in no profile; they only rated two films.
     { id: "ida",  n: "Ida",  d: "#D8EDD3", sec: 2 },
     { id: "raj",  n: "Raj",  d: "#E4D7F2", sec: 2 },
@@ -1289,18 +1365,20 @@ button.chip:hover{border-color:var(--rubric)}
     { id: "d3", t: "Third number", short: "Third", g: "③", d: "#EFE6D2", dim: true }
   ];
 
-  // Every known number, row by row: V[row][column]. A customer's profile and a film's critic answers are rows
-  // over the axes (2 two ticks, 1 a tick, 0 a shrug, -1 a cross, -2 two crosses).
+  // Every known number, row by row: V[row][column]. A profile is a row over the questions (2 two ticks, 1 a tick, 0 a
+  // shrug, -1 a cross, -2 two crosses).
   var V = {
-    // Section 1, the profiles (customers fill them in).
-    sara: { real:  2, comedy:  1, action: -2 },   // loves real stories, likes comedy, hates action
-    leo:  { real: -2, comedy:  2, action:  2 },   // hates real stories (loves fiction), loves comedy and action
-    maya: { real:  1, comedy: -2, action:  1 },   // likes real stories, hates comedy (loves drama), likes action
-    // Section 1, the critic's answers for each film.
-    intouchables: { real:  2, comedy:  1, action: -1 },
-    apollo13:     { real:  2, comedy: -2, action:  1 },
-    mib:          { real: -2, comedy:  1, action:  2 },
-    interstellar: { real: -2, comedy: -2, action:  0 },
+    // Section 1, the Matchmaker's clients (invented, ../tools/s1_matchmaking.py, seed 20261112): the ladies ...
+    clara:   { dancing:  2, reading: -1, walks: -2 },   // loves dancing, dislikes reading, hates long walks
+    eliza:   { dancing:  1, reading: -1, walks:  2 },
+    harriet: { dancing: -2, reading:  1, walks: -2 },
+    rose:    { dancing: -2, reading:  2, walks:  2 },
+    // ... and the gentlemen, on the same form.
+    arthur:  { dancing:  1, reading: -2, walks:  1 },
+    felix:   { dancing: -2, reading:  2, walks:  1 },
+    george:  { dancing: -2, reading:  2, walks: -2 },
+    oscar:   { dancing:  2, reading: -2, walks: -2 },
+    walter:  { dancing: -1, reading:  0, walks:  2 },
     // Section 2, the ratings, the five marks as numbers: one row per customer, one number per film.
     ida:  { paddington:  2, martian:  1 },
     raj:  { paddington: -1, martian:  2 },
@@ -1322,17 +1400,18 @@ button.chip:hover{border-color:var(--rubric)}
     holes: [[0, 1], [0, 3], [1, 1], [1, 2], [2, 4], [3, 2]]                  // [customer, film]: not rated
   };
 
-  // Section 1. The Matchmaker's score of a customer and a film is the inner product of the customer's row and the
-  // film's column over the three axes (kept here one row per film; the game draws the films turned). Scores (rows
-  // Sara, Leo, Maya; columns The Intouchables, Apollo 13, Men in Black, Interstellar):
-  //   Sara  7  0 -7 -6     Leo  -4 -6 10  0     Maya  -1  7 -2  2
-  // Suggested worked examples: Sara and The Intouchables 4 + 1 + 2 = 7 (agree on all three axes),
-  // Leo and Apollo 13 -4 - 4 + 2 = -6, Sara and Apollo 13 4 - 2 - 2 = 0 (the products cancel).
+  // Section 1, Once Upon a Matchmaker (since 2026-11-12). The compatibility of a lady and a gentleman is the inner
+  // product of their rows over the three questions; the game draws the gentlemen's table turned, one column per
+  // gentleman, above the table of compatibilities. Rows Clara, Eliza, Harriet, Rose; columns Arthur, Felix, George,
+  // Oscar, Walter:
+  //   Clara 2 -8 -2 10 -6  /  Eliza 5 -2 -8 0 3  /  Harriet -6 4 10 -2 -2  /  Rose -4 10 4 -12 6
+  // Each lady has one best match, four different gentlemen: Clara and Oscar, Eliza and Arthur, Harriet and George,
+  // Rose and Felix; Walter is left over. The worked example is the first pair, Clara and Arthur: 2 + 2 - 2 = 2.
   var S1 = {
-    people: ["sara", "leo", "maya"],
-    films: ["intouchables", "apollo13", "mib", "interstellar"],
-    axes: ["real", "comedy", "action"],
-    worked: [["sara", "intouchables"], ["leo", "apollo13"], ["sara", "apollo13"]],
+    ladies: ["clara", "eliza", "harriet", "rose"],
+    gents: ["arthur", "felix", "george", "oscar", "walter"],
+    axes: ["dancing", "reading", "walks"],
+    worked: [["clara", "arthur"]],
     // Scene 4, a bigger product: two plain matrices of invented numbers, A 5 x 4 and B 4 x 6 as drawn (B kept one
     // row per column of the drawing). Their product (every row of A with every column of B) is 5 x 6:
     //   -3  6  4 -3  1 -2  /  3 -4  5 -2  6 -2  /  -2  5 -3  3 -3  0  /  4 -4 -3  3 -2  3  /  0  5  4 -2  0  0
@@ -1432,8 +1511,7 @@ button.chip:hover{border-color:var(--rubric)}
   // The file is generated by ../tools/s5_movielens.py from MovieLens ml-latest-small and carries the dataset's
   // citation and licence conditions; ../tools/check_s5.js checks that MF.T.run in the browser equals the run there.
 
-  // The five marks. For a profile they say how much the customer likes the axis's `pos` end; for a film, how
-  // much the film is that end, in the critic's view.
+  // The five marks. For a profile they say how much the lady or the gentleman likes the pastime of the question.
   var KIND = { "2": "tick2", "1": "tick", "0": "wave", "-1": "cross", "-2": "cross2" };
   var WORD = { "2": "love it", "1": "like it", "0": "don't mind", "-1": "dislike it", "-2": "hate it" };
   var CRITIC_WORD = { "2": "very much", "1": "rather", "0": "half and half", "-1": "rather not", "-2": "not at all" };
@@ -1450,8 +1528,8 @@ button.chip:hover{border-color:var(--rubric)}
   function isFilm(x) { if (typeof x === "string") x = get(x); return !!x.g; }
   function isAxis(x) { return !!BY[idOf(x)] && (AXES.indexOf(BY[idOf(x)]) >= 0 || DIMS.indexOf(BY[idOf(x)]) >= 0); }
   function isPerson(x) { return !!BY[idOf(x)] && PEOPLE.indexOf(BY[idOf(x)]) >= 0; }
-  // The number in row p, column f (a profile or critic value when f is an axis, a rating when f is a film);
-  // null when it is not known. The name `rating` is the video store's, which notation.js calls.
+  // The number in row p, column f (a profile's answer when f is a question, a rating when f is a film); null when it
+  // is not known. The name `rating` is the video store's, which notation.js calls.
   function rating(p, f) {
     var row = V[idOf(p)];
     var v = row ? row[idOf(f)] : undefined;
@@ -1463,7 +1541,7 @@ button.chip:hover{border-color:var(--rubric)}
     cols.forEach(function (c) { s += rating(a, c) * rating(b, c); });
     return s;
   }
-  // The Matchmaker's score of customer p and film f: the inner product of their rows over the axes.
+  // The compatibility of lady p and gentleman f: the inner product of their rows over the questions.
   function score(p, f, axes) { return inner(p, f, axes || S1.axes); }
   // How many columns two rows have with exactly the same number.
   function matches(a, b, cols) {
@@ -1660,23 +1738,33 @@ button.chip:hover{border-color:var(--rubric)}
   // The four games (Carlos, 2026-11-05: "Section one on its own becomes its own visualization ... it's now a
   // trilogy. Matrix multiplication, matrix factorization, and then the whole picture", and "an optional
   // visualization that goes into the details ... a separate application"). Each shell (game1.html, game2.html,
-  // game2opt.html, game3.html) calls MF.start({ game: key }); MF.start() alone shows all five sections, as the
+  // game2opt.html; game3.html until 2026-11-12) calls MF.start({ game: key }); MF.start() alone shows all five sections, as the
   // interaction tests expect. sections: the sections the game holds; tag: the words beside the brand; cards: what a
   // section card says in this game (kicker, its numeral, no skip button); back: the last line of a Python leaf.
+  // Since 2026-11-12 (Carlos: "We're going to come up with a story ... four ladies, five guys have registered into a
+  // matchmaking service"; "for the matrix factorization, matchmaker part 2, matchmaker part 3, and matchmaker optional
+  // part, we call it ... once upon a streaming service") part one is Once Upon a Matchmaker and the other three games
+  // are Once Upon a Streaming Service; the parts keep their numbers. Section 0 is each game's prologue: game 1's cover
+  // and "Recommender systems today", game 2's cover and the overview "Matrix factorization at a glance" (moved there
+  // from part one the same day). A scene with `games` shows only in those games. names: a section's name in this game.
+  // Since 2026-11-12 (Carlos: "merge matchmaker part 2 matrix factorization with matchmaker part 3, the whole picture")
+  // part two holds section 5 after section 2, and three games are built: game3.html is gone. "3", section 5 alone,
+  // stays only for the interaction test _try-s5.html. A card's num counts the carded sections of its game.
   var GAMES = {
-    "1": { sections: [0, 1], tag: "Part one: matrix multiplication",
-           back: { 1: "Then open part two of the Matchmaker: matrix factorization." } },
-    "2": { sections: [2], tag: "Part two: matrix factorization",
-           cards: { 2: { kicker: "Once Upon a Matchmaker, part two", num: 2 } },
-           back: { 2: "Then open part three of the Matchmaker: the whole picture." } },
+    "1": { sections: [0, 1], tag: "Part one: matrix multiplication", names: { 0: "Prologue" },
+           back: { 1: "Then open part two, Once Upon a Streaming Service: matrix factorization." } },
+    "2": { sections: [0, 2, 5], tag: "Part two: matrix factorization",
+           cards: { 2: { kicker: "Once Upon a Streaming Service, part two", num: 1 },
+                    5: { kicker: "Once Upon a Streaming Service, part two", num: 2 } },
+           back: { 2: "Then come back here for the second half: the whole picture." } },
     "2opt": { sections: [3, 4], tag: "Optional: gradient descent up close",
               cards: { 3: { kicker: "Gradient descent, optional", num: 1, skip: null },
                        4: { kicker: "Gradient descent, optional", num: 2, skip: null } },
               back: { 3: "Then come back here for the second half: many customers, many films.",
-                      4: "That is the end of the Matchmaker." } },  // played after part three (Carlos, 2026-11-06)
-    "3": { sections: [5], tag: "Part three: the whole picture",
-           cards: { 5: { kicker: "Once Upon a Matchmaker, part three", num: 3 } } }
+                      4: "That is the end of the Streaming Service." } },  // played after part two (Carlos, 2026-11-06)
+    "3": { sections: [5] }  // section 5 alone, for _try-s5.html only (no shell since 2026-11-12)
   };
+  function actName(a) { return (GAME && GAME.names && GAME.names[a]) || ACT_NAMES[a]; }
   var GAME = null;
   function cardInfo(a) {
     var info = {}, base = ACT_INTRO[a] || {}, over = (GAME && GAME.cards && GAME.cards[a]) || {};
@@ -1694,9 +1782,9 @@ button.chip:hover{border-color:var(--rubric)}
   // leaves "Your turn in Python" open the optional notebook.
   var ACT_INTRO = {
     1: { kicker: "Section one", motif: "product",
-         line: "How two tables, one row per customer and one column per film, give a score for every customer and every film." },
+         line: "How two tables, one row per lady and one row per gentleman, give the compatibility of every lady with every gentleman." },
     2: { kicker: "Section two", motif: "unknown",
-         line: "In real life nobody fills in a profile. The Matchmaker sees only ratings, and has to find the numbers behind them." },
+         line: "At a streaming service nobody fills in a profile. It sees only ratings, and has to find the numbers behind them." },
     3: { kicker: "Section three, optional", motif: "hop", optional: true, skipTo: 5, skip: "Skip sections 3 and 4",
          line: "In part two each number moved against nabla, the slope of the total loss. Here is that move up close: a grasshopper feels the slope and hops just the right amount." },
     4: { kicker: "Section four, optional", motif: "many", optional: true, skipTo: 5, skip: "Skip to section 5",
@@ -1710,7 +1798,7 @@ button.chip:hover{border-color:var(--rubric)}
   var COLAB = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/02_cx_matrix_factorization_student.ipynb";
   var COLAB_OPT = "https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/02_cx_matrix_factorization_optional_student.ipynb";
   var PYTHON = {
-    1: { part: 1, url: COLAB, what: "Teach a computer to multiply two matrices: one score, then one row, then the whole table." },
+    1: { part: 1, url: COLAB, what: "Teach a computer to multiply two matrices: one compatibility, then one lady's row, then the whole table." },
     2: { part: 2, url: COLAB, what: "The predictions of a guess with part one's product, then the loss of every rating and their total." },
     3: { part: 3, url: COLAB_OPT, optional: true, what: "Let the computer feel the slope with a tiny hop, then hop downhill: gradient descent." },
     4: { part: 4, url: COLAB_OPT, optional: true, what: "The total loss of a whole table, the slope of every number, and the loop that finds both matrices from the ratings alone." }
@@ -1742,14 +1830,14 @@ button.chip:hover{border-color:var(--rubric)}
   function introScene(a) {
     var info = cardInfo(a);
     return {
-      act: a, title: ACT_NAMES[a], intro: true,
+      act: a, title: actName(a), intro: true,
       build: function (inner) {
         var card = el("div", "act-card" + (info.optional ? " opt" : ""));
         var g = el("div", "act-no", String(info.num || a));
         g.setAttribute("aria-hidden", "true");
         card.appendChild(g);
         card.appendChild(el("p", "act-kicker", info.kicker));
-        card.appendChild(el("p", "act-title", ACT_NAMES[a]));
+        card.appendChild(el("p", "act-title", actName(a)));
         card.appendChild(el("p", "act-line", info.line));
         var m = el("div", "act-motif");
         introMotif(info.motif).forEach(function (x, j) { x.style.setProperty("--j", String(j)); m.appendChild(x); });
@@ -1904,8 +1992,9 @@ button.chip:hover{border-color:var(--rubric)}
     GAME = (cfg && GAMES[cfg.game]) || null;
     if (GAME) {
       SECTIONS = GAME.sections.slice();
-      // A scene of a section that this game does not hold is dropped, so a shell may load a shared file.
-      REG = REG.filter(function (s) { return SECTIONS.indexOf(s.act) >= 0; });
+      // A scene of a section that this game does not hold is dropped, so a shell may load a shared file; so is a scene
+      // that names other games (sec0.js holds the prologues of games 1 and 2).
+      REG = REG.filter(function (s) { return SECTIONS.indexOf(s.act) >= 0 && (!s.games || s.games.indexOf(cfg.game) >= 0); });
       KEYS = {};
       REG.forEach(function (s) { KEYS[s.key] = s; });
       var brand = document.querySelector(".topbar .brand");
@@ -1918,7 +2007,7 @@ button.chip:hover{border-color:var(--rubric)}
     stepsEl = document.getElementById("steps");
     // A section that is not built yet still gets a leaf, so the pager shows the whole lesson.
     SECTIONS.forEach(function (a) {
-      if (!REG.some(function (s) { return s.act === a; })) define("sec" + a + "-todo", { act: a, title: ACT_NAMES[a],
+      if (!REG.some(function (s) { return s.act === a; })) define("sec" + a + "-todo", { act: a, title: actName(a),
         build: function (inner) { inner.appendChild(el("p", "say", "Section " + a + " is being built.")); } });
     });
     // The section cards come first in their section (order -1), the Python leaves last (order 1e6).
@@ -1952,7 +2041,7 @@ button.chip:hover{border-color:var(--rubric)}
       h.id = "h-" + s.key;
       head.appendChild(h);
       if (ACT_INTRO[s.act] && ACT_INTRO[s.act].optional) head.appendChild(el("span", "opt-tag", "optional"));
-      head.appendChild(el("span", "actname", ACT_NAMES[s.act]));
+      head.appendChild(el("span", "actname", actName(s.act)));
       sec.appendChild(head);
       var body = el("div", "scene-body"), inner = el("div", "scene-inner");
       body.appendChild(inner);
@@ -1962,14 +2051,14 @@ button.chip:hover{border-color:var(--rubric)}
       s.inner = inner;
       if (!groups[s.act]) {
         groups[s.act] = el("span", "act");
-        groups[s.act].title = ACT_NAMES[s.act];
+        groups[s.act].title = actName(s.act);
         nav.appendChild(groups[s.act]);
       }
       var b = el("button", s.intro ? "intro" : s.python ? "py" : "", s.intro || s.python ? "" : String(s.num));
       b.type = "button";
       // a card inside a section (s.card, part two's "Your turn" since 2026-11-11) is named by its own title
-      b.title = s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.title;
-      b.setAttribute("aria-label", s.intro ? (s.card ? s.title : ACT_NAMES[s.act]) : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
+      b.title = s.intro ? (s.card ? s.title : actName(s.act)) : s.title;
+      b.setAttribute("aria-label", s.intro ? (s.card ? s.title : actName(s.act)) : s.python ? "Your turn in Python, part " + PYTHON[s.act].part : "Scene " + s.num + ": " + s.title);
       b.addEventListener("click", function () { go(i, 0); });
       groups[s.act].appendChild(b);
       dots.push(b);
@@ -4179,21 +4268,27 @@ button.chip:hover{border-color:var(--rubric)}
 })();
 </script>
 <script>
-/* Section 0, the preface of part one, "Matrix factorization at a glance". Built by the main session on 2026-11-10 at
-   Carlos's request (REQUEST.md, eleventh message: "We need to add a section before all these sections ... please
-   come up with a name"). Only game1.html loads this file; the engine gives section 0 no card and no Python leaf.
-   Classes start with s0-.
+/* Section 0, the prologue of games 1 and 2. Built by the main session on 2026-11-10 as the preface of part one,
+   "Matrix factorization at a glance" (REQUEST.md, eleventh message: "We need to add a section before all these sections
+   ... please come up with a name"); split between the two games on 2026-11-12 (REQUEST.md, twentieth message: part one
+   becomes Once Upon a Matchmaker, the story of four ladies and five gentlemen, and "this requires to move the part
+   about the overview ... to the part 2", Once Upon a Streaming Service). game1.html and game2.html load this file; each
+   scene names its game (`games`), and the engine gives section 0 no card and no Python leaf. Classes start with s0-.
 
-   cover    the title alone: the three customers and the four films of section 1 face each other, a heart between
-            them, and "Once Upon a Matchmaker" (step 0 of section 1's matchmaker until the preface came)
-   today    the video store recommended what a customer's nearest neighbours liked; recommender systems today use
-            matrix factorization
+   Game 1, Once Upon a Matchmaker:
+   cover    the title alone: the four ladies and the five gentlemen face each other, a heart between them
+   today    recommender systems today use matrix factorization; to understand it we first need matrix multiplication
+            (Carlos: "we only say the part about recommender systems ... And then we simply say to understand this, we
+            need to understand matrix multiplication. And then the story begins.")
+
+   Game 2, Once Upon a Streaming Service:
+   scover   the title alone: the overview's four customers and five films, popcorn between them
    glance   MF.S0, invented: the ratings of four customers for five films, six of them holes, in marks, then in
             numbers; the two tables of embeddings appear, the customers' on the left of the ratings and the films',
             turned, on top of them; a customer's embedding, a film's embedding; the two tables move left and their
             product appears between them and the ratings (the right tables at once: "Here we cheat a bit"); where a
             rating is known the product gives it back; where it is missing, the product's number flies into the hole:
-            the prediction; what the next animations show
+            the prediction; what part two shows next
 
    The board is MF.M's textbook cross (MATRIX.md) with three layouts of its own: the ratings alone; the two tables
    around the ratings, which stand where the product will come; the cross, the product between the customers' table
@@ -4238,41 +4333,46 @@ button.chip:hover{border-color:var(--rubric)}
     requestAnimationFrame(function () { requestAnimationFrame(function () { node.classList.remove("s0-still"); }); });
   }
 
-  /* 1. THE COVER: the title alone (Carlos, 2026-11-10: "Simply say once upon a matchmaker") */
-  var C0 = null;
-  MF.define("cover", {
-    act: 0, title: "Once Upon a Matchmaker",
-    build: function (inner, api) {
-      api.root.classList.add("s0-coverleaf");
-      var cover = el("div", "s0-cover");
-      var cast = el("div", "s0-cast");
-      cast.setAttribute("aria-hidden", "true");
-      var ppl = el("span", "s0-castg"), fls = el("span", "s0-castg");
-      S1.people.forEach(function (p, i) { var x = MF.pic(p, "lg"); x.style.setProperty("--s0-i", String(i)); ppl.appendChild(x); });
-      S1.films.forEach(function (f, i) { var x = MF.pic(f, "lg"); x.style.setProperty("--s0-i", String(i + 4)); fls.appendChild(x); });
-      cast.appendChild(ppl);
-      cast.appendChild(emo("💘", "s0-heart"));
-      cast.appendChild(fls);
-      cover.appendChild(cast);
-      var title = el("h1", "s0-title", "Once Upon a ");
-      title.appendChild(el("em", "", "Matchmaker"));
-      cover.appendChild(title);
-      inner.appendChild(cover);
-      C0 = cover;
-    },
-    step: function () { if (MOTION) replay(C0, "s0-in"); }
-  });
+  /* 1. THE COVERS: the title alone (Carlos, 2026-11-10: "Simply say once upon a matchmaker"). One per game: the ladies
+     and the gentlemen of the Matchmaker; the customers and the films of the streaming service's overview. */
+  function cover(key, games, title, left, mid, right) {
+    var C = null;
+    MF.define(key, {
+      act: 0, games: games, title: "Once Upon a " + title,
+      build: function (inner, api) {
+        api.root.classList.add("s0-coverleaf");
+        var c = el("div", "s0-cover");
+        var cast = el("div", "s0-cast");
+        cast.setAttribute("aria-hidden", "true");
+        var a = el("span", "s0-castg"), b = el("span", "s0-castg");
+        left.forEach(function (p, i) { var x = MF.pic(p, "lg"); x.style.setProperty("--s0-i", String(i)); a.appendChild(x); });
+        right.forEach(function (f, i) { var x = MF.pic(f, "lg"); x.style.setProperty("--s0-i", String(i + left.length)); b.appendChild(x); });
+        cast.appendChild(a);
+        cast.appendChild(emo(mid, "s0-heart"));
+        cast.appendChild(b);
+        c.appendChild(cast);
+        var t = el("h1", "s0-title", "Once Upon a ");
+        t.appendChild(el("em", "", title));
+        c.appendChild(t);
+        inner.appendChild(c);
+        C = c;
+      },
+      step: function () { if (MOTION) replay(C, "s0-in"); }
+    });
+  }
+  cover("cover", ["1"], "Matchmaker", S1.ladies, "\ud83d\udc98", S1.gents);
+  cover("scover", ["2"], "Streaming Service", S0.people, "\ud83c\udf7f", S0.films);
 
-  /* 2. RECOMMENDER SYSTEMS TODAY (Carlos: "modern recommendation systems don't work using the nearest neighbor
-     search. They use what is called instead matrix factorization"). Today's systems still look up nearest neighbours,
-     among the embeddings that a method such as matrix factorization has learnt, so the leaf sets the two side by
-     side and claims no more. */
+  /* 2. RECOMMENDER SYSTEMS TODAY, game 1 (Carlos, 2026-11-12: "we only say the part about recommender systems. Today
+     use a method called [matrix] factorization. And then we simply say to understand this, we need to understand
+     matrix multiplication"). Until then the leaf also said what the video store recommended. */
   var D0 = null;
   MF.define("today", {
-    act: 0, title: "Recommender systems today",
+    act: 0, games: ["1"], title: "Recommender systems today",
     build: function (inner) {
       var now = h("p", "s0-now", ["Recommender systems today use a method called ", el("em", "", "matrix factorization"), "."]);
-      D0 = h("div", "s0-today", [el("p", "s0-was", "The video store recommended what a customer's nearest neighbours liked."), now]);
+      var then = h("p", "s0-then", ["To understand it, we first need to understand ", el("em", "", "matrix multiplication"), "."]);
+      D0 = h("div", "s0-today", [now, then]);
       inner.appendChild(D0);
     },
     step: function () { if (MOTION) replay(D0, "s0-in"); }
@@ -4296,15 +4396,15 @@ button.chip:hover{border-color:var(--rubric)}
   var T0 = ["The ratings", "Marks become numbers", "Two tables of embeddings", "A customer's embedding", "A film's embedding",
             "Matrix multiplication", "We cheat a bit", "The predictions", "What comes next"];
   var L0 = [
-    "A recommender system starts from ratings: here four customers and five films. Each ? is a hole: a film the customer has not rated.",
+    "A streaming service starts from ratings: here four customers and five films. Each ? is a hole: a film the customer has not rated.",
     "The ticks and crosses become numbers again, as in the video store.",
     "Matrix factorization adds two tables of embeddings: the customers' on the left, the films' on top.",
     "Each customer is an embedding: a row of three numbers. Each number measures one characteristic of the customer.",
     "Each film is an embedding too: a column of three numbers, each measuring one characteristic of the film.",
-    "Once the two tables are estimated, an operation called matrix multiplication turns them into a third table: their product.",
+    "Once the two tables are estimated, matrix multiplication, as in the Matchmaker, turns them into a third table: their product.",
     "Here we cheat a bit: these are already the right two tables. Finding them, with guesses and gradient descent, comes later.",
     "Where a rating is missing, the product says what it should be: these numbers are the predictions.",
-    "The next animations show how matrix multiplication works, then how matrix factorization finds the two tables from the ratings."
+    "Next: how matrix factorization finds the two tables from the ratings alone."
   ];
   var READ6 = "Where a customer has rated a film, the product gives back the rating.";
   var AROUND = 2, FULL = 5;   // the first step of each layout
@@ -4400,7 +4500,7 @@ button.chip:hover{border-color:var(--rubric)}
   }
 
   MF.define("glance", {
-    act: 0, title: "At a glance", steps: T0.length,
+    act: 0, games: ["2"], title: "At a glance", steps: T0.length,
     build: function (inner) {
       var root = el("div", "s0-gl");
       var lead = el("p", "s0-lead");
@@ -4540,43 +4640,43 @@ button.chip:hover{border-color:var(--rubric)}
 })();
 </script>
 <script>
-/* Section 1, "Matrix multiplication": part one of the Matchmaker, a game of its own since 2026-11-05 (game1.html).
-   Built by agent S1-A on 2026-11-03 (see BRIEF-s1.md); rewritten by the main session on 2026-11-05 at Carlos's
-   request (REQUEST.md, fifth message): one leaf for the cover and the three leaves after it, no desk and no stack
-   for the inner product, and a scene where the participants multiply by hand. Turned to the textbook orientation on
-   2026-11-06 (REQUEST.md, seventh message; BRIEF-port-a.md): every M.stack takes layout "textbook", so the films'
-   matrix is drawn turned, one row per axis and one column per film, ABOVE the product, and the customers' matrix
-   stands on its left. The rule is the textbook's: the first matrix has as many columns as the second has rows, and
-   every row of the first meets every column of the second. The data (MF.S1) keeps one row per film; only the drawing
-   turns. Classes start with s1-.
+/* Section 1, "Matrix multiplication": part one, Once Upon a Matchmaker, a game of its own since 2026-11-05 (game1.html).
+   Built by agent S1-A on 2026-11-03 (see BRIEF-s1.md); rewritten by the main session on 2026-11-05 (REQUEST.md, fifth
+   message), turned to the textbook orientation on 2026-11-06 (seventh message), given its opening on 2026-11-10 (tenth
+   message), and rewritten as a matchmaking story on 2026-11-12 (twentieth message): four ladies and five gentlemen of a
+   matchmaking website in the style of the 1990s answer the same three questions (dancing, reading, long walks); the
+   compatibility of a lady and a gentleman is the inner product of their rows; the table of compatibilities is the
+   product of the ladies' matrix and the gentlemen's matrix, transposed. The rule is the textbook's: the first matrix has
+   as many columns as the second has rows, and every row of the first meets every column of the second. The data
+   (MF.S1, ../tools/s1_matchmaking.py) keeps one row per person; only the drawing turns. Classes start with s1-.
 
-   matchmaker   the website (the cover, the title alone, is the first leaf of the preface, sec0.js, since 2026-11-10);
-                how it works (Sara logs in and answers the three questions); the customers' profiles; a film critic's answers for The Intouchables; the critic's
-                answers for every film; the two tables, the profiles, one row per customer, and the critic's answers
-                turned, one column per film, up and to the right of them, with the prediction to come (Sara and The
-                Intouchables); the marks become numbers; an embedding: Sara's row and The Intouchables' column outlined
-   scores       the films turned above the empty table of scores, the customers on its left. Sara and The
-                Intouchables: her row and its column outlined, an arrow from each into the row and the column of
-                their score, the inner product worked once on one line; then every other score lands at once while
-                its row and its column are lit; each customer's best match
-   multiply     the name, a matrix, its size (rows × columns), the rule (the columns of the first match the rows of
-                the second, the rule used everywhere), every row with every column, the shape of the product, the
-                table of scores as the product
-   bigger       MF.S1.big: 5 × 4 and, turned, 4 × 6, their 5 × 6 product filled fast; why the two must match (a row
-                of four numbers against a column of three); two questions, the answer hidden until the room has chosen
-   byhand       MF.S1.hand: a 3 × 3 and, turned, a 3 × 4 matrix; the participant fills in the 12 cells of their
-                product
+   matchmaker   the website; how it works (Clara logs in and answers the three questions); the ladies' answers, one row
+                each; the gentlemen's, on the same form; the two tables side by side, as they are; the marks become
+                numbers; an embedding (Clara's row, Arthur's row)
+   compat       "How can we measure the matching compatibility between one lady and one gentleman?" (Carlos: "the most
+                important slide"): three answers, the inner product the right one
+   matches      the two tables side by side; the gentlemen's table turns, each row a column (transposing: the numbers fly
+                to their new places); Clara's row and Arthur's column can be compared; the two tables take the textbook
+                cross and the table of compatibilities appears; Clara and Arthur: the numbers of her row and of his
+                column fly into a stack, which plays the video store's inner product, and its sum flies into the table;
+                every other pair at once; each lady's best match
+   multiply     the name, a matrix, its size (rows × columns), the rule (the columns of the first match the rows of the
+                second, the rule used everywhere), every row with every column, the shape of the product, the table of
+                compatibilities as the product
+   bigger       MF.S1.big: 5 × 4 and, turned, 4 × 6, their 5 × 6 product filled fast; why the two must match (a row of
+                four numbers against a column of three); two questions, the answer hidden until the room has chosen
+   byhand       MF.S1.hand: a 3 × 3 and, turned, a 3 × 4 matrix; the participant fills in the 12 cells of their product
 
-   Every number and table is the notation's (MF.N) or the matrix component's (MF.M); this file arranges them and
-   writes the words, made from the data so they stay true to it. A motion plays only when its step is reached from
-   the step before; Back, the pager and a reload draw the end state at once; leaving a scene stops every timer. */
+   Every number and table is the notation's (MF.N) or the matrix component's (MF.M); this file arranges them and writes
+   the words, made from the data so they stay true to it. A motion plays only when its step is reached from the step
+   before; Back, the pager and a reload draw the end state at once; leaving a scene stops every timer. */
 (function () {
   "use strict";
   var MF = window.MF;
   if (!MF || !MF.N || !MF.M) return;
   var N = MF.N, M = MF.M, el = MF.el;
   var MOTION = !MF.reducedMotion;
-  var S1 = MF.S1, AX = S1.axes, PEOPLE = S1.people, FILMS = S1.films;
+  var S1 = MF.S1, AX = S1.axes, LADIES = S1.ladies, GENTS = S1.gents;
 
   /* SMALL TOOLS */
   function h(tag, cls, kids) {
@@ -4593,9 +4693,7 @@ button.chip:hover{border-color:var(--rubric)}
     return node;
   }
   function nm(id) { return MF.get(id).n; }
-  function ft(id) { return MF.get(id).t; }
   function count(n) { return ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"][n] || String(n); }
-  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function button(text, cls, fn) {
     var b = el("button", "btn" + (cls ? " " + cls : ""), text);
     b.type = "button";
@@ -4624,86 +4722,123 @@ button.chip:hover{border-color:var(--rubric)}
     void node.offsetWidth;
     requestAnimationFrame(function () { requestAnimationFrame(function () { node.classList.remove("s1-still"); }); });
   }
+  // The page's zoom on a box: its drawn width over its layout width (1 unless a host scales the page).
+  function zoom(node) {
+    var k = node && node.offsetWidth ? node.getBoundingClientRect().width / node.offsetWidth : 1;
+    return k && isFinite(k) ? k : 1;
+  }
+  // A copy of a number flies from a place on screen (a rectangle read earlier, so that its element may have moved or
+  // gone since) onto an element, inside layer, a box at the top left of a positioned element. The copy is removed when
+  // it lands. Nothing flies under reduced motion.
+  function ghost(layer, node, from, to, dur, delay, fs) {
+    if (!MOTION || !layer || !node || !from || !to || !node.cloneNode) return null;
+    var host = layer.parentNode, hb = host.getBoundingClientRect(), k = zoom(host), b = to.getBoundingClientRect();
+    if (!from.width || !b.width) return null;
+    var g = node.cloneNode(true);
+    g.classList.remove("nt-hot", "nt-ask", "nt-off", "nt-slot");
+    g.classList.add("mx-ghost");
+    g.removeAttribute("role");
+    g.removeAttribute("aria-label");
+    g.setAttribute("aria-hidden", "true");
+    g.style.left = (from.left - hb.left) / k + "px";
+    g.style.top = (from.top - hb.top) / k + "px";
+    g.style.width = from.width / k + "px";
+    g.style.height = from.height / k + "px";
+    g.style.fontSize = fs || getComputedStyle(node).fontSize;
+    layer.appendChild(g);
+    var dx = (b.left + b.width / 2 - from.left - from.width / 2) / k, dy = (b.top + b.height / 2 - from.top - from.height / 2) / k;
+    var sc = from.height ? b.height / from.height : 1;
+    if (!g.animate) { g.parentNode.removeChild(g); return null; }
+    var an = g.animate([{ transform: "translate(0px,0px) scale(1)" },
+                        { transform: "translate(" + dx + "px," + dy + "px) scale(" + sc + ")" }],
+                       { duration: dur, delay: delay || 0, easing: "cubic-bezier(.45,.05,.3,1)", fill: "both" });
+    function gone() { if (g.parentNode) g.parentNode.removeChild(g); }
+    an.onfinish = gone;
+    // Also by the clock: a page that draws no frames (a hidden tab, a headless check) never finishes the animation.
+    setTimeout(gone, (delay || 0) + dur + 80);
+    return g;
+  }
+  function box(node) { return node && node.offsetParent !== null ? node.getBoundingClientRect() : null; }
 
   /* WORDS, made from the data */
   var VERB = { "2": "loves", "1": "likes", "0": "doesn't mind", "-1": "dislikes", "-2": "hates" };
-  var OBJ = { real: "real stories", comedy: "comedies", action: "action" };
   function r(p, a) { return MF.rating(p, a); }
   function readProfile(p) {
-    var parts = AX.map(function (a) { return VERB[String(r(p, a))] + " " + OBJ[a]; });
+    var parts = AX.map(function (a) { return VERB[String(r(p, a))] + " " + MF.get(a).obj; });
     return nm(p) + " " + parts.slice(0, -1).join(", ") + " and " + parts[parts.length - 1] + ".";
   }
-  function readCritic(f) {
-    return AX.map(function (a) { return MF.get(a).critic + " " + cap(MF.CRITIC_WORD[String(r(f, a))]) + "."; }).join(" ");
-  }
-  function readPair(p, f) {
-    var pr = AX.map(function (a) { return r(p, a) * r(f, a); });
+  // Agreeing on a question: both like it or both dislike it, so its product is positive.
+  function readPair(l, g) {
+    var pr = AX.map(function (a) { return r(l, a) * r(g, a); });
     var ag = pr.filter(function (x) { return x > 0; }).length, dis = pr.filter(function (x) { return x < 0; }).length;
-    var s = MF.score(p, f), head = nm(p) + " and " + ft(f) + " ";
-    if (ag === AX.length) return head + "agree on all three axes: a high score.";
-    if (dis === AX.length) return head + "disagree on all three axes: a very low score.";
+    var s = MF.score(l, g), head = nm(l) + " and " + nm(g) + " ";
+    if (ag === AX.length) return head + "agree on all three questions: a high compatibility.";
+    if (dis === AX.length) return head + "disagree on all three questions: a very low compatibility.";
     var parts = [];
-    if (ag) parts.push("agree on " + count(ag) + (ag === 1 ? " axis" : " axes"));
-    if (dis) parts.push("disagree on " + count(dis) + (dis === 1 ? " axis" : " axes"));
+    if (ag) parts.push("agree on " + count(ag) + (ag === 1 ? " question" : " questions"));
+    if (dis) parts.push("disagree on " + count(dis) + (dis === 1 ? " question" : " questions"));
     var zero = AX.length - ag - dis;
     if (zero) parts.push(zero === 1 ? "one product is 0" : count(zero) + " products are 0");
-    var verdict = s > 0 ? "the agreement weighs more, so the score is positive" :
-                  s < 0 ? "the disagreement weighs more, so the score is negative" : "the products cancel, so the score is 0";
+    var verdict = s > 0 ? "the agreement weighs more, so the compatibility is positive" :
+                  s < 0 ? "the disagreement weighs more, so the compatibility is negative" : "the products cancel, so the compatibility is 0";
     return head + parts.join(" and ") + ": " + verdict + ".";
   }
-  function best(p) {
-    var b = FILMS[0];
-    FILMS.forEach(function (f) { if (MF.score(p, f) > MF.score(p, b)) b = f; });
+  function best(l) {
+    var b = GENTS[0];
+    GENTS.forEach(function (g) { if (MF.score(l, g) > MF.score(l, b)) b = g; });
     return b;
   }
+  function rowVals(p) { return AX.map(function (a) { return r(p, a); }); }
 
-  /* 1. THE MATCHMAKER. Rewritten by the main session on 2026-11-10 at Carlos's request (REQUEST.md, tenth message):
-     the cover says only the title (since the preface came the same day, the cover is its first leaf, in sec0.js), and
-     the introduction it summed up returns as one leaf per idea: the website; how it
-     works (Sara logs in and answers the three questions); the customers' profiles, row by row; a film critic's answers
-     for one film, The Intouchables; the critic's answers for every film, column by column; then the two tables
-     together, where Sara's row and the column of The Intouchables ask for a prediction. The marks become numbers and
-     the embedding follow as before. The words of steps 5 to 7 stand under the tables (Carlos, 2026-11-06: text above
-     or below a picture, never beside it). */
+  /* 1. THE MATCHMAKER (Carlos, 2026-11-12: "A little town with four ladies and five men. Not a little town, but let's do
+     it like a classic 90s style, like very retro, vintage. So four ladies, five guys have registered into a
+     matchmaking service ... A client logs in, and then they fill preferences ... Then we say the customer's profiles.
+     Every customer answers the same three questions, one row each ... we do the same for men ... So then we have two
+     tables, ladies and gentlemen. But instead of showing the gentlemen transposed ... we just simply show them side by
+     side as it is.") The cover, the title alone, is the first leaf of the prologue (sec0.js). The words of steps 4 to 6
+     stand under the tables (Carlos, 2026-11-06: text above or below a picture, never beside it). */
   var A = null;
-  var T1 = ["The Matchmaker", "How it works", "The customers' profiles", "A film critic", "The critic's answers", "Two tables",
-            "Marks become numbers", "An embedding"];
-  var TABS = 5;   // the first step of the two tables together; steps 6 and 7 keep them
+  var T1 = ["The Matchmaker", "How it works", "The ladies", "The gentlemen", "Two tables", "Marks become numbers", "An embedding"];
+  var TWO = 4;   // the first step of the two tables side by side; steps 5 and 6 keep them
   var L1 = [
-    "We run the Matchmaker, a website that matches film fans with films.",
-    "You log in and answer three questions: real or fiction, comedy or drama, action or calm.",
-    "Every customer answers the same three questions: one row each.",
-    "The Matchmaker asks a film critic to answer the same three questions for every film.",
-    "The critic's answers for every film: one column each.",
-    "Each customer fills in a profile, one row each. A film critic answers the same three questions for every film, one column each.",
+    "Four ladies and five gentlemen have signed up with the Matchmaker, a website that pairs ladies and gentlemen who like the same things.",
+    "A client logs in and answers three questions, each with one of five marks.",
+    "Every lady answers the same three questions: one row each.",
+    "The gentlemen fill in the same form: one row each.",
+    "Two tables: the ladies' and the gentlemen's, one row per person and one column per question.",
     "A computer works with numbers: each mark becomes its number, as in the video store.",
-    "The three numbers of a customer's row are their embedding. A film's embedding is the three numbers of its column."
+    "The three numbers of a lady's row are her embedding. A gentleman's embedding is the three numbers of his row."
   ];
-  // A browser window on the Matchmaker's website: a bar with its address, then the page.
+  // A window of the 1990s on the Matchmaker's website: a title bar, the address, then the page.
   function frame() {
-    var f = el("div", "s1-site"), bar = el("div", "s1-bar"), body = el("div", "s1-siteb");
+    var f = el("div", "s1-site"), bar = el("div", "s1-bar"), addr = el("div", "s1-addr"), body = el("div", "s1-siteb");
     bar.setAttribute("aria-hidden", "true");
-    [0, 1, 2].forEach(function () { bar.appendChild(el("i")); });
-    bar.appendChild(el("span", "s1-url", "the-matchmaker"));
+    bar.appendChild(el("span", "s1-bart", "The Matchmaker"));
+    var keys = el("span", "s1-barb");
+    [0, 1, 2].forEach(function () { keys.appendChild(el("i")); });
+    bar.appendChild(keys);
+    addr.setAttribute("aria-hidden", "true");
+    addr.appendChild(el("span", "s1-alab", "Address"));
+    addr.appendChild(el("span", "s1-url", "the-matchmaker"));
     f.appendChild(bar);
+    f.appendChild(addr);
     f.appendChild(body);
     return { el: f, body: body };
   }
-  // The three questions, each answered with one of the five marks, the words of the marks over their columns: a
-  // customer's profile (critic false) or the critic's answers for a film (critic true). x is the customer or the film.
-  function form(x, critic) {
-    var words = critic ? MF.CRITIC_WORD : MF.WORD;
+  // The three questions, each answered with one of the five marks, the words of the marks over their columns: the form
+  // of a lady or a gentleman, p.
+  function form(p) {
     var f = el("div", "s1-form");
     f.setAttribute("role", "img");
-    f.setAttribute("aria-label", critic ? ft(x) + ". " + readCritic(x) : readProfile(x));
+    f.setAttribute("aria-label", readProfile(p));
     var head = el("div", "s1-fline s1-fhead");
     head.appendChild(el("span", "s1-fsp"));
-    MF.LEVELS.forEach(function (v) { head.appendChild(el("span", "s1-fw", words[String(v)])); });
+    MF.LEVELS.forEach(function (v) { head.appendChild(el("span", "s1-fw", MF.WORD[String(v)])); });
     f.appendChild(head);
     var rows = AX.map(function (a, i) {
       var ax = MF.get(a), line = el("div", "s1-fline s1-frow");
       line.style.setProperty("--s1-i", String(i + 1));
-      line.appendChild(h("p", "s1-fq", [emo(ax.g, "s1-fg"), critic ? ax.critic : ax.ask]));
+      line.appendChild(h("p", "s1-fq", [emo(ax.g, "s1-fg"), ax.ask]));
       var opts = MF.LEVELS.map(function (v) {
         var o = el("span", "s1-fo");
         o.dataset.v = String(v);
@@ -4712,7 +4847,7 @@ button.chip:hover{border-color:var(--rubric)}
         return o;
       });
       f.appendChild(line);
-      return { line: line, opts: opts, v: r(x, a) };
+      return { line: line, opts: opts, v: r(p, a) };
     });
     var F = { el: f, rows: rows };
     // Row i answered (on) or still open; pop plays the chosen mark's landing.
@@ -4729,9 +4864,9 @@ button.chip:hover{border-color:var(--rubric)}
     F.all = function (on) { rows.forEach(function (R, i) { F.answer(i, on, false); }); };
     return F;
   }
-  // Step 1, a movie: the name typed, Log in pressed, then the questions and Sara's three answers one by one.
+  // Step 1, a movie: the name typed, Log in pressed, then the questions and Clara's three answers one by one.
   function playHow(live) {
-    var F = A.fy, name = nm(PEOPLE[0]), t = 450;
+    var F = A.fy, name = nm(LADIES[0]), t = 450;
     A.m.stop();
     A.go.classList.remove("s1-press");
     F.el.classList.remove("s1-wait", "s1-come");
@@ -4755,16 +4890,7 @@ button.chip:hover{border-color:var(--rubric)}
     t += 900;
     AX.forEach(function (a, i) { A.m.later(function () { F.answer(i, true, true); }, t + i * 700); });
   }
-  // Step 3, a movie: the critic's three answers for The Intouchables, one by one.
-  function playFilm(live) {
-    var F = A.fc;
-    A.m.stop();
-    if (!live) { F.all(true); return; }
-    F.all(false);
-    AX.forEach(function (a, i) { A.m.later(function () { F.answer(i, true, true); }, 650 + i * 700); });
-  }
-  // Steps 2 and 4: a matrix shown one logical row at a time (the profiles row by row; the critic's answers, drawn
-  // turned, column by column), the hidden ones faded out.
+  // Steps 2 and 3: a table shown one row at a time, the rows still to come faded out.
   function reveal(m, n, live) {
     A.m.stop();
     still(m.el);
@@ -4784,80 +4910,66 @@ button.chip:hover{border-color:var(--rubric)}
   }
   function wave(live) {
     waveStop();
-    A.S.A.unconvert();
-    A.S.B.unconvert();
-    if (!live) { A.S.A.convert({ animate: false }); A.S.B.convert({ animate: false }); return; }
-    A.q.later(function () { A.h2 = A.S.B.convert({}); }, 450);
-    A.q.later(function () { A.h1 = A.S.A.convert({}); }, 830);
+    A.pL.unconvert();
+    A.pG.unconvert();
+    if (!live) { A.pL.convert({ animate: false }); A.pG.convert({ animate: false }); return; }
+    A.q.later(function () { A.h1 = A.pL.convert({}); }, 450);
+    A.q.later(function () { A.h2 = A.pG.convert({}); }, 830);
   }
   MF.define("matchmaker", {
-    act: 1, title: "The Matchmaker", steps: 8,
+    act: 1, title: "The Matchmaker", steps: T1.length,
     build: function (inner) {
       var root = el("div", "s1-mm");
 
       // Every step opens with one line.
       var lead = el("p", "s1-lead");
 
-      // Step 0, the website: the film fans on one side, the films on the other, a heart between them.
+      // Step 0, the website: the ladies on one side, the gentlemen on the other, a heart between them.
       var w1 = frame();
-      var fans = el("div", "s1-chips"), films = el("div", "s1-chips");
-      PEOPLE.forEach(function (p) { fans.appendChild(MF.chip(p)); });
-      FILMS.forEach(function (f) { var c = MF.chip(f, { long: true }); c.appendChild(el("span", "s1-yr", String(MF.get(f).y))); films.appendChild(c); });
-      w1.body.appendChild(h("div", "s1-sides", [h("div", "s1-side", [el("p", "s1-sh", "Film fans"), fans]),
+      var lad = el("div", "s1-chips"), gen = el("div", "s1-chips");
+      LADIES.forEach(function (p) { lad.appendChild(MF.chip(p)); });
+      GENTS.forEach(function (p) { gen.appendChild(MF.chip(p)); });
+      w1.body.appendChild(el("p", "s1-welcome", "Welcome to the Matchmaker!"));
+      w1.body.appendChild(el("hr", "s1-hr"));
+      w1.body.appendChild(h("div", "s1-sides", [h("div", "s1-side", [el("p", "s1-sh", "Ladies"), lad]),
                                                 emo("💘", "s1-heart-sm"),
-                                                h("div", "s1-side", [el("p", "s1-sh", "Films"), films])]));
+                                                h("div", "s1-side", [el("p", "s1-sh", "Gentlemen"), gen])]));
       var site = h("div", "s1-step", [w1.el,
-        el("p", "s1-note", "An invented example: the customers, their profiles and the critic are made up. The films are real.")]);
+        el("p", "s1-note", "An invented example: the website, the people and their answers are made up.")]);
 
-      // Step 1, how it works: Sara logs in and answers the three questions.
+      // Step 1, how it works: Clara logs in and answers the three questions.
       var w2 = frame();
       var typed = el("span", "s1-typed"), go = el("span", "s1-login", "Log in");
       var who = h("div", "s1-who", [
         h("div", "s1-loginrow", [h("span", "s1-field", [el("span", "s1-flab", "Name"), typed, el("span", "s1-caret")]), go]),
-        h("div", "s1-me", [MF.pic(PEOPLE[0], "sm"), el("span", "s1-mename", nm(PEOPLE[0])), el("span", "s1-metag", "logged in")])]);
+        h("div", "s1-me", [MF.pic(LADIES[0], "sm"), el("span", "s1-mename", nm(LADIES[0])), el("span", "s1-metag", "logged in")])]);
       who.setAttribute("aria-hidden", "true");
-      var fy = form(PEOPLE[0], false);
+      var fy = form(LADIES[0]);
       w2.body.appendChild(who);
       w2.body.appendChild(fy.el);
       var how = h("div", "s1-step", [w2.el, button("Replay", "quiet", function () { playHow(MOTION); })]);
 
-      // Step 2, the customers' profiles: one row per customer, in marks.
-      var mP = M.matrix({ rows: PEOPLE, cols: AX, fill: "marks", caption: "Profiles", brackets: false, size: "lg", phonePics: true });
-      var prof = h("div", "s1-step s1-one", [mP.el]);
+      // Steps 2 and 3, the ladies' answers and the gentlemen's: one row per person, in marks.
+      var mL = M.matrix({ rows: LADIES, cols: AX, fill: "marks", caption: "Ladies", brackets: false, size: "lg", phonePics: true });
+      var mG = M.matrix({ rows: GENTS, cols: AX, fill: "marks", caption: "Gentlemen", brackets: false, size: "lg", phonePics: true });
+      var ladies = h("div", "s1-step s1-one", [mL.el]);
+      var gents = h("div", "s1-step s1-one", [mG.el]);
 
-      // Step 3, a film critic: the critic's answers for The Intouchables, on the same form.
-      var f0 = MF.get(FILMS[0]);
-      var card = h("div", "s1-crit", [h("div", "s1-film", [MF.pic(f0, "md"),
-        h("div", "s1-filmt", [h("h3", "", [f0.t, el("span", "yr", String(f0.y))]), el("p", "s1-filmsum", f0.sum)])])]);
-      var fc = form(FILMS[0], true);
-      card.appendChild(fc.el);
-      var film = h("div", "s1-step", [card, button("Replay", "quiet", function () { playFilm(MOTION); })]);
-
-      // Step 4, the critic's answers for every film: turned, one column per film, in marks.
-      var mF = M.matrix({ rows: FILMS, cols: AX, fill: "marks", caption: "The critic", brackets: false, size: "lg", transpose: true,
-                          rowHeads: "full", colHeads: "chip", phonePics: true });
-      var crit = h("div", "s1-step s1-one", [mF.el]);
-
-      // Steps 5 to 7, the two tables: the profiles, one row per customer, and the critic's answers turned, one column
-      // per film, up and to the right of them (the textbook stack without a product), in marks, then numbers. Their
-      // words stand under them.
-      var tabs = el("div", "s1-tabs");
+      // Steps 4 to 6, the two tables side by side, as they were filled in: in marks, then numbers. Their words stand
+      // under them.
+      var pL = M.matrix({ rows: LADIES, cols: AX, fill: "marks", caption: "Ladies", brackets: false, phonePics: true, cls: "s1-pl" });
+      var pG = M.matrix({ rows: GENTS, cols: AX, fill: "marks", caption: "Gentlemen", brackets: false, phonePics: true, cls: "s1-pg" });
       var key = N.legend(MF.LEVELS);
       key.classList.add("s1-key");
-      var S = M.stack({ layout: "textbook",
-                        A: { rows: PEOPLE, cols: AX, fill: "marks", caption: "Profiles", colHeads: "pic" },
-                        B: { rows: FILMS, cols: AX, fill: "marks", caption: "The critic", rowHeads: "full", colHeads: "chip" },
-                        C: false, brackets: false, phonePics: true });
       var read = el("div", "s1-read");
       var again = button("Replay the wave", "quiet s1-again", function () { wave(MOTION); });
-      tabs.appendChild(S.el);
-      tabs.appendChild(h("div", "s1-tside", [read, key, again]));
+      var two = h("div", "s1-tabs", [h("div", "s1-two", [pL.el, pG.el]), h("div", "s1-tside", [read, key, again])]);
 
-      [lead, site, how, prof, film, crit, tabs].forEach(function (b) { root.appendChild(b); });
+      [lead, site, how, ladies, gents, two].forEach(function (b) { root.appendChild(b); });
       inner.appendChild(root);
-      A = { root: root, lead: lead, site: site, how: how, prof: prof, film: film, crit: crit, tabs: tabs,
-            who: who, typed: typed, go: go, fy: fy, fc: fc, mP: mP, mF: mF,
-            key: key, S: S, read: read, again: again, q: Seq(), m: Seq(), last: null };
+      A = { root: root, lead: lead, site: site, how: how, ladies: ladies, gents: gents, two: two,
+            who: who, typed: typed, go: go, fy: fy, mL: mL, mG: mG, pL: pL, pG: pG,
+            key: key, read: read, again: again, q: Seq(), m: Seq(), last: null };
     },
     enter: function () { A.last = null; },
     leave: function () { waveStop(); A.m.stop(); },
@@ -4870,199 +4982,54 @@ button.chip:hover{border-color:var(--rubric)}
       A.m.stop();
       A.site.hidden = k !== 0;
       A.how.hidden = k !== 1;
-      A.prof.hidden = k !== 2;
-      A.film.hidden = k !== 3;
-      A.crit.hidden = k !== 4;
-      A.tabs.hidden = k < TABS;
-      if (k < TABS) waveStop();
+      A.ladies.hidden = k !== 2;
+      A.gents.hidden = k !== 3;
+      A.two.hidden = k < TWO;
+      if (k < TWO) waveStop();
       A.lead.textContent = L1[k];
       if (MOTION && was !== k) replay(A.lead, "s1-in");
       if (k === 0 && MOTION && was !== k) replay(A.site, "s1-in");
       if (k === 1) playHow(live);
-      if (k === 2) { A.mP.clearBands(); A.mP.band("row", 0, "a"); reveal(A.mP, PEOPLE.length, live); }
-      if (k === 3) playFilm(live);
-      if (k === 4) { A.mF.clearBands(); A.mF.band("row", 0, "b"); reveal(A.mF, FILMS.length, live); }
-      if (k < TABS) return;
+      if (k === 2) { A.mL.clearBands(); reveal(A.mL, LADIES.length, live); }
+      if (k === 3) { A.mG.clearBands(); reveal(A.mG, GENTS.length, live); }
+      if (k < TWO) return;
 
-      var t = k - TABS;   // 0 the two tables, 1 marks become numbers, 2 an embedding
+      var t = k - TWO;   // 0 the two tables, 1 marks become numbers, 2 an embedding
       A.key.hidden = t !== 1;
       A.again.hidden = t !== 1;
-      if (t === 0) { waveStop(); A.S.A.unconvert(); A.S.B.unconvert(); }
+      if (t === 0) { waveStop(); A.pL.unconvert(); A.pG.unconvert(); }
       else if (t === 1) wave(MOTION && was === k - 1);
-      else { waveStop(); A.S.A.unconvert(); A.S.B.unconvert(); A.S.A.convert({ animate: false }); A.S.B.convert({ animate: false }); }
-      A.S.A.clearBands();
-      A.S.B.clearBands();
-      if (t === 0) { A.S.light(null); A.S.A.band("row", 0, "a"); A.S.B.band("row", 0, "b"); }
-      else if (t === 2) A.S.light(0, 0);
-      else A.S.light(null);
+      else { waveStop(); A.pL.unconvert(); A.pG.unconvert(); A.pL.convert({ animate: false }); A.pG.convert({ animate: false }); }
+      A.pL.clearBands();
+      A.pG.clearBands();
+      if (t !== 1) { A.pL.band("row", 0, "a"); A.pG.band("row", 0, "b"); }
+      A.two.classList.toggle("s1-emb", t === 2);
       A.read.textContent = "";
       if (t === 0) {
-        A.read.appendChild(h("p", "s1-ask", ["Now we can predict, for example, how much ", el("b", "s1-ra", nm(PEOPLE[0])),
-          " will like ", el("b", "s1-rb", ft(FILMS[0])), "."]));
+        A.read.appendChild(h("p", "s1-ask", ["Now the Matchmaker can ask, for example, how compatible ", el("b", "s1-ra", nm(LADIES[0])),
+          " and ", el("b", "s1-rb", nm(GENTS[0])), " are."]));
       }
-      if (t === 2) A.read.appendChild(el("p", "", "An embedding places a customer, or a film, on the three axes: real or fiction, comedy or drama, action or calm."));
+      if (t === 2) {
+        A.read.appendChild(h("p", "", [el("b", "s1-ra", nm(LADIES[0]) + "'s embedding"), " and ", el("b", "s1-rb", nm(GENTS[0]) + "'s"),
+          ": each places a person on the three questions."]));
+      }
       A.read.hidden = !A.read.firstChild;
     }
   });
 
-  /* 2. FROM PROFILES TO SCORES */
-  var B = null;
-  var FIRST = [PEOPLE.indexOf(S1.worked[0][0]), FILMS.indexOf(S1.worked[0][1])];
-  var T2 = ["A table of scores", "Sara and The Intouchables", "Every other score", "The rating matrix"];
-  var L2 = [
-    "With the numbers of every customer and every film, the Matchmaker can fill a table of scores.",
-    "Sara's row and the column of The Intouchables: multiply their numbers axis by axis, then add.",
-    "Every other score the same way: a customer's row with a film's column.",
-    "The whole table of scores: the rating matrix."
-  ];
-  function rest2() {
-    return B.S.pairs.filter(function (p) { return !(p[0] === FIRST[0] && p[1] === FIRST[1]); });
-  }
-  function bests(on) {
-    PEOPLE.forEach(function (p, i) {
-      FILMS.forEach(function (f, j) { B.S.C.td(i, j).classList.toggle("s1-best", !!on && f === best(p)); });
-    });
-  }
-  function step2(k, live, api) {
-    var S = B.S;
-    api.setTitle(T2[k]);
-    B.root.dataset.k = String(k);
-    bests(false);
-    B.lead.textContent = L2[k];
-    if (MOTION && live) replay(B.lead, "s1-in");
-    B.replay.hidden = k !== 1;
-    B.all.hidden = k !== 2;
-    if (k === 0) {
-      S.show({ done: 0, lit: null });
-      B.cue.textContent = "";
-    } else if (k === 1) {
-      S.show({ done: 0, lit: null });
-      S.work(FIRST[0], FIRST[1], { live: live });
-      B.cue.textContent = readPair(PEOPLE[FIRST[0]], FILMS[FIRST[1]]);
-    } else if (k === 2) {
-      B.cue.textContent = "";
-      if (live) {
-        S.show({ done: [FIRST], lit: null });
-        S.run(rest2(), { gap: 470, each: function (i, j) { B.cue.textContent = nm(PEOPLE[i]) + " and " + ft(FILMS[j]) + "."; } })
-          .then(function (ok) { if (ok) B.cue.textContent = "Twelve scores, one inner product each."; });
-      } else {
-        S.show({ done: "all", lit: null });
-        B.cue.textContent = "Twelve scores, one inner product each.";
-      }
-    } else {
-      S.show({ done: "all", lit: null });
-      bests(true);
-      B.cue.textContent = "Each customer's best match. " + PEOPLE.map(function (p) { return nm(p) + ": " + ft(best(p)) + "."; }).join(" ");
-    }
-  }
-  MF.define("scores", {
-    act: 1, title: "From profiles to scores", steps: 4,
-    build: function (inner) {
-      var root = el("div", "s1-sc");
-      var lead = el("p", "s1-lead");
-      // The films turned above the scores: their pictures on top (no wider than a cell, so that the columns of the
-      // films and of the scores line up) and the axes down their left side, as on top of the customers.
-      var S = M.stack({ layout: "textbook",
-                        A: { rows: PEOPLE, cols: AX, caption: "Customers", colHeads: "pic" },
-                        B: { rows: FILMS, cols: AX, caption: "Films", rowHeads: "pic", colHeads: "pic" },
-                        C: { caption: "Scores" }, brackets: false, phonePics: true, side: true });
-      var cue = el("p", "s1-cue");
-      cue.setAttribute("aria-live", "polite");
-      var tools = el("div", "s1-tools");
-      var rp = button("Replay", "quiet", function () { B.S.show({ done: 0, lit: null }); B.S.work(FIRST[0], FIRST[1], { live: true }); });
-      var all = button("Show all", "quiet", function () { B.S.stop(); B.cue.textContent = "Twelve scores, one inner product each."; });
-      tools.appendChild(rp);
-      tools.appendChild(all);
-      S.note.appendChild(cue);
-      S.note.appendChild(tools);
-      root.appendChild(lead);
-      root.appendChild(S.el);
-      inner.appendChild(root);
-      B = { root: root, lead: lead, S: S, cue: cue, replay: rp, all: all, last: null };
-    },
-    enter: function () { B.last = null; },
-    leave: function () { B.S.stop(); },
-    step: function (k, api) {
-      var was = B.last;
-      B.last = k;
-      step2(k, MOTION && was === k - 1, api);
-    }
-  });
-
-  /* 3. MATRIX MULTIPLICATION */
-  var C3 = null;
-  // The sizes in the words come from the data: the customers' matrix is people x axes, the films' matrix, turned,
-  // axes x films.
-  var NA = AX.length, NP = PEOPLE.length, NF = FILMS.length;
-  var L3 = [
-    ["What we just did has a name: ", el("b", "s1-rub", "matrix multiplication"), "."],
-    ["A rectangular table of numbers is called a ", el("b", "s1-rub", "matrix"), ". The customers' table and the films' table are matrices."],
-    ["The size of a matrix is its number of rows, then its number of columns."],
-    ["Two matrices can be multiplied when the first has as many columns as the second has rows: here " + NA + " and " + NA + "."],
-    ["To multiply them, take every row of the first with every column of the second: one inner product each."],
-    ["The product has a row for each row of the first matrix, and a column for each column of the second: " + NP + " × " + NF + "."],
-    ["The table of scores is the product of the customers' matrix and the films' matrix: the rating matrix."]
-  ];
-  // Said once, where the rule first appears (step 3): the notebook's optional note on the textbook rule is gone.
-  var EVERYWHERE = "This is the rule used everywhere: in textbooks, in Python's numpy library and in the TAs' notebook.";
-  function step3(k, live) {
-    var S = C3.S;
-    C3.root.dataset.k = String(k);
-    put(C3.lead, L3[k].map(function (x) { return typeof x === "string" ? x : x.cloneNode(true); }));
-    if (MOTION && live) replay(C3.lead, "s1-in");
-    C3.std.hidden = k !== 3;
-    if (MOTION && live && k === 3) replay(C3.std, "s1-in");
-    if (!live) still(C3.root);
-    [S.A, S.B, S.C].forEach(function (m) { m.brackets(k >= 1); m.showShape(k >= 2); });
-    if (k === 4 && live) { S.show({ done: 0, lit: null }); S.run(S.pairs, { gap: 300 }); }
-    else S.show({ done: "all", lit: null });
-  }
-  MF.define("multiply", {
-    act: 1, title: "Matrix multiplication", steps: 7,
-    build: function (inner) {
-      var root = el("div", "s1-mul");
-      var lead = el("p", "s1-lead");
-      var S = M.stack({ layout: "textbook",
-                        A: { rows: PEOPLE, cols: AX, caption: "Customers", colHeads: "pic" },
-                        B: { rows: FILMS, cols: AX, caption: "Films", rowHeads: "pic", colHeads: "pic" },
-                        C: { caption: "Scores" }, brackets: false, shapes: true, phonePics: true });
-      var std = el("p", "s1-std", EVERYWHERE);
-      std.hidden = true;
-      root.appendChild(lead);
-      root.appendChild(S.el);
-      root.appendChild(std);
-      inner.appendChild(root);
-      C3 = { root: root, lead: lead, S: S, std: std, last: null };
-    },
-    enter: function () { C3.last = null; },
-    leave: function () { C3.S.stop(); },
-    step: function (k) {
-      var was = C3.last;
-      C3.last = k;
-      step3(k, MOTION && was === k - 1);
-    }
-  });
-
-  /* 4. A BIGGER PRODUCT */
-  var D = null;
-  var BIG = S1.big;
-  // The bigger pair as the scene draws it: the first matrix BIG.A (rows x columns), the second turned (one row per
-  // number of a row of BIG.B, one column per row of BIG.B).
-  var BA = [BIG.A.length, BIG.A[0].length], BB = [BIG.B[0].length, BIG.B.length];
-  var L4 = [
-    "Two bigger matrices: the first has " + BA[0] + " rows and " + BA[1] + " columns, the second " + BB[0] + " rows and " + BB[1] + " columns.",
-    "The first has " + BA[1] + " columns and the second " + BB[0] + " rows, so we can multiply them: every row with every column.",
-    "Why must the columns of the first match the rows of the second?",
-    "Your turn. Which pair can be multiplied?",
-    "Your turn. How big is the product?"
-  ];
-  // A question: options are buttons; a wrong pick is struck through and earns one hint; after two wrong picks
-  // "Show me" appears. The answer and its reason stay hidden until the right option is found (or shown).
+  /* 2. HOW COMPATIBLE? (Carlos: "Now here is the most important slide. How can we measure the matching compatibility
+     between one lady and one gentleman? And then do a multiple choice question here. And one of the options is going
+     to be obviously the inner product.") Clara's row and Arthur's row, three answers; a wrong pick is struck through
+     and earns its own hint, "Show me" comes after two. */
+  var Q2 = null;
+  // A question: options are buttons; a wrong pick is struck through and earns a hint (the option's own, else the next
+  // of o.hints); after two wrong picks "Show me" appears. The answer and its reason stay hidden until the right option
+  // is found (or shown).
   function Quiz(o) {
-    var Q = { tries: 0, solved: false, picked: {} };
+    var Q = { tries: 0, solved: false, picked: {}, hint: null };
     Q.el = el("div", "s1-quiz");
     if (o.lead) Q.el.appendChild(o.lead);
-    var opts = el("div", "s1-opts");
+    var opts = el("div", "s1-opts" + (o.cls ? " " + o.cls : ""));
     opts.setAttribute("role", "group");
     opts.setAttribute("aria-label", "Your answer");
     Q.btns = o.options.map(function (op, i) {
@@ -5101,27 +5068,351 @@ button.chip:hover{border-color:var(--rubric)}
       show.hidden = Q.solved || Q.tries < 2;
       hide.hidden = !Q.solved && Q.tries === 0;
       if (Q.solved) put(msg, [el("b", "s1-tag ok", Q.byHand ? "The answer." : "Right!"), " ", o.why]);
-      else if (Q.tries) put(msg, [el("b", "s1-tag no", "Not quite."), " ", o.hints[Math.min(Q.tries, o.hints.length) - 1]]);
+      else if (Q.tries) put(msg, [el("b", "s1-tag no", "Not quite."), " ", Q.hint || o.hints[Math.min(Q.tries, o.hints.length) - 1]]);
       else msg.textContent = "";
       msg.hidden = !Q.solved && !Q.tries;
       if (fresh && MOTION) replay(msg, "s1-in");
+      if (o.onsolve) o.onsolve(Q.solved);
     }
     function pick(i) {
       if (Q.solved || Q.picked[i]) return;
       if (o.options[i].right) { Q.solved = true; Q.byHand = false; }
-      else { Q.picked[i] = true; Q.tries++; }
+      else { Q.picked[i] = true; Q.tries++; Q.hint = o.options[i].hint || null; }
       draw(true);
     }
     function solve() { Q.solved = true; Q.byHand = true; draw(true); }
-    function reset() { Q.tries = 0; Q.solved = false; Q.picked = {}; Q.byHand = false; draw(false); }
+    function reset() { Q.tries = 0; Q.solved = false; Q.picked = {}; Q.byHand = false; Q.hint = null; draw(false); }
     Q.draw = draw;
     Q.reset = reset;
     draw(false);
     return Q;
   }
+  function textOpt(text, right, hint) { return { el: el("span", "s1-otext", text), say: text, right: right, hint: hint }; }
+  MF.define("compat", {
+    act: 1, title: "How compatible?", steps: 1,
+    build: function (inner) {
+      var root = el("div", "s1-cp");
+      var lead = el("p", "s1-lead", "How can the Matchmaker measure how compatible a lady and a gentleman are? Take " +
+        nm(LADIES[0]) + " and " + nm(GENTS[0]) + ".");
+      var two = M.matrix({ rows: [LADIES[0], GENTS[0]], cols: AX, caption: "", brackets: false, phonePics: true, cls: "s1-cpm" });
+      two.band("row", 0, "a");
+      two.band("row", 1, "b");
+      var l = LADIES[0], g = GENTS[0], same = AX.filter(function (a) { return r(l, a) === r(g, a); }).length;
+      var both = AX.filter(function (a) { return r(l, a) * r(g, a) > 0; }).map(function (a) { return MF.get(a).obj; });
+      var q = Quiz({
+        cls: "s1-opts-t",
+        options: [
+          textOpt("Count the questions they answer with the same mark.", false,
+            nm(l) + " and " + nm(g) + " give " + count(same) + " answer" + (same === 1 ? "" : "s") + " with the same mark, yet they agree about " +
+            both.join(" and ") + ". Counting the same marks misses that, and it never counts a disagreement against them."),
+          textOpt("Multiply their answers question by question, then add up the products.", true),
+          textOpt("Add up all six of their answers.", false,
+            "The sum of all six answers says how much the two like these pastimes in general. It says nothing about whether they like the same ones.")
+        ],
+        hints: ["Think of a question that both of them love, and one that only one of them loves."],
+        why: "Their inner product, as in the video store: a question that both like, or both dislike, adds a positive product; " +
+             "a question that one likes and the other dislikes adds a negative one."
+      });
+      root.appendChild(lead);
+      root.appendChild(two.el);
+      root.appendChild(q.el);
+      inner.appendChild(root);
+      Q2 = { root: root, lead: lead, q: q };
+    },
+    step: function () { Q2.q.draw(false); if (MOTION) replay(Q2.lead, "s1-in"); }
+  });
+
+  /* 3. A TABLE OF COMPATIBILITIES (Carlos: "So then we're going to create a matrix, and here is where we transpose. First
+     we transpose the gentleman's matrix, and then we show we can compare, and then you put the ladies and the gentleman
+     matrix in the way we are doing it in the original visualization, and then we produce the product matrix. By the
+     way, when you compute the first entry of the product matrix, I want the numbers to move ... you move the vectors in
+     a way that they align in the way it was done in the previous visualization, and then you compute the inner product
+     with ... the animation we did in the previous part. Do that for the first one. And then for the rest, you do it as
+     it is currently done with the nice animation without showing the details of the inner product.")
+     One M.stack in the textbook layout (the ladies on the left, the gentlemen turned above the product) with two more
+     slots in its grid: the gentlemen's table as they filled it in (G0, one row per gentleman), and the desk, where the
+     first pair's numbers line up as the video store's stack (N.stack). Three layouts, classes on the stack:
+       lay0   the ladies and the gentlemen side by side, as they are (step 0)
+       lay1   the ladies and the gentlemen turned, side by side (steps 1 and 2)
+       lay2   the textbook cross, the product between (steps 3 to 6), the desk beside the gentlemen on a wide screen
+     A change of layout reached from the step before slides each table from where it was (FLIP); the turn flies every
+     number of G0 to its place in the turned table. */
+  var P = null;
+  var FIRST = [LADIES.indexOf(S1.worked[0][0]), GENTS.indexOf(S1.worked[0][1])];
+  var NL = LADIES.length, NG = GENTS.length;
+  var TP = ["Every lady with every gentleman", "Transposing", "A row and a column", "A table of compatibilities",
+            nm(LADIES[FIRST[0]]) + " and " + nm(GENTS[FIRST[1]]), "Every other pair", "The best matches"];
+  var LP = [
+    "The Matchmaker wants the compatibility of every lady with every gentleman: " + NL * NG + " inner products. It puts them in one table.",
+    "First it turns the gentlemen's table: each gentleman's row becomes a column. This is called transposing.",
+    nm(LADIES[FIRST[0]]) + "'s row and " + nm(GENTS[FIRST[1]]) + "'s column hold their answers to the same three questions, in the same order, so they can be compared.",
+    "Their compatibility goes where " + nm(LADIES[FIRST[0]]) + "'s row meets " + nm(GENTS[FIRST[1]]) + "'s column: a table with one row per lady and one column per gentleman.",
+    nm(LADIES[FIRST[0]]) + " and " + nm(GENTS[FIRST[1]]) + ": their answers line up question by question; multiply them, then add.",
+    "Every other compatibility the same way: a lady's row with a gentleman's column.",
+    "The whole table of compatibilities."
+  ];
+  var DONE = (NL * NG === 20 ? "Twenty" : String(NL * NG)) + " compatibilities, one inner product each.";
+  function bestWords() {
+    var picked = LADIES.map(best), left = GENTS.filter(function (g) { return picked.indexOf(g) < 0; });
+    return "Each lady's best match: " + LADIES.map(function (l) { return nm(l) + " and " + nm(best(l)); }).join(", ") + "." +
+      (left.length ? " " + left.map(nm).join(" and ") + (left.length === 1 ? " is" : " are") + " no lady's best match." : "");
+  }
+  function restPairs() {
+    return P.S.pairs.filter(function (p) { return !(p[0] === FIRST[0] && p[1] === FIRST[1]); });
+  }
+  function bests(on) {
+    LADIES.forEach(function (l, i) {
+      GENTS.forEach(function (g, j) { P.S.C.td(i, j).classList.toggle("s1-best", !!on && g === best(l)); });
+    });
+  }
+  var SLIDE = 900;
+  function layout(name, live, rise) {
+    var X = P.S.el, slots = [P.sa, P.sb, P.sc, P.sg];
+    var before = slots.map(function (s) { return live ? box(s) : null; });
+    slots.forEach(function (s) { s.style.transition = "none"; s.style.transform = ""; s.classList.remove("s1-rise"); });
+    X.classList.remove("s1-lay0", "s1-lay1", "s1-lay2");
+    X.classList.add("s1-" + name);
+    void X.offsetWidth;
+    var k = zoom(X);
+    slots.forEach(function (s, n) {
+      s.style.transition = "";
+      var a = box(s), b = before[n];
+      if (!live || !a) return;
+      if (!b) { if (rise && rise.indexOf(s) >= 0) replay(s, "s1-rise"); return; }
+      var dx = (b.left - a.left) / k, dy = (b.top - a.top) / k;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+      s.style.transition = "none";
+      s.style.transform = "translate(" + dx + "px," + dy + "px)";
+      void s.offsetWidth;
+      s.style.transition = "transform " + SLIDE + "ms cubic-bezier(.45,0,.2,1)";
+      s.style.transform = "";
+    });
+  }
+  // Step 1 reached from step 0: the gentlemen's table turns. Every number of G0 flies to its place in the turned table,
+  // one gentleman after another; the turned table's heads fade in.
+  function turn() {
+    var from = [];
+    GENTS.forEach(function (g, j) {
+      AX.forEach(function (a, q) {
+        var n = P.G0.item(j, q);
+        from.push({ j: j, q: q, node: n, at: box(n), fs: n ? getComputedStyle(n).fontSize : "" });
+      });
+    });
+    layout("lay1", true);
+    var B = P.S.B;
+    B.el.classList.add("s1-arr");
+    replay(B.el, "s1-hin");
+    var gap = 150, last = 0;
+    from.forEach(function (f) {
+      var delay = 120 + f.j * gap + f.q * 40;
+      last = Math.max(last, delay);
+      ghost(P.layer, f.node, f.at, B.item(f.j, f.q), 950, delay, f.fs);
+    });
+    P.q.later(function () { B.el.classList.remove("s1-arr"); }, last + 950 + 30);
+  }
+  // Step 4 reached from step 3: the first pair. Her row and his column light up; their numbers fly onto the desk, hers
+  // on top and his under them, question under question; the stack plays (each product, then the sum); the sum flies
+  // into the table.
+  function first(live) {
+    var S = P.S, st = P.st, i = FIRST[0], j = FIRST[1], v = S.value(i, j), me = ++P.job;
+    S.show({ done: 0, lit: [i, j] });
+    P.desk.classList.remove("mx-idle", "mx-arr", "mx-arr0");
+    function land(pop) {
+      S.show({ done: [[i, j]], lit: [i, j] });
+      if (pop) S.C.set(i, j, v, { pop: true });
+      P.cue.textContent = readPair(LADIES[i], GENTS[j]);
+    }
+    if (!live || !MOTION) { st.end(); land(false); return; }
+    st.show(0);
+    P.cue.textContent = "";
+    P.desk.classList.add("mx-arr", "mx-arr0");
+    var tops = st.table.querySelectorAll("tr.nt-top td.nt-c .nt-n"), bots = st.table.querySelectorAll("tr.nt-bot td.nt-c .nt-n");
+    var t0 = 550, dur = 950, gap = 110, second = 420, n = AX.length;
+    P.q.later(function () {
+      P.desk.classList.remove("mx-arr0");
+      for (var q = 0; q < n; q++) {
+        var a = S.A.item(i, q), b = S.B.item(j, q);
+        ghost(P.layer, a, box(a), tops[q], dur, q * gap);
+        ghost(P.layer, b, box(b), bots[q], dur, second + q * gap);
+      }
+    }, t0);
+    var end = t0 + second + (n - 1) * gap + dur + 40;
+    P.q.later(function () {
+      P.desk.classList.remove("mx-arr");
+      st.play().then(function (ok) {
+        if (!ok || me !== P.job) return;
+        P.q.later(function () {
+          var sum = st.table.querySelector(".nt-res .nt-sum");
+          ghost(P.layer, sum, box(sum), S.C.item(i, j) || S.C.td(i, j), 820, 0);
+          P.q.later(function () { land(true); }, 820);
+        }, 450);
+      });
+    }, end);
+  }
+  function rest(live) {
+    var S = P.S;
+    if (!live) { S.show({ done: "all", lit: null }); P.cue.textContent = DONE; return; }
+    S.show({ done: [FIRST], lit: null });
+    S.run(restPairs(), { gap: 430, each: function (i, j) { P.cue.textContent = nm(LADIES[i]) + " and " + nm(GENTS[j]) + "."; } })
+      .then(function (ok) { if (ok) P.cue.textContent = DONE; });
+  }
+  function stopAll() {
+    if (!P) return;
+    P.q.stop();
+    P.job++;
+    P.st.show(0);
+    P.layer.textContent = "";
+    P.S.B.el.classList.remove("s1-arr", "s1-hin");
+    P.desk.classList.remove("mx-arr", "mx-arr0");
+    P.desk.classList.add("mx-idle");
+  }
+  MF.define("matches", {
+    act: 1, title: "A table of compatibilities", steps: TP.length,
+    build: function (inner) {
+      var root = el("div", "s1-pr");
+      var lead = el("p", "s1-lead");
+      var S = M.stack({ layout: "textbook", side: true,
+                        A: { rows: LADIES, cols: AX, caption: "Ladies", colHeads: "pic" },
+                        B: { rows: GENTS, cols: AX, caption: "Gentlemen", rowHeads: "full", colHeads: "pic" },
+                        C: { caption: "Compatibility" }, brackets: false, phonePics: true });
+      // The gentlemen's table as they filled it in, one row each: the start of the turn.
+      var G0 = M.matrix({ rows: GENTS, cols: AX, caption: "Gentlemen", colHeads: "pic", brackets: false, phonePics: true, cls: "s1-mg0" });
+      var sg = el("div", "mx-sslot s1-ssg");
+      sg.appendChild(G0.el);
+      // The desk: the first pair's stack, the video store's notation (her row on top, his under it, question under
+      // question, the products and their sum).
+      var desk = el("div", "mx-desk mx-idle s1-desk");
+      var l0 = LADIES[FIRST[0]], g0 = GENTS[FIRST[1]];
+      var st = N.stack({ top: { p: l0, values: rowVals(l0) }, bottom: { p: g0, values: rowVals(g0) }, films: AX.slice(),
+                         heads: "pic", sumLabel: "", pace: 1 });
+      desk.appendChild(st.el);
+      var sd = el("div", "mx-sslot s1-ssd");
+      sd.appendChild(desk);
+      var layer = el("div", "mx-flyl");
+      S.el.appendChild(sg);
+      S.el.appendChild(sd);
+      S.el.appendChild(layer);
+      var cue = el("p", "s1-cue");
+      cue.setAttribute("aria-live", "polite");
+      var tools = el("div", "s1-tools");
+      var rp = button("Replay", "quiet s1-rp", function () { stopAll(); first(true); });
+      var all = button("Show all", "quiet", function () { P.S.stop(); P.cue.textContent = DONE; });
+      tools.appendChild(rp);
+      tools.appendChild(all);
+      // The words about the pair at work and the buttons stand under the desk, in its slot: on a wide screen the slot
+      // spans the stack's two rows on the right, so the desk never makes the first row taller than the gentlemen.
+      sd.appendChild(cue);
+      sd.appendChild(tools);
+      root.appendChild(lead);
+      root.appendChild(S.el);
+      inner.appendChild(root);
+      P = { root: root, lead: lead, S: S, G0: G0, st: st, desk: desk, layer: layer, cue: cue, rp: rp, all: all,
+            sa: S.A.el.parentNode, sb: S.B.el.parentNode, sc: S.C.el.parentNode, sg: sg, sd: sd,
+            q: Seq(), job: 0, last: null };
+      layout("lay0", false);
+    },
+    enter: function () { P.last = null; },
+    leave: function () { stopAll(); P.S.stop(); },
+    step: function (k, api) {
+      var was = P.last;
+      P.last = k;
+      var live = MOTION && was === k - 1;
+      api.setTitle(TP[k]);
+      P.root.dataset.k = String(k);
+      stopAll();
+      P.lead.textContent = LP[k];
+      if (MOTION && was !== k) replay(P.lead, "s1-in");
+      P.rp.hidden = k !== 4;
+      P.all.hidden = k !== 5;
+      bests(false);
+      P.cue.textContent = "";
+      var S = P.S;
+      if (k === 0) { layout("lay0", false); S.show({ done: 0, lit: null }); }
+      else if (k === 1) { S.show({ done: 0, lit: null }); if (live) turn(); else layout("lay1", false); }
+      else if (k === 2) { layout("lay1", false); S.show({ done: 0, lit: FIRST }); }
+      else if (k === 3) {
+        layout("lay2", live, [P.sc]);
+        S.show({ done: 0, lit: live ? null : FIRST });
+        if (live) P.q.later(function () { S.light(FIRST[0], FIRST[1]); }, SLIDE + 60);
+      }
+      else if (k === 4) { layout("lay2", false); first(live); }
+      else if (k === 5) { layout("lay2", false); rest(live); }
+      else { layout("lay2", false); S.show({ done: "all", lit: null }); bests(true); P.cue.textContent = bestWords(); }
+    }
+  });
+
+  /* 4. MATRIX MULTIPLICATION */
+  var C3 = null;
+  // The sizes in the words come from the data: the ladies' matrix is ladies x questions, the gentlemen's, turned,
+  // questions x gentlemen.
+  var NA = AX.length;
+  var L3 = [
+    ["What we just did has a name: ", el("b", "s1-rub", "matrix multiplication"), "."],
+    ["A rectangular table of numbers is called a ", el("b", "s1-rub", "matrix"), ". The ladies' table and the gentlemen's table are matrices."],
+    ["The size of a matrix is its number of rows, then its number of columns."],
+    ["Two matrices can be multiplied when the first has as many columns as the second has rows: here " + NA + " and " + NA + "."],
+    ["To multiply them, take every row of the first with every column of the second: one inner product each."],
+    ["The product has a row for each row of the first matrix, and a column for each column of the second: " + NL + " × " + NG + "."],
+    ["The table of compatibilities is the product of the ladies' matrix and the gentlemen's matrix, transposed."]
+  ];
+  // Said once, where the rule first appears (step 3).
+  var EVERYWHERE = "This is the rule used everywhere: in textbooks, in Python's numpy library and in the TAs' notebook.";
+  function step3(k, live) {
+    var S = C3.S;
+    C3.root.dataset.k = String(k);
+    put(C3.lead, L3[k].map(function (x) { return typeof x === "string" ? x : x.cloneNode(true); }));
+    if (MOTION && live) replay(C3.lead, "s1-in");
+    C3.std.hidden = C3.std2.hidden = k !== 3;
+    if (MOTION && live && k === 3) { replay(C3.std, "s1-in"); replay(C3.std2, "s1-in"); }
+    if (!live) still(C3.root);
+    [S.A, S.B, S.C].forEach(function (m) { m.brackets(k >= 1); m.showShape(k >= 2); });
+    if (k === 4 && live) { S.show({ done: 0, lit: null }); S.run(S.pairs, { gap: 260 }); }
+    else S.show({ done: "all", lit: null });
+  }
+  MF.define("multiply", {
+    act: 1, title: "Matrix multiplication", steps: 7,
+    build: function (inner) {
+      var root = el("div", "s1-mul");
+      var lead = el("p", "s1-lead");
+      var S = M.stack({ layout: "textbook",
+                        A: { rows: LADIES, cols: AX, caption: "Ladies", colHeads: "pic" },
+                        B: { rows: GENTS, cols: AX, caption: "Gentlemen", rowHeads: "full", colHeads: "pic" },
+                        C: { caption: "Compatibility" }, brackets: false, shapes: true, phonePics: true });
+      var std = el("p", "s1-std", EVERYWHERE), std2 = el("p", "s1-std s1-std2", EVERYWHERE);
+      std.hidden = std2.hidden = true;
+      // In the stack's note: from 561 px it stands in the empty corner above the ladies, left of the gentlemen. On a
+      // phone that corner is too narrow, and its copy stands under the stack.
+      S.note.appendChild(std);
+      root.appendChild(lead);
+      root.appendChild(S.el);
+      root.appendChild(std2);
+      inner.appendChild(root);
+      C3 = { root: root, lead: lead, S: S, std: std, std2: std2, last: null };
+    },
+    enter: function () { C3.last = null; },
+    leave: function () { C3.S.stop(); },
+    step: function (k) {
+      var was = C3.last;
+      C3.last = k;
+      step3(k, MOTION && was === k - 1);
+    }
+  });
+
+  /* 5. A BIGGER PRODUCT */
+  var D = null;
+  var BIG = S1.big;
+  // The bigger pair as the scene draws it: the first matrix BIG.A (rows x columns), the second turned (one row per
+  // number of a row of BIG.B, one column per row of BIG.B).
+  var BA = [BIG.A.length, BIG.A[0].length], BB = [BIG.B[0].length, BIG.B.length];
+  var L4 = [
+    "Two bigger matrices: the first has " + BA[0] + " rows and " + BA[1] + " columns, the second " + BB[0] + " rows and " + BB[1] + " columns.",
+    "The first has " + BA[1] + " columns and the second " + BB[0] + " rows, so we can multiply them: every row with every column.",
+    "Why must the columns of the first match the rows of the second?",
+    "Your turn. Which pair can be multiplied?",
+    "Your turn. How big is the product?"
+  ];
   // A pair of shapes r1 x c1 and r2 x c2: they can be multiplied when the first has as many columns as the second
-  // has rows. (Every option of question 1 gets the same answer under Carlos's earlier rule, the same number of
-  // columns, so the question stayed as it was.)
+  // has rows.
   function pairOpt(r1, c1, r2, c2) {
     var g = h("span", "s1-gpair", [M.grid(r1, c1), el("span", "s1-and", "and"), M.grid(r2, c2)]);
     return { el: g, say: r1 + " by " + c1 + " and " + r2 + " by " + c2, right: c1 === r2 };
@@ -5129,8 +5420,8 @@ button.chip:hover{border-color:var(--rubric)}
   function shapeOpt(r1, c1, right) {
     return { el: M.grid(r1, c1), say: r1 + " by " + c1, right: right };
   }
-  // A row of four numbers against a column of three, in the textbook look: the row on the left, the column above
-  // the cell where their inner product would land, both outlined with their arrows; the cell holds a "?" that is no
+  // A row of four numbers against a column of three, in the textbook look: the row on the left, the column above the
+  // cell where their inner product would land, both outlined with their arrows; the cell holds a "?" that is no
   // product. Under them the pairs, first with first: the fourth number of the row meets a hole.
   function lonely() {
     var row = BIG.A[0].slice(), col = BIG.B[0].slice(0, 3);
@@ -5222,11 +5513,11 @@ button.chip:hover{border-color:var(--rubric)}
     }
   });
 
-  /* 5. BY HAND: the participants fill in the 12 cells of a product (Carlos, 2026-11-05: "Before you open the Colab
+  /* 6. BY HAND: the participants fill in the 12 cells of a product (Carlos, 2026-11-05: "Before you open the Colab
      notebook, add a little section where you show two matrices of decent size, and then the participant has to fill
      the calculated product by hand ... at most 12 entries"). The first matrix on the left, the second (one row per
      column in MF.S1.hand) turned above the product. Tap a cell (the first's row and the second's column light up),
-     type its score on the keypad or the keyboard, OK. A wrong answer earns a hint; after two, "Show me" plays the
+     type its number on the keypad or the keyboard, OK. A wrong answer earns a hint; after two, "Show me" plays the
      worked line. The cells filled stay filled when the participant goes back and forth; "Start again" empties them. */
   var E = null;
   var HAND = S1.hand;
@@ -5236,9 +5527,9 @@ button.chip:hover{border-color:var(--rubric)}
   function hkey(p) { return p[0] + "," + p[1]; }
   function handDone() { return E.S.pairs.filter(function (p) { return !!E.ok[hkey(p)]; }); }
   function handNext(from) {
-    var P = E.S.pairs, n = P.length, s0 = 0;
-    if (from) P.forEach(function (p, s) { if (p[0] === from[0] && p[1] === from[1]) s0 = s + 1; });
-    for (var t = 0; t < n; t++) { var p = P[(s0 + t) % n]; if (!E.ok[hkey(p)]) return p; }
+    var Pr = E.S.pairs, n = Pr.length, s0 = 0;
+    if (from) Pr.forEach(function (p, s) { if (p[0] === from[0] && p[1] === from[1]) s0 = s + 1; });
+    for (var t = 0; t < n; t++) { var p = Pr[(s0 + t) % n]; if (!E.ok[hkey(p)]) return p; }
     return null;
   }
   function typedValue() {
@@ -5247,13 +5538,13 @@ button.chip:hover{border-color:var(--rubric)}
     return E.minus ? -x : x;
   }
   function handShowEntry() {
-    var box = E.entry, x = typedValue();
-    box.textContent = "";
+    var bx = E.entry, x = typedValue();
+    bx.textContent = "";
     if (x === null) {
       var s = N.slot();
       if (E.minus) { s.textContent = MF.MINUS; s.classList.add("s1-hminus"); }
-      box.appendChild(s);
-    } else box.appendChild(N.cell(x));
+      bx.appendChild(s);
+    } else bx.appendChild(N.cell(x));
   }
   function handWords() {
     var sel = E.sel, n = handDone().length, total = E.S.pairs.length;
@@ -5273,7 +5564,7 @@ button.chip:hover{border-color:var(--rubric)}
     if (how === "shown") put(E.msg, [el("b", "s1-tag ok", "The answer."), " " + where, el("span", "s1-hfar", " The worked line is under the matrices.")]);
     else if (tried === 1) put(E.msg, [el("b", "s1-tag no", "Not quite."), " Multiply the lit row's numbers, left to right, with the lit column's, top to bottom, then add the " + count(HA[1]) + " products."]);
     else if (tried >= 2) put(E.msg, [el("b", "s1-tag no", "Not quite."), " Check the sign of each product, then add."]);
-    else E.msg.textContent = where + " Type its score, then OK.";
+    else E.msg.textContent = where + " Type its number, then OK.";
   }
   function handDraw() {
     E.S.show({ done: handDone(), lit: E.sel });
@@ -5347,7 +5638,7 @@ button.chip:hover{border-color:var(--rubric)}
     act: 1, title: "By hand", steps: 1,
     build: function (inner) {
       var root = el("div", "s1-hand");
-      var lead = el("p", "s1-lead", "Your turn: multiply by hand. Tap a cell of the product, type its score, then OK.");
+      var lead = el("p", "s1-lead", "Your turn: multiply by hand. Tap a cell of the product, type its number, then OK.");
       // The first numbers its rows and the second, turned, its columns (from 1): they name the product's rows and
       // columns, as in the scene bigger.
       var S = M.stack({ layout: "textbook",
