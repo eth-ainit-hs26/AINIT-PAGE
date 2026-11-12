@@ -562,14 +562,16 @@ export const weekends: Weekend[] = [
         title: 'Large-scale computing',
         type: 'lecture',
         // Computing clusters and parallelized matrix factorization in one block (Carlos, 2026-11-11). Since 2026-11-12,
-        // in his order, "large-scale computing cold intro with business case, LinkedIn ads, then computing clusters":
-        // the cold intro "Dividing a computation, 1793" (FDD's section of that name) and the case LinkedIn's ads in one
-        // PDF, the first block of FDD weekend 7 ported into Codex plates (clusters-deck/ of the public repository
-        // eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's instruction of 2026-11-10), then the Grid.
+        // in his order, "large-scale computing cold intro with business case, LinkedIn ads, then computing clusters",
+        // and later that day "Notice the slides on large-scale computing and computing clusters. Merge them, I meant":
+        // one PDF, the cold intro "Dividing a computation, 1793" (FDD's section of that name), the case LinkedIn's ads,
+        // then the first block of FDD weekend 7 ported into Codex plates (clusters-deck/ of the public repository
+        // eth-ainit-hs26/w2-recsys-bandits-lecture, published at Carlos's instruction of 2026-11-10), made by
+        // cold-intro-and-cases/merge.py there. The handout is that of the clusters deck alone (no cold intro or business
+        // case has a handout since 2026-11-11). Then the Grid.
         links: [
-          { label: 'Large-scale computing', url: deck(2, 'ainit-hs26-large-scale-computing-cold-intro-and-cases.pdf') },
-          { label: 'Computing clusters', url: deck(2, 'ainit-hs26-computing-clusters.pdf') },
-          { label: 'Handout', url: deck(2, 'ainit-hs26-computing-clusters-handout.pdf') },
+          { label: 'Large-scale computing', url: deck(2, 'ainit-hs26-large-scale-computing.pdf') },
+          { label: 'Handout', url: deck(2, 'ainit-hs26-large-scale-computing-handout.pdf') },
           { label: 'Matchmaker on a Grid', url: viz(2, 'matchmaker-grid') },
         ],
       },
