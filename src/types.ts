@@ -28,6 +28,11 @@ export interface Resource {
    * order. Resources without a group render as a single flat list.
    */
   group?: string;
+  /**
+   * Show this link even when it is a notebook that one of the weekend's games
+   * already opens (src/lib/materials.ts hides those by default).
+   */
+  keepWithGames?: boolean;
 }
 
 /**

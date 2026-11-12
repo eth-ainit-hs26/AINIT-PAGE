@@ -555,7 +555,9 @@ export const weekends: Weekend[] = [
           // { label: "4) Epsilon-greedy", url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb') },
           // { label: "5) UCB", url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb') },
           { label: "Urn Games", url: viz(2, 'urn') },
-          { label: "Bandits (all-in-one)", url: 'https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/03_cx_bandits_6_all_in_one_student.ipynb' },        ]
+          // keepWithGames: shown here although the Urn Games page also opens it.
+          { label: "Bandits (all-in-one)", url: colab('w2-cx-public', '03_cx_bandits_6_all_in_one_student.ipynb'), keepWithGames: true },
+        ]
       },
       { time: '15:30', title: 'Coffee break at Polysnack, until 16:00', type: 'break' },
       {

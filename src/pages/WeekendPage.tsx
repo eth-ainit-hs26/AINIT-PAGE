@@ -86,7 +86,7 @@ export function WeekendPage() {
   const numbered = materials.entries();
   // The rest of the Materials list: what the numbered list does not already show.
   const resources = weekend.resources.filter(
-    (r) => !materials.numbered(r.url) && !materials.hidden(r.url),
+    (r) => !materials.numbered(r.url) && (r.keepWithGames || !materials.hidden(r.url)),
   );
   const hasRealResources = numbered.length > 0 || resources.some((r) => r.url !== '#');
 

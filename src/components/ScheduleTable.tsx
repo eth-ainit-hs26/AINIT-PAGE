@@ -35,7 +35,7 @@ export function ScheduleTable({ day, date, sessions, room, materials }: Props) {
           // or from the weekend's Materials list.
           const isFile = !!url && downloadKind(url) !== null;
           const quiet = s.type === 'break' || s.type === 'tba';
-          const links = (s.links ?? []).filter((l) => !materials.hidden(l.url));
+          const links = (s.links ?? []).filter((l) => l.keepWithGames || !materials.hidden(l.url));
           return (
             <div key={i} className={`srow${quiet ? ` srow--${s.type}` : ''}`}>
               <div className="srow__time">{s.time}</div>
