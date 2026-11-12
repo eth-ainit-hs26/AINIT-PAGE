@@ -554,7 +554,7 @@ export const weekends: Weekend[] = [
           { label: "3) Explore-then-exploit", url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_student.ipynb') },
           { label: "4) Epsilon-greedy", url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb') },
           { label: "5) UCB", url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb') },
-          { label: "Urn Games", url: viz(2, '03_urn_games.html') },
+          { label: "Urn Games", url: viz(2, 'urn') },
           { label: "Bandits (all-in-one)", url: colab('w2-cx-public', '03_cx_bandits_6_all_in_one_student.ipynb') },
         ]
       },
