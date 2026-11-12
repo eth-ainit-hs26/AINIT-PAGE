@@ -33,6 +33,19 @@ const taSlots = Array.from({ length: officeHourTAsPerDay }, (_, i) => `TA${i + 1
 /** Offset in days from the week's Monday for a JS weekday (0=Sun…6=Sat). */
 const offsetFromMonday = (weekday: number): number => (weekday - 1 + 7) % 7;
 
+/**
+ * Index of the bookable week containing today (local time), clamped to the
+ * offered range so visits before/after the term land on the first/last week.
+ */
+function currentWeekIndex(): number {
+  const [y, m, d] = officeHourFirstMonday.split('-').map(Number);
+  const firstMonday = Date.UTC(y, m - 1, d);
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const week = Math.floor((today - firstMonday) / (7 * 86_400_000));
+  return Math.min(Math.max(week, 0), officeHourWeeks - 1);
+}
+
 /** "18:00" → "18:00–18:30" using the configured slot length. */
 function slotRange(time: string): string {
   const [h, m] = time.split(':').map(Number);
@@ -57,7 +70,7 @@ export function OfficeHoursPage() {
     [],
   );
 
-  const [weekIndex, setWeekIndex] = useState(0);
+  const [weekIndex, setWeekIndex] = useState(currentWeekIndex);
   const weekMonday = useMemo(
     () => addDaysISO(officeHourFirstMonday, weekIndex * 7),
     [weekIndex],
