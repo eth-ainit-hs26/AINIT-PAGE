@@ -610,7 +610,7 @@ export const weekends: Weekend[] = [
       // { group: 'Coding exercises', label: 'Bandits: Explore-then-exploit', url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_student.ipynb') },
       // { group: 'Coding exercises', label: 'Bandits: Epsilon-greedy', url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb') },
       // { group: 'Coding exercises', label: 'Bandits: UCB', url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb') },
-      { group: 'Coding exercises', label: 'Bandits: All-in-one', url: 'https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/03_cx_bandits_6_all_in_one_student.ipynb' },        ]
+      { group: 'Coding exercises', label: 'Bandits: All-in-one', url: 'https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/03_cx_bandits_6_all_in_one_student.ipynb' }, 
       { group: 'Project', label: 'Recommender for online retail: project description', url: SOON },
       { group: 'Project', label: 'Recommender for online retail: Colab notebook', url: SOON },
       // { group: 'Project', label: 'Recommender for online retail: grading scheme', url: SOON },
