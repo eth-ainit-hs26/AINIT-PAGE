@@ -587,7 +587,7 @@ export const weekends: Weekend[] = [
         title: 'Project intro: Recommender for online retail', 
         type: 'project',
         links: [
-          { label: 'Slides', url: deck(2, SOON) },
+          { label: 'Project intro, Recommender for online retail', url: deck(2, 'w2_project_intro_hs26.pdf') },
           { label: 'Project Notebook', url: colab('w2-project-public', 'project2_student.ipynb') },
         ]
       },
