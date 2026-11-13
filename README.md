@@ -79,7 +79,8 @@ it too. Run it alone with `node scripts/sync-materials.mjs`.
 
 On every weekend, a link to a Colab notebook that one of the weekend's games names
 is left off the page, agenda and Materials list: the participants open it from the
-game. The same script lists those notebooks in
+game. The CX rows of the agenda (`type: 'exercise'`) are the exception since
+2026-11-13 and show their notebooks. The same script lists those notebooks in
 `src/data/generated/notebooks-in-games.json`, and a notebook is back on the page
 when no game names it any more. `public/downloads/` and `src/data/generated/` are
 written by every build and are not committed.

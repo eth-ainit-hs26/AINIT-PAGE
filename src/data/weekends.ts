@@ -491,11 +491,14 @@ export const weekends: Weekend[] = [
           { label: 'Once Upon a Video Store', url: viz(2, 'video-store') },
         ],
       },
-      { 
-        time: '09:00', 
-        title: 'Inner product and nearest neighbors', 
+      {
+        time: '09:00',
+        title: 'Inner product and nearest neighbors',
         type: 'exercise',
-        url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb'),
+        // The CX rows show their Colab notebooks since 2026-11-13, although the games open them too (Carlos: "Please
+        // put the links to the colab notebooks for the exercises on the corresponding CX slots"); a chip, as on the
+        // 12:00 and 15:00 rows.
+        links: [{ label: 'Notebook', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb') }],
       },
       {
         time: '10:00',
@@ -589,7 +592,8 @@ export const weekends: Weekend[] = [
     // The Materials list. Every deck and visualization on the agenda is listed by the page itself, numbered, under
     // "Slides and visualizations" (src/lib/materials.ts), so it is not repeated here; a deck or visualization added
     // here and not to the agenda stops the build, unless it is one of `download.extras`. A notebook that one of the
-    // games opens is left off the page (Carlos, 2026-11-11), whatever this list says.
+    // games opens is left off this list (Carlos, 2026-11-11), whatever it says; the CX rows of the agenda show theirs
+    // since 2026-11-13.
     resources: [
       // The semester cheat sheet, the three weekends on one A3 page, from cheat-sheet/ of the public repository
       // eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11), also by the title on the home page. Number

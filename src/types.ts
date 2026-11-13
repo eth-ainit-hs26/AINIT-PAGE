@@ -30,7 +30,8 @@ export interface Resource {
   group?: string;
   /**
    * Show this link even when it is a notebook that one of the weekend's games
-   * already opens (src/lib/materials.ts hides those by default).
+   * already opens (src/lib/materials.ts hides those by default, except on the
+   * CX rows, which show theirs since 2026-11-13).
    */
   keepWithGames?: boolean;
 }

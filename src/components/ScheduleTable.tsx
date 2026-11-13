@@ -26,16 +26,20 @@ export function ScheduleTable({ day, date, sessions, room, materials }: Props) {
         {sessions.map((s, i) => {
           // Coding exercises are prefixed with "CX" to match the course convention.
           const title = s.type === 'exercise' ? `CX ${s.title}` : s.title;
-          // A row whose own link is a notebook that a game already opens keeps
-          // its title, without the link.
-          const url = s.url && !materials.hidden(s.url) ? s.url : undefined;
+          // A CX row keeps its notebooks although a game opens them too (Carlos,
+          // 2026-11-13: "Please put the links to the colab notebooks for the
+          // exercises on the corresponding CX slots"). On any other row a
+          // notebook that a game already opens is left off, and a row whose own
+          // link is one keeps its title, without the link.
+          const cx = s.type === 'exercise';
+          const url = s.url && (cx || !materials.hidden(s.url)) ? s.url : undefined;
           // PDFs and notebooks are offered as a download rather than opened in
           // the browser viewer. This applies to the chips below as well as the
           // title, so a deck saves the same way whether it is reached from here
           // or from the weekend's Materials list.
           const isFile = !!url && downloadKind(url) !== null;
           const quiet = s.type === 'break' || s.type === 'tba';
-          const links = (s.links ?? []).filter((l) => l.keepWithGames || !materials.hidden(l.url));
+          const links = (s.links ?? []).filter((l) => cx || l.keepWithGames || !materials.hidden(l.url));
           return (
             <div key={i} className={`srow${quiet ? ` srow--${s.type}` : ''}`}>
               <div className="srow__time">{s.time}</div>
