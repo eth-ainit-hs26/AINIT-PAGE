@@ -591,9 +591,9 @@ export const weekends: Weekend[] = [
     ],
     // The Materials list. Every deck and visualization on the agenda is listed by the page itself, numbered, under
     // "Slides and visualizations" (src/lib/materials.ts), so it is not repeated here; a deck or visualization added
-    // here and not to the agenda stops the build, unless it is one of `download.extras`. A notebook that one of the
-    // games opens is left off this list (Carlos, 2026-11-11), whatever it says; the CX rows of the agenda show theirs
-    // since 2026-11-13.
+    // here and not to the agenda stops the build, unless it is one of `download.extras`. Every coding-exercise
+    // notebook of w2-cx-public is listed, the student version under Coding exercises and the solution under CX
+    // solutions, as in weekend 1 (2026-11-13; until then a notebook that one of the games opens was left off).
     resources: [
       // The semester cheat sheet, the three weekends on one A3 page, from cheat-sheet/ of the public repository
       // eth-ainit-hs26/w2-recsys-bandits-lecture (Carlos's yes, 2026-11-11), also by the title on the home page. Number
@@ -611,19 +611,29 @@ export const weekends: Weekend[] = [
         label: 'Nearest neighbors and matrix factorization',
         url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
       },
-      // { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb')},
-      // { group: 'Coding exercises', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
-      // { group: 'Coding exercises', label: 'Matrix factorization (Part 3+4 (Optional))', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
-      { group: 'Coding exercises', label: 'Recommendation System', url: colab('w2-cx-public', '02_cx_recsys_student.ipynb') },
-      // { group: 'Coding exercises', label: 'Bandits: Estimates', url: colab('w2-cx-public', '03_cx_bandits_1_estimates_student.ipynb') },
-      // { group: 'Coding exercises', label: 'Bandits: Random', url: colab('w2-cx-public', '03_cx_bandits_2_random_student.ipynb') },
-      // { group: 'Coding exercises', label: 'Bandits: Explore-then-exploit', url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_student.ipynb') },
-      // { group: 'Coding exercises', label: 'Bandits: Epsilon-greedy', url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb') },
-      // { group: 'Coding exercises', label: 'Bandits: UCB', url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb') },
-      { group: 'Coding exercises', label: 'Bandits: All-in-one', url: 'https://colab.research.google.com/github/eth-ainit-hs26/w2-cx-public/blob/main/03_cx_bandits_6_all_in_one_student.ipynb' }, 
+      { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb') },
+      { group: 'Coding exercises', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb') },
+      { group: 'Coding exercises', label: 'Matrix factorization (Part 3+4, optional)', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb') },
+      { group: 'Coding exercises', label: 'Recommendation system', url: colab('w2-cx-public', '02_cx_recsys_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Estimates', url: colab('w2-cx-public', '03_cx_bandits_1_estimates_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Random', url: colab('w2-cx-public', '03_cx_bandits_2_random_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Explore-then-exploit', url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: Epsilon-greedy', url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: UCB', url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb') },
+      { group: 'Coding exercises', label: 'Bandits: All-in-one', url: colab('w2-cx-public', '03_cx_bandits_6_all_in_one_student.ipynb') },
       { group: 'Project', label: 'Recommender for online retail: project description', url: SOON },
       { group: 'Project', label: 'Recommender for online retail: Colab notebook', url: SOON },
       // { group: 'Project', label: 'Recommender for online retail: grading scheme', url: SOON },
+      { group: 'CX solutions', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Matrix factorization (Part 3+4, optional)', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Recommendation system', url: colab('w2-cx-public', '02_cx_recsys_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Bandits: Estimates', url: colab('w2-cx-public', '03_cx_bandits_1_estimates_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Bandits: Random', url: colab('w2-cx-public', '03_cx_bandits_2_random_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Bandits: Explore-then-exploit', url: colab('w2-cx-public', '03_cx_bandits_3_estimate_then_exploit_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Bandits: Epsilon-greedy', url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Bandits: UCB', url: colab('w2-cx-public', '03_cx_bandits_5_ucb_solutions.ipynb') },
+      { group: 'CX solutions', label: 'Bandits: All-in-one', url: colab('w2-cx-public', '03_cx_bandits_6_all_in_one_solutions.ipynb') },
     ],
     // Numbers every deck and visualization of the agenda in the agenda's order, on the page, in the names of the
     // saved files and in one ZIP behind the button at the top of the page (Carlos, 2026-11-11: "all materials
