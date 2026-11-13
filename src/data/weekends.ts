@@ -582,7 +582,15 @@ export const weekends: Weekend[] = [
       },
     ],
     saturday: [
-      { time: '08:15', title: 'Project intro: Recommender for online retail', type: 'project' },
+      { 
+        time: '08:15', 
+        title: 'Project intro: Recommender for online retail', 
+        type: 'project',
+        links: [
+          { label: 'Slides', url: deck(2, SOON) },
+          { label: 'Project Notebook', url: colab('w2-project-public', 'project2_student.ipynb') },
+        ]
+      },
       { time: '09:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '10:00', title: 'Coffee break at HG E30.0075, until 10:30', type: 'break' },
       { time: '10:30', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
@@ -618,8 +626,7 @@ export const weekends: Weekend[] = [
       { group: 'Coding exercises', label: 'Bandits: UCB', url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb'), keepWithGames: true},
       { group: 'Coding exercises', label: 'Bandits: All-in-one', url: colab('w2-cx-public', '03_cx_bandits_6_all_in_one_student.ipynb'), keepWithGames: true},
       { group: 'Project', label: 'Recommender for online retail: project description', url: SOON },
-      { group: 'Project', label: 'Recommender for online retail: Colab notebook', url: SOON },
-      // { group: 'Project', label: 'Recommender for online retail: grading scheme', url: SOON },
+      { group: 'Project', label: 'Recommender for online retail: Colab notebook', url: colab('w2-project-public', 'project2_student.ipynb') },
       { group: 'CX solutions', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_solutions.ipynb') },
       { group: 'CX solutions', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_solutions.ipynb') },
       { group: 'CX solutions', label: 'Matrix factorization (Part 3+4, optional)', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_solutions.ipynb') },
