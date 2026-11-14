@@ -729,7 +729,14 @@ export const weekends: Weekend[] = [
         links: [{ label: 'Old Bessie 2: Runs and cumulative rewards', url: viz(3, 'old-bessie-runs') }],
       },
       { time: '10:30', title: 'Coffee break at Dozentenfoyer, until 11:00', type: 'break' },
-      { time: '11:00', title: 'proto-REINFORCE', type: 'lecture' },
+      {
+        time: '11:00',
+        title: 'proto-REINFORCE',
+        type: 'lecture',
+        // The third page of the visualization, from w3-cx-private 02_old_bessie: try a strategy, bets and softmax,
+        // the forward and backward pass of proto-REINFORCE, the update up close, and a movie of 300 updates.
+        links: [{ label: 'Old Bessie 3: proto-REINFORCE', url: viz(3, 'old-bessie-proto-reinforce') }],
+      },
       { time: '12:00', title: 'Coding bazaar', type: 'lab' },
       { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
       { time: '14:00', title: 'proto-REINFORCE', type: 'exercise' },
