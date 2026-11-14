@@ -591,7 +591,17 @@ export const weekends: Weekend[] = [
           { label: 'Project Notebook', url: colab('w2-project-public', 'project2_student.ipynb') },
         ]
       },
-      { time: '09:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
+      {
+        time: '09:00',
+        title: 'Guest lecture: Joachim M. Buhmann',
+        type: 'lecture',
+        // The speaker's slides, "Quo Vadis, Artificialis Intelligentia?" (68 pages, his PDF of 2026-11-13, published
+        // unchanged at Carlos's request of 2026-11-14: "Slides from Prof Buhmann arrived, please upload them on the
+        // website"). On the first of the three guest rows only, as in weekend 1.
+        links: [
+          { label: 'Guest lecture, Joachim M. Buhmann', url: deck(2, 'ainit-hs26-guest-joachim-buhmann.pdf') },
+        ],
+      },
       { time: '10:00', title: 'Coffee break at HG E30.0075, until 10:30', type: 'break' },
       { time: '10:30', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
       { time: '11:00', title: 'Guest lecture: Joachim M. Buhmann', type: 'lecture' },
@@ -608,7 +618,6 @@ export const weekends: Weekend[] = [
       // 01 of the agenda from 9e0be17 (2026-11-11) until 2026-11-12, when Carlos asked: "Drop the cheat sheet from the
       // agenda of weekend 2. We'll keep it on the website." Here since then without a number, as in ab95b28.
       { group: 'Cheat sheet', label: 'The semester on one page, all three weekends', url: deck(2, 'ainit-hs26-cheat-sheet.pdf') },
-      { group: 'Lecture slides', label: 'Guest lecture: Joachim M. Buhmann', url: SOON },
       { group: 'Business cases', label: 'All six cases', url: deck(2, 'ainit-hs26-business-cases.pdf') },
       {
         group: 'Lecture notes',
