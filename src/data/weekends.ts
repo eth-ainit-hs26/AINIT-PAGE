@@ -624,6 +624,11 @@ export const weekends: Weekend[] = [
         label: 'Nearest neighbors and matrix factorization',
         url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
       },
+      {
+        group: 'Lecture notes',
+        label: 'Handwritten summary, inner product to large-scale computing',
+        url: deck(2, 'ainit-hs26-handwritten-summary.pdf'),
+      },
       { group: 'Coding exercises', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_student.ipynb'), keepWithGames: true},
       { group: 'Coding exercises', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_student.ipynb'), keepWithGames: true},
       { group: 'Coding exercises', label: 'Matrix factorization (Part 3+4, optional)', url: colab('w2-cx-public', '02_cx_matrix_factorization_optional_student.ipynb'), keepWithGames: true},
@@ -656,7 +661,7 @@ export const weekends: Weekend[] = [
     // the build when the agenda and public/slides/we2/ or public/viz/we2/ disagree.
     download: {
       file: 'ainit-hs26-weekend-2.zip',
-      note: 'The slides and games of this page with their numbers, the lecture notes, and the handouts in a folder of their own. The games open the coding exercises in Colab.',
+      note: 'The slides and games of this page with their numbers, the lecture notes, the handwritten summary, and the handouts in a folder of their own. The games open the coding exercises in Colab.',
       // Beside the ZIP button since 2026-11-12, without a number, and in the ZIP (Carlos: "The lecture notes, nearest
       // neighbors, and matrix factorization. I want you to put that next to download all slides and visualizations").
       // The 11:00 row held them until then, number 10. From lecture-notes/ of the public repository
@@ -665,6 +670,14 @@ export const weekends: Weekend[] = [
         {
           label: 'Lecture notes, nearest neighbors and matrix factorization',
           url: deck(2, 'ainit-hs26-lecture-notes-nearest-neighbors-and-matrix-factorization.pdf'),
+        },
+        // Carlos's handwritten summary of the lectures (inner product, matrix product, matrix factorization,
+        // large-scale computing): pages 38 and 39 of his iPad copy of "01 Nearest neighbors" (exported 2026-11-14),
+        // unchanged, in that order. His request that day: "take the last slide with the second to last handwriting
+        // slide and put it on the website on the weekend".
+        {
+          label: 'Handwritten summary, inner product to large-scale computing',
+          url: deck(2, 'ainit-hs26-handwritten-summary.pdf'),
         },
       ],
       // The combined case deck repeats the four block decks: it stays in the Materials list without a number, and out of the ZIP.
