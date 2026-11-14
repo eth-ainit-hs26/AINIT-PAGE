@@ -625,7 +625,7 @@ export const weekends: Weekend[] = [
       { group: 'Coding exercises', label: 'Bandits: Epsilon-greedy', url: colab('w2-cx-public', '03_cx_bandits_4_epsilon_greedy_student.ipynb'), keepWithGames: true},
       { group: 'Coding exercises', label: 'Bandits: UCB', url: colab('w2-cx-public', '03_cx_bandits_5_ucb_student.ipynb'), keepWithGames: true},
       { group: 'Coding exercises', label: 'Bandits: All-in-one', url: colab('w2-cx-public', '03_cx_bandits_6_all_in_one_student.ipynb'), keepWithGames: true},
-      { group: 'Project', label: 'Recommender for online retail: project description', url: SOON },
+      { group: 'Project', label: 'Recommender for online retail: project description', url: deck(2, 'w2_project_intro_hs26.pdf') },
       { group: 'Project', label: 'Recommender for online retail: Colab notebook', url: colab('w2-project-public', 'project2_student.ipynb') },
       { group: 'CX solutions', label: 'Inner product and nearest neighbors', url: colab('w2-cx-public', '01_cx_nearest_neighbours_solutions.ipynb') },
       { group: 'CX solutions', label: 'Matrix factorization (Part 1+2)', url: colab('w2-cx-public', '02_cx_matrix_factorization_solutions.ipynb') },
