@@ -712,7 +712,12 @@ export const weekends: Weekend[] = [
         // going to show some video games for them to play"): Old Bessie, ANYmal, Last-Minute Pricing, Pokemon. Built
         // in the private repository eth-ainit-hs26/w3-cx-private, folder 01_arcade, copied here without its tools
         // and CLAUDE.md files.
-        links: [{ label: 'Press Start, four games', url: viz(3, 'arcade') }],
+        // Then "Old Bessie 1: MDPs", the first page of the visualization (states, actions, transition dynamics), from
+        // w3-cx-private 02_old_bessie (Carlos: "I don't want slides. I want a visualization").
+        links: [
+          { label: 'Press Start, four games', url: viz(3, 'arcade') },
+          { label: 'Old Bessie 1: MDPs', url: viz(3, 'old-bessie-mdps') },
+        ],
       },
       { time: '09:00', title: 'MDPs', type: 'exercise' },
       { time: '10:00', title: 'Runs and cumulative rewards', type: 'lecture' },

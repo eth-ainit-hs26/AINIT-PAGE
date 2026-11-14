@@ -1,0 +1,1742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Old Bessie 1: MDPs</title>
+<style>/* core.css */
+/* core.css: the look of "Old Bessie", the engine's stylesheet (agent A2, 2026-11-14). ENGINE.md documents it.
+
+   The arcade's retro console look in its light "paper" theme (rl-arcade/repair-or-replace/css/style.css): Press Start
+   2P everywhere, the NES shell #E8E0CC, dialog boxes #F8F4E4 with a double pixel border, ink #181818, secondary ink
+   #585858, the lever colours of the three actions and the wear colours of the four states. Light only: no dark
+   theme and no theme toggle (Carlos, 2026-11-14).
+
+   Larger words on large screens (the rule of weekend 2, w2-cx-private/CLAUDE.md): on a screen of at least 1080 x 740
+   px --tx is 1.4. A size of words up to 18 px is written calc(V * var(--tx)); a larger one grows by a share that falls
+   to nothing at 44 px: calc(V * (1 + (var(--tx) - 1) * w)) with w = (44 - V) / 26. Boards, tables, sprites, the top
+   bar and the Back and Next buttons keep their sizes. */
+
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("data:font/woff2;base64,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") format("woff2");
+  font-display: block;
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --px: "Press Start 2P", ui-monospace, monospace;
+  --bg: #E8E0CC;            /* the NES shell */
+  --box: #F8F4E4;           /* dialog boxes */
+  --white: #FFFFFF;
+  --ink: #181818;
+  --ink2: #585858;          /* secondary ink */
+  --hi: #404040;            /* the inner line of a dialog box */
+  --press: #BBB6A2;         /* the pressed edge of a button */
+  --yellow: #F8D028;
+  --ring: #E84828;          /* the highlight ring */
+  --run: #1666C8;           /* RUN, calm blue */
+  --service: #E08A00;       /* SERVICE, amber */
+  --replace: #D33A2C;       /* REPLACE, hot red */
+  --run-soft: #DCE9FB;
+  --service-soft: #FBEED2;
+  --replace-soft: #FADBD6;
+  --wear0: #2E8B57;         /* HEALTHY */
+  --wear1: #C99A33;         /* WORN */
+  --wear2: #E07A2A;         /* SHAKY */
+  --wear3: #D33A2C;         /* FAILING */
+  --wear0-soft: #D5EBDD;
+  --wear1-soft: #F3E6C4;
+  --wear2-soft: #F8DCC4;
+  --wear3-soft: #F6D2CC;
+  --gain: #1F7A45;          /* a positive amount of money */
+  --loss: #C0302A;          /* a negative amount of money */
+  --gut: 16px;
+  --tx: 1;
+}
+@media (min-width: 1080px) and (min-height: 740px) { :root { --tx: 1.4; } }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--px);
+  font-size: calc(12px * var(--tx));
+  line-height: 1.7;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+button { font-family: var(--px); color: var(--ink); }
+
+/* The frame: top bar, stage, footer. */
+.app {
+  height: 100vh; height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.topbar {
+  display: flex; align-items: center; gap: 12px; min-width: 0;
+  padding: 7px var(--gut);
+  background: var(--box);
+  border-bottom: 4px solid var(--ink);
+}
+.topbar .brand {
+  font-size: 11px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 0 1 auto; min-width: 0;
+}
+.pager { display: flex; align-items: center; gap: 4px; margin-left: auto; flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.pager button {
+  min-width: 26px; height: 26px; padding: 0 4px;
+  font-size: 9px; line-height: 1;
+  background: var(--box); border: 2px solid var(--ink); border-radius: 0;
+  box-shadow: inset -2px -2px 0 0 var(--press);
+  cursor: pointer; flex: 0 0 auto;
+}
+.pager button.card { min-width: 14px; width: 14px; padding: 0; background: var(--ink2); box-shadow: none; }
+.pager button.opt { border-style: dashed; }
+.pager button[aria-current] { background: var(--yellow); box-shadow: inset 2px 2px 0 0 #B89020; }
+.pager .gap { font-size: 9px; color: var(--ink2); flex: 0 0 auto; padding: 0 1px; }
+.pager.fold .far { display: none; }
+[data-fullscreen] { display: flex; flex: 0 0 auto; }
+.fullbtn {
+  width: 34px; height: 30px; padding: 0;
+  background: var(--box); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 0;
+  box-shadow: inset -2px -2px 0 0 var(--press);
+  cursor: pointer;
+}
+.fullbtn:hover { background: var(--yellow); }
+
+.stage { position: relative; overflow: auto; padding: 10px var(--gut) 12px; min-height: 0; }
+.scene { display: none; min-height: 100%; flex-direction: column; }
+.scene.active { display: flex; }
+.scene-head { display: flex; align-items: baseline; gap: 14px; min-width: 0; padding: 2px 0 8px; }
+.scene-head .scene-no { font-size: calc(14px * var(--tx)); color: var(--ink2); flex: 0 0 auto; }
+.scene-head h2 { margin: 0; font-weight: 400; line-height: 1.35; font-size: calc(18px * var(--tx)); min-width: 0; }
+.scene-head .opt-tag {
+  margin-left: auto; flex: 0 0 auto;
+  font-size: calc(9px * var(--tx)); line-height: 1; padding: 6px 8px;
+  border: 2px dashed var(--ink); background: var(--box);
+}
+.scene-body { position: relative; flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center; }
+.scene-inner {
+  position: relative; width: 100%; max-width: 1240px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: calc(14px * var(--tx));
+}
+.scene.card .scene-head { display: none; }
+
+.foot {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 12px;
+  padding: 8px var(--gut) 10px;
+  background: var(--box);
+  border-top: 4px solid var(--ink);
+}
+.navbtn {
+  min-width: 132px; padding: 13px 16px 11px;
+  font-size: 14px; line-height: 1;
+  background: var(--box); border: 4px solid var(--ink); border-radius: 0;
+  box-shadow: inset -4px -4px 0 0 var(--press);
+  cursor: pointer; touch-action: manipulation;
+}
+.navbtn.next { background: var(--yellow); box-shadow: inset -4px -4px 0 0 #B89020; }
+.navbtn:active:not(:disabled) { box-shadow: inset 4px 4px 0 0 var(--press); }
+.navbtn:disabled { opacity: 0.35; cursor: default; }
+.navbtn.skip { min-width: 0; font-size: 11px; padding: 11px 12px 9px; border-style: dashed; }
+.navbtn.skip[hidden] { display: none; }
+.beats { display: flex; justify-content: center; align-items: center; gap: 6px; min-width: 0; overflow: hidden; }
+.beats i { width: 12px; height: 12px; border: 2px solid var(--ink); background: transparent; flex: 0 0 auto; }
+.beats i.past { background: var(--ink2); }
+.beats i.on { background: var(--yellow); }
+
+/* The stage card at the start of a page (and any scene with card: {...}), in the manner of a console's stage card. */
+.ob-card {
+  align-self: center; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: calc(18px * var(--tx));
+  padding: calc(34px * var(--tx)) calc(56px * var(--tx)) calc(28px * var(--tx));
+  min-width: min(100%, 640px); max-width: 100%;
+}
+.ob-card .kicker { font-size: calc(14px * var(--tx)); color: var(--ink2); letter-spacing: 0.08em; }
+.ob-card .title { margin: 0; font-weight: 400; line-height: 1.3; font-size: 64px; }
+.ob-card .line { font-size: calc(13px * var(--tx)); line-height: 1.8; max-width: 40ch; color: var(--ink2); }
+.ob-card .road { display: flex; align-items: flex-end; justify-content: center; gap: 18px; min-height: 90px; }
+.ob-card .press { font-size: calc(11px * var(--tx)); animation: ob-blink 1.1s steps(2, end) infinite; }
+.ob-card .drive { animation: ob-drive 1.8s steps(12, end) both; }
+@keyframes ob-drive { from { transform: translateX(-240px); } to { transform: none; } }
+@keyframes ob-blink { 50% { opacity: 0; } }
+
+/* Dialog boxes and words. */
+.ob-box {
+  background: var(--box);
+  border: 4px solid var(--ink);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 2px var(--box), inset 0 0 0 4px var(--hi);
+  padding: calc(12px * var(--tx)) calc(16px * var(--tx));
+}
+.ob-box.plain { box-shadow: none; }
+.ob-box.white { background: var(--white); box-shadow: inset 0 0 0 2px var(--white), inset 0 0 0 4px var(--hi); }
+.ob-say { font-size: calc(15px * var(--tx)); line-height: 1.75; text-align: center; max-width: 52ch; margin: 0; text-wrap: balance; }
+.ob-say.left { text-align: left; }
+.ob-note { font-size: calc(11px * var(--tx)); line-height: 1.8; color: var(--ink2); text-align: center; max-width: 60ch; margin: 0; }
+.ob-big { font-size: calc(24px * (1 + (var(--tx) - 1) * 0.769)); line-height: 1.35; }
+.ob-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: calc(14px * var(--tx)); }
+.ob-col { display: flex; flex-direction: column; align-items: center; gap: calc(10px * var(--tx)); }
+.ob-hide { visibility: hidden; }
+.ob-gone { display: none !important; }
+.ob-mark { background: var(--yellow); padding: 0 0.2em; }
+
+/* Buttons inside a scene (Compute, Roll, Done). */
+.ob-btn {
+  font-size: calc(12px * var(--tx)); line-height: 1;
+  padding: calc(10px * var(--tx)) calc(14px * var(--tx));
+  background: var(--yellow); border: 4px solid var(--ink); border-radius: 0;
+  box-shadow: inset -4px -4px 0 0 #B89020;
+  cursor: pointer; touch-action: manipulation;
+}
+.ob-btn.quiet { background: var(--box); box-shadow: inset -4px -4px 0 0 var(--press); }
+.ob-btn:active:not(:disabled) { box-shadow: inset 4px 4px 0 0 #B89020; }
+.ob-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* Chips: a state (coloured by wear), an action (its lever colour and glyph), an amount of money. */
+.ob-chip {
+  display: inline-flex; align-items: center; gap: 0.5em; white-space: nowrap;
+  font-size: calc(12px * var(--tx)); line-height: 1;
+  padding: 0.55em 0.7em 0.5em;
+  border: 3px solid var(--ink); background: var(--box);
+}
+.ob-chip svg { flex: 0 0 auto; }
+.ob-chip.s0 { background: var(--wear0-soft); } .ob-chip.s0 .dot { background: var(--wear0); }
+.ob-chip.s1 { background: var(--wear1-soft); } .ob-chip.s1 .dot { background: var(--wear1); }
+.ob-chip.s2 { background: var(--wear2-soft); } .ob-chip.s2 .dot { background: var(--wear2); }
+.ob-chip.s3 { background: var(--wear3-soft); } .ob-chip.s3 .dot { background: var(--wear3); }
+.ob-chip .dot { width: 0.8em; height: 0.8em; border: 2px solid var(--ink); flex: 0 0 auto; }
+.ob-chip.a0 { color: var(--run); background: var(--run-soft); border-color: var(--run); }
+.ob-chip.a1 { color: #9A5E00; background: var(--service-soft); border-color: var(--service); }
+.ob-chip.a2 { color: var(--replace); background: var(--replace-soft); border-color: var(--replace); }
+.ob-money { white-space: nowrap; }
+.ob-money.gain { color: var(--gain); }
+.ob-money.loss { color: var(--loss); }
+
+/* Pictures from art.js. */
+.ob-art { display: inline-block; line-height: 0; flex: 0 0 auto; }
+.ob-art svg { display: block; shape-rendering: crispEdges; }
+.ob-art svg.smooth { shape-rendering: auto; }
+.ob-van { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
+.ob-van .gauge { display: flex; gap: 3px; padding: 3px 4px; border: 2px solid var(--ink); background: var(--box); line-height: 0; }
+.ob-van .gauge i { width: 12px; height: 8px; border: 1px solid var(--ink); opacity: 0.3; }
+.ob-van .gauge i.lit { opacity: 1; }
+.ob-van .tag { font-size: calc(11px * var(--tx)); line-height: 1.2; white-space: nowrap; }
+.ob-van.w0 .tag { color: var(--wear0); } .ob-van.w0 .gauge i.lit { background: var(--wear0); }
+.ob-van.w1 .tag { color: #9C7417; }      .ob-van.w1 .gauge i.lit { background: var(--wear1); }
+.ob-van.w2 .tag { color: #C25F14; }      .ob-van.w2 .gauge i.lit { background: var(--wear2); }
+.ob-van.w3 .tag { color: var(--wear3); } .ob-van.w3 .gauge i.lit { background: var(--wear3); }
+.ob-game { display: inline-flex; flex-direction: column; align-items: center; gap: 8px; }
+.ob-game .label { font-size: calc(9px * var(--tx)); line-height: 1.3; text-align: center; max-width: 13em; }
+.ob-die.tumble { animation: ob-tumble 0.5s steps(4, end) 3; }
+@keyframes ob-tumble { 25% { transform: rotate(90deg) translateY(-6px); } 50% { transform: rotate(180deg); } 75% { transform: rotate(270deg) translateY(-6px); } }
+
+/* Motion (core.js): ghosts in flight, the highlight ring, arrows, the scene's overlay. */
+.ob-ghost { position: fixed; z-index: 40; margin: 0; pointer-events: none; transform-origin: 0 0; }
+.ob-ring { outline: 4px solid var(--ring); outline-offset: 4px; animation: ob-ring 0.5s steps(2, end) 3; }
+@keyframes ob-ring { 50% { outline-color: transparent; } }
+.ob-overlay { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 5; }
+.ob-overlay svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.ob-arrow line, .ob-arrow polyline { stroke: var(--ink); stroke-width: 4; fill: none; stroke-linecap: square; stroke-linejoin: miter; }
+.ob-arrow polygon { fill: var(--ink); }
+.ob-arrow-label {
+  position: absolute; transform: translate(-50%, -50%); white-space: nowrap;
+  font-size: calc(11px * var(--tx)); line-height: 1; padding: 5px 6px 4px;
+  background: var(--box); border: 2px solid var(--ink);
+}
+.scene-error { border: 3px dashed var(--loss); color: var(--loss); padding: 8px 12px; font-size: 11px; }
+
+/* The placeholder of a page whose scenes are not built yet. */
+.ob-todo { text-align: center; }
+
+/* Phones and small windows. */
+@media (max-height: 700px) and (min-width: 561px) {
+  .navbtn { padding: 10px 14px 8px; }
+  .stage { padding-top: 6px; }
+}
+@media (max-width: 560px) {
+  :root { --gut: 10px; }
+  .topbar { gap: 8px; padding-top: 6px; padding-bottom: 6px; }
+  .topbar .brand { font-size: 9px; }
+  .pager button { min-width: 22px; height: 22px; font-size: 8px; }
+  .foot { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
+  .foot .skip { grid-column: 1 / -1; grid-row: 1; justify-self: center; }
+  .navbtn { min-width: 96px; font-size: 11px; padding: 11px 10px 9px; }
+  .ob-say { font-size: 12px; }
+  .ob-note { font-size: 10px; }
+  .ob-card .title { font-size: 32px; }
+  .ob-card { min-width: 0; }
+  .ob-chip { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ob-card .drive, .ob-card .press, .ob-ring, .ob-die.tumble { animation: none; }
+}
+
+/* Back and Next carry pixel triangles. */
+.navbtn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+#prev::before, #next::after { content: ""; width: 0; height: 0; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+#prev::before { border-right: 9px solid currentColor; }
+#next::after { border-left: 9px solid currentColor; }
+
+/* Notation: subscripts (S1, a1, $r1, G1), powers (gamma squared), the bar of an average (G1 with a bar), the pixel
+   Greek letters of art.js (OB.art.sym). */
+sub, sup { font-size: 0.62em; line-height: 0; position: relative; vertical-align: baseline; }
+sub { bottom: -0.3em; }
+sup { top: -0.55em; }
+.ob-bar { display: inline-block; border-top: 0.14em solid currentColor; padding-top: 0.12em; line-height: 1.1; }
+.ob-sym { display: inline-block; vertical-align: -0.02em; shape-rendering: crispEdges; }
+.ob-symbox { display: inline-block; line-height: 1; }
+</style>
+<style>/* sec1.css */
+/* sec1.css: page 1, section 2 of the weekend, "MDPs" (agent A2). Classes start with s1-. */
+
+/* What the games have in common. */
+.s1-games { display: flex; flex-wrap: wrap; justify-content: center; gap: calc(16px * var(--tx)) calc(26px * var(--tx)); }
+.s1-games .ob-game svg { width: 96px; height: 96px; }
+.s1-games .ob-art.ob-box { padding: 10px; }
+.s1-list { display: flex; flex-direction: column; gap: calc(10px * var(--tx)); padding: calc(14px * var(--tx)) calc(26px * var(--tx)); min-width: min(100%, 30em); }
+.s1-item { display: flex; align-items: center; gap: 0.8em; font-size: calc(18px * var(--tx)); line-height: 1.4; }
+.s1-item::before { content: ""; width: 0; height: 0; border-top: 0.42em solid transparent; border-bottom: 0.42em solid transparent; border-left: 0.6em solid var(--ink); flex: 0 0 auto; }
+
+/* A definition. */
+.s1-def { max-width: min(100%, 60em); display: flex; flex-direction: column; align-items: center; gap: calc(16px * var(--tx)); padding: calc(20px * var(--tx)) calc(28px * var(--tx)); }
+.s1-def .word { font-size: calc(26px * (1 + (var(--tx) - 1) * 0.692)); line-height: 1.3; }
+.s1-def .ob-say { max-width: 40ch; }
+
+/* Old Bessie's states and actions. */
+.s1-vans { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: calc(18px * var(--tx)) calc(30px * var(--tx)); }
+.s1-acts { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: calc(16px * var(--tx)); }
+.s1-act { display: flex; flex-direction: column; align-items: center; gap: calc(12px * var(--tx)); width: calc(220px + 60px * var(--tx)); padding: calc(18px * var(--tx)) calc(12px * var(--tx)); text-align: center; }
+.s1-act .big-glyph { line-height: 0; }
+.s1-act .name { font-size: calc(17px * var(--tx)); line-height: 1.2; }
+.s1-act .gloss { font-size: calc(12px * var(--tx)); line-height: 1.7; color: var(--ink2); }
+.s1-act.a0 { border-color: var(--run); } .s1-act.a0 .name, .s1-act.a0 .big-glyph { color: var(--run); }
+.s1-act.a1 { border-color: var(--service); } .s1-act.a1 .name, .s1-act.a1 .big-glyph { color: #9A5E00; }
+.s1-act.a2 { border-color: var(--replace); } .s1-act.a2 .name, .s1-act.a2 .big-glyph { color: var(--replace); }
+
+@media (max-width: 560px) {
+  .s1-games .ob-game svg { width: 56px; height: 56px; }
+  .s1-vans .ob-van svg { width: 140px; height: auto; }
+  .s1-act .big-glyph svg { width: 40px; height: 40px; }
+  .s1-games { gap: 12px 14px; }
+  .s1-item { font-size: 13px; }
+  .s1-def .word { font-size: 20px; }
+  .s1-act { width: 100%; flex-direction: row; text-align: left; padding: 10px 12px; }
+}
+
+/* Transition dynamics: a state and an action go in, a new state and a reward come out. */
+.s1-flow { display: grid; grid-template-columns: auto auto auto; align-items: center; justify-content: center; gap: 0 calc(70px * var(--tx)); }
+.s1-in, .s1-out { display: flex; flex-direction: column; align-items: center; gap: calc(10px * var(--tx)); }
+.s1-pair { display: flex; align-items: flex-end; gap: calc(14px * var(--tx)); }
+.s1-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.s1-cap { font-size: calc(9px * var(--tx)); line-height: 1.2; color: var(--ink2); letter-spacing: 0.06em; white-space: nowrap; }
+.s1-td { display: flex; flex-direction: column; align-items: center; gap: calc(10px * var(--tx)); padding: calc(14px * var(--tx)) calc(16px * var(--tx)); text-align: center; }
+.s1-td .name { font-size: calc(13px * var(--tx)); line-height: 1.6; }
+.s1-reward { font-size: calc(18px * var(--tx)); line-height: 1.2; padding: 8px 10px 6px; }
+.s1-defs { display: flex; flex-direction: column; align-items: center; gap: calc(8px * var(--tx)); padding: calc(14px * var(--tx)) calc(22px * var(--tx)); max-width: 100%; }
+.s1-defs .ob-say { max-width: 46ch; }
+.s1-num { display: grid; grid-template-columns: auto auto; gap: 4px 0.9em; align-items: baseline; font-size: calc(14px * var(--tx)); line-height: 1.5; }
+@media (max-width: 760px) {
+  .s1-flow { grid-template-columns: auto; gap: 44px 0; }
+}
+
+/* Transition dynamics are usually random: six rolls, then all the outcomes in 100 rolls. */
+.s1-rflow { display: flex; align-items: center; justify-content: center; gap: calc(60px * var(--tx)); }
+.s1-area { display: grid; justify-items: center; }
+.s1-area > * { grid-area: 1 / 1; }
+.s1-rolls, .s1-outs { display: flex; flex-direction: column; align-items: center; gap: calc(8px * var(--tx)); }
+.s1-row { display: flex; flex-wrap: wrap; justify-content: center; gap: calc(12px * var(--tx)); }
+.s1-roll { width: calc(120px + 14px * var(--tx)); min-height: 136px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; padding: 8px 4px; border: 3px dashed var(--ink2); }
+.s1-roll .no { font-size: calc(8px * var(--tx)); line-height: 1; color: var(--ink2); }
+.s1-got { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.s1-got .ob-money { font-size: calc(13px * var(--tx)); line-height: 1.2; }
+.s1-out1 { width: calc(150px + 30px * var(--tx)); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; }
+.s1-out1 .ob-money { font-size: calc(13px * var(--tx)); line-height: 1.2; }
+.s1-out1 .bd { font-size: calc(8px * var(--tx)); line-height: 1.2; min-height: 2.4em; color: var(--loss); }  /* the empty tag keeps its line: the counts align */
+.s1-out1 .count { font-size: calc(13px * var(--tx)); line-height: 1.3; }
+.s1-out1 .count b { font-weight: 400; font-size: calc(18px * var(--tx)); }
+.s1-cap2 { font-size: calc(11px * var(--tx)); line-height: 1.6; color: var(--ink2); text-align: center; }
+@media (max-width: 760px) {
+  .s1-rflow { flex-direction: column; gap: 40px; }
+  .s1-roll { width: 104px; min-height: 120px; }
+  .s1-out1 { width: 150px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <span class="brand">Old Bessie 1: MDPs</span>
+    <nav class="pager" id="pager" aria-label="Scenes"></nav>
+    <span data-fullscreen></span>
+  </header>
+  <main class="stage" id="stage"></main>
+  <footer class="foot">
+    <button type="button" class="navbtn" id="prev">Back</button>
+    <div class="beats" id="beats" aria-hidden="true"></div>
+    <button type="button" class="navbtn skip" id="skip" hidden>Skip optional</button>
+    <button type="button" class="navbtn next" id="next">Next</button>
+  </footer>
+</div>
+<script>/* bessie.js */
+/* bessie.js: Old Bessie, the MDP of weekend 3's visualization, shared by every section.
+
+   The model is the FS26 arcade's van, rl-arcade/repair-or-replace/js/van.js (commit 05dea09), unchanged:
+   four states of wear, three actions, the same money and the same chances. In the browser it is window.B;
+   in node, require('./bessie.js'). tools/check_bessie.js asserts every number the pages rely on.
+
+   A run is one quarter, WEEKS = 13 weeks, from HEALTHY. Its cumulative reward is
+   G1 = r1 + GAMMA r2 + GAMMA^2 r3 + ... + GAMMA^12 r13, GAMMA = 0.9.
+
+   Dice. Every week of a run uses exactly two random numbers from B.dice: the first picks the action (unused by a
+   strict policy, but always spent), the second the outcome of the transition dynamics. Two policies played on the
+   same dice therefore meet the same luck, and a change in their averages comes from the policies alone. */
+(function (root) {
+  'use strict';
+
+  const STATES = ['HEALTHY', 'WORN', 'SHAKY', 'FAILING'];
+  const ACTIONS = ['RUN', 'SERVICE', 'REPLACE'];
+  const HEALTHY = 0, WORN = 1, SHAKY = 2, FAILING = 3;
+  const RUN = 0, SERVICE = 1, REPLACE = 2;
+
+  const REV_RUN = [95, 72, 40, 16];          // RUN: the week's profit, by wear
+  const P_BD = [0.02, 0.08, 0.28, 0.55];     // RUN: chance of a breakdown, by wear
+  const BREAKDOWN_COST = 280;                // on top of the profit; the van ends FAILING
+  const DEGR = [                             // RUN without a breakdown: wears 0, 1 or 2 levels
+    [0.35, 0.55, 0.10],
+    [0.30, 0.55, 0.15],
+    [0.45, 0.55, 0.00],
+    [0.65, 0.35, 0.00],
+  ];
+  const C_SERVICE = 50;                      // SERVICE: a week in the shop
+  const SERV_UP = [                          // SERVICE: repairs 0, 1 or 2 levels
+    [1.00, 0.00, 0.00],
+    [0.05, 0.70, 0.25],
+    [0.45, 0.50, 0.05],
+    [0.55, 0.42, 0.03],
+  ];
+  const C_REPLACE = 130;                     // REPLACE: a new van, HEALTHY
+  const GAMMA = 0.9;
+  const WEEKS = 13;
+  const START = HEALTHY;
+
+  /* The transition dynamics of state s and action a: every outcome, in a fixed order, as
+     {p, next, reward, face}. face as in the arcade's van.js: 'breakdown', 'wear0' to 'wear2' (RUN),
+     'fix0' to 'fix2' (SERVICE), 'new' (REPLACE). Outcomes with no chance are left out; two outcomes that land
+     in the same state with the same reward stay apart (they differ in what happened). */
+  function outcomes(s, a) {
+    const out = [];
+    if (a === RUN) {
+      out.push({ p: P_BD[s], next: FAILING, reward: REV_RUN[s] - BREAKDOWN_COST, face: 'breakdown' });
+      for (let d = 0; d < 3; d++) {
+        const p = (1 - P_BD[s]) * DEGR[s][d];
+        if (p > 0) out.push({ p, next: Math.min(FAILING, s + d), reward: REV_RUN[s], face: 'wear' + d });
+      }
+    } else if (a === SERVICE) {
+      for (let u = 0; u < 3; u++) {
+        const p = SERV_UP[s][u];
+        if (p > 0) out.push({ p, next: Math.max(HEALTHY, s - u), reward: -C_SERVICE, face: 'fix' + u });
+      }
+    } else {
+      out.push({ p: 1, next: HEALTHY, reward: -C_REPLACE, face: 'new' });
+    }
+    return out;
+  }
+
+  /* One week: the outcome of (s, a) that the random number u in [0, 1) picks. */
+  function step(s, a, u) {
+    const out = outcomes(s, a);
+    let cum = 0;
+    for (const o of out) {
+      cum += o.p;
+      if (u < cum) return o;
+    }
+    return out[out.length - 1];
+  }
+
+  /* Mulberry32, the arcade's generator. */
+  function rng(seed) {
+    let t = seed >>> 0;
+    return function () {
+      t = (t + 0x6D2B79F5) >>> 0;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* The dice of n runs: n * weeks * 2 numbers, run by run, week by week, (action, transition). */
+  function dice(seed, n, weeks) {
+    weeks = weeks || WEEKS;
+    const r = rng(seed);
+    const d = new Float64Array(n * weeks * 2);
+    for (let k = 0; k < d.length; k++) d[k] = r();
+    d.n = n;
+    d.weeks = weeks;
+    return d;
+  }
+
+  /* The action a policy takes in state s with the random number u. A policy is either a column of four actions
+     (a strict policy, one action per state) or a table of four rows of three probabilities. */
+  function act(policy, s, u) {
+    const row = policy[s];
+    if (typeof row === 'number') return row;
+    let cum = 0;
+    for (let a = 0; a < 3; a++) {
+      cum += row[a];
+      if (u < cum) return a;
+    }
+    return 2;
+  }
+
+  /* Run i of the dice: states S1..S13 (and the state after the last week), actions, rewards, faces, G1. */
+  function playRun(policy, d, i) {
+    const weeks = d.weeks || WEEKS;
+    const states = [], actions = [], rewards = [], faces = [];
+    let s = START, G = 0, disc = 1;
+    for (let t = 0; t < weeks; t++) {
+      const k = (i * weeks + t) * 2;
+      const a = act(policy, s, d[k]);
+      const o = step(s, a, d[k + 1]);
+      states.push(s); actions.push(a); rewards.push(o.reward); faces.push(o.face);
+      G += disc * o.reward;
+      disc *= GAMMA;
+      s = o.next;
+    }
+    states.push(s);
+    return { states, actions, rewards, faces, G1: G };
+  }
+
+  /* G1 of a list of rewards. */
+  function g1(rewards) {
+    let G = 0, disc = 1;
+    for (const r of rewards) { G += disc * r; disc *= GAMMA; }
+    return G;
+  }
+
+  /* The average G1 of the first n runs of the dice (all of them by default). */
+  function avgG1(policy, d, n) {
+    n = n || d.n;
+    let sum = 0;
+    for (let i = 0; i < n; i++) sum += playRun(policy, d, i).G1;
+    return sum / n;
+  }
+
+  /* Softmax of one row of bets: exponential of every entry, then the row divided by its sum. */
+  function softmax(row) {
+    const m = Math.max.apply(null, row);
+    const e = row.map((x) => Math.exp(x - m));
+    const sum = e.reduce((x, y) => x + y, 0);
+    return e.map((x) => x / sum);
+  }
+  function softmaxTable(W) { return W.map(softmax); }
+
+  /* The exact expected G1 of a policy (over all runs, weighted by their chances): for checks only. */
+  function expectedG1(policy) {
+    let dist = [0, 0, 0, 0];
+    dist[START] = 1;
+    let J = 0, disc = 1;
+    for (let t = 0; t < WEEKS; t++) {
+      const nd = [0, 0, 0, 0];
+      for (let s = 0; s < 4; s++) {
+        if (dist[s] === 0) continue;
+        const row = policy[s];
+        const probs = typeof row === 'number' ? [0, 1, 2].map((a) => (a === row ? 1 : 0)) : row;
+        for (let a = 0; a < 3; a++) {
+          if (probs[a] === 0) continue;
+          for (const o of outcomes(s, a)) {
+            const w = dist[s] * probs[a] * o.p;
+            J += disc * w * o.reward;
+            nd[o.next] += w;
+          }
+        }
+      }
+      dist = nd;
+      disc *= GAMMA;
+    }
+    return J;
+  }
+
+  /* One hop of the backward pass of proto-REINFORCE: the average G1 before and after adding eps to the bet
+     W[s][a], both on the same dice; the change; nabla = change / eps. */
+  function hop(W, s, a, eps, d, n) {
+    const before = avgG1(softmaxTable(W), d, n);
+    const W2 = W.map((row) => row.slice());
+    W2[s][a] += eps;
+    const after = avgG1(softmaxTable(W2), d, n);
+    return { before, after, change: after - before, nabla: (after - before) / eps, W2 };
+  }
+
+  /* Random bets, uniform in [-1, 1], one decimal (the starting table of proto-REINFORCE). */
+  function randomBets(seed) {
+    const r = rng(seed);
+    return [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
+  }
+
+  const B = {
+    STATES, ACTIONS, HEALTHY, WORN, SHAKY, FAILING, RUN, SERVICE, REPLACE,
+    REV_RUN, P_BD, BREAKDOWN_COST, DEGR, C_SERVICE, SERV_UP, C_REPLACE,
+    GAMMA, WEEKS, START,
+    outcomes, step, rng, dice, act, playRun, g1, avgG1, softmax, softmaxTable, expectedG1, hop, randomBets,
+    /* The arcade's optimal strict policy at gamma 0.9: RUN, SERVICE, REPLACE, REPLACE. Over one quarter from
+       HEALTHY it is also the best of the 81 strict policies (expected G1 242.08, tools/check_bessie.js). */
+    BEST: [RUN, SERVICE, REPLACE, REPLACE],
+    /* Try it (section 4, A4a): ten runs, the same dice for every try. */
+    TRY: { n: 10, diceSeed: 11 },
+    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17); the entry is
+       drawn by B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000).
+       Shown with two decimals: average G1 before -243.36, after -241.35, change 2.01, nabla 201,
+       w = 0.40 + 0.01 x 201 = 2.41, average G1 after the update -5.20 (same dice). */
+    PROTO: {
+      betsSeed: 17,
+      bets: [[0.4, -0.6, 0.1], [-0.7, -0.8, 0.5], [-0.4, 0.1, -0.5], [0.4, 0.6, -0.4]],
+      pickSeed: 17 * 7919,
+      pick: [HEALTHY, RUN],
+      diceSeed: 12,
+      n: 1000,
+      eps: 0.01,
+      alpha: 0.01,
+    },
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = B;
+  else root.B = B;
+})(typeof window !== 'undefined' ? window : this);
+</script>
+<script>/* core.js */
+/* core.js: the scene engine of "Old Bessie" (agent A2, 2026-11-14). ENGINE.md documents the API; read it first.
+
+   A page is a list of scenes; a scene is a list of beats. Next shows the next beat of the scene, and after its last
+   beat the first beat of the next scene; Back reverses beat by beat. Each section registers its scenes with
+   OB.scene({ key, order, title, beats, build, beat, ... }) and the shell starts the page with OB.start({ page, card }).
+
+   The beat contract. beat(k, api) leaves the scene in the state of beat k, whatever state it was in (Back and deep
+   links jump). It sets that state at once (synchronously) and may decorate the change with the motion helpers
+   (api.show, api.fade, api.fly, api.move, api.roll, api.ring, api.arrow, api.at), which only animate when the reader
+   came forward with Next and motion is allowed (api.instant false). Before any other beat is shown, the engine
+   finishes every running motion and every pending api.at callback at once, so a reader who presses Next early
+   always lands on the right state. */
+(function () {
+  "use strict";
+
+  var doc = document;
+  var DUR = { fade: 1200, fly: 1600, move: 1600, roll: 1500, arrow: 1200 };
+  var HASH0 = location.hash || "";
+  var INSTANT = /[#&]instant\b/.test(HASH0);
+  var REDUCED = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var SVGNS = "http://www.w3.org/2000/svg";
+
+  /* Small helpers. */
+  function el(tag, cls, text) {
+    var e = doc.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = String(text);
+    return e;
+  }
+  function html(tag, cls, markup) {
+    var e = el(tag, cls);
+    e.innerHTML = markup;
+    return e;
+  }
+  function svgEl(tag, attrs) {
+    var e = doc.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function num(x, places) {
+    var p = places || 0;
+    var neg = x < 0 && Math.abs(x) >= 0.5 * Math.pow(10, -p);
+    var s = Math.abs(x).toFixed(p);
+    var parts = s.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (neg ? "-" : "") + parts.join(".");
+  }
+  function money(x, places, sign) {
+    var p = places || 0;
+    var r = +x.toFixed(p);
+    var body = "$" + num(Math.abs(r), p);
+    if (r < 0) return "-" + body;
+    return (sign && r > 0 ? "+" : "") + body;
+  }
+  function moneyEl(x, places, sign) {
+    var r = +x.toFixed(places || 0);
+    return el("span", "ob-money " + (r > 0 ? "gain" : r < 0 ? "loss" : ""), money(x, places, sign));
+  }
+  function remove(list, item) { var i = list.indexOf(item); if (i >= 0) list.splice(i, 1); }
+  function safe(fn) {
+    try { return fn(); } catch (e) { if (window.console) console.error("OB:", e); return undefined; }
+  }
+  function ease(p) { return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
+
+  /* The timeline of the current beat: its pending callbacks and its running motions. */
+  var T = null;
+  function Timeline(instant) { this.instant = instant; this.timers = []; this.motions = []; this.flushing = false; this.dead = false; }
+  function quick() { return !T || T.instant || T.flushing || T.dead; }
+  function at(ms, fn) {
+    var t = T;
+    if (quick() || !(ms > 0)) { safe(fn); return; }
+    var rec = { fn: fn, due: Date.now() + ms, id: 0 };
+    rec.id = setTimeout(function () { remove(t.timers, rec); if (!t.dead) { safe(fn); relayoutSoon(); } }, ms);
+    t.timers.push(rec);
+  }
+  function finishAll(t) {
+    if (!t || t.dead) return;
+    t.flushing = true;
+    for (var guard = 0; guard < 5000 && (t.timers.length || t.motions.length); guard++) {
+      if (t.motions.length) { t.motions[0].finish(); continue; }
+      t.timers.sort(function (a, b) { return a.due - b.due; });
+      var rec = t.timers.shift();
+      clearTimeout(rec.id);
+      safe(rec.fn);
+    }
+    t.dead = true;
+  }
+  /* animate(dur, tick, done): tick(p) for p from 0 to 1 (eased), then done(). A Promise, resolved at the end or
+     when the engine finishes the beat early. */
+  function animate(dur, tick, done) {
+    var t = T;
+    return new Promise(function (resolve) {
+      var fin = false, rec = { finish: finish };
+      function finish() {
+        if (fin) return;
+        fin = true;
+        if (t) remove(t.motions, rec);
+        if (done) safe(done);
+        relayoutSoon();
+        resolve();
+      }
+      if (quick() || !(dur > 0)) { finish(); return; }
+      t.motions.push(rec);
+      var t0 = null;
+      function frame(now) {
+        if (fin) return;
+        if (t0 === null) t0 = now;
+        var p = Math.min(1, (now - t0) / dur);
+        safe(function () { tick(ease(p)); });
+        if (p >= 1) finish(); else requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+  function later(opts, start) {
+    var d = (opts && opts.delay) || 0;
+    return new Promise(function (resolve) { at(d, function () { Promise.resolve(start()).then(resolve); }); });
+  }
+
+  /* The motion helpers. Each sets its end state for sure and animates only when motion is allowed. */
+  function show(e, on, opts) {
+    if (!e) return Promise.resolve();
+    if (on === undefined) on = true;
+    if (!on) { e.classList.add("ob-hide"); e.style.opacity = ""; return Promise.resolve(); }
+    if (!e.classList.contains("ob-hide")) return Promise.resolve();
+    return fade(e, true, opts);
+  }
+  function fade(e, on, opts) {
+    opts = opts || {};
+    if (!e) return Promise.resolve();
+    if (on && opts.delay) e.classList.add("ob-hide");
+    return later(opts, function () {
+      var from = on ? 0 : 1, to = on ? 1 : 0;
+      if (on) { e.classList.remove("ob-hide"); e.style.opacity = "0"; }
+      return animate(opts.dur || DUR.fade, function (p) { e.style.opacity = String(from + (to - from) * p); },
+        function () { e.style.opacity = ""; if (!on) e.classList.add("ob-hide"); });
+    });
+  }
+  function fly(from, to, opts) {
+    opts = opts || {};
+    if (!from || !to) return Promise.resolve();
+    to.style.visibility = "hidden";
+    return later(opts, function () {
+      function land() { to.style.visibility = ""; to.classList.remove("ob-hide"); }
+      if (quick()) { land(); return null; }
+      var src = opts.ghost || from;
+      var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+      if (!a.width || !b.width) { land(); return null; }
+      var g = src.cloneNode(true);
+      g.removeAttribute("id");
+      g.classList.remove("ob-hide", "ob-ring");
+      g.classList.add("ob-ghost");
+      g.style.visibility = "visible";
+      g.style.opacity = "";
+      g.style.left = a.left + "px";
+      g.style.top = a.top + "px";
+      g.style.width = a.width + "px";
+      g.style.height = a.height + "px";
+      from.parentNode.insertBefore(g, from.nextSibling);
+      var sx = opts.scale === false ? 1 : b.width / a.width, sy = opts.scale === false ? 1 : b.height / a.height;
+      var dx = b.left - a.left, dy = b.top - a.top, arc = opts.arc === undefined ? 40 : opts.arc;
+      return animate(opts.dur || DUR.fly, function (p) {
+        var y = dy * p - Math.sin(Math.PI * p) * arc;
+        g.style.transform = "translate(" + (dx * p) + "px," + y + "px) scale(" + (1 + (sx - 1) * p) + "," + (1 + (sy - 1) * p) + ")";
+      }, function () { if (g.parentNode) g.parentNode.removeChild(g); land(); });
+    });
+  }
+  function move(e, dest, opts) {
+    opts = opts || {};
+    if (!e || !dest) return Promise.resolve();
+    var a = e.getBoundingClientRect();
+    if (opts.before) dest.insertBefore(e, opts.before); else dest.appendChild(e);
+    if (quick()) { e.style.transform = ""; return Promise.resolve(); }
+    var b = e.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top;
+    e.style.transform = "translate(" + dx + "px," + dy + "px)";
+    return later(opts, function () {
+      return animate(opts.dur || DUR.move, function (p) {
+        e.style.transform = "translate(" + (dx * (1 - p)) + "px," + (dy * (1 - p)) + "px)";
+      }, function () { e.style.transform = ""; });
+    });
+  }
+  function roll(e, to, opts) {
+    opts = opts || {};
+    if (!e) return Promise.resolve();
+    var fmt = opts.fmt || function (x) { return num(x, opts.places || 0); };
+    var from = opts.from !== undefined ? opts.from : (e.dataset.v !== undefined ? parseFloat(e.dataset.v) : to);
+    e.dataset.v = String(to);
+    e.textContent = fmt(quick() && !opts.delay ? to : from);
+    return later(opts, function () {
+      return animate(opts.dur || DUR.roll, function (p) { e.textContent = fmt(from + (to - from) * p); },
+        function () { e.textContent = fmt(to); });
+    });
+  }
+  function ring(e, on) {
+    if (!e) return;
+    if (on === false) { e.classList.remove("ob-ring"); e.style.animation = ""; return; }
+    e.classList.remove("ob-ring");
+    if (quick()) e.style.animation = "none";
+    else { e.style.animation = ""; void e.offsetWidth; }
+    e.classList.add("ob-ring");
+  }
+
+  /* Arrows: drawn in the scene's overlay from one element to another, kept by id, redrawn on every layout change. */
+  function overlayOf(s) {
+    if (!s.overlay) {
+      s.overlay = el("div", "ob-overlay");
+      s.overlay.setAttribute("aria-hidden", "true");
+      s.inner.appendChild(s.overlay);
+      s.arrows = {};
+    }
+    return s.overlay;
+  }
+  function side(r, where) {
+    if (where === "right") return { x: r.right, y: r.top + r.height / 2, dx: 1, dy: 0 };
+    if (where === "left") return { x: r.left, y: r.top + r.height / 2, dx: -1, dy: 0 };
+    if (where === "top") return { x: r.left + r.width / 2, y: r.top, dx: 0, dy: -1 };
+    return { x: r.left + r.width / 2, y: r.bottom, dx: 0, dy: 1 };
+  }
+  function geometry(s, A) {
+    var o = s.inner.getBoundingClientRect();
+    var a = A.from.getBoundingClientRect(), b = A.to.getBoundingClientRect();
+    if (!a.width && !a.height || !b.width && !b.height) return null;
+    var ca = { x: a.left + a.width / 2, y: a.top + a.height / 2 }, cb = { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+    var horiz = Math.abs(cb.x - ca.x) >= Math.abs(cb.y - ca.y);
+    var fs = A.opts.from || (horiz ? (cb.x >= ca.x ? "right" : "left") : (cb.y >= ca.y ? "bottom" : "top"));
+    var ts = A.opts.to || (horiz ? (cb.x >= ca.x ? "left" : "right") : (cb.y >= ca.y ? "top" : "bottom"));
+    var gap = A.opts.gap === undefined ? 8 : A.opts.gap;
+    var p = side(a, fs), q = side(b, ts);
+    var x1 = p.x + p.dx * gap - o.left, y1 = p.y + p.dy * gap - o.top;
+    var x2 = q.x + q.dx * gap - o.left, y2 = q.y + q.dy * gap - o.top;
+    var pts = [[x1, y1]];
+    if (A.opts.elbow && x1 !== x2 && y1 !== y2) {
+      if (fs === "left" || fs === "right") pts.push([(x1 + x2) / 2, y1], [(x1 + x2) / 2, y2]);
+      else pts.push([x1, (y1 + y2) / 2], [x2, (y1 + y2) / 2]);
+    }
+    pts.push([x2, y2]);
+    return pts;
+  }
+  function drawArrow(s, A, p) {
+    var pts = geometry(s, A);
+    if (!pts) { A.svg.style.display = "none"; if (A.label) A.label.style.display = "none"; return; }
+    A.svg.style.display = "";
+    var n = pts.length, ex = pts[n - 1][0], ey = pts[n - 1][1], px = pts[n - 2][0], py = pts[n - 2][1];
+    var ang = Math.atan2(ey - py, ex - px), h = A.opts.head || 14;
+    var bx = ex - Math.cos(ang) * h, by = ey - Math.sin(ang) * h;
+    var line = pts.slice(0, n - 1).concat([[bx, by]]);
+    A.line.setAttribute("points", line.map(function (q) { return q[0].toFixed(1) + "," + q[1].toFixed(1); }).join(" "));
+    var w = h * 0.62;
+    A.head.setAttribute("points", [ex, ey, bx + Math.sin(ang) * w, by - Math.cos(ang) * w, bx - Math.sin(ang) * w, by + Math.cos(ang) * w]
+      .map(function (v) { return v.toFixed(1); }).join(","));
+    var len = 0;
+    for (var i = 1; i < line.length; i++) len += Math.hypot(line[i][0] - line[i - 1][0], line[i][1] - line[i - 1][1]);
+    var f = p === undefined ? A.p : p;
+    A.p = f;
+    A.line.style.strokeDasharray = len + " " + len;
+    A.line.style.strokeDashoffset = String(len * (1 - f));
+    A.head.style.opacity = f >= 1 ? "1" : "0";
+    if (A.color) { A.line.style.stroke = A.color; A.head.style.fill = A.color; }
+    if (A.label) {
+      var t = A.opts.labelAt === undefined ? 0.5 : A.opts.labelAt, mid = Math.floor((pts.length - 1) * t);
+      var q0 = pts[mid], q1 = pts[Math.min(pts.length - 1, mid + 1)], u = (pts.length - 1) * t - mid;
+      A.label.style.display = "";
+      A.label.style.left = (q0[0] + (q1[0] - q0[0]) * (pts.length === 2 ? t : u)) + "px";
+      A.label.style.top = (q0[1] + (q1[1] - q0[1]) * (pts.length === 2 ? t : u) + (A.opts.labelDy || 0)) + "px";
+      A.label.style.opacity = f >= 1 ? "1" : String(Math.max(0, f * 2 - 1));
+    }
+  }
+  function arrowFor(s, id, from, to, opts) {
+    opts = opts || {};
+    var ov = overlayOf(s), A = s.arrows[id];
+    if (A) { A.from = from; A.to = to; A.opts = opts; drawArrow(s, A); return Promise.resolve(); }
+    A = { id: id, from: from, to: to, opts: opts, p: 0, color: opts.color || null };
+    A.svg = svgEl("svg", { "class": "ob-arrow", width: "1", height: "1" });
+    A.line = svgEl("polyline", {});
+    A.head = svgEl("polygon", {});
+    A.svg.appendChild(A.line);
+    A.svg.appendChild(A.head);
+    ov.appendChild(A.svg);
+    if (opts.label) { A.label = el("div", "ob-arrow-label", opts.label); ov.appendChild(A.label); }
+    s.arrows[id] = A;
+    drawArrow(s, A, 0);
+    return later(opts, function () {
+      return animate(opts.dur || DUR.arrow, function (p) { drawArrow(s, A, p); }, function () { drawArrow(s, A, 1); });
+    });
+  }
+  function unarrowFor(s, id) {
+    if (!s.arrows) return;
+    Object.keys(s.arrows).forEach(function (k) {
+      if (id !== undefined && k !== id) return;
+      var A = s.arrows[k];
+      if (A.svg.parentNode) A.svg.parentNode.removeChild(A.svg);
+      if (A.label && A.label.parentNode) A.label.parentNode.removeChild(A.label);
+      delete s.arrows[k];
+    });
+  }
+  function relayout() {
+    var s = scenes[cur];
+    if (s && s.arrows) Object.keys(s.arrows).forEach(function (k) { drawArrow(s, s.arrows[k]); });
+    fitPager();
+  }
+  var relayoutQueued = false;
+  function relayoutSoon() {
+    if (relayoutQueued) return;
+    relayoutQueued = true;
+    requestAnimationFrame(function () { relayoutQueued = false; relayout(); });
+  }
+
+  /* The scenes. */
+  var REG = [], KEYS = {}, CFG = {};
+  var scenes = [], cur = -1, curBeat = 0;
+  var stage, prevBtn, nextBtn, skipBtn, beatsEl, pagerEl, pagerBtns = [];
+
+  function scene(spec) {
+    if (!spec || !spec.key) { console.error("OB.scene: a scene needs a key", spec); return; }
+    if (KEYS[spec.key]) { console.error("OB.scene: scene defined twice: " + spec.key); return; }
+    if (typeof spec.order !== "number" || !isFinite(spec.order)) console.error("OB.scene: " + spec.key + " has no order number");
+    spec.order = +spec.order || 0;
+    spec.beats = Math.max(1, spec.beats | 0 || 1);
+    spec.seq = REG.length;
+    REG.push(spec);
+    KEYS[spec.key] = spec;
+  }
+
+  /* The stage card: a scene with card: { kicker, title, line }. */
+  function cardBuild(s) {
+    var c = s.card, box = el("div", "ob-card ob-box");
+    if (c.kicker) box.appendChild(el("div", "kicker", c.kicker));
+    box.appendChild(el("h2", "title", c.title || s.title));
+    if (c.line) box.appendChild(el("p", "line", c.line));
+    var road = el("div", "road");
+    if (window.OB.art && c.van !== false) {
+      var van = window.OB.art.van(c.wear || 0, { size: 180, gauge: false, label: false });
+      van.classList.add("drive");
+      road.appendChild(van);
+    }
+    box.appendChild(road);
+    box.appendChild(el("div", "press", c.press || "PRESS NEXT"));
+    s.inner.appendChild(box);
+  }
+  function cardBeat(s) {
+    var v = s.inner.querySelector(".drive");
+    if (!v) return;
+    v.style.animation = "none";
+    void v.offsetWidth;
+    v.style.animation = quick() ? "none" : "";
+  }
+
+  function apiFor(s, from, forward) {
+    return {
+      key: s.key, spec: s, root: s.inner, sec: s.sec,
+      beat: s.index === cur ? curBeat : 0, from: from, forward: !!forward, instant: quick(),
+      next: next, back: back, go: function (key, k) { goKey(key, k); },
+      at: at, show: show, fade: fade, fly: fly, move: move, roll: roll, ring: ring, animate: animate,
+      arrow: function (id, a, b, opts) { return arrowFor(s, id, a, b, opts); },
+      unarrow: function (id) { unarrowFor(s, id); },
+      nextLabel: function (t) { if (s.index === cur) nextBtn.textContent = t || "Next"; },
+      relayout: relayoutSoon
+    };
+  }
+  function fail(s, where, e) {
+    if (window.console) console.error("OB scene " + s.key + " failed in " + where, e);
+    if (s.inner) s.inner.appendChild(el("p", "scene-error", "Scene " + s.key + " failed in " + where + ": " + (e && e.message)));
+  }
+  function run(s, name, a, b) {
+    if (typeof s[name] !== "function") return undefined;
+    try { return s[name](a, b); } catch (e) { fail(s, name, e); return undefined; }
+  }
+  function ensureBuilt(s) {
+    if (s.built) return;
+    s.built = true;
+    var t = T;
+    T = new Timeline(true);
+    if (s.card) { try { cardBuild(s); } catch (e) { fail(s, "card", e); } }
+    run(s, "build", s.inner, apiFor(s, -1, false));
+    T = t;
+  }
+  function go(i, k, how) {
+    if (!(i >= 0 && i < scenes.length)) return;
+    var s = scenes[i];
+    k = Math.max(0, Math.min(s.beats - 1, k | 0));
+    finishAll(T);
+    var forward = !!(how && how.forward);
+    var entering = i !== cur;
+    if (entering && cur >= 0) {
+      var old = scenes[cur];
+      T = new Timeline(true);
+      run(old, "leave", apiFor(old, curBeat, false));
+      old.sec.classList.remove("active");
+    }
+    var from = entering ? -1 : curBeat;
+    if (entering) {
+      cur = i;
+      ensureBuilt(s);
+      s.sec.classList.add("active");
+      if (stage) stage.scrollTop = 0;
+    }
+    curBeat = k;
+    T = new Timeline(INSTANT || REDUCED || !forward);
+    nextBtn.textContent = "Next";
+    var api = apiFor(s, from, forward);
+    if (entering) run(s, "enter", api);
+    if (s.card) cardBeat(s);
+    run(s, "beat", k, api);
+    chrome();
+    writeHash();
+    relayoutSoon();
+  }
+  function next() {
+    if (cur < 0) return;
+    var s = scenes[cur];
+    if (typeof s.onnext === "function" && run(s, "onnext", apiFor(s, curBeat, true)) === true) return;
+    if (curBeat < s.beats - 1) go(cur, curBeat + 1, { forward: true });
+    else if (cur < scenes.length - 1) go(cur + 1, 0, { forward: true });
+  }
+  function back() {
+    if (cur < 0) return;
+    if (curBeat > 0) go(cur, curBeat - 1);
+    else if (cur > 0) go(cur - 1, scenes[cur - 1].beats - 1);
+  }
+  function skip() {
+    for (var j = cur + 1; j < scenes.length; j++) if (!scenes[j].optional) { go(j, 0); return; }
+    go(scenes.length - 1, 0);
+  }
+  function indexOfKey(key) {
+    if (typeof key === "number") return key;
+    for (var j = 0; j < scenes.length; j++) if (scenes[j].key === key) return j;
+    return -1;
+  }
+  function goKey(key, k) { var i = indexOfKey(key); if (i >= 0) go(i, k || 0); }
+
+  /* The chrome: pager, beats, Back, Next, Skip. */
+  function chrome() {
+    var s = scenes[cur];
+    pagerBtns.forEach(function (b, j) { if (j === cur) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+    fitPager();
+    prevBtn.disabled = cur === 0 && curBeat === 0;
+    nextBtn.disabled = cur === scenes.length - 1 && curBeat === s.beats - 1;
+    skipBtn.hidden = !s.optional;
+    beatsEl.textContent = "";
+    if (s.beats > 1) for (var k = 0; k < s.beats; k++) beatsEl.appendChild(el("i", k === curBeat ? "on" : (k < curBeat ? "past" : "")));
+  }
+  function fitPager() {
+    if (!pagerEl) return;
+    Array.prototype.slice.call(pagerEl.querySelectorAll(".gap")).forEach(function (g) { g.parentNode.removeChild(g); });
+    pagerBtns.forEach(function (b) { b.classList.remove("far"); });
+    pagerEl.classList.remove("fold");
+    if (pagerEl.scrollWidth <= pagerEl.clientWidth + 1) return;
+    pagerEl.classList.add("fold");
+    for (var r = 2; r >= 0; r--) {
+      var last = pagerBtns.length - 1, shown = [];
+      pagerBtns.forEach(function (b, j) {
+        var keep = j === 0 || j === last || Math.abs(j - cur) <= r;
+        b.classList.toggle("far", !keep);
+        if (keep) shown.push(j);
+      });
+      Array.prototype.slice.call(pagerEl.querySelectorAll(".gap")).forEach(function (g) { g.parentNode.removeChild(g); });
+      for (var q = 1; q < shown.length; q++) if (shown[q] - shown[q - 1] > 1) pagerEl.insertBefore(el("span", "gap", ".."), pagerBtns[shown[q]]);
+      if (pagerEl.scrollWidth <= pagerEl.clientWidth + 1) return;
+    }
+  }
+  function writeHash() {
+    var s = scenes[cur];
+    try { history.replaceState(null, "", "#s=" + encodeURIComponent(s.key) + "&k=" + (curBeat + 1) + (INSTANT ? "&instant" : "")); } catch (e) {}
+  }
+  function readHash() {
+    var h = location.hash || "", m = h.match(/[#&]s=([^&]+)/);
+    if (!m) return null;
+    var key = decodeURIComponent(m[1]), i = /^\d+$/.test(key) ? parseInt(key, 10) - 1 : indexOfKey(key);
+    var mk = h.match(/[#&]k=(\d+)/);
+    return i >= 0 && i < scenes.length ? { i: i, k: mk ? parseInt(mk[1], 10) - 1 : 0 } : null;
+  }
+
+  function start(cfg) {
+    CFG = cfg || {};
+    stage = doc.getElementById("stage");
+    prevBtn = doc.getElementById("prev");
+    nextBtn = doc.getElementById("next");
+    skipBtn = doc.getElementById("skip");
+    beatsEl = doc.getElementById("beats");
+    pagerEl = doc.getElementById("pager");
+    var page = CFG.page;
+    var list = REG.filter(function (s) { return s.page === undefined || page === undefined || s.page === page; });
+    if (CFG.card && !list.some(function (s) { return s.key === "card"; })) {
+      list.push({ key: "card", order: 0, title: CFG.card.title, card: CFG.card, beats: 1, seq: -1 });
+    }
+    if (!list.some(function (s) { return !s.card; })) {
+      list.push({ key: "coming-next", order: 1, title: "Coming next", beats: 1, seq: 1e9,
+        card: { kicker: CFG.card ? CFG.card.kicker : "", title: "Coming next", line: "The scenes of this page are being built.", press: " ", van: false } });
+    }
+    scenes = list.slice().sort(function (a, b) { return a.order - b.order || a.seq - b.seq; });
+    var shown = 0;
+    scenes.forEach(function (s, i) {
+      s.index = i;
+      s.num = s.card ? 0 : ++shown;
+      var sec = el("section", "scene" + (s.card ? " card" : "") + (s.optional ? " optional" : ""));
+      sec.dataset.key = s.key;
+      sec.dataset.order = String(s.order);
+      var head = el("header", "scene-head");
+      head.appendChild(el("span", "scene-no", s.card ? "" : String(s.num)));
+      var h = el("h2", "", s.title || "");
+      head.appendChild(h);
+      if (s.optional) head.appendChild(el("span", "opt-tag", "OPTIONAL"));
+      sec.appendChild(head);
+      var body = el("div", "scene-body"), inner = el("div", "scene-inner");
+      body.appendChild(inner);
+      sec.appendChild(body);
+      stage.appendChild(sec);
+      s.sec = sec;
+      s.inner = inner;
+      var b = el("button", (s.card ? "card" : "") + (s.optional ? " opt" : ""), s.card ? "" : String(s.num));
+      b.type = "button";
+      b.title = (s.optional ? "Optional: " : "") + (s.title || "");
+      b.setAttribute("aria-label", s.card ? (s.title || "Card") : "Scene " + s.num + ": " + (s.title || ""));
+      b.addEventListener("click", function () { b.blur(); go(i, 0); });
+      pagerEl.appendChild(b);
+      pagerBtns.push(b);
+    });
+    // A clicked button gives the focus back, so that the space bar always means Next.
+    prevBtn.addEventListener("click", function () { prevBtn.blur(); back(); });
+    nextBtn.addEventListener("click", function () { nextBtn.blur(); next(); });
+    skipBtn.addEventListener("click", function () { skipBtn.blur(); skip(); });
+    window.addEventListener("resize", relayoutSoon);
+    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(relayoutSoon);
+    window.addEventListener("hashchange", function () { var h = readHash(); if (h && (h.i !== cur || h.k !== curBeat)) go(h.i, h.k); });
+    doc.addEventListener("keydown", function (e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var t = e.target;
+      if (t && (/^(input|textarea|select)$/i.test(t.tagName) || t.isContentEditable)) return;
+      var s = scenes[cur];
+      if (s && typeof s.onkey === "function" && run(s, "onkey", e, apiFor(s, curBeat, false)) === true) return;
+      var free = !t || t === doc.body || t === doc.documentElement;
+      if (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && free)) { e.preventDefault(); next(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); back(); }
+      else if (e.key === "Home") { e.preventDefault(); go(0, 0); }
+      else if (e.key === "End") { e.preventDefault(); go(scenes.length - 1, 0); }
+    });
+    var h = readHash();
+    go(h ? h.i : 0, h ? h.k : 0);
+  }
+
+  window.OB = {
+    DUR: DUR,
+    // helpers
+    el: el, html: html, svgEl: svgEl, num: num, money: money, moneyEl: moneyEl,
+    // motion (also on the api of a beat)
+    at: at, show: show, fade: fade, fly: fly, move: move, roll: roll, ring: ring, animate: animate,
+    // engine
+    scene: scene, start: start, go: go, next: next, back: back, skip: skip,
+    instant: function (on) { if (on !== undefined) INSTANT = !!on; return INSTANT; },
+    list: function () {
+      return scenes.map(function (s) {
+        return { key: s.key, order: s.order, beats: s.beats, title: s.title || "", card: !!s.card, optional: !!s.optional };
+      });
+    },
+    state: function () { return { scene: cur, beat: curBeat, key: cur >= 0 ? scenes[cur].key : null, busy: !!(T && (T.timers.length || T.motions.length)) }; },
+    config: function () { return CFG; }
+  };
+})();
+</script>
+<script>/* art.js */
+/* art.js: the pictures of "Old Bessie" (agent A2, 2026-11-14), as inline SVG pixels, crisp at any size. OB.art.
+   ENGINE.md lists the API. Colours are written here as hex (CSS custom properties do not reach SVG attributes) and
+   match core.css: the wear colours of the four states and the lever colours of the three actions.
+
+   Sources: the van is the arcade's OLD BESSIE (rl-arcade/repair-or-replace/js/vanCard.js) redrawn as pixels and
+   coloured by wear; the action glyphs are the arcade's (js/actions.js: wheel RUN, wrench SERVICE, sparkle REPLACE);
+   the game sprites are the arcade's cartridges (rl-arcade/cartridges.js). */
+(function () {
+  "use strict";
+  var OB = window.OB;
+
+  var C = {
+    ink: "#181818", ink2: "#585858", box: "#F8F4E4", white: "#FFFFFF", yellow: "#F8D028",
+    wear: ["#2E8B57", "#C99A33", "#E07A2A", "#D33A2C"],
+    wearDark: ["#1E6B40", "#9C7417", "#B85A16", "#9E2A20"],
+    wearSoft: ["#D5EBDD", "#F3E6C4", "#F8DCC4", "#F6D2CC"],
+    wearText: ["#2E8B57", "#9C7417", "#C25F14", "#D33A2C"],
+    lever: ["#1666C8", "#E08A00", "#D33A2C"],
+    leverText: ["#1666C8", "#9A5E00", "#D33A2C"],
+    leverSoft: ["#DCE9FB", "#FBEED2", "#FADBD6"]
+  };
+  var STATES = (window.B && window.B.STATES) || ["HEALTHY", "WORN", "SHAKY", "FAILING"];
+  var ACTIONS = (window.B && window.B.ACTIONS) || ["RUN", "SERVICE", "REPLACE"];
+
+  /* A grid of characters to an SVG of pixels: each run of one colour in a row is one rect. */
+  function pixels(rows, pal, px, cls) {
+    var h = rows.length, w = 0, out = [];
+    rows.forEach(function (row) { w = Math.max(w, row.length); });
+    rows.forEach(function (row, y) {
+      var x = 0;
+      while (x < row.length) {
+        var ch = row[x], x0 = x;
+        while (x < row.length && row[x] === ch) x++;
+        var col = pal[ch];
+        if (col) out.push('<rect x="' + x0 + '" y="' + y + '" width="' + (x - x0) + '" height="1" fill="' + col + '"/>');
+      }
+    });
+    var scale = px || 4;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + " " + h + '" width="' + (w * scale) + '" height="' + (h * scale) +
+      '" shape-rendering="crispEdges"' + (cls ? ' class="' + cls + '"' : "") + ' aria-hidden="true">' + out.join("") + "</svg>";
+  }
+  function wrap(svg, cls) {
+    var s = document.createElement("span");
+    s.className = "ob-art" + (cls ? " " + cls : "");
+    s.innerHTML = svg;
+    return s;
+  }
+
+  /* Old Bessie, facing right, 30 x 16 pixels. B body, R roof stripe (both in the wear colour), G glass, L headlight,
+     S pipe and bumper, T tyre, H hub, g ground. The decals of wear are added on top by vanRows. */
+  var VAN = [
+    "..............................",
+    "..KKKKKKKKKKKKKKKKK...........",
+    "..KRRRRRRRRRRRRRRRK...........",
+    "..KBBBBBBBBBBBBBBBK...........",
+    "..KBBBBBBBBBBBBBBBKKKKKK......",
+    "..KBBBBBBBBBBBBBBBKBBBBBK.....",
+    "..KBBBBBBBBBBBBBBBKGGGGBBK....",
+    "..KBBBBBBBBBBBBBBBKGGGGBBBK...",
+    "..KBBBBBBBBBBBBBBBKGGGGBBBK...",
+    "..KBBBBBBBBBBBBBBBKBBBBBBLK...",
+    "SSKBBBBBBBBBBBBBBBKBBBBBBBKSS.",
+    "SSKKKTTTKKKKKKKKKKKKKTTTKKKSS.",
+    "...TTTTTTT.........TTTTTTT....",
+    "...TTTHTTT.........TTTHTTT....",
+    "....TTTTT...........TTTTT.....",
+    "gggggggggggggggggggggggggggggg"
+  ];
+  /* Decals: [row, col, char]. WORN a scratch; SHAKY also a dent and rust; FAILING also a crack, a drip and smoke. */
+  var DECALS = [
+    [],
+    [[8, 5, "K"], [8, 6, "K"], [9, 7, "K"], [9, 8, "K"]],
+    [[6, 13, "K"], [7, 12, "K"], [7, 14, "K"], [9, 14, "O"], [9, 15, "O"], [10, 15, "O"], [10, 16, "O"]],
+    [[3, 4, "K"], [4, 4, "K"], [5, 5, "K"], [6, 4, "K"], [7, 5, "K"], [12, 26, "D"], [13, 26, "D"], [7, 0, "M"], [8, 1, "M"], [6, 1, "M"], [9, 0, "M"]]
+  ];
+  function vanRows(wear) {
+    var rows = VAN.map(function (r) { return r.split(""); });
+    for (var w = 1; w <= wear; w++) DECALS[w].forEach(function (d) { rows[d[0]][d[1]] = d[2]; });
+    return rows.map(function (r) { return r.join(""); });
+  }
+  function vanPal(wear) {
+    return { K: C.ink, B: C.wear[wear], R: C.wearDark[wear], G: "#B6D9EB", L: C.yellow, S: C.ink2, T: C.ink, H: C.box,
+      g: C.ink2, O: "#6B3410", D: C.ink2, M: "#9A9A9A" };
+  }
+  function vanSvg(wear, px) { return pixels(vanRows(wear | 0), vanPal(wear | 0), px || 4); }
+  /* The van as an element: opts.size (width in px, default 120), opts.gauge (default true), opts.label (default
+     true: the state's name in its colour). */
+  function van(wear, opts) {
+    opts = opts || {};
+    wear = Math.max(0, Math.min(3, wear | 0));
+    var box = document.createElement("span");
+    box.className = "ob-van w" + wear;
+    var px = (opts.size || 120) / 30;
+    box.appendChild(wrap(vanSvg(wear, px)));
+    if (opts.gauge !== false) {
+      var g = document.createElement("span");
+      g.className = "gauge";
+      for (var i = 0; i < 4; i++) {
+        var seg = document.createElement("i");
+        if (i < 4 - wear) seg.className = "lit";
+        g.appendChild(seg);
+      }
+      box.appendChild(g);
+    }
+    if (opts.label !== false) {
+      var t = document.createElement("span");
+      t.className = "tag";
+      t.textContent = STATES[wear];
+      box.appendChild(t);
+    }
+    return box;
+  }
+
+  /* The three action glyphs (the arcade's line art), in currentColor. */
+  var GLYPH = [
+    '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.1"/>' +
+      '<circle cx="12" cy="12" r="2.5" fill="currentColor"/>' +
+      '<g stroke="currentColor" stroke-width="2.1" stroke-linecap="round">' +
+      '<line x1="12" y1="9.5" x2="12" y2="3.4"/><line x1="14.1" y1="13.2" x2="18.9" y2="16.1"/>' +
+      '<line x1="9.9" y1="13.2" x2="5.1" y2="16.1"/></g>',
+    '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"' +
+      ' fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>',
+    '<path d="M12 2.6l1.95 5.95a2 2 0 0 0 1.3 1.3L21.4 12l-5.95 1.95a2 2 0 0 0-1.3 1.3L12 21.4l-1.95-5.95a2 2 0 0 0-1.3-1.3L2.6 12l5.95-1.95a2 2 0 0 0 1.3-1.3z"' +
+      ' fill="currentColor"/>'
+  ];
+  function glyph(a, px) {
+    var s = px || 20;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" class="smooth" aria-hidden="true">' + GLYPH[a] + "</svg>";
+  }
+
+  /* Chips: a state (its colour, its name) and an action (its glyph, its colour, its name). */
+  function stateChip(s, opts) {
+    opts = opts || {};
+    var c = document.createElement("span");
+    c.className = "ob-chip s" + s;
+    var d = document.createElement("i");
+    d.className = "dot";
+    c.appendChild(d);
+    c.appendChild(document.createTextNode(opts.text || STATES[s]));
+    return c;
+  }
+  function actionChip(a, opts) {
+    opts = opts || {};
+    var c = document.createElement("span");
+    c.className = "ob-chip a" + a;
+    c.innerHTML = glyph(a, opts.glyph || 18);
+    c.appendChild(document.createTextNode(opts.text || ACTIONS[a]));
+    return c;
+  }
+
+  /* The four games of the arcade, as their cartridge sprites (rl-arcade/cartridges.js, palette PX). */
+  var PX = { ".": null, K: "#0b0b16", W: "#f4f6ff", R: "#ff4d5e", r: "#c0202e", G: "#6be24a", g: "#1f9a52",
+    B: "#41a6ff", b: "#9aa7ff", Y: "#ffd23f", O: "#ff9a3c", P: "#b06bff", C: "#5ad0ff", S: "#c9cee6", s: "#6c7194", N: "#9a6a3c" };
+  var SPRITES = {
+    van: ["...........", "...KKKKKKK.", "..KKWWKbbbK", ".KbbbbbbbbK", ".KbbbbbbbbK",
+      ".KbbbbbbbbK", ".KKKKKKKKK.", "..KK...KK..", "..KK...KK..", "..........."],
+    robot: [".....R.....", ".....K.....", "..KKKKKKK..", "..KSSSSSK..", "..KSSSSSK..",
+      "..KCCSCCK..", "..KSSSSSK..", "..KSKKKSK..", "..KKKKKKK..", "...K...K..."],
+    tag: ["..KKKKKKK..", ".KOOOKOOOK.", ".KOOOOOOOK.", ".KOYYYOOOK.", ".KOYOOOOOK.",
+      ".KOYYYOOOK.", ".KOOOYOOOK.", ".KOYYYOOOK.", ".KOOOOOOOK.", "..KKKKKKK.."],
+    pokeball: ["...KKKKK...", ".KKRRRRRKK.", ".KRRRRRRRK.", "KRRRRRRRRRK", "KRRRWWWRRRK",
+      "KKKKWKWKKKK", "KWWWWWWWWWK", "KWWWWWWWWWK", ".KWWWWWWWK.", ".KKWWWWWKK.", "...KKKKK..."]
+  };
+  var GAMES = [
+    { id: "bessie", sprite: "van", name: "OLD BESSIE" },
+    { id: "anymal", sprite: "robot", name: "ANYMAL" },
+    { id: "pricing", sprite: "tag", name: "LAST-MINUTE PRICING" },
+    { id: "pokemon", sprite: "pokeball", name: "POKEMON" }
+  ];
+  function sprite(name, px) { return pixels(SPRITES[name], PX, px || 6); }
+  /* A game as an element: its sprite on a cartridge-like tile and its name. id: bessie, anymal, pricing, pokemon. */
+  function game(id, opts) {
+    opts = opts || {};
+    var g = GAMES.filter(function (x) { return x.id === id; })[0];
+    var box = document.createElement("span");
+    box.className = "ob-game";
+    var tile = wrap(sprite(g.sprite, opts.px || 7), "ob-box plain");
+    box.appendChild(tile);
+    var t = document.createElement("span");
+    t.className = "label";
+    t.textContent = g.name;
+    box.appendChild(t);
+    return box;
+  }
+
+  /* The player, the one who chooses (sketch page 18): a small face. */
+  var FACE = ["..KKKKK..", ".KYYYYYK.", "KYYKYKYYK", "KYYKYKYYK", "KYYYYYYYK", "KYKYYYKYK", "KYYKKKYYK", ".KYYYYYK.", "..KKKKK.."];
+  function face(px) { return pixels(FACE, { K: C.ink, Y: C.yellow }, px || 4); }
+
+  /* A die for the transition dynamics: n pips (1 to 6), 15 x 15 pixels. */
+  var PIPS = { 1: [[1, 1]], 2: [[0, 0], [2, 2]], 3: [[0, 0], [1, 1], [2, 2]], 4: [[0, 0], [2, 0], [0, 2], [2, 2]],
+    5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]], 6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]] };
+  function dieRows(n) {
+    var g = [];
+    for (var y = 0; y < 15; y++) {
+      var r = "";
+      for (var x = 0; x < 15; x++) r += (x === 0 || y === 0 || x === 14 || y === 14) ? "K" : "W";
+      g.push(r.split(""));
+    }
+    if (n === 0) {   /* a question mark: an outcome that no fair die decides (page 1; added after the freeze by the main session) */
+      [".OOO.", "O...O", "....O", "...O.", "..O..", "..O..", ".....", "..O.."].forEach(function (row, y) {
+        for (var x = 0; x < 5; x++) if (row[x] === "O") g[3 + y][5 + x] = "K";
+      });
+      return g.map(function (r) { return r.join(""); });
+    }
+    (PIPS[n] || PIPS[1]).forEach(function (p) {
+      for (var dy = 0; dy < 3; dy++) for (var dx = 0; dx < 3; dx++) g[2 + p[1] * 4 + dy][2 + p[0] * 4 + dx] = "K";
+    });
+    return g.map(function (r) { return r.join(""); });
+  }
+  function die(n, px) { return pixels(dieRows(n), { K: C.ink, W: C.white }, px || 3); }
+  function dieEl(n, px) { return wrap(die(n, px), "ob-die"); }
+  /* Set the face of a die element made by dieEl; with roll true it tumbles first (about 1.5 s, CSS ob-tumble). */
+  function setDie(e, n, roll) {
+    var px = parseFloat(e.querySelector("svg").getAttribute("width")) / 15;
+    e.innerHTML = die(n, px);
+    e.classList.remove("tumble");
+    if (roll) { void e.offsetWidth; e.classList.add("tumble"); }
+  }
+
+  /* Greek letters drawn as pixels: Press Start 2P has only ASCII (and a few signs such as x), so gamma, alpha,
+     epsilon, nabla and Sigma are 8 x 8 pixel glyphs that sit in a line of text like a letter of the font. */
+  var SYM = {
+    gamma: ["........", "........", "OO....OO", ".OO..OO.", "..OOOO..", "...OO...", "...OO...", "...OO..."],
+    alpha: ["........", "........", ".OOO.OO.", "OO..OOO.", "OO...OO.", "OO..OOO.", ".OOO.OO.", "........"],
+    epsilon: ["........", "........", ".OOOOO..", "OO......", ".OOOO...", "OO......", ".OOOOO..", "........"],
+    nabla: ["OOOOOOO.", "OO...OO.", ".O...O..", ".OO.OO..", "..O.O...", "..OOO...", "...O....", "........"],
+    Sigma: ["OOOOOOO.", "OO......", ".OO.....", "..OO....", ".OO.....", "OO......", "OOOOOOO.", "........"]
+  };
+  function sym(name) {
+    return pixels(SYM[name], { O: "currentColor" }, 1).replace('width="8" height="8"', 'width="1em" height="1em" class="ob-sym"');
+  }
+  function symEl(name) {
+    var s = document.createElement("span");
+    s.className = "ob-symbox";
+    s.setAttribute("aria-label", name);
+    s.innerHTML = sym(name);
+    return s;
+  }
+
+  OB.art = {
+    C: C, STATES: STATES, ACTIONS: ACTIONS, GAMES: GAMES, SPRITES: SPRITES,
+    pixels: pixels, wrap: wrap,
+    van: van, vanSvg: vanSvg, glyph: glyph, stateChip: stateChip, actionChip: actionChip,
+    sprite: sprite, game: game, face: face, die: die, dieEl: dieEl, setDie: setDie,
+    sym: sym, symEl: symEl, SYM: SYM
+  };
+})();
+</script>
+<script>/* sec1.js */
+/* sec1.js: page 1, section 2 of the weekend, "MDPs" (agent A2, 2026-11-14), from Carlos's sketch pages 5 to 12.
+   Scenes 100 to 999 of page 1. Every number comes from bessie.js (window.B). */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, art = OB.art, el = OB.el;
+
+  /* 100. All these games have the following (sketch page 6). */
+  OB.scene({
+    page: 1, key: "have", order: 100, title: "What they have in common", beats: 4,
+    build: function (root) {
+      root.appendChild(el("p", "ob-say", "All these games and many other scenarios in life have the following:"));
+      var games = el("div", "s1-games");
+      art.GAMES.forEach(function (g) { games.appendChild(art.game(g.id)); });
+      root.appendChild(games);
+      var list = el("div", "s1-list ob-box");
+      ["States", "Actions", "Transition dynamics"].forEach(function (t) { list.appendChild(el("div", "s1-item", t)); });
+      root.appendChild(list);
+    },
+    beat: function (k, api) {
+      var items = api.root.querySelectorAll(".s1-item");
+      for (var i = 0; i < items.length; i++) api.show(items[i], k > i);
+      api.show(api.root.querySelector(".s1-list"), k > 0);
+    }
+  });
+
+  /* 200. States: a definition (sketch page 7). */
+  OB.scene({
+    page: 1, key: "states", order: 200, title: "States", beats: 1,
+    build: function (root) {
+      var box = el("div", "s1-def ob-box");
+      box.appendChild(el("div", "word", "State"));
+      box.appendChild(el("p", "ob-say", "A state is the situation you are in right now."));
+      box.appendChild(el("p", "ob-say", "It holds what you need to know to choose what to do next."));
+      root.appendChild(box);
+    }
+  });
+
+  /* 300. Old Bessie's four states (sketch page 8). */
+  OB.scene({
+    page: 1, key: "bessie-states", order: 300, title: "Old Bessie's four states", beats: 4,
+    build: function (root) {
+      root.appendChild(el("p", "ob-say", "Old Bessie's state is how worn the van is."));
+      var row = el("div", "s1-vans");
+      for (var s = 0; s < 4; s++) row.appendChild(art.van(s, { size: 210 }));
+      root.appendChild(row);
+    },
+    beat: function (k, api) {
+      var vans = api.root.querySelectorAll(".ob-van");
+      for (var i = 0; i < vans.length; i++) api.show(vans[i], i <= k);
+    }
+  });
+})();
+
+/* Scenes 600 and 700 share the example of WORN and RUN on seeded dice. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, art = OB.art, el = OB.el;
+  var S = B.WORN, A = B.RUN, SEED = 80, ROLLS = 100, SHOWN = 6;
+  var dice = B.dice(SEED, ROLLS, 1);
+  var rolls = [];
+  for (var i = 0; i < ROLLS; i++) {
+    var u = dice[2 * i + 1];
+    rolls.push({ u: u, o: B.step(S, A, u), face: 0 });   /* face 0: the die shows a question mark; the outcome comes from u */
+  }
+  window.OB.sec1 = { S: S, A: A, SEED: SEED, ROLLS: ROLLS, SHOWN: SHOWN, rolls: rolls };
+
+  function slot(cap, child) {
+    var s = el("div", "s1-slot");
+    s.appendChild(el("span", "s1-cap", cap));
+    s.appendChild(child);
+    return s;
+  }
+  function reward(x) {
+    var r = OB.moneyEl(x);
+    r.classList.add("s1-reward", "ob-box", "plain");
+    return r;
+  }
+  /* The flow: the state and the action, the box of the transition dynamics with a die, the outcome. */
+  function flow(root, o) {
+    var f = el("div", "s1-flow");
+    var inn = el("div", "s1-in");
+    var pair = el("div", "s1-pair");
+    pair.appendChild(slot("STATE", art.van(S, { size: 150 })));
+    pair.appendChild(slot("ACTION", art.actionChip(A)));
+    inn.appendChild(pair);
+    var td = el("div", "s1-td ob-box white");
+    td.appendChild(el("div", "name", "TRANSITION DYNAMICS"));
+    td.appendChild(art.dieEl(0, 5));
+    var out = el("div", "s1-out");
+    if (o) {
+      var p2 = el("div", "s1-pair");
+      p2.appendChild(slot("NEW STATE", art.van(o.o.next, { size: 150 })));
+      p2.appendChild(slot("REWARD", reward(o.o.reward)));
+      out.appendChild(p2);
+    }
+    f.appendChild(inn);
+    f.appendChild(td);
+    f.appendChild(out);
+    root.appendChild(f);
+    return { flow: f, inn: inn, td: td, out: out };
+  }
+
+  /* 600. Transition dynamics: a definition, then Old Bessie (sketch page 11). */
+  OB.scene({
+    page: 1, key: "dynamics", order: 600, title: "Transition dynamics", beats: 3,
+    build: function (root) {
+      var d = el("div", "s1-defs ob-box");
+      d.appendChild(el("p", "ob-say", "Given a state and an action, the transition dynamics decide:"));
+      var n = el("div", "s1-num");
+      n.appendChild(el("span", "", "(1)"));
+      n.appendChild(el("span", "", "the new state"));
+      n.appendChild(el("span", "", "(2)"));
+      n.appendChild(el("span", "", "the reward"));
+      d.appendChild(n);
+      root.appendChild(d);
+      this.parts = flow(root, rolls[0]);
+    },
+    beat: function (k, api) {
+      var p = this.parts;
+      api.show(p.inn, k >= 1);
+      api.show(p.td, k >= 1);
+      if (k >= 1) api.arrow("in", p.inn, p.td, { delay: k === 1 ? 600 : 0 }); else api.unarrow("in");
+      var die = p.td.querySelector(".ob-die");
+      if (k >= 2) {
+        if (api.forward && !api.instant && api.from === 1) art.setDie(die, rolls[0].face, true);
+        api.arrow("out", p.td, p.out, { delay: 1500 });
+        api.show(p.out, true, { delay: 1500 });
+      } else {
+        api.unarrow("out");
+        api.show(p.out, false);
+      }
+    }
+  });
+})();
+
+/* Scenes 400, 500 and 700. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, art = OB.art, el = OB.el, X = OB.sec1;
+
+  /* 400. Actions: a definition (sketch page 9). */
+  OB.scene({
+    page: 1, key: "actions", order: 400, title: "Actions", beats: 1,
+    build: function (root) {
+      var box = el("div", "s1-def ob-box");
+      box.appendChild(el("div", "word", "Action"));
+      box.appendChild(el("p", "ob-say", "An action is a choice you can make in a state."));
+      box.appendChild(el("p", "ob-say", "You choose one action at a time."));
+      root.appendChild(box);
+    }
+  });
+
+  /* 500. Old Bessie's three actions, the arcade's glyphs, colours and glosses (sketch page 9). */
+  var GLOSS = ["Drive the route this week.", "A week in the shop.", "Buy a new van."];
+  OB.scene({
+    page: 1, key: "bessie-actions", order: 500, title: "Old Bessie's three actions", beats: 3,
+    build: function (root) {
+      root.appendChild(el("p", "ob-say", "In every state, Old Bessie's owner chooses one of three actions:"));
+      var row = el("div", "s1-acts");
+      for (var a = 0; a < 3; a++) {
+        var c = el("div", "s1-act ob-box a" + a);
+        c.appendChild(OB.html("span", "big-glyph", art.glyph(a, 80)));
+        c.appendChild(el("div", "name", B.ACTIONS[a]));
+        c.appendChild(el("div", "gloss", GLOSS[a]));
+        row.appendChild(c);
+      }
+      root.appendChild(row);
+    },
+    beat: function (k, api) {
+      var cards = api.root.querySelectorAll(".s1-act");
+      for (var i = 0; i < cards.length; i++) api.show(cards[i], i <= k);
+    }
+  });
+
+  /* 700. Transition dynamics are usually random (sketch page 12): WORN and RUN, six rolls landing side by side,
+     then all the outcomes, counted in 100 rolls of the same dice. */
+  var OUTS = B.outcomes(X.S, X.A).slice().sort(function (p, q) { return p.next - q.next || q.reward - p.reward; });
+  function kind(o) { for (var j = 0; j < OUTS.length; j++) if (OUTS[j].face === o.face) return j; return -1; }
+  var COUNT = OUTS.map(function () { return 0; });
+  X.rolls.forEach(function (r) { COUNT[kind(r.o)]++; });
+
+  OB.scene({
+    page: 1, key: "random", order: 700, title: "Transition dynamics are usually random", beats: X.SHOWN + 2,
+    build: function (root) {
+      var P = this.parts = { got: [], slots: [], cards: [], counts: [] };
+      root.appendChild(el("p", "ob-say", "For the same state and the same action, the new state and the reward can be different every time."));
+      var f = el("div", "s1-rflow");
+      var inn = el("div", "s1-pair");
+      var s1 = el("div", "s1-slot");
+      s1.appendChild(el("span", "s1-cap", "STATE"));
+      s1.appendChild(art.van(X.S, { size: 120 }));
+      inn.appendChild(s1);
+      var s2 = el("div", "s1-slot");
+      s2.appendChild(el("span", "s1-cap", "ACTION"));
+      s2.appendChild(art.actionChip(X.A));
+      inn.appendChild(s2);
+      var td = el("div", "s1-td ob-box white");
+      td.appendChild(el("div", "name", "TRANSITION DYNAMICS"));
+      P.die = art.dieEl(X.rolls[0].face, 4);
+      td.appendChild(P.die);
+      f.appendChild(inn);
+      f.appendChild(td);
+      root.appendChild(f);
+      P.inn = inn;
+      P.td = td;
+
+      var area = el("div", "s1-area");
+      var rolls = el("div", "s1-rolls");
+      var row = el("div", "s1-row");
+      for (var i = 0; i < X.SHOWN; i++) {
+        var r = X.rolls[i], sl = el("div", "s1-roll");
+        sl.appendChild(el("span", "no", "ROLL " + (i + 1)));
+        var got = el("div", "s1-got");
+        got.appendChild(art.van(r.o.next, { size: 84, gauge: false }));
+        got.appendChild(OB.moneyEl(r.o.reward));
+        sl.appendChild(got);
+        row.appendChild(sl);
+        P.slots.push(sl);
+        P.got.push(got);
+      }
+      rolls.appendChild(row);
+      area.appendChild(rolls);
+      var outs = el("div", "s1-outs");
+      outs.appendChild(el("div", "s1-cap2", "All its outcomes, counted in " + X.ROLLS + " rolls:"));
+      var orow = el("div", "s1-row");
+      OUTS.forEach(function (o, j) {
+        var c = el("div", "s1-out1 ob-box");
+        c.appendChild(art.van(o.next, { size: 84, gauge: false }));
+        c.appendChild(OB.moneyEl(o.reward));
+        var bd = el("span", "bd", " ");
+        if (o.face === "breakdown") bd.innerHTML = "BREAKDOWN<br>" + OB.money(B.REV_RUN[X.S]) + " - " + OB.money(B.BREAKDOWN_COST);
+        c.appendChild(bd);
+        var cnt = el("div", "count");
+        var b = el("b", "", String(COUNT[j]));
+        cnt.appendChild(b);
+        cnt.appendChild(document.createTextNode(" rolls"));
+        c.appendChild(cnt);
+        orow.appendChild(c);
+        P.cards.push(c);
+        P.counts.push(b);
+      });
+      outs.appendChild(orow);
+      area.appendChild(outs);
+      root.appendChild(area);
+      P.rolls = rolls;
+      P.outs = outs;
+    },
+    beat: function (k, api) {
+      var P = this.parts, n = X.SHOWN, i;
+      if (k < n) api.nextLabel("Roll");
+      api.arrow("in", P.inn, P.td);
+      var all = k === n + 1;
+      api.show(P.rolls, !all);
+      api.show(P.outs, all);
+      for (i = 0; i < n; i++) api.show(P.got[i], k > i);
+      if (k >= 1 && k <= n) {
+        var r = X.rolls[k - 1];
+        if (api.forward && !api.instant && api.from === k - 1) {
+          art.setDie(P.die, r.face, true);
+          api.fly(P.die, P.got[k - 1], { delay: 1500, scale: false });
+        } else art.setDie(P.die, r.face, false);
+      }
+      if (all) {
+        var shown = OUTS.map(function () { return 0; });
+        for (i = 0; i < n; i++) {
+          var j = kind(X.rolls[i].o);
+          shown[j]++;
+          if (api.forward && !api.instant) api.fly(P.got[i], P.cards[j], { scale: false });
+        }
+        P.counts.forEach(function (b, j) { api.roll(b, COUNT[j], { from: shown[j], delay: api.instant ? 0 : 1700 }); });
+      }
+    }
+  });
+})();
+</script>
+<script>/* fullscreen.js */
+/* fullscreen.js: the full-screen button of the AINIT games (2026-11-11; Carlos shows the games from his iPad).
+   The same file in every game. The button goes after the light or dark switch (.themebtn) and takes its look; a
+   page without that switch marks the place with data-fullscreen. One tap and the page fills the whole screen, with
+   no address bar or tabs, in Safari and Chrome on an iPad and on a computer. The button is left out where the
+   browser cannot do that (an iPhone, a frame that does not allow it), and hidden on screens under 561 px and while
+   the page is full screen. The browser's own exit button, a swipe down on an iPad, or Escape leave full screen. */
+(function () {
+  var doc = document, root = doc.documentElement;
+  var request = root.requestFullscreen || root.webkitRequestFullscreen;
+  if (!request || !(doc.fullscreenEnabled || doc.webkitFullscreenEnabled)) return;
+  var host = doc.querySelector("[data-fullscreen]"), twin = host ? null : doc.querySelector(".themebtn");
+  if (!host && !twin) return;
+
+  var btn = doc.createElement("button");
+  btn.type = "button";
+  btn.className = twin ? twin.className + " fullbtn" : "fullbtn";
+  btn.title = "Full screen";
+  btn.setAttribute("aria-label", "Full screen");
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" style="display:block; margin:auto" aria-hidden="true"' +
+    ' fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>';
+
+  var narrow = window.matchMedia ? window.matchMedia("(max-width: 560px)") : null;
+  function isFull() { return !!(doc.fullscreenElement || doc.webkitFullscreenElement); }
+  function sync() { btn.style.display = isFull() || (narrow && narrow.matches) ? "none" : ""; }
+
+  btn.addEventListener("click", function () {
+    btn.blur();
+    var p = request.call(root);
+    if (p && typeof p.catch === "function") p.catch(function () {});
+  });
+  doc.addEventListener("fullscreenchange", sync);
+  doc.addEventListener("webkitfullscreenchange", sync);
+  if (narrow && narrow.addEventListener) narrow.addEventListener("change", sync);
+  else if (narrow && narrow.addListener) narrow.addListener(sync);
+
+  if (twin) twin.parentNode.insertBefore(btn, twin.nextSibling);
+  else host.appendChild(btn);
+  sync();
+})();
+</script>
+<script>OB.start({ page: 1, card: { kicker: "OLD BESSIE 1", title: "MDPs" } });</script>
+</body>
+</html>
