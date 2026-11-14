@@ -1,0 +1,2471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Old Bessie 2: Runs and cumulative rewards</title>
+<style>/* core.css */
+/* core.css: the look of "Old Bessie", the engine's stylesheet (agent A2, 2026-11-14). ENGINE.md documents it.
+
+   The arcade's retro console look in its light "paper" theme (rl-arcade/repair-or-replace/css/style.css): Press Start
+   2P everywhere, the NES shell #E8E0CC, dialog boxes #F8F4E4 with a double pixel border, ink #181818, secondary ink
+   #585858, the lever colours of the three actions and the wear colours of the four states. Light only: no dark
+   theme and no theme toggle (Carlos, 2026-11-14).
+
+   Larger words on large screens (the rule of weekend 2, w2-cx-private/CLAUDE.md): on a screen of at least 1080 x 740
+   px --tx is 1.4. A size of words up to 18 px is written calc(V * var(--tx)); a larger one grows by a share that falls
+   to nothing at 44 px: calc(V * (1 + (var(--tx) - 1) * w)) with w = (44 - V) / 26. Boards, tables, sprites, the top
+   bar and the Back and Next buttons keep their sizes. */
+
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("data:font/woff2;base64,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") format("woff2");
+  font-display: block;
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --px: "Press Start 2P", ui-monospace, monospace;
+  --bg: #E8E0CC;            /* the NES shell */
+  --box: #F8F4E4;           /* dialog boxes */
+  --white: #FFFFFF;
+  --ink: #181818;
+  --ink2: #585858;          /* secondary ink */
+  --hi: #404040;            /* the inner line of a dialog box */
+  --press: #BBB6A2;         /* the pressed edge of a button */
+  --yellow: #F8D028;
+  --ring: #E84828;          /* the highlight ring */
+  --run: #1666C8;           /* RUN, calm blue */
+  --service: #E08A00;       /* SERVICE, amber */
+  --replace: #D33A2C;       /* REPLACE, hot red */
+  --run-soft: #DCE9FB;
+  --service-soft: #FBEED2;
+  --replace-soft: #FADBD6;
+  --wear0: #2E8B57;         /* HEALTHY */
+  --wear1: #C99A33;         /* WORN */
+  --wear2: #E07A2A;         /* SHAKY */
+  --wear3: #D33A2C;         /* FAILING */
+  --wear0-soft: #D5EBDD;
+  --wear1-soft: #F3E6C4;
+  --wear2-soft: #F8DCC4;
+  --wear3-soft: #F6D2CC;
+  --gain: #1F7A45;          /* a positive amount of money */
+  --loss: #C0302A;          /* a negative amount of money */
+  --gut: 16px;
+  --tx: 1;
+}
+@media (min-width: 1080px) and (min-height: 740px) { :root { --tx: 1.4; } }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--px);
+  font-size: calc(12px * var(--tx));
+  line-height: 1.7;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+button { font-family: var(--px); color: var(--ink); }
+
+/* The frame: top bar, stage, footer. */
+.app {
+  height: 100vh; height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.topbar {
+  display: flex; align-items: center; gap: 12px; min-width: 0;
+  padding: 7px var(--gut);
+  background: var(--box);
+  border-bottom: 4px solid var(--ink);
+}
+.topbar .brand {
+  font-size: 11px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 0 1 auto; min-width: 0;
+}
+.pager { display: flex; align-items: center; gap: 4px; margin-left: auto; flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.pager button {
+  min-width: 26px; height: 26px; padding: 0 4px;
+  font-size: 9px; line-height: 1;
+  background: var(--box); border: 2px solid var(--ink); border-radius: 0;
+  box-shadow: inset -2px -2px 0 0 var(--press);
+  cursor: pointer; flex: 0 0 auto;
+}
+.pager button.card { min-width: 14px; width: 14px; padding: 0; background: var(--ink2); box-shadow: none; }
+.pager button.opt { border-style: dashed; }
+.pager button[aria-current] { background: var(--yellow); box-shadow: inset 2px 2px 0 0 #B89020; }
+.pager .gap { font-size: 9px; color: var(--ink2); flex: 0 0 auto; padding: 0 1px; }
+.pager.fold .far { display: none; }
+[data-fullscreen] { display: flex; flex: 0 0 auto; }
+.fullbtn {
+  width: 34px; height: 30px; padding: 0;
+  background: var(--box); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 0;
+  box-shadow: inset -2px -2px 0 0 var(--press);
+  cursor: pointer;
+}
+.fullbtn:hover { background: var(--yellow); }
+
+.stage { position: relative; overflow: auto; padding: 10px var(--gut) 12px; min-height: 0; }
+.scene { display: none; min-height: 100%; flex-direction: column; }
+.scene.active { display: flex; }
+.scene-head { display: flex; align-items: baseline; gap: 14px; min-width: 0; padding: 2px 0 8px; }
+.scene-head .scene-no { font-size: calc(14px * var(--tx)); color: var(--ink2); flex: 0 0 auto; }
+.scene-head h2 { margin: 0; font-weight: 400; line-height: 1.35; font-size: calc(18px * var(--tx)); min-width: 0; }
+.scene-head .opt-tag {
+  margin-left: auto; flex: 0 0 auto;
+  font-size: calc(9px * var(--tx)); line-height: 1; padding: 6px 8px;
+  border: 2px dashed var(--ink); background: var(--box);
+}
+.scene-body { position: relative; flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center; }
+.scene-inner {
+  position: relative; width: 100%; max-width: 1240px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: calc(14px * var(--tx));
+}
+.scene.card .scene-head { display: none; }
+
+.foot {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 12px;
+  padding: 8px var(--gut) 10px;
+  background: var(--box);
+  border-top: 4px solid var(--ink);
+}
+.navbtn {
+  min-width: 132px; padding: 13px 16px 11px;
+  font-size: 14px; line-height: 1;
+  background: var(--box); border: 4px solid var(--ink); border-radius: 0;
+  box-shadow: inset -4px -4px 0 0 var(--press);
+  cursor: pointer; touch-action: manipulation;
+}
+.navbtn.next { background: var(--yellow); box-shadow: inset -4px -4px 0 0 #B89020; }
+.navbtn:active:not(:disabled) { box-shadow: inset 4px 4px 0 0 var(--press); }
+.navbtn:disabled { opacity: 0.35; cursor: default; }
+.navbtn.skip { min-width: 0; font-size: 11px; padding: 11px 12px 9px; border-style: dashed; }
+.navbtn.skip[hidden] { display: none; }
+.beats { display: flex; justify-content: center; align-items: center; gap: 6px; min-width: 0; overflow: hidden; }
+.beats i { width: 12px; height: 12px; border: 2px solid var(--ink); background: transparent; flex: 0 0 auto; }
+.beats i.past { background: var(--ink2); }
+.beats i.on { background: var(--yellow); }
+
+/* The stage card at the start of a page (and any scene with card: {...}), in the manner of a console's stage card. */
+.ob-card {
+  align-self: center; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: calc(18px * var(--tx));
+  padding: calc(34px * var(--tx)) calc(56px * var(--tx)) calc(28px * var(--tx));
+  min-width: min(100%, 640px); max-width: 100%;
+}
+.ob-card .kicker { font-size: calc(14px * var(--tx)); color: var(--ink2); letter-spacing: 0.08em; }
+.ob-card .title { margin: 0; font-weight: 400; line-height: 1.3; font-size: 64px; }
+.ob-card .line { font-size: calc(13px * var(--tx)); line-height: 1.8; max-width: 40ch; color: var(--ink2); }
+.ob-card .road { display: flex; align-items: flex-end; justify-content: center; gap: 18px; min-height: 90px; }
+.ob-card .press { font-size: calc(11px * var(--tx)); animation: ob-blink 1.1s steps(2, end) infinite; }
+.ob-card .drive { animation: ob-drive 1.8s steps(12, end) both; }
+@keyframes ob-drive { from { transform: translateX(-240px); } to { transform: none; } }
+@keyframes ob-blink { 50% { opacity: 0; } }
+
+/* Dialog boxes and words. */
+.ob-box {
+  background: var(--box);
+  border: 4px solid var(--ink);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 2px var(--box), inset 0 0 0 4px var(--hi);
+  padding: calc(12px * var(--tx)) calc(16px * var(--tx));
+}
+.ob-box.plain { box-shadow: none; }
+.ob-box.white { background: var(--white); box-shadow: inset 0 0 0 2px var(--white), inset 0 0 0 4px var(--hi); }
+.ob-say { font-size: calc(15px * var(--tx)); line-height: 1.75; text-align: center; max-width: 52ch; margin: 0; text-wrap: balance; }
+.ob-say.left { text-align: left; }
+.ob-note { font-size: calc(11px * var(--tx)); line-height: 1.8; color: var(--ink2); text-align: center; max-width: 60ch; margin: 0; }
+.ob-big { font-size: calc(24px * (1 + (var(--tx) - 1) * 0.769)); line-height: 1.35; }
+.ob-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: calc(14px * var(--tx)); }
+.ob-col { display: flex; flex-direction: column; align-items: center; gap: calc(10px * var(--tx)); }
+.ob-hide { visibility: hidden; }
+.ob-gone { display: none !important; }
+.ob-mark { background: var(--yellow); padding: 0 0.2em; }
+
+/* Buttons inside a scene (Compute, Roll, Done). */
+.ob-btn {
+  font-size: calc(12px * var(--tx)); line-height: 1;
+  padding: calc(10px * var(--tx)) calc(14px * var(--tx));
+  background: var(--yellow); border: 4px solid var(--ink); border-radius: 0;
+  box-shadow: inset -4px -4px 0 0 #B89020;
+  cursor: pointer; touch-action: manipulation;
+}
+.ob-btn.quiet { background: var(--box); box-shadow: inset -4px -4px 0 0 var(--press); }
+.ob-btn:active:not(:disabled) { box-shadow: inset 4px 4px 0 0 #B89020; }
+.ob-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* Chips: a state (coloured by wear), an action (its lever colour and glyph), an amount of money. */
+.ob-chip {
+  display: inline-flex; align-items: center; gap: 0.5em; white-space: nowrap;
+  font-size: calc(12px * var(--tx)); line-height: 1;
+  padding: 0.55em 0.7em 0.5em;
+  border: 3px solid var(--ink); background: var(--box);
+}
+.ob-chip svg { flex: 0 0 auto; }
+.ob-chip.s0 { background: var(--wear0-soft); } .ob-chip.s0 .dot { background: var(--wear0); }
+.ob-chip.s1 { background: var(--wear1-soft); } .ob-chip.s1 .dot { background: var(--wear1); }
+.ob-chip.s2 { background: var(--wear2-soft); } .ob-chip.s2 .dot { background: var(--wear2); }
+.ob-chip.s3 { background: var(--wear3-soft); } .ob-chip.s3 .dot { background: var(--wear3); }
+.ob-chip .dot { width: 0.8em; height: 0.8em; border: 2px solid var(--ink); flex: 0 0 auto; }
+.ob-chip.a0 { color: var(--run); background: var(--run-soft); border-color: var(--run); }
+.ob-chip.a1 { color: #9A5E00; background: var(--service-soft); border-color: var(--service); }
+.ob-chip.a2 { color: var(--replace); background: var(--replace-soft); border-color: var(--replace); }
+.ob-money { white-space: nowrap; }
+.ob-money.gain { color: var(--gain); }
+.ob-money.loss { color: var(--loss); }
+
+/* Pictures from art.js. */
+.ob-art { display: inline-block; line-height: 0; flex: 0 0 auto; }
+.ob-art svg { display: block; shape-rendering: crispEdges; }
+.ob-art svg.smooth { shape-rendering: auto; }
+.ob-van { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
+.ob-van .gauge { display: flex; gap: 3px; padding: 3px 4px; border: 2px solid var(--ink); background: var(--box); line-height: 0; }
+.ob-van .gauge i { width: 12px; height: 8px; border: 1px solid var(--ink); opacity: 0.3; }
+.ob-van .gauge i.lit { opacity: 1; }
+.ob-van .tag { font-size: calc(11px * var(--tx)); line-height: 1.2; white-space: nowrap; }
+.ob-van.w0 .tag { color: var(--wear0); } .ob-van.w0 .gauge i.lit { background: var(--wear0); }
+.ob-van.w1 .tag { color: #9C7417; }      .ob-van.w1 .gauge i.lit { background: var(--wear1); }
+.ob-van.w2 .tag { color: #C25F14; }      .ob-van.w2 .gauge i.lit { background: var(--wear2); }
+.ob-van.w3 .tag { color: var(--wear3); } .ob-van.w3 .gauge i.lit { background: var(--wear3); }
+.ob-game { display: inline-flex; flex-direction: column; align-items: center; gap: 8px; }
+.ob-game .label { font-size: calc(9px * var(--tx)); line-height: 1.3; text-align: center; max-width: 13em; }
+.ob-die.tumble { animation: ob-tumble 0.5s steps(4, end) 3; }
+@keyframes ob-tumble { 25% { transform: rotate(90deg) translateY(-6px); } 50% { transform: rotate(180deg); } 75% { transform: rotate(270deg) translateY(-6px); } }
+
+/* Motion (core.js): ghosts in flight, the highlight ring, arrows, the scene's overlay. */
+.ob-ghost { position: fixed; z-index: 40; margin: 0; pointer-events: none; transform-origin: 0 0; }
+.ob-ring { outline: 4px solid var(--ring); outline-offset: 4px; animation: ob-ring 0.5s steps(2, end) 3; }
+@keyframes ob-ring { 50% { outline-color: transparent; } }
+.ob-overlay { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 5; }
+.ob-overlay svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.ob-arrow line, .ob-arrow polyline { stroke: var(--ink); stroke-width: 4; fill: none; stroke-linecap: square; stroke-linejoin: miter; }
+.ob-arrow polygon { fill: var(--ink); }
+.ob-arrow-label {
+  position: absolute; transform: translate(-50%, -50%); white-space: nowrap;
+  font-size: calc(11px * var(--tx)); line-height: 1; padding: 5px 6px 4px;
+  background: var(--box); border: 2px solid var(--ink);
+}
+.scene-error { border: 3px dashed var(--loss); color: var(--loss); padding: 8px 12px; font-size: 11px; }
+
+/* The placeholder of a page whose scenes are not built yet. */
+.ob-todo { text-align: center; }
+
+/* Phones and small windows. */
+@media (max-height: 700px) and (min-width: 561px) {
+  .navbtn { padding: 10px 14px 8px; }
+  .stage { padding-top: 6px; }
+}
+@media (max-width: 560px) {
+  :root { --gut: 10px; }
+  .topbar { gap: 8px; padding-top: 6px; padding-bottom: 6px; }
+  .topbar .brand { font-size: 9px; }
+  .pager button { min-width: 22px; height: 22px; font-size: 8px; }
+  .foot { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
+  .foot .skip { grid-column: 1 / -1; grid-row: 1; justify-self: center; }
+  .navbtn { min-width: 96px; font-size: 11px; padding: 11px 10px 9px; }
+  .ob-say { font-size: 12px; }
+  .ob-note { font-size: 10px; }
+  .ob-card .title { font-size: 32px; }
+  .ob-card { min-width: 0; }
+  .ob-chip { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ob-card .drive, .ob-card .press, .ob-ring, .ob-die.tumble { animation: none; }
+}
+
+/* Back and Next carry pixel triangles. */
+.navbtn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+#prev::before, #next::after { content: ""; width: 0; height: 0; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+#prev::before { border-right: 9px solid currentColor; }
+#next::after { border-left: 9px solid currentColor; }
+
+/* Notation: subscripts (S1, a1, $r1, G1), powers (gamma squared), the bar of an average (G1 with a bar), the pixel
+   Greek letters of art.js (OB.art.sym). */
+sub, sup { font-size: 0.62em; line-height: 0; position: relative; vertical-align: baseline; }
+sub { bottom: -0.3em; }
+sup { top: -0.55em; }
+.ob-bar { display: inline-block; border-top: 0.14em solid currentColor; padding-top: 0.12em; line-height: 1.1; }
+.ob-sym { display: inline-block; vertical-align: -0.02em; shape-rendering: crispEdges; }
+.ob-symbox { display: inline-block; line-height: 1; }
+</style>
+<style>/* runs.css */
+/* runs.css: the run symbol (agent A3, 2026-11-14), OB.runs in runs.js. Classes start with runs-. */
+
+.runs-block { --rc: calc(18px + 8px * var(--tx)); display: inline-flex; flex-direction: column; gap: 3px; }
+.runs-row { display: flex; align-items: center; gap: calc(6px * var(--tx)); }
+.runs-no { width: 2.4em; text-align: right; font-size: calc(9px * var(--tx)); line-height: 1; color: var(--ink2); flex: 0 0 auto; }
+.runs-cells { display: inline-flex; border: 2px solid var(--ink); background: var(--ink); gap: 2px; flex: 0 0 auto; }
+.runs-head .runs-cells { border-color: transparent; background: transparent; }
+.runs-wk { width: var(--rc); text-align: center; font-size: calc(7px * var(--tx)); line-height: 1; color: var(--ink2); }
+.runs-cell {
+  position: relative; width: var(--rc); height: var(--rc);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--ink); line-height: 0;
+}
+.runs-cell svg { width: 58%; height: 58%; }
+.runs-cell.w0, .runs-swatch.w0 { background: var(--wear0); }
+.runs-cell.w1, .runs-swatch.w1 { background: var(--wear1); }
+.runs-cell.w2, .runs-swatch.w2 { background: var(--wear2); }
+.runs-cell.w3, .runs-swatch.w3 { background: var(--wear3); }
+.runs-bolt { position: absolute; right: 1px; top: 1px; line-height: 0; }
+.runs-bolt svg { width: calc(var(--rc) * 0.36); height: auto; display: block; }
+.runs-cell.bd svg:first-child { transform: translate(-12%, 10%); }
+.runs-g1 { min-width: 6.2em; text-align: right; font-size: calc(10px * var(--tx)); line-height: 1; white-space: nowrap; flex: 0 0 auto; }
+.runs-g1h { color: var(--ink); }
+
+/* Compact: one thin line per run. */
+.runs-block.compact { flex-direction: row; align-items: stretch; gap: 8px; }
+.runs-canvas, .runs-g1col { display: block; image-rendering: pixelated; border: 2px solid var(--ink); background: var(--box); box-sizing: content-box; }
+.runs-canvas.blend, .runs-g1col.blend { image-rendering: auto; }
+
+/* The legend of the symbol. */
+.runs-legend { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 18px; font-size: calc(9px * var(--tx)); line-height: 1.2; color: var(--ink2); }
+.runs-key { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.runs-swatch { width: 14px; height: 14px; border: 2px solid var(--ink); flex: 0 0 auto; }
+.runs-gl { line-height: 0; color: var(--ink); }
+.runs-gl svg { display: block; }
+
+@media (max-width: 560px) {
+  .runs-block { --rc: 18px; }
+  .runs-row { gap: 4px; }
+  .runs-cells { gap: 1px; border-width: 1px; }
+  .runs-g1 { min-width: 5.4em; font-size: 9px; }
+  .runs-no { width: 2.2em; font-size: 8px; }
+  .runs-legend { gap: 6px 10px; font-size: 8px; }
+}
+</style>
+<style>/* sec2.css */
+/* sec2.css: page 2, section 3 of the weekend, "Runs and cumulative rewards" (agent A3, 2026-11-14). Classes s2-. */
+
+:root {
+  --s2-blue: #1F4FA8;      /* the sketch's step 2 */
+  --s2-green: #1B7A47;     /* step 3 */
+  --s2-purple: #8A3FC0;    /* step 4 */
+  --s2-or: #EE8A12;        /* the orange of the cumulative reward (sketch page 20) */
+  --s2-or-text: #B35A00;   /* the same orange, dark enough for words */
+}
+.s2-c1 { color: var(--ink); }
+.s2-c2 { color: var(--s2-blue); }
+.s2-c3 { color: var(--s2-green); }
+.s2-c4 { color: var(--s2-purple); }
+.s2-cap { min-height: 3.5em; }
+.s2-cap .s2-c1, .s2-cap .s2-c2, .s2-cap .s2-c3, .s2-cap .s2-c4 { font-weight: 400; }
+
+/* The run in the sketch's notation: a grid of four rows (above the arrows, the line, below, values) on a desk,
+   turned on a phone (rows become columns). */
+.s2-seq { --lw: calc(56px + 40px * var(--tx)); display: grid; align-items: center; justify-items: center; row-gap: 6px; }
+.s2-seq > * { grid-row: var(--r); grid-column: var(--c); }
+.s2-sym { font-size: calc(24px * (1 + (var(--tx) - 1) * 0.769)); line-height: 1.2; white-space: nowrap; }
+.s2-big .s2-sym { font-size: calc(30px * (1 + (var(--tx) - 1) * 0.538)); }
+.s2-item { padding: 0 4px; }
+.s2-link { width: var(--lw); padding: 0 10px; align-self: center; line-height: 0; }
+.s2-arr { display: block; position: relative; width: 100%; height: 4px; background: currentColor; }
+.s2-arr::after { content: ""; position: absolute; right: -4px; top: 50%; transform: translateY(-50%); border-left: 14px solid currentColor; border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
+.s2-top { align-self: end; min-height: 36px; display: flex; align-items: flex-end; justify-content: center; }
+.s2-bot { align-self: start; min-height: 36px; display: flex; align-items: flex-start; justify-content: center; }
+.s2-val { align-self: start; padding-top: 6px; display: flex; justify-content: center; }
+.s2-span2 { grid-column: var(--c) / span 2; }
+.s2-num { display: inline-flex; align-items: center; justify-content: center; width: 2em; height: 2em; border: 3px solid currentColor; border-radius: 50%; font-size: calc(11px * var(--tx)); line-height: 1; padding-top: 0.1em; }
+.s2-face { line-height: 0; }
+.s2-hang { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
+.s2-down { position: relative; width: 4px; height: 14px; background: currentColor; margin-bottom: 8px; }
+.s2-down::after { content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%); border-top: 10px solid currentColor; border-left: 7px solid transparent; border-right: 7px solid transparent; }
+.s2-rsym { font-size: calc(15px * var(--tx)); line-height: 1.2; }
+.s2-dots { padding-left: 14px; }
+.s2-tdname { font-size: calc(9px * var(--tx)); line-height: 1.6; text-align: center; color: var(--s2-blue); white-space: nowrap; }
+.s2-vals .s2-val .ob-chip { font-size: calc(10px * var(--tx)); }
+.s2-rv { font-size: calc(15px * var(--tx)); line-height: 1.2; padding-top: 4px; }
+.s2-vals .ob-van .tag { font-size: calc(9px * var(--tx)); }
+.s2-ink { --lw: calc(36px + 26px * var(--tx)); }
+.s2-ink .s2-top, .s2-ink .s2-val { min-height: 0; padding: 0; }
+.s2-ink .s2-sym { font-size: calc(20px * (1 + (var(--tx) - 1) * 0.923)); }
+
+/* The run as a table of weeks: a row per kind, a column per week; turned on a phone. */
+.s2-tab { --cw: clamp(40px, calc((100vw - 330px) / 13), 64px); display: grid; grid-template-columns: repeat(13, var(--cw)); align-items: center; justify-items: center; row-gap: 5px; position: relative; }
+.s2-tab.named { grid-template-columns: auto repeat(13, var(--cw)); }
+.s2-tab > * { grid-row: var(--r); grid-column: var(--c); }
+.s2-tab.s2-small { --cw: clamp(38px, calc((100vw - 400px) / 13), 62px); }
+.s2-small .s2-tr { font-size: calc(8px * var(--tx)); }
+.s2-name { justify-self: end; padding-right: 12px; font-size: calc(8px * var(--tx)); line-height: 1.2; color: var(--ink2); white-space: nowrap; }
+.s2-wk { font-size: calc(8px * var(--tx)); line-height: 1; color: var(--ink2); }
+.s2-ts { line-height: 0; padding: 2px 0; }
+.s2-ts .ob-van svg { width: calc(var(--cw) - 6px); height: auto; }
+.s2-ts.bd { outline: 3px dashed var(--loss); outline-offset: 1px; }
+.s2-ta { line-height: 0; }
+.s2-ta.a0 { color: var(--run); } .s2-ta.a1 { color: #9A5E00; } .s2-ta.a2 { color: var(--replace); }
+.s2-tr { font-size: calc(8.5px * var(--tx)); line-height: 1.3; position: relative; z-index: 1; }
+.s2-tw { font-size: calc(8.5px * var(--tx)); line-height: 1.3; color: var(--ink2); }
+.s2-loop { justify-self: stretch; align-self: stretch; border: 4px solid var(--s2-or); border-radius: 999px; margin: -5px -6px; pointer-events: none; }
+.s2-seq .s2-loop { margin: -2px -10px -6px; }
+
+/* 300. Runs are random: the strategy as a column, the runs beside it, then the run symbol. */
+.s2-random { display: flex; align-items: flex-start; justify-content: center; gap: calc(14px + 8px * var(--tx)); max-width: 100%; }
+.s2-strat { display: flex; flex-direction: column; gap: calc(6px * var(--tx)); padding: 10px 12px; flex: 0 0 auto; }
+.s2-strat-h { font-size: calc(8px * var(--tx)); line-height: 1.2; color: var(--ink2); }
+.s2-strat-r { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+.s2-strat .ob-chip { font-size: calc(9px * var(--tx)); border-width: 2px; }
+.s2-strat .ob-chip svg { width: 14px; height: 14px; }
+.s2-area { display: grid; justify-items: start; align-items: start; min-width: 0; }
+.s2-area > * { grid-area: 1 / 1; }
+.s2-cumarea { justify-items: center; }
+.s2-tabs { display: flex; flex-direction: column; gap: 6px; }
+.s2-runwrap { display: flex; flex-direction: column; gap: 2px; }
+.s2-runlab { font-size: calc(8px * var(--tx)); line-height: 1.2; color: var(--ink2); }
+.s2-symwrap { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.s2-symwrap .runs-block { --rc: calc(16px + 7px * var(--tx)); }
+
+/* 500 and 600. The cumulative reward. */
+.s2-bigdown { position: relative; width: 30px; height: 40px; flex: 0 0 auto; }
+.s2-bigdown::before { content: ""; position: absolute; left: 9px; top: 0; width: 12px; height: 22px; background: var(--s2-or); }
+.s2-bigdown::after { content: ""; position: absolute; left: 0; top: 22px; border-top: 18px solid var(--s2-or); border-left: 15px solid transparent; border-right: 15px solid transparent; }
+.s2-formula { font-size: calc(18px * var(--tx)); line-height: 1.5; color: var(--s2-or-text); text-align: center; }
+.s2-formula .ob-money { font-size: 1.15em; }
+.s2-res { white-space: nowrap; }
+.s2-name2 { margin-top: calc(-8px * var(--tx)); }
+.s2-with { margin: 0; font-size: calc(12px * var(--tx)); color: var(--s2-or-text); margin-top: calc(-8px * var(--tx)); }
+.s2-here { margin: 0; font-size: calc(14px * var(--tx)); }
+.s2-res2 .ob-money { font-size: 1.2em; }
+
+/* 700. The goal of RL: lanes of strategies, their runs, their G1 as dots, their averages as bars. */
+.s2-goalsay { font-size: calc(16px * var(--tx)); }
+.s2-goal { --band: calc(12px + 8px * var(--tx)); --lane: 58px; display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 8px 14px; width: 100%; max-width: 1060px; align-items: end; }
+.s2-glab { display: flex; align-items: center; gap: 10px; }
+.s2-gcells { --rc: 13px; display: flex; flex-direction: column; border: 2px solid var(--ink); background: var(--ink); gap: 2px; }
+.s2-gcells .runs-cell svg { width: 80%; height: 80%; }
+.s2-gname { font-size: calc(8.5px * var(--tx)); line-height: 1.5; max-width: 9.5em; padding: 2px 4px; }
+.s2-glab.s2-win .s2-gname { background: var(--yellow); }
+.s2-gblock { line-height: 0; }
+.s2-gblock .runs-canvas { height: var(--lane) !important; }
+.s2-gdots { position: relative; height: calc(var(--lane) + var(--band)); }
+.s2-dl { position: absolute; left: 0; right: 0; top: var(--band); bottom: 0; background: rgba(255, 255, 255, 0.45); border: 2px solid var(--ink2); }
+.s2-dw { position: absolute; inset: 0; }
+.s2-zero { position: absolute; top: var(--band); bottom: 0; border-left: 2px dashed var(--ink2); z-index: 1; }
+.s2-dot { position: absolute; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; background: rgba(24, 24, 24, 0.5); }
+.s2-avg { position: absolute; top: var(--band); bottom: 0; width: 8px; margin-left: -4px; background: var(--yellow); border: 2px solid var(--ink); z-index: 2; }
+.s2-avgl { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; font-size: calc(8.5px * var(--tx)); line-height: 1; padding: 3px 4px 2px; background: var(--box); border: 2px solid var(--ink); z-index: 3; }
+.s2-gaxis { position: relative; height: calc(1.6em + 8px); border-top: 3px solid var(--ink); align-self: start; font-size: calc(8px * var(--tx)); }
+.s2-tick { position: absolute; top: 8px; transform: translateX(-50%); line-height: 1; white-space: nowrap; }
+.s2-tick::before { content: ""; position: absolute; left: 50%; top: -10px; width: 2px; height: 6px; background: var(--ink); }
+.s2-gaxb { align-self: start; justify-self: end; padding-top: 6px; font-size: calc(9px * var(--tx)); line-height: 1; }
+
+/* Phones: the notation and the tables turn, the run reads top to bottom. */
+@media (max-width: 560px) {
+  .s2-seq > * { grid-row: var(--c); grid-column: var(--r); }
+  .s2-span2 { grid-column: var(--r); grid-row: var(--c) / span 2; }
+  .s2-link { width: auto; height: 46px; padding: 6px 0; align-self: stretch; justify-self: center; }
+  .s2-arr { width: 4px; height: 100%; }
+  .s2-arr::after { right: auto; left: 50%; top: auto; bottom: -4px; transform: translateX(-50%); border-left: 9px solid transparent; border-right: 9px solid transparent; border-top: 14px solid currentColor; border-bottom: 0; }
+  .s2-top { justify-self: end; align-self: center; min-height: 0; padding-right: 8px; }
+  .s2-bot { justify-self: start; align-self: center; min-height: 0; padding-left: 8px; }
+  .s2-val { justify-self: start; align-self: center; padding: 0 0 0 10px; }
+  .s2-sym, .s2-big .s2-sym { font-size: 20px; }
+  .s2-ink .s2-sym { font-size: 16px; }
+  .s2-ink .s2-link { height: 30px; }
+  .s2-dots { padding: 0; }
+  .s2-seq .s2-loop { margin: -4px -6px; }
+  .s2-tab, .s2-tab.named, .s2-tab.s2-small { --cw: auto; grid-template-columns: none; column-gap: 10px; row-gap: 2px; }
+  .s2-tab > * { grid-row: var(--c); grid-column: var(--r); }
+  .s2-name { justify-self: center; padding: 0 0 4px; }
+  .s2-ts .ob-van svg { width: 45px; }
+  .s2-tr, .s2-tw { font-size: 10px; }
+  .s2-loop { margin: -2px -6px; border-radius: 22px; }
+  .s2-random { flex-direction: column; align-items: center; }
+  .s2-tabs { gap: 14px; }
+  .s2-runwrap { align-items: center; }
+  .s2-goal { grid-template-columns: auto minmax(0, 1fr); --lane: 50px; }
+  .s2-glab { grid-column: 1 / -1; }
+  .s2-gcells { flex-direction: row; }
+  .s2-gaxl { display: none; }
+  .s2-goalsay { font-size: 13px; }
+  .s2-formula { font-size: 13px; }
+  .s2-lead { order: -2; }
+  .s2-cap { order: -1; min-height: 0; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <span class="brand">Old Bessie 2: Runs and cumulative rewards</span>
+    <nav class="pager" id="pager" aria-label="Scenes"></nav>
+    <span data-fullscreen></span>
+  </header>
+  <main class="stage" id="stage"></main>
+  <footer class="foot">
+    <button type="button" class="navbtn" id="prev">Back</button>
+    <div class="beats" id="beats" aria-hidden="true"></div>
+    <button type="button" class="navbtn skip" id="skip" hidden>Skip optional</button>
+    <button type="button" class="navbtn next" id="next">Next</button>
+  </footer>
+</div>
+<script>/* bessie.js */
+/* bessie.js: Old Bessie, the MDP of weekend 3's visualization, shared by every section.
+
+   The model is the FS26 arcade's van, rl-arcade/repair-or-replace/js/van.js (commit 05dea09), unchanged:
+   four states of wear, three actions, the same money and the same chances. In the browser it is window.B;
+   in node, require('./bessie.js'). tools/check_bessie.js asserts every number the pages rely on.
+
+   A run is one quarter, WEEKS = 13 weeks, from HEALTHY. Its cumulative reward is
+   G1 = r1 + GAMMA r2 + GAMMA^2 r3 + ... + GAMMA^12 r13, GAMMA = 0.9.
+
+   Dice. Every week of a run uses exactly two random numbers from B.dice: the first picks the action (unused by a
+   strict policy, but always spent), the second the outcome of the transition dynamics. Two policies played on the
+   same dice therefore meet the same luck, and a change in their averages comes from the policies alone. */
+(function (root) {
+  'use strict';
+
+  const STATES = ['HEALTHY', 'WORN', 'SHAKY', 'FAILING'];
+  const ACTIONS = ['RUN', 'SERVICE', 'REPLACE'];
+  const HEALTHY = 0, WORN = 1, SHAKY = 2, FAILING = 3;
+  const RUN = 0, SERVICE = 1, REPLACE = 2;
+
+  const REV_RUN = [95, 72, 40, 16];          // RUN: the week's profit, by wear
+  const P_BD = [0.02, 0.08, 0.28, 0.55];     // RUN: chance of a breakdown, by wear
+  const BREAKDOWN_COST = 280;                // on top of the profit; the van ends FAILING
+  const DEGR = [                             // RUN without a breakdown: wears 0, 1 or 2 levels
+    [0.35, 0.55, 0.10],
+    [0.30, 0.55, 0.15],
+    [0.45, 0.55, 0.00],
+    [0.65, 0.35, 0.00],
+  ];
+  const C_SERVICE = 50;                      // SERVICE: a week in the shop
+  const SERV_UP = [                          // SERVICE: repairs 0, 1 or 2 levels
+    [1.00, 0.00, 0.00],
+    [0.05, 0.70, 0.25],
+    [0.45, 0.50, 0.05],
+    [0.55, 0.42, 0.03],
+  ];
+  const C_REPLACE = 130;                     // REPLACE: a new van, HEALTHY
+  const GAMMA = 0.9;
+  const WEEKS = 13;
+  const START = HEALTHY;
+
+  /* The transition dynamics of state s and action a: every outcome, in a fixed order, as
+     {p, next, reward, face}. face as in the arcade's van.js: 'breakdown', 'wear0' to 'wear2' (RUN),
+     'fix0' to 'fix2' (SERVICE), 'new' (REPLACE). Outcomes with no chance are left out; two outcomes that land
+     in the same state with the same reward stay apart (they differ in what happened). */
+  function outcomes(s, a) {
+    const out = [];
+    if (a === RUN) {
+      out.push({ p: P_BD[s], next: FAILING, reward: REV_RUN[s] - BREAKDOWN_COST, face: 'breakdown' });
+      for (let d = 0; d < 3; d++) {
+        const p = (1 - P_BD[s]) * DEGR[s][d];
+        if (p > 0) out.push({ p, next: Math.min(FAILING, s + d), reward: REV_RUN[s], face: 'wear' + d });
+      }
+    } else if (a === SERVICE) {
+      for (let u = 0; u < 3; u++) {
+        const p = SERV_UP[s][u];
+        if (p > 0) out.push({ p, next: Math.max(HEALTHY, s - u), reward: -C_SERVICE, face: 'fix' + u });
+      }
+    } else {
+      out.push({ p: 1, next: HEALTHY, reward: -C_REPLACE, face: 'new' });
+    }
+    return out;
+  }
+
+  /* One week: the outcome of (s, a) that the random number u in [0, 1) picks. */
+  function step(s, a, u) {
+    const out = outcomes(s, a);
+    let cum = 0;
+    for (const o of out) {
+      cum += o.p;
+      if (u < cum) return o;
+    }
+    return out[out.length - 1];
+  }
+
+  /* Mulberry32, the arcade's generator. */
+  function rng(seed) {
+    let t = seed >>> 0;
+    return function () {
+      t = (t + 0x6D2B79F5) >>> 0;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* The dice of n runs: n * weeks * 2 numbers, run by run, week by week, (action, transition). */
+  function dice(seed, n, weeks) {
+    weeks = weeks || WEEKS;
+    const r = rng(seed);
+    const d = new Float64Array(n * weeks * 2);
+    for (let k = 0; k < d.length; k++) d[k] = r();
+    d.n = n;
+    d.weeks = weeks;
+    return d;
+  }
+
+  /* The action a policy takes in state s with the random number u. A policy is either a column of four actions
+     (a strict policy, one action per state) or a table of four rows of three probabilities. */
+  function act(policy, s, u) {
+    const row = policy[s];
+    if (typeof row === 'number') return row;
+    let cum = 0;
+    for (let a = 0; a < 3; a++) {
+      cum += row[a];
+      if (u < cum) return a;
+    }
+    return 2;
+  }
+
+  /* Run i of the dice: states S1..S13 (and the state after the last week), actions, rewards, faces, G1. */
+  function playRun(policy, d, i) {
+    const weeks = d.weeks || WEEKS;
+    const states = [], actions = [], rewards = [], faces = [];
+    let s = START, G = 0, disc = 1;
+    for (let t = 0; t < weeks; t++) {
+      const k = (i * weeks + t) * 2;
+      const a = act(policy, s, d[k]);
+      const o = step(s, a, d[k + 1]);
+      states.push(s); actions.push(a); rewards.push(o.reward); faces.push(o.face);
+      G += disc * o.reward;
+      disc *= GAMMA;
+      s = o.next;
+    }
+    states.push(s);
+    return { states, actions, rewards, faces, G1: G };
+  }
+
+  /* G1 of a list of rewards. */
+  function g1(rewards) {
+    let G = 0, disc = 1;
+    for (const r of rewards) { G += disc * r; disc *= GAMMA; }
+    return G;
+  }
+
+  /* The average G1 of the first n runs of the dice (all of them by default). */
+  function avgG1(policy, d, n) {
+    n = n || d.n;
+    let sum = 0;
+    for (let i = 0; i < n; i++) sum += playRun(policy, d, i).G1;
+    return sum / n;
+  }
+
+  /* Softmax of one row of bets: exponential of every entry, then the row divided by its sum. */
+  function softmax(row) {
+    const m = Math.max.apply(null, row);
+    const e = row.map((x) => Math.exp(x - m));
+    const sum = e.reduce((x, y) => x + y, 0);
+    return e.map((x) => x / sum);
+  }
+  function softmaxTable(W) { return W.map(softmax); }
+
+  /* The exact expected G1 of a policy (over all runs, weighted by their chances): for checks only. */
+  function expectedG1(policy) {
+    let dist = [0, 0, 0, 0];
+    dist[START] = 1;
+    let J = 0, disc = 1;
+    for (let t = 0; t < WEEKS; t++) {
+      const nd = [0, 0, 0, 0];
+      for (let s = 0; s < 4; s++) {
+        if (dist[s] === 0) continue;
+        const row = policy[s];
+        const probs = typeof row === 'number' ? [0, 1, 2].map((a) => (a === row ? 1 : 0)) : row;
+        for (let a = 0; a < 3; a++) {
+          if (probs[a] === 0) continue;
+          for (const o of outcomes(s, a)) {
+            const w = dist[s] * probs[a] * o.p;
+            J += disc * w * o.reward;
+            nd[o.next] += w;
+          }
+        }
+      }
+      dist = nd;
+      disc *= GAMMA;
+    }
+    return J;
+  }
+
+  /* One hop of the backward pass of proto-REINFORCE: the average G1 before and after adding eps to the bet
+     W[s][a], both on the same dice; the change; nabla = change / eps. */
+  function hop(W, s, a, eps, d, n) {
+    const before = avgG1(softmaxTable(W), d, n);
+    const W2 = W.map((row) => row.slice());
+    W2[s][a] += eps;
+    const after = avgG1(softmaxTable(W2), d, n);
+    return { before, after, change: after - before, nabla: (after - before) / eps, W2 };
+  }
+
+  /* Random bets, uniform in [-1, 1], one decimal (the starting table of proto-REINFORCE). */
+  function randomBets(seed) {
+    const r = rng(seed);
+    return [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
+  }
+
+  const B = {
+    STATES, ACTIONS, HEALTHY, WORN, SHAKY, FAILING, RUN, SERVICE, REPLACE,
+    REV_RUN, P_BD, BREAKDOWN_COST, DEGR, C_SERVICE, SERV_UP, C_REPLACE,
+    GAMMA, WEEKS, START,
+    outcomes, step, rng, dice, act, playRun, g1, avgG1, softmax, softmaxTable, expectedG1, hop, randomBets,
+    /* The arcade's optimal strict policy at gamma 0.9: RUN, SERVICE, REPLACE, REPLACE. Over one quarter from
+       HEALTHY it is also the best of the 81 strict policies (expected G1 242.08, tools/check_bessie.js). */
+    BEST: [RUN, SERVICE, REPLACE, REPLACE],
+    /* Try it (section 4, A4a): ten runs, the same dice for every try. */
+    TRY: { n: 10, diceSeed: 11 },
+    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17); the entry is
+       drawn by B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000).
+       Shown with two decimals: average G1 before -243.36, after -241.35, change 2.01, nabla 201,
+       w = 0.40 + 0.01 x 201 = 2.41, average G1 after the update -5.20 (same dice). */
+    PROTO: {
+      betsSeed: 17,
+      bets: [[0.4, -0.6, 0.1], [-0.7, -0.8, 0.5], [-0.4, 0.1, -0.5], [0.4, 0.6, -0.4]],
+      pickSeed: 17 * 7919,
+      pick: [HEALTHY, RUN],
+      diceSeed: 12,
+      n: 1000,
+      eps: 0.01,
+      alpha: 0.01,
+    },
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = B;
+  else root.B = B;
+})(typeof window !== 'undefined' ? window : this);
+</script>
+<script>/* core.js */
+/* core.js: the scene engine of "Old Bessie" (agent A2, 2026-11-14). ENGINE.md documents the API; read it first.
+
+   A page is a list of scenes; a scene is a list of beats. Next shows the next beat of the scene, and after its last
+   beat the first beat of the next scene; Back reverses beat by beat. Each section registers its scenes with
+   OB.scene({ key, order, title, beats, build, beat, ... }) and the shell starts the page with OB.start({ page, card }).
+
+   The beat contract. beat(k, api) leaves the scene in the state of beat k, whatever state it was in (Back and deep
+   links jump). It sets that state at once (synchronously) and may decorate the change with the motion helpers
+   (api.show, api.fade, api.fly, api.move, api.roll, api.ring, api.arrow, api.at), which only animate when the reader
+   came forward with Next and motion is allowed (api.instant false). Before any other beat is shown, the engine
+   finishes every running motion and every pending api.at callback at once, so a reader who presses Next early
+   always lands on the right state. */
+(function () {
+  "use strict";
+
+  var doc = document;
+  var DUR = { fade: 1200, fly: 1600, move: 1600, roll: 1500, arrow: 1200 };
+  var HASH0 = location.hash || "";
+  var INSTANT = /[#&]instant\b/.test(HASH0);
+  var REDUCED = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var SVGNS = "http://www.w3.org/2000/svg";
+
+  /* Small helpers. */
+  function el(tag, cls, text) {
+    var e = doc.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = String(text);
+    return e;
+  }
+  function html(tag, cls, markup) {
+    var e = el(tag, cls);
+    e.innerHTML = markup;
+    return e;
+  }
+  function svgEl(tag, attrs) {
+    var e = doc.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function num(x, places) {
+    var p = places || 0;
+    var neg = x < 0 && Math.abs(x) >= 0.5 * Math.pow(10, -p);
+    var s = Math.abs(x).toFixed(p);
+    var parts = s.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (neg ? "-" : "") + parts.join(".");
+  }
+  function money(x, places, sign) {
+    var p = places || 0;
+    var r = +x.toFixed(p);
+    var body = "$" + num(Math.abs(r), p);
+    if (r < 0) return "-" + body;
+    return (sign && r > 0 ? "+" : "") + body;
+  }
+  function moneyEl(x, places, sign) {
+    var r = +x.toFixed(places || 0);
+    return el("span", "ob-money " + (r > 0 ? "gain" : r < 0 ? "loss" : ""), money(x, places, sign));
+  }
+  function remove(list, item) { var i = list.indexOf(item); if (i >= 0) list.splice(i, 1); }
+  function safe(fn) {
+    try { return fn(); } catch (e) { if (window.console) console.error("OB:", e); return undefined; }
+  }
+  function ease(p) { return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
+
+  /* The timeline of the current beat: its pending callbacks and its running motions. */
+  var T = null;
+  function Timeline(instant) { this.instant = instant; this.timers = []; this.motions = []; this.flushing = false; this.dead = false; }
+  function quick() { return !T || T.instant || T.flushing || T.dead; }
+  function at(ms, fn) {
+    var t = T;
+    if (quick() || !(ms > 0)) { safe(fn); return; }
+    var rec = { fn: fn, due: Date.now() + ms, id: 0 };
+    rec.id = setTimeout(function () { remove(t.timers, rec); if (!t.dead) { safe(fn); relayoutSoon(); } }, ms);
+    t.timers.push(rec);
+  }
+  function finishAll(t) {
+    if (!t || t.dead) return;
+    t.flushing = true;
+    for (var guard = 0; guard < 5000 && (t.timers.length || t.motions.length); guard++) {
+      if (t.motions.length) { t.motions[0].finish(); continue; }
+      t.timers.sort(function (a, b) { return a.due - b.due; });
+      var rec = t.timers.shift();
+      clearTimeout(rec.id);
+      safe(rec.fn);
+    }
+    t.dead = true;
+  }
+  /* animate(dur, tick, done): tick(p) for p from 0 to 1 (eased), then done(). A Promise, resolved at the end or
+     when the engine finishes the beat early. */
+  function animate(dur, tick, done) {
+    var t = T;
+    return new Promise(function (resolve) {
+      var fin = false, rec = { finish: finish };
+      function finish() {
+        if (fin) return;
+        fin = true;
+        if (t) remove(t.motions, rec);
+        if (done) safe(done);
+        relayoutSoon();
+        resolve();
+      }
+      if (quick() || !(dur > 0)) { finish(); return; }
+      t.motions.push(rec);
+      var t0 = null;
+      function frame(now) {
+        if (fin) return;
+        if (t0 === null) t0 = now;
+        var p = Math.min(1, (now - t0) / dur);
+        safe(function () { tick(ease(p)); });
+        if (p >= 1) finish(); else requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+  function later(opts, start) {
+    var d = (opts && opts.delay) || 0;
+    return new Promise(function (resolve) { at(d, function () { Promise.resolve(start()).then(resolve); }); });
+  }
+
+  /* The motion helpers. Each sets its end state for sure and animates only when motion is allowed. */
+  function show(e, on, opts) {
+    if (!e) return Promise.resolve();
+    if (on === undefined) on = true;
+    if (!on) { e.classList.add("ob-hide"); e.style.opacity = ""; return Promise.resolve(); }
+    if (!e.classList.contains("ob-hide")) return Promise.resolve();
+    return fade(e, true, opts);
+  }
+  function fade(e, on, opts) {
+    opts = opts || {};
+    if (!e) return Promise.resolve();
+    if (on && opts.delay) e.classList.add("ob-hide");
+    return later(opts, function () {
+      var from = on ? 0 : 1, to = on ? 1 : 0;
+      if (on) { e.classList.remove("ob-hide"); e.style.opacity = "0"; }
+      return animate(opts.dur || DUR.fade, function (p) { e.style.opacity = String(from + (to - from) * p); },
+        function () { e.style.opacity = ""; if (!on) e.classList.add("ob-hide"); });
+    });
+  }
+  function fly(from, to, opts) {
+    opts = opts || {};
+    if (!from || !to) return Promise.resolve();
+    to.style.visibility = "hidden";
+    return later(opts, function () {
+      function land() { to.style.visibility = ""; to.classList.remove("ob-hide"); }
+      if (quick()) { land(); return null; }
+      var src = opts.ghost || from;
+      var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+      if (!a.width || !b.width) { land(); return null; }
+      var g = src.cloneNode(true);
+      g.removeAttribute("id");
+      g.classList.remove("ob-hide", "ob-ring");
+      g.classList.add("ob-ghost");
+      g.style.visibility = "visible";
+      g.style.opacity = "";
+      g.style.left = a.left + "px";
+      g.style.top = a.top + "px";
+      g.style.width = a.width + "px";
+      g.style.height = a.height + "px";
+      from.parentNode.insertBefore(g, from.nextSibling);
+      var sx = opts.scale === false ? 1 : b.width / a.width, sy = opts.scale === false ? 1 : b.height / a.height;
+      var dx = b.left - a.left, dy = b.top - a.top, arc = opts.arc === undefined ? 40 : opts.arc;
+      return animate(opts.dur || DUR.fly, function (p) {
+        var y = dy * p - Math.sin(Math.PI * p) * arc;
+        g.style.transform = "translate(" + (dx * p) + "px," + y + "px) scale(" + (1 + (sx - 1) * p) + "," + (1 + (sy - 1) * p) + ")";
+      }, function () { if (g.parentNode) g.parentNode.removeChild(g); land(); });
+    });
+  }
+  function move(e, dest, opts) {
+    opts = opts || {};
+    if (!e || !dest) return Promise.resolve();
+    var a = e.getBoundingClientRect();
+    if (opts.before) dest.insertBefore(e, opts.before); else dest.appendChild(e);
+    if (quick()) { e.style.transform = ""; return Promise.resolve(); }
+    var b = e.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top;
+    e.style.transform = "translate(" + dx + "px," + dy + "px)";
+    return later(opts, function () {
+      return animate(opts.dur || DUR.move, function (p) {
+        e.style.transform = "translate(" + (dx * (1 - p)) + "px," + (dy * (1 - p)) + "px)";
+      }, function () { e.style.transform = ""; });
+    });
+  }
+  function roll(e, to, opts) {
+    opts = opts || {};
+    if (!e) return Promise.resolve();
+    var fmt = opts.fmt || function (x) { return num(x, opts.places || 0); };
+    var from = opts.from !== undefined ? opts.from : (e.dataset.v !== undefined ? parseFloat(e.dataset.v) : to);
+    e.dataset.v = String(to);
+    e.textContent = fmt(quick() && !opts.delay ? to : from);
+    return later(opts, function () {
+      return animate(opts.dur || DUR.roll, function (p) { e.textContent = fmt(from + (to - from) * p); },
+        function () { e.textContent = fmt(to); });
+    });
+  }
+  function ring(e, on) {
+    if (!e) return;
+    if (on === false) { e.classList.remove("ob-ring"); e.style.animation = ""; return; }
+    e.classList.remove("ob-ring");
+    if (quick()) e.style.animation = "none";
+    else { e.style.animation = ""; void e.offsetWidth; }
+    e.classList.add("ob-ring");
+  }
+
+  /* Arrows: drawn in the scene's overlay from one element to another, kept by id, redrawn on every layout change. */
+  function overlayOf(s) {
+    if (!s.overlay) {
+      s.overlay = el("div", "ob-overlay");
+      s.overlay.setAttribute("aria-hidden", "true");
+      s.inner.appendChild(s.overlay);
+      s.arrows = {};
+    }
+    return s.overlay;
+  }
+  function side(r, where) {
+    if (where === "right") return { x: r.right, y: r.top + r.height / 2, dx: 1, dy: 0 };
+    if (where === "left") return { x: r.left, y: r.top + r.height / 2, dx: -1, dy: 0 };
+    if (where === "top") return { x: r.left + r.width / 2, y: r.top, dx: 0, dy: -1 };
+    return { x: r.left + r.width / 2, y: r.bottom, dx: 0, dy: 1 };
+  }
+  function geometry(s, A) {
+    var o = s.inner.getBoundingClientRect();
+    var a = A.from.getBoundingClientRect(), b = A.to.getBoundingClientRect();
+    if (!a.width && !a.height || !b.width && !b.height) return null;
+    var ca = { x: a.left + a.width / 2, y: a.top + a.height / 2 }, cb = { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+    var horiz = Math.abs(cb.x - ca.x) >= Math.abs(cb.y - ca.y);
+    var fs = A.opts.from || (horiz ? (cb.x >= ca.x ? "right" : "left") : (cb.y >= ca.y ? "bottom" : "top"));
+    var ts = A.opts.to || (horiz ? (cb.x >= ca.x ? "left" : "right") : (cb.y >= ca.y ? "top" : "bottom"));
+    var gap = A.opts.gap === undefined ? 8 : A.opts.gap;
+    var p = side(a, fs), q = side(b, ts);
+    var x1 = p.x + p.dx * gap - o.left, y1 = p.y + p.dy * gap - o.top;
+    var x2 = q.x + q.dx * gap - o.left, y2 = q.y + q.dy * gap - o.top;
+    var pts = [[x1, y1]];
+    if (A.opts.elbow && x1 !== x2 && y1 !== y2) {
+      if (fs === "left" || fs === "right") pts.push([(x1 + x2) / 2, y1], [(x1 + x2) / 2, y2]);
+      else pts.push([x1, (y1 + y2) / 2], [x2, (y1 + y2) / 2]);
+    }
+    pts.push([x2, y2]);
+    return pts;
+  }
+  function drawArrow(s, A, p) {
+    var pts = geometry(s, A);
+    if (!pts) { A.svg.style.display = "none"; if (A.label) A.label.style.display = "none"; return; }
+    A.svg.style.display = "";
+    var n = pts.length, ex = pts[n - 1][0], ey = pts[n - 1][1], px = pts[n - 2][0], py = pts[n - 2][1];
+    var ang = Math.atan2(ey - py, ex - px), h = A.opts.head || 14;
+    var bx = ex - Math.cos(ang) * h, by = ey - Math.sin(ang) * h;
+    var line = pts.slice(0, n - 1).concat([[bx, by]]);
+    A.line.setAttribute("points", line.map(function (q) { return q[0].toFixed(1) + "," + q[1].toFixed(1); }).join(" "));
+    var w = h * 0.62;
+    A.head.setAttribute("points", [ex, ey, bx + Math.sin(ang) * w, by - Math.cos(ang) * w, bx - Math.sin(ang) * w, by + Math.cos(ang) * w]
+      .map(function (v) { return v.toFixed(1); }).join(","));
+    var len = 0;
+    for (var i = 1; i < line.length; i++) len += Math.hypot(line[i][0] - line[i - 1][0], line[i][1] - line[i - 1][1]);
+    var f = p === undefined ? A.p : p;
+    A.p = f;
+    A.line.style.strokeDasharray = len + " " + len;
+    A.line.style.strokeDashoffset = String(len * (1 - f));
+    A.head.style.opacity = f >= 1 ? "1" : "0";
+    if (A.color) { A.line.style.stroke = A.color; A.head.style.fill = A.color; }
+    if (A.label) {
+      var t = A.opts.labelAt === undefined ? 0.5 : A.opts.labelAt, mid = Math.floor((pts.length - 1) * t);
+      var q0 = pts[mid], q1 = pts[Math.min(pts.length - 1, mid + 1)], u = (pts.length - 1) * t - mid;
+      A.label.style.display = "";
+      A.label.style.left = (q0[0] + (q1[0] - q0[0]) * (pts.length === 2 ? t : u)) + "px";
+      A.label.style.top = (q0[1] + (q1[1] - q0[1]) * (pts.length === 2 ? t : u) + (A.opts.labelDy || 0)) + "px";
+      A.label.style.opacity = f >= 1 ? "1" : String(Math.max(0, f * 2 - 1));
+    }
+  }
+  function arrowFor(s, id, from, to, opts) {
+    opts = opts || {};
+    var ov = overlayOf(s), A = s.arrows[id];
+    if (A) { A.from = from; A.to = to; A.opts = opts; drawArrow(s, A); return Promise.resolve(); }
+    A = { id: id, from: from, to: to, opts: opts, p: 0, color: opts.color || null };
+    A.svg = svgEl("svg", { "class": "ob-arrow", width: "1", height: "1" });
+    A.line = svgEl("polyline", {});
+    A.head = svgEl("polygon", {});
+    A.svg.appendChild(A.line);
+    A.svg.appendChild(A.head);
+    ov.appendChild(A.svg);
+    if (opts.label) { A.label = el("div", "ob-arrow-label", opts.label); ov.appendChild(A.label); }
+    s.arrows[id] = A;
+    drawArrow(s, A, 0);
+    return later(opts, function () {
+      return animate(opts.dur || DUR.arrow, function (p) { drawArrow(s, A, p); }, function () { drawArrow(s, A, 1); });
+    });
+  }
+  function unarrowFor(s, id) {
+    if (!s.arrows) return;
+    Object.keys(s.arrows).forEach(function (k) {
+      if (id !== undefined && k !== id) return;
+      var A = s.arrows[k];
+      if (A.svg.parentNode) A.svg.parentNode.removeChild(A.svg);
+      if (A.label && A.label.parentNode) A.label.parentNode.removeChild(A.label);
+      delete s.arrows[k];
+    });
+  }
+  function relayout() {
+    var s = scenes[cur];
+    if (s && s.arrows) Object.keys(s.arrows).forEach(function (k) { drawArrow(s, s.arrows[k]); });
+    fitPager();
+  }
+  var relayoutQueued = false;
+  function relayoutSoon() {
+    if (relayoutQueued) return;
+    relayoutQueued = true;
+    requestAnimationFrame(function () { relayoutQueued = false; relayout(); });
+  }
+
+  /* The scenes. */
+  var REG = [], KEYS = {}, CFG = {};
+  var scenes = [], cur = -1, curBeat = 0;
+  var stage, prevBtn, nextBtn, skipBtn, beatsEl, pagerEl, pagerBtns = [];
+
+  function scene(spec) {
+    if (!spec || !spec.key) { console.error("OB.scene: a scene needs a key", spec); return; }
+    if (KEYS[spec.key]) { console.error("OB.scene: scene defined twice: " + spec.key); return; }
+    if (typeof spec.order !== "number" || !isFinite(spec.order)) console.error("OB.scene: " + spec.key + " has no order number");
+    spec.order = +spec.order || 0;
+    spec.beats = Math.max(1, spec.beats | 0 || 1);
+    spec.seq = REG.length;
+    REG.push(spec);
+    KEYS[spec.key] = spec;
+  }
+
+  /* The stage card: a scene with card: { kicker, title, line }. */
+  function cardBuild(s) {
+    var c = s.card, box = el("div", "ob-card ob-box");
+    if (c.kicker) box.appendChild(el("div", "kicker", c.kicker));
+    box.appendChild(el("h2", "title", c.title || s.title));
+    if (c.line) box.appendChild(el("p", "line", c.line));
+    var road = el("div", "road");
+    if (window.OB.art && c.van !== false) {
+      var van = window.OB.art.van(c.wear || 0, { size: 180, gauge: false, label: false });
+      van.classList.add("drive");
+      road.appendChild(van);
+    }
+    box.appendChild(road);
+    box.appendChild(el("div", "press", c.press || "PRESS NEXT"));
+    s.inner.appendChild(box);
+  }
+  function cardBeat(s) {
+    var v = s.inner.querySelector(".drive");
+    if (!v) return;
+    v.style.animation = "none";
+    void v.offsetWidth;
+    v.style.animation = quick() ? "none" : "";
+  }
+
+  function apiFor(s, from, forward) {
+    return {
+      key: s.key, spec: s, root: s.inner, sec: s.sec,
+      beat: s.index === cur ? curBeat : 0, from: from, forward: !!forward, instant: quick(),
+      next: next, back: back, go: function (key, k) { goKey(key, k); },
+      at: at, show: show, fade: fade, fly: fly, move: move, roll: roll, ring: ring, animate: animate,
+      arrow: function (id, a, b, opts) { return arrowFor(s, id, a, b, opts); },
+      unarrow: function (id) { unarrowFor(s, id); },
+      nextLabel: function (t) { if (s.index === cur) nextBtn.textContent = t || "Next"; },
+      relayout: relayoutSoon
+    };
+  }
+  function fail(s, where, e) {
+    if (window.console) console.error("OB scene " + s.key + " failed in " + where, e);
+    if (s.inner) s.inner.appendChild(el("p", "scene-error", "Scene " + s.key + " failed in " + where + ": " + (e && e.message)));
+  }
+  function run(s, name, a, b) {
+    if (typeof s[name] !== "function") return undefined;
+    try { return s[name](a, b); } catch (e) { fail(s, name, e); return undefined; }
+  }
+  function ensureBuilt(s) {
+    if (s.built) return;
+    s.built = true;
+    var t = T;
+    T = new Timeline(true);
+    if (s.card) { try { cardBuild(s); } catch (e) { fail(s, "card", e); } }
+    run(s, "build", s.inner, apiFor(s, -1, false));
+    T = t;
+  }
+  function go(i, k, how) {
+    if (!(i >= 0 && i < scenes.length)) return;
+    var s = scenes[i];
+    k = Math.max(0, Math.min(s.beats - 1, k | 0));
+    finishAll(T);
+    var forward = !!(how && how.forward);
+    var entering = i !== cur;
+    if (entering && cur >= 0) {
+      var old = scenes[cur];
+      T = new Timeline(true);
+      run(old, "leave", apiFor(old, curBeat, false));
+      old.sec.classList.remove("active");
+    }
+    var from = entering ? -1 : curBeat;
+    if (entering) {
+      cur = i;
+      ensureBuilt(s);
+      s.sec.classList.add("active");
+      if (stage) stage.scrollTop = 0;
+    }
+    curBeat = k;
+    T = new Timeline(INSTANT || REDUCED || !forward);
+    nextBtn.textContent = "Next";
+    var api = apiFor(s, from, forward);
+    if (entering) run(s, "enter", api);
+    if (s.card) cardBeat(s);
+    run(s, "beat", k, api);
+    chrome();
+    writeHash();
+    relayoutSoon();
+  }
+  function next() {
+    if (cur < 0) return;
+    var s = scenes[cur];
+    if (typeof s.onnext === "function" && run(s, "onnext", apiFor(s, curBeat, true)) === true) return;
+    if (curBeat < s.beats - 1) go(cur, curBeat + 1, { forward: true });
+    else if (cur < scenes.length - 1) go(cur + 1, 0, { forward: true });
+  }
+  function back() {
+    if (cur < 0) return;
+    if (curBeat > 0) go(cur, curBeat - 1);
+    else if (cur > 0) go(cur - 1, scenes[cur - 1].beats - 1);
+  }
+  function skip() {
+    for (var j = cur + 1; j < scenes.length; j++) if (!scenes[j].optional) { go(j, 0); return; }
+    go(scenes.length - 1, 0);
+  }
+  function indexOfKey(key) {
+    if (typeof key === "number") return key;
+    for (var j = 0; j < scenes.length; j++) if (scenes[j].key === key) return j;
+    return -1;
+  }
+  function goKey(key, k) { var i = indexOfKey(key); if (i >= 0) go(i, k || 0); }
+
+  /* The chrome: pager, beats, Back, Next, Skip. */
+  function chrome() {
+    var s = scenes[cur];
+    pagerBtns.forEach(function (b, j) { if (j === cur) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+    fitPager();
+    prevBtn.disabled = cur === 0 && curBeat === 0;
+    nextBtn.disabled = cur === scenes.length - 1 && curBeat === s.beats - 1;
+    skipBtn.hidden = !s.optional;
+    beatsEl.textContent = "";
+    if (s.beats > 1) for (var k = 0; k < s.beats; k++) beatsEl.appendChild(el("i", k === curBeat ? "on" : (k < curBeat ? "past" : "")));
+  }
+  function fitPager() {
+    if (!pagerEl) return;
+    Array.prototype.slice.call(pagerEl.querySelectorAll(".gap")).forEach(function (g) { g.parentNode.removeChild(g); });
+    pagerBtns.forEach(function (b) { b.classList.remove("far"); });
+    pagerEl.classList.remove("fold");
+    if (pagerEl.scrollWidth <= pagerEl.clientWidth + 1) return;
+    pagerEl.classList.add("fold");
+    for (var r = 2; r >= 0; r--) {
+      var last = pagerBtns.length - 1, shown = [];
+      pagerBtns.forEach(function (b, j) {
+        var keep = j === 0 || j === last || Math.abs(j - cur) <= r;
+        b.classList.toggle("far", !keep);
+        if (keep) shown.push(j);
+      });
+      Array.prototype.slice.call(pagerEl.querySelectorAll(".gap")).forEach(function (g) { g.parentNode.removeChild(g); });
+      for (var q = 1; q < shown.length; q++) if (shown[q] - shown[q - 1] > 1) pagerEl.insertBefore(el("span", "gap", ".."), pagerBtns[shown[q]]);
+      if (pagerEl.scrollWidth <= pagerEl.clientWidth + 1) return;
+    }
+  }
+  function writeHash() {
+    var s = scenes[cur];
+    try { history.replaceState(null, "", "#s=" + encodeURIComponent(s.key) + "&k=" + (curBeat + 1) + (INSTANT ? "&instant" : "")); } catch (e) {}
+  }
+  function readHash() {
+    var h = location.hash || "", m = h.match(/[#&]s=([^&]+)/);
+    if (!m) return null;
+    var key = decodeURIComponent(m[1]), i = /^\d+$/.test(key) ? parseInt(key, 10) - 1 : indexOfKey(key);
+    var mk = h.match(/[#&]k=(\d+)/);
+    return i >= 0 && i < scenes.length ? { i: i, k: mk ? parseInt(mk[1], 10) - 1 : 0 } : null;
+  }
+
+  function start(cfg) {
+    CFG = cfg || {};
+    stage = doc.getElementById("stage");
+    prevBtn = doc.getElementById("prev");
+    nextBtn = doc.getElementById("next");
+    skipBtn = doc.getElementById("skip");
+    beatsEl = doc.getElementById("beats");
+    pagerEl = doc.getElementById("pager");
+    var page = CFG.page;
+    var list = REG.filter(function (s) { return s.page === undefined || page === undefined || s.page === page; });
+    if (CFG.card && !list.some(function (s) { return s.key === "card"; })) {
+      list.push({ key: "card", order: 0, title: CFG.card.title, card: CFG.card, beats: 1, seq: -1 });
+    }
+    if (!list.some(function (s) { return !s.card; })) {
+      list.push({ key: "coming-next", order: 1, title: "Coming next", beats: 1, seq: 1e9,
+        card: { kicker: CFG.card ? CFG.card.kicker : "", title: "Coming next", line: "The scenes of this page are being built.", press: " ", van: false } });
+    }
+    scenes = list.slice().sort(function (a, b) { return a.order - b.order || a.seq - b.seq; });
+    var shown = 0;
+    scenes.forEach(function (s, i) {
+      s.index = i;
+      s.num = s.card ? 0 : ++shown;
+      var sec = el("section", "scene" + (s.card ? " card" : "") + (s.optional ? " optional" : ""));
+      sec.dataset.key = s.key;
+      sec.dataset.order = String(s.order);
+      var head = el("header", "scene-head");
+      head.appendChild(el("span", "scene-no", s.card ? "" : String(s.num)));
+      var h = el("h2", "", s.title || "");
+      head.appendChild(h);
+      if (s.optional) head.appendChild(el("span", "opt-tag", "OPTIONAL"));
+      sec.appendChild(head);
+      var body = el("div", "scene-body"), inner = el("div", "scene-inner");
+      body.appendChild(inner);
+      sec.appendChild(body);
+      stage.appendChild(sec);
+      s.sec = sec;
+      s.inner = inner;
+      var b = el("button", (s.card ? "card" : "") + (s.optional ? " opt" : ""), s.card ? "" : String(s.num));
+      b.type = "button";
+      b.title = (s.optional ? "Optional: " : "") + (s.title || "");
+      b.setAttribute("aria-label", s.card ? (s.title || "Card") : "Scene " + s.num + ": " + (s.title || ""));
+      b.addEventListener("click", function () { b.blur(); go(i, 0); });
+      pagerEl.appendChild(b);
+      pagerBtns.push(b);
+    });
+    // A clicked button gives the focus back, so that the space bar always means Next.
+    prevBtn.addEventListener("click", function () { prevBtn.blur(); back(); });
+    nextBtn.addEventListener("click", function () { nextBtn.blur(); next(); });
+    skipBtn.addEventListener("click", function () { skipBtn.blur(); skip(); });
+    window.addEventListener("resize", relayoutSoon);
+    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(relayoutSoon);
+    window.addEventListener("hashchange", function () { var h = readHash(); if (h && (h.i !== cur || h.k !== curBeat)) go(h.i, h.k); });
+    doc.addEventListener("keydown", function (e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var t = e.target;
+      if (t && (/^(input|textarea|select)$/i.test(t.tagName) || t.isContentEditable)) return;
+      var s = scenes[cur];
+      if (s && typeof s.onkey === "function" && run(s, "onkey", e, apiFor(s, curBeat, false)) === true) return;
+      var free = !t || t === doc.body || t === doc.documentElement;
+      if (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && free)) { e.preventDefault(); next(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); back(); }
+      else if (e.key === "Home") { e.preventDefault(); go(0, 0); }
+      else if (e.key === "End") { e.preventDefault(); go(scenes.length - 1, 0); }
+    });
+    var h = readHash();
+    go(h ? h.i : 0, h ? h.k : 0);
+  }
+
+  window.OB = {
+    DUR: DUR,
+    // helpers
+    el: el, html: html, svgEl: svgEl, num: num, money: money, moneyEl: moneyEl,
+    // motion (also on the api of a beat)
+    at: at, show: show, fade: fade, fly: fly, move: move, roll: roll, ring: ring, animate: animate,
+    // engine
+    scene: scene, start: start, go: go, next: next, back: back, skip: skip,
+    instant: function (on) { if (on !== undefined) INSTANT = !!on; return INSTANT; },
+    list: function () {
+      return scenes.map(function (s) {
+        return { key: s.key, order: s.order, beats: s.beats, title: s.title || "", card: !!s.card, optional: !!s.optional };
+      });
+    },
+    state: function () { return { scene: cur, beat: curBeat, key: cur >= 0 ? scenes[cur].key : null, busy: !!(T && (T.timers.length || T.motions.length)) }; },
+    config: function () { return CFG; }
+  };
+})();
+</script>
+<script>/* art.js */
+/* art.js: the pictures of "Old Bessie" (agent A2, 2026-11-14), as inline SVG pixels, crisp at any size. OB.art.
+   ENGINE.md lists the API. Colours are written here as hex (CSS custom properties do not reach SVG attributes) and
+   match core.css: the wear colours of the four states and the lever colours of the three actions.
+
+   Sources: the van is the arcade's OLD BESSIE (rl-arcade/repair-or-replace/js/vanCard.js) redrawn as pixels and
+   coloured by wear; the action glyphs are the arcade's (js/actions.js: wheel RUN, wrench SERVICE, sparkle REPLACE);
+   the game sprites are the arcade's cartridges (rl-arcade/cartridges.js). */
+(function () {
+  "use strict";
+  var OB = window.OB;
+
+  var C = {
+    ink: "#181818", ink2: "#585858", box: "#F8F4E4", white: "#FFFFFF", yellow: "#F8D028",
+    wear: ["#2E8B57", "#C99A33", "#E07A2A", "#D33A2C"],
+    wearDark: ["#1E6B40", "#9C7417", "#B85A16", "#9E2A20"],
+    wearSoft: ["#D5EBDD", "#F3E6C4", "#F8DCC4", "#F6D2CC"],
+    wearText: ["#2E8B57", "#9C7417", "#C25F14", "#D33A2C"],
+    lever: ["#1666C8", "#E08A00", "#D33A2C"],
+    leverText: ["#1666C8", "#9A5E00", "#D33A2C"],
+    leverSoft: ["#DCE9FB", "#FBEED2", "#FADBD6"]
+  };
+  var STATES = (window.B && window.B.STATES) || ["HEALTHY", "WORN", "SHAKY", "FAILING"];
+  var ACTIONS = (window.B && window.B.ACTIONS) || ["RUN", "SERVICE", "REPLACE"];
+
+  /* A grid of characters to an SVG of pixels: each run of one colour in a row is one rect. */
+  function pixels(rows, pal, px, cls) {
+    var h = rows.length, w = 0, out = [];
+    rows.forEach(function (row) { w = Math.max(w, row.length); });
+    rows.forEach(function (row, y) {
+      var x = 0;
+      while (x < row.length) {
+        var ch = row[x], x0 = x;
+        while (x < row.length && row[x] === ch) x++;
+        var col = pal[ch];
+        if (col) out.push('<rect x="' + x0 + '" y="' + y + '" width="' + (x - x0) + '" height="1" fill="' + col + '"/>');
+      }
+    });
+    var scale = px || 4;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + " " + h + '" width="' + (w * scale) + '" height="' + (h * scale) +
+      '" shape-rendering="crispEdges"' + (cls ? ' class="' + cls + '"' : "") + ' aria-hidden="true">' + out.join("") + "</svg>";
+  }
+  function wrap(svg, cls) {
+    var s = document.createElement("span");
+    s.className = "ob-art" + (cls ? " " + cls : "");
+    s.innerHTML = svg;
+    return s;
+  }
+
+  /* Old Bessie, facing right, 30 x 16 pixels. B body, R roof stripe (both in the wear colour), G glass, L headlight,
+     S pipe and bumper, T tyre, H hub, g ground. The decals of wear are added on top by vanRows. */
+  var VAN = [
+    "..............................",
+    "..KKKKKKKKKKKKKKKKK...........",
+    "..KRRRRRRRRRRRRRRRK...........",
+    "..KBBBBBBBBBBBBBBBK...........",
+    "..KBBBBBBBBBBBBBBBKKKKKK......",
+    "..KBBBBBBBBBBBBBBBKBBBBBK.....",
+    "..KBBBBBBBBBBBBBBBKGGGGBBK....",
+    "..KBBBBBBBBBBBBBBBKGGGGBBBK...",
+    "..KBBBBBBBBBBBBBBBKGGGGBBBK...",
+    "..KBBBBBBBBBBBBBBBKBBBBBBLK...",
+    "SSKBBBBBBBBBBBBBBBKBBBBBBBKSS.",
+    "SSKKKTTTKKKKKKKKKKKKKTTTKKKSS.",
+    "...TTTTTTT.........TTTTTTT....",
+    "...TTTHTTT.........TTTHTTT....",
+    "....TTTTT...........TTTTT.....",
+    "gggggggggggggggggggggggggggggg"
+  ];
+  /* Decals: [row, col, char]. WORN a scratch; SHAKY also a dent and rust; FAILING also a crack, a drip and smoke. */
+  var DECALS = [
+    [],
+    [[8, 5, "K"], [8, 6, "K"], [9, 7, "K"], [9, 8, "K"]],
+    [[6, 13, "K"], [7, 12, "K"], [7, 14, "K"], [9, 14, "O"], [9, 15, "O"], [10, 15, "O"], [10, 16, "O"]],
+    [[3, 4, "K"], [4, 4, "K"], [5, 5, "K"], [6, 4, "K"], [7, 5, "K"], [12, 26, "D"], [13, 26, "D"], [7, 0, "M"], [8, 1, "M"], [6, 1, "M"], [9, 0, "M"]]
+  ];
+  function vanRows(wear) {
+    var rows = VAN.map(function (r) { return r.split(""); });
+    for (var w = 1; w <= wear; w++) DECALS[w].forEach(function (d) { rows[d[0]][d[1]] = d[2]; });
+    return rows.map(function (r) { return r.join(""); });
+  }
+  function vanPal(wear) {
+    return { K: C.ink, B: C.wear[wear], R: C.wearDark[wear], G: "#B6D9EB", L: C.yellow, S: C.ink2, T: C.ink, H: C.box,
+      g: C.ink2, O: "#6B3410", D: C.ink2, M: "#9A9A9A" };
+  }
+  function vanSvg(wear, px) { return pixels(vanRows(wear | 0), vanPal(wear | 0), px || 4); }
+  /* The van as an element: opts.size (width in px, default 120), opts.gauge (default true), opts.label (default
+     true: the state's name in its colour). */
+  function van(wear, opts) {
+    opts = opts || {};
+    wear = Math.max(0, Math.min(3, wear | 0));
+    var box = document.createElement("span");
+    box.className = "ob-van w" + wear;
+    var px = (opts.size || 120) / 30;
+    box.appendChild(wrap(vanSvg(wear, px)));
+    if (opts.gauge !== false) {
+      var g = document.createElement("span");
+      g.className = "gauge";
+      for (var i = 0; i < 4; i++) {
+        var seg = document.createElement("i");
+        if (i < 4 - wear) seg.className = "lit";
+        g.appendChild(seg);
+      }
+      box.appendChild(g);
+    }
+    if (opts.label !== false) {
+      var t = document.createElement("span");
+      t.className = "tag";
+      t.textContent = STATES[wear];
+      box.appendChild(t);
+    }
+    return box;
+  }
+
+  /* The three action glyphs (the arcade's line art), in currentColor. */
+  var GLYPH = [
+    '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.1"/>' +
+      '<circle cx="12" cy="12" r="2.5" fill="currentColor"/>' +
+      '<g stroke="currentColor" stroke-width="2.1" stroke-linecap="round">' +
+      '<line x1="12" y1="9.5" x2="12" y2="3.4"/><line x1="14.1" y1="13.2" x2="18.9" y2="16.1"/>' +
+      '<line x1="9.9" y1="13.2" x2="5.1" y2="16.1"/></g>',
+    '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"' +
+      ' fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>',
+    '<path d="M12 2.6l1.95 5.95a2 2 0 0 0 1.3 1.3L21.4 12l-5.95 1.95a2 2 0 0 0-1.3 1.3L12 21.4l-1.95-5.95a2 2 0 0 0-1.3-1.3L2.6 12l5.95-1.95a2 2 0 0 0 1.3-1.3z"' +
+      ' fill="currentColor"/>'
+  ];
+  function glyph(a, px) {
+    var s = px || 20;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" class="smooth" aria-hidden="true">' + GLYPH[a] + "</svg>";
+  }
+
+  /* Chips: a state (its colour, its name) and an action (its glyph, its colour, its name). */
+  function stateChip(s, opts) {
+    opts = opts || {};
+    var c = document.createElement("span");
+    c.className = "ob-chip s" + s;
+    var d = document.createElement("i");
+    d.className = "dot";
+    c.appendChild(d);
+    c.appendChild(document.createTextNode(opts.text || STATES[s]));
+    return c;
+  }
+  function actionChip(a, opts) {
+    opts = opts || {};
+    var c = document.createElement("span");
+    c.className = "ob-chip a" + a;
+    c.innerHTML = glyph(a, opts.glyph || 18);
+    c.appendChild(document.createTextNode(opts.text || ACTIONS[a]));
+    return c;
+  }
+
+  /* The four games of the arcade, as their cartridge sprites (rl-arcade/cartridges.js, palette PX). */
+  var PX = { ".": null, K: "#0b0b16", W: "#f4f6ff", R: "#ff4d5e", r: "#c0202e", G: "#6be24a", g: "#1f9a52",
+    B: "#41a6ff", b: "#9aa7ff", Y: "#ffd23f", O: "#ff9a3c", P: "#b06bff", C: "#5ad0ff", S: "#c9cee6", s: "#6c7194", N: "#9a6a3c" };
+  var SPRITES = {
+    van: ["...........", "...KKKKKKK.", "..KKWWKbbbK", ".KbbbbbbbbK", ".KbbbbbbbbK",
+      ".KbbbbbbbbK", ".KKKKKKKKK.", "..KK...KK..", "..KK...KK..", "..........."],
+    robot: [".....R.....", ".....K.....", "..KKKKKKK..", "..KSSSSSK..", "..KSSSSSK..",
+      "..KCCSCCK..", "..KSSSSSK..", "..KSKKKSK..", "..KKKKKKK..", "...K...K..."],
+    tag: ["..KKKKKKK..", ".KOOOKOOOK.", ".KOOOOOOOK.", ".KOYYYOOOK.", ".KOYOOOOOK.",
+      ".KOYYYOOOK.", ".KOOOYOOOK.", ".KOYYYOOOK.", ".KOOOOOOOK.", "..KKKKKKK.."],
+    pokeball: ["...KKKKK...", ".KKRRRRRKK.", ".KRRRRRRRK.", "KRRRRRRRRRK", "KRRRWWWRRRK",
+      "KKKKWKWKKKK", "KWWWWWWWWWK", "KWWWWWWWWWK", ".KWWWWWWWK.", ".KKWWWWWKK.", "...KKKKK..."]
+  };
+  var GAMES = [
+    { id: "bessie", sprite: "van", name: "OLD BESSIE" },
+    { id: "anymal", sprite: "robot", name: "ANYMAL" },
+    { id: "pricing", sprite: "tag", name: "LAST-MINUTE PRICING" },
+    { id: "pokemon", sprite: "pokeball", name: "POKEMON" }
+  ];
+  function sprite(name, px) { return pixels(SPRITES[name], PX, px || 6); }
+  /* A game as an element: its sprite on a cartridge-like tile and its name. id: bessie, anymal, pricing, pokemon. */
+  function game(id, opts) {
+    opts = opts || {};
+    var g = GAMES.filter(function (x) { return x.id === id; })[0];
+    var box = document.createElement("span");
+    box.className = "ob-game";
+    var tile = wrap(sprite(g.sprite, opts.px || 7), "ob-box plain");
+    box.appendChild(tile);
+    var t = document.createElement("span");
+    t.className = "label";
+    t.textContent = g.name;
+    box.appendChild(t);
+    return box;
+  }
+
+  /* The player, the one who chooses (sketch page 18): a small face. */
+  var FACE = ["..KKKKK..", ".KYYYYYK.", "KYYKYKYYK", "KYYKYKYYK", "KYYYYYYYK", "KYKYYYKYK", "KYYKKKYYK", ".KYYYYYK.", "..KKKKK.."];
+  function face(px) { return pixels(FACE, { K: C.ink, Y: C.yellow }, px || 4); }
+
+  /* A die for the transition dynamics: n pips (1 to 6), 15 x 15 pixels. */
+  var PIPS = { 1: [[1, 1]], 2: [[0, 0], [2, 2]], 3: [[0, 0], [1, 1], [2, 2]], 4: [[0, 0], [2, 0], [0, 2], [2, 2]],
+    5: [[0, 0], [2, 0], [1, 1], [0, 2], [2, 2]], 6: [[0, 0], [2, 0], [0, 1], [2, 1], [0, 2], [2, 2]] };
+  function dieRows(n) {
+    var g = [];
+    for (var y = 0; y < 15; y++) {
+      var r = "";
+      for (var x = 0; x < 15; x++) r += (x === 0 || y === 0 || x === 14 || y === 14) ? "K" : "W";
+      g.push(r.split(""));
+    }
+    if (n === 0) {   /* a question mark: an outcome that no fair die decides (page 1; added after the freeze by the main session) */
+      [".OOO.", "O...O", "....O", "...O.", "..O..", "..O..", ".....", "..O.."].forEach(function (row, y) {
+        for (var x = 0; x < 5; x++) if (row[x] === "O") g[3 + y][5 + x] = "K";
+      });
+      return g.map(function (r) { return r.join(""); });
+    }
+    (PIPS[n] || PIPS[1]).forEach(function (p) {
+      for (var dy = 0; dy < 3; dy++) for (var dx = 0; dx < 3; dx++) g[2 + p[1] * 4 + dy][2 + p[0] * 4 + dx] = "K";
+    });
+    return g.map(function (r) { return r.join(""); });
+  }
+  function die(n, px) { return pixels(dieRows(n), { K: C.ink, W: C.white }, px || 3); }
+  function dieEl(n, px) { return wrap(die(n, px), "ob-die"); }
+  /* Set the face of a die element made by dieEl; with roll true it tumbles first (about 1.5 s, CSS ob-tumble). */
+  function setDie(e, n, roll) {
+    var px = parseFloat(e.querySelector("svg").getAttribute("width")) / 15;
+    e.innerHTML = die(n, px);
+    e.classList.remove("tumble");
+    if (roll) { void e.offsetWidth; e.classList.add("tumble"); }
+  }
+
+  /* Greek letters drawn as pixels: Press Start 2P has only ASCII (and a few signs such as x), so gamma, alpha,
+     epsilon, nabla and Sigma are 8 x 8 pixel glyphs that sit in a line of text like a letter of the font. */
+  var SYM = {
+    gamma: ["........", "........", "OO....OO", ".OO..OO.", "..OOOO..", "...OO...", "...OO...", "...OO..."],
+    alpha: ["........", "........", ".OOO.OO.", "OO..OOO.", "OO...OO.", "OO..OOO.", ".OOO.OO.", "........"],
+    epsilon: ["........", "........", ".OOOOO..", "OO......", ".OOOO...", "OO......", ".OOOOO..", "........"],
+    nabla: ["OOOOOOO.", "OO...OO.", ".O...O..", ".OO.OO..", "..O.O...", "..OOO...", "...O....", "........"],
+    Sigma: ["OOOOOOO.", "OO......", ".OO.....", "..OO....", ".OO.....", "OO......", "OOOOOOO.", "........"]
+  };
+  function sym(name) {
+    return pixels(SYM[name], { O: "currentColor" }, 1).replace('width="8" height="8"', 'width="1em" height="1em" class="ob-sym"');
+  }
+  function symEl(name) {
+    var s = document.createElement("span");
+    s.className = "ob-symbox";
+    s.setAttribute("aria-label", name);
+    s.innerHTML = sym(name);
+    return s;
+  }
+
+  OB.art = {
+    C: C, STATES: STATES, ACTIONS: ACTIONS, GAMES: GAMES, SPRITES: SPRITES,
+    pixels: pixels, wrap: wrap,
+    van: van, vanSvg: vanSvg, glyph: glyph, stateChip: stateChip, actionChip: actionChip,
+    sprite: sprite, game: game, face: face, die: die, dieEl: dieEl, setDie: setDie,
+    sym: sym, symEl: symEl, SYM: SYM
+  };
+})();
+</script>
+<script>/* runs.js */
+/* runs.js: the run symbol of "Old Bessie" (agent A3, 2026-11-14), drawn on pages 2 and 3. OB.runs.
+
+   A run is one row: one cell per week, the cell coloured by the van's state that week (the wear colours of core.css),
+   the action's glyph small inside it (art.js, in ink), a breakdown marked by a small yellow bolt in the cell's corner,
+   and at the end of the row a slot for the run's G1, hidden until a scene shows it. Many runs are a block of rows.
+   Up to 20 runs (by default) are drawn as elements, one legible row each; more are drawn as a compact block on a
+   canvas, one thin line per run (1,000 runs fit in a few hundred pixels), with an optional G1 column of thin bars.
+
+   API (stable from 2026-11-14; additions only):
+
+     OB.runs.play(policy, d, n)    the first n runs (default d.n) of the dice d under policy: an array of
+                                   B.playRun(policy, d, i), each { states, actions, rewards, faces, G1 }.
+     OB.runs.block(runs, opts)     an element .runs-block that draws the runs. opts (all optional):
+         compact   true or false   default: runs.length > 20
+         g1        true            rows: a G1 slot at the end of each row; compact: a G1 column of bars. Hidden
+                                   (class ob-hide) until shown with OB.runs.showG1 or api.show
+         head      true            rows: a line above the rows with the week numbers and the head "G1" of the slots
+         label     true            rows: the run's number at the left of its row (1, 2, 3, ...)
+         places    0               decimals of the G1 slots (OB.money)
+         height    0               compact: the block's height in px (default: 1 px a run, at most 320 px)
+         width     0               compact: the block's width in px (default 13 x 8 px)
+       The element carries: .runs (the data), .rows[i] and .cells[i][t] (rows), .g1s[i] (the G1 slots of the rows),
+       .g1head (the head "G1" over the slots), .canvas and .g1col (compact).
+     OB.runs.showG1(block, on, api, opts)  shows (on true) or hides the G1 slots of a block: with api and motion one
+                                   after another (opts.stagger ms, default 140; opts.delay ms); compact: the G1 column.
+     OB.runs.row(run, i, opts)     one row element (as in a block of rows): .cells, .g1 (its slot)
+     OB.runs.cell(s, a, breakdown) one cell element .runs-cell (state s, action a, a bolt when breakdown is true)
+     OB.runs.legend(opts)          a line that explains the symbol: the four states' colours, the three glyphs and
+                                   the bolt (opts.states, opts.actions, opts.breakdown: false leaves a part out)
+
+   Sizes: the cell is --rc (CSS, about 29 px on a large screen, 18 px on a phone); a block of rows sets it with
+   style.setProperty("--rc", "24px") if a scene needs another size. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, art = OB.art, el = OB.el;
+  var WEAR = art.C.wear;
+
+  /* The bolt of a breakdown: a 5 x 8 pixel spark, yellow with an ink outline. */
+  var BOLT = [
+    "..KKK",
+    ".KYYK",
+    ".KYK.",
+    "KYYKK",
+    "KYYYK",
+    ".KYK.",
+    ".KK..",
+    "K...."
+  ];
+  function boltSvg() { return art.pixels(BOLT, { K: art.C.ink, Y: art.C.yellow }, 2); }
+
+  function play(policy, d, n) {
+    var out = [];
+    n = n || d.n;
+    for (var i = 0; i < n; i++) out.push(B.playRun(policy, d, i));
+    return out;
+  }
+
+  function cell(s, a, breakdown) {
+    var c = el("span", "runs-cell w" + s + (breakdown ? " bd" : ""));
+    c.innerHTML = art.glyph(a, 16);
+    if (breakdown) c.appendChild(OB.html("span", "runs-bolt", boltSvg()));
+    c.title = B.STATES[s] + ", " + B.ACTIONS[a] + (breakdown ? ", breakdown" : "");
+    return c;
+  }
+
+  function row(run, i, opts) {
+    opts = opts || {};
+    var r = el("div", "runs-row");
+    if (opts.label !== false) r.appendChild(el("span", "runs-no", String(i + 1)));
+    var cs = el("span", "runs-cells"), cells = [];
+    for (var t = 0; t < run.actions.length; t++) {
+      var c = cell(run.states[t], run.actions[t], run.faces[t] === "breakdown");
+      cs.appendChild(c);
+      cells.push(c);
+    }
+    r.appendChild(cs);
+    r.cells = cells;
+    if (opts.g1 !== false) {
+      var g = OB.moneyEl(run.G1, opts.places || 0);
+      g.classList.add("runs-g1", "ob-hide");
+      r.appendChild(g);
+      r.g1 = g;
+    }
+    return r;
+  }
+
+  function rowsBlock(runs, opts) {
+    var b = el("div", "runs-block rows");
+    b.runs = runs;
+    b.rows = [];
+    b.cells = [];
+    b.g1s = [];
+    var weeks = runs.length ? runs[0].actions.length : B.WEEKS;
+    if (opts.head !== false) {
+      var h = el("div", "runs-row runs-head");
+      if (opts.label !== false) h.appendChild(el("span", "runs-no", ""));
+      var hs = el("span", "runs-cells");
+      for (var t = 0; t < weeks; t++) hs.appendChild(el("span", "runs-wk", String(t + 1)));
+      h.appendChild(hs);
+      if (opts.g1 !== false) {
+        b.g1head = OB.html("span", "runs-g1 runs-g1h ob-hide", "G<sub>1</sub>");
+        h.appendChild(b.g1head);
+      }
+      b.appendChild(h);
+    }
+    runs.forEach(function (run, i) {
+      var r = row(run, i, opts);
+      b.appendChild(r);
+      b.rows.push(r);
+      b.cells.push(r.cells);
+      if (r.g1) b.g1s.push(r.g1);
+    });
+    return b;
+  }
+
+  /* Compact: a canvas with one line per run (13 columns of the state colours), and a G1 column of bars. */
+  function compactBlock(runs, opts) {
+    var b = el("div", "runs-block compact");
+    b.runs = runs;
+    var n = runs.length, weeks = n ? runs[0].actions.length : B.WEEKS;
+    var H = opts.height || Math.min(320, n), W = opts.width || weeks * 8;
+    var rowPx = n <= H ? Math.max(1, Math.floor(H / n)) : 1;
+    var cv = el("canvas", "runs-canvas");
+    cv.width = weeks;
+    cv.height = n * rowPx;
+    cv.style.width = W + "px";
+    cv.style.height = (n <= H ? n * rowPx : H) + "px";
+    if (n > H) cv.classList.add("blend");
+    var g = cv.getContext("2d");
+    runs.forEach(function (run, i) {
+      for (var t = 0; t < weeks; t++) {
+        g.fillStyle = WEAR[run.states[t]];
+        g.fillRect(t, i * rowPx, 1, rowPx);
+      }
+    });
+    b.appendChild(cv);
+    b.canvas = cv;
+    if (opts.g1 !== false) {
+      var gw = 64, gc = el("canvas", "runs-g1col ob-hide");
+      gc.width = gw;
+      gc.height = n * rowPx;
+      gc.style.width = Math.round(W * 0.9) + "px";
+      gc.style.height = cv.style.height;
+      if (n > H) gc.classList.add("blend");
+      var m = 1;
+      runs.forEach(function (run) { m = Math.max(m, Math.abs(run.G1)); });
+      var lo = 0, hi = 0;
+      runs.forEach(function (run) { lo = Math.min(lo, run.G1); hi = Math.max(hi, run.G1); });
+      var span = Math.max(1, hi - lo), x0 = Math.round((0 - lo) / span * (gw - 2)) + 1;
+      var gg = gc.getContext("2d");
+      runs.forEach(function (run, i) {
+        var x1 = Math.round((run.G1 - lo) / span * (gw - 2)) + 1;
+        gg.fillStyle = run.G1 >= 0 ? "#1F7A45" : "#C0302A";
+        gg.fillRect(Math.min(x0, x1), i * rowPx, Math.max(1, Math.abs(x1 - x0)), rowPx);
+      });
+      gg.fillStyle = art.C.ink;
+      gg.fillRect(x0, 0, 1, n * rowPx);
+      b.appendChild(gc);
+      b.g1col = gc;
+    }
+    return b;
+  }
+
+  function block(runs, opts) {
+    opts = opts || {};
+    var compact = opts.compact === undefined ? runs.length > 20 : !!opts.compact;
+    return compact ? compactBlock(runs, opts) : rowsBlock(runs, opts);
+  }
+
+  function showG1(b, on, api, opts) {
+    opts = opts || {};
+    var show = api ? api.show : OB.show;
+    var moving = api && !api.instant;
+    if (b.g1col) { show(b.g1col, on !== false, { delay: opts.delay || 0 }); return; }
+    if (b.g1head) show(b.g1head, on !== false, { delay: opts.delay || 0 });
+    var st = opts.stagger === undefined ? 140 : opts.stagger;
+    b.g1s.forEach(function (g, i) {
+      show(g, on !== false, moving ? { delay: (opts.delay || 0) + i * st } : undefined);
+    });
+  }
+
+  function legend(opts) {
+    opts = opts || {};
+    var l = el("div", "runs-legend");
+    if (opts.states !== false) {
+      for (var s = 0; s < 4; s++) {
+        var it = el("span", "runs-key");
+        it.appendChild(el("span", "runs-swatch w" + s));
+        it.appendChild(el("span", "", B.STATES[s]));
+        l.appendChild(it);
+      }
+    }
+    if (opts.actions !== false) {
+      for (var a = 0; a < 3; a++) {
+        var ia = el("span", "runs-key");
+        ia.appendChild(OB.html("span", "runs-gl", art.glyph(a, 16)));
+        ia.appendChild(el("span", "", B.ACTIONS[a]));
+        l.appendChild(ia);
+      }
+    }
+    if (opts.breakdown !== false) {
+      var ib = el("span", "runs-key");
+      ib.appendChild(OB.html("span", "runs-gl", boltSvg()));
+      ib.appendChild(el("span", "", "BREAKDOWN"));
+      l.appendChild(ib);
+    }
+    return l;
+  }
+
+  OB.runs = { play: play, block: block, showG1: showG1, row: row, cell: cell, legend: legend };
+})();
+</script>
+<script>/* sec2-data.js */
+/* sec2-data.js: the numbers of page 2, "Runs and cumulative rewards" (agent A3, 2026-11-14), all from bessie.js.
+   In the browser OB.sec2 (this file loads after core.js and runs.js); in node require("./sec2-data.js"), which
+   tools/check_runs.js uses to assert every number the page shows.
+
+   Seeds (recorded in PLAN.md by the main session):
+   - RUN_SEED 15: the runs of the strategy B.BEST in scenes 200 to 600 are runs 0 to 9 of B.dice(15, 10). Run 0 is
+     "a run of Old Bessie" (HEALTHY RUN to WORN, $95; WORN SERVICE to HEALTHY, -$50; ...), the run of the cumulative
+     reward (plain sum $430, G1 with gamma 0.9 $230.17); runs 0 to 2 are the three runs of "Runs are random" (run 1
+     has a breakdown in week 9); runs 0 to 9 the ten runs after the fold.
+   - GOAL_SEED 40: the goal of RL plays four strict strategies on the same 100 runs of B.dice(40, 100); their
+     averages are within $6 of the exact expected G1 (B.expectedG1), and B.BEST has the highest. */
+(function (root) {
+  "use strict";
+  var node = typeof module !== "undefined" && module.exports;
+  var B = node ? require("./bessie.js") : root.B;
+
+  var RUN_SEED = 15, RUN_N = 10;
+  var GOAL_SEED = 40, GOAL_N = 100;
+
+  var dRun = B.dice(RUN_SEED, RUN_N);
+  var runs = [];
+  for (var i = 0; i < RUN_N; i++) runs.push(B.playRun(B.BEST, dRun, i));
+  var run = runs[0];
+  var sum = 0;
+  run.rewards.forEach(function (r) { sum += r; });
+  var weights = [], w = 1;
+  for (var t = 0; t < B.WEEKS; t++) { weights.push(w); w *= B.GAMMA; }
+
+  /* The goal of RL: four strict strategies (one action per state: HEALTHY, WORN, SHAKY, FAILING). */
+  var STRATS = [
+    { name: "Always RUN", policy: [B.RUN, B.RUN, B.RUN, B.RUN] },
+    { name: "RUN until it fails", policy: [B.RUN, B.RUN, B.RUN, B.REPLACE] },
+    { name: "SERVICE when worn", policy: [B.RUN, B.SERVICE, B.SERVICE, B.SERVICE] },
+    { name: "REPLACE when shaky", policy: B.BEST.slice() }
+  ];
+  var dGoal = B.dice(GOAL_SEED, GOAL_N);
+  var lo = Infinity, hi = -Infinity, best = 0;
+  STRATS.forEach(function (s, k) {
+    s.runs = [];
+    s.g1 = [];
+    var tot = 0;
+    for (var j = 0; j < GOAL_N; j++) {
+      var r = B.playRun(s.policy, dGoal, j);
+      s.runs.push(r);
+      s.g1.push(r.G1);
+      tot += r.G1;
+      lo = Math.min(lo, r.G1);
+      hi = Math.max(hi, r.G1);
+    }
+    s.avg = tot / GOAL_N;
+    s.expected = B.expectedG1(s.policy);
+    if (s.avg > STRATS[best].avg) best = k;
+  });
+  /* The axis of G1 in dollars: from the lowest G1 to the highest, padded and rounded to $100; ticks every $500. */
+  var AXIS = { lo: Math.floor((lo - 50) / 100) * 100, hi: Math.ceil((hi + 50) / 100) * 100, ticks: [] };
+  for (var x = Math.ceil(AXIS.lo / 500) * 500; x <= AXIS.hi; x += 500) AXIS.ticks.push(x);
+
+  var D = {
+    RUN_SEED: RUN_SEED, RUN_N: RUN_N, GOAL_SEED: GOAL_SEED, GOAL_N: GOAL_N,
+    runs: runs, run: run, sum: sum, weights: weights, G1: run.G1,
+    STRATS: STRATS, best: best, lo: lo, hi: hi, AXIS: AXIS
+  };
+  if (node) module.exports = D;
+  else root.OB.sec2 = D;
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>/* sec2a.js */
+/* sec2a.js: page 2, section 3 of the weekend, "Runs and cumulative rewards" (agent A3, 2026-11-14), from Carlos's
+   sketch pages 17 to 22. This file: the shared drawings of the page (the run in the sketch's notation, the run as a
+   table of weeks) and the scenes 100 "Runs", 200 "A run of Old Bessie", 300 "Runs are random". Every number comes
+   from sec2-data.js (OB.sec2), which takes it from bessie.js. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, art = OB.art, el = OB.el, D = OB.sec2;
+
+  function phone() { return !!(window.matchMedia && window.matchMedia("(max-width: 560px)").matches); }
+  function place(e, r, c) { e.style.setProperty("--r", String(r)); e.style.setProperty("--c", String(c)); return e; }
+
+  /* A circled step number in the colour of its step. */
+  function num(n) { return el("span", "s2-num", String(n)); }
+  /* The player who chooses (the face of art.js) and the transition dynamics (a die). */
+  function face() { return OB.html("span", "s2-face", art.face(4)); }
+  function dieMark() { return OB.html("span", "s2-die", art.die(5, 2)); }
+  /* A reward hanging below an arrow: a short arrow down and $r with its week. */
+  function hang(k) {
+    var h = el("span", "s2-hang");
+    h.appendChild(el("span", "s2-down"));
+    h.appendChild(OB.html("span", "s2-sym s2-rsym", "$r<sub>" + k + "</sub>"));
+    return h;
+  }
+
+  /* The run in the sketch's notation (sketch page 18). spec: a list of columns, left to right; each column is
+     { sym: "S<sub>1</sub>" } (a symbol) or { link: true, top: element, bot: element } (an arrow with what is above
+     and below it), and may carry cls (a colour class s2-c1 to s2-c4). A grid: on a desk the columns run left to
+     right in four rows (above the arrows, the line, below the arrows, values); on a phone the grid turns, so the
+     run reads top to bottom. Returns { grid, cols: [{ cell, top, bot, val }] }. */
+  function seq(spec, cls) {
+    var g = el("div", "s2-seq" + (cls ? " " + cls : "")), cols = [];
+    spec.forEach(function (s, i) {
+      var c = i + 1, col = { spec: s };
+      var cc = s.cls ? " " + s.cls : "";
+      if (s.link) {
+        col.cell = place(el("div", "s2-link" + cc), 2, c);
+        col.arr = el("span", "s2-arr");
+        col.cell.appendChild(col.arr);
+        col.top = place(el("div", "s2-top" + cc), 1, c);
+        col.bot = place(el("div", "s2-bot" + cc), 3, c);
+        if (s.top) col.top.appendChild(s.top);
+        if (s.bot) col.bot.appendChild(s.bot);
+        g.appendChild(col.top);
+        g.appendChild(col.bot);
+      } else {
+        col.cell = place(OB.html("div", "s2-sym s2-item" + cc, s.sym), 2, c);
+      }
+      g.appendChild(col.cell);
+      col.val = place(el("div", "s2-val" + cc), 4, c);
+      g.appendChild(col.val);
+      cols.push(col);
+    });
+    return { grid: g, cols: cols };
+  }
+  /* Draw an arrow of the notation: it grows from its tail (1.2 s) when motion is on. */
+  function grow(api, arr, opts) {
+    var vert = phone();
+    arr.style.clipPath = "";
+    if (api.instant) return;
+    opts = opts || {};
+    arr.style.clipPath = vert ? "inset(0 0 100% 0)" : "inset(0 100% 0 0)";
+    api.at(opts.delay || 0, function () {
+      api.animate(opts.dur || 1200, function (p) {
+        var q = (100 * (1 - p)).toFixed(1) + "%";
+        arr.style.clipPath = vert ? "inset(0 0 " + q + " 0)" : "inset(0 " + q + " 0 0)";
+      }, function () { arr.style.clipPath = ""; });
+    });
+  }
+
+  /* The sketch's run S1, a1, S2, $r1, a2, S3, $r2, ... in the four numbered, coloured steps (sketch page 18). */
+  function sketchRun(cls) {
+    return seq([
+      { sym: "S<sub>1</sub>" },
+      { link: true, top: face(), bot: num(1), cls: "s2-c1" },
+      { sym: "a<sub>1</sub>", cls: "s2-c1" },
+      { link: true, top: num(2), bot: hang(1), cls: "s2-c2" },
+      { sym: "S<sub>2</sub>", cls: "s2-c2" },
+      { link: true, top: face(), bot: num(3), cls: "s2-c3" },
+      { sym: "a<sub>2</sub>", cls: "s2-c3" },
+      { link: true, top: num(4), bot: hang(2), cls: "s2-c4" },
+      { sym: "S<sub>3</sub>", cls: "s2-c4" },
+      { sym: "...", cls: "s2-dots" }
+    ], cls);
+  }
+  /* The parts of the sketch's run that each beat adds: beat 0 S1; step n (1 to 4) its arrow, marks and target. */
+  function stepParts(q, n) {
+    var L = q.cols[2 * n - 1], T = q.cols[2 * n];
+    return [L.top, L.cell, L.bot, T.cell];
+  }
+
+  /* The run as a table of weeks: a row per kind (the state, the action, the reward, and on request the weight),
+     a column per week. opts.names (the rows' names at the left), opts.head (the weeks' numbers above),
+     opts.weights (the row of weights GAMMA to the power t - 1). On a phone the table turns: a row per week.
+     Returns { grid, s: [], a: [], r: [], w: [], head: [], loop } (loop: the orange ring around the rewards). */
+  var ROW = { head: 1, s: 2, a: 3, r: 4, w: 5 };
+  var NAMES = { head: "WEEK", s: "STATE", a: "ACTION", r: "REWARD", w: "WEIGHT" };
+  function runTable(run, opts) {
+    opts = opts || {};
+    var g = el("div", "s2-tab" + (opts.names ? " named" : "") + (opts.cls ? " " + opts.cls : ""));
+    var T = { grid: g, s: [], a: [], r: [], w: [], head: [] };
+    var c0 = opts.names ? 1 : 0, n = run.actions.length;
+    var kinds = ["s", "a", "r"];
+    if (opts.head) kinds.unshift("head");
+    if (opts.weights) kinds.push("w");
+    if (opts.names) kinds.forEach(function (k) {
+      var nm = place(el("div", "s2-name", NAMES[k]), ROW[k], 1);
+      g.appendChild(nm);
+      T["name_" + k] = nm;
+    });
+    T.loop = el("div", "s2-loop ob-hide");
+    T.loop.style.setProperty("--r", String(ROW.r));
+    T.loop.style.setProperty("--c", (c0 + 1) + " / span " + n);
+    g.appendChild(T.loop);
+    for (var t = 0; t < n; t++) {
+      var c = c0 + 1 + t;
+      if (opts.head) { var h = place(el("div", "s2-wk", String(t + 1)), ROW.head, c); g.appendChild(h); T.head.push(h); }
+      var sc = place(el("div", "s2-ts"), ROW.s, c);
+      sc.appendChild(art.van(run.states[t], { size: 60, gauge: false, label: false }));
+      if (run.faces[t] === "breakdown") { sc.classList.add("bd"); sc.title = "breakdown"; }
+      g.appendChild(sc);
+      T.s.push(sc);
+      var ac = place(OB.html("div", "s2-ta a" + run.actions[t], art.glyph(run.actions[t], 22)), ROW.a, c);
+      ac.title = B.ACTIONS[run.actions[t]];
+      g.appendChild(ac);
+      T.a.push(ac);
+      var rc = place(el("div", "s2-tr"), ROW.r, c);
+      rc.appendChild(OB.moneyEl(run.rewards[t]));
+      g.appendChild(rc);
+      T.r.push(rc);
+      if (opts.weights) {
+        var wc = place(el("div", "s2-tw", OB.num(D.weights[t], t === 0 ? 0 : 2)), ROW.w, c);
+        g.appendChild(wc);
+        T.w.push(wc);
+      }
+    }
+    return T;
+  }
+  /* Show the weeks of a table one after another (a quick sweep, opts.stagger ms a week) or hide them. */
+  function sweep(api, T, on, opts) {
+    opts = opts || {};
+    var st = opts.stagger === undefined ? 130 : opts.stagger, d0 = opts.delay || 0;
+    var kinds = opts.kinds || ["head", "s", "a", "r", "w"];
+    for (var t = 0; t < T.s.length; t++) {
+      kinds.forEach(function (k) {
+        var e = T[k][t];
+        if (e) api.show(e, on, on && !api.instant ? { delay: d0 + t * st, dur: opts.dur || 700 } : undefined);
+      });
+    }
+  }
+
+  OB.s2 = { phone: phone, place: place, num: num, face: face, hang: hang, seq: seq, grow: grow, sketchRun: sketchRun,
+    stepParts: stepParts, runTable: runTable, sweep: sweep };
+
+  /* 100. Runs (sketch page 18): the sequence S1, a1, S2, $r1, a2, S3, $r2, ... built in the four numbered, coloured
+     steps, one step a beat. */
+  var CAP100 = [
+    "A run starts in a state, S<sub>1</sub>.",
+    "<span class=\"s2-c1\">1.</span> You choose an action, a<sub>1</sub>.",
+    "<span class=\"s2-c2\">2.</span> The transition dynamics give the new state S<sub>2</sub> and the reward $r<sub>1</sub>.",
+    "<span class=\"s2-c3\">3.</span> You choose the next action, a<sub>2</sub>.",
+    "<span class=\"s2-c4\">4.</span> The transition dynamics give S<sub>3</sub> and $r<sub>2</sub>.",
+    "And so on. The whole sequence is a run."
+  ];
+  OB.scene({
+    page: 2, key: "runs", order: 100, title: "Runs", beats: 6,
+    build: function (root) {
+      root.appendChild(el("p", "ob-say s2-lead", "When you act on an MDP, you produce a run."));
+      var q = this.q = sketchRun("s2-big");
+      var td = el("span", "s2-tdname", "TRANSITION DYNAMICS");
+      q.cols[3].val.appendChild(td);
+      q.cols[3].val.classList.add("s2-span2");
+      this.td = td;
+      root.appendChild(q.grid);
+      this.cap = OB.html("p", "ob-say s2-cap", CAP100[0]);
+      root.appendChild(this.cap);
+    },
+    beat: function (k, api) {
+      var q = this.q, self = this;
+      api.show(q.cols[0].cell, true);
+      for (var n = 1; n <= 4; n++) {
+        var parts = stepParts(q, n), on = k >= n, fresh = on && k === n && api.forward && api.from === n - 1;
+        parts.forEach(function (e, j) {
+          if (!on) { api.show(e, false); return; }
+          if (!fresh) { api.show(e, true); return; }
+          // the arrow grows, then the marks around it, then its target
+          if (j === 1) { api.show(e, true, { dur: 10 }); grow(api, q.cols[2 * n - 1].arr); }
+          else api.show(e, true, { delay: j === 3 ? 1200 : 500 });
+        });
+      }
+      api.show(this.td, k >= 2, k === 2 && api.forward ? { delay: 1400 } : undefined);
+      api.show(q.cols[9].cell, k >= 5);
+      this.cap.innerHTML = CAP100[k];
+      if (api.forward && !api.instant && api.from === k - 1) api.fade(self.cap, true, { dur: 900 });
+    }
+  });
+
+  /* 200. A run of Old Bessie: the same notation with the values of run 0 beneath the symbols, the first two weeks
+     slowly, step by step; then the whole quarter, 13 weeks, quickly, as a table of weeks. */
+  var R = D.run;
+  function cap200(k) {
+    var st = B.STATES, ac = B.ACTIONS;
+    return [
+      "Old Bessie starts the quarter " + st[R.states[0]] + ".",
+      "<span class=\"s2-c1\">1.</span> You choose " + ac[R.actions[0]] + ".",
+      "<span class=\"s2-c2\">2.</span> The transition dynamics give " + st[R.states[1]] + " and " + OB.money(R.rewards[0]) + ".",
+      "<span class=\"s2-c3\">3.</span> You choose " + ac[R.actions[1]] + ".",
+      "<span class=\"s2-c4\">4.</span> The transition dynamics give " + st[R.states[2]] + " and " + OB.money(R.rewards[1]) + ".",
+      "And so on, week after week. One quarter, 13 weeks: one run."
+    ][k];
+  }
+  OB.scene({
+    page: 2, key: "bessie-run", order: 200, title: "A run of Old Bessie", beats: 6,
+    build: function (root) {
+      var q = this.q = sketchRun("s2-vals");
+      function vanOf(s) { return art.van(s, { size: 72, gauge: false, label: true }); }
+      function reward(x) { var m = OB.moneyEl(x); m.classList.add("s2-rv"); return m; }
+      this.v = [
+        vanOf(R.states[0]), art.actionChip(R.actions[0]), reward(R.rewards[0]), vanOf(R.states[1]),
+        art.actionChip(R.actions[1]), reward(R.rewards[1]), vanOf(R.states[2])
+      ];
+      // values beneath S1, a1, $r1, S2, a2, $r2, S3 (columns 0, 2, 3, 4, 6, 7, 8)
+      [0, 2, 3, 4, 6, 7, 8].forEach(function (c, j) { q.cols[c].val.appendChild(this.v[j]); }, this);
+      root.appendChild(q.grid);
+      this.T = runTable(R, { names: true, head: true });
+      this.T.grid.classList.add("s2-quarter");
+      root.appendChild(this.T.grid);
+      this.cap = OB.html("p", "ob-say s2-cap", cap200(0));
+      root.appendChild(this.cap);
+    },
+    beat: function (k, api) {
+      var self = this, fwd = api.forward && !api.instant && api.from === k - 1;
+      // which values each beat shows: 0 S1; 1 a1; 2 $r1 and S2; 3 a2; 4 $r2 and S3
+      var at = [0, 1, 2, 2, 3, 4, 4];
+      this.v.forEach(function (e, j) {
+        var on = k >= at[j];
+        api.show(e, on, on && fwd && k === at[j] ? { delay: j === 3 || j === 6 ? 900 : 300 } : undefined);
+        if (on && fwd && k === at[j]) api.at(j === 3 || j === 6 ? 900 : 300, function () { api.ring(e, true); });
+        else api.ring(e, false);
+      });
+      var all = k >= 5;
+      if (!all) sweep(api, this.T, false);
+      else if (fwd) sweep(api, this.T, true, { stagger: 140, delay: 200 });
+      else sweep(api, this.T, true);
+      ["head", "s", "a", "r"].forEach(function (kd) { api.show(self.T["name_" + kd], all); });
+      this.cap.innerHTML = cap200(k);
+      if (fwd) api.fade(this.cap, true, { dur: 900 });
+    }
+  });
+
+  /* 300. Runs are random (sketch page 19): the strict strategy B.BEST as a column; three runs played on the same
+     strategy, each different; then they fold into the run symbol (runs.js); then ten runs. */
+  var CAP300 = [
+    "A strict strategy gives one action for each state. Press Play.",
+    "Run 1.",
+    "Run 2: the same strategy, a different run.",
+    "Run 3: different again.",
+    "One row per run: a cell per week, coloured by the van's state, with the action inside.",
+    "Ten runs of the same strategy: ten different runs."
+  ];
+  OB.scene({
+    page: 2, key: "random", order: 300, title: "Runs are random!", beats: 6,
+    build: function (root) {
+      root.appendChild(el("p", "ob-say s2-lead", "Even when you follow a strict deterministic strategy, you get different runs."));
+      var main = el("div", "s2-random");
+      var col = el("div", "s2-strat ob-box");
+      col.appendChild(el("div", "s2-strat-h", "STRATEGY"));
+      for (var s = 0; s < 4; s++) {
+        var r = el("div", "s2-strat-r");
+        r.appendChild(art.stateChip(s));
+        r.appendChild(art.actionChip(B.BEST[s]));
+        col.appendChild(r);
+      }
+      main.appendChild(col);
+      var area = el("div", "s2-area");
+      var tabs = el("div", "s2-tabs");
+      this.tabs = [];
+      for (var i = 0; i < 3; i++) {
+        var wrap = el("div", "s2-runwrap");
+        wrap.appendChild(el("div", "s2-runlab", "RUN " + (i + 1)));
+        var T = runTable(D.runs[i], { head: i === 0, cls: "s2-small" });
+        wrap.appendChild(T.grid);
+        T.wrap = wrap;
+        tabs.appendChild(wrap);
+        this.tabs.push(T);
+      }
+      area.appendChild(tabs);
+      var sym = el("div", "s2-symwrap");
+      this.block = OB.runs.block(D.runs, { g1: false });
+      sym.appendChild(this.block);
+      this.legend = OB.runs.legend();
+      sym.appendChild(this.legend);
+      area.appendChild(sym);
+      main.appendChild(area);
+      root.appendChild(main);
+      this.sym = sym;
+      this.cap = OB.html("p", "ob-say s2-cap", CAP300[0]);
+      root.appendChild(this.cap);
+    },
+    beat: function (k, api) {
+      var self = this, fwd = api.forward && !api.instant && api.from === k - 1;
+      if (k <= 2) api.nextLabel("Play");
+      var folded = k >= 4;
+      this.tabs.forEach(function (T, i) {
+        var on = !folded && k >= i + 1;
+        if (!on) { T.wrap.classList.add("ob-hide"); return; }
+        T.wrap.classList.remove("ob-hide");
+        T.wrap.style.opacity = "";
+        if (fwd && k === i + 1) { sweep(api, T, false); sweep(api, T, true, { stagger: 110 }); }
+        else sweep(api, T, true);
+      });
+      // the run symbol: hidden before the fold, three rows at the fold, ten rows after
+      this.sym.classList.toggle("ob-hide", !folded);
+      var head = this.block.querySelector(".runs-head");
+      api.show(head, folded);
+      api.show(this.legend, folded, folded && fwd && k === 4 ? { delay: 1600 } : undefined);
+      this.block.rows.forEach(function (r, i) {
+        var on = i < 3 ? folded : k >= 5;
+        if (!on) { r.classList.add("ob-hide"); r.style.visibility = ""; return; }
+        if (fwd && k === 4 && i < 3) {
+          // the table of run i shrinks into its row of the symbol
+          r.classList.remove("ob-hide");
+          api.fly(self.tabs[i].grid, r, { arc: 0, dur: 1600 });
+        } else if (fwd && k === 5 && i >= 3) {
+          api.show(r, true, { delay: (i - 3) * 220 });
+        } else {
+          r.classList.remove("ob-hide");
+          r.style.visibility = "";
+        }
+      });
+      this.cap.innerHTML = CAP300[k];
+      if (fwd) api.fade(this.cap, true, { dur: 900 });
+    }
+  });
+})();
+</script>
+<script>/* sec2b.js */
+/* sec2b.js: page 2, scenes 500 "Cumulative reward" and 600 "Cumulative reward in practice" (agent A3, 2026-11-14),
+   from Carlos's sketch pages 20 and 21. Carlos asked for a standard name: the page says "cumulative reward", and one
+   small line adds the textbooks' name, the return. The worked run is run 0 of sec2-data.js. */
+(function () {
+  "use strict";
+  var OB = window.OB, art = OB.art, el = OB.el, D = OB.sec2, S2 = OB.s2;
+  var R = D.run;
+  var G1 = "G<sub>1</sub>";
+  function gam() { return art.sym("gamma"); }
+
+  /* The sketch's run of page 20, in ink: S1, a1, S2, a2, S3, a3, ... with $r1 and $r2 below their arrows. */
+  function inkRun() {
+    function L(bot) { return { link: true, top: null, bot: bot }; }
+    return S2.seq([
+      { sym: "S<sub>1</sub>" }, L(null), { sym: "a<sub>1</sub>" }, L(S2.hang(1)),
+      { sym: "S<sub>2</sub>" }, L(null), { sym: "a<sub>2</sub>" }, L(S2.hang(2)),
+      { sym: "S<sub>3</sub>" }, L(null), { sym: "a<sub>3</sub>" }, L(null), { sym: "...", cls: "s2-dots" }
+    ], "s2-ink");
+  }
+  function bigDown() { return el("div", "s2-bigdown"); }
+
+  /* 500. Cumulative reward (sketch page 20). */
+  var CAP500 = [
+    "A run, and the rewards it collects on the way.",
+    "Gather all the rewards of the run.",
+    "Add them up: the run's cumulative reward, " + G1 + ".",
+    "Old Bessie's run of 13 weeks. What is its " + G1 + "? Guess, then press Compute.",
+    "Its cumulative reward: " + G1 + " = " + OB.money(D.sum) + "."
+  ];
+  OB.scene({
+    page: 2, key: "cumulative", order: 500, title: "Cumulative reward", beats: 5,
+    build: function (root) {
+      var area = el("div", "s2-area s2-cumarea");
+      var q = this.q = inkRun();
+      this.qloop = S2.place(el("div", "s2-loop ob-hide"), 3, "4 / span 10");
+      q.grid.appendChild(this.qloop);
+      area.appendChild(q.grid);
+      this.T = S2.runTable(R, { names: true, head: true });
+      area.appendChild(this.T.grid);
+      root.appendChild(area);
+      this.down = bigDown();
+      root.appendChild(this.down);
+      var f = this.f = el("div", "s2-formula");
+      f.appendChild(OB.html("span", "", G1 + " = $r<sub>1</sub> + $r<sub>2</sub> + ... + $r<sub>13</sub>"));
+      this.res = el("span", "s2-res");
+      this.res.appendChild(document.createTextNode(" = "));
+      this.sum = OB.moneyEl(D.sum);
+      this.res.appendChild(this.sum);
+      f.appendChild(this.res);
+      root.appendChild(f);
+      this.name = OB.html("p", "ob-note s2-name2", "the cumulative reward of the run (textbooks: the return)");
+      root.appendChild(this.name);
+      this.cap = OB.html("p", "ob-say s2-cap", CAP500[0]);
+      root.appendChild(this.cap);
+    },
+    beat: function (k, api) {
+      var fwd = api.forward && !api.instant && api.from === k - 1, T = this.T, q = this.q;
+      var bessie = k >= 3;
+      q.grid.classList.toggle("ob-hide", bessie);
+      if (bessie) {
+        T.grid.classList.remove("ob-hide");
+        if (fwd && k === 3) { S2.sweep(api, T, false); S2.sweep(api, T, true, { stagger: 120, delay: 300 }); }
+        else S2.sweep(api, T, true);
+      } else T.grid.classList.add("ob-hide");
+      api.show(this.qloop, !bessie && k >= 1);
+      api.show(T.loop, k >= 4);
+      api.show(this.down, k >= 2, fwd && k === 2 ? { delay: 200 } : undefined);
+      api.show(this.f, k >= 2, fwd && k === 2 ? { delay: 900 } : undefined);
+      api.show(this.name, k >= 2, fwd && k === 2 ? { delay: 1800 } : undefined);
+      if (k === 3) api.nextLabel("Compute");
+      api.show(this.res, k >= 4, fwd && k === 4 ? { delay: 900 } : undefined);
+      if (k >= 4) api.roll(this.sum, D.sum, fwd && k === 4 ? { from: 0, delay: 900, fmt: function (x) { return OB.money(x); } } : { fmt: function (x) { return OB.money(x); } });
+      this.cap.innerHTML = CAP500[k];
+      if (fwd) api.fade(this.cap, true, { dur: 900 });
+    }
+  });
+
+  /* 600. Cumulative reward in practice (sketch page 21): the rewards weighted by gamma to the power of their delay. */
+  var CAP600 = [
+    "In practice, later rewards count a little less.",
+    "Here " + gam() + " = 0.9: the weights 1, 0.9, 0.81, ... under the same run's rewards. Guess " + G1 + ", then press Compute.",
+    G1 + " = " + OB.money(D.G1) + ". Without the weights, " + OB.money(D.sum) + "."
+  ];
+  OB.scene({
+    page: 2, key: "in-practice", order: 600, title: "Cumulative reward in practice", beats: 3,
+    build: function (root) {
+      var f = el("div", "s2-formula s2-formula-g");
+      f.appendChild(OB.html("span", "", G1 + " = $r<sub>1</sub> + " + gam() + " $r<sub>2</sub> + " + gam() + "<sup>2</sup> $r<sub>3</sub> + ... + " +
+        gam() + "<sup>12</sup> $r<sub>13</sub>"));
+      root.appendChild(f);
+      root.appendChild(OB.html("p", "s2-with", "with 0 &lt; " + gam() + " &lt; 1"));
+      this.here = OB.html("p", "s2-here", "Here " + gam() + " = 0.9");
+      root.appendChild(this.here);
+      this.T = S2.runTable(R, { names: true, head: true, weights: true });
+      root.appendChild(this.T.grid);
+      var r = this.res = el("div", "s2-formula s2-res2");
+      r.appendChild(OB.html("span", "", G1 + " = "));
+      this.g = OB.moneyEl(D.G1);
+      r.appendChild(this.g);
+      root.appendChild(r);
+      this.cap = OB.html("p", "ob-say s2-cap", CAP600[0]);
+      root.appendChild(this.cap);
+    },
+    beat: function (k, api) {
+      var fwd = api.forward && !api.instant && api.from === k - 1, T = this.T;
+      api.show(this.here, k >= 1);
+      var names = ["head", "s", "a", "r", "w"];
+      names.forEach(function (n) { api.show(T["name_" + n], k >= 1); });
+      if (k >= 1) {
+        if (fwd && k === 1) {
+          S2.sweep(api, T, false);
+          S2.sweep(api, T, true, { stagger: 90, delay: 300, kinds: ["head", "s", "a", "r"] });
+          S2.sweep(api, T, true, { stagger: 140, delay: 2000, kinds: ["w"] });
+        } else S2.sweep(api, T, true);
+      } else S2.sweep(api, T, false);
+      if (k === 1) api.nextLabel("Compute");
+      api.show(this.res, k >= 2);
+      var fmt = function (x) { return OB.money(x); };
+      if (k >= 2) api.roll(this.g, D.G1, fwd && k === 2 ? { from: 0, delay: 300, fmt: fmt } : { fmt: fmt });
+      this.cap.innerHTML = CAP600[k];
+      if (fwd) api.fade(this.cap, true, { dur: 900 });
+    }
+  });
+})();
+</script>
+<script>/* sec2c.js */
+/* sec2c.js: page 2, scene 700 "The goal of RL" (agent A3, 2026-11-14), from Carlos's sketch page 22: four strict
+   strategies, each played on the same 100 runs of dice (sec2-data.js, GOAL_SEED), each run's G1 a dot on one axis,
+   each strategy's average G1 a bar, the highest average lit at the end. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, el = OB.el, D = OB.sec2;
+  var AVG = "<span class=\"ob-bar\">G<sub>1</sub></span>";
+  var N = D.GOAL_N, A = D.AXIS;
+
+  function xPct(g) { return ((g - A.lo) / (A.hi - A.lo) * 100).toFixed(3) + "%"; }
+  /* A dot's height in its lane, spread by the run's number (no randomness): 10% to 90% of the lane. */
+  function yPct(i) { return (10 + ((i * 53) % 97) / 96 * 80).toFixed(2) + "%"; }
+
+  var CAP700 = [
+    "Four strict strategies. Each is played for " + N + " runs, with the same luck for all four.",
+    null, null, null, null,
+    null
+  ];
+  function capLane(k) {
+    var s = D.STRATS[k];
+    return s.name + ": each dot is the " + "G<sub>1</sub> of one run; the bar is their average, " + AVG + " = " + OB.money(s.avg) + ".";
+  }
+  CAP700[5] = D.STRATS[D.best].name + " yields the highest " + "G<sub>1</sub> on average. Discovering such a strategy is the goal of RL.";
+
+  OB.scene({
+    page: 2, key: "goal", order: 700, title: "The goal of RL", beats: 6,
+    build: function (root) {
+      root.appendChild(OB.html("p", "ob-say s2-goalsay s2-lead", "Discover a strategy that yields the highest G<sub>1</sub> on average!"));
+      var g = el("div", "s2-goal");
+      this.lanes = [];
+      var self = this;
+      D.STRATS.forEach(function (s, k) {
+        var lab = el("div", "s2-glab");
+        var cells = el("div", "s2-gcells");
+        for (var st = 0; st < 4; st++) cells.appendChild(OB.runs.cell(st, s.policy[st], false));
+        lab.appendChild(cells);
+        lab.appendChild(el("div", "s2-gname", s.name));
+        g.appendChild(lab);
+        var bw = el("div", "s2-gblock");
+        var block = OB.runs.block(s.runs, { compact: true, g1: false, height: 84, width: 13 * 6 });
+        bw.appendChild(block);
+        g.appendChild(bw);
+        var dots = el("div", "s2-gdots");
+        var zero = el("span", "s2-zero");
+        zero.style.left = xPct(0);
+        dots.appendChild(zero);
+        var box = el("div", "s2-dl");
+        var dl = el("div", "s2-dw");
+        box.appendChild(dl);
+        var ds = [];
+        s.g1.forEach(function (v, i) {
+          var d = el("span", "s2-dot");
+          d.style.left = xPct(v);
+          d.style.top = yPct(i);
+          dl.appendChild(d);
+          ds.push(d);
+        });
+        dots.appendChild(box);
+        var bar = el("span", "s2-avg");
+        bar.style.left = xPct(s.avg);
+        dots.appendChild(bar);
+        var lbl = OB.html("span", "s2-avgl", AVG + " = " + OB.money(s.avg));
+        lbl.style.left = xPct(s.avg);
+        dots.appendChild(lbl);
+        g.appendChild(dots);
+        self.lanes.push({ lab: lab, bw: bw, block: block, dots: dots, dl: dl, ds: ds, bar: bar, lbl: lbl });
+      });
+      // the axis of G1, under the lanes
+      g.appendChild(el("div", "s2-gaxl"));
+      g.appendChild(OB.html("div", "s2-gaxb", "G<sub>1</sub>"));
+      var ax = el("div", "s2-gaxis");
+      A.ticks.forEach(function (t) {
+        var tk = el("span", "s2-tick", OB.money(t));
+        tk.style.left = xPct(t);
+        ax.appendChild(tk);
+      });
+      g.appendChild(ax);
+      root.appendChild(g);
+      this.cap = OB.html("p", "ob-say s2-cap", CAP700[0]);
+      root.appendChild(this.cap);
+    },
+    beat: function (k, api) {
+      var fwd = api.forward && !api.instant && api.from === k - 1;
+      this.lanes.forEach(function (L, j) {
+        var on = k >= j + 1, fresh = fwd && k === j + 1;
+        L.lab.classList.toggle("s2-win", k >= 5 && j === D.best);
+        api.ring(L.lbl, false);
+        if (!on) {
+          api.show(L.block, false);
+          api.show(L.dl, false);
+          api.show(L.bar, false);
+          api.show(L.lbl, false);
+          return;
+        }
+        if (!fresh) {
+          api.show(L.block, true);
+          L.ds.forEach(function (d) { d.style.transform = ""; d.style.opacity = ""; });
+          api.show(L.dl, true);
+          api.show(L.bar, true);
+          api.show(L.lbl, true);
+          return;
+        }
+        // the runs appear, each run's G1 flies from its row to the axis, then the average's bar
+        api.show(L.block, true);
+        api.show(L.dl, false);
+        api.show(L.bar, false);
+        api.show(L.lbl, false);
+        api.at(1300, function () {
+          var cv = L.block.canvas.getBoundingClientRect(), box = L.dl.getBoundingClientRect();
+          L.dl.classList.remove("ob-hide");
+          var start = L.ds.map(function (d, i) {
+            var fx = box.left + parseFloat(d.style.left) / 100 * box.width;
+            var fy = box.top + parseFloat(d.style.top) / 100 * box.height;
+            var sx = cv.right + 6, sy = cv.top + (i + 0.5) / N * cv.height;
+            return [sx - fx, sy - fy];
+          });
+          L.ds.forEach(function (d, i) {
+            d.style.opacity = "0";
+            d.style.transform = "translate(" + start[i][0] + "px," + start[i][1] + "px)";
+          });
+          api.animate(2000, function (p) {
+            L.ds.forEach(function (d, i) {
+              var s0 = i / N * 0.55, q = Math.max(0, Math.min(1, (p - s0) / 0.45));
+              d.style.opacity = q > 0 ? "1" : "0";
+              d.style.transform = "translate(" + (start[i][0] * (1 - q)).toFixed(1) + "px," + (start[i][1] * (1 - q)).toFixed(1) + "px)";
+            });
+          }, function () {
+            L.ds.forEach(function (d) { d.style.transform = ""; d.style.opacity = ""; });
+          });
+        });
+        api.show(L.bar, true, { delay: 3500 });
+        api.show(L.lbl, true, { delay: 3500 });
+      });
+      if (k >= 5) {
+        var W = this.lanes[D.best];
+        if (fwd) api.at(300, function () { api.ring(W.lbl, true); }); else api.ring(W.lbl, true);
+      }
+      this.cap.innerHTML = k >= 1 && k <= 4 ? capLane(k - 1) : CAP700[k];
+      if (fwd) api.fade(this.cap, true, { dur: 900 });
+    }
+  });
+})();
+</script>
+<script>/* fullscreen.js */
+/* fullscreen.js: the full-screen button of the AINIT games (2026-11-11; Carlos shows the games from his iPad).
+   The same file in every game. The button goes after the light or dark switch (.themebtn) and takes its look; a
+   page without that switch marks the place with data-fullscreen. One tap and the page fills the whole screen, with
+   no address bar or tabs, in Safari and Chrome on an iPad and on a computer. The button is left out where the
+   browser cannot do that (an iPhone, a frame that does not allow it), and hidden on screens under 561 px and while
+   the page is full screen. The browser's own exit button, a swipe down on an iPad, or Escape leave full screen. */
+(function () {
+  var doc = document, root = doc.documentElement;
+  var request = root.requestFullscreen || root.webkitRequestFullscreen;
+  if (!request || !(doc.fullscreenEnabled || doc.webkitFullscreenEnabled)) return;
+  var host = doc.querySelector("[data-fullscreen]"), twin = host ? null : doc.querySelector(".themebtn");
+  if (!host && !twin) return;
+
+  var btn = doc.createElement("button");
+  btn.type = "button";
+  btn.className = twin ? twin.className + " fullbtn" : "fullbtn";
+  btn.title = "Full screen";
+  btn.setAttribute("aria-label", "Full screen");
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" style="display:block; margin:auto" aria-hidden="true"' +
+    ' fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>';
+
+  var narrow = window.matchMedia ? window.matchMedia("(max-width: 560px)") : null;
+  function isFull() { return !!(doc.fullscreenElement || doc.webkitFullscreenElement); }
+  function sync() { btn.style.display = isFull() || (narrow && narrow.matches) ? "none" : ""; }
+
+  btn.addEventListener("click", function () {
+    btn.blur();
+    var p = request.call(root);
+    if (p && typeof p.catch === "function") p.catch(function () {});
+  });
+  doc.addEventListener("fullscreenchange", sync);
+  doc.addEventListener("webkitfullscreenchange", sync);
+  if (narrow && narrow.addEventListener) narrow.addEventListener("change", sync);
+  else if (narrow && narrow.addListener) narrow.addListener(sync);
+
+  if (twin) twin.parentNode.insertBefore(btn, twin.nextSibling);
+  else host.appendChild(btn);
+  sync();
+})();
+</script>
+<script>OB.start({ page: 2, card: { kicker: "OLD BESSIE 2", title: "Runs and cumulative rewards" } });</script>
+</body>
+</html>

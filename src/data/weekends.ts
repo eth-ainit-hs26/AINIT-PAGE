@@ -720,7 +720,14 @@ export const weekends: Weekend[] = [
         ],
       },
       { time: '09:00', title: 'MDPs', type: 'exercise' },
-      { time: '10:00', title: 'Runs and cumulative rewards', type: 'lecture' },
+      {
+        time: '10:00',
+        title: 'Runs and cumulative rewards',
+        type: 'lecture',
+        // The second page of the visualization, from w3-cx-private 02_old_bessie: runs, runs are random, the
+        // cumulative reward G1 and the goal of RL.
+        links: [{ label: 'Old Bessie 2: Runs and cumulative rewards', url: viz(3, 'old-bessie-runs') }],
+      },
       { time: '10:30', title: 'Coffee break at Dozentenfoyer, until 11:00', type: 'break' },
       { time: '11:00', title: 'proto-REINFORCE', type: 'lecture' },
       { time: '12:00', title: 'Coding bazaar', type: 'lab' },
