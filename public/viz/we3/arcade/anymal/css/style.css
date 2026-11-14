@@ -1,0 +1,321 @@
+/* ANYmal, arcade cut: the light retro console look of the other three games
+   (shell #E8E0CC, boxes #F8F4E4, ink #181818, Press Start 2P), one stylesheet.
+
+   Words grow by up to 1.4 on screens of at least 1080 x 740 px (--tx, the
+   weekend 2 rule): a size V of at most 18px is written calc(V * var(--tx)),
+   a larger one grows less. The grid, its pictures, the arrow pad and the
+   photo keep their sizes. */
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../../assets/fonts/PressStart2P-Regular.woff2') format('woff2');
+  font-display: block;
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --tx: 1;
+  --bg:             #E8E0CC;
+  --bg-strong:      #F8F4E4;
+  --ink:            #181818;
+  --ink-secondary:  #585858;
+  --rule:           #181818;
+  --inner-highlight:#404040;
+  --ink-on-box:     #181818;
+  --yellow:         #F8D028;
+  --red:            #E84828;
+  --good:           #009E73;
+  --bad:            #D55E00;
+  --ghost-bg:       #E6E0F2;
+}
+@media (min-width: 1080px) and (min-height: 740px) {
+  :root { --tx: 1.4; }
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Press Start 2P', "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+button, a { touch-action: manipulation; }
+
+/* ---------- Topbar (as in the other games) ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--bg);
+  border-bottom: 4px solid var(--rule);
+  font-size: calc(9px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.topbar .scene-title {
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-secondary);
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 0 20px;
+}
+.topbar .right-cluster { display: flex; gap: 6px; align-items: center; }
+.pager-btn, .arcade-link {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 5px 8px;
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.pager-btn:hover, .arcade-link:hover { background: var(--yellow); }
+.pager-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.dot-pager { display: flex; gap: 4px; align-items: center; }
+.dot-pager .dot {
+  width: 10px; height: 10px;
+  background: var(--ink-secondary);
+  border: 2px solid var(--rule);
+  padding: 0;
+  cursor: pointer;
+}
+.dot-pager .dot.active { background: var(--yellow); }
+.fs-host { display: inline-flex; }
+.fs-host:empty { display: none; }
+.fullbtn {
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 3px 5px;
+  cursor: pointer;
+  line-height: 0;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.fullbtn:hover { background: var(--yellow); }
+
+/* ---------- Stage and scenes ---------- */
+.stage {
+  position: relative;
+  max-width: 1160px;
+  margin: 14px auto 28px;
+  padding: 0 20px;
+}
+.scene { display: none; }
+.scene.active { display: block; animation: am-fade 180ms ease-out; }
+@keyframes am-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .scene.active { animation: none; } }
+
+.am-box {
+  background: var(--bg-strong);
+  border: 4px solid var(--rule);
+  padding: 12px 16px;
+  box-shadow:
+    inset 0 0 0 2px var(--bg-strong),
+    inset 0 0 0 4px var(--inner-highlight),
+    inset 0 0 0 6px var(--bg-strong);
+  color: var(--ink-on-box);
+}
+.am-btn {
+  display: inline-block;
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  padding: 8px 12px;
+  font-size: calc(9px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: inset -2px -2px 0 0 var(--inner-highlight);
+}
+.am-btn:hover { background: var(--yellow); }
+.end-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 4px 0; }
+/* A link takes the line height of the button beside it (buttons do not inherit it). */
+.end-actions > a { line-height: normal; }
+
+/* ---------- Scene 0: title ---------- */
+.am-title-scene { text-align: center; padding-top: 8px; }
+.am-title {
+  font-size: calc(40px * (1 + (var(--tx) - 1) * 0.15));
+  color: var(--red);
+  text-shadow:
+    2px 0 0 var(--ink), -2px 0 0 var(--ink), 0 2px 0 var(--ink), 0 -2px 0 var(--ink),
+    2px 2px 0 var(--ink), -2px -2px 0 var(--ink), -2px 2px 0 var(--ink), 2px -2px 0 var(--ink),
+    4px 4px 0 var(--yellow);
+  letter-spacing: 6px;
+  margin: 6px 0 16px;
+}
+.am-hero {
+  display: inline-block;
+  border: 4px solid var(--rule);
+  background: #111;
+  padding: 0;
+  line-height: 0;
+  box-shadow: 6px 6px 0 0 var(--inner-highlight);
+}
+.am-photo { width: 300px; height: 300px; object-fit: cover; display: block; }
+.am-sub {
+  font-size: calc(10px * var(--tx));
+  line-height: 1.8;
+  max-width: 58ch;
+  margin: 18px auto 14px;
+}
+.am-start {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(12px * var(--tx));
+  background: var(--yellow);
+  color: var(--ink);
+  border: 3px solid var(--rule);
+  padding: 12px 20px;
+  cursor: pointer;
+  box-shadow: inset -3px -3px 0 0 #B89020;
+}
+.am-start .am-chev { animation: am-blink 0.9s steps(2, end) infinite; display: inline-block; }
+@keyframes am-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .am-start .am-chev { animation: none; } }
+
+/* ---------- Scene 1: how to play ---------- */
+.am-heading { font-size: calc(12px * var(--tx)); margin: 4px 0 10px; }
+.am-lead { font-size: calc(10px * var(--tx)); line-height: 1.8; margin-bottom: 12px; }
+.am-rules {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.am-rule {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--bg-strong);
+  border: 2px solid var(--rule);
+  padding: 8px 10px;
+  font-size: calc(8px * var(--tx));
+  line-height: 1.8;
+}
+.am-rule strong { font-weight: 400; color: var(--red); }
+.am-rule-icon { font-size: 22px; line-height: 1; flex: 0 0 auto; }
+.am-scoring { max-width: 560px; }
+.am-box-title { font-size: calc(9px * var(--tx)); margin-bottom: 6px; }
+.am-score-row { display: flex; gap: 14px; align-items: baseline; font-size: calc(9px * var(--tx)); line-height: 2; }
+.am-score-val { min-width: 5.5em; text-align: right; }
+.am-good { color: var(--good); }
+.am-bad { color: var(--bad); }
+.am-go-row { margin-top: 12px; text-align: right; }
+
+/* ---------- Scene 2: the game ---------- */
+.am-game-row { display: flex; gap: 22px; align-items: flex-start; justify-content: center; }
+.am-game-left { display: flex; flex-direction: column; gap: 12px; width: 300px; flex: 0 0 auto; }
+.am-stats { display: flex; gap: 18px; }
+.am-stat-label { font-size: calc(8px * var(--tx)); color: var(--ink-secondary); }
+.am-stat-value { font-size: calc(16px * var(--tx)); margin-top: 4px; }
+.am-stat-meta { font-size: calc(8px * var(--tx)); color: var(--ink-secondary); }
+.am-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(2, 60px);
+  gap: 6px;
+  justify-content: center;
+}
+.am-dpad button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  background: var(--bg-strong);
+  color: var(--ink);
+  border: 3px solid var(--rule);
+  cursor: pointer;
+  box-shadow: inset -3px -3px 0 0 #BBB6A2;
+  padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.am-dpad button:active { background: var(--yellow); box-shadow: inset 3px 3px 0 0 #B89020; }
+.am-reset { align-self: center; }
+.am-log { font-size: calc(8px * var(--tx)); line-height: 1.8; color: var(--ink-secondary); min-height: 3.6em; text-align: center; }
+
+.am-game-right { position: relative; flex: 0 0 auto; }
+.am-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 64px);
+  grid-auto-rows: 64px;
+  gap: 5px;
+  padding: 8px;
+  background: var(--bg-strong);
+  border: 4px solid var(--rule);
+}
+.am-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 2px solid var(--rule);
+  font-size: 28px;
+  line-height: 1;
+  overflow: hidden;
+}
+.am-cell.anymal { border: 3px solid var(--red); padding: 0; background: #111; }
+.am-cell-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.am-cell.ghost { background: var(--ghost-bg); }
+.am-cell.reward { background: var(--yellow); color: var(--ink); }
+
+.am-end {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  max-width: 94%;
+  text-align: center;
+}
+.am-end[hidden] { display: none; }
+.am-end-title { font-size: calc(14px * var(--tx)); color: var(--red); margin-bottom: 8px; }
+.am-end-reason { font-size: calc(9px * var(--tx)); margin-bottom: 8px; }
+.am-end-score { font-size: calc(11px * var(--tx)); margin-bottom: 10px; }
+
+/* ---------- The long words of the arcade link only where they fit ---------- */
+@media (max-width: 900px) {
+  .arcade-link .al-long { display: none; }
+  .am-rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 720px) {
+  .topbar { flex-wrap: wrap; padding: 10px 12px; gap: 8px; row-gap: 10px; }
+  .topbar .scene-title { display: none; }
+  .topbar .right-cluster { flex: 0 0 100%; justify-content: center; gap: 8px; }
+  .topbar .right-cluster #prev-btn, .topbar .right-cluster #next-btn { min-height: 36px; padding: 8px 12px; font-size: 10px; }
+  .stage { padding: 0 12px; }
+  .am-photo { width: 220px; height: 220px; }
+  .am-title { font-size: 30px; letter-spacing: 4px; }
+  .am-rules { grid-template-columns: 1fr; }
+  .am-game-row { flex-direction: column; align-items: center; gap: 10px; }
+  .am-game-left { display: contents; }
+  .am-stats { order: 0; width: 100%; max-width: 340px; justify-content: space-between; }
+  .am-game-right { order: 1; }
+  .am-dpad { order: 2; }
+  .am-reset { order: 3; }
+  .am-log { order: 4; }
+  .am-grid { grid-template-columns: repeat(7, 40px); grid-auto-rows: 40px; gap: 4px; padding: 5px; border-width: 3px; }
+  .am-cell { font-size: 20px; }
+}
+
+/* The photo's credit (its EXIF names ANYbotics AG), added 2026-11-14 for the public course site. */
+.am-credit { margin: 4px 0 0; font-size: calc(7px * var(--tx)); color: var(--ink-secondary); text-align: center; }

@@ -1,0 +1,865 @@
+/* Pokemon battle, viz #7 of the AI in Industry reinforcement-learning curriculum.
+   Second integrative review.  Same lesson as Snakes & Ladders, retold on a
+   Gen-1 Pokemon Red/Blue battle screen.  The editorial cream/serif palette of
+   the rest of the curriculum is deliberately overridden here per the user's
+   request; the SKILL §10 anticipates this exit.  The cross-viz hue identities
+   (anymal-red, casino-blue, ghost-purple, star-amber, door-green) are kept as
+   per-component accent tokens so the scene-5 recap can still cite them. */
+
+/* ---------- Press Start 2P ---------- */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../assets/fonts/PressStart2P-Regular.woff2') format('woff2');
+  font-display: block;  /* pixel font: do NOT flash fallback serif first */
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* ---------- Tokens ---------- */
+:root,
+:root[data-theme="light"] {
+  /* Battle screen, Day */
+  --sky-top:        #9CC8E8;
+  --sky-bottom:     #C0DEF0;
+  --grass:          #5BA85B;
+  --grass-rim:      #3A8A3A;
+
+  /* Page chrome */
+  --bg:             #E8E0CC;     /* warm grey-cream, NES "shell" */
+  --bg-strong:      #F8F4E4;     /* lighter, for dialog boxes */
+  --ink:            #181818;
+  --ink-secondary:  #585858;
+  --rule:           #181818;     /* hard black for Pokemon borders */
+  --card-bg:        #FFFFFF;
+  --inner-highlight:#404040;     /* the secondary inner border line */
+  --pikachu-yellow: #F8D028;
+  --pikachu-cheek:  #E84828;
+  --charmander-orange:#F58030;
+  --hp-green:       #48C848;
+  --hp-yellow:      #E8C828;
+  --hp-red:         #E84828;
+  --damage-text:    #F8F8F8;
+  --damage-stroke:  #181818;
+  --ink-on-box:     #181818;     /* ink on Pokemon-white boxes (always dark) */
+
+  /* Colour-blind-safe semantic palette (Okabe-Ito). Use these, not the
+     hp-green / hp-red brand tokens, wherever colour carries meaning
+     (heatmap, win/lose, positive/negative delta). Pair with a label or
+     icon for redundancy. See teaching-viz SKILL §Colour-blind safety. */
+  --cb-blue:             #0072B2;
+  --cb-blue-light:       #B6D9EB;
+  --cb-vermillion:       #D55E00;
+  --cb-vermillion-light: #F4D2B0;
+  --cb-bluish-green:     #009E73;
+  --cb-yellow:           #F0E442;
+  --cb-orange:           #E69F00;
+  --cb-sky:              #56B4E9;
+  --cb-purple:           #CC79A7;
+
+  /* Cross-viz hue identities (kept for scene-5 recap chips) */
+  --hue-anymal:  #B8323A;     /* red, MDP */
+  --hue-casino:  #2F6CB1;     /* blue, ε-greedy */
+  --hue-ghost:   #7A5C8C;     /* purple, Bellman */
+  --hue-star:    #C08A3E;     /* amber, Robbins-Monro */
+  --hue-door:    #4A8B6B;     /* green, SARSA */
+  --hue-snakes:  #C8902C;     /* gold, Snakes & Ladders sibling */
+
+  /* HP-bar bucket fill tokens, overridable per theme. */
+  --hp-b0: #48C848;
+  --hp-b1: #88D848;
+  --hp-b2: #E8C828;
+  --hp-b3: #E89028;
+  --hp-b4: #E84828;
+
+  /* ---- Price-lever colour tokens (Last-Minute Pricing) ----
+     PREMIUM deep-blue, STANDARD amber/gold, FIRE-SALE burnt-orange.
+     Used wherever a lever carries meaning (price tags, the optimal-policy
+     overlay, +$ flashes). Each token has a fill, a darker rule/edge, and a
+     soft tint for backgrounds. CRT retints them all to the amber palette. */
+  --lever-premium:        #2F6CB1;   /* deep blue */
+  --lever-premium-rule:   #1C4B82;
+  --lever-premium-tint:   #D9E6F2;
+  --lever-standard:       #C08A3E;   /* amber / gold */
+  --lever-standard-rule:  #8C6224;
+  --lever-standard-tint:  #F2E6CC;
+  --lever-firesale:       #A8421C;   /* burnt orange / vermillion */
+  --lever-firesale-rule:  #7A2E12;
+  --lever-firesale-tint:  #F2D5C6;
+  --lever-ink:            #FFFFFF;   /* text on a saturated lever tag */
+
+  /* The perishable thing: airline-seat sprite tokens. */
+  --ticket-fill:   #F0C24A;   /* an empty seat still FOR SALE (warm gold) */
+  --ticket-edge:   #181818;
+  --ticket-gone:   #B8B0A0;   /* a seat already SOLD (greyed) */
+  --ticket-gone-edge: #6E665A;
+  /* Departure-board tokens (names kept; --pip-* now tint the board digits). */
+  --pip-on:        #F0C24A;   /* a lit board digit: a day still to go */
+  --pip-off:       #5A6172;   /* a flipped-dim digit: a day already gone */
+  --midnight-bg:   #11161F;   /* the dark GATE tile (d=0, departing plane) */
+  --cal-open-bg:   #1B2330;   /* a lit board tile (dark split-flap slate) */
+  --cal-x-bg:      #141A24;   /* a flipped-dim board tile (day departed) */
+  --cal-x-ink:     #B8323A;   /* the GATE CLOSED alert highlight (red) */
+  --cal-moon:      #E6B23A;   /* the departing plane (amber) */
+
+  /* Battle-VFX colour tokens, used by the scene 1 attack overlays.
+     Each theme overrides these so the lightning bolt / ember / rage
+     aura match the palette. */
+  --vfx-bolt:    #FFD028;     /* THUNDERBOLT SVG stroke */
+  --vfx-bolt-hl: #FFFFFF;     /* THUNDERBOLT inner highlight stroke */
+  --vfx-bolt-glow: rgba(255, 208, 40, 0.95);
+  --vfx-ember-a: rgba(248, 128, 48, 0.95);
+  --vfx-ember-b: rgba(232,  80, 24, 0.85);
+  --vfx-ember-c: rgba(248, 168, 64, 0.95);
+  --vfx-flame-a: rgba(248,  96, 24, 0.9);
+  --vfx-flame-b: rgba(252, 168, 32, 0.95);
+  --vfx-flame-c: rgba(255, 220, 64, 0.95);
+  --vfx-flame-d: rgba(255, 220, 64, 0.0);
+  --vfx-rage:    rgba(232, 40, 40, 0.7);
+}
+
+/* Arcade cut (weekend 3): words grow by up to 1.4 on screens of at least 1080 x 740 px, the weekend 2 rule.
+   Font sizes of words read calc(V * var(--tx)); boards, sprites and tables keep plain px
+   (01_arcade/tools/keep-*.txt names them). */
+:root { --tx: 1; }
+@media (min-width: 1080px) and (min-height: 740px) {
+  :root { --tx: 1.4; }
+}
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Press Start 2P', "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  -webkit-font-smoothing: none;  /* keep pixel font crisp */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Topbar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--bg);
+  border-bottom: 4px solid var(--rule);
+  font-size: calc(9px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.topbar .brand {
+  font-family: 'Press Start 2P', monospace;
+  color: var(--ink);
+  font-size: calc(9px * var(--tx));
+}
+.topbar .scene-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-secondary);
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 0 20px;
+}
+.topbar .right-cluster { display: flex; gap: 6px; align-items: center; }
+
+.theme-toggle, .pager-btn {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 5px 8px;
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.theme-toggle:hover, .pager-btn:hover {
+  background: var(--pikachu-yellow);
+}
+.pager-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* MUSIC button, same chrome as THEME but with an "on" state. */
+.music-toggle.active {
+  background: var(--pikachu-yellow);
+  color: var(--ink);
+  box-shadow: inset 2px 2px 0 0 #B89020;
+}
+
+.dot-pager { display: flex; gap: 4px; align-items: center; }
+.dot-pager .dot {
+  width: 10px; height: 10px;
+  background: var(--ink-secondary);
+  border: 2px solid var(--rule);
+  padding: 0;
+  cursor: pointer;
+}
+.dot-pager .dot.active { background: var(--pikachu-yellow); }
+.dot-pager .dot:hover { background: var(--pikachu-cheek); }
+
+/* ---------- Stage / scene engine ---------- */
+.stage {
+  position: relative;
+  max-width: 1100px;
+  margin: 16px auto 32px;
+  padding: 0 20px;
+  min-height: calc(100vh - 130px);
+}
+.scene {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  transition: opacity 180ms ease-out;
+}
+.scene.active {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+  left: 0;
+  right: 0;
+}
+
+/* ---------- Pokemon dialog box ----------
+   The iconic look: thick black outer border + thin inner-highlight rectangle.
+   We render the inner highlight with stacked inset box-shadows. */
+.poke-box {
+  background: var(--bg-strong);
+  border: 4px solid var(--rule);
+  padding: 14px 16px;
+  border-radius: 0;
+  box-shadow:
+    inset 0 0 0 2px var(--bg-strong),
+    inset 0 0 0 4px var(--inner-highlight),
+    inset 0 0 0 6px var(--bg-strong);
+  color: var(--ink-on-box);
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(11px * var(--tx));
+  line-height: 1.7;
+  position: relative;
+}
+
+.poke-box .triangle {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--ink);
+  animation: blink 0.9s steps(2, end) infinite;
+}
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ---------- Headings ---------- */
+.poke-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(38px * (1 + (var(--tx) - 1) * 0.231));
+  color: var(--pikachu-yellow);
+  text-shadow:
+    2px 0 0 var(--ink),
+    -2px 0 0 var(--ink),
+    0 2px 0 var(--ink),
+    0 -2px 0 var(--ink),
+    2px 2px 0 var(--ink),
+    -2px -2px 0 var(--ink),
+    -2px 2px 0 var(--ink),
+    2px -2px 0 var(--ink),
+    4px 4px 0 var(--charmander-orange);
+  margin: 0 0 18px;
+  letter-spacing: 6px;
+}
+.poke-section-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(12px * var(--tx));
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.poke-caption {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(9px * var(--tx));
+  line-height: 1.7;
+  color: var(--ink-secondary);
+  margin: 8px 4px 0;
+  max-width: 76ch;
+}
+
+/* ---------- Pokemon-styled "menu option" rows (for sliders / params) ---------- */
+.poke-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(10px * var(--tx));
+  color: var(--ink);
+}
+.poke-menu-row::before {
+  content: '\25B6';
+  color: var(--pikachu-yellow);
+  -webkit-text-stroke: 0.5px var(--ink);
+  margin-right: 4px;
+}
+.poke-menu-row input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 140px;
+  height: 8px;
+  background: var(--bg-strong);
+  border: 2px solid var(--rule);
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.poke-menu-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 16px;
+  background: var(--pikachu-yellow);
+  border: 2px solid var(--rule);
+  margin-top: 0;
+  cursor: pointer;
+}
+.poke-menu-row input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 16px;
+  background: var(--pikachu-yellow);
+  border: 2px solid var(--rule);
+  cursor: pointer;
+}
+.poke-menu-row output, .poke-menu-row .val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(10px * var(--tx));
+  min-width: 56px;
+  color: var(--ink);
+}
+.poke-menu-row button {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  border: 2px solid var(--rule);
+  padding: 4px 8px;
+  font-size: calc(9px * var(--tx));
+  color: var(--ink-on-box);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.poke-menu-row button:hover { background: var(--pikachu-yellow); }
+.poke-menu-row button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---------- Scenes layout helpers ---------- */
+.scene-pad {
+  padding: 12px 4px 24px;
+}
+@keyframes cell-flash {
+  0%   { box-shadow: 0 0 0 4px var(--pikachu-yellow), inset 0 0 0 1px var(--bg-strong), inset 0 0 0 2px var(--inner-highlight); }
+  100% { box-shadow: inset 0 0 0 1px var(--bg-strong), inset 0 0 0 2px var(--inner-highlight); }
+}
+
+/* ---------- Footnote ---------- */
+.footnote {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(7px * var(--tx));
+  color: var(--ink-secondary);
+  border-top: 2px solid var(--rule);
+  padding-top: 6px;
+  margin-top: 14px;
+  text-align: right;
+}
+.footnote kbd {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(7px * var(--tx));
+  border: 1px solid var(--rule);
+  padding: 0 4px;
+  background: var(--bg-strong);
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile (≤ 720px). The pixel-font chrome packs brand + title + ~7 buttons
+   into one flex row at desktop; on a phone the row overflows and the
+   scene-title gets squeezed into a vertical column. Below 720px the
+   topbar collapses to three wrapping rows:
+     row 1, brand
+     row 2, PREV + dot-pager + NEXT  (primary navigation, big taps)
+     row 3, concept-badges            (full-width, centered)
+     row 4, music + lang + theme     (secondary toggles, compact)
+   The concept-badges row forces a wrap via `flex: 1 1 100%`, which pushes
+   the three secondary toggles to a fresh row beneath it. The scene-title
+   is hidden, every scene already opens with its own H2, and per-scene
+   responsive rules (sd-row, sd-f-row, tut-welcome, Q-table scroll) live
+   alongside their desktop rules in the scene CSS files.
+   --------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .topbar {
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    gap: 8px;
+    row-gap: 10px;
+  }
+  .topbar .scene-title { display: none; }
+  .topbar .brand { flex: 1 1 auto; font-size: 10px; }
+
+  /* Right cluster spans full width below the brand and wraps its own
+     children into the three rows described above. */
+  .topbar .right-cluster {
+    flex: 0 0 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Row 2, primary pager controls get the iOS-tappable size. */
+  .topbar .right-cluster #prev-btn,
+  .topbar .right-cluster #next-btn {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+  .topbar .right-cluster .dot-pager {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .dot-pager .dot { width: 12px; height: 12px; }
+
+  /* Row 4, secondary toggles. Compact (these are tapped once per
+     session, not primary actions) so the three fit on one row. */
+  .topbar .right-cluster #theme-toggle,
+.topbar .right-cluster #music-toggle {
+    min-height: 30px;
+    padding: 6px 10px;
+    font-size: 8px;
+  }
+
+  .stage {
+    padding: 0 12px;
+    margin: 12px auto 24px;
+    min-height: calc(100dvh - 220px);
+  }
+  .scene { left: 12px; right: 12px; }
+  .scene.active { left: 0; right: 0; }
+  .scene-pad { padding: 8px 0 18px; }
+}
+
+/* ============================================================
+   Last-Minute Pricing, shelf-card state-icon, lever tags,
+   concept-badge row, and the foundation stub card.
+   (Pricing-specific additions to the reskinned Pokemon chrome.)
+   ============================================================ */
+
+/* ---- The recurring shelf-card state-icon ---- */
+.shelf-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--card-bg);
+  border: 3px solid var(--rule);
+  box-shadow: 4px 4px 0 var(--rule);
+  image-rendering: pixelated;
+}
+.shelf-card[data-lever="premium"]  { border-color: var(--lever-premium-rule);  box-shadow: 4px 4px 0 var(--lever-premium-rule); }
+.shelf-card[data-lever="standard"] { border-color: var(--lever-standard-rule); box-shadow: 4px 4px 0 var(--lever-standard-rule); }
+.shelf-card[data-lever="firesale"] { border-color: var(--lever-firesale-rule); box-shadow: 4px 4px 0 var(--lever-firesale-rule); }
+
+.shelf-body { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+/* The cabin: ONE airplane row seen from above -- two seats, an aisle, then
+   three. Each .shelf-slot is one seat; the bottom-u seats are still for sale. */
+.shelf-stack { display: flex; flex-direction: row; align-items: flex-start; justify-content: center; gap: 3px; }
+.shelf-slot  { width: 14px; height: 17px; display: block; }
+.shelf-slot:nth-child(2) { margin-right: 9px; }   /* the aisle, between the 2- and 3-seat blocks */
+.shelf-ticket { width: 100%; height: 100%; display: block; }
+.shelf-ticket.is-gone { opacity: 0.55; }
+
+.shelf-ribbon { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+/* Split-flap DEPARTURE BOARD: NUM_DAYS day tiles + a GATE (departing-plane) tile. */
+.shelf-calendar { display: flex; gap: 3px; align-items: stretch; }
+.cal-cell {
+  position: relative;
+  width: 22px; height: 26px;
+  border: 2px solid var(--rule);
+  background: var(--cal-x-bg);
+  display: flex; align-items: center; justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+/* the split-flap seam across the middle of every tile */
+.cal-cell::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 50%;
+  height: 2px; transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.42); pointer-events: none;
+}
+.cal-cell.is-open { background: var(--cal-open-bg); }
+.cal-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px; line-height: 1;
+  color: var(--pip-off);
+}
+.cal-cell.is-open .cal-num { color: var(--pip-on); }
+.cal-midnight { background: var(--midnight-bg); border-color: var(--rule); }
+.cal-midnight .cal-moon-mark { width: 70%; height: 70%; display: block; }
+.cal-midnight.is-active { box-shadow: inset 0 0 0 2px var(--cal-x-ink); }
+/* a tile "flips" when its day departs */
+@keyframes cal-flip {
+  0%   { transform: perspective(60px) rotateX(0);    }
+  45%  { transform: perspective(60px) rotateX(-88deg); }
+  100% { transform: perspective(60px) rotateX(0);    }
+}
+.cal-cell.is-stamping { animation: cal-flip 360ms cubic-bezier(.3,.7,.3,1); }
+@media (prefers-reduced-motion: reduce) { .cal-cell.is-stamping { animation: none; } }
+
+.shelf-caption {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  color: var(--ink-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+.shelf-card.is-terminal .shelf-caption { color: var(--ink); }
+.shelf-card.is-soldout  { opacity: 0.92; }
+
+/* size variants */
+.shelf-sm .shelf-slot { width: 10px; height: 12px; }
+.shelf-sm .shelf-slot:nth-child(2) { margin-right: 6px; }
+.shelf-sm .cal-cell { width: 15px; height: 18px; }
+.shelf-sm .cal-num  { font-size: 6px; }
+.shelf-sm .shelf-caption { font-size: 7px; }
+.shelf-lg .shelf-slot { width: 19px; height: 23px; }
+.shelf-lg .shelf-slot:nth-child(2) { margin-right: 12px; }
+.shelf-lg .cal-cell { width: 30px; height: 36px; }
+.shelf-lg .cal-num  { font-size: 11px; }
+.shelf-lg .shelf-caption { font-size: 10px; }
+
+/* MINI form: the Q-table-cell icon. No caption (set off in JS); tiny
+   slots/pips with hairline gaps and no card chrome so it nests cleanly
+   inside a packed board cell, yet stays legible at projector scale. */
+.shelf-mini {
+  padding: 0;
+  gap: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.shelf-mini .shelf-body { gap: 6px; }
+.shelf-mini .shelf-stack { gap: 1.5px; }
+.shelf-mini .shelf-slot { width: 8px; height: 9px; }
+.shelf-mini .shelf-slot:nth-child(2) { margin-right: 4px; }
+.shelf-mini .shelf-calendar { gap: 1px; }
+.shelf-mini .cal-cell { width: 9px; height: 11px; border-width: 1px; }
+.shelf-mini .cal-num { display: none; }
+.shelf-mini .cal-midnight .cal-moon-mark { width: 82%; height: 82%; }
+
+/* ---- Price-lever tag (a chunky coloured price button/label) ---- */
+.lever-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(10px * var(--tx));
+  color: var(--lever-ink);
+  background: var(--lever-standard);
+  border: 3px solid var(--lever-standard-rule);
+  box-shadow: 3px 3px 0 var(--lever-standard-rule);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.lever-tag .lever-price { font-size: calc(9px * var(--tx)); opacity: 0.92; }
+.lever-tag[data-lever="premium"]  { background: var(--lever-premium);  border-color: var(--lever-premium-rule);  box-shadow: 3px 3px 0 var(--lever-premium-rule); }
+.lever-tag[data-lever="standard"] { background: var(--lever-standard); border-color: var(--lever-standard-rule); box-shadow: 3px 3px 0 var(--lever-standard-rule); }
+.lever-tag[data-lever="firesale"] { background: var(--lever-firesale); border-color: var(--lever-firesale-rule); box-shadow: 3px 3px 0 var(--lever-firesale-rule); }
+
+/* policy-overlay cell tints (the three coloured regions) */
+.lever-fill-premium  { background: var(--lever-premium);  color: var(--lever-ink); }
+.lever-fill-standard { background: var(--lever-standard); color: var(--lever-ink); }
+.lever-fill-firesale { background: var(--lever-firesale); color: var(--lever-ink); }
+
+/* ============================================================
+   Last-Minute Pricing -- shared scene primitives: the DEMAND DECK
+   (the signature card-flip draw, window.Deck), the MONEY counter,
+   and the RETURN tape. All themeable via the existing tokens.
+   ============================================================ */
+
+/* ---- The DEMAND JAR: a per-lever jar of outcome marbles; one rolls out ----
+   Root class stays `.demand-deck` so the per-scene size overrides keep working;
+   `.demand-jar` carries the new layout. PREMIUM pours a jar of mostly grey "0"
+   duds; STANDARD pours a jar of gold sales and no 0 -- the population you draw
+   from visibly changes with the lever, so the outcome is seen to depend on the
+   action (and the odds stay hidden: the pile is jumbled, not countable). */
+.demand-deck.demand-jar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 86px;
+  height: 112px;
+  perspective: none;
+}
+.jar-glass {
+  position: relative;
+  width: 100%;
+  height: 70%;
+  box-sizing: border-box;
+  border: 3px solid var(--rule);
+  border-radius: 8px 8px 4px 4px;
+  background: var(--bg-strong);
+  background-image: repeating-linear-gradient(115deg, var(--inner-highlight) 0 1px, transparent 1px 10px);
+  box-shadow: 3px 3px 0 var(--rule);
+  overflow: hidden;
+}
+.jar-lid {
+  position: absolute; left: 16%; right: 16%; top: -6px; height: 6px;
+  background: var(--rule); border-radius: 2px;
+}
+.jar-marbles {
+  position: absolute; inset: 5px 4px 4px;
+  display: flex; flex-wrap: wrap; align-content: flex-end; justify-content: center;
+  gap: 2px;
+}
+.jar-marble {
+  width: 15px; height: 15px; border-radius: 50%; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Press Start 2P', monospace; font-size: 7px;
+  border: 2px solid var(--ticket-edge);
+  transform: rotate(var(--tilt, 0deg));
+}
+.jar-marble.jar-dud {                 /* a "0" marble -- no sale */
+  background: var(--ticket-gone); border-color: var(--ticket-gone-edge);
+  color: var(--ticket-gone-edge);
+}
+.jar-marble.jar-sale {                /* sells one or more -- gold */
+  background: var(--ticket-fill); color: var(--ticket-edge);
+}
+.is-pouring .jar-marble { animation: jar-pour 240ms ease-out backwards; }
+@keyframes jar-pour {
+  0%   { opacity: 0; transform: translateY(-16px) rotate(var(--tilt, 0deg)); }
+  100% { opacity: 1; transform: translateY(0) rotate(var(--tilt, 0deg)); }
+}
+.is-shaking .jar-glass { animation: jar-shake 190ms ease-in-out; }
+@keyframes jar-shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25%      { transform: translateX(-2px) rotate(-1.6deg); }
+  75%      { transform: translateX(2px)  rotate(1.6deg); }
+}
+
+.jar-spout {
+  width: 0; height: 0; margin-top: -1px;
+  border-left: 7px solid transparent; border-right: 7px solid transparent;
+  border-top: 8px solid var(--rule);
+}
+.jar-cup {
+  margin-top: 1px;
+  width: 32px; height: 22px; box-sizing: border-box;
+  border: 3px solid var(--rule); border-top: 0; border-radius: 0 0 7px 7px;
+  background: var(--bg-strong); box-shadow: 3px 3px 0 var(--rule);
+  display: flex; align-items: center; justify-content: center;
+}
+.jar-drawn {
+  width: 17px; height: 17px; border-radius: 50%; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  border: 2px solid var(--ticket-edge);
+  opacity: 0; transform: scale(0.2);
+}
+.jar-drawn.jar-dud { background: var(--ticket-gone); border-color: var(--ticket-gone-edge); color: var(--ticket-gone-edge); }
+.jar-drawn.jar-sale { background: var(--ticket-fill); color: var(--ticket-edge); }
+.jar-drawn.is-shown { animation: jar-drop 340ms cubic-bezier(.34, 1.56, .64, 1) forwards; }
+@keyframes jar-drop {
+  0%   { opacity: 0; transform: translateY(-22px) scale(0.4); }
+  60%  { opacity: 1; transform: translateY(2px) scale(1.12); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.jar-label {
+  margin-top: 4px; min-height: 8px;
+  font-family: 'Press Start 2P', monospace; font-size: 7px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--ink-secondary); text-align: center;
+}
+/* the jar frame takes the chosen lever's colour, so the action and its marble
+   population read together at a glance. */
+.demand-deck[data-lever="premium"] .jar-glass { border-color: var(--lever-premium); }
+.demand-deck[data-lever="standard"] .jar-glass { border-color: var(--lever-standard); }
+
+@media (prefers-reduced-motion: reduce) {
+  .is-pouring .jar-marble,
+  .is-shaking .jar-glass,
+  .jar-drawn.is-shown { animation: none; }
+  .jar-drawn.is-shown { opacity: 1; transform: none; }
+}
+
+/* ---- The MONEY counter (running revenue, mono, top-corner HUD) ---- */
+.money-counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 7px 12px;
+  background: var(--bg-strong);
+  border: 3px solid var(--rule);
+  box-shadow: 3px 3px 0 var(--rule);
+  font-family: 'Press Start 2P', monospace;
+  color: var(--ink-on-box);
+}
+.money-counter .money-label {
+  font-size: calc(7px * var(--tx));
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+.money-counter .money-amount {
+  font-size: calc(16px * var(--tx));
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  color: var(--ink-on-box);
+}
+.money-counter .money-amount .money-sign { color: var(--lever-standard); }
+/* a brief gold pulse when revenue ticks up */
+.money-counter.money-bump .money-amount { animation: money-bump 360ms ease-out; }
+@keyframes money-bump {
+  0%   { transform: scale(1);   color: var(--lever-standard); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1);   color: var(--ink-on-box); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .money-counter.money-bump .money-amount { animation: none; }
+}
+
+/* a floating "+$N" flash in a lever colour (the sale receipt) */
+.money-flash {
+  position: absolute;
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(14px * var(--tx));
+  pointer-events: none;
+  color: var(--lever-standard);
+  text-shadow: 1px 1px 0 var(--bg), -1px -1px 0 var(--bg), 1px -1px 0 var(--bg), -1px 1px 0 var(--bg);
+  animation: money-flash-rise 800ms ease-out forwards;
+  z-index: 6;
+}
+.money-flash.lever-fill-premium  { color: var(--lever-premium); }
+.money-flash.lever-fill-standard { color: var(--lever-standard); }
+.money-flash.lever-fill-firesale { color: var(--lever-firesale); }
+@keyframes money-flash-rise {
+  0%   { transform: translateY(8px);   opacity: 0; }
+  20%  { transform: translateY(0);     opacity: 1; }
+  80%  { transform: translateY(-24px); opacity: 1; }
+  100% { transform: translateY(-32px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .money-flash { animation: none; opacity: 1; }
+}
+
+/* ---- The RETURN tape: a left-to-right rollout of episode steps ---- */
+.return-tape {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--bg-strong);
+  border: 3px solid var(--rule);
+  box-shadow: inset 0 0 0 2px var(--bg-strong), inset 0 0 0 4px var(--inner-highlight);
+  font-family: 'Press Start 2P', monospace;
+  overflow-x: auto;
+}
+.return-tape .tape-step {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 64px;
+  padding: 6px 6px 5px;
+  border: 2px solid var(--rule);
+  background: var(--bg);
+  color: var(--ink-on-box);
+}
+.return-tape .tape-step .tape-day {
+  font-size: 7px;
+  letter-spacing: 0.5px;
+  color: var(--ink-secondary);
+  text-transform: uppercase;
+}
+.return-tape .tape-step .tape-reward {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.return-tape .tape-step.tape-sale   { box-shadow: inset 0 0 0 2px var(--lever-standard); }
+.return-tape .tape-step.tape-nosale .tape-reward { color: var(--ink-secondary); }
+/* the terminal cap (MIDNIGHT) on the right of the tape */
+.return-tape .tape-step.tape-terminal {
+  background: var(--midnight-bg);
+  color: #FFFFFF;
+  border-color: var(--rule);
+}
+.return-tape .tape-total {
+  flex: 0 0 auto;
+  align-self: center;
+  margin-left: 4px;
+  padding: 6px 10px;
+  border: 2px solid var(--rule);
+  background: var(--lever-standard);
+  color: var(--lever-ink);
+  font-size: calc(11px * var(--tx));
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Arcade cut (weekend 3): back link, full-screen button, end buttons ----------
+   The link back to the arcade takes the place of the brand; the full-screen button (js/fullscreen.js) lands in
+   the [data-fullscreen] host after MUSIC and takes the look of the topbar buttons. */
+.arcade-link {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  padding: 5px 8px;
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.arcade-link:hover { background: var(--pikachu-yellow); }
+.fs-host { display: inline-flex; }
+.fs-host:empty { display: none; }
+.fullbtn {
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 3px 5px;
+  cursor: pointer;
+  line-height: 0;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.fullbtn:hover { background: var(--pikachu-yellow); }
+.end-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 4px 0;
+}
+/* A link takes the line height of the button beside it (buttons do not inherit it). */
+.end-actions > a { line-height: normal; }
+a.poke-btn { display: inline-block; text-decoration: none; }
+@media (max-width: 900px) {
+  .arcade-link .al-long { display: none; }
+}
+
+/* Arcade cut: no double-tap zoom on taps (iPad). */
+button, a { touch-action: manipulation; }

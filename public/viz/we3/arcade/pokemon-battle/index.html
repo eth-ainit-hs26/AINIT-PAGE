@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pokemon battle</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/scene0.css">
+  <link rel="stylesheet" href="css/sceneHowToPlay.css">
+  <link rel="stylesheet" href="css/scene1.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="arcade-link" href="../index.html" title="Back to the arcade"><span aria-hidden="true">&#9664; </span><span class="al-long">BACK TO THE </span>ARCADE</a>
+    <div id="scene-title" class="scene-title">loading&hellip;</div>
+    <div class="right-cluster">
+      <button id="prev-btn" class="pager-btn" type="button">PREV</button>
+      <div id="dot-pager" class="dot-pager"></div>
+      <button id="next-btn" class="pager-btn" type="button">NEXT</button>
+      <button id="music-toggle" class="theme-toggle music-toggle" type="button" aria-label="Toggle music">&#9834; MUSIC OFF</button>
+      <span class="fs-host" data-fullscreen></span>
+    </div>
+  </header>
+
+  <main id="stage" class="stage"></main>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/sfx.js"></script>
+  <script src="js/music-ui.js"></script>
+  <script src="js/moves.js"></script>
+  <script src="js/battle.js"></script>
+  <script src="js/sprite.js"></script>
+  <script src="js/dialog.js"></script>
+  <script src="js/hpbar.js"></script>
+  <script src="js/scenes/scene0.js"></script>
+  <script src="js/scenes/sceneHowToPlay.js"></script>
+  <script src="js/scenes/scene1.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fullscreen.js"></script>
+</body>
+</html>

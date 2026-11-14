@@ -704,7 +704,16 @@ export const weekends: Weekend[] = [
     // the Vorlesungsverzeichnis time, where the spreadsheet says 08:00; the break rows keep the programme office's
     // venues. The spreadsheet has no Saturday 12:00 row for this weekend.
     friday: [
-      { time: '08:15', title: 'MDPs', type: 'lecture' },
+      {
+        time: '08:15',
+        title: 'MDPs',
+        type: 'lecture',
+        // "Press Start", four games of the FS26 arcade, played only (Carlos, 2026-11-14: "In the first section, we're
+        // going to show some video games for them to play"): Old Bessie, ANYmal, Last-Minute Pricing, Pokemon. Built
+        // in the private repository eth-ainit-hs26/w3-cx-private, folder 01_arcade, copied here without its tools
+        // and CLAUDE.md files.
+        links: [{ label: 'Press Start, four games', url: viz(3, 'arcade') }],
+      },
       { time: '09:00', title: 'MDPs', type: 'exercise' },
       { time: '10:00', title: 'Runs and cumulative rewards', type: 'lecture' },
       { time: '10:30', title: 'Coffee break at Dozentenfoyer, until 11:00', type: 'break' },

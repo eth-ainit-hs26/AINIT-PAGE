@@ -1,0 +1,150 @@
+/* PRESS START, the start screen of the weekend 3 arcade: the light retro
+   console look of the games (shell #E8E0CC, boxes #F8F4E4, ink #181818,
+   Press Start 2P from assets/fonts). Words grow by up to 1.4 on screens of
+   at least 1080 x 740 px (--tx, the weekend 2 rule); the sprites keep their
+   sizes. */
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../assets/fonts/PressStart2P-Regular.woff2') format('woff2');
+  font-display: block;
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --tx: 1;
+  --bg:        #E8E0CC;
+  --bg-strong: #F8F4E4;
+  --ink:       #181818;
+  --ink-2:     #585858;
+  --rule:      #181818;
+  --yellow:    #F8D028;
+  --orange:    #F58030;
+}
+@media (min-width: 1080px) and (min-height: 740px) {
+  :root { --tx: 1.4; }
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Press Start 2P', "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+a, button { touch-action: manipulation; }
+
+.top {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 20px 0;
+  min-height: 12px;
+}
+.fs-host { display: inline-flex; }
+.fs-host:empty { display: none; }
+.fullbtn {
+  background: var(--bg-strong);
+  color: var(--ink);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 3px 5px;
+  cursor: pointer;
+  line-height: 0;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.fullbtn:hover { background: var(--yellow); }
+
+body { min-height: 100vh; display: flex; flex-direction: column; }
+.arcade {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 8px 20px 48px;
+  text-align: center;
+}
+.logo {
+  font-size: calc(44px * (1 + (var(--tx) - 1) * 0.15));
+  color: var(--yellow);
+  letter-spacing: 6px;
+  margin: 18px 0 14px;
+  text-shadow:
+    3px 0 0 var(--ink), -3px 0 0 var(--ink), 0 3px 0 var(--ink), 0 -3px 0 var(--ink),
+    3px 3px 0 var(--ink), -3px -3px 0 var(--ink), -3px 3px 0 var(--ink), 3px -3px 0 var(--ink),
+    6px 6px 0 var(--orange);
+}
+.prompt {
+  font-size: calc(11px * var(--tx));
+  margin: 0 0 26px;
+  letter-spacing: 0.06em;
+}
+.blink { display: inline-block; animation: blink 0.9s steps(2, end) infinite; }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
+
+.carts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--bg-strong);
+  border: 4px solid var(--rule);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 0 14px 18px;
+  box-shadow: 6px 6px 0 0 #404040;
+  transition: transform 90ms ease-out, box-shadow 90ms ease-out;
+}
+.cart:hover, .cart:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 0 #404040;
+  outline: none;
+}
+.cart:focus-visible { background: #FFF6CC; }
+.cart:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 0 #404040; }
+.cart-label {
+  align-self: stretch;
+  height: 14px;
+  margin: 0 -14px;
+  background: var(--acc);
+  border-bottom: 4px solid var(--rule);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.cart-sprite { display: block; width: 104px; height: 104px; margin-top: 10px; }
+.cart-sprite svg { width: 100%; height: 100%; display: block; }
+.cart-text { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.cart-name { font-size: calc(11px * var(--tx)); line-height: 1.5; }
+.cart-sub { font-size: calc(8px * var(--tx)); color: var(--ink-2); min-height: 1.6em; }
+.cart-blurb { font-size: calc(8px * var(--tx)); line-height: 1.8; color: var(--ink); }
+
+@media (max-width: 1000px) {
+  .carts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .arcade { padding: 4px 14px 24px; }
+  .logo { font-size: 26px; letter-spacing: 3px; margin-top: 10px; }
+  .prompt { margin-bottom: 18px; }
+  .carts { grid-template-columns: 1fr; gap: 14px; }
+  .cart { flex-direction: row; flex-wrap: wrap; align-items: center; text-align: left; gap: 12px; padding-bottom: 12px; }
+  .cart-label { flex: 0 0 calc(100% + 28px); }
+  .cart-sprite { width: 56px; height: 56px; margin-top: 0; flex: 0 0 auto; }
+  .cart-text { align-items: flex-start; flex: 1 1 0; min-width: 0; gap: 4px; }
+  .cart-sub:empty { display: none; }
+}

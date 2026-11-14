@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ANYmal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="arcade-link" href="../index.html" title="Back to the arcade"><span aria-hidden="true">&#9664; </span><span class="al-long">BACK TO THE </span>ARCADE</a>
+    <div id="scene-title" class="scene-title">loading&hellip;</div>
+    <div class="right-cluster">
+      <button id="prev-btn" class="pager-btn" type="button">PREV</button>
+      <div id="dot-pager" class="dot-pager"></div>
+      <button id="next-btn" class="pager-btn" type="button">NEXT</button>
+      <span class="fs-host" data-fullscreen></span>
+    </div>
+  </header>
+
+  <main id="stage" class="stage">
+
+    <!-- Scene 0: title -->
+    <section class="scene am-title-scene" data-key="title" data-title="ANYMAL">
+      <h1 class="am-title">ANYMAL</h1>
+      <div class="am-hero">
+        <img class="am-photo" src="img/anymal.jpg" alt="The ANYmal robot">
+      </div>
+      <p class="am-credit">Photo: ANYbotics AG</p>
+      <p class="am-sub">Meet ANYmal, ETH Zurich's quadrupedal robot, in a tiny grid-world game.</p>
+      <button class="am-start" type="button" data-go="1"><span class="am-chev">&#9654;</span> PRESS START</button>
+    </section>
+
+    <!-- Scene 1: how to play -->
+    <section class="scene am-howto" data-key="howto" data-title="How to play">
+      <h2 class="am-heading">HOW TO PLAY</h2>
+      <div class="am-box am-lead">ANYmal moves on a grid trying to collect rewards while two spooky ghosts roam around. Sometimes the robot malfunctions and moves randomly: welcome to the world of stochastic decision-making.</div>
+      <div class="am-rules">
+        <div class="am-rule"><div class="am-rule-icon" aria-hidden="true">&#127918;</div><div><strong>You drive ANYmal</strong> with the arrow buttons under the grid, or with w/a/s/d or the arrow keys: up, left, down, right.</div></div>
+        <div class="am-rule"><div class="am-rule-icon" aria-hidden="true">&#11088;</div><div><strong>Collect rewards.</strong> A new reward spawns at a random cell after each one you pick up.</div></div>
+        <div class="am-rule"><div class="am-rule-icon" aria-hidden="true">&#128123;</div><div><strong>Avoid the ghosts.</strong> Two ghosts wander the grid following random walks.</div></div>
+        <div class="am-rule"><div class="am-rule-icon" aria-hidden="true">&#9889;</div><div><strong>Mind the glitches.</strong> ANYmal occasionally malfunctions and moves in a random direction.</div></div>
+        <div class="am-rule"><div class="am-rule-icon" aria-hidden="true">&#127937;</div><div><strong>Game over</strong> when ANYmal collides with a ghost or the round limit is reached.</div></div>
+        <div class="am-rule"><div class="am-rule-icon" aria-hidden="true">&#127919;</div><div><strong>Goal:</strong> maximise the cumulative score over a fixed number of rounds.</div></div>
+      </div>
+      <div class="am-box am-scoring">
+        <div class="am-box-title">SCORING</div>
+        <div class="am-score-row"><span class="am-score-val am-good">+10</span><span>collect a reward</span></div>
+        <div class="am-score-row"><span class="am-score-val">-1</span><span>per step (rewards efficiency)</span></div>
+        <div class="am-score-row"><span class="am-score-val am-bad">-100</span><span>ghost collision (game over)</span></div>
+      </div>
+      <div class="am-go-row"><button class="am-btn" type="button" data-go="2">PLAY &#9654;</button></div>
+    </section>
+
+    <!-- Scene 2: the game -->
+    <section class="scene am-game" data-key="game" data-title="Collect the stars, dodge the ghosts">
+      <div class="am-game-row">
+        <div class="am-game-left">
+          <div class="am-box am-stats">
+            <div class="am-stat"><div class="am-stat-label">ROUND</div><div class="am-stat-value"><span id="g_round">0</span> <span class="am-stat-meta">OF <span id="g_max">100</span></span></div></div>
+            <div class="am-stat"><div class="am-stat-label">SCORE</div><div class="am-stat-value" id="g_score">0</div></div>
+          </div>
+          <div class="am-dpad" aria-label="Move ANYmal">
+            <span></span><button type="button" data-dir="up" aria-label="Up">&#9650;</button><span></span>
+            <button type="button" data-dir="left" aria-label="Left">&#9664;</button><button type="button" data-dir="down" aria-label="Down">&#9660;</button><button type="button" data-dir="right" aria-label="Right">&#9654;</button>
+          </div>
+          <button class="am-btn am-reset" id="g_start" type="button">&#8635; START / RESET</button>
+          <div class="am-log" id="g_log" aria-live="polite"></div>
+        </div>
+        <div class="am-game-right">
+          <div id="g_grid" class="am-grid" aria-hidden="true"></div>
+          <div class="am-box am-end" id="g_end" hidden>
+            <div class="am-end-title">GAME OVER</div>
+            <div class="am-end-reason" id="g_endReason"></div>
+            <div class="am-end-score">FINAL SCORE <span id="g_final">0</span></div>
+            <div class="end-actions">
+              <button class="am-btn" id="g_again" type="button">PLAY AGAIN</button>
+              <a class="am-btn" href="../index.html">BACK TO THE ARCADE</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fullscreen.js"></script>
+</body>
+</html>

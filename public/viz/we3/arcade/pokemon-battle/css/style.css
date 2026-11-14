@@ -1,0 +1,935 @@
+/* Pokemon battle, viz #7 of the AI in Industry reinforcement-learning curriculum.
+   Second integrative review.  Same lesson as Snakes & Ladders, retold on a
+   Gen-1 Pokemon Red/Blue battle screen.  The editorial cream/serif palette of
+   the rest of the curriculum is deliberately overridden here per the user's
+   request; the SKILL §10 anticipates this exit.  The cross-viz hue identities
+   (anymal-red, casino-blue, ghost-purple, star-amber, door-green) are kept as
+   per-component accent tokens so the scene-5 recap can still cite them. */
+
+/* ---------- Press Start 2P ---------- */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../assets/fonts/PressStart2P-Regular.woff2') format('woff2');
+  font-display: block;  /* pixel font: do NOT flash fallback serif first */
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* ---------- Tokens ---------- */
+:root,
+:root[data-theme="light"] {
+  /* Battle screen, Day */
+  --sky-top:        #9CC8E8;
+  --sky-bottom:     #C0DEF0;
+  --grass:          #5BA85B;
+  --grass-rim:      #3A8A3A;
+
+  /* Page chrome */
+  --bg:             #E8E0CC;     /* warm grey-cream, NES "shell" */
+  --bg-strong:      #F8F4E4;     /* lighter, for dialog boxes */
+  --ink:            #181818;
+  --ink-secondary:  #585858;
+  --rule:           #181818;     /* hard black for Pokemon borders */
+  --card-bg:        #FFFFFF;
+  --inner-highlight:#404040;     /* the secondary inner border line */
+  --pikachu-yellow: #F8D028;
+  --pikachu-cheek:  #E84828;
+  --charmander-orange:#F58030;
+  --hp-green:       #48C848;
+  --hp-yellow:      #E8C828;
+  --hp-red:         #E84828;
+  --damage-text:    #F8F8F8;
+  --damage-stroke:  #181818;
+  --ink-on-box:     #181818;     /* ink on Pokemon-white boxes (always dark) */
+
+  /* Colour-blind-safe semantic palette (Okabe-Ito). Use these, not the
+     hp-green / hp-red brand tokens, wherever colour carries meaning
+     (heatmap, win/lose, positive/negative delta). Pair with a label or
+     icon for redundancy. See teaching-viz SKILL §Colour-blind safety. */
+  --cb-blue:             #0072B2;
+  --cb-blue-light:       #B6D9EB;
+  --cb-vermillion:       #D55E00;
+  --cb-vermillion-light: #F4D2B0;
+  --cb-bluish-green:     #009E73;
+  --cb-yellow:           #F0E442;
+  --cb-orange:           #E69F00;
+  --cb-sky:              #56B4E9;
+  --cb-purple:           #CC79A7;
+
+  /* Cross-viz hue identities (kept for scene-5 recap chips) */
+  --hue-anymal:  #B8323A;     /* red, MDP */
+  --hue-casino:  #2F6CB1;     /* blue, ε-greedy */
+  --hue-ghost:   #7A5C8C;     /* purple, Bellman */
+  --hue-star:    #C08A3E;     /* amber, Robbins-Monro */
+  --hue-door:    #4A8B6B;     /* green, SARSA */
+  --hue-snakes:  #C8902C;     /* gold, Snakes & Ladders sibling */
+
+  /* HP-bar bucket fill tokens, overridable per theme. */
+  --hp-b0: #48C848;
+  --hp-b1: #88D848;
+  --hp-b2: #E8C828;
+  --hp-b3: #E89028;
+  --hp-b4: #E84828;
+
+  /* Battle-VFX colour tokens, used by the scene 1 attack overlays.
+     Each theme overrides these so the lightning bolt / ember / rage
+     aura match the palette. */
+  --vfx-bolt:    #FFD028;     /* THUNDERBOLT SVG stroke */
+  --vfx-bolt-hl: #FFFFFF;     /* THUNDERBOLT inner highlight stroke */
+  --vfx-bolt-glow: rgba(255, 208, 40, 0.95);
+  --vfx-ember-a: rgba(248, 128, 48, 0.95);
+  --vfx-ember-b: rgba(232,  80, 24, 0.85);
+  --vfx-ember-c: rgba(248, 168, 64, 0.95);
+  --vfx-flame-a: rgba(248,  96, 24, 0.9);
+  --vfx-flame-b: rgba(252, 168, 32, 0.95);
+  --vfx-flame-c: rgba(255, 220, 64, 0.95);
+  --vfx-flame-d: rgba(255, 220, 64, 0.0);
+  --vfx-rage:    rgba(232, 40, 40, 0.7);
+}
+
+/* Arcade cut (weekend 3): words grow by up to 1.4 on screens of at least 1080 x 740 px, the weekend 2 rule.
+   Font sizes of words read calc(V * var(--tx)); boards, sprites and tables keep plain px
+   (01_arcade/tools/keep-*.txt names them). */
+:root { --tx: 1; }
+@media (min-width: 1080px) and (min-height: 740px) {
+  :root { --tx: 1.4; }
+}
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Press Start 2P', "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  -webkit-font-smoothing: none;  /* keep pixel font crisp */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Topbar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--bg);
+  border-bottom: 4px solid var(--rule);
+  font-size: calc(9px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.topbar .scene-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-secondary);
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 0 20px;
+}
+.topbar .right-cluster { display: flex; gap: 6px; align-items: center; }
+
+.theme-toggle, .pager-btn {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 5px 8px;
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.theme-toggle:hover, .pager-btn:hover {
+  background: var(--pikachu-yellow);
+}
+.pager-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* MUSIC button, same chrome as THEME but with an "on" state. */
+.music-toggle.active {
+  background: var(--pikachu-yellow);
+  color: var(--ink);
+  box-shadow: inset 2px 2px 0 0 #B89020;
+}
+
+.dot-pager { display: flex; gap: 4px; align-items: center; }
+.dot-pager .dot {
+  width: 10px; height: 10px;
+  background: var(--ink-secondary);
+  border: 2px solid var(--rule);
+  padding: 0;
+  cursor: pointer;
+}
+.dot-pager .dot.active { background: var(--pikachu-yellow); }
+.dot-pager .dot:hover { background: var(--pikachu-cheek); }
+
+/* ---------- Stage / scene engine ---------- */
+.stage {
+  position: relative;
+  max-width: 1100px;
+  margin: 16px auto 32px;
+  padding: 0 20px;
+  min-height: calc(100vh - 130px);
+}
+.scene {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  transition: opacity 180ms ease-out;
+}
+.scene.active {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+  left: 0;
+  right: 0;
+}
+
+/* ---------- Pokemon dialog box ----------
+   The iconic look: thick black outer border + thin inner-highlight rectangle.
+   We render the inner highlight with stacked inset box-shadows. */
+.poke-box {
+  background: var(--bg-strong);
+  border: 4px solid var(--rule);
+  padding: 14px 16px;
+  border-radius: 0;
+  box-shadow:
+    inset 0 0 0 2px var(--bg-strong),
+    inset 0 0 0 4px var(--inner-highlight),
+    inset 0 0 0 6px var(--bg-strong);
+  color: var(--ink-on-box);
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(11px * var(--tx));
+  line-height: 1.7;
+  position: relative;
+}
+
+.poke-box .triangle {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--ink);
+  animation: blink 0.9s steps(2, end) infinite;
+}
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ---------- Headings ---------- */
+.poke-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(38px * (1 + (var(--tx) - 1) * 0.231));
+  color: var(--pikachu-yellow);
+  text-shadow:
+    2px 0 0 var(--ink),
+    -2px 0 0 var(--ink),
+    0 2px 0 var(--ink),
+    0 -2px 0 var(--ink),
+    2px 2px 0 var(--ink),
+    -2px -2px 0 var(--ink),
+    -2px 2px 0 var(--ink),
+    2px -2px 0 var(--ink),
+    4px 4px 0 var(--charmander-orange);
+  margin: 0 0 18px;
+  letter-spacing: 6px;
+}
+.poke-section-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(12px * var(--tx));
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.poke-caption {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(9px * var(--tx));
+  line-height: 1.7;
+  color: var(--ink-secondary);
+  margin: 8px 4px 0;
+  max-width: 76ch;
+}
+
+/* ---------- Pokemon sprite ----------
+   Hard rule: image-rendering: pixelated must apply on both the <img> tag and
+   any wrapper that scales. */
+.poke-sprite {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  image-rendering: -moz-crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  display: block;
+  /* Idle breathing, 1.5 px vertical bob on a 2.4s cycle. The
+     animation property is replaced wholesale by .shake / .faint when
+     those classes are added, so it cleanly pauses during damage and
+     KO animations. */
+  animation: poke-breathe 2.4s ease-in-out infinite;
+}
+
+/* Grass tufts at the platform rim, 5 chunky pixel tufts that sway on
+   staggered cycles.  Lives inside .grass-rim so it sits at the right
+   vertical position automatically.  prefers-reduced-motion disables. */
+.grass-tufts {
+  position: absolute;
+  inset: -14px 0 auto 0;        /* lift above the rim */
+  height: 14px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 6%;
+  pointer-events: none;
+  z-index: 2;
+}
+.grass-tuft {
+  width: 14px;
+  height: 14px;
+  background: var(--grass-rim);
+  clip-path: polygon(
+    20% 100%,  0%  35%, 18% 55%,
+    35% 0%,   45% 50%, 50% 25%,
+    55% 50%,  65% 0%,  82% 55%,
+    100% 35%, 80% 100%
+  );
+  transform-origin: 50% 100%;
+  animation: grass-sway 4.0s ease-in-out infinite alternate;
+}
+.grass-tuft:nth-child(2) { animation-delay: -0.7s; animation-duration: 4.4s; }
+.grass-tuft:nth-child(3) { animation-delay: -1.5s; animation-duration: 3.6s; }
+.grass-tuft:nth-child(4) { animation-delay: -2.1s; animation-duration: 4.8s; }
+.grass-tuft:nth-child(5) { animation-delay: -0.3s; animation-duration: 4.2s; }
+@keyframes grass-sway {
+  0%   { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg);  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grass-tuft { animation: none; }
+}
+@keyframes poke-breathe {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-1.5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .poke-sprite { animation: none; }
+}
+.poke-sprite.shake {
+  animation: poke-shake 320ms steps(1, end);
+}
+@keyframes poke-shake {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-6px, 0); }
+  25%  { transform: translate(6px, 0); }
+  40%  { transform: translate(-5px, 0); }
+  55%  { transform: translate(5px, 0); }
+  70%  { transform: translate(-3px, 0); }
+  85%  { transform: translate(3px, 0); }
+  100% { transform: translate(0, 0); }
+}
+.poke-sprite.faint {
+  animation: poke-faint 600ms ease-in forwards;
+}
+@keyframes poke-faint {
+  0%   { transform: translateY(0); opacity: 1; filter: brightness(1); }
+  100% { transform: translateY(48px); opacity: 0; filter: brightness(0); }
+}
+
+/* ---------- Battle stage ---------- */
+.battle-stage {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 5 / 3;
+  margin: 0 auto;
+  background:
+    linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-bottom) 65%, var(--grass) 65%, var(--grass) 100%);
+  border: 4px solid var(--rule);
+  box-shadow: inset 0 0 0 2px var(--bg-strong), inset 0 0 0 4px var(--inner-highlight);
+  overflow: hidden;
+  font-family: 'Press Start 2P', monospace;
+}
+.battle-stage .grass-rim {
+  position: absolute;
+  left: 0; right: 0;
+  top: 65%;
+  height: 4px;
+  background: var(--grass-rim);
+}
+.battle-stage .platform {
+  position: absolute;
+  width: 38%;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--grass-rim);
+  opacity: 0.65;
+}
+.battle-stage .platform.player   { left: 6%;  bottom: 14%; }
+.battle-stage .platform.opponent { right: 6%; top: 35%;    }
+
+.battle-stage .sprite-host {
+  position: absolute;
+}
+.battle-stage .sprite-host.player {
+  left: 10%;
+  bottom: 16%;
+  width: 30%;
+}
+.battle-stage .sprite-host.opponent {
+  right: 10%;
+  top: 12%;
+  width: 22%;
+}
+.battle-stage .sprite-host img {
+  width: 100%;
+  height: auto;
+  /* feet rest on platform: the platform is at the host's bottom */
+  transform: translateY(0);
+}
+
+/* HP box, sits floating over the battle */
+.hp-box {
+  position: absolute;
+  background: var(--bg-strong);
+  border: 3px solid var(--rule);
+  padding: 6px 10px 6px 12px;
+  box-shadow:
+    inset 0 0 0 2px var(--bg-strong),
+    inset 0 0 0 4px var(--inner-highlight);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--ink-on-box);
+  min-width: 160px;
+}
+.hp-box.player   { right: 4%; bottom: 6%;   }
+.hp-box.opponent { left:  4%; top: 6%;      }
+
+.hp-box .row1 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+.hp-box .name { color: var(--ink-on-box); }
+.hp-box .lvl { color: var(--ink-on-box); }
+
+.hp-bar-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.hp-bar-row .hp-label {
+  font-size: 8px;
+  color: var(--pikachu-yellow);
+  -webkit-text-stroke: 0.5px var(--ink);
+}
+.hp-bar-track {
+  flex: 1 1 auto;
+  height: 9px;
+  background: #585858;
+  border: 2px solid var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+.hp-bar-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  background: #48C848;     /* default = full */
+  width: 100%;
+  transition: width 1100ms cubic-bezier(.45, .05, .55, .95), background-color 200ms;
+}
+/* Discrete bucket fill, 5 buckets + fainted. Width snaps to 100/80/60/
+   40/20/0%, color phases green → light-green → yellow → orange → red. */
+.hp-bar-fill[data-bucket="0"] { width: 100%; background: var(--hp-b0, #48C848); }
+.hp-bar-fill[data-bucket="1"] { width: 80%;  background: var(--hp-b1, #88D848); }
+.hp-bar-fill[data-bucket="2"] { width: 60%;  background: var(--hp-b2, #E8C828); }
+.hp-bar-fill[data-bucket="3"] { width: 40%;  background: var(--hp-b3, #E89028); }
+.hp-bar-fill[data-bucket="4"] { width: 20%;  background: var(--hp-b4, #E84828); }
+.hp-bar-fill[data-bucket="5"] { width: 0;   background: var(--hp-b4, #E84828); }
+/* Tick marks at the bucket boundaries, makes the discretisation
+   readable even in a still screenshot. */
+.hp-bar-tick {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(0,0,0,0.45);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hp-box .row3 {
+  margin-top: 4px;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 9px;
+  color: var(--ink-on-box);
+}
+
+/* Damage flash number */
+.damage-flash {
+  position: absolute;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 22px;
+  color: var(--damage-text);
+  -webkit-text-stroke: 2px var(--damage-stroke);
+  text-stroke: 2px var(--damage-stroke);
+  pointer-events: none;
+  animation: dmg-rise 700ms ease-out forwards;
+}
+@keyframes dmg-rise {
+  0%   { transform: translateY(8px); opacity: 0; }
+  20%  { transform: translateY(0);   opacity: 1; }
+  80%  { transform: translateY(-24px); opacity: 1; }
+  100% { transform: translateY(-32px); opacity: 0; }
+}
+
+/* ---------- Move menu (scene 1) ---------- */
+.move-menu {
+  background: var(--bg-strong);
+  border: 4px solid var(--rule);
+  padding: 10px 12px;
+  box-shadow:
+    inset 0 0 0 2px var(--bg-strong),
+    inset 0 0 0 4px var(--inner-highlight);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--ink-on-box);
+}
+.move-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  background: transparent;
+  border: 0;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 10px;
+  color: var(--ink-on-box);
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  text-transform: uppercase;
+}
+.move-btn::before {
+  content: '\25B6 ';
+  visibility: hidden;
+  color: var(--ink-on-box);
+}
+.move-btn:hover::before,
+.move-btn:focus::before {
+  visibility: visible;
+}
+.move-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.move-btn:disabled::before { visibility: hidden; }
+.move-btn .move-sub {
+  font-size: 8px;
+  color: #585858;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  display: flex;
+  flex-direction: column;     /* two rows: .move-stats then .move-drop */
+  gap: 3px;
+}
+.move-btn .move-stats {
+  display: flex;
+  flex-wrap: wrap;            /* just the type pill now (PWR/ACC retired) */
+  gap: 2px 8px;
+  align-items: center;
+}
+.move-btn .type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  font-size: 7px;
+  text-transform: uppercase;
+}
+.type-pill.electric { background: #F8D028; color: #181818; }
+.type-pill.normal   { background: #C8C0B0; color: #181818; }
+.type-pill.steel    { background: #B0B0C0; color: #181818; }
+.type-pill.fire     { background: #F58030; color: #181818; }
+
+/* ---------- Pokemon-styled "menu option" rows (for sliders / params) ---------- */
+.poke-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(10px * var(--tx));
+  color: var(--ink);
+}
+.poke-menu-row::before {
+  content: '\25B6';
+  color: var(--pikachu-yellow);
+  -webkit-text-stroke: 0.5px var(--ink);
+  margin-right: 4px;
+}
+.poke-menu-row input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 140px;
+  height: 8px;
+  background: var(--bg-strong);
+  border: 2px solid var(--rule);
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.poke-menu-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 16px;
+  background: var(--pikachu-yellow);
+  border: 2px solid var(--rule);
+  margin-top: 0;
+  cursor: pointer;
+}
+.poke-menu-row input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 16px;
+  background: var(--pikachu-yellow);
+  border: 2px solid var(--rule);
+  cursor: pointer;
+}
+.poke-menu-row output, .poke-menu-row .val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(10px * var(--tx));
+  min-width: 56px;
+  color: var(--ink);
+}
+.poke-menu-row button {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  border: 2px solid var(--rule);
+  padding: 4px 8px;
+  font-size: calc(9px * var(--tx));
+  color: var(--ink-on-box);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.poke-menu-row button:hover { background: var(--pikachu-yellow); }
+.poke-menu-row button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---------- Scenes layout helpers ---------- */
+.scene-pad {
+  padding: 12px 4px 24px;
+}
+.scene-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+@keyframes cell-flash {
+  0%   { box-shadow: 0 0 0 4px var(--pikachu-yellow), inset 0 0 0 1px var(--bg-strong), inset 0 0 0 2px var(--inner-highlight); }
+  100% { box-shadow: inset 0 0 0 1px var(--bg-strong), inset 0 0 0 2px var(--inner-highlight); }
+}
+
+/* ---------- Footnote ---------- */
+.footnote {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(7px * var(--tx));
+  color: var(--ink-secondary);
+  border-top: 2px solid var(--rule);
+  padding-top: 6px;
+  margin-top: 14px;
+  text-align: right;
+}
+.footnote kbd {
+  font-family: 'Press Start 2P', monospace;
+  font-size: calc(7px * var(--tx));
+  border: 1px solid var(--rule);
+  padding: 0 4px;
+  background: var(--bg-strong);
+  color: var(--ink);
+}
+/* The topbar controls use the pixel font. */
+.theme-toggle,
+.pager-btn,
+.scene-title {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+}
+
+/* ============================================================
+   Scene 1, wild-encounter intro
+   ----------------------------------------------------------------
+   The cascade hides both sprite hosts on reset, flashes the
+   opponent into view ("A wild CHARMANDER appeared!"), then arcs
+   a Pokeball in from off-screen-left onto the player platform,
+   pops it open, and materializes Pikachu in its place ("Go!
+   PIKACHU!"). All animations are opacity- and filter-based on
+   the sprite hosts so they DO NOT conflict with the
+   .poke-sprite breathing/shake/faint transform animations that
+   live on the inner <img>. The Pokeball is its own absolute
+   element layered above the platform.
+   ============================================================ */
+
+/* Initial hidden state for sprite hosts, opacity only, no
+   transform/display so the inner sprite's breathing keyframes
+   keep running unmolested. */
+.sc1-hidden {
+  opacity: 0;
+}
+
+/* Opponent wild-appears: a fast white-flash that brings the
+   host from invisible+overbright down to fully visible at
+   normal brightness. Filter + opacity only, no transform. */
+.sc1-wild-appear {
+  animation: sc1-wild-appear 500ms steps(8, end) forwards;
+}
+@keyframes sc1-wild-appear {
+  0%   { opacity: 0; filter: brightness(6) contrast(0.4); }
+  20%  { opacity: 1; filter: brightness(4) contrast(0.6); }
+  60%  { opacity: 1; filter: brightness(2) contrast(0.9); }
+  100% { opacity: 1; filter: brightness(1) contrast(1); }
+}
+
+/* Player materialize: similar opacity+filter flash for the
+   Pikachu reveal that follows the Pokeball pop. */
+.sc1-materialize {
+  animation: sc1-materialize 360ms steps(6, end) forwards;
+}
+@keyframes sc1-materialize {
+  0%   { opacity: 0; filter: brightness(4) contrast(0.5); }
+  30%  { opacity: 1; filter: brightness(3) contrast(0.7); }
+  100% { opacity: 1; filter: brightness(1) contrast(1); }
+}
+
+/* Pokeball arcing onto the player platform. The ball is its
+   own element appended to .battle-stage; it lives above the
+   platforms but below the HP boxes (z-index: 6). The arc keyframe
+   uses left/bottom percentages so it scales with the stage,
+   plus rotation for the spinning ball feel. */
+.sc1-pokeball {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  z-index: 6;
+  pointer-events: none;
+  left: -20%;
+  bottom: -20%;
+}
+.sc1-pokeball svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.sc1-pokeball-arc {
+  animation: sc1-pokeball-arc 620ms cubic-bezier(0.3, 0.05, 0.55, 1) forwards;
+}
+@keyframes sc1-pokeball-arc {
+  0%   { left: -20%; bottom: -20%; transform: rotate(0deg);   }
+  40%  { left:   2%; bottom:  45%; transform: rotate(360deg); }
+  65%  { left:  18%; bottom:  60%; transform: rotate(540deg); }
+  100% { left:  22%; bottom:  22%; transform: rotate(720deg); }
+}
+.sc1-pokeball-open {
+  left: 22%;
+  bottom: 22%;
+  animation: sc1-pokeball-open 280ms ease-out forwards;
+}
+@keyframes sc1-pokeball-open {
+  0%   { transform: scale(1)   rotate(720deg); opacity: 1; }
+  100% { transform: scale(2.4) rotate(720deg); opacity: 0; }
+}
+
+/* Reduced motion, collapse the cascade to a simple opacity
+   reveal. Pokeball is invisible (the materialize alone reads
+   as "appears"). */
+@media (prefers-reduced-motion: reduce) {
+  .sc1-hidden {
+    opacity: 0;
+    transition: opacity 200ms linear;
+  }
+  .sc1-wild-appear,
+  .sc1-materialize {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transition: opacity 200ms linear;
+  }
+  .sc1-pokeball,
+  .sc1-pokeball-arc,
+  .sc1-pokeball-open {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Gen-1 rotating-hex scene transition
+   ----------------------------------------------------------------
+   A full-viewport overlay shaped as a 6-point hexagon (extended
+   beyond the viewport so the shape fully covers the screen at
+   scale 1) animates from scale 1 / rotate 0 down to scale 0 /
+   rotate 180, opacity fading at the tail.  The new scene is
+   already mounted underneath; the overlay just gates the reveal.
+   pointer-events: none keeps the underlying scene interactive.
+   Fires only on entry to the three battle-flavored scenes
+   (scene1, sceneSarsaDerive, sceneQstar), see playSceneTransition
+   in main.js.
+   ============================================================ */
+.scene-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  pointer-events: none;
+  clip-path: polygon(
+    50% -50%,
+    130% 25%,
+    130% 75%,
+    50% 150%,
+    -30% 75%,
+    -30% 25%
+  );
+  transform-origin: 50% 50%;
+  animation: scene-trans-hex 700ms cubic-bezier(.42, 0, .58, 1) forwards;
+}
+@keyframes scene-trans-hex {
+  0%   { transform: scale(1) rotate(0deg);     opacity: 1; }
+  70%  {                                       opacity: 1; }
+  100% { transform: scale(0) rotate(180deg);   opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-transition { display: none; }
+}   /* SAR, purple */
+
+
+/* ============================================================
+   Slide mode (`f` hotkey)
+   ----------------------------------------------------------------
+   Hides the topbar and stretches the scene container.  ESC exits.
+   ============================================================ */
+body.slide-mode .topbar { display: none; }
+body.slide-mode .stage  { padding: 12px 18px; }
+
+/* ---------------------------------------------------------------------------
+   Mobile (≤ 720px). The pixel-font chrome packs brand + title + ~7 buttons
+   into one flex row at desktop; on a phone the row overflows and the
+   scene-title gets squeezed into a vertical column. Below 720px the
+   topbar collapses to three wrapping rows:
+     row 1, brand
+     row 2, PREV + dot-pager + NEXT  (primary navigation, big taps)
+     row 3, trainer-badges            (full-width, centered)
+     row 4, music + lang + theme     (secondary toggles, compact)
+   The trainer-badges row forces a wrap via `flex: 1 1 100%`, which pushes
+   the three secondary toggles to a fresh row beneath it. The scene-title
+   is hidden, every scene already opens with its own H2, and per-scene
+   responsive rules (sd-row, sd-f-row, tut-welcome, Q-table scroll) live
+   alongside their desktop rules in the scene CSS files.
+   --------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .topbar {
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    gap: 8px;
+    row-gap: 10px;
+  }
+  .topbar .scene-title { display: none; }
+
+  /* Right cluster spans full width below the brand and wraps its own
+     children into the three rows described above. */
+  .topbar .right-cluster {
+    flex: 0 0 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Row 2, primary pager controls get the iOS-tappable size. */
+  .topbar .right-cluster #prev-btn,
+  .topbar .right-cluster #next-btn {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+  .topbar .right-cluster .dot-pager {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .dot-pager .dot { width: 12px; height: 12px; }
+
+  /* Row 4, secondary toggles. Compact (these are tapped once per
+     session, not primary actions) so the three fit on one row. */
+  .topbar .right-cluster #theme-toggle,
+.topbar .right-cluster #music-toggle {
+    min-height: 30px;
+    padding: 6px 10px;
+    font-size: 8px;
+  }
+
+  .stage {
+    padding: 0 12px;
+    margin: 12px auto 24px;
+    min-height: calc(100dvh - 220px);
+  }
+  .scene { left: 12px; right: 12px; }
+  .scene.active { left: 0; right: 0; }
+
+  /* Cards/scene-row helpers: two-column scene-rows fall back to stack. */
+  .scene-row { gap: 12px; }
+  .scene-pad { padding: 8px 0 18px; }
+}
+
+/* ---------- Arcade cut (weekend 3): back link, full-screen button, end buttons ----------
+   The link back to the arcade takes the place of the brand; the full-screen button (js/fullscreen.js) lands in
+   the [data-fullscreen] host after MUSIC and takes the look of the topbar buttons. */
+.arcade-link {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  padding: 5px 8px;
+  font-size: calc(8px * var(--tx));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.arcade-link:hover { background: var(--pikachu-yellow); }
+.fs-host { display: inline-flex; }
+.fs-host:empty { display: none; }
+.fullbtn {
+  background: var(--bg-strong);
+  color: var(--ink-on-box);
+  border: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 3px 5px;
+  cursor: pointer;
+  line-height: 0;
+  box-shadow: inset -2px -2px 0 0 #BBB6A2;
+}
+.fullbtn:hover { background: var(--pikachu-yellow); }
+.end-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 4px 0;
+}
+/* A link takes the line height of the button beside it (buttons do not inherit it). */
+.end-actions > a { line-height: normal; }
+a.poke-btn { display: inline-block; text-decoration: none; }
+@media (max-width: 900px) {
+  .arcade-link .al-long { display: none; }
+}
+
+/* Arcade cut: no double-tap zoom on taps (iPad). */
+button, a { touch-action: manipulation; }
