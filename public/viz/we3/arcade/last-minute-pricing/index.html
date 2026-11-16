@@ -1,54 +1,36 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Last-Minute Pricing</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/scene0.css">
-  <link rel="stylesheet" href="css/scene1.css">
-  <link rel="stylesheet" href="css/scene2.css">
+  <link rel="stylesheet" href="../kit/kit.css">
+  <link rel="stylesheet" href="css/game.css">
 </head>
-<body>
-  <header class="topbar">
-    <a class="arcade-link" href="../index.html" title="Back to the arcade"><span aria-hidden="true">&#9664; </span><span class="al-long">BACK TO THE </span>ARCADE</a>
-    <div id="scene-title" class="scene-title">loading&hellip;</div>
-    <div class="right-cluster">
-      <button id="prev-btn" class="pager-btn" type="button">PREV</button>
-      <div id="dot-pager" class="dot-pager"></div>
-      <button id="next-btn" class="pager-btn" type="button">NEXT</button>
-      <button id="music-toggle" class="theme-toggle music-toggle" type="button" aria-label="Toggle music">&#9834; MUSIC OFF</button>
+<body class="k-game lm">
+  <header class="k-top">
+    <a class="k-tbtn arcade-link" href="../index.html" title="Back to the arcade"><span aria-hidden="true">&#9664; </span><span class="k-long">BACK TO THE </span>ARCADE</a>
+    <div id="scene-title" class="k-title">LAST-MINUTE PRICING</div>
+    <div class="k-tools">
+      <button id="music-toggle" class="k-tbtn" type="button" aria-label="Music and sounds">&#9834; MUSIC OFF</button>
       <span class="fs-host" data-fullscreen></span>
     </div>
   </header>
 
-  <main id="stage" class="stage"></main>
+  <main id="stage" class="lm-stage" data-mode="title"></main>
 
-  <!-- the MDP engine: Levers + Pricing (aliased to Moves + Battle) -->
+  <!-- the rules: levers.js (the two prices) and pricing.js (a day of buyers), unchanged -->
   <script src="js/levers.js"></script>
   <script src="js/pricing.js"></script>
-
-  <!-- English strings: the core, then one fragment per scene -->
-  <script src="js/i18n.js"></script>
-  <script src="js/i18n/scene0.i18n.js"></script>
-  <script src="js/i18n/scene1.i18n.js"></script>
-  <script src="js/i18n/scene2.i18n.js"></script>
-
-  <!-- shared widgets and chrome -->
-  <script src="js/dialog.js"></script>
+  <!-- the shared kit: coach, end card, pops -->
+  <script src="../kit/kit.js"></script>
+  <!-- sound -->
   <script src="js/sfx.js"></script>
-  <script src="js/deck.js"></script>
   <script src="js/music.js"></script>
-  <script src="js/shelfCard.js"></script>
   <script src="js/music-ui.js"></script>
-
-  <!-- scenes: title, how to read the shelf, the game -->
-  <script src="js/scenes/scene0.js"></script>
-  <script src="js/scenes/scene1.js"></script>
-  <script src="js/scenes/scene2.js"></script>
-
-  <!-- pager -->
-  <script src="js/main.js"></script>
+  <!-- the game -->
+  <script src="js/art.js"></script>
+  <script src="js/game.js"></script>
   <script src="js/fullscreen.js"></script>
 </body>
 </html>

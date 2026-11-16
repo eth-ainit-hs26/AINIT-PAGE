@@ -1,0 +1,347 @@
+/* game.css: Last-Minute Pricing, the game screen (from 2026-11-16). Built on ../kit/kit.css (fonts, --tx, the top
+   bar, .k-btn, the coach, the end card). The airport lives in .lm-field, a size container: its parts are sized in cq
+   units, so the scene keeps its proportions from a phone to a projector. Light only. */
+
+body.k-game.lm { height: 100vh; height: 100dvh; overflow: hidden; }
+
+.lm-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 10px;
+  padding: 12px 18px 16px;
+}
+
+/* ---- the HUD: DAY, SEATS LEFT, MONEY ---- */
+.lm-hud { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: stretch; }
+.lm-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--k-edge);
+  padding: 7px 16px;
+  transition: transform 160ms;
+}
+.lm-pill > svg { width: calc(30px * var(--tx)); height: calc(30px * var(--tx)); flex: 0 0 auto; }
+.lm-pill-col { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.lm-lab {
+  font-family: var(--k-display);
+  font-size: max(13px, calc(11px * var(--tx)));
+  letter-spacing: 0.06em;
+  color: var(--k-ink-2);
+  line-height: 1.1;
+}
+.lm-val { display: flex; align-items: center; gap: 10px; }
+.lm-num { font-family: var(--k-display); font-size: calc(23px * var(--tx)); line-height: 1.05; white-space: nowrap; }
+.lm-of { font-family: var(--k-display); font-size: calc(16px * var(--tx)); color: var(--k-ink-2); }
+.lm-day { flex: 1 1 auto; }
+.lm-seats, .lm-money { flex: 0 0 auto; }
+.lm-bump { animation: lm-bump 420ms ease-out; }
+@keyframes lm-bump { 30% { transform: scale(1.08); } }
+
+.lm-pips { display: flex; gap: 6px; }
+.lm-pips i {
+  width: calc(18px * var(--tx));
+  height: calc(18px * var(--tx));
+  border-radius: 50%;
+  background: #E3EAF4;
+  box-shadow: inset 0 0 0 2px #CFD9E7;
+}
+.lm-pips i.now { background: #FFFFFF; box-shadow: inset 0 0 0 3px var(--k-gold-dark); }
+.lm-pips i.premium { background: #2F6CB1; box-shadow: none; }
+.lm-pips i.standard { background: #EE8A12; box-shadow: none; }
+
+.lm-minis { display: flex; gap: 5px; align-items: flex-end; }
+.lm-minis i {
+  position: relative;
+  width: calc(13px * var(--tx));
+  height: calc(18px * var(--tx));
+  border-radius: 5px 5px 3px 3px;
+  background: #DDF3F0;
+  box-shadow: inset 0 0 0 2px #33B5A5;
+}
+.lm-minis i.sold { background: #33B5A5; box-shadow: inset 0 0 0 2px #23877B; }
+.lm-minis i.sold::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -18%;
+  width: 78%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 2px var(--k-ink);
+}
+.lm-money .lm-num { min-width: 2.6em; }
+
+/* ---- the airport ---- */
+.lm-field {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  border-radius: 22px;
+  container-type: size;
+  box-shadow: 0 0 0 4px #FFFFFF, 0 10px 24px rgba(34, 49, 77, 0.16);
+  background: linear-gradient(180deg, #86D2FF 0%, #BDE8FF 55%, #E4F6FF 100%);
+}
+.lm-field > * { position: absolute; }
+.lm-field svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.lm-sun {
+  width: 12cqmin; height: 12cqmin; right: 7cqw; top: 8cqh; border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, #FFF8C4 0%, #FFD84A 55%, #FFC531 100%);
+  box-shadow: 0 0 0 2.2cqmin rgba(255, 226, 110, 0.35), 0 0 0 4.4cqmin rgba(255, 226, 110, 0.16);
+}
+/* three clouds drift from the right edge to the left one, a third of a lap apart, so the sky is never empty */
+.lm-cloud { left: 100cqw; width: 15cqw; min-width: 80px; height: auto; animation: lm-drift 110s linear infinite; }
+.lm-cloud svg { height: auto; }
+.lm-cloud.c1 { top: 9cqh; animation-delay: -55s; }
+.lm-cloud.c2 { top: 21cqh; width: 11cqw; animation-delay: -15s; opacity: 0.9; }
+.lm-cloud.c3 { top: 3cqh; width: 9cqw; animation-delay: -92s; opacity: 0.85; }
+@keyframes lm-drift { from { transform: translateX(0); } to { transform: translateX(-120cqw); } }
+.lm-hills { left: 0; right: 0; bottom: 24cqh; height: 24cqh; }
+.lm-apron {
+  left: 0; right: 0; bottom: 0; height: 26cqh;
+  background: linear-gradient(180deg, #BCC8D6 0, #CFD8E3 1.6cqh, #D7DFE9 100%);
+  border-top: 3px solid #A9B7C9;
+}
+.lm-apron::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 8cqh; height: 0.9cqh; min-height: 3px;
+  background: repeating-linear-gradient(90deg, #FFC531 0 5cqw, transparent 5cqw 8cqw);
+}
+.lm-walk { left: 0; right: 0; bottom: 0; height: 7cqh; background: #EEF2F7; border-top: 3px solid #D3DDE9; }
+.lm-tower { left: 32cqw; bottom: 24cqh; height: min(44cqh, 22cqw); aspect-ratio: 60 / 160; }
+.lm-sockpole { left: 26cqw; bottom: 24cqh; height: min(17cqh, 10cqw); aspect-ratio: 70 / 90; }
+.lm-sock { transform-box: fill-box; transform-origin: 0% 50%; animation: lm-flap 1.6s ease-in-out infinite alternate; }
+@keyframes lm-flap { from { transform: rotate(-4deg) scaleX(0.94); } to { transform: rotate(5deg) scaleX(1.02); } }
+
+/* the departure board: DEPARTS IN 4 DAYS */
+.lm-board {
+  left: 2.5cqw; top: 4.5cqh; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  background: #22314D; color: #FFD54A;
+  border: 4px solid #FFFFFF; border-radius: 16px;
+  box-shadow: 0 0 0 3px #22314D, 0 8px 14px rgba(34, 49, 77, 0.22);
+  padding: 8px 16px 10px;
+  font-family: var(--k-display);
+  text-align: center;
+}
+.lm-board-head { font-size: max(14px, calc(12px * var(--tx))); letter-spacing: 0.08em; color: #FFFFFF; white-space: nowrap; }
+.lm-board-row { display: flex; align-items: center; gap: 10px; }
+.lm-flip {
+  display: inline-grid; place-items: center;
+  min-width: 1.15em; padding: 0 0.12em;
+  font-size: calc(34px * var(--tx)); line-height: 1.12;
+  color: #22314D; background: #FFD54A; border-radius: 10px;
+  box-shadow: inset 0 -4px 0 rgba(34, 49, 77, 0.18);
+  background-image: linear-gradient(180deg, transparent 49%, rgba(34, 49, 77, 0.25) 49%, rgba(34, 49, 77, 0.25) 53%, transparent 53%);
+}
+.lm-flip.flipping { animation: lm-flip 420ms ease-in-out; }
+@keyframes lm-flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
+.lm-board-unit { font-size: calc(22px * var(--tx)); white-space: nowrap; }
+.lm-board.now .lm-flip { display: none; }
+.lm-board.now .lm-board-unit { color: #FFFFFF; background: var(--k-red); border-radius: 10px; padding: 2px 12px; }
+
+/* the gate: a price sign over the counter */
+.lm-gate { left: 3.5cqw; bottom: 3cqh; height: min(37cqh, 23cqw); aspect-ratio: 220 / 150; z-index: 4; }
+.lm-counter { position: absolute; inset: 0; }
+.lm-desk-sign { font-family: var(--k-display); font-size: 21px; fill: #FFFFFF; letter-spacing: 1px; }
+.lm-sign {
+  position: absolute; left: 47%; bottom: calc(100% + 8px); translate: -50% 0;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  min-width: 5.6em;
+  font-family: var(--k-display); color: #FFFFFF; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+  background: #9AA7BC; border: 3px solid #22314D; border-radius: 14px;
+  box-shadow: 0 5px 0 #22314D;
+  padding: 4px 14px 6px; white-space: nowrap;
+}
+.lm-sign::before, .lm-sign::after {
+  content: ""; position: absolute; top: 100%; width: 4px; height: 9px; background: #22314D;
+}
+.lm-sign::before { left: 22%; } .lm-sign::after { right: 22%; }
+.lm-sign-name { font-size: max(14px, calc(11px * var(--tx))); letter-spacing: 0.06em; line-height: 1.1; }
+.lm-sign-price { font-size: calc(22px * var(--tx)); line-height: 1.05; }
+.lm-sign.premium { background: #2F6CB1; }
+.lm-sign.standard { background: #EE8A12; }
+.lm-sign.pop { animation: lm-sign-pop 380ms cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes lm-sign-pop { from { transform: scale(0.6) rotate(-6deg); } }
+
+/* the plane at its gate, with the steps up to its door */
+.lm-planepos { right: 1.5cqw; bottom: 3.5cqh; width: min(57cqw, 122cqh); aspect-ratio: 420 / 180; z-index: 5; }
+.lm-plane { position: absolute; inset: 0; }
+.lm-stairs { position: absolute; left: 9.5%; width: 20%; bottom: 3.3%; height: 25.6%; z-index: 1; }
+.lm-door-leaf { transform-box: fill-box; transform-origin: 0% 50%; transition: transform 300ms ease-in-out; }
+.lm-plane.open .lm-door-leaf { transform: scaleX(0.14); }
+.lm-pax { transform-box: fill-box; transform-origin: 50% 100%; }
+.lm-pax.pop { animation: lm-pop-in 360ms cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes lm-pop-in { from { transform: translateY(30%) scale(0.6); opacity: 0; } }
+.lm-win-x { display: none; }
+.lm-win.empty .lm-win-x { display: inline; animation: lm-blink 0.35s ease-in-out 6 alternate both; }
+@keyframes lm-blink { from { opacity: 1; } to { opacity: 0.25; } }
+.lm-plane.rumble svg { animation: lm-rumble 0.12s linear infinite; }
+@keyframes lm-rumble { 50% { transform: translateY(1px); } }
+
+/* passengers on foot, the tumbleweed */
+.lm-walker { left: 0; bottom: 1.6cqh; height: min(18cqh, 14cqw); aspect-ratio: 60 / 100; z-index: 8; pointer-events: none; transform-origin: 50% 100%; }
+.lm-walker.left svg { scale: -1 1; }
+.lm-leg { transform-box: fill-box; transform-origin: 50% 0%; }
+.lm-walker.walking .lm-leg-a { animation: lm-leg 0.34s ease-in-out infinite alternate; }
+.lm-walker.walking .lm-leg-b { animation: lm-leg 0.34s ease-in-out infinite alternate-reverse; }
+.lm-walker.walking svg { animation: lm-bob 0.34s ease-in-out infinite alternate; }
+@keyframes lm-leg { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }
+@keyframes lm-bob { to { transform: translateY(-3%); } }
+.lm-tumble { left: 0; bottom: 2.2cqh; height: min(10cqh, 7cqw); aspect-ratio: 1; z-index: 8; pointer-events: none; }
+
+/* effects: tags above the plane, sparkles, coins */
+.lm-tag {
+  position: absolute; z-index: 9; transform: translate(-50%, -100%);
+  font-family: var(--k-display); font-size: calc(20px * var(--tx)); letter-spacing: 0.03em;
+  color: #FFFFFF; background: #22314D; border: 3px solid #FFFFFF; border-radius: 999px; padding: 4px 14px;
+  box-shadow: 0 4px 10px rgba(34, 49, 77, 0.25); white-space: nowrap; pointer-events: none;
+  display: flex; align-items: center; gap: 8px;
+  animation: lm-tag-in 300ms cubic-bezier(.2, 1.5, .4, 1) both;
+}
+.lm-tag svg { width: 1.2em; height: 1.2em; }
+.lm-tag.gold { background: #FFC531; color: #22314D; }
+.lm-tag.bad { background: var(--k-red); }
+.lm-tag.small { font-size: calc(16px * var(--tx)); padding: 2px 10px; border-width: 2px; }
+@keyframes lm-tag-in { from { opacity: 0; transform: translate(-50%, -60%) scale(0.6); } }
+.lm-fx { position: absolute; z-index: 8; pointer-events: none; transform: translate(-50%, -50%); }
+.lm-spark { width: min(6cqh, 4cqw); aspect-ratio: 1; animation: lm-twinkle 0.9s ease-in-out 2 both; }
+@keyframes lm-twinkle { 0%, 100% { transform: translate(-50%, -50%) scale(0); } 50% { transform: translate(-50%, -50%) scale(1) rotate(30deg); } }
+.lm-flycoin { position: fixed; z-index: 80; width: 28px; height: 28px; pointer-events: none; }
+.lm-flycoin svg { width: 100%; height: 100%; display: block; }
+
+/* ---- the message line and the two prices ---- */
+.lm-msg {
+  justify-self: center;
+  max-width: 100%;
+  min-height: calc(1.3em + 16px);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: #FFFFFF;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 var(--k-edge);
+  padding: 8px 24px;
+  font-weight: 800;
+  font-size: calc(15px * var(--tx));
+  text-align: center;
+}
+.lm-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.lm-price-btn {
+  position: relative;
+  justify-content: flex-start;
+  gap: 12px;
+  min-height: calc(54px * var(--tx));
+  padding: 10px 16px;
+  font-size: calc(24px * var(--tx));
+  border-radius: 18px;
+}
+.lm-premium { --b: #2F6CB1; --bd: #1C4B82; }
+.lm-standard { --b: #EE8A12; --bd: #A85C00; }
+.lm-price-btn .lm-ic {
+  flex: 0 0 auto;
+  width: calc(34px * var(--tx)); height: calc(34px * var(--tx));
+  border-radius: 50%; background: #FFFFFF; color: var(--b);
+  display: grid; place-items: center; box-shadow: inset 0 -3px 0 rgba(34, 49, 77, 0.14);
+}
+.lm-price-btn .lm-ic svg { width: 62%; height: 62%; display: block; }
+.lm-price-btn .lm-tag-price {
+  margin-left: auto;
+  font-size: calc(17px * var(--tx));
+  color: #22314D; text-shadow: none;
+  background: #FFFFFF; border-radius: 999px; padding: 4px 14px;
+  white-space: nowrap;
+}
+.lm-price-btn kbd {
+  position: absolute; top: -9px; left: -7px;
+  font-family: var(--k-display); font-size: max(14px, calc(10px * var(--tx)));
+  color: #22314D; text-shadow: none; background: #FFFFFF;
+  border: 2px solid #22314D; border-radius: 8px; padding: 0 7px; line-height: 1.35;
+}
+
+/* ---- the title screen ---- */
+.lm-title { display: none; }
+.lm-stage[data-mode="title"] { grid-template-rows: minmax(0, 1fr); }
+.lm-stage[data-mode="title"] .lm-hud,
+.lm-stage[data-mode="title"] .lm-msg,
+.lm-stage[data-mode="title"] .lm-prices,
+.lm-stage[data-mode="title"] .lm-board,
+.lm-stage[data-mode="title"] .lm-sign { display: none; }
+.lm-stage[data-mode="title"] .lm-title {
+  display: flex; position: absolute; z-index: 20; left: 50%; top: 3.5%; translate: -50% 0;
+  width: min(820px, 92%); flex-direction: column; align-items: center; gap: 12px; text-align: center;
+}
+/* a smaller plane and gate on the title screen, so the logo and the buttons stand in open sky */
+.lm-stage[data-mode="title"] .lm-planepos { width: min(46cqw, 82cqh); }
+.lm-stage[data-mode="title"] .lm-gate { height: min(28cqh, 20cqw); }
+.lm-stage[data-mode="title"] .lm-tower { left: 15cqw; height: min(30cqh, 16cqw); }
+.lm-logo {
+  margin: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  font-family: var(--k-display); font-weight: 400; line-height: 0.98; letter-spacing: 0.02em;
+  color: #FFFFFF;
+  text-shadow:
+    4px 0 0 #22314D, -4px 0 0 #22314D, 0 4px 0 #22314D, 0 -4px 0 #22314D,
+    3px 3px 0 #22314D, -3px -3px 0 #22314D, 3px -3px 0 #22314D, -3px 3px 0 #22314D,
+    0 9px 0 #22314D, 0 12px 14px rgba(34, 49, 77, 0.3);
+}
+.lm-logo .l1 { font-size: min(calc(44px * var(--tx)), 11vw); color: #FFC531; }
+.lm-logo .l2 { font-size: min(calc(66px * var(--tx)), 16vw); }
+.lm-ribbon {
+  font-family: var(--k-display); font-size: calc(19px * var(--tx)); letter-spacing: 0.08em;
+  color: #FFFFFF; background: #F2655A; padding: 6px 24px; border-radius: 10px; rotate: -2deg;
+  box-shadow: 0 4px 0 #C4473D;
+}
+.lm-tagline {
+  font-weight: 800; font-size: calc(16px * var(--tx)); background: #FFFFFF; border-radius: 16px;
+  padding: 10px 20px; box-shadow: 0 4px 0 var(--k-edge); max-width: 100%;
+}
+.lm-title-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 4px; }
+.lm-title-best { font-family: var(--k-display); font-size: calc(15px * var(--tx)); color: #22314D; background: rgba(255, 255, 255, 0.85); border-radius: 999px; padding: 3px 14px; }
+
+/* ---- phones ---- */
+/* A phone's field is tall and narrow: the plane stands further back on the tarmac, across the field, and the gate
+   comes forward to the bottom right; a buyer walks in, pays at the gate, then crosses the tarmac to the steps. */
+@media (max-width: 560px) {
+  .lm-stage { padding: 8px 10px 10px; gap: 8px; }
+  .lm-pill { padding: 6px 10px; gap: 8px; }
+  .lm-day { flex-basis: 100%; }
+  .lm-seats, .lm-money { flex: 1 1 0; }
+  .lm-minis { gap: 3px; }
+  .lm-msg { border-radius: 16px; padding: 6px 12px; }
+  .lm-prices { gap: 8px; }
+  .lm-price-btn { flex-direction: column; gap: 4px; padding: 8px 4px 10px; font-size: 20px; }
+  .lm-price-btn .lm-tag-price { margin-left: 0; font-size: 15px; padding: 2px 10px; }
+  .lm-price-btn kbd { display: none; }
+  .lm-apron { height: 48cqh; }
+  .lm-apron::before { top: 5cqh; }
+  .lm-hills { bottom: 46cqh; height: 16cqh; }
+  .lm-tower, .lm-sockpole { display: none; }
+  .lm-planepos { left: 3cqw; right: auto; width: 94cqw; bottom: 33cqh; }
+  .lm-gate { left: auto; right: 2cqw; bottom: 2cqh; height: min(20cqh, 30cqw); }
+  .lm-walker { height: min(14cqh, 15cqw); }
+  .lm-board { left: 3cqw; top: 3cqh; padding: 6px 10px 8px; }
+  .lm-stage[data-mode="title"] .lm-apron { height: 26cqh; }
+  .lm-stage[data-mode="title"] .lm-hills { bottom: 24cqh; height: 14cqh; }
+  .lm-stage[data-mode="title"] .lm-planepos { left: 4cqw; width: 70cqw; bottom: 9cqh; }
+  .lm-stage[data-mode="title"] .lm-gate { height: min(12cqh, 24cqw); }
+  .lm-stage[data-mode="title"] .lm-sun { top: 53cqh; right: 12cqw; }
+}
+@media (max-height: 560px) {
+  body.k-game.lm { height: auto; overflow: auto; }
+  .lm-stage { min-height: 560px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lm-cloud { animation-play-state: paused !important; }
+  .lm-sock, .lm-spark, .lm-tag, .lm-pax.pop, .lm-win.empty .lm-win-x, .lm-flip.flipping, .lm-sign.pop, .lm-plane.rumble svg,
+  .lm-walker.walking svg, .lm-walker.walking .lm-leg, .lm-bump { animation: none !important; }
+  .lm-door-leaf { transition: none; }
+}
