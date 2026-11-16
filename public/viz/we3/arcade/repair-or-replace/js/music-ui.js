@@ -3,7 +3,7 @@
  *   Music is off on every page load: nothing plays until the MUSIC button
  *   is pressed (that click also unlocks the browser's AudioContext). The
  *   same button turns the sound effects on and off with the music (js/sfx.js
- *   gates every effect on it). 'm' presses the button (js/main.js).
+ *   gates every effect on it). 'm' presses the button (js/game.js).
  *
  *   The button label always reflects the current state.
  */

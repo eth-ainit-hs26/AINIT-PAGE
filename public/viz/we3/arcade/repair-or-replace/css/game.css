@@ -1,0 +1,303 @@
+/* game.css: Old Bessie, the game screen (from 2026-11-16). Built on ../kit/kit.css (fonts, --tx, the top bar,
+   .k-btn, the coach, the end card). The town lives in .ob-field, a size container: its parts are sized in cq
+   units, so the scene keeps its proportions from a phone to a projector. Light only. */
+
+body.k-game.ob { height: 100vh; height: 100dvh; overflow: hidden; }
+
+.ob-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 10px;
+  padding: 12px 18px 16px;
+}
+
+/* ---- the HUD ---- */
+.ob-hud { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: stretch; }
+.ob-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  border-radius: 18px;
+  box-shadow: 0 4px 0 var(--k-edge);
+  padding: 7px 16px;
+  transition: transform 160ms;
+}
+.ob-pill > svg { width: calc(30px * var(--tx)); height: calc(30px * var(--tx)); flex: 0 0 auto; }
+.ob-pill-col { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ob-lab {
+  font-family: var(--k-display);
+  font-size: max(13px, calc(11px * var(--tx)));
+  letter-spacing: 0.06em;
+  color: var(--k-ink-2);
+  line-height: 1.1;
+}
+.ob-val { display: flex; align-items: center; gap: 10px; }
+.ob-num { font-family: var(--k-display); font-size: calc(23px * var(--tx)); line-height: 1.05; white-space: nowrap; }
+.ob-of { font-family: var(--k-display); font-size: calc(16px * var(--tx)); color: var(--k-ink-2); }
+.ob-week { flex: 1 1 auto; }
+.ob-money { flex: 0 0 auto; }
+.ob-money .ob-num.neg { color: var(--k-red); }
+.ob-cond { flex: 0 0 auto; }
+.ob-bump { animation: ob-bump 420ms ease-out; }
+@keyframes ob-bump { 30% { transform: scale(1.08); } }
+
+.ob-pips { display: flex; gap: 4px; flex-wrap: nowrap; }
+.ob-pips i {
+  width: calc(14px * var(--tx));
+  height: calc(14px * var(--tx));
+  border-radius: 50%;
+  background: #E3EAF4;
+  box-shadow: inset 0 0 0 2px #CFD9E7;
+}
+.ob-pips i.now { background: #FFFFFF; box-shadow: inset 0 0 0 3px var(--k-gold-dark); }
+.ob-pips i.run { background: #1666C8; box-shadow: none; }
+.ob-pips i.service { background: #E08A00; box-shadow: none; }
+.ob-pips i.replace { background: #D33A2C; box-shadow: none; }
+.ob-pips i.bd { box-shadow: 0 0 0 3px #D33A2C; }
+
+.ob-meter { display: flex; gap: 4px; }
+.ob-meter i {
+  width: calc(16px * var(--tx));
+  height: calc(22px * var(--tx));
+  border-radius: 6px;
+  background: #E3EAF4;
+  box-shadow: inset 0 -3px 0 rgba(34, 49, 77, 0.12);
+}
+.ob-cond.w0 .ob-meter i.lit { background: #2E8B57; }
+.ob-cond.w1 .ob-meter i.lit { background: #C99A33; }
+.ob-cond.w2 .ob-meter i.lit { background: #E07A2A; }
+.ob-cond.w3 .ob-meter i.lit { background: #D33A2C; }
+.ob-cond-name { font-family: var(--k-display); font-size: calc(20px * var(--tx)); min-width: 5.2em; }
+.ob-cond.w0 .ob-cond-name { color: #2E8B57; }
+.ob-cond.w1 .ob-cond-name { color: #9C7417; }
+.ob-cond.w2 .ob-cond-name { color: #C25F14; }
+.ob-cond.w3 .ob-cond-name { color: #D33A2C; }
+
+/* ---- the town ---- */
+.ob-field {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  border-radius: 22px;
+  container-type: size;
+  box-shadow: 0 0 0 4px #FFFFFF, 0 10px 24px rgba(34, 49, 77, 0.16);
+  background: linear-gradient(180deg, #7FCFFF 0%, #B9E8FF 55%, #E2F6FF 100%);
+}
+.ob-field > * { position: absolute; }
+.ob-sun {
+  width: 13cqmin; height: 13cqmin; left: 7cqw; top: 9cqh; border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, #FFF8C4 0%, #FFD84A 55%, #FFC531 100%);
+  box-shadow: 0 0 0 2.2cqmin rgba(255, 226, 110, 0.35), 0 0 0 4.4cqmin rgba(255, 226, 110, 0.16);
+}
+/* three clouds drift from the right edge to the left one, a third of a lap apart, so the sky is never empty */
+.ob-cloud { left: 100cqw; width: 17cqw; min-width: 90px; animation: ob-drift 120s linear infinite; }
+.ob-cloud svg { display: block; width: 100%; height: auto; }
+.ob-cloud.c1 { top: 7cqh; animation-delay: -60s; }
+.ob-cloud.c2 { top: 17cqh; width: 12cqw; animation-delay: -20s; opacity: 0.9; }
+.ob-cloud.c3 { top: 4cqh; width: 10cqw; animation-delay: -100s; opacity: 0.85; }
+@keyframes ob-drift { from { transform: translateX(0); } to { transform: translateX(-120cqw); } }
+.ob-hills { left: 0; right: 0; bottom: 21cqh; height: 30cqh; }
+.ob-hills svg { display: block; width: 100%; height: 100%; }
+.ob-tree { bottom: 22cqh; height: min(22cqh, 15cqw); aspect-ratio: 60 / 90; }
+.ob-tree svg, .ob-garage svg, .ob-dealer svg, .ob-van svg, .ob-tow svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ob-tree.t1 { left: 28cqw; }
+.ob-tree.t2 { left: 34cqw; height: min(17cqh, 12cqw); }
+.ob-tree.t3 { right: 30cqw; height: min(19cqh, 13cqw); }
+.ob-garage { left: 2cqw; bottom: 21cqh; height: min(46cqh, 30cqw); aspect-ratio: 240 / 200; }
+.ob-dealer { right: 2cqw; bottom: 21cqh; height: min(46cqh, 30cqw); aspect-ratio: 260 / 200; }
+.ob-sign { font-family: var(--k-display); font-size: 27px; fill: #FFFFFF; letter-spacing: 1px; }
+.ob-door { transform-box: fill-box; transform-origin: 50% 0%; transition: transform 380ms ease-in-out; }
+.ob-garage.open .ob-door { transform: scaleY(0.06); }
+.ob-walk { left: 0; right: 0; bottom: 18cqh; height: 4cqh; background: #F3E9D3; border-top: 3px solid #E2D3B2; }
+.ob-road {
+  left: 0; right: 0; bottom: 0; height: 18cqh;
+  background:
+    linear-gradient(180deg, transparent 47%, #FFFFFF 47%, #FFFFFF 53%, transparent 53%) 0 0 / 8cqh 100% repeat-x,
+    #7E899C;
+}
+.ob-road::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1.4cqh; background: rgba(34, 49, 77, 0.18); }
+
+.ob-vanpos, .ob-tow {
+  left: 50%;
+  bottom: 2.5cqh;
+  height: min(26cqh, 18cqw);
+  aspect-ratio: 200 / 112;
+  translate: -50% 0;
+  z-index: 5;
+}
+.ob-tow { z-index: 6; }
+.ob-van { position: relative; width: 100%; height: 100%; }
+.ob-van-name { font-family: var(--k-display); font-size: 22px; fill: #22314D; letter-spacing: 0.5px; }
+.ob-tow-name { font-family: var(--k-display); font-size: 21px; fill: #22314D; }
+.ob-wheel { transform-box: fill-box; transform-origin: center; }
+.ob-van.driving .ob-wheel, .ob-tow.driving .ob-wheel { animation: ob-spin 0.45s linear infinite; }
+.ob-van.driving .ob-body { animation: ob-bob 0.22s ease-in-out infinite alternate; }
+.ob-van.w3 .ob-body { transform: rotate(1.6deg); transform-box: fill-box; transform-origin: 70% 100%; }
+.ob-van.shake { animation: ob-shake 0.5s linear 2; }
+.ob-beacon { animation: ob-blink 0.5s steps(2, end) infinite; }
+@keyframes ob-spin { to { transform: rotate(360deg); } }
+@keyframes ob-bob { to { transform: translateY(-1.5px); } }
+@keyframes ob-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-1deg); } 75% { transform: translateX(5px) rotate(1deg); } }
+@keyframes ob-blink { 50% { fill: #FFE36B; } }
+
+.ob-puffs { position: absolute; left: -12%; bottom: 14%; width: 24%; height: 55%; pointer-events: none; }
+.ob-puffs i {
+  position: absolute; left: 30%; bottom: 0; width: 34%; aspect-ratio: 1; border-radius: 50%;
+  background: #E1E6EE; opacity: 0; animation: ob-puff 1.8s ease-out infinite;
+}
+.ob-puffs i:nth-child(2) { animation-delay: 0.6s; }
+.ob-puffs i:nth-child(3) { animation-delay: 1.2s; }
+.ob-van.w0 .ob-puffs i { display: none; }
+.ob-van.w1 .ob-puffs i:nth-child(n+2) { display: none; }
+.ob-van.w2 .ob-puffs i:nth-child(3) { display: none; }
+.ob-van.w2 .ob-puffs i { background: #C3CAD6; }
+.ob-van.w3 .ob-puffs i { background: #8E98AA; width: 44%; }
+@keyframes ob-puff {
+  0% { opacity: 0.9; transform: translate(0, 0) scale(0.5); }
+  100% { opacity: 0; transform: translate(-80%, -130%) scale(1.6); }
+}
+
+/* effects: smoke, warning sign, wrench bubble, sparkles, tags above the van */
+.ob-fx { position: absolute; z-index: 8; pointer-events: none; transform: translate(-50%, -50%); }
+.ob-fx svg { display: block; width: 100%; height: 100%; }
+.ob-fx-smoke { width: min(26cqh, 18cqw); aspect-ratio: 100 / 70; animation: ob-smoke 1.6s ease-out forwards; }
+@keyframes ob-smoke { 0% { opacity: 0; transform: translate(-50%, -30%) scale(0.4); } 25% { opacity: 1; } 100% { opacity: 0.85; transform: translate(-50%, -70%) scale(1.15); } }
+.ob-tag {
+  position: absolute; z-index: 9; transform: translate(-50%, -100%);
+  font-family: var(--k-display); font-size: calc(20px * var(--tx)); letter-spacing: 0.03em;
+  color: #FFFFFF; background: #22314D; border: 3px solid #FFFFFF; border-radius: 999px; padding: 4px 14px;
+  box-shadow: 0 4px 10px rgba(34, 49, 77, 0.25); white-space: nowrap; pointer-events: none;
+  display: flex; align-items: center; gap: 8px;
+  animation: ob-tag-in 300ms cubic-bezier(.2, 1.5, .4, 1) both;
+}
+.ob-tag svg { width: 1.2em; height: 1.2em; }
+.ob-tag.t0 { background: #2E8B57; } .ob-tag.t1 { background: #C99A33; } .ob-tag.t2 { background: #E07A2A; } .ob-tag.t3 { background: #D33A2C; }
+.ob-tag.bad { background: #D33A2C; }
+@keyframes ob-tag-in { from { opacity: 0; transform: translate(-50%, -60%) scale(0.6); } }
+.ob-wrench {
+  width: min(13cqh, 9cqw); aspect-ratio: 1; border-radius: 50%; background: #FFFFFF; color: #E08A00;
+  border: 3px solid #22314D; display: grid; place-items: center; box-shadow: 0 6px 12px rgba(34, 49, 77, 0.2);
+}
+.ob-wrench svg { width: 60% !important; height: 60% !important; animation: ob-wiggle 0.35s ease-in-out infinite alternate; }
+@keyframes ob-wiggle { from { transform: rotate(-25deg); } to { transform: rotate(25deg); } }
+.ob-spark { width: min(7cqh, 5cqw); aspect-ratio: 1; animation: ob-twinkle 0.9s ease-in-out 2 both; }
+@keyframes ob-twinkle { 0%, 100% { transform: translate(-50%, -50%) scale(0); } 50% { transform: translate(-50%, -50%) scale(1) rotate(30deg); } }
+.ob-flycoin { position: fixed; z-index: 80; width: 28px; height: 28px; pointer-events: none; }
+.ob-flycoin svg { width: 100%; height: 100%; display: block; }
+
+/* ---- the message line and the three calls ---- */
+.ob-msg {
+  justify-self: center;
+  max-width: 100%;
+  min-height: calc(1.3em + 16px);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: #FFFFFF;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 var(--k-edge);
+  padding: 8px 24px;
+  font-weight: 800;
+  font-size: calc(15px * var(--tx));
+  text-align: center;
+}
+.ob-calls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ob-call {
+  position: relative;
+  justify-content: flex-start;
+  gap: 12px;
+  min-height: calc(54px * var(--tx));
+  padding: 10px 16px;
+  font-size: calc(22px * var(--tx));
+  border-radius: 18px;
+}
+.ob-run { --b: #1666C8; --bd: #0D4A94; }
+.ob-service { --b: #E08A00; --bd: #A35F00; }
+.ob-replace { --b: #D33A2C; --bd: #962519; }
+.ob-call .ob-ic {
+  flex: 0 0 auto;
+  width: calc(34px * var(--tx)); height: calc(34px * var(--tx));
+  border-radius: 50%; background: #FFFFFF; color: var(--b);
+  display: grid; place-items: center; box-shadow: inset 0 -3px 0 rgba(34, 49, 77, 0.14);
+}
+.ob-call .ob-ic svg { width: 64%; height: 64%; }
+.ob-call .ob-tag-price {
+  margin-left: auto;
+  font-size: calc(16px * var(--tx));
+  color: #22314D; text-shadow: none;
+  background: #FFFFFF; border-radius: 999px; padding: 4px 12px;
+}
+.ob-call kbd {
+  position: absolute; top: -9px; left: -7px;
+  font-family: var(--k-display); font-size: max(14px, calc(10px * var(--tx)));
+  color: #22314D; text-shadow: none; background: #FFFFFF;
+  border: 2px solid #22314D; border-radius: 8px; padding: 0 7px; line-height: 1.35;
+}
+
+/* ---- the title screen ---- */
+.ob-title { display: none; }
+.ob-stage[data-mode="title"] { grid-template-rows: minmax(0, 1fr); }
+.ob-stage[data-mode="title"] .ob-hud,
+.ob-stage[data-mode="title"] .ob-msg,
+.ob-stage[data-mode="title"] .ob-calls { display: none; }
+.ob-stage[data-mode="title"] .ob-title {
+  display: flex; position: absolute; z-index: 20; left: 50%; top: 4%; translate: -50% 0;
+  width: min(760px, 92%); flex-direction: column; align-items: center; gap: 12px; text-align: center;
+}
+/* lower buildings on the title screen, so the logo and the buttons stand in open sky */
+.ob-stage[data-mode="title"] .ob-garage,
+.ob-stage[data-mode="title"] .ob-dealer { height: min(34cqh, 25cqw); }
+.ob-logo {
+  margin: 0;
+  font-family: var(--k-display); font-weight: 400;
+  font-size: min(calc(62px * var(--tx)), 15vw); line-height: 1; letter-spacing: 0.02em;
+  color: #FFFFFF;
+  text-shadow:
+    4px 0 0 #22314D, -4px 0 0 #22314D, 0 4px 0 #22314D, 0 -4px 0 #22314D,
+    3px 3px 0 #22314D, -3px -3px 0 #22314D, 3px -3px 0 #22314D, -3px 3px 0 #22314D,
+    0 9px 0 #22314D, 0 12px 14px rgba(34, 49, 77, 0.3);
+}
+.ob-logo span { color: #FFC531; }
+.ob-ribbon {
+  font-family: var(--k-display); font-size: calc(19px * var(--tx)); letter-spacing: 0.08em;
+  color: #FFFFFF; background: #D33A2C; padding: 6px 24px; border-radius: 10px; rotate: -2deg;
+  box-shadow: 0 4px 0 #962519;
+}
+.ob-tagline {
+  font-weight: 800; font-size: calc(16px * var(--tx)); background: #FFFFFF; border-radius: 16px;
+  padding: 10px 20px; box-shadow: 0 4px 0 var(--k-edge); max-width: 100%;
+}
+.ob-title-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 4px; }
+.ob-title-best { font-family: var(--k-display); font-size: calc(15px * var(--tx)); color: #22314D; background: rgba(255, 255, 255, 0.85); border-radius: 999px; padding: 3px 14px; }
+
+/* ---- phones ---- */
+@media (max-width: 560px) {
+  .ob-stage { padding: 8px 10px 10px; gap: 8px; }
+  .ob-pill { padding: 6px 10px; gap: 8px; }
+  .ob-week { flex-basis: 100%; }
+  .ob-money, .ob-cond { flex: 1 1 0; }
+  .ob-pips { gap: 3px; }
+  .ob-msg { border-radius: 16px; padding: 6px 12px; }
+  .ob-calls { gap: 8px; }
+  .ob-call { flex-direction: column; gap: 4px; padding: 8px 4px 10px; font-size: 18px; }
+  .ob-call .ob-tag-price { margin-left: 0; font-size: 15px; padding: 2px 8px; }
+  .ob-call kbd { display: none; }
+  .ob-cond-name { min-width: 0; }
+}
+@media (max-height: 560px) {
+  body.k-game.ob { height: auto; overflow: auto; }
+  .ob-stage { min-height: 560px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ob-cloud { animation-play-state: paused !important; }
+  .ob-puffs i, .ob-beacon, .ob-wrench svg, .ob-spark, .ob-fx-smoke, .ob-tag,
+  .ob-van.driving .ob-wheel, .ob-van.driving .ob-body, .ob-van.shake, .ob-bump { animation: none !important; }
+  .ob-puffs i { opacity: 0.7; transform: translate(-40%, -60%); }
+  .ob-door { transition: none; }
+}

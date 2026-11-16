@@ -1,52 +1,36 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Old Bessie: Repair or Replace</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/scene0.css">
-  <link rel="stylesheet" href="css/scene1.css">
-  <link rel="stylesheet" href="css/scene2.css">
+  <title>Old Bessie</title>
+  <link rel="stylesheet" href="../kit/kit.css">
+  <link rel="stylesheet" href="css/game.css">
 </head>
-<body>
-  <header class="topbar">
-    <a class="arcade-link" href="../index.html" title="Back to the arcade"><span aria-hidden="true">&#9664; </span><span class="al-long">BACK TO THE </span>ARCADE</a>
-    <div id="scene-title" class="scene-title">loading&hellip;</div>
-    <div class="right-cluster">
-      <button id="prev-btn" class="pager-btn" type="button">PREV</button>
-      <div id="dot-pager" class="dot-pager"></div>
-      <button id="next-btn" class="pager-btn" type="button">NEXT</button>
-      <button id="music-toggle" class="theme-toggle music-toggle" type="button" aria-label="Toggle music">&#9834; MUSIC OFF</button>
+<body class="k-game ob">
+  <header class="k-top">
+    <a class="k-tbtn arcade-link" href="../index.html" title="Back to the arcade"><span aria-hidden="true">&#9664; </span><span class="k-long">BACK TO THE </span>ARCADE</a>
+    <div id="scene-title" class="k-title">OLD BESSIE</div>
+    <div class="k-tools">
+      <button id="music-toggle" class="k-tbtn" type="button" aria-label="Music and sounds">&#9834; MUSIC OFF</button>
       <span class="fs-host" data-fullscreen></span>
     </div>
   </header>
 
-  <main id="stage" class="stage"></main>
+  <main id="stage" class="ob-stage" data-mode="title"></main>
 
-  <!-- the MDP engine: Actions + Van (aliased to Moves + Battle) -->
+  <!-- the rules: van.js is the model of the slides (unchanged), actions.js the three calls and their glyphs -->
   <script src="js/actions.js"></script>
   <script src="js/van.js"></script>
-
-  <!-- audio + dialog -->
-  <script src="js/dialog.js"></script>
+  <!-- the shared kit: coach, end card, pops -->
+  <script src="../kit/kit.js"></script>
+  <!-- sound -->
   <script src="js/sfx.js"></script>
   <script src="js/music.js"></script>
-
-  <!-- shared widgets -->
-  <script src="js/vanCard.js"></script>
-  <script src="js/history.js"></script>
-
-  <!-- chrome -->
   <script src="js/music-ui.js"></script>
-
-  <!-- scenes: title, how it works, the game -->
-  <script src="js/scenes/scene0.js"></script>
-  <script src="js/scenes/scene1.js"></script>
-  <script src="js/scenes/scene2.js"></script>
-
-  <!-- pager -->
-  <script src="js/main.js"></script>
+  <!-- the game -->
+  <script src="js/art.js"></script>
+  <script src="js/game.js"></script>
   <script src="js/fullscreen.js"></script>
 </body>
 </html>
