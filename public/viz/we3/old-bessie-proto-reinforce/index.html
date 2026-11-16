@@ -922,10 +922,42 @@ sup { top: -0.55em; }
 }
 .s3c-fbox { min-width: 230px; }
 
-/* The movie of many updates: the chart of the average G1 and the probability table. */
-.s3c-mv { display: flex; align-items: center; justify-content: center; gap: 44px; width: 100%; }
-.s3c-mvl, .s3c-mvr { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.s3c-chart { position: relative; width: 560px; height: 296px; font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); line-height: 1; }
+/* The reward plot and the movie (scenes 410 and 420, main session, 2026-11-16, evening): the whole diagram of one
+   update (s3c-mvd), the panel of its backward pass and its update (hop) where scene 400 writes the update, and the
+   reward plot (plot) beside the average G1. The cells aa, zb and za are not used. */
+.s3c-dia.s3c-mvd { padding: 12px 0 0 0; grid-template-areas: "bets prob" "runs g1" "ab plot" "hop hop"; }
+.s3c-mvd > .s3c-aa, .s3c-mvd > .s3c-zb, .s3c-mvd > .s3c-za { display: none; }
+@media (min-width: 1120px) {
+  .s3c-dia.s3c-mvd {
+    grid-template-columns: auto 80px auto 44px 160px 30px 330px;
+    grid-template-areas: "bets . prob . hop hop hop" ". . . . . . ." "runs runs g1 g1 ab . plot";
+  }
+}
+@media (min-width: 1300px) {
+  .s3c-dia.s3c-mvd { grid-template-columns: auto 100px auto 56px 170px 40px 400px; }
+}
+.s3c-hopc { align-self: center; }
+.s3c-hp { display: flex; flex-direction: column; align-items: center; gap: calc(4px * var(--tx)); padding: 8px 16px 10px; }
+.s3c-hphead { display: flex; align-items: center; gap: 8px; }
+.s3c-hphead .ob-chip { font-size: calc(9px * var(--fz, 1)); }
+.s3c-hpgrid { display: grid; grid-template-columns: auto repeat(3, auto); column-gap: 18px; align-items: baseline; }
+.s3c-hph, .s3c-hpl { font-family: var(--disp); font-weight: 700; letter-spacing: 0.06em; white-space: nowrap; }
+.s3c-hph { font-size: calc(calc(7px * var(--tx)) * var(--fz, 1)); color: var(--ink2); text-align: right; }
+.s3c-hpl { font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); color: var(--ink); }
+.s3c-hpc { font-size: calc(17px * var(--fz, 1)); line-height: 1.35; min-width: 4.7em; text-align: right; }
+.s3c-hpn { font-family: var(--px); font-weight: 700; font-size: calc(17px * var(--fz, 1)); line-height: 1.35; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.s3c-hpn.gain { color: var(--gain); }
+.s3c-hpn.loss { color: var(--loss); }
+.s3c-hpd { color: var(--ink2); }
+.s3c-hpf { font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); }
+.s3c-hpf .ob-texn { font-variant-numeric: tabular-nums; }
+.s3c-plotc { justify-self: stretch; align-self: start; gap: 4px; }
+.s3c-plot { position: relative; width: 100%; height: 172px; font-size: calc(calc(7px * var(--tx)) * var(--fz, 1)); line-height: 1; }
+.s3c-ptag { position: absolute; white-space: nowrap; line-height: 1; pointer-events: none; font-family: var(--px); font-weight: 700; font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); }
+.s3c-dot0 { fill: #FFFFFF; }
+.s3c-mvd .s3c-mvbar { gap: 10px; min-height: 0; }
+.s3c-mvd .s3c-count { min-width: 8.6em; font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); }
+.s3c-mvd .s3c-btn { font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); padding: calc(6px * var(--tx)) calc(9px * var(--tx)); }
 .s3c-ylab { position: absolute; left: 0; top: 0; font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); line-height: 1.2; white-space: nowrap; }
 .s3c-csvg { position: absolute; left: 0; top: 0; overflow: visible; }
 .s3c-csvg text { font-family: var(--px); fill: var(--ink); }
@@ -941,11 +973,7 @@ sup { top: -0.55em; }
 .s3c-mvbar { display: flex; align-items: center; justify-content: center; gap: 14px; min-height: 44px; }
 .s3c-count { font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); line-height: 1.2; min-width: 15em; text-align: center; white-space: nowrap; }
 .s3c-btn { font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); padding: calc(8px * var(--tx)) calc(11px * var(--tx)); }
-.s3c-note { min-height: 1.8em; }
 
-@media (max-width: 1119px) {
-  .s3c-mv { flex-direction: column; gap: 22px; }
-}
 @media (max-width: 560px) {
   .s3c-lead { min-height: calc(3 * 1.75em); }
   .s3c-dia {
@@ -966,8 +994,12 @@ sup { top: -0.55em; }
   .s3c-four .tb-zn { font-size: calc(15px * var(--fz, 1)); }
   .s3c-four .tb-zoom { padding: 8px 8px 10px; }
   .s3c-four .s3c-gname, .s3c-four .tb-zhead .ob-chip { font-size: calc(8px * var(--fz, 1)); }
-  .s3c-chart { width: 350px; height: 250px; }
   .s3c-count { min-width: 0; }
+  .s3c-dia.s3c-mvd { padding: 10px 0 0 0; grid-template-areas: "bets bets" "prob prob" "runs runs" "g1 g1" "ab ab" "plot plot" "hop hop"; }
+  .s3c-hpc, .s3c-hpn { font-size: calc(13px * var(--fz, 1)); }
+  .s3c-hpc { min-width: 4.4em; }
+  .s3c-hpgrid { column-gap: 10px; }
+  .s3c-hp { padding: 6px 8px 8px; }
 }
 </style>
 <style>/* sec3d.css */
@@ -1013,6 +1045,8 @@ sup { top: -0.55em; }
 .s3d-plot { line-height: 0; max-width: 100%; }
 .s3d-psvg { display: block; width: 660px; max-width: 100%; height: auto; overflow: visible; }
 .s3d-psvg text { font-family: var(--px); fill: var(--ink); }
+/* The nabla of 360's triangle is TeX: this rule outranks the one above (main session, 2026-11-16, evening). */
+.s3d-psvg text.s3d-tex { font-family: KaTeX_Main, "Times New Roman", serif; font-weight: 400; }
 .s3d-pax line { stroke: var(--ink); stroke-width: 4; stroke-linecap: square; }
 .s3d-ptit { font-size: calc(13px * var(--fz, 1)); letter-spacing: 0.04em; }
 .s3d-psvg .s3d-ptit { fill: var(--ink2); }
@@ -1052,13 +1086,34 @@ sup { top: -0.55em; }
 .s3d-old .s3d-sg { background: var(--press); }
 .s3d-new { outline: 4px solid var(--yellow); outline-offset: 3px; }
 
-/* 380. Why this update: four cards, each a small picture and two short lines under it. */
-.s3d-whys { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: calc(14px * var(--tx)); }
-.s3d-why { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 14px; width: 236px; }
-.s3d-wsvg { display: block; width: 200px; max-width: 100%; height: auto; }
-.s3d-wax line { stroke: var(--ink); stroke-width: 3; }
-.s3d-wsl { stroke: var(--ink); stroke-width: 4; stroke-linecap: square; }
-.s3d-wpt { fill: var(--white); stroke: var(--ink); stroke-width: 3; }
+/* 380. Why this update: four cards in a row, each a small copy of 360's triangle of the hop (the axes and their names,
+   BEFORE and AFTER, the tinted right triangle, the words of its sides, its slope) over the line of the bet and its
+   move, then two short lines. The picture is an SVG board: its words and strokes are in the units of its viewBox,
+   plain px on a desk, and shrink with it. Colours, strokes and faces as on 360's plot in the look Grand Prix. */
+.s3d-whys {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 256px)); justify-content: center; align-items: stretch;
+  gap: calc(14px * var(--tx)); width: 100%;
+}
+.s3d-why { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 12px 14px; min-width: 0; }
+.s3d-wsvg { display: block; width: 100%; max-width: 232px; height: auto; overflow: visible; }
+.s3d-wsvg text { font-family: var(--px); fill: var(--ink); }
+/* nabla beside the slope in the face of the formulas (the rule above would set it in Barlow). */
+.s3d-wsvg text.s3d-tex { font-family: KaTeX_Main, "Times New Roman", serif; font-weight: 400; }
+.s3d-wax line { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: square; }
+.s3d-wsvg .s3d-wtit { font-family: var(--disp); font-weight: 700; letter-spacing: 0.06em; font-size: calc(12px * var(--fz, 1)); fill: var(--ink2); }
+.s3d-wsub { font-size: calc(9px * var(--fz, 1)); }
+.s3d-wtf { fill: var(--yellow); fill-opacity: 0.7; }
+.s3d-wleg { stroke: var(--ink); stroke-width: 4; stroke-linecap: square; }
+.s3d-wleg.s3d-wup { stroke: var(--gain); }
+.s3d-wleg.s3d-wdown { stroke: var(--loss); }
+.s3d-whyp { stroke: var(--ink); stroke-width: 3; }
+.s3d-wpt { fill: var(--ink); stroke: var(--ink); stroke-width: 2.5; }
+.s3d-wpt.s3d-wold { fill: var(--white); }
+.s3d-wsvg .s3d-wtag { font-family: var(--disp); font-weight: 700; letter-spacing: 0.06em; font-size: calc(11px * var(--fz, 1)); fill: var(--ink2); }
+.s3d-wsvg .s3d-wlab { font-weight: 700; font-size: calc(13px * var(--fz, 1)); }
+.s3d-wsvg .s3d-wword { font-family: var(--disp); letter-spacing: 0.06em; }
+.s3d-wsvg .s3d-wgain { fill: var(--gain); }
+.s3d-wsvg .s3d-wloss { fill: var(--loss); }
 .s3d-wbl { stroke: var(--ink2); stroke-width: 3; }
 .s3d-wbet { fill: var(--ink); }
 .s3d-wmv line { stroke: var(--ink); stroke-width: 5; }
@@ -1081,9 +1136,6 @@ sup { top: -0.55em; }
 .s3d-wr { white-space: nowrap; }
 .s3d-final .tb-zn { font-size: calc(56px * var(--fz, 1)); }
 
-@media (max-width: 760px) {
-  .s3d-why { width: 210px; }
-}
 @media (max-width: 560px) {
   .s3d-lead { min-height: calc(3 * 1.75em); }
   .s3d-ba { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
@@ -1104,8 +1156,8 @@ sup { top: -0.55em; }
   .s3d-al { font-size: calc(13px * var(--fz, 1)); }
   .s3d-sign { padding: 12px 14px; }
   .s3d-sf { font-size: calc(15px * var(--fz, 1)); }
-  .s3d-whys { gap: 8px; }
-  .s3d-why { width: calc(50% - 4px); padding: 8px 6px; }
+  .s3d-whys { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .s3d-why { padding: 8px 6px 10px; gap: 4px; }
   .s3d-wc { font-size: calc(10px * var(--fz, 1)); }
   .s3d-we { font-size: calc(8px * var(--fz, 1)); }
   .s3d-work { font-size: calc(14px * var(--fz, 1)); padding: 12px 14px; }
@@ -1864,6 +1916,16 @@ button { font-family: var(--px); }
       g.style.width = a.width + "px";
       g.style.height = a.height + "px";
       from.parentNode.insertBefore(g, from.nextSibling);
+      /* A filter or a transform above from (the skin's boxes carry a drop shadow, skin.css) makes the fixed copy move
+         with that box and stay in its stacking context: it then lands in the wrong place, under later parts of the
+         page. Such a copy flies from the body instead, in the source's font (main session, 2026-11-16). */
+      var gr = g.getBoundingClientRect();
+      if (Math.abs(gr.left - a.left) > 0.5 || Math.abs(gr.top - a.top) > 0.5) {
+        var cs = window.getComputedStyle(src);
+        ["fontSize", "fontFamily", "fontWeight", "fontStyle", "color", "letterSpacing", "lineHeight", "textAlign", "whiteSpace"]
+          .forEach(function (k) { g.style[k] = cs[k]; });
+        document.body.appendChild(g);
+      }
       var sx = opts.scale === false ? 1 : b.width / a.width, sy = opts.scale === false ? 1 : b.height / a.height;
       var dx = b.left - a.left, dy = b.top - a.top, arc = opts.arc === undefined ? 40 : opts.arc;
       return animate(opts.dur || DUR.fly, function (p) {
@@ -5096,7 +5158,7 @@ button { font-family: var(--px); }
    dice B.dice(12, 1000) for rounds 1 and 2, B.dice(2000 + round, 1000) for rounds 3 to 300. */
 (function (root) {
   "use strict";
-  var S3C = {"seeds":{"bets":17,"betsX":68,"pick":134623,"dice":12,"movieDiceBase":2000},"n":1000,"eps":0.01,"alpha":0.01,"rounds":300,"W0":[[0.4,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"start":-172.24,"hop1":{"s":0,"a":0,"w":0.4,"before":-172.24,"after":-170.5,"change":1.74,"nabla":174,"wNew":2.14,"upd":73.57},"hop2":{"s":0,"a":2,"w":0.1,"before":73.57,"after":73.44,"change":-0.13,"nabla":-13,"wNew":-0.03,"upd":80.98},"W1":[[2.14,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"W2":[[2.14,-0.6,-0.03],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"g1":{"lo":-1200,"hi":600},"ten":{"W0":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W0h":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W1":[91,10,-229,198,340,-671,117,370,-14,155],"W1h":[91,10,-229,198,340,-671,117,370,-14,155],"W2":[91,10,-229,236,340,-671,117,370,-14,177]},"hist":{"bin":100,"max":240},"movie":[[0,0,174,73.57],[0,2,-13,80.98],[2,2,0,96.7],[0,0,70,129.52],[3,0,-40,143.85],[2,1,0,137.54],[2,1,-2,134.23],[2,1,0,154.72],[3,1,-7,135.34],[3,0,-56,151.64],[3,2,12,143.97],[0,1,3,156.52],[3,0,-4,148.96],[0,2,-8,155.65],[2,0,0,155.05],[1,1,29,153.69],[1,1,9,153.07],[2,1,0,151.95],[0,1,-10,163.01],[3,1,-10,150.56],[2,0,0,159.12],[0,1,4,148.23],[0,0,3,158.27],[3,1,-6,149.11],[2,1,0,155.3],[3,0,41,155.63],[0,1,-10,165.34],[1,1,45,160.42],[1,2,-7,170.29],[1,1,-16,159.83],[0,2,-3,153.86],[0,1,-14,169.74],[1,0,-24,155.33],[1,2,0,160.44],[0,2,-31,161.31],[0,0,24,175.01],[3,0,-11,183.44],[1,2,0,181.5],[2,2,0,190.74],[2,0,0,183.99],[1,2,0,187.38],[1,2,0,177.53],[0,0,29,197.85],[0,0,12,195.1],[1,0,-1,202.79],[1,0,-16,197.38],[2,0,0,190.06],[0,2,-8,192.69],[0,0,18,199.28],[2,1,0,201.14],[2,2,0,195.51],[0,0,12,197.68],[3,2,13,193.31],[3,2,-2,195.89],[0,2,-4,199.88],[3,1,4,195.88],[2,1,0,213.73],[1,1,-17,196.93],[2,1,0,197.46],[3,0,-10,199.58],[0,0,8,198.41],[1,2,0,196.54],[0,2,0,190.99],[1,2,0,202.22],[0,0,-6,191.48],[1,1,51,204.45],[3,0,5,201.21],[0,0,6,201.8],[3,1,-44,209.94],[1,1,26,223.26],[1,0,19,209.57],[0,1,-12,199.35],[3,0,-11,204.57],[2,0,0,220.1],[2,0,0,206.17],[1,2,0,206.93],[1,2,0,209.15],[3,1,0,215.71],[3,0,0,203.56],[1,2,0,207.15],[1,0,11,203.46],[1,1,34,207.45],[2,1,0,209.37],[0,2,-17,206.51],[0,2,0,208.51],[2,2,0,208.62],[2,2,0,206.52],[0,1,0,205.02],[2,0,0,206.7],[3,2,13,207.08],[0,0,18,214.46],[2,1,0,211.8],[1,2,0,218.29],[2,1,0,208.1],[0,1,0,213.87],[1,1,-6,212.54],[0,1,0,211.34],[2,2,0,205.21],[3,2,0,209.82],[1,1,-5,209.58],[1,2,0,215.68],[1,2,0,215.34],[1,0,6,212.1],[1,1,14,210.79],[0,0,0,211.79],[3,2,39,216.26],[0,2,-16,222.31],[0,2,-22,219.93],[1,2,0,208.21],[3,1,3,223.45],[2,2,0,221.07],[3,1,10,221.34],[2,0,0,214.31],[3,1,-4,221.74],[3,1,1,210.04],[0,0,0,219.85],[3,1,4,221.33],[2,0,0,221.89],[2,1,0,218.31],[2,0,0,215.15],[3,1,0,223.52],[2,0,0,217.62],[2,1,0,205.61],[2,2,0,216],[3,0,0,219.62],[2,2,0,213.61],[0,1,-11,208.69],[1,2,0,220.36],[0,2,-8,214.79],[1,2,0,219.87],[2,0,0,210.35],[0,1,-4,209.04],[1,2,0,221.74],[2,2,0,214.96],[3,0,-18,220.72],[2,1,0,222.28],[3,1,0,211.32],[2,2,0,223.25],[0,0,10,221.98],[1,2,0,219.78],[1,2,0,224.33],[0,0,0,220.5],[1,2,0,222.99],[3,2,24,218.92],[3,1,1,219.04],[1,1,-1,217.67],[0,1,0,217.13],[0,1,-15,222.63],[0,0,5,221.75],[0,0,2,216.45],[0,1,0,227.29],[0,2,-8,221.01],[0,1,0,222.03],[1,0,3,222.18],[2,0,0,221.95],[3,1,-5,220.42],[2,1,0,214.03],[1,2,0,223.18],[2,0,0,223.55],[0,2,-8,228.19],[3,2,38,229.8],[1,1,13,222.96],[1,1,39,229.03],[1,0,11,226.29],[0,1,0,226.37],[0,2,0,225.86],[2,2,0,227.96],[0,0,0,231.75],[2,0,0,222.73],[1,0,-33,227.94],[2,1,0,232.23],[1,1,3,233.43],[1,2,0,227.74],[0,2,-10,231.19],[1,2,0,234.24],[3,1,-22,231.52],[0,2,-7,230.32],[3,2,0,241.86],[2,1,0,235.66],[2,1,0,224.94],[0,2,0,224.23],[1,0,-26,228.56],[1,2,0,223.33],[0,1,0,231.11],[3,2,0,228.47],[2,2,0,234.34],[1,2,0,226.64],[2,1,0,229.39],[1,2,0,229.94],[1,0,-8,229.27],[1,2,0,226.43],[0,2,-1,232.5],[3,0,-7,224.28],[1,0,0,232.63],[3,1,0,223.59],[1,1,13,222.61],[0,1,0,227.54],[1,1,0,231.09],[0,0,0,228.07],[1,0,-1,232.9],[0,0,1,232.88],[2,2,0,229.79],[0,2,0,228.08],[2,0,0,238.29],[1,0,-22,237.68],[2,0,0,230.7],[0,0,4,231.16],[3,1,0,239.42],[3,0,0,225.27],[2,0,0,229.11],[3,1,0,233.8],[3,0,0,230.06],[0,2,-18,247.21],[1,2,0,235.79],[2,2,0,230.1],[3,2,-2,240.67],[3,2,0,229.53],[1,2,0,233.48],[2,2,0,231.3],[0,0,11,233.51],[0,2,0,238.65],[2,1,0,234.03],[3,2,0,230.74],[0,0,0,236.05],[0,0,7,231.86],[1,0,-2,232.69],[2,1,0,232.18],[0,1,-10,232.87],[2,2,0,230.99],[3,2,0,236.96],[1,2,0,237.96],[0,0,0,224.28],[0,0,0,227.61],[1,1,0,235.75],[3,1,-10,233.51],[2,2,0,237.33],[0,2,0,229.63],[2,0,0,233.58],[3,1,0,233.03],[0,0,13,231.96],[1,1,5,232.44],[0,0,12,231.45],[2,0,0,232.34],[2,2,0,235.92],[0,2,0,233.4],[3,0,0,232.45],[1,1,0,232.61],[2,1,0,241.95],[2,0,0,233.29],[1,2,0,232.27],[1,1,0,234.14],[3,0,0,236.08],[3,1,20,232.9],[3,0,0,236.65],[2,0,0,234.64],[1,1,0,237.85],[0,2,0,231.61],[0,0,0,233.2],[2,2,0,230.25],[0,1,0,228.58],[0,1,0,235.18],[1,2,0,233.56],[1,2,0,231.32],[2,0,0,231.75],[1,0,0,233.18],[3,1,0,232.64],[3,0,0,235.05],[1,0,-4,231.5],[2,2,0,233.62],[0,0,0,235.74],[3,1,-11,232.75],[1,2,0,239.94],[3,1,0,230.51],[3,0,0,233.55],[0,0,0,236.74],[2,2,0,240.9],[2,1,0,240.93],[1,0,-10,243.61],[3,2,0,233.48],[3,2,25,239.55],[0,0,0,237.37],[3,2,0,239.95],[3,2,0,234.71],[3,2,0,233.23],[3,2,0,238.1],[0,1,0,236.8],[2,2,0,235.66],[3,2,7,234.95],[3,1,-19,234.14],[2,0,0,232.52],[2,2,0,241.71],[1,0,-1,239.07],[1,0,-20,236.18],[2,1,0,236.09],[1,2,0,235.75],[2,0,0,236.1],[3,0,-7,238.57],[1,2,0,236.22],[1,0,-2,243.57],[3,2,12,239.5]],"chart":{"lo":-200,"hi":300},"end":{"W":[[4.73,-1.39,-1.72],[-1.9,1.56,-6.97],[-0.4,0.08,10],[-0.78,-0.35,1.39]],"top":[0,1,2,2],"upd":239.5,"best":244.03}};
+  var S3C = {"seeds":{"bets":17,"betsX":68,"pick":134623,"dice":12,"movieDiceBase":2000},"n":1000,"eps":0.01,"alpha":0.01,"rounds":300,"W0":[[0.4,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"start":-172.24,"hop1":{"s":0,"a":0,"w":0.4,"before":-172.24,"after":-170.5,"change":1.74,"nabla":174,"wNew":2.14,"upd":73.57},"W1":[[2.14,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"g1":{"lo":-1200,"hi":700},"ten":{"W0":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W0h":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W1":[91,10,-229,198,340,-671,117,370,-14,155]},"hist":{"bin":100,"max":414},"movie":[[0,0,174,73.57,-172.24,-170.5],[0,2,-13,80.98,73.57,73.44],[2,2,0,96.7,96.7,96.7],[0,0,70,129.52,92.91,93.61],[3,0,-40,143.85,135.86,135.46],[2,1,0,137.54,137.54,137.54],[2,1,-2,134.23,134.23,134.21],[2,1,0,154.72,154.72,154.72],[3,1,-7,135.34,136.49,136.42],[3,0,-56,151.64,145.03,144.47],[3,2,12,143.97,142.21,142.33],[0,1,3,156.52,156.6,156.63],[3,0,-4,148.96,148.51,148.47],[0,2,-8,155.65,152.51,152.43],[2,0,0,155.05,155.05,155.05],[1,1,29,153.69,149.44,149.73],[1,1,9,153.07,151.2,151.29],[2,1,0,151.95,151.95,151.95],[0,1,-10,163.01,162.09,161.99],[3,1,-10,150.56,149.9,149.8],[2,0,0,159.12,159.12,159.12],[0,1,4,148.23,148.78,148.82],[0,0,3,158.27,157.21,157.24],[3,1,-6,149.11,149,148.94],[2,1,0,155.3,155.3,155.3],[3,0,41,155.63,159.14,159.55],[0,1,-10,165.34,163.44,163.34],[1,1,45,160.42,151.02,151.47],[1,2,-7,170.29,170.29,170.22],[1,1,-16,159.83,163.89,163.73],[0,2,-3,153.86,153.68,153.65],[0,1,-14,169.74,168.86,168.72],[1,0,-24,155.33,152.73,152.49],[1,2,0,160.44,160.44,160.44],[0,2,-31,161.31,153.16,152.85],[0,0,24,175.01,169.73,169.97],[3,0,-11,183.44,182.62,182.51],[1,2,0,181.5,181.5,181.5],[2,2,0,190.74,190.74,190.74],[2,0,0,183.99,183.99,183.99],[1,2,0,187.38,187.38,187.38],[1,2,0,177.53,177.53,177.53],[0,0,29,197.85,192.77,193.06],[0,0,12,195.1,192.89,193.01],[1,0,-1,202.79,202,201.99],[1,0,-16,197.38,193.86,193.7],[2,0,0,190.06,190.06,190.06],[0,2,-8,192.69,191.37,191.29],[0,0,18,199.28,196.88,197.06],[2,1,0,201.14,201.14,201.14],[2,2,0,195.51,195.51,195.51],[0,0,12,197.68,195.94,196.06],[3,2,13,193.31,192.84,192.97],[3,2,-2,195.89,196.14,196.12],[0,2,-4,199.88,199.34,199.3],[3,1,4,195.88,195.87,195.91],[2,1,0,213.73,213.73,213.73],[1,1,-17,196.93,199.53,199.36],[2,1,0,197.46,197.46,197.46],[3,0,-10,199.58,198.47,198.37],[0,0,8,198.41,198.1,198.18],[1,2,0,196.54,196.54,196.54],[0,2,0,190.99,190.99,190.99],[1,2,0,202.22,202.22,202.22],[0,0,-6,191.48,192.18,192.12],[1,1,51,204.45,197.88,198.39],[3,0,5,201.21,201.32,201.37],[0,0,6,201.8,201.47,201.53],[3,1,-44,209.94,208.88,208.44],[1,1,26,223.26,220.09,220.35],[1,0,19,209.57,210.33,210.52],[0,1,-12,199.35,199.03,198.91],[3,0,-11,204.57,203.6,203.49],[2,0,0,220.1,220.1,220.1],[2,0,0,206.17,206.17,206.17],[1,2,0,206.93,206.93,206.93],[1,2,0,209.15,209.15,209.15],[3,1,0,215.71,215.71,215.71],[3,0,0,203.56,203.56,203.56],[1,2,0,207.15,207.15,207.15],[1,0,11,203.46,204.61,204.72],[1,1,34,207.45,199.86,200.2],[2,1,0,209.37,209.37,209.37],[0,2,-17,206.51,205.56,205.39],[0,2,0,208.51,208.51,208.51],[2,2,0,208.62,208.62,208.62],[2,2,0,206.52,206.52,206.52],[0,1,0,205.02,205.02,205.02],[2,0,0,206.7,206.7,206.7],[3,2,13,207.08,205.09,205.22],[0,0,18,214.46,212.98,213.16],[2,1,0,211.8,211.8,211.8],[1,2,0,218.29,218.29,218.29],[2,1,0,208.1,208.1,208.1],[0,1,0,213.87,213.87,213.87],[1,1,-6,212.54,213.56,213.5],[0,1,0,211.34,211.34,211.34],[2,2,0,205.21,205.21,205.21],[3,2,0,209.82,209.82,209.82],[1,1,-5,209.58,209.92,209.87],[1,2,0,215.68,215.68,215.68],[1,2,0,215.34,215.34,215.34],[1,0,6,212.1,212.62,212.68],[1,1,14,210.79,209.94,210.08],[0,0,0,211.79,211.79,211.79],[3,2,39,216.26,212.62,213.01],[0,2,-16,222.31,221.73,221.57],[0,2,-22,219.93,219.33,219.11],[1,2,0,208.21,208.21,208.21],[3,1,3,223.45,223.5,223.53],[2,2,0,221.07,221.07,221.07],[3,1,10,221.34,221.76,221.86],[2,0,0,214.31,214.31,214.31],[3,1,-4,221.74,221.87,221.83],[3,1,1,210.04,210.03,210.04],[0,0,0,219.85,219.85,219.85],[3,1,4,221.33,221.76,221.8],[2,0,0,221.89,221.89,221.89],[2,1,0,218.31,218.31,218.31],[2,0,0,215.15,215.15,215.15],[3,1,0,223.52,223.52,223.52],[2,0,0,217.62,217.62,217.62],[2,1,0,205.61,205.61,205.61],[2,2,0,216,216,216],[3,0,0,219.62,219.62,219.62],[2,2,0,213.61,213.61,213.61],[0,1,-11,208.69,208.38,208.27],[1,2,0,220.36,220.36,220.36],[0,2,-8,214.79,214.38,214.3],[1,2,0,219.87,219.87,219.87],[2,0,0,210.35,210.35,210.35],[0,1,-4,209.04,208.98,208.94],[1,2,0,221.74,221.74,221.74],[2,2,0,214.96,214.96,214.96],[3,0,-18,220.72,219.99,219.81],[2,1,0,222.28,222.28,222.28],[3,1,0,211.32,211.32,211.32],[2,2,0,223.25,223.25,223.25],[0,0,10,221.98,221.56,221.66],[1,2,0,219.78,219.78,219.78],[1,2,0,224.33,224.33,224.33],[0,0,0,220.5,220.5,220.5],[1,2,0,222.99,222.99,222.99],[3,2,24,218.92,216.47,216.71],[3,1,1,219.04,219.03,219.04],[1,1,-1,217.67,217.71,217.7],[0,1,0,217.13,217.13,217.13],[0,1,-15,222.63,222.53,222.38],[0,0,5,221.75,221.33,221.38],[0,0,2,216.45,216.33,216.35],[0,1,0,227.29,227.29,227.29],[0,2,-8,221.01,220.86,220.78],[0,1,0,222.03,222.03,222.03],[1,0,3,222.18,222,222.03],[2,0,0,221.95,221.95,221.95],[3,1,-5,220.42,220.38,220.33],[2,1,0,214.03,214.03,214.03],[1,2,0,223.18,223.18,223.18],[2,0,0,223.55,223.55,223.55],[0,2,-8,228.19,227.93,227.85],[3,2,38,229.8,227.18,227.56],[1,1,13,222.96,222.76,222.89],[1,1,39,229.03,227.34,227.73],[1,0,11,226.29,227.01,227.12],[0,1,0,226.37,226.37,226.37],[0,2,0,225.86,225.86,225.86],[2,2,0,227.96,227.96,227.96],[0,0,0,231.75,231.75,231.75],[2,0,0,222.73,222.73,222.73],[1,0,-33,227.94,227.33,227],[2,1,0,232.23,232.23,232.23],[1,1,3,233.43,233.58,233.61],[1,2,0,227.74,227.74,227.74],[0,2,-10,231.19,230.96,230.86],[1,2,0,234.24,234.24,234.24],[3,1,-22,231.52,231.31,231.09],[0,2,-7,230.32,230.14,230.07],[3,2,0,241.86,241.86,241.86],[2,1,0,235.66,235.66,235.66],[2,1,0,224.94,224.94,224.94],[0,2,0,224.23,224.23,224.23],[1,0,-26,228.56,227.5,227.24],[1,2,0,223.33,223.33,223.33],[0,1,0,231.11,231.11,231.11],[3,2,0,228.47,228.47,228.47],[2,2,0,234.34,234.34,234.34],[1,2,0,226.64,226.64,226.64],[2,1,0,229.39,229.39,229.39],[1,2,0,229.94,229.94,229.94],[1,0,-8,229.27,228.59,228.51],[1,2,0,226.43,226.43,226.43],[0,2,-1,232.5,232.44,232.43],[3,0,-7,224.28,224.04,223.97],[1,0,0,232.63,232.63,232.63],[3,1,0,223.59,223.59,223.59],[1,1,13,222.61,221.88,222.01],[0,1,0,227.54,227.54,227.54],[1,1,0,231.09,231.09,231.09],[0,0,0,228.07,228.07,228.07],[1,0,-1,232.9,232.88,232.87],[0,0,1,232.88,232.87,232.88],[2,2,0,229.79,229.79,229.79],[0,2,0,228.08,228.08,228.08],[2,0,0,238.29,238.29,238.29],[1,0,-22,237.68,236.75,236.53],[2,0,0,230.7,230.7,230.7],[0,0,4,231.16,231,231.04],[3,1,0,239.42,239.42,239.42],[3,0,0,225.27,225.27,225.27],[2,0,0,229.11,229.11,229.11],[3,1,0,233.8,233.8,233.8],[3,0,0,230.06,230.06,230.06],[0,2,-18,247.21,246.81,246.63],[1,2,0,235.79,235.79,235.79],[2,2,0,230.1,230.1,230.1],[3,2,-2,240.67,240.7,240.68],[3,2,0,229.53,229.53,229.53],[1,2,0,233.48,233.48,233.48],[2,2,0,231.3,231.3,231.3],[0,0,11,233.51,233.22,233.33],[0,2,0,238.65,238.65,238.65],[2,1,0,234.03,234.03,234.03],[3,2,0,230.74,230.74,230.74],[0,0,0,236.05,236.05,236.05],[0,0,7,231.86,231.76,231.83],[1,0,-2,232.69,232.79,232.77],[2,1,0,232.18,232.18,232.18],[0,1,-10,232.87,232.67,232.57],[2,2,0,230.99,230.99,230.99],[3,2,0,236.96,236.96,236.96],[1,2,0,237.96,237.96,237.96],[0,0,0,224.28,224.28,224.28],[0,0,0,227.61,227.61,227.61],[1,1,0,235.75,235.75,235.75],[3,1,-10,233.51,233.52,233.42],[2,2,0,237.33,237.33,237.33],[0,2,0,229.63,229.63,229.63],[2,0,0,233.58,233.58,233.58],[3,1,0,233.03,233.03,233.03],[0,0,13,231.96,231.74,231.87],[1,1,5,232.44,232.57,232.62],[0,0,12,231.45,230.74,230.86],[2,0,0,232.34,232.34,232.34],[2,2,0,235.92,235.92,235.92],[0,2,0,233.4,233.4,233.4],[3,0,0,232.45,232.45,232.45],[1,1,0,232.61,232.61,232.61],[2,1,0,241.95,241.95,241.95],[2,0,0,233.29,233.29,233.29],[1,2,0,232.27,232.27,232.27],[1,1,0,234.14,234.14,234.14],[3,0,0,236.08,236.08,236.08],[3,1,20,232.9,233.01,233.21],[3,0,0,236.65,236.65,236.65],[2,0,0,234.64,234.64,234.64],[1,1,0,237.85,237.85,237.85],[0,2,0,231.61,231.61,231.61],[0,0,0,233.2,233.2,233.2],[2,2,0,230.25,230.25,230.25],[0,1,0,228.58,228.58,228.58],[0,1,0,235.18,235.18,235.18],[1,2,0,233.56,233.56,233.56],[1,2,0,231.32,231.32,231.32],[2,0,0,231.75,231.75,231.75],[1,0,0,233.18,233.18,233.18],[3,1,0,232.64,232.64,232.64],[3,0,0,235.05,235.05,235.05],[1,0,-4,231.5,231.43,231.39],[2,2,0,233.62,233.62,233.62],[0,0,0,235.74,235.74,235.74],[3,1,-11,232.75,232.74,232.63],[1,2,0,239.94,239.94,239.94],[3,1,0,230.51,230.51,230.51],[3,0,0,233.55,233.55,233.55],[0,0,0,236.74,236.74,236.74],[2,2,0,240.9,240.9,240.9],[2,1,0,240.93,240.93,240.93],[1,0,-10,243.61,243.68,243.58],[3,2,0,233.48,233.48,233.48],[3,2,25,239.55,238.68,238.93],[0,0,0,237.37,237.37,237.37],[3,2,0,239.95,239.95,239.95],[3,2,0,234.71,234.71,234.71],[3,2,0,233.23,233.23,233.23],[3,2,0,238.1,238.1,238.1],[0,1,0,236.8,236.8,236.8],[2,2,0,235.66,235.66,235.66],[3,2,7,234.95,234.71,234.78],[3,1,-19,234.14,234,233.81],[2,0,0,232.52,232.52,232.52],[2,2,0,241.71,241.71,241.71],[1,0,-1,239.07,239.07,239.06],[1,0,-20,236.18,235.82,235.62],[2,1,0,236.09,236.09,236.09],[1,2,0,235.75,235.75,235.75],[2,0,0,236.1,236.1,236.1],[3,0,-7,238.57,238.58,238.51],[1,2,0,236.22,236.22,236.22],[1,0,-2,243.57,243.52,243.5],[3,2,12,239.5,239.2,239.32]],"chart":{"lo":-300,"hi":300},"end":{"W":[[4.73,-1.39,-1.72],[-1.9,1.56,-6.97],[-0.4,0.08,10],[-0.78,-0.35,1.39]],"top":[0,1,2,2],"upd":239.5,"best":244.03}};
   if (typeof module !== "undefined" && module.exports) module.exports = S3C;
   else root.S3C = S3C;
 })(typeof window !== "undefined" ? window : this);
@@ -5120,7 +5182,7 @@ button { font-family: var(--px); }
                                 end), R.hist (the histogram's box), R.count (the number of the caption n = 1,000)
    R.src = element              where the stream starts (the probability table)
    R.layer(V, key, mean)        the runs of the bets V on the dice of the diagram; key names V in S3C.ten (W0, W0h,
-                                W1, W1h, W2), mean is the average G1 the scenes say; both are checked against the runs
+                                W1), mean is the average G1 the scenes say; both are checked against the runs
                                 (console.error when they differ). Returns the layer's index.
    R.runsOn(i, api, go, o)      shows layer i's runs (-1: none). go: the motion of Next. From none: the ten rows play
                                 one after another, then the stream and the count. From another layer: the ten rows
@@ -5130,6 +5192,10 @@ button { font-family: var(--px); }
    R.markOn(i, api, go, o)      the mark of layer i's average on the histogram (-1: none): drawn, moved or hidden.
    R.flyAvg(api, to, o)         a copy of the mark's number flies into the element to, hidden until it lands; with
                                 o.set, to keeps what it shows and o.set() gives it the number when the copy lands.
+   R.frame(S)                   the movie of scenes 410 and 420 (main session, 2026-11-16, evening): the runs of a
+                                summary S at once, with no layer and no motion: the ten rows (their cells changed in
+                                place), the full stack and its count, the G1 slots, the bars, the mark at S.mean.
+   OB.s3cRuns.summary(runs)     what the diagram draws of a policy's runs: { ten, bins, mean }.
    o: { delay } in ms. */
 (function () {
   "use strict";
@@ -5146,6 +5212,25 @@ button { font-family: var(--px); }
   function dice() { return DICE || (DICE = B.dice(D.seeds.dice, D.n)); }
 
   function money0(x) { return OB.money(x, 0); }
+  /* The counts of G1s in the histogram's $100 bins (a G1 outside the scale counts in the bin at its end). */
+  function binsOf(g1s) {
+    var bins = [];
+    for (var b = 0; b < NB; b += 1) bins.push(0);
+    g1s.forEach(function (g) { bins[Math.max(0, Math.min(NB - 1, Math.floor((g - LO) / BIN)))] += 1; });
+    return bins;
+  }
+  function summary(runs) {
+    var sum = 0;
+    runs.forEach(function (q) { sum += q.G1; });
+    return { ten: runs.slice(0, TEN), bins: binsOf(runs.map(function (q) { return q.G1; })), mean: sum / runs.length };
+  }
+  /* A cell of a run for state s, action a and a breakdown, cloned from one made once by OB.runs.cell. */
+  var CELLS = {};
+  function cellOf(s, a, bd) {
+    var k = s + "." + a + (bd ? "b" : "");
+    if (!CELLS[k]) { CELLS[k] = OB.runs.cell(s, a, bd); CELLS[k].dataset.k = k; }
+    return CELLS[k].cloneNode(true);
+  }
   function money2(x) { return OB.money(x, 2); }
   function xOf(v) { return X0 + (v - LO) / (HI - LO) * (X1 - X0); }
   function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
@@ -5257,8 +5342,8 @@ button { font-family: var(--px); }
       });
       var avg = sum / runs.length;
       if (money2(avg) !== money2(mean)) console.error("sec3c-runs: the average G1 of " + key + " is " + money2(avg) + ", the scenes say " + money2(mean));
-      var ten = D.ten[key] || [];
-      for (var j = 0; j < TEN; j += 1) {
+      var ten = (D.ten && D.ten[key]) || [];
+      for (var j = 0; j < TEN && ten.length; j += 1) {
         if (money0(runs[j].G1) !== money0(ten[j])) console.error("sec3c-runs: run " + (j + 1) + " of " + key + " has G1 " + money0(runs[j].G1) + ", S3C.ten says " + money0(ten[j]));
       }
       L.block = null;
@@ -5558,6 +5643,48 @@ button { font-family: var(--px); }
         api.animate(1100, function (p) { placeMark(xa + (xb - xa) * p, P0.mean + (L.mean - P0.mean) * p); }, function () { placeMark(xb, L.mean); });
       });
     };
+    /* The movie: the runs of the summary S, at once (see the head of the file). */
+    R.frame = function (S) {
+      var bk = R.block;
+      if (!bk || !bk.movie) {
+        if (bk && bk.parentNode) bk.parentNode.removeChild(bk);
+        bk = OB.runs.block(S.ten, { compact: false, head: false, label: true, g1: true });
+        bk.classList.add("s3c-rows");
+        bk.movie = true;
+        bk.cells.forEach(function (row, j) {
+          row.forEach(function (c, t) { var q = S.ten[j]; c.dataset.k = q.states[t] + "." + q.actions[t] + (q.faces[t] === "breakdown" ? "b" : ""); });
+        });
+        R.face.insertBefore(bk, R.head);
+        R.block = bk;
+      }
+      S.ten.forEach(function (q, j) {
+        var cells = bk.cells[j];
+        for (var t = 0; t < cells.length; t += 1) {
+          var bd = q.faces[t] === "breakdown", k = q.states[t] + "." + q.actions[t] + (bd ? "b" : "");
+          if (cells[t].dataset.k === k) continue;
+          var c = cellOf(q.states[t], q.actions[t], bd);
+          cells[t].parentNode.replaceChild(c, cells[t]);
+          cells[t] = c;
+        }
+        var g = bk.g1s[j], r = +q.G1.toFixed(0);
+        g.textContent = money0(q.G1);
+        g.classList.toggle("gain", r > 0);
+        g.classList.toggle("loss", r < 0);
+        g.classList.remove("ob-hide");
+        g.style.opacity = "";
+      });
+      R.cur = { runs: -2, g1: -2, mark: -2 };
+      R.face.classList.remove("ob-hide");
+      R.face.style.opacity = "";
+      R.head.classList.add("ob-hide");
+      deckAt(1);
+      R.count.textContent = OB.texText(OB.num(D.n));
+      R.hist.classList.remove("ob-hide");
+      R.hist.style.opacity = "";
+      setBars(S.bins);
+      placeMark(xOf(S.mean), S.mean);
+      markVis(true);
+    };
     R.flyAvg = function (api, to, o) {
       o = o || {};
       if (!to) return;
@@ -5570,7 +5697,7 @@ button { font-family: var(--px); }
     return R;
   }
 
-  OB.s3cRuns = { View: View, TEN: TEN, dice: dice };
+  OB.s3cRuns = { View: View, TEN: TEN, dice: dice, summary: summary, binsOf: binsOf };
 })();
 </script>
 <script>/* sec3c-text.js */
@@ -5578,8 +5705,8 @@ button { font-family: var(--px); }
    number built from S3C (sec3c-data.js, generated by tools/proto_movie.js from bessie.js). In the browser
    window.S3CT (loaded after sec3c-data.js, before sec3c.js); in node a module, so that tools/check_proto.js asserts
    every number the scenes say. Formulas: since 2026-11-16 a line marks each formula between \( and \) in TeX, and
-   sec3c.js draws it with OB.texIn (tex.js, KaTeX, LaTeX's standard font); updLines and againLines are each one
-   formula in TeX. Node has no OB: tools/check_proto.js reads the TeX as text. */
+   sec3c.js draws it with OB.texIn (tex.js, KaTeX, LaTeX's standard font); updLines is one formula in TeX. Node
+   has no OB: tools/check_proto.js reads the TeX as text. */
 (function (root) {
   "use strict";
   var NODE = typeof module !== "undefined" && module.exports;
@@ -5610,7 +5737,7 @@ button { font-family: var(--px); }
   var G1 = tx("G_1");
   var AVG = tx("\\bar{G}_1");
   var N = num(D.n, 0), EPS = num(D.eps, 2), ALPHA = num(D.alpha, 2);
-  var h1 = D.hop1, h2 = D.hop2;
+  var h1 = D.hop1;
   var E = D.end, LAST = D.rounds;
   function sa(h) { return STATES[h.s] + " and " + ACTIONS[h.a]; }
 
@@ -5661,30 +5788,32 @@ button { font-family: var(--px); }
       "w = " + bet(h1.w) + " + " + ALPHA + " \\times " + paren(h1.nabla) + " = " + bet(h1.wNew)
     ],
 
-    /* 410, the loop: another bet, faster, the numbers in place. */
-    again: [
-      "Again: another bet, picked at random.",
-      sa(h2) + ": " + bet(h2.w) + " becomes " + bet(h2.w + D.eps) + ", and the average " + G1 + " goes from " +
-        money(h2.before) + " to " + money(h2.after) + ".",
-      tx("\\nabla") + " is " + num(h2.nabla, 0) + ", so the update " + (h2.nabla < 0 ? "lowers" : "raises") + " the bet: " +
-        bet(h2.w) + " becomes " + bet(h2.wNew) + ".",
-      "With the new bet and the same luck, the average " + G1 + (h2.upd > h2.before ? " rises" : " falls") + " to " +
-        money(h2.upd) + ".",
-      "Again and again: that is the loop of proto-REINFORCE."
-    ],
-    againLines: [
-      "\\nabla = " + num(h2.change, 2) + " \\mathbin{/} " + EPS + " = " + num(h2.nabla, 0),
-      "w = " + bet(h2.w) + " + " + ALPHA + " \\times " + paren(h2.nabla) + " = " + bet(h2.wNew)
+    /* 410, the reward plot: how its points are made (main session, 2026-11-16, evening; scene 410 "Again" went at
+       Carlos's word: "show me only one loop"). */
+    plot: [
+      "The reward plot: across, the number of updates; up, the average " + G1 + " after them.",
+      "No update yet: the bets picked at random give " + money(D.start) + ". The first point.",
+      "After update 1: " + money(h1.upd) + ". The second point. Every update adds one."
     ],
 
-    /* 420, the movie of many updates. */
+    /* 420, the movie: every update with the whole diagram, its backward pass, its update and its point. */
     movie: [
-      "Many updates, each with a bet picked at random and " + N + " new runs.",
-      "The average " + G1 + " after each update, and the probability table.",
+      "Each update in full: a bet picked at random, its " + tx("\\nabla") + " and its update, " + N + " new runs, one more point.",
       "After " + LAST + " updates, the likeliest action in each state is " +
         E.top.map(function (a) { return ACTIONS[a]; }).join(", ") + ": the best strategy."
     ],
-    movieNote: "On the runs of the last update: this policy " + money(E.upd) + ", the best strategy " + money(E.best) + ".",
+    /* The numbers of update i (1 to 300) as the movie's panel writes them: its bet, Before and After of the bet and
+       of the average, their changes, nabla and the new bet. r: { s, a, w, wNew, before, after, change, nabla }. */
+    hop: function (r) {
+      return {
+        state: STATES[r.s], action: ACTIONS[r.a],
+        w: bet(r.w), w1: bet(r.w + D.eps), dw: EPS,
+        before: money(r.before), after: money(r.after), dg: money(r.change),
+        change: num(r.change, 2), nabla: num(r.nabla, 0), nablaP: paren(r.nabla), wNew: bet(r.wNew)
+      };
+    },
+    /* The label of the best strategy's line in the plot: its average G1 on the runs of the last update. */
+    bestLab: "BEST STRATEGY: " + money(E.best),
     counter: function (i) { return "UPDATE " + i + " OF " + LAST; }
   };
   if (NODE) module.exports = T;
@@ -6124,20 +6253,22 @@ button { font-family: var(--px); }
        chances (RUN 0.84); the same 1,000 runs again (the ten played again under a playhead, the stream, the
        histogram moves right), the mark of the average goes and the room guesses (Compute); the mark at $73.57 and
        its number flies into the box: up, from -$172.24 to $73.57
-   410 Again (5 beats): another bet picked at random (HEALTHY, REPLACE); its hop, shown faster; nabla and the update,
-       0.10 becomes -0.03; the same runs played again, the histogram and its mark move, the average G1 $80.98 flies
-       into the box; the loop
    The runs are drawn by OB.s3cRuns (sec3c-runs.js, agent W, 2026-11-16) through the diagram's d.layer, d.runsOn,
    d.g1On, d.markOn and d.flyAvg.
-   420 Many updates (3 beats): the start; the movie of 300 updates (each a bet at random and 1,000 fresh runs), the
-       average G1 drawn point by point and the probability table beside it, faster and faster, with Pause and Again;
-       the end: the likeliest actions RUN, SERVICE, REPLACE, REPLACE, the best strategy
+   410 The reward plot (3 beats, main session, 2026-11-16, evening): the whole diagram after update 1, the panel of
+       its backward pass and its update, and an empty plot (across the updates, up the average G1); the average of
+       the bets at random, -$172.24, flies to the first point; the average after update 1, $73.57, to the second
+   420 Many updates (2 beats): the movie of updates 2 to 300 with the whole diagram, every part set at each update
+       (the bet picked at random, its Before, After and change, nabla, the update, the bets, the chances, the 1,000
+       runs of the new policy, their histogram and average, the plot's new point), faster and faster, with Pause and
+       Again; the end: the likeliest actions RUN, SERVICE, REPLACE, REPLACE, the best strategy
+   Scene 410 "Again" (a second update shown slowly) went at Carlos's word that evening: "show me only one loop".
 
    The movie runs on its own requestAnimationFrame loop (the engine's motions are for single moves): it is stopped in
    beat() and leave(), and an instant visit shows its end at once. */
 (function () {
   "use strict";
-  var OB = window.OB, B = window.B, el = OB.el, TB = OB.tables, D = window.S3C, X = window.S3CT, K = OB.s3c;
+  var OB = window.OB, B = window.B, el = OB.el, D = window.S3C, X = window.S3CT, K = OB.s3c, RV = OB.s3cRuns;
   if (!K) { console.error("sec3c2: sec3c.js is missing"); return; }
 
   /* 400. The update in the diagram. */
@@ -6188,154 +6319,198 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 410. Again: another bet, the hop, nabla and the update, faster, the numbers in place; then the loop. */
-  OB.scene({
-    page: 3, key: "proto-again", order: 410, title: "Again", beats: X.again.length,
-    build: function (root) {
-      root.classList.add("s3c-root");
-      var P = this.parts = {}, h = D.hop2;
-      P.lead = K.lead(root);
-      var d = P.d = K.Dia(D.W1, { avg: h.before, avgCap: "BEFORE" });
-      d.A.capOn(false);
-      d.layer(D.W1, "W1", h.before);
-      d.layer(D.W2, "W2", h.upd);
-      P.zb = d.T.zoom(h.s, h.a, { cap: "BEFORE", value: h.w });
-      P.za = d.T.zoom(h.s, h.a, { cap: "AFTER", value: h.w + D.eps });
-      d.c.zb.appendChild(P.zb.el);
-      d.c.za.appendChild(P.za.el);
-      P.ga = K.avgBox(h.after, "AFTER");
-      d.c.aa.appendChild(P.ga.el);
-      [P.zb.el, P.za.el, P.ga.el].forEach(function (e) { e.classList.add("ob-hide"); });
-      P.U = K.updBox(X.againLines);
-      d.el.appendChild(P.U.el);
-      root.appendChild(d.wrap);
-    },
-    beat: function (k, api) {
-      var P = this.parts, d = P.d, h = D.hop2, go = K.live(api, k), cell = [h.s, h.a];
-      K.say(P.lead, X.again[k], api);
-      d.arrows(api, ["sm", "play", "g1", "avg"]);
-      // 0: the twelve bets light up, one is ringed. 4: the loop, nothing marked.
-      if (go && k === 0) {
-        d.T.mark(K.ALL12);
-        api.at(1400, function () { d.T.mark([cell]); d.T.rings([cell]); });
-      } else if (k < 4) { d.T.mark([cell]); d.T.rings([cell]); }
-      else { d.T.mark([]); d.T.rings([]); }
-      // 1: the hop, all at once: Before, After, the average Before and After.
-      var hop = k === 1, g1 = go && k === 1;
-      if (hop) {
-        if (g1) d.T.lift(h.s, h.a, P.zb, { delay: 100 });
-        else { P.zb.el.classList.remove("ob-hide"); P.zb.el.style.visibility = ""; }
-        api.arrow("hop", P.zb.el, P.za.el, { label: "+" + OB.num(D.eps, 2), labelDy: -22, delay: g1 ? 1300 : 0, dur: g1 ? 900 : 1 });
-        api.show(P.za.el, true, K.opt(g1, 1900));
-        api.show(P.ga.el, true, K.opt(g1, 2600));
-        api.arrow("flow", P.za.el, P.ga.el, { delay: g1 ? 2500 : 0, dur: g1 ? 900 : 1 });
-      } else {
-        api.unarrow("hop");
-        api.unarrow("flow");
-        [P.zb.el, P.za.el, P.ga.el].forEach(function (e) {
-          if (go && k === 2) api.fade(e, false, { dur: 800 }); else api.show(e, false);
-        });
-      }
-      d.A.capOn(hop, api, K.opt(g1, 2600));
-      // 2: the update, written in their place; the new bet flies into the table.
-      api.show(P.U.el, k === 2 || k === 3, K.opt(go && k === 2, 900));
-      if (go && k === 2) {
-        d.T.setCell(h.s, h.a, h.w, { now: true });
-        api.at(2300, function () {
-          d.T.setCell(h.s, h.a, h.wNew, { now: true });
-          api.fly(P.U.res, d.T.num(h.s, h.a), { arc: 30 });
-        });
-      } else {
-        d.T.setCell(h.s, h.a, k >= 2 ? h.wNew : h.w, { now: true });
-        d.T.num(h.s, h.a).style.visibility = "";
-      }
-      // 3: softmax, the same runs, the new average G1.
-      d.Q.setRow(h.s, B.softmax(k >= 3 ? D.W2[h.s] : D.W1[h.s]), go && k === 3 ? { delay: 200 } : undefined);
-      d.runsOn(k >= 3 ? 1 : 0, api, go && k === 3, { delay: 700 });
-      d.g1On(k >= 3 ? 1 : 0, api, go && k === 3, { delay: 2400 });
-      d.markOn(k >= 3 ? 1 : 0, api, go && k === 3, { delay: 2600 });
-      d.A.set(k >= 3 && !(go && k === 3) ? h.upd : h.before);
-      if (go && k === 3) d.flyAvg(api, d.A.num, { delay: 3900, set: function () { d.A.set(h.upd); } });
-      d.A.el.classList.toggle("s3c-lit", k >= 3);
-      // 4: the loop.
-      d.loopOn(k >= 4, api, go && k === 4, { delay: 200 });
-    }
-  });
+  /* 410 and 420 (main session, 2026-11-16, evening). Carlos: "you show me only one loop, and then you move to show me
+     the plot of how the reward goes up to how to make the reward plot, and then show the iterations. I want you to
+     show me the iterations exactly as we did in weekend 2, where we kept the entire diagram that illustrates one
+     iteration of the proto-reinforce loop ... Like every time you compute a step to produce the next point in the
+     plot, I want you to show me everything ... You don't have to do this part step by step ... but I want you to
+     show me all the values there. And at the same speed at which you are doing the iterations in this last slide."
+     Both scenes show the whole diagram of one update (OB.s3c.Dia), a panel with its backward pass and its update, and
+     the reward plot. The diagram stands after the update: its bets, chances, runs and average are those of the new
+     bets, on the dice of the update's round, so the average box holds the plot's newest point. */
 
-  /* 420. Many updates: the movie. */
-
-  /* The bets and chances after each of the 300 rounds, rebuilt from the movie's rows in hundredths (whole numbers,
-     so the sums are exact); frame 0 is B.PROTO's bets. tools/check_proto.js checks that the last frame is D.end.W. */
+  /* The frames: FR[0] the bets at random; FR[i] update i: its bet, its numbers, then the bets and the chances after
+     it, rebuilt from the movie's rows in hundredths (whole numbers, so the sums are exact). tools/check_proto.js
+     checks that the rebuilt bets end on D.end.W. */
   var FR = (function () {
     var H = D.W0.map(function (r) { return r.map(function (x) { return Math.round(x * 100); }); });
-    var out = [];
-    function push(g) {
-      var W = H.map(function (r) { return r.map(function (x) { return x / 100; }); });
-      out.push({ W: W, P: B.softmaxTable(W), g: g });
-    }
-    push(D.start);
-    D.movie.forEach(function (m) { H[m[0]][m[1]] += m[2]; push(m[3]); });
+    function bets() { return H.map(function (r) { return r.map(function (x) { return x / 100; }); }); }
+    var out = [{ i: 0, W: D.W0, P: B.softmaxTable(D.W0), g: D.start }];
+    D.movie.forEach(function (m, k) {
+      var s = m[0], a = m[1], w = H[s][a] / 100;
+      H[s][a] += m[2];
+      var W = bets();
+      out.push({ i: k + 1, s: s, a: a, w: w, wNew: H[s][a] / 100, nabla: m[2], g: m[3], before: m[4], after: m[5],
+        change: (Math.round(m[5] * 100) - Math.round(m[4] * 100)) / 100, W: W, P: B.softmaxTable(W) });
+    });
     return out;
   })();
-  var N = FR.length - 1, FIRST = 2;
+  var N = FR.length - 1, FIRST = 1;
 
-  /* The chart of the average G1 after each update: drawn in the element's own pixels, on D.chart's scale. */
-  function Chart() {
-    var C = { el: el("div", "s3c-chart") };
+  /* The runs of frame i's bets on its round's dice (dice 12 for the bets at random and rounds 1 and 2, B.dice(2000 + i)
+     after), played here and kept as the diagram draws them; their average must be the data's (a console error if
+     not). About 2 ms a frame, once. */
+  var SUM = [];
+  function runsOf(i) {
+    if (!SUM[i]) {
+      var d = i <= 2 ? RV.dice() : B.dice(D.seeds.movieDiceBase + i, D.n);
+      SUM[i] = RV.summary(OB.runs.play(FR[i].P, d, D.n));
+      if (OB.money(SUM[i].mean, 2) !== OB.money(FR[i].g, 2)) {
+        console.error("sec3c2: the runs of frame " + i + " average " + OB.money(SUM[i].mean, 2) + ", the data says " + OB.money(FR[i].g, 2));
+      }
+    }
+    return SUM[i];
+  }
+
+  /* The panel of update i: the bet picked at random (its state and action), Before, After and their change for the bet
+     and for the average G1, then nabla and the update. The formulas are drawn once; a frame only writes numbers. */
+  function Panel() {
+    var P = { el: el("div", "s3c-hp ob-box white") };
+    P.el.appendChild(el("div", "tb-zcap", "BACKWARD PASS AND UPDATE"));
+    var hd = el("div", "s3c-hphead");
+    P.cs = [0, 1, 2, 3].map(function (s) { var c = OB.art.stateChip(s); c.classList.add("ob-gone"); hd.appendChild(c); return c; });
+    P.ca = [0, 1, 2].map(function (a) { var c = OB.art.actionChip(a); c.classList.add("ob-gone"); hd.appendChild(c); return c; });
+    P.el.appendChild(hd);
+    var g = el("div", "s3c-hpgrid");
+    ["", "BEFORE", "AFTER", "CHANGE"].forEach(function (t) { g.appendChild(el("div", "s3c-hph", t)); });
+    /* A number of the grid: its cell, and in it the number's own span (which a flight carries). */
+    function cell(cls) { var c = el("div", "s3c-hpc"), e = el("span", "s3c-hpn" + (cls ? " " + cls : "")); c.appendChild(e); g.appendChild(c); return e; }
+    g.appendChild(OB.html("div", "s3c-hpl", "BET " + OB.tex("w")));
+    P.w = cell(); P.w1 = cell(); P.dw = cell("s3c-hpd");
+    g.appendChild(OB.html("div", "s3c-hpl", "AVERAGE " + OB.texIn(X.AVG)));
+    P.gb = cell(); P.ga = cell(); P.dg = cell("s3c-hpd");
+    P.el.appendChild(g);
+    function line(parts) {
+      var l = el("div", "s3c-line s3c-hpf");
+      parts.forEach(function (q) { l.appendChild(q); });
+      P.el.appendChild(l);
+      return l;
+    }
+    P.ch = OB.texNumEl("", "");
+    P.nab = OB.texNumEl("", "");
+    P.l1 = line([OB.texEl("\\nabla =\\;"), P.ch, OB.texEl("\\;/\\;" + X.num(D.eps, 2) + " =\\;"), P.nab]);
+    P.uw = OB.texNumEl("", "");
+    P.un = OB.texNumEl("", "");
+    P.res = OB.texNumEl("", "s3c-new");
+    P.l2 = line([OB.texEl("w =\\;"), P.uw, OB.texEl("\\;+\\;" + X.num(D.alpha, 2) + "\\;\\times\\;"), P.un, OB.texEl("\\;=\\;"), P.res]);
+    function money(e, t, x) {
+      var r = +x.toFixed(2);
+      e.textContent = t;
+      e.classList.toggle("gain", r > 0);
+      e.classList.toggle("loss", r < 0);
+    }
+    P.set = function (r) {
+      var h = X.hop(r);
+      P.cs.forEach(function (c, s) { c.classList.toggle("ob-gone", s !== r.s); });
+      P.ca.forEach(function (c, a) { c.classList.toggle("ob-gone", a !== r.a); });
+      P.w.textContent = h.w;
+      P.w1.textContent = h.w1;
+      P.dw.textContent = h.dw;
+      money(P.gb, h.before, r.before);
+      money(P.ga, h.after, r.after);
+      money(P.dg, h.dg, r.change);
+      P.ch.textContent = OB.texText(h.change);
+      P.nab.textContent = OB.texText(h.nabla);
+      P.uw.textContent = OB.texText(h.w);
+      P.un.textContent = OB.texText(h.nablaP);
+      P.res.textContent = OB.texText(h.wNew);
+    };
+    return P;
+  }
+
+  /* The reward plot: the average G1 after each update, point by point. Across, the updates from 0 to the larger of 10
+     and the newest point's update: the first points stand apart, and the axis grows with the movie. Up, D.chart's
+     scale. Two tags (HTML over the plot) carry the numbers of points 0 and 1 in scene 410. */
+  var XMIN = 10;
+  function Plot() {
+    var C = { el: el("div", "s3c-plot") };
     C.ylab = OB.html("div", "s3c-ylab", "AVERAGE " + OB.texIn(X.AVG));
     C.el.appendChild(C.ylab);
     C.svg = OB.svgEl("svg", { "class": "s3c-csvg", "aria-hidden": "true" });
     C.el.appendChild(C.svg);
     C.axes = OB.svgEl("g", {});
+    C.xt = OB.svgEl("g", {});
     C.best = OB.svgEl("line", { "class": "s3c-best" });
     C.bestLab = OB.svgEl("text", { "class": "s3c-bl" });
-    C.bestLab.textContent = "BEST STRATEGY";
+    C.bestLab.textContent = X.bestLab;
     C.curve = OB.svgEl("polyline", { "class": "s3c-curve" });
+    C.d0 = OB.svgEl("circle", { "class": "s3c-dot s3c-dot0", r: "5" });
     C.dot = OB.svgEl("circle", { "class": "s3c-dot", r: "6" });
-    [C.axes, C.best, C.bestLab, C.curve, C.dot].forEach(function (e) { C.svg.appendChild(e); });
+    [C.axes, C.xt, C.best, C.bestLab, C.curve, C.d0, C.dot].forEach(function (e) { C.svg.appendChild(e); });
+    C.tags = [D.start, FR[1].g].map(function (v) {
+      var t = OB.moneyEl(v, 2);
+      t.classList.add("s3c-ptag", "ob-hide");
+      C.el.appendChild(t);
+      return t;
+    });
+    C.tagsOn = [false, false];
+    C.n = -1;
     C.key = "";
-    C.i = FIRST;
     C.showBest = false;
+    function xmax(n) { return Math.max(XMIN, n); }
     function geo() {
       var w = C.el.clientWidth, h = C.el.clientHeight, f = parseFloat(window.getComputedStyle(C.el).fontSize) || 11;
-      var g = { w: w, h: h, f: f, l: Math.round(f * 5 + 16), r: 12, t: Math.round(f * 2.6), b: Math.round(f * 2 + 14) };
-      g.x = function (i) { return g.l + (w - g.l - g.r) * i / N; };
+      var g = { w: w, h: h, f: f, l: Math.round(f * 4.6 + 14), r: 14, t: Math.round(f * 2.4), b: Math.round(f * 2 + 14) };
       g.y = function (v) { return g.t + (h - g.t - g.b) * (D.chart.hi - v) / (D.chart.hi - D.chart.lo); };
       return g;
     }
-    function text(x, y, s, cls, anchor) {
+    function text(parent, x, y, s, cls, anchor) {
       var t = OB.svgEl("text", { x: x.toFixed(1), y: y.toFixed(1), "class": cls || "", "text-anchor": anchor || "start" });
       t.textContent = s;
+      parent.appendChild(t);
       return t;
     }
+    function clear(gr) { while (gr.firstChild) gr.removeChild(gr.firstChild); }
     function axes(g) {
-      while (C.axes.firstChild) C.axes.removeChild(C.axes.firstChild);
+      clear(C.axes);
       C.svg.setAttribute("width", g.w);
       C.svg.setAttribute("height", g.h);
       for (var v = D.chart.lo; v <= D.chart.hi; v += 100) {
         var y = g.y(v);
         C.axes.appendChild(OB.svgEl("line", { "class": v === 0 ? "s3c-zero" : "s3c-grid", x1: g.l, x2: g.w - g.r, y1: y, y2: y }));
-        C.axes.appendChild(text(g.l - 9, y + g.f * 0.45, OB.money(v, 0), "s3c-tl", "end"));
-      }
-      for (var i = 0; i <= N; i += 100) {
-        var x = g.x(i);
-        C.axes.appendChild(OB.svgEl("line", { "class": "s3c-tick", x1: x, x2: x, y1: g.h - g.b, y2: g.h - g.b + 7 }));
-        C.axes.appendChild(text(x, g.h - g.b + 9 + g.f, String(i), "s3c-tl", i === 0 ? "start" : i === N ? "end" : "middle"));
+        text(C.axes, g.l - 9, y + g.f * 0.45, OB.money(v, 0), "s3c-tl", "end");
       }
       C.axes.appendChild(OB.svgEl("polyline", { "class": "s3c-ax", points: g.l + "," + g.t + " " + g.l + "," + (g.h - g.b) + " " + (g.w - g.r) + "," + (g.h - g.b) }));
-      C.axes.appendChild(text((g.l + g.w - g.r) / 2, g.h - 2, "UPDATES", "s3c-tt", "middle"));
+      text(C.axes, (g.l + g.w - g.r) / 2, g.h - 2, "UPDATES", "s3c-tt", "middle");
     }
-    C.draw = function (i) {
-      if (i !== undefined) C.i = i;
+    /* The ticks across, for the domain 0 to m: a step of 1, 2, 5, 10, 20, 25, 50 or 100, at most six of them. */
+    var STEPS = [1, 2, 5, 10, 20, 25, 50, 100];
+    function ticks(g, m, x) {
+      clear(C.xt);
+      var st = STEPS[STEPS.length - 1];
+      for (var j = 0; j < STEPS.length; j += 1) if (m / STEPS[j] <= 6) { st = STEPS[j]; break; }
+      for (var i = 0; i <= m; i += st) {
+        var xi = x(i);
+        C.xt.appendChild(OB.svgEl("line", { "class": "s3c-tick", x1: xi, x2: xi, y1: g.h - g.b, y2: g.h - g.b + 7 }));
+        text(C.xt, xi, g.h - g.b + 9 + g.f, String(i), "s3c-tl", "middle");
+      }
+    }
+    /* Points 0 to n (n = -1: none). */
+    C.draw = function (n) {
+      if (n !== undefined) C.n = n;
       var g = geo();
       if (!g.w || !g.h) return;
       var key = g.w + "x" + g.h + "x" + g.f;
-      if (key !== C.key) { C.key = key; axes(g); }
+      if (key !== C.key) { C.key = key; C.mk = -1; axes(g); }
+      var m = xmax(Math.max(0, C.n));
+      function x(i) { return g.l + (g.w - g.l - g.r) * i / m; }
+      if (m !== C.mk) { C.mk = m; ticks(g, m, x); }
       var pts = [];
-      for (var j = 0; j <= C.i; j++) pts.push(g.x(j).toFixed(1) + "," + g.y(FR[j].g).toFixed(1));
+      for (var j = 0; j <= C.n; j += 1) pts.push(x(j).toFixed(1) + "," + g.y(FR[j].g).toFixed(1));
       C.curve.setAttribute("points", pts.join(" "));
-      C.dot.setAttribute("cx", g.x(C.i).toFixed(1));
-      C.dot.setAttribute("cy", g.y(FR[C.i].g).toFixed(1));
+      C.d0.style.display = C.n >= 0 ? "" : "none";
+      C.d0.setAttribute("cx", x(0).toFixed(1));
+      C.d0.setAttribute("cy", g.y(FR[0].g).toFixed(1));
+      C.dot.style.display = C.n >= 1 ? "" : "none";
+      if (C.n >= 1) {
+        C.dot.setAttribute("cx", x(C.n).toFixed(1));
+        C.dot.setAttribute("cy", g.y(FR[C.n].g).toFixed(1));
+      }
+      C.tags.forEach(function (t, j) {
+        t.style.left = (x(j) + 10).toFixed(1) + "px";
+        t.style.top = (g.y(FR[j].g) + (j === 0 ? 4 : -g.f * 1.6)).toFixed(1) + "px";
+        t.classList.toggle("ob-hide", !C.tagsOn[j]);
+      });
       var yb = g.y(D.end.best);
       C.best.setAttribute("x1", g.l);
       C.best.setAttribute("x2", g.w - g.r);
@@ -6348,107 +6523,167 @@ button { font-family: var(--px); }
     return C;
   }
 
+  /* The view of 410 and 420: the lead, the diagram (OB.s3c.Dia) with the panel and the plot in cells of its own, the
+     bar of the movie under the plot (420). */
+  var VIEWS = [];
+  function View(root, bar) {
+    root.classList.add("s3c-root");
+    var V = { lead: K.lead(root) };
+    var d = V.d = K.Dia(FR[1].W, { avg: FR[1].g });
+    d.el.classList.add("s3c-mvd");
+    V.hop = Panel();
+    var ch = el("div", "s3c-cell s3c-hopc");
+    ch.style.gridArea = "hop";
+    ch.appendChild(V.hop.el);
+    d.el.appendChild(ch);
+    V.plot = Plot();
+    var cp = el("div", "s3c-cell s3c-plotc");
+    cp.style.gridArea = "plot";
+    cp.appendChild(V.plot.el);
+    d.el.appendChild(cp);
+    if (bar) {
+      var b = el("div", "s3c-mvbar");
+      V.pause = el("button", "ob-btn s3c-btn", "PAUSE");
+      V.pause.type = "button";
+      V.count = el("span", "s3c-count");
+      V.again = el("button", "ob-btn quiet s3c-btn", "AGAIN");
+      V.again.type = "button";
+      [V.pause, V.count, V.again].forEach(function (e) { b.appendChild(e); });
+      cp.appendChild(b);
+    }
+    root.appendChild(d.wrap);
+    VIEWS.push(V);
+    return V;
+  }
+  window.addEventListener("resize", function () { VIEWS.forEach(function (V) { if (V.plot.key) V.plot.draw(); }); });
+
+  /* Update i, everything at once: in the panel its backward pass and its update; in the diagram the bets after it
+     (the changed bet ringed), their chances, the runs of the new policy on the update's dice, their histogram and
+     average. plotN: the plot's last point (default i). */
+  function render(V, i, plotN) {
+    var d = V.d, r = FR[i];
+    d.T.set(r.W, { now: true });
+    V.hop.set(r);
+    d.T.mark([[r.s, r.a]]);
+    d.T.rings([[r.s, r.a]]);
+    d.Q.set(r.P, { now: true });
+    d.Q.rings([[r.s, null]]);
+    d.R.frame(runsOf(i));
+    d.A.set(r.g);
+    V.plot.draw(plotN === undefined ? i : plotN);
+    if (V.count) V.count.textContent = X.counter(i);
+  }
+  function arrows(V, api, pt) {
+    V.d.arrows(api, ["sm", "play", "g1", "avg"]);
+    if (pt) api.arrow("pt", V.d.A.el, V.plot.el, pt === true ? { dur: 1 } : pt);
+    else api.unarrow("pt");
+  }
+
+  /* 410. The reward plot: its axes, then its first two points, each flying from the number it plots. */
+  OB.scene({
+    page: 3, key: "proto-plot", order: 410, title: "The reward plot", beats: X.plot.length,
+    build: function (root) { this.V = View(root, false); },
+    beat: function (k, api) {
+      var V = this.V, d = V.d, go = K.live(api, k), C = V.plot;
+      K.say(V.lead, X.plot[k], api);
+      C.tagsOn = [k >= 1, k >= 2];
+      render(V, 1, k >= 2 && !(go && k === 2) ? 1 : k >= 1 && !(go && k === 1) ? 0 : -1);
+      arrows(V, api, k >= 2 ? (go && k === 2 ? { delay: 200 } : true) : false);
+      // 1: the average of the bets at random (the panel's Before) flies to point 0.
+      V.hop.gb.classList.toggle("s3c-lit", k === 1);
+      if (go && k === 1) {
+        api.fly(V.hop.gb, C.tags[0], { delay: 400, arc: 50 });
+        api.at(400 + OB.DUR.fly, function () { C.draw(0); });
+      }
+      // 2: the average after update 1 (the diagram's box) flies to point 1.
+      d.A.el.classList.toggle("s3c-lit", k === 2);
+      if (go && k === 2) {
+        api.fly(d.A.num, C.tags[1], { delay: 1300, arc: 40 });
+        api.at(1300 + OB.DUR.fly, function () { C.draw(1); });
+      }
+    }
+  });
+
+  /* 420. Many updates: the movie. */
   var MOVIE = {
     page: 3, key: "proto-movie", order: 420, title: "Many updates", beats: X.movie.length,
     build: function (root) {
-      root.classList.add("s3c-root");
-      var P = this.parts = {}, self = MOVIE;
-      P.lead = K.lead(root);
-      var mv = el("div", "s3c-mv");
-      var left = el("div", "s3c-mvl");
-      P.C = Chart();
-      left.appendChild(P.C.el);
-      var bar = el("div", "s3c-mvbar");
-      P.pause = el("button", "ob-btn s3c-btn", "PAUSE");
-      P.pause.type = "button";
-      P.count = el("span", "s3c-count");
-      P.again = el("button", "ob-btn quiet s3c-btn", "AGAIN");
-      P.again.type = "button";
-      bar.appendChild(P.pause);
-      bar.appendChild(P.count);
-      bar.appendChild(P.again);
-      left.appendChild(bar);
-      mv.appendChild(left);
-      var right = el("div", "s3c-mvr");
-      P.Q = TB.table(FR[FIRST].P, { kind: "prob", size: "m", cap: "PROBABILITY TABLE" });
-      right.appendChild(P.Q.el);
-      mv.appendChild(right);
-      root.appendChild(mv);
-      P.note = el("p", "ob-note s3c-note ob-hide", X.movieNote);
-      root.appendChild(P.note);
-      P.M = { i: FIRST, playing: false, raf: 0, last: 0, acc: 0 };
-      P.pause.addEventListener("click", function () {
-        if (P.M.playing) self.stop(); else if (P.M.i < N) self.play(); else self.play(true);
+      var V = this.V = View(root, true), self = MOVIE;
+      V.M = { k: FIRST, t: 0, playing: false, raf: 0, last: 0, shown: -1 };
+      V.pause.addEventListener("click", function () {
+        if (V.M.playing) self.stop(); else if (V.M.k < N || V.M.t < dur(N)) self.play(); else self.play(true);
       });
-      P.again.addEventListener("click", function () { self.play(true); });
-      window.addEventListener("resize", function () { if (P.C.key) P.C.draw(); });
+      V.again.addEventListener("click", function () { self.play(true); });
     },
-    /* Frame i: the chart up to update i, the counter, the table of chances after update i. */
-    frame: function (i) {
-      var P = MOVIE.parts;
-      P.M.i = i;
-      P.C.draw(i);
-      P.count.textContent = X.counter(i);
-      P.Q.set(FR[i].P, { now: true });
+    /* Shows update k (only when the screen holds another). */
+    show: function (k) {
+      var V = MOVIE.V;
+      if (k === V.M.shown) return;
+      V.M.shown = k;
+      render(V, k);
     },
-    /* The end of the movie (beat 2): the best strategy's line, the likeliest actions lit, the note. */
+    /* The end of the movie (beat 1): the best strategy's line and its average, the likeliest actions lit. */
     extras: function (on) {
-      var P = MOVIE.parts;
-      P.C.showBest = on;
-      P.C.draw();
-      P.Q.mark(on ? D.end.top.map(function (a, s) { return [s, a]; }) : []);
-      P.note.classList.toggle("ob-hide", !on);
+      var V = MOVIE.V;
+      V.plot.showBest = on;
+      V.plot.draw();
+      V.d.Q.rings([]);
+      V.d.Q.mark(on ? D.end.top.map(function (a, s) { return [s, a]; }) : []);
     },
     stop: function () {
-      var P = MOVIE.parts;
-      if (!P) return;
-      P.M.playing = false;
-      if (P.M.raf) cancelAnimationFrame(P.M.raf);
-      P.M.raf = 0;
-      P.pause.textContent = "PLAY";
+      var V = MOVIE.V;
+      if (!V) return;
+      V.M.playing = false;
+      if (V.M.raf) cancelAnimationFrame(V.M.raf);
+      V.M.raf = 0;
+      V.pause.textContent = "PLAY";
     },
-    /* Plays the movie from where it is (or from the start): 700 ms for each of the first eight updates, then each
-       0.88 times the one before, down to 20 ms (about 16 s for the 298 updates). */
+    /* Plays from where the movie stands (or from update 1): update k stays on the screen for dur(k). */
     play: function (fromStart) {
-      var P = MOVIE.parts, M = P.M, self = MOVIE;
+      var V = MOVIE.V, M = V.M, self = MOVIE;
       self.stop();
-      if (fromStart || M.i >= N) { M.i = FIRST; self.extras(false); self.frame(FIRST); }
-      function dur(i) { var j = i - FIRST - 1; return j < 8 ? 700 : Math.max(20, 700 * Math.pow(0.88, j - 7)); }
+      if (fromStart || (M.k >= N && M.t >= dur(N))) { M.k = FIRST; M.t = 0; self.extras(false); M.shown = -1; self.show(FIRST); }
+      if (M.k === FIRST) { M.k = FIRST + 1; M.t = 0; }
       M.playing = true;
       M.last = 0;
-      M.acc = 0;
-      P.pause.textContent = "PAUSE";
+      V.pause.textContent = "PAUSE";
       function tick(now) {
         if (!M.playing) return;
         if (!M.last) M.last = now;
-        M.acc += now - M.last;
+        M.t += now - M.last;
         M.last = now;
-        var i = M.i;
-        while (i < N && M.acc >= dur(i + 1)) { M.acc -= dur(i + 1); i++; }
-        if (i !== M.i) self.frame(i);
-        if (i >= N) {
+        while (M.k < N && M.t >= dur(M.k)) { M.t -= dur(M.k); M.k += 1; }
+        if (M.k >= N && M.t >= dur(N)) {
+          M.t = dur(N);
+          self.show(N);
           self.stop();
-          if (self.k === 2) self.extras(true);
+          if (self.beatNow === 1) self.extras(true);
           return;
         }
+        self.show(M.k);
         M.raf = requestAnimationFrame(tick);
       }
+      self.show(M.k);
       M.raf = requestAnimationFrame(tick);
     },
     beat: function (k, api) {
-      var P = MOVIE.parts, go = K.live(api, k);
-      MOVIE.k = k;
+      var V = this.V, go = K.live(api, k);
+      MOVIE.beatNow = k;
       MOVIE.stop();
-      K.say(P.lead, X.movie[k], api);
-      api.show(P.pause, k >= 1);
-      api.show(P.again, k >= 1);
-      if (k === 0) { MOVIE.extras(false); MOVIE.frame(FIRST); return; }
-      if (k === 1 && go) { MOVIE.extras(false); MOVIE.frame(FIRST); MOVIE.play(true); return; }
-      MOVIE.frame(N);
-      MOVIE.extras(k >= 2);
+      K.say(V.lead, X.movie[k], api);
+      arrows(V, api, true);
+      if (k === 0 && go) { MOVIE.extras(false); V.M.shown = -1; MOVIE.play(true); return; }
+      V.M.k = N;
+      V.M.t = dur(N);
+      V.M.shown = -1;
+      MOVIE.show(N);
+      MOVIE.extras(k >= 1);
     },
     leave: function () { MOVIE.stop(); }
   };
+  /* The pace of the movie before 2026-11-16 (Carlos: "at the same speed"): 700 ms for each of the first eight updates
+     after update 1, then each 0.88 times the one before, down to 20 ms (about 16 s for updates 2 to 300). */
+  function dur(k) { var j = k - FIRST - 1; return j < 8 ? 700 : Math.max(20, 700 * Math.pow(0.88, j - 7)); }
   OB.scene(MOVIE);
 })();
 </script>
@@ -6554,7 +6789,8 @@ button { font-family: var(--px); }
    370 The update (2 beats): w = w + alpha nabla, alpha = 0.01; the sign: weekend 2's loss had to go down (minus),
        here the average G1 has to go up (plus)
    380 Why this update (4 beats): a positive nabla raises the bet; a negative one lowers it; a steep slope moves it
-       more; alpha keeps each move small
+       more; alpha keeps each move small. Since 2026-11-16 each rule is a small copy of 360's triangle of the hop
+       (BEFORE, AFTER, across +epsilon, the vertical side UP or DOWN, the slope), drawn in when its card comes
    390 The update, worked out (3 beats): w = 0.40 + 0.01 x 174 = ? (the room guesses); Compute: 2.14; the new bet
        alone on the screen, for A5's scene 400 */
 (function () {
@@ -7144,15 +7380,27 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 380. Why this update: four rules, one per Next, each with a small picture. On top, the slope through the bet;
-     below, the line of the bet and the move the update gives it. No numbers: the shapes alone. */
+  /* 380. Why this update: four rules, one per Next, each drawn as a small copy of 360's triangle of the hop (Carlos,
+     2026-11-16: "When you explain the update with different slopes, make sure that they look like rectangle triangles
+     as in the previous image, so that the participant can really connect where the slope is coming from"). A card has
+     360's axes and their names (the bet across, the average G1 up), BEFORE and AFTER as its square points, the tinted
+     right triangle with its across side (the hop, +epsilon, the same in every card), its vertical side (the change of
+     the average G1: UP in green, DOWN in red) and its hypotenuse, the slope nabla; below them, the line of the bet and
+     the move that the update gives it. A card that comes with Next draws its triangle in 360's order (across, the
+     vertical side, the slope and its tint), then the move. The shapes are schematic: the only numbers are the hop and
+     alpha, both from S3D. */
+  var WV = { w: 232, h: 268 };                       // the card's viewBox, plain px on a desk
+  var WA = { x: 20, y: 190, top: 22, right: 228 };   // the axes: their corner (x, y), the top of the up axis, the end of the across axis
+  var WB = 84, WH = 80, WL = 244;                    // BEFORE's place across, the hop (the across side), the line of the bet
+  /* Each card: BEFORE's height y, AFTER's height minus BEFORE's dy (below zero: AFTER above, the average rose), the
+     move of the bet (0.85 of the vertical side in every card, so a taller side moves the bet more), the move without
+     alpha (ghost, on the card of alpha). */
   var WHY = [
-    { slope: [50, 75, 142, 29], move: 36, cond: tx("\\nabla > 0"), eff: "BET UP" },
-    { slope: [50, 29, 142, 75], move: -36, cond: tx("\\nabla < 0"), eff: "BET DOWN" },
-    { slope: [78, 88, 114, 16], move: 80, cond: "STEEP", eff: "BIG MOVE" },
-    { slope: [78, 88, 114, 16], move: 12, ghost: 80, cond: tx("\\alpha = " + T.alpha), eff: "SMALL MOVE" }
+    { y: 136, dy: -60, move: 51, cond: tx("\\nabla > 0"), eff: "BET UP" },
+    { y: 76, dy: 60, move: -51, cond: tx("\\nabla < 0"), eff: "BET DOWN" },
+    { y: 162, dy: -132, move: 112, cond: "STEEP", eff: "BIG MOVE" },
+    { y: 162, dy: -132, move: 18, ghost: 112, cond: tx("\\alpha = " + T.alpha), eff: "SMALL MOVE" }
   ];
-  var BX = 96, BY = 124;                         // the bet on its line; the slope passes through (96, 52)
   function moveArrow(svg, from, len, y, cls) {
     var g = add(svg, "g", { "class": "s3d-wmv " + (cls || "") });
     var dir = len < 0 ? -1 : 1, tip = from + len, base = tip - dir * 10;
@@ -7162,20 +7410,88 @@ button { font-family: var(--px); }
   }
   function whyCard(w) {
     var c = el("div", "s3d-why ob-box white ob-hide");
-    var svg = OB.svgEl("svg", { "class": "s3d-wsvg", viewBox: "0 0 200 150", width: 200, height: 150, "aria-hidden": "true" });
-    var ax = add(svg, "g", { "class": "s3d-wax" });
-    add(ax, "line", { x1: 20, y1: 6, x2: 20, y2: 90 });
-    add(ax, "line", { x1: 20, y1: 90, x2: 192, y2: 90 });
-    add(svg, "line", { "class": "s3d-wsl", x1: w.slope[0], y1: w.slope[1], x2: w.slope[2], y2: w.slope[3] });
-    add(svg, "rect", { "class": "s3d-wpt", x: BX - 6, y: 46, width: 12, height: 12 });
-    add(svg, "line", { "class": "s3d-wbl", x1: 20, y1: BY, x2: 192, y2: BY });
-    add(svg, "rect", { "class": "s3d-wbet", x: BX - 5, y: BY - 5, width: 10, height: 10 });
-    c.ghost = w.ghost ? moveArrow(svg, BX, w.ghost, BY + 18, "s3d-wghost") : null;
-    c.mv = moveArrow(svg, BX, w.move, BY - 16);
+    var svg = OB.svgEl("svg", { "class": "s3d-wsvg", viewBox: "0 0 " + WV.w + " " + WV.h, width: WV.w, height: WV.h, "aria-hidden": "true" });
+    var bx = WB, by = w.y, ax = WB + WH, ay = w.y + w.dy, rise = w.dy < 0;
+    // 360's axes and their names.
+    var axes = add(svg, "g", { "class": "s3d-wax" });
+    add(axes, "line", { x1: WA.x, y1: WA.y, x2: WA.right, y2: WA.y });
+    add(axes, "line", { x1: WA.x, y1: WA.top, x2: WA.x, y2: WA.y });
+    var yt = svgText(svg, WA.x, 15, "AVERAGE ", "s3d-wtit", "start");
+    add(yt, "tspan", { "class": "s3d-tex s3d-tmath" }).textContent = "G";
+    add(yt, "tspan", { "class": "s3d-tex s3d-wsub", dy: "3" }).textContent = "1";
+    svgText(svg, WA.right, WA.y + 19, "THE BET", "s3d-wtit", "end");
+    // The right triangle, under the points: its tint, across (the hop), the vertical side (the change of the average
+    // G1) and the slope from BEFORE to AFTER; the words of the two sides; nabla beside the slope, away from the tint.
+    var R = c.tri = {};
+    R.fill = add(svg, "polygon", { "class": "s3d-wtf", points: [bx, by, ax, by, ax, ay].join(",") });
+    R.across = add(svg, "line", { "class": "s3d-wleg", x1: bx, y1: by, x2: ax, y2: by });
+    R.side = add(svg, "line", { "class": "s3d-wleg " + (rise ? "s3d-wup" : "s3d-wdown"), x1: ax, y1: by, x2: ax, y2: ay });
+    R.hyp = add(svg, "line", { "class": "s3d-whyp", x1: bx, y1: by, x2: ax, y2: ay });
+    R.hop = svgText(svg, bx + WH / 2, rise ? by + 21 : by - 11, "+" + T.eps, "s3d-wlab");
+    R.chg = svgText(svg, ax + 10, (by + ay) / 2 + 6, rise ? "UP" : "DOWN", "s3d-wlab s3d-wword " + (rise ? "s3d-wgain" : "s3d-wloss"), "start");
+    var len = Math.hypot(WH, w.dy), off = rise ? 20 : -20;
+    R.nab = texText(svg, String.fromCharCode(8711), bx + WH / 2 + off * w.dy / len, by + w.dy / 2 - off * WH / len + 8, 24, false);
+    // BEFORE and AFTER, 360's square points (BEFORE white, AFTER ink), each with its tag.
+    var pb = add(svg, "g", {});
+    add(pb, "rect", { "class": "s3d-wpt s3d-wold", x: bx - 7, y: by - 7, width: 14, height: 14 });
+    svgText(pb, bx - 12, by + 5, "BEFORE", "s3d-wtag", "end");
+    var pa = add(svg, "g", {});
+    add(pa, "rect", { "class": "s3d-wpt", x: ax - 7, y: ay - 7, width: 14, height: 14 });
+    svgText(pa, ax + 12, rise ? ay - 3 : ay + 15, "AFTER", "s3d-wtag", "start");
+    // The line of the bet, the bet on it under BEFORE, and the move that the update gives it; on the card of alpha,
+    // under the line, the move without alpha, dashed.
+    add(svg, "line", { "class": "s3d-wbl", x1: WA.x, y1: WL, x2: WA.right, y2: WL });
+    add(svg, "rect", { "class": "s3d-wbet", x: bx - 5, y: WL - 5, width: 10, height: 10 });
+    c.ghost = w.ghost ? moveArrow(svg, bx, w.ghost, WL + 14, "s3d-wghost") : null;
+    c.mv = moveArrow(svg, bx, w.move, WL - 14);
     c.appendChild(svg);
     c.appendChild(OB.html("div", "s3d-wc", w.cond));
     c.appendChild(el("div", "s3d-we", w.eff));
     return c;
+  }
+  /* A line of a card grows from its start (x1, y1) to its end in dur ms from delay, when go is true; else it stands
+     whole at once. The end is kept on the element (n.end). */
+  function grow(api, n, go, delay, dur) {
+    var e = n.end || (n.end = [+n.getAttribute("x2"), +n.getAttribute("y2")]);
+    var x1 = +n.getAttribute("x1"), y1 = +n.getAttribute("y1");
+    function to(p) { n.setAttribute("x2", x1 + (e[0] - x1) * p); n.setAttribute("y2", y1 + (e[1] - y1) * p); }
+    to(1);
+    n.style.opacity = "";
+    if (!go) { n.classList.remove("ob-hide"); return; }
+    n.classList.add("ob-hide");
+    api.at(delay, function () {
+      to(0);
+      n.classList.remove("ob-hide");
+      api.animate(dur, to, function () { to(1); });
+    });
+  }
+  /* A part of a card fades in from delay when go is true; else it is there at once. */
+  function appear(api, e, go, delay, dur) {
+    if (!go) { e.classList.remove("ob-hide"); e.style.opacity = ""; return; }
+    e.classList.add("ob-hide");
+    api.show(e, true, { delay: delay, dur: dur });
+  }
+  /* A card at rest, or drawn in when go is true: the card fades in from 200 ms with its axes and its two points;
+     across grows from BEFORE (the hop), the vertical side from the corner to AFTER (the change of the average), the
+     slope from BEFORE to AFTER with the tint and nabla, each side in 1.2 s as on 360 and each starting as the one
+     before ends; then the move of the bet grows from the bet, and on the card of alpha the dashed move without alpha
+     comes first. The last motion ends about 6.3 s after Next (7.5 s on the card of alpha). */
+  function drawWhy(api, c, go) {
+    var R = c.tri, t = 1200, d = OB.DUR.arrow;
+    grow(api, R.across, go, t, d);
+    appear(api, R.hop, go, t + 600, 700);
+    t += 1100;
+    grow(api, R.side, go, t, d);
+    appear(api, R.chg, go, t + 600, 700);
+    t += 1100;
+    grow(api, R.hyp, go, t, d);
+    appear(api, R.fill, go, t + 200, 1000);
+    appear(api, R.nab, go, t + 600, 700);
+    t += 1400;
+    if (c.ghost) { appear(api, c.ghost, go, t, 1000); t += 1200; }
+    drawIn(api, c.mv.line, go, t);
+    if (go) c.mv.head.classList.add("ob-hide");
+    api.show(c.mv.head, true, { delay: go ? t + 1100 : 0, dur: 400 });
   }
   var L380 = [
     "A positive " + nw(NAB) + " says that raising the bet raised the average " + G1 + ". So the update raises the bet.",
@@ -7199,18 +7515,7 @@ button { font-family: var(--px); }
         var fresh = i === k && go;
         api.show(c, i <= k, { delay: fresh ? 200 : 0 });
         c.classList.toggle("s3d-lit", i === k);
-        if (i > k) return;
-        // The move of the bet grows from the bet once the card is there; on the card of alpha, the move without
-        // alpha comes first, dashed, then the small move.
-        var t = 1300;
-        if (c.ghost) {
-          if (fresh) c.ghost.classList.add("ob-hide");
-          api.show(c.ghost, true, { delay: fresh ? t : 0 });
-          t += 1500;
-        }
-        drawIn(api, c.mv.line, fresh, t);
-        if (fresh) c.mv.head.classList.add("ob-hide");
-        api.show(c.mv.head, true, { delay: fresh ? t + 1100 : 0, dur: 400 });
+        if (i <= k) drawWhy(api, c, fresh);
       });
     }
   });

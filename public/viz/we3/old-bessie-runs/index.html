@@ -1168,6 +1168,16 @@ button { font-family: var(--px); }
       g.style.width = a.width + "px";
       g.style.height = a.height + "px";
       from.parentNode.insertBefore(g, from.nextSibling);
+      /* A filter or a transform above from (the skin's boxes carry a drop shadow, skin.css) makes the fixed copy move
+         with that box and stay in its stacking context: it then lands in the wrong place, under later parts of the
+         page. Such a copy flies from the body instead, in the source's font (main session, 2026-11-16). */
+      var gr = g.getBoundingClientRect();
+      if (Math.abs(gr.left - a.left) > 0.5 || Math.abs(gr.top - a.top) > 0.5) {
+        var cs = window.getComputedStyle(src);
+        ["fontSize", "fontFamily", "fontWeight", "fontStyle", "color", "letterSpacing", "lineHeight", "textAlign", "whiteSpace"]
+          .forEach(function (k) { g.style[k] = cs[k]; });
+        document.body.appendChild(g);
+      }
       var sx = opts.scale === false ? 1 : b.width / a.width, sy = opts.scale === false ? 1 : b.height / a.height;
       var dx = b.left - a.left, dy = b.top - a.top, arc = opts.arc === undefined ? 40 : opts.arc;
       return animate(opts.dur || DUR.fly, function (p) {
