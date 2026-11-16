@@ -824,10 +824,23 @@ button { font-family: var(--px); }
     return { before, after, change: after - before, nabla: (after - before) / eps, W2 };
   }
 
-  /* Random bets, uniform in [-1, 1], one decimal (the starting table of proto-REINFORCE). */
-  function randomBets(seed) {
+  /* Random bets, one decimal (the starting table of proto-REINFORCE): every bet uniform in [-1, 1], from rng(seed).
+     With a second seed xseed, about one bet in four is extreme instead, between 5 and 10 or between -10 and -5
+     (Carlos, 2026-11-16: "Don't make them all between -1 and 1 ... make them between -10 and 10"): for each bet in
+     turn, row by row, rng(xseed) gives three numbers; the first below 0.25 makes the bet extreme, the second sets its
+     size, 5 + 5 x u, the third its sign, minus below 0.5. */
+  function randomBets(seed, xseed) {
     const r = rng(seed);
-    return [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
+    const W = [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
+    if (xseed === undefined) return W;
+    const x = rng(xseed);
+    for (const row of W) {
+      for (let a = 0; a < 3; a++) {
+        const u = x(), size = x(), sign = x();
+        if (u < 0.25) row[a] = (sign < 0.5 ? -1 : 1) * Math.round((5 + 5 * size) * 10) / 10;
+      }
+    }
+    return W;
   }
 
   const B = {
@@ -843,13 +856,21 @@ button { font-family: var(--px); }
     EXAMPLE: [RUN, RUN, RUN, REPLACE],
     /* Try it (section 4, A4a): ten runs, the same dice for every try. */
     TRY: { n: 10, diceSeed: 11 },
-    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17); the entry is
-       drawn by B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000).
-       Shown with two decimals: average G1 before -243.36, after -241.35, change 2.01, nabla 201,
-       w = 0.40 + 0.01 x 201 = 2.41, average G1 after the update -5.20 (same dice). */
+    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17, 68), two of them
+       extreme: -6.9 (WORN, REPLACE) and 10 (SHAKY, REPLACE); until 2026-11-16 they were B.randomBets(17), all between
+       -1 and 1. Extreme seed 68 is the first, counting from 1, whose table (1) has no extreme bet in HEALTHY's row (the
+       roulette of scene 260, scenes 220 and 230, the close-up and the softmax aside read that row), (2) has a bet of 5
+       or more and one of -5 or less, (3) has highest bets other than B.BEST (an example never shows the best
+       strategy), (4) ends the 300 updates of tools/proto_movie.js on B.BEST (a big bet on a wrong action stalls the
+       learning: softmax gives that action a chance near 1, and a hop of its bets changes almost nothing), and (5)
+       reads right in the softmax aside with three decimals (every e to the power of a bet above 0.000, every shown
+       sum the sum of its row's shown numbers). The entry is drawn by B.rng(17 * 7919) among the twelve and lands on
+       (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000). Shown with two decimals: average G1 before -172.24, after
+       -170.50, change 1.74, nabla 174, w = 0.40 + 0.01 x 174 = 2.14, average G1 after the update 73.57 (same dice). */
     PROTO: {
       betsSeed: 17,
-      bets: [[0.4, -0.6, 0.1], [-0.7, -0.8, 0.5], [-0.4, 0.1, -0.5], [0.4, 0.6, -0.4]],
+      betsXSeed: 68,
+      bets: [[0.4, -0.6, 0.1], [-0.7, -0.8, -6.9], [-0.4, 0.1, 10], [0.4, 0.6, -0.4]],
       pickSeed: 17 * 7919,
       pick: [HEALTHY, RUN],
       diceSeed: 12,

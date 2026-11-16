@@ -379,7 +379,7 @@ sup { top: -0.55em; }
 .tb-c.fr, .tb-e.fr { border-top: 3px solid var(--ink); }
 .tb-sum { background: var(--box); }
 .tb-in { display: flex; flex-direction: column; align-items: center; gap: 7px; }
-.tb-n { font-size: calc(var(--tb-fs) * var(--fz, 1)); line-height: 1; white-space: nowrap; }
+.tb-n { font-size: calc(var(--tb-fs) * var(--fz, 1) * var(--fit, 1)); line-height: 1; white-space: nowrap; }
 .tb-bar {
   position: relative; width: calc(var(--tb-cw) - 32px); height: var(--tb-bh);
   border: 2px solid var(--ink); background: var(--box); overflow: hidden;
@@ -1639,10 +1639,23 @@ button { font-family: var(--px); }
     return { before, after, change: after - before, nabla: (after - before) / eps, W2 };
   }
 
-  /* Random bets, uniform in [-1, 1], one decimal (the starting table of proto-REINFORCE). */
-  function randomBets(seed) {
+  /* Random bets, one decimal (the starting table of proto-REINFORCE): every bet uniform in [-1, 1], from rng(seed).
+     With a second seed xseed, about one bet in four is extreme instead, between 5 and 10 or between -10 and -5
+     (Carlos, 2026-11-16: "Don't make them all between -1 and 1 ... make them between -10 and 10"): for each bet in
+     turn, row by row, rng(xseed) gives three numbers; the first below 0.25 makes the bet extreme, the second sets its
+     size, 5 + 5 x u, the third its sign, minus below 0.5. */
+  function randomBets(seed, xseed) {
     const r = rng(seed);
-    return [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
+    const W = [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
+    if (xseed === undefined) return W;
+    const x = rng(xseed);
+    for (const row of W) {
+      for (let a = 0; a < 3; a++) {
+        const u = x(), size = x(), sign = x();
+        if (u < 0.25) row[a] = (sign < 0.5 ? -1 : 1) * Math.round((5 + 5 * size) * 10) / 10;
+      }
+    }
+    return W;
   }
 
   const B = {
@@ -1658,13 +1671,21 @@ button { font-family: var(--px); }
     EXAMPLE: [RUN, RUN, RUN, REPLACE],
     /* Try it (section 4, A4a): ten runs, the same dice for every try. */
     TRY: { n: 10, diceSeed: 11 },
-    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17); the entry is
-       drawn by B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000).
-       Shown with two decimals: average G1 before -243.36, after -241.35, change 2.01, nabla 201,
-       w = 0.40 + 0.01 x 201 = 2.41, average G1 after the update -5.20 (same dice). */
+    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17, 68), two of them
+       extreme: -6.9 (WORN, REPLACE) and 10 (SHAKY, REPLACE); until 2026-11-16 they were B.randomBets(17), all between
+       -1 and 1. Extreme seed 68 is the first, counting from 1, whose table (1) has no extreme bet in HEALTHY's row (the
+       roulette of scene 260, scenes 220 and 230, the close-up and the softmax aside read that row), (2) has a bet of 5
+       or more and one of -5 or less, (3) has highest bets other than B.BEST (an example never shows the best
+       strategy), (4) ends the 300 updates of tools/proto_movie.js on B.BEST (a big bet on a wrong action stalls the
+       learning: softmax gives that action a chance near 1, and a hop of its bets changes almost nothing), and (5)
+       reads right in the softmax aside with three decimals (every e to the power of a bet above 0.000, every shown
+       sum the sum of its row's shown numbers). The entry is drawn by B.rng(17 * 7919) among the twelve and lands on
+       (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000). Shown with two decimals: average G1 before -172.24, after
+       -170.50, change 1.74, nabla 174, w = 0.40 + 0.01 x 174 = 2.14, average G1 after the update 73.57 (same dice). */
     PROTO: {
       betsSeed: 17,
-      bets: [[0.4, -0.6, 0.1], [-0.7, -0.8, 0.5], [-0.4, 0.1, -0.5], [0.4, 0.6, -0.4]],
+      betsXSeed: 68,
+      bets: [[0.4, -0.6, 0.1], [-0.7, -0.8, -6.9], [-0.4, 0.1, 10], [0.4, 0.6, -0.4]],
       pickSeed: 17 * 7919,
       pick: [HEALTHY, RUN],
       diceSeed: 12,
@@ -3122,6 +3143,13 @@ button { font-family: var(--px); }
       return s;
     };
   }
+  /* A number longer than LONG characters is drawn smaller so that it stays inside its cell: 22,026.466, e to the power
+     of the bet 10 in the softmax aside, at 7/10 of the table's size (--fit on the number, read by tables.css). */
+  var LONG = 7;
+  function fitN(n, s) {
+    if (s.length > LONG) n.style.setProperty("--fit", (LONG / s.length).toFixed(3));
+    else n.style.removeProperty("--fit");
+  }
   function place(e, row, col) { e.style.gridRow = String(row); e.style.gridColumn = String(col); }
   function isNum(v) { return typeof v === "number" && isFinite(v); }
   function resolved() { return Promise.resolve(); }
@@ -3221,6 +3249,7 @@ button { font-family: var(--px); }
       if (!isNum(v)) {
         vals[s][a] = null;
         c.n.textContent = "";
+        fitN(c.n, "");
         delete c.n.dataset.v;
         barTo(c, 0);
         c.el.classList.add("empty");
@@ -3230,6 +3259,7 @@ button { font-family: var(--px); }
       }
       vals[s][a] = v;
       c.el.classList.remove("empty");
+      fitN(c.n, F(v));
       if (o.now) {
         c.n.textContent = F(v);
         c.n.dataset.v = String(v);
@@ -3297,6 +3327,7 @@ button { font-family: var(--px); }
       }
       sumv[s] = v;
       c.el.classList.remove("empty");
+      fitN(c.n, F(v));
       c.n.textContent = F(v);
       c.n.dataset.v = String(v);
       if (c.bar) {
@@ -4094,9 +4125,10 @@ button { font-family: var(--px); }
    In the browser it is window.S3B (loaded before sec3b.js); in node, require('./sec3b-data.js'), for
    tools/check_tables.js, which asserts every shown number.
 
-   W     the bets of proto-REINFORCE, B.PROTO.bets (= B.randomBets(17)), the table that agent A5 starts from; since
-         2026-11-16 also the table of bets that scene 210 introduces, so one table runs through the page (its highest
-         bets give RUN, REPLACE, SERVICE, SERVICE, a strategy other than B.BEST)
+   W     the bets of proto-REINFORCE, B.PROTO.bets (= B.randomBets(17, 68), between -10 and 10, two of them extreme,
+         -6.9 and 10, since the evening of 2026-11-16), the table that agent A5 starts from; since 2026-11-16 also the
+         table of bets that scene 210 introduces, so one table runs through the page (its highest bets give RUN, RUN,
+         REPLACE, SERVICE, a strategy other than B.BEST)
    READ  the two entries of W that scenes 220 and 230 ring and read out: [state, action], a positive bet and a negative
          one
    P     its probability table, B.softmaxTable(W), shown with 2 decimals
@@ -4677,7 +4709,7 @@ button { font-family: var(--px); }
    means. And then the third one, clarify that you allow negative bets. Then afterwards show how the table of bets
    gives rise to a probabilistic strategy. Then show the table normalize to the softmax. There you include the link
    towards the softmax explanation, but don't explain it there." One table runs through the section: the bets of
-   proto-REINFORCE, S3B.W (B.randomBets(17)).
+   proto-REINFORCE, S3B.W (B.randomBets(17, 68)).
 
    200 card "Bets"
    210 A table of bets (2 beats): why a strategy is written as a table of bets; a row per state, a column per action
@@ -4752,7 +4784,7 @@ button { font-family: var(--px); }
     page: 3, key: "bets-table", order: 210, title: "A table of bets", beats: L210.length,
     build: function (root) {
       var P = this.parts = board(root);
-      P.note.textContent = "Bets picked at random, between -1 and 1.";
+      P.note.textContent = "Bets picked at random, between -10 and 10.";
       P.read.textContent = readOut(D.READ[0]);
       P.read.classList.add("ob-hide");
     },
@@ -5060,11 +5092,11 @@ button { font-family: var(--px); }
 <script>/* sec3c-data.js */
 /* sec3c-data.js: GENERATED by tools/proto_movie.js (agent A5) from game/bessie.js; do not edit by hand.
    Every number of the proto-REINFORCE scenes of page 3 (sec3c.js). In the browser window.S3C; in node a module.
-   tools/check_proto.js recomputes it from bessie.js and asserts it. Seeds: bets B.randomBets(17), picks B.rng(134623),
+   tools/check_proto.js recomputes it from bessie.js and asserts it. Seeds: bets B.randomBets(17, 68), picks B.rng(134623),
    dice B.dice(12, 1000) for rounds 1 and 2, B.dice(2000 + round, 1000) for rounds 3 to 300. */
 (function (root) {
   "use strict";
-  var S3C = {"seeds":{"bets":17,"pick":134623,"dice":12,"movieDiceBase":2000},"n":1000,"eps":0.01,"alpha":0.01,"rounds":300,"W0":[[0.4,-0.6,0.1],[-0.7,-0.8,0.5],[-0.4,0.1,-0.5],[0.4,0.6,-0.4]],"start":-243.36,"hop1":{"s":0,"a":0,"w":0.4,"before":-243.36,"after":-241.35,"change":2.01,"nabla":201,"wNew":2.41,"upd":-5.2},"hop2":{"s":0,"a":2,"w":0.1,"before":-5.2,"after":-5.57,"change":-0.37,"nabla":-37,"wNew":-0.27,"upd":11.08},"W1":[[2.41,-0.6,0.1],[-0.7,-0.8,0.5],[-0.4,0.1,-0.5],[0.4,0.6,-0.4]],"W2":[[2.41,-0.6,-0.27],[-0.7,-0.8,0.5],[-0.4,0.1,-0.5],[0.4,0.6,-0.4]],"g1":{"lo":-1200,"hi":600},"ten":{"W0":[-344,-33,-41,-262,-100,-500,-102,-306,-71,-367],"W0h":[-344,-33,-41,-262,-100,-500,-102,-306,-71,-367],"W1":[-258,63,-279,97,371,-119,72,269,-145,-27],"W1h":[-258,63,-279,97,371,-119,72,269,-145,-27],"W2":[-258,63,-279,97,371,-119,72,269,-73,-27]},"hist":{"bin":100,"max":258},"movie":[[0,0,201,-5.2],[0,2,-37,11.08],[2,2,23,27.59],[0,0,24,27],[3,0,-28,42.11],[2,1,-8,34.41],[2,1,-5,25.22],[2,1,-23,49.92],[3,1,12,34.91],[3,0,-44,45.52],[3,2,0,35.13],[0,1,-11,52.4],[3,0,-40,42.42],[0,2,-22,57.79],[2,0,0,51.29],[1,1,16,54.86],[1,1,9,52.24],[2,1,-15,50.76],[0,1,24,64.21],[3,1,-8,48.28],[2,0,-23,61.16],[0,1,-2,55.72],[0,0,51,71.76],[3,1,0,68.88],[2,1,-24,73.5],[3,0,-24,73.55],[0,1,0,77.88],[1,1,33,81.04],[1,2,11,83.16],[1,1,15,84.33],[0,2,-50,84.57],[0,1,-4,90.7],[1,0,7,90.05],[1,2,-67,105.2],[0,2,0,102.05],[0,0,49,116.13],[3,0,-10,115.05],[1,2,-24,129.74],[2,2,45,141.09],[2,0,-15,130.08],[1,2,-14,140.19],[1,2,-34,143.33],[0,0,12,153.3],[0,0,6,148.91],[1,0,10,150.02],[1,0,-25,145.65],[2,0,7,142.56],[0,2,0,146.65],[0,0,14,141.49],[2,1,-3,147.39],[2,2,15,148.12],[0,0,0,147.61],[3,2,-2,139.82],[3,2,25,147.99],[0,2,-14,150.86],[3,1,-6,146.44],[2,1,-4,160.83],[1,1,23,162.4],[2,1,0,156.61],[3,0,-11,159.17],[0,0,8,159.77],[1,2,40,149.76],[0,2,0,143.37],[1,2,17,153.55],[0,0,9,138.37],[1,1,41,155.06],[3,0,0,153.12],[0,0,0,154.53],[3,1,-2,161.38],[1,1,12,178.32],[1,0,-26,168.95],[0,1,0,161.88],[3,0,-3,160.25],[2,0,-12,171.17],[2,0,4,153.52],[1,2,-18,171.18],[1,2,-32,178.23],[3,1,-2,184.78],[3,0,-11,173.34],[1,2,-44,184.11],[1,0,-16,182.84],[1,1,5,185.03],[2,1,-3,186.04],[0,2,-12,189.98],[0,2,0,187.03],[2,2,31,188.49],[2,2,-1,189.49],[0,1,0,192.48],[2,0,-22,188.41],[3,2,6,191.06],[0,0,0,195.41],[2,1,1,189.53],[1,2,-14,201.74],[2,1,2,188.33],[0,1,0,195.59],[1,1,23,199.39],[0,1,0,198.83],[2,2,-7,193.99],[3,2,24,196.43],[1,1,2,199.01],[1,2,-3,203.35],[1,2,-9,207.44],[1,0,-20,206.1],[1,1,51,211.62],[0,0,9,212.07],[3,2,0,212],[0,2,0,214.75],[0,2,0,211],[1,2,-5,203.77],[3,1,0,217.2],[2,2,-1,208.31],[3,1,0,215.53],[2,0,-15,212.43],[3,1,-23,217.83],[3,1,0,209.64],[0,0,0,216.84],[3,1,0,212.85],[2,0,-4,212.85],[2,1,-5,217.33],[2,0,-1,207.19],[3,1,0,216.18],[2,0,-12,211.85],[2,1,-4,201.5],[2,2,-3,211.86],[3,0,0,211.13],[2,2,14,209.76],[0,1,-10,204.3],[1,2,-4,213.61],[0,2,-2,213],[1,2,1,212.23],[2,0,-23,209.68],[0,1,-5,209.66],[1,2,-7,214.72],[2,2,2,214.68],[3,0,-19,217.78],[2,1,-9,215.91],[3,1,0,209.09],[2,2,0,223.78],[0,0,0,218.25],[1,2,-5,221.07],[1,2,-11,219.32],[0,0,2,221.22],[1,2,-3,219.5],[3,2,7,212.32],[3,1,0,215.6],[1,1,10,217.37],[0,1,0,215.63],[0,1,-13,224.96],[0,0,0,216.47],[0,0,5,210.84],[0,1,0,223.5],[0,2,26,216.53],[0,1,39,212.8],[1,0,0,219.9],[2,0,-3,220.01],[3,1,0,216.31],[2,1,1,211.75],[1,2,-6,217.33],[2,0,-14,220.83],[0,2,12,221.46],[3,2,0,217.84],[1,1,-11,212.57],[1,1,6,219.43],[1,0,0,219.14],[0,1,-13,215.85],[0,2,12,216.7],[2,2,41,221.13],[0,0,7,222.79],[2,0,0,213.35],[1,0,9,217.09],[2,1,0,220.05],[1,1,87,225.43],[1,2,-14,223.41],[0,2,0,226.66],[1,2,0,227.33],[3,1,0,227.99],[0,2,-3,225.3],[3,2,0,235.04],[2,1,2,229.77],[2,1,-2,216.17],[0,2,-14,223.84],[1,0,0,223.88],[1,2,0,215.16],[0,1,-12,226.95],[3,2,0,220.35],[2,2,9,232.41],[1,2,0,221.54],[2,1,5,220.46],[1,2,0,224.66],[1,0,-17,226.64],[1,2,12,218.71],[0,2,-5,224.15],[3,0,0,216.79],[1,0,0,229.93],[3,1,0,218.52],[1,1,0,217.52],[0,1,0,219.54],[1,1,9,226.29],[0,0,0,221.21],[1,0,0,226.25],[0,0,14,227.31],[2,2,0,223.24],[0,2,-3,222.5],[2,0,0,231.56],[1,0,-5,233.94],[2,0,0,227.56],[0,0,3,225.11],[3,1,-2,236.22],[3,0,-11,220.4],[2,0,0,222.58],[3,1,0,228.12],[3,0,0,221.83],[0,2,-9,240.32],[1,2,-4,229.09],[2,2,14,226.54],[3,2,0,235.4],[3,2,18,226.7],[1,2,0,228.1],[2,2,0,225.58],[0,0,12,230.8],[0,2,0,233.1],[2,1,7,227.27],[3,2,8,227.7],[0,0,1,231.73],[0,0,0,226.6],[1,0,10,229.61],[2,1,0,226.43],[0,1,0,228.56],[2,2,22,226.51],[3,2,-2,233.67],[1,2,0,234.28],[0,0,0,221.26],[0,0,14,225.11],[1,1,0,232.97],[3,1,0,228.27],[2,2,0,233.14],[0,2,0,227.2],[2,0,0,229.59],[3,1,0,227.65],[0,0,12,229.26],[1,1,13,229.39],[0,0,3,227.24],[2,0,1,227.65],[2,2,13,231.56],[0,2,0,229.13],[3,0,0,228.91],[1,1,6,231.44],[2,1,-3,240.11],[2,0,0,230.35],[1,2,0,226.16],[1,1,5,230.89],[3,0,-5,233.82],[3,1,0,232.62],[3,0,0,236.43],[2,0,3,229.39],[1,1,-3,235.37],[0,2,0,229.91],[0,0,9,230.78],[2,2,5,228.07],[0,1,0,223.24],[0,1,0,231.59],[1,2,0,230.27],[1,2,0,229.51],[2,0,-3,228.92],[1,0,0,229.64],[3,1,0,230.15],[3,0,0,234.56],[1,0,0,229.46],[2,2,0,231.22],[0,0,0,233.46],[3,1,0,231.45],[1,2,0,238.4],[3,1,-8,226.11],[3,0,0,229.28],[0,0,0,231],[2,2,-7,237.82],[2,1,0,238.67],[1,0,0,240.73],[3,2,9,229.25],[3,2,9,235.18],[0,0,0,235.99],[3,2,0,236.03],[3,2,0,230.91],[3,2,0,229.53],[3,2,0,235.24],[0,1,0,233.75],[2,2,2,230.7],[3,2,0,230.82],[3,1,0,229.46],[2,0,0,230.61],[2,2,-6,239],[1,0,0,236.53],[1,0,-1,233.55],[2,1,0,231.96],[1,2,-4,228.79],[2,0,0,231.91],[3,0,0,232.29],[1,2,-3,232.26],[1,0,-6,240.17],[3,2,6,233.48]],"chart":{"lo":-300,"hi":300},"end":{"W":[[5.05,-0.67,-1.11],[-1.5,2.72,-1.94],[-1.72,-0.8,1.61],[-1.66,0.21,0.68]],"top":[0,1,2,2],"upd":233.48,"best":244.03}};
+  var S3C = {"seeds":{"bets":17,"betsX":68,"pick":134623,"dice":12,"movieDiceBase":2000},"n":1000,"eps":0.01,"alpha":0.01,"rounds":300,"W0":[[0.4,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"start":-172.24,"hop1":{"s":0,"a":0,"w":0.4,"before":-172.24,"after":-170.5,"change":1.74,"nabla":174,"wNew":2.14,"upd":73.57},"hop2":{"s":0,"a":2,"w":0.1,"before":73.57,"after":73.44,"change":-0.13,"nabla":-13,"wNew":-0.03,"upd":80.98},"W1":[[2.14,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"W2":[[2.14,-0.6,-0.03],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"g1":{"lo":-1200,"hi":600},"ten":{"W0":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W0h":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W1":[91,10,-229,198,340,-671,117,370,-14,155],"W1h":[91,10,-229,198,340,-671,117,370,-14,155],"W2":[91,10,-229,236,340,-671,117,370,-14,177]},"hist":{"bin":100,"max":240},"movie":[[0,0,174,73.57],[0,2,-13,80.98],[2,2,0,96.7],[0,0,70,129.52],[3,0,-40,143.85],[2,1,0,137.54],[2,1,-2,134.23],[2,1,0,154.72],[3,1,-7,135.34],[3,0,-56,151.64],[3,2,12,143.97],[0,1,3,156.52],[3,0,-4,148.96],[0,2,-8,155.65],[2,0,0,155.05],[1,1,29,153.69],[1,1,9,153.07],[2,1,0,151.95],[0,1,-10,163.01],[3,1,-10,150.56],[2,0,0,159.12],[0,1,4,148.23],[0,0,3,158.27],[3,1,-6,149.11],[2,1,0,155.3],[3,0,41,155.63],[0,1,-10,165.34],[1,1,45,160.42],[1,2,-7,170.29],[1,1,-16,159.83],[0,2,-3,153.86],[0,1,-14,169.74],[1,0,-24,155.33],[1,2,0,160.44],[0,2,-31,161.31],[0,0,24,175.01],[3,0,-11,183.44],[1,2,0,181.5],[2,2,0,190.74],[2,0,0,183.99],[1,2,0,187.38],[1,2,0,177.53],[0,0,29,197.85],[0,0,12,195.1],[1,0,-1,202.79],[1,0,-16,197.38],[2,0,0,190.06],[0,2,-8,192.69],[0,0,18,199.28],[2,1,0,201.14],[2,2,0,195.51],[0,0,12,197.68],[3,2,13,193.31],[3,2,-2,195.89],[0,2,-4,199.88],[3,1,4,195.88],[2,1,0,213.73],[1,1,-17,196.93],[2,1,0,197.46],[3,0,-10,199.58],[0,0,8,198.41],[1,2,0,196.54],[0,2,0,190.99],[1,2,0,202.22],[0,0,-6,191.48],[1,1,51,204.45],[3,0,5,201.21],[0,0,6,201.8],[3,1,-44,209.94],[1,1,26,223.26],[1,0,19,209.57],[0,1,-12,199.35],[3,0,-11,204.57],[2,0,0,220.1],[2,0,0,206.17],[1,2,0,206.93],[1,2,0,209.15],[3,1,0,215.71],[3,0,0,203.56],[1,2,0,207.15],[1,0,11,203.46],[1,1,34,207.45],[2,1,0,209.37],[0,2,-17,206.51],[0,2,0,208.51],[2,2,0,208.62],[2,2,0,206.52],[0,1,0,205.02],[2,0,0,206.7],[3,2,13,207.08],[0,0,18,214.46],[2,1,0,211.8],[1,2,0,218.29],[2,1,0,208.1],[0,1,0,213.87],[1,1,-6,212.54],[0,1,0,211.34],[2,2,0,205.21],[3,2,0,209.82],[1,1,-5,209.58],[1,2,0,215.68],[1,2,0,215.34],[1,0,6,212.1],[1,1,14,210.79],[0,0,0,211.79],[3,2,39,216.26],[0,2,-16,222.31],[0,2,-22,219.93],[1,2,0,208.21],[3,1,3,223.45],[2,2,0,221.07],[3,1,10,221.34],[2,0,0,214.31],[3,1,-4,221.74],[3,1,1,210.04],[0,0,0,219.85],[3,1,4,221.33],[2,0,0,221.89],[2,1,0,218.31],[2,0,0,215.15],[3,1,0,223.52],[2,0,0,217.62],[2,1,0,205.61],[2,2,0,216],[3,0,0,219.62],[2,2,0,213.61],[0,1,-11,208.69],[1,2,0,220.36],[0,2,-8,214.79],[1,2,0,219.87],[2,0,0,210.35],[0,1,-4,209.04],[1,2,0,221.74],[2,2,0,214.96],[3,0,-18,220.72],[2,1,0,222.28],[3,1,0,211.32],[2,2,0,223.25],[0,0,10,221.98],[1,2,0,219.78],[1,2,0,224.33],[0,0,0,220.5],[1,2,0,222.99],[3,2,24,218.92],[3,1,1,219.04],[1,1,-1,217.67],[0,1,0,217.13],[0,1,-15,222.63],[0,0,5,221.75],[0,0,2,216.45],[0,1,0,227.29],[0,2,-8,221.01],[0,1,0,222.03],[1,0,3,222.18],[2,0,0,221.95],[3,1,-5,220.42],[2,1,0,214.03],[1,2,0,223.18],[2,0,0,223.55],[0,2,-8,228.19],[3,2,38,229.8],[1,1,13,222.96],[1,1,39,229.03],[1,0,11,226.29],[0,1,0,226.37],[0,2,0,225.86],[2,2,0,227.96],[0,0,0,231.75],[2,0,0,222.73],[1,0,-33,227.94],[2,1,0,232.23],[1,1,3,233.43],[1,2,0,227.74],[0,2,-10,231.19],[1,2,0,234.24],[3,1,-22,231.52],[0,2,-7,230.32],[3,2,0,241.86],[2,1,0,235.66],[2,1,0,224.94],[0,2,0,224.23],[1,0,-26,228.56],[1,2,0,223.33],[0,1,0,231.11],[3,2,0,228.47],[2,2,0,234.34],[1,2,0,226.64],[2,1,0,229.39],[1,2,0,229.94],[1,0,-8,229.27],[1,2,0,226.43],[0,2,-1,232.5],[3,0,-7,224.28],[1,0,0,232.63],[3,1,0,223.59],[1,1,13,222.61],[0,1,0,227.54],[1,1,0,231.09],[0,0,0,228.07],[1,0,-1,232.9],[0,0,1,232.88],[2,2,0,229.79],[0,2,0,228.08],[2,0,0,238.29],[1,0,-22,237.68],[2,0,0,230.7],[0,0,4,231.16],[3,1,0,239.42],[3,0,0,225.27],[2,0,0,229.11],[3,1,0,233.8],[3,0,0,230.06],[0,2,-18,247.21],[1,2,0,235.79],[2,2,0,230.1],[3,2,-2,240.67],[3,2,0,229.53],[1,2,0,233.48],[2,2,0,231.3],[0,0,11,233.51],[0,2,0,238.65],[2,1,0,234.03],[3,2,0,230.74],[0,0,0,236.05],[0,0,7,231.86],[1,0,-2,232.69],[2,1,0,232.18],[0,1,-10,232.87],[2,2,0,230.99],[3,2,0,236.96],[1,2,0,237.96],[0,0,0,224.28],[0,0,0,227.61],[1,1,0,235.75],[3,1,-10,233.51],[2,2,0,237.33],[0,2,0,229.63],[2,0,0,233.58],[3,1,0,233.03],[0,0,13,231.96],[1,1,5,232.44],[0,0,12,231.45],[2,0,0,232.34],[2,2,0,235.92],[0,2,0,233.4],[3,0,0,232.45],[1,1,0,232.61],[2,1,0,241.95],[2,0,0,233.29],[1,2,0,232.27],[1,1,0,234.14],[3,0,0,236.08],[3,1,20,232.9],[3,0,0,236.65],[2,0,0,234.64],[1,1,0,237.85],[0,2,0,231.61],[0,0,0,233.2],[2,2,0,230.25],[0,1,0,228.58],[0,1,0,235.18],[1,2,0,233.56],[1,2,0,231.32],[2,0,0,231.75],[1,0,0,233.18],[3,1,0,232.64],[3,0,0,235.05],[1,0,-4,231.5],[2,2,0,233.62],[0,0,0,235.74],[3,1,-11,232.75],[1,2,0,239.94],[3,1,0,230.51],[3,0,0,233.55],[0,0,0,236.74],[2,2,0,240.9],[2,1,0,240.93],[1,0,-10,243.61],[3,2,0,233.48],[3,2,25,239.55],[0,0,0,237.37],[3,2,0,239.95],[3,2,0,234.71],[3,2,0,233.23],[3,2,0,238.1],[0,1,0,236.8],[2,2,0,235.66],[3,2,7,234.95],[3,1,-19,234.14],[2,0,0,232.52],[2,2,0,241.71],[1,0,-1,239.07],[1,0,-20,236.18],[2,1,0,236.09],[1,2,0,235.75],[2,0,0,236.1],[3,0,-7,238.57],[1,2,0,236.22],[1,0,-2,243.57],[3,2,12,239.5]],"chart":{"lo":-200,"hi":300},"end":{"W":[[4.73,-1.39,-1.72],[-1.9,1.56,-6.97],[-0.4,0.08,10],[-0.78,-0.35,1.39]],"top":[0,1,2,2],"upd":239.5,"best":244.03}};
   if (typeof module !== "undefined" && module.exports) module.exports = S3C;
   else root.S3C = S3C;
 })(typeof window !== "undefined" ? window : this);
@@ -5677,10 +5709,10 @@ button { font-family: var(--px); }
    310 The forward pass (6 beats): the bets picked at random; softmax and the probability table; the policy plays
        the runs: ten runs week by week, then the stream of the other 990, counted from 10 to 1,000; each run's G1:
        the ten at the ends of their rows fly to their dots under the histogram, then its bars rise; the average G1:
-       its mark on the histogram, whose number, -$243.36, flies into the average box; the loop back to the bets
+       its mark on the histogram, whose number, -$172.24, flies into the average box; the loop back to the bets
    320 The backward pass (7 beats): the twelve bets light up and one is ringed (HEALTHY, RUN); its bet taken apart,
        Before 0.40; +0.01, After 0.41; softmax with 0.41; the same 1,000 runs played again (the ten under a
-       playhead, the stream), the histogram moves, the mark rolls to -$241.35 and flies into the box After; the
+       playhead, the stream), the histogram moves, the mark rolls to -$170.50 and flies into the box After; the
        four boxes lit together; the diagram fades and the four numbers move to the middle, in the places of agent
        A6's scene 350 (the bet's Before and After on top, the average's below)
 
@@ -6088,12 +6120,12 @@ button { font-family: var(--px); }
 /* sec3c2.js: page 3, proto-REINFORCE after agent A6's close-up (agent A5, 2026-11-14), scenes 400 to 499. The kit
    of the diagram is OB.s3c (sec3c.js); every number comes from sec3c-data.js and every line from sec3c-text.js.
 
-   400 The update (4 beats): the new bet 2.41 flies from the update into the table; softmax gives HEALTHY new
-       chances (RUN 0.87); the same 1,000 runs again (the ten played again under a playhead, the stream, the
-       histogram moves right), the mark of the average goes and the room guesses (Compute); the mark at -$5.20 and
-       its number flies into the box: up, from -$243.36 to -$5.20
+   400 The update (4 beats): the new bet 2.14 flies from the update into the table; softmax gives HEALTHY new
+       chances (RUN 0.84); the same 1,000 runs again (the ten played again under a playhead, the stream, the
+       histogram moves right), the mark of the average goes and the room guesses (Compute); the mark at $73.57 and
+       its number flies into the box: up, from -$172.24 to $73.57
    410 Again (5 beats): another bet picked at random (HEALTHY, REPLACE); its hop, shown faster; nabla and the update,
-       0.10 becomes -0.27; the same runs played again, the histogram and its mark move, the average G1 $11.08 flies
+       0.10 becomes -0.03; the same runs played again, the histogram and its mark move, the average G1 $80.98 flies
        into the box; the loop
    The runs are drawn by OB.s3cRuns (sec3c-runs.js, agent W, 2026-11-16) through the diagram's d.layer, d.runsOn,
    d.g1On, d.markOn and d.flyAvg.
@@ -6430,12 +6462,12 @@ button { font-family: var(--px); }
 
    Every number is shown with two decimals, as B.PROTO's comment says, and every shown number follows from the shown
    numbers before it, worked in hundredths (whole numbers, so the arithmetic is exact):
-     change = after - before            -241.35 - (-243.36) = 2.01
-     nabla  = change / epsilon          2.01 / 0.01 = 201
-     w      = w + alpha x nabla         0.40 + 0.01 x 201 = 0.40 + 2.01 = 2.41
+     change = after - before            -170.50 - (-172.24) = 1.74
+     nabla  = change / epsilon          1.74 / 0.01 = 174
+     w      = w + alpha x nabla         0.40 + 0.01 x 174 = 0.40 + 1.74 = 2.14
    The update climbs (w + alpha nabla): the average G1 has to go up (Carlos, 2026-11-14, "yes!").
 
-   DOLLARS: true writes the averages and their change as money (OB.money: "-$243.36", "$2.01"), as page 2 and Try it
+   DOLLARS: true writes the averages and their change as money (OB.money: "-$172.24", "$1.74"), as page 2 and Try it
    write every G1; nabla, the bets, epsilon and alpha are plain numbers. */
 (function (root) {
   "use strict";
@@ -6459,7 +6491,7 @@ button { font-family: var(--px); }
     if (r < 0) return "-" + body;
     return (sign && r > 0 ? "+" : "") + body;
   }
-  /* A whole number of hundredths as text with two decimals (241 -> "2.41", -24336 -> "-243.36"). */
+  /* A whole number of hundredths as text with two decimals (214 -> "2.14", -17224 -> "-172.24"). */
   function hund(i) { return num(i / 100, 2); }
   /* An average G1 (or its change) as the page writes it. */
   function avg(x, sign) { return DOLLARS ? money(x, 2, sign) : (sign && x > 0 ? "+" : "") + num(x, 2); }
@@ -6473,14 +6505,14 @@ button { font-family: var(--px); }
     w0: Math.round(P.bets[S][A] * 100),            // 40
     eps: Math.round(P.eps * 100),                  // 1
     alpha: Math.round(P.alpha * 100),              // 1
-    before: Math.round(hop.before * 100),          // -24336
-    after: Math.round(hop.after * 100)             // -24135
+    before: Math.round(hop.before * 100),          // -17224
+    after: Math.round(hop.after * 100)             // -17050
   };
   U.w1 = U.w0 + U.eps;                             // 41
-  U.change = U.after - U.before;                   // 201: the change is 2.01
-  var NABLA = U.change / U.eps;                    // 201: 2.01 / 0.01, a whole number since epsilon is one hundredth
-  U.step = U.alpha * NABLA;                        // 201: 0.01 x 201 = 2.01
-  U.wNew = U.w0 + U.step;                          // 241: 0.40 + 2.01 = 2.41
+  U.change = U.after - U.before;                   // 174: the change is 1.74
+  var NABLA = U.change / U.eps;                    // 174: 1.74 / 0.01, a whole number since epsilon is one hundredth
+  U.step = U.alpha * NABLA;                        // 174: 0.01 x 174 = 1.74
+  U.wNew = U.w0 + U.step;                          // 214: 0.40 + 1.74 = 2.14
 
   var V = {                                        // the shown numbers as numbers
     w0: U.w0 / 100, w1: U.w1 / 100, eps: U.eps / 100, alpha: U.alpha / 100,
@@ -6516,14 +6548,14 @@ button { font-family: var(--px); }
        up or down? (the room guesses); Compute: after minus before, $2.01
    360 The triangle of the hop (5 beats), beside the table of 350's four numbers (agent W, 2026-11-16): before and
        after as two points, their numbers flying out of the table; across, 0.41 - 0.40 = 0.01 from the two bets;
-       up, -$241.35 - (-$243.36) = $2.01 from the two averages; nabla = 2.01 / 0.01 as a fraction, its two numbers
-       flying from the sides (the room guesses); Compute: 201. Next from 350's last beat flies 350's four numbers
+       up, -$170.50 - (-$172.24) = $1.74 from the two averages; nabla = 1.74 / 0.01 as a fraction, its two numbers
+       flying from the sides (the room guesses); Compute: 174. Next from 350's last beat flies 350's four numbers
        into the table
    370 The update (2 beats): w = w + alpha nabla, alpha = 0.01; the sign: weekend 2's loss had to go down (minus),
        here the average G1 has to go up (plus)
    380 Why this update (4 beats): a positive nabla raises the bet; a negative one lowers it; a steep slope moves it
        more; alpha keeps each move small
-   390 The update, worked out (3 beats): w = 0.40 + 0.01 x 201 = ? (the room guesses); Compute: 2.41; the new bet
+   390 The update, worked out (3 beats): w = 0.40 + 0.01 x 174 = ? (the room guesses); Compute: 2.14; the new bet
        alone on the screen, for A5's scene 400 */
 (function () {
   "use strict";
@@ -7228,7 +7260,7 @@ button { font-family: var(--px); }
       var P = this.parts, go = live(api, k);
       say(P.lead, L390[k], api);
       if (k === 0) api.nextLabel("Compute");
-      // Beat 0: the question mark. Beat 1: 0.01 x 201 becomes 2.01, then the sum rolls up from the bet now.
+      // Beat 0: the question mark. Beat 1: 0.01 x 174 becomes 1.74, then the sum rolls up from the bet now.
       P.q.classList.toggle("ob-gone", k >= 1);
       P.sum.classList.toggle("ob-gone", k < 1);
       if (k === 1 && go) P.sum.classList.add("ob-hide");
