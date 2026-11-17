@@ -739,7 +739,18 @@ export const weekends: Weekend[] = [
       },
       { time: '12:00', title: 'Coding bazaar', type: 'lab' },
       { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
-      { time: '14:00', title: 'proto-REINFORCE', type: 'exercise' },
+      {
+        time: '14:00',
+        title: 'proto-REINFORCE',
+        type: 'exercise',
+        // Two notebooks of w3-cx-public, built in w3-cx-private 03_proto_reinforce (Carlos, 2026-11-17: notebooks
+        // "for each of the video games we have available except Pokemon. That is last minute pricing. They repair or
+        // replace."): proto-REINFORCE on Old Bessie, which replays page 3, then on Last-Minute Pricing.
+        links: [
+          { label: '1) Old Bessie', url: colab('w3-cx-public', '03_cx_proto_reinforce_1_old_bessie_student.ipynb') },
+          { label: '2) Last-Minute Pricing', url: colab('w3-cx-public', '03_cx_proto_reinforce_2_last_minute_pricing_student.ipynb') },
+        ],
+      },
       { time: '15:00', title: 'REINFORCE with baselines', type: 'lecture' },
       { time: '15:30', title: 'Coffee break at Polysnack, until 16:00', type: 'break' },
       { time: '16:00', title: 'Guest lecture: Alina Dubatovka', type: 'lecture' },
@@ -754,10 +765,13 @@ export const weekends: Weekend[] = [
     resources: [
       { group: 'Lecture slides', label: 'Reinforcement learning', url: SOON },
       { group: 'Coding exercises', label: 'MDPs', url: SOON },
-      { group: 'Coding exercises', label: 'proto-REINFORCE', url: SOON },
+      { group: 'Coding exercises', label: 'proto-REINFORCE: Old Bessie', url: colab('w3-cx-public', '03_cx_proto_reinforce_1_old_bessie_student.ipynb') },
+      { group: 'Coding exercises', label: 'proto-REINFORCE: Last-Minute Pricing', url: colab('w3-cx-public', '03_cx_proto_reinforce_2_last_minute_pricing_student.ipynb') },
       { group: 'Project', label: 'RL vehicle routing: project description', url: SOON },
       { group: 'Project', label: 'RL vehicle routing: Colab notebook', url: SOON },
       // { group: 'Project', label: 'RL vehicle routing: grading scheme', url: SOON },
+      { group: 'CX solutions', label: 'proto-REINFORCE: Old Bessie', url: colab('w3-cx-public', '03_cx_proto_reinforce_1_old_bessie_solutions.ipynb') },
+      { group: 'CX solutions', label: 'proto-REINFORCE: Last-Minute Pricing', url: colab('w3-cx-public', '03_cx_proto_reinforce_2_last_minute_pricing_solutions.ipynb') },
     ],
   },
 ];
