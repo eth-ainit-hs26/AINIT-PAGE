@@ -128,7 +128,8 @@
     mode = m;
     stage.setAttribute("data-mode", m);
     if (window.Music && window.Music.setTrack) {
-      try { window.Music.setTrack(m === "title" ? "title" : m === "tutorial" ? "tutorial" : "boss"); } catch (e) { /* no music */ }
+      /* the end card: the win or loss jingle of js/sfx.js sounds alone first */
+      try { window.Music.setTrack(m, m === "end" ? { gap: 1.4 } : undefined); } catch (e) { /* no music */ }
     }
   }
   if (INSTANT) stage.setAttribute("data-instant", "");

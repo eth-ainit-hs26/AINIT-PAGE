@@ -320,7 +320,7 @@
     chip: synth({ osc: [{ w: "pulse25", g: 1 }], amp: [0.004, 0.3, 0.7, 0.05], level: 0.2 }),
     square: synth({ osc: [{ w: "square", g: 1 }], filter: { f: 5200 }, amp: [0.004, 0.25, 0.65, 0.05], level: 0.14 }),
     robot: synth({ osc: [{ w: "pulse12", g: 1 }, { w: "square", g: 0.35, d: 9 }], filter: { f: 7, to: 3, time: 0.08, track: true, q: 2 },
-      amp: [0.003, 0.18, 0.55, 0.04], level: 0.24 }),
+      amp: [0.003, 0.18, 0.55, 0.04], level: 0.6 }),
     whistle: synth({ osc: [{ w: "sine", g: 1 }, { w: "sine", m: 2, g: 0.05 }, { w: "triangle", m: 1, g: 0.12 }],
       amp: [0.035, 0, 1, 0.09], vib: [5.2, 14, 0.18], level: 0.36 }),
     flute: synth({ osc: [{ w: "sine", g: 1 }, { w: "triangle", g: 0.22 }, { w: "sine", m: 2, g: 0.12 }],
@@ -345,7 +345,7 @@
     upright: synth({ osc: [{ w: "triangle", g: 1 }, { w: "sine", m: 2, g: 0.25 }, { w: "sawtooth", g: 0.12 }], filter: { f: 700, q: 0.6 },
       amp: [0.006, 0.45, 0.3, 0.08], level: 0.5 }),
     synthbass: synth({ osc: [{ w: "sawtooth", g: 1 }, { w: "square", m: 0.5, g: 0.35 }], filter: { f: 10, to: 2.4, time: 0.07, track: true, q: 6 },
-      amp: [0.003, 0.2, 0.6, 0.04], level: 0.26 }),
+      amp: [0.003, 0.2, 0.6, 0.04], level: 0.5 }),
     pad: synth({ osc: [{ w: "sawtooth", g: 0.6, d: -8 }, { w: "sawtooth", g: 0.6, d: 8 }], filter: { f: 1700, q: 0.5 },
       amp: [0.25, 0, 1, 0.45], level: 0.11 }),
     brass: synth({ osc: [{ w: "sawtooth", g: 1 }, { w: "sawtooth", g: 0.7, d: 7 }], filter: { f: 2, to: 5, time: 0.05, track: true, q: 1.5 },
@@ -407,9 +407,9 @@
     o.type = "square";
     o.frequency.setValueAtTime(f, t);
     g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(v * 0.1, t + 0.002);
-    g.gain.setValueAtTime(v * 0.1, t + 0.03);
-    g.gain.linearRampToValueAtTime(0, t + 0.04);
+    g.gain.linearRampToValueAtTime(v * 0.22, t + 0.002);
+    g.gain.setValueAtTime(v * 0.22, t + 0.08);
+    g.gain.linearRampToValueAtTime(0, t + 0.1);
     o.connect(g);
     g.connect(out);
     o.start(t);
