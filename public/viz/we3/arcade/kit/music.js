@@ -2,8 +2,8 @@
    No audio files and nothing from the network. Old Bessie, ANYmal and Last-Minute Pricing load it, and each game
    writes its own songs in its js/tracks.js with Music.define. The battle game keeps rl-arcade's js/music.js.
 
-   A song:
-     { bpm: 120, swing: 0.58, intro: 1,
+   A song (gain scales the whole song, 1 when left out):
+     { bpm: 120, swing: 0.58, intro: 1, gain: 1,
        voices: { lead: { inst: "harmonica", gain: 0.9, pan: 0.1, rev: 0.25 },
                  bass: { inst: "bass", range: "E2 D3", pat: "B - . . F - . ." }, ... },
        bars: [ { c: "G", lead: "B4 - A4 G4 - B4 D5 -", bass: "G2 - . . A2 - B2 -" }, ... ] }
@@ -130,7 +130,7 @@
     var loopFrom = intro * bpb, loopIdx = events.length;
     for (var i = 0; i < events.length; i++) if (events[i].beat >= loopFrom - 1e-9) { loopIdx = i; break; }
     built[key] = {
-      key: key, bpm: s.bpm, swing: s.swing || 0.5, bpb: bpb, len: s.bars.length * bpb, loopFrom: loopFrom,
+      key: key, bpm: s.bpm, swing: s.swing || 0.5, gain: s.gain || 1, bpb: bpb, len: s.bars.length * bpb, loopFrom: loopFrom,
       loopIdx: loopIdx, events: events, voices: s.voices, chords: chords
     };
     return built[key];
@@ -336,14 +336,14 @@
     marimba: synth({ osc: [{ w: "sine", g: 1, dec: 0.28 }, { w: "sine", m: 4, g: 0.22, dec: 0.04 }, { w: "sine", m: 10, g: 0.05, dec: 0.01 }],
       amp: [0.002, 0, 1, 0.08], level: 0.5 }),
     vibes: synth({ osc: [{ w: "sine", g: 1, dec: 0.9 }, { w: "sine", m: 4, g: 0.14, dec: 0.22 }, { w: "sine", m: 3, g: 0.04, dec: 0.1 }],
-      amp: [0.002, 0, 1, 0.25], trem: [5, 0.22], level: 0.42 }),
+      amp: [0.002, 0, 1, 0.25], trem: [5, 0.22], level: 0.65 }),
     bell: synth({ osc: [{ w: "sine", g: 1, dec: 1.2 }, { w: "sine", m: 2.01, g: 0.45, dec: 0.6 }, { w: "sine", m: 3, g: 0.22, dec: 0.35 },
       { w: "sine", m: 4.17, g: 0.12, dec: 0.18 }], amp: [0.002, 0, 1, 0.6], level: 0.32 }),
     organ: synth({ osc: [{ w: "organ", g: 1 }], amp: [0.006, 0, 1, 0.05], level: 0.15 }),
     bass: synth({ osc: [{ w: "square", g: 0.55 }, { w: "triangle", g: 1 }], filter: { f: 900, q: 0.8 },
       amp: [0.004, 0.3, 0.55, 0.05], level: 0.3 }),
     upright: synth({ osc: [{ w: "triangle", g: 1 }, { w: "sine", m: 2, g: 0.25 }, { w: "sawtooth", g: 0.12 }], filter: { f: 700, q: 0.6 },
-      amp: [0.006, 0.45, 0.3, 0.08], level: 0.55 }),
+      amp: [0.006, 0.45, 0.3, 0.08], level: 0.5 }),
     synthbass: synth({ osc: [{ w: "sawtooth", g: 1 }, { w: "square", m: 0.5, g: 0.35 }], filter: { f: 10, to: 2.4, time: 0.07, track: true, q: 6 },
       amp: [0.003, 0.2, 0.6, 0.04], level: 0.26 }),
     pad: synth({ osc: [{ w: "sawtooth", g: 0.6, d: -8 }, { w: "sawtooth", g: 0.6, d: 8 }], filter: { f: 1700, q: 0.5 },
@@ -391,12 +391,12 @@
       [0, 0.011, 0.022].forEach(function (d) { hit(E, o, t + d, v, 1300, "bandpass", 1.1, 0.45, 0.006); });
       hit(E, o, t + 0.03, v, 1300, "bandpass", 1.1, 0.4, 0.05);
     },
-    r: function (E, o, t, v) { thump(E, o, t, v, 1750, 1650, 0.02, 0.3, 0.012, "triangle"); hit(E, o, t, v, 3500, "bandpass", 1.5, 0.22, 0.006); },
-    z: function (E, o, t, v) { hit(E, o, t, v, 6500, "bandpass", 0.9, 0.2, 0.03, 0.012); },
+    r: function (E, o, t, v) { thump(E, o, t, v, 1750, 1650, 0.02, 0.5, 0.012, "triangle"); hit(E, o, t, v, 3500, "bandpass", 1.5, 0.35, 0.006); },
+    z: function (E, o, t, v) { hit(E, o, t, v, 6500, "bandpass", 0.9, 0.5, 0.03, 0.012); },
     t: function (E, o, t, v) { thump(E, o, t, v, 170, 95, 0.18, 0.7, 0.12); },
     u: function (E, o, t, v) { thump(E, o, t, v, 260, 160, 0.15, 0.6, 0.1); },
-    w: function (E, o, t, v) { thump(E, o, t, v, 1200, 1150, 0.02, 0.42, 0.02); thump(E, o, t, v, 2600, 2500, 0.01, 0.1, 0.008); },
-    v: function (E, o, t, v) { thump(E, o, t, v, 820, 790, 0.02, 0.42, 0.025); },
+    w: function (E, o, t, v) { thump(E, o, t, v, 1200, 1150, 0.02, 0.6, 0.02); thump(E, o, t, v, 2600, 2500, 0.01, 0.15, 0.008); },
+    v: function (E, o, t, v) { thump(E, o, t, v, 820, 790, 0.02, 0.6, 0.025); },
     b: function (E, o, t, v) { hit(E, o, t, v, 3800, "bandpass", 0.5, 0.7, 0.07, 0.02); },
     x: function (E, o, t, v) { hit(E, o, t, v, 5500, "highpass", 0.5, 0.18, 0.45); },
     p: function (E, o, t, v) { blip(E, o, t, v, 1568); },
@@ -430,7 +430,7 @@
     [I.bus, I.wet].forEach(function (g) {
       g.gain.setValueAtTime(0, Math.max(0, c.currentTime));
       g.gain.setValueAtTime(0, when);
-      g.gain.linearRampToValueAtTime(1, when + 0.08);
+      g.gain.linearRampToValueAtTime(S.gain, when + 0.08);
     });
     I.bus.connect(E.mix);
     I.wet.connect(E.revIn);
