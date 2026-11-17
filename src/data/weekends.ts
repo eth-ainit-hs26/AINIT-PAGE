@@ -743,7 +743,7 @@ export const weekends: Weekend[] = [
         time: '14:00',
         title: 'proto-REINFORCE',
         type: 'exercise',
-        // Two notebooks of w3-cx-public, built in w3-cx-private 03_proto_reinforce (Carlos, 2026-11-17: notebooks
+        // The proto-REINFORCE notebooks of w3-cx-public, each game in three parts,, built in w3-cx-private 03_proto_reinforce (Carlos, 2026-11-17: notebooks
         // "for each of the video games we have available except Pokemon. That is last minute pricing. They repair or
         // replace."): proto-REINFORCE on Old Bessie, which replays page 3, then on Last-Minute Pricing.
         links: [
@@ -752,7 +752,9 @@ export const weekends: Weekend[] = [
           { label: '1) Old Bessie, runs and cumulative rewards', url: colab('w3-cx-public', '03_cx_proto_reinforce_1a_old_bessie_runs_and_cumulative_rewards_student.ipynb') },
           { label: '2) Old Bessie, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1b_old_bessie_forward_pass_student.ipynb') },
           { label: '3) Old Bessie, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1c_old_bessie_backward_pass_student.ipynb') },
-          { label: '4) Last-Minute Pricing', url: colab('w3-cx-public', '03_cx_proto_reinforce_2_last_minute_pricing_student.ipynb') },
+          { label: '4) Last-Minute Pricing, runs and cumulative rewards', url: colab('w3-cx-public', '03_cx_proto_reinforce_2a_last_minute_pricing_runs_and_cumulative_rewards_student.ipynb') },
+          { label: '5) Last-Minute Pricing, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2b_last_minute_pricing_forward_pass_student.ipynb') },
+          { label: '6) Last-Minute Pricing, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2c_last_minute_pricing_backward_pass_student.ipynb') },
         ],
       },
       { time: '15:00', title: 'REINFORCE with baselines', type: 'lecture' },
@@ -772,14 +774,18 @@ export const weekends: Weekend[] = [
       { group: 'Coding exercises', label: 'proto-REINFORCE: Old Bessie, runs and cumulative rewards', url: colab('w3-cx-public', '03_cx_proto_reinforce_1a_old_bessie_runs_and_cumulative_rewards_student.ipynb') },
       { group: 'Coding exercises', label: 'proto-REINFORCE: Old Bessie, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1b_old_bessie_forward_pass_student.ipynb') },
       { group: 'Coding exercises', label: 'proto-REINFORCE: Old Bessie, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1c_old_bessie_backward_pass_student.ipynb') },
-      { group: 'Coding exercises', label: 'proto-REINFORCE: Last-Minute Pricing', url: colab('w3-cx-public', '03_cx_proto_reinforce_2_last_minute_pricing_student.ipynb') },
+      { group: 'Coding exercises', label: 'proto-REINFORCE: Last-Minute Pricing, runs and cumulative rewards', url: colab('w3-cx-public', '03_cx_proto_reinforce_2a_last_minute_pricing_runs_and_cumulative_rewards_student.ipynb') },
+      { group: 'Coding exercises', label: 'proto-REINFORCE: Last-Minute Pricing, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2b_last_minute_pricing_forward_pass_student.ipynb') },
+      { group: 'Coding exercises', label: 'proto-REINFORCE: Last-Minute Pricing, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2c_last_minute_pricing_backward_pass_student.ipynb') },
       { group: 'Project', label: 'RL vehicle routing: project description', url: SOON },
       { group: 'Project', label: 'RL vehicle routing: Colab notebook', url: SOON },
       // { group: 'Project', label: 'RL vehicle routing: grading scheme', url: SOON },
       { group: 'CX solutions', label: 'proto-REINFORCE: Old Bessie, runs and cumulative rewards', url: colab('w3-cx-public', '03_cx_proto_reinforce_1a_old_bessie_runs_and_cumulative_rewards_solutions.ipynb') },
       { group: 'CX solutions', label: 'proto-REINFORCE: Old Bessie, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1b_old_bessie_forward_pass_solutions.ipynb') },
       { group: 'CX solutions', label: 'proto-REINFORCE: Old Bessie, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1c_old_bessie_backward_pass_solutions.ipynb') },
-      { group: 'CX solutions', label: 'proto-REINFORCE: Last-Minute Pricing', url: colab('w3-cx-public', '03_cx_proto_reinforce_2_last_minute_pricing_solutions.ipynb') },
+      { group: 'CX solutions', label: 'proto-REINFORCE: Last-Minute Pricing, runs and cumulative rewards', url: colab('w3-cx-public', '03_cx_proto_reinforce_2a_last_minute_pricing_runs_and_cumulative_rewards_solutions.ipynb') },
+      { group: 'CX solutions', label: 'proto-REINFORCE: Last-Minute Pricing, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2b_last_minute_pricing_forward_pass_solutions.ipynb') },
+      { group: 'CX solutions', label: 'proto-REINFORCE: Last-Minute Pricing, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2c_last_minute_pricing_backward_pass_solutions.ipynb') },
     ],
   },
 ];
