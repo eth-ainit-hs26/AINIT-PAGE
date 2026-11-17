@@ -287,7 +287,7 @@ sup { top: -0.55em; }
 .ob-symbox { display: inline-block; line-height: 1; }
 </style>
 <style>/* runs.css */
-/* runs.css: the run symbol (agent A3, 2026-11-14), OB.runs in runs.js. Classes start with runs-. */
+/* runs.css: the episode symbol (agent A3, 2026-11-14), OB.runs in runs.js. Classes start with runs-. */
 
 .runs-block { --rc: calc(18px + 8px * var(--tx)); display: inline-flex; flex-direction: column; gap: 3px; }
 .runs-row { display: flex; align-items: center; gap: calc(6px * var(--tx)); }
@@ -311,7 +311,7 @@ sup { top: -0.55em; }
 .runs-g1 { min-width: 6.2em; text-align: right; font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1; white-space: nowrap; flex: 0 0 auto; }
 .runs-g1h { color: var(--ink); }
 
-/* Compact: one thin line per run. */
+/* Compact: one thin line per episode. */
 .runs-block.compact { flex-direction: row; align-items: stretch; gap: 8px; }
 .runs-canvas, .runs-g1col { display: block; image-rendering: pixelated; border: 2px solid var(--ink); background: var(--box); box-sizing: content-box; }
 .runs-canvas.blend, .runs-g1col.blend { image-rendering: auto; }
@@ -333,8 +333,9 @@ sup { top: -0.55em; }
 }
 </style>
 <style>/* tables.css */
-/* tables.css: the bets table W, the probability table and a strategy's column (agent A4b; tables.js has the API).
-   Classes start with tb-. Tables are plain px (they keep their size on large screens); a phone gets smaller cells.
+/* tables.css: the table of preferences theta, the probability table and a policy's column (agent A4b; tables.js has the
+   API). Classes start with tb-. Tables are plain px (they keep their size on large screens); a phone gets smaller
+   cells.
    Sizes: --tb-cw cell width, --tb-rh row height, --tb-hw width of the vans, --tb-hh height of the action heads,
    --tb-fs number size, --tb-sw and --tb-sg the sum column and its gap, --tb-ew a column entry's width. */
 
@@ -435,8 +436,8 @@ sup { top: -0.55em; }
 <style>/* sec3a.css */
 /* sec3a.css: page 3, "Try it", scenes 100 to 199 (agent A4a, 2026-11-14; the what-if of beat 5 by agent U,
    2026-11-16); sec3a.js has the scenes. Classes s3a-.
-   Beats 1 to 4 on a desk: the sketch's row, the column, its runs, their average; Done under the column. A phone stacks
-   them, the keypad under the column.
+   Beats 1 to 4 on a desk: the sketch's row, the column, its episodes, their average; Done under the column. A phone
+   stacks them, the keypad under the column.
    Beat 5 on a desk: the column, BEFORE and AFTER in a row; under the column the menu of the picked state, under BEFORE
    and AFTER the two averages with the arrow of the change, Keep and Leave beside them. Below 1040 px: the column and
    the menu side by side, the averages, then BEFORE and AFTER one under the other (the page may scroll). */
@@ -471,7 +472,8 @@ sup { top: -0.55em; }
 /* The head is drawn by its borders alone: a background (skin.css gives the arrow and its head one) would fill it. */
 .s3a-dia .s3a-arr::after { background-color: transparent; }
 
-/* The runs: the block of runs.js with smaller cells and G1 slots wide enough for "-$1,376"; a dashed frame over it. */
+/* The episodes: the block of runs.js with smaller cells and G1 slots wide enough for "-$1,376"; a dashed frame over
+   it. */
 .s3a-hold { position: relative; }
 .s3a-hold .runs-block { --rc: calc(13px + 6px * var(--tx)); }
 .s3a-hold .runs-g1 { min-width: 7.2em; }
@@ -536,7 +538,7 @@ sup { top: -0.55em; }
 }
 .s3a-mkey:disabled { cursor: default; }
 
-/* BEFORE and AFTER: a head (caption, the picked state and its action), then the ten runs. */
+/* BEFORE and AFTER: a head (caption, the picked state and its action), then the ten episodes. */
 .s3a-side { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 14px 12px; }
 .s3a-shead { display: flex; align-items: center; gap: 8px; min-height: calc(calc(11px * var(--fz, 1)) * 2.1); }
 .s3a-scap, .s3a-gcap {
@@ -635,7 +637,7 @@ sup { top: -0.55em; }
 .s3p-lead { min-height: 2.8em; display: flex; align-items: center; justify-content: center; }
 .s3p-lead > span { display: block; }
 
-/* The table on the left, the bar of HEALTHY's chances on the right, its top level with HEALTHY's row (desks). */
+/* The table on the left, the bar of HEALTHY's probabilities on the right, its top level with HEALTHY's row (desks). */
 .s3p-wrap { --s3p-L: 520px; display: flex; align-items: flex-start; justify-content: center; gap: 64px; }
 .s3p-right { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; width: calc(var(--s3p-L) + 24px); max-width: 100%; }
 @media (min-width: 761px) { .s3p-wrap.s3p-k0 .s3p-right { display: none; } }
@@ -643,7 +645,7 @@ sup { top: -0.55em; }
   font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1)); }
 .s3p-right > .s3p-cap { height: 24px; display: flex; align-items: flex-end; justify-content: center; }
 
-/* The bar: three segments, each as long as its chance, 2 px apart on the stage (no track: the segments land in
+/* The bar: three segments, each as long as its probability, 2 px apart on the stage (no track: the segments land in
    empty space and become the bar); the pin is two pointers, one above the bar and one below it. */
 .s3p-barbox { position: relative; width: var(--s3p-L); max-width: 100%; padding-top: 26px; }
 .s3p-bar { position: relative; height: 56px; }
@@ -720,7 +722,7 @@ sup { top: -0.55em; }
 }
 </style>
 <style>/* sec3b.css */
-/* sec3b.css: page 3, bets and softmax (agent A4b), scenes 200 to 299. Classes start with s3b-. Words scale with
+/* sec3b.css: page 3, preferences and softmax (agent A4b), scenes 200 to 299. Classes start with s3b-. Words scale with
    --tx (core.css); tables, rulers and pictures are plain px. */
 
 /* The lead line keeps two lines of room, so the pictures below it stay put from beat to beat. */
@@ -738,7 +740,7 @@ sup { top: -0.55em; }
 /* 250. The button that opens the aside "How softmax works, and why" (core.js, OB.openAside). */
 .s3b-how { margin-top: calc(22px * var(--tx)); font-size: calc(calc(12px * var(--tx)) * var(--fz, 1)); }
 
-/* The ruler of chances with a pin, the six draws and the counts of 100: scene 240 "The policy" until 2026-11-16,
+/* The ruler of probabilities with a pin, the six draws and the counts of 100: scene 240 "The policy" until 2026-11-16,
    kept for agent V's scene 260 (sec3b-policy.js), which may reuse them. */
 .s3b-pol { display: flex; align-items: center; justify-content: center; gap: calc(30px * var(--tx)); }
 .s3b-dpanel { display: flex; flex-direction: column; align-items: center; gap: 14px; }
@@ -797,7 +799,7 @@ sup { top: -0.55em; }
 }
 </style>
 <style>/* sec3c-runs.css */
-/* sec3c-runs.css: the runs of the proto-REINFORCE diagram (agent W, 2026-11-16), OB.s3cRuns in sec3c-runs.js.
+/* sec3c-runs.css: the episodes of the proto-REINFORCE diagram (agent W, 2026-11-16), OB.s3cRuns in sec3c-runs.js.
    Classes start with s3c-. The ten rows are OB.runs rows (runs.css, skin.css) with a smaller cell; the stack of
    cards behind them, the stream of strips, the histogram of G1 and the mark of the average are plain HTML and SVG.
    Sizes in px, words with --tx (core.css); the histogram's geometry is fixed in sec3c-runs.js (180 x 158 px). */
@@ -823,7 +825,7 @@ sup { top: -0.55em; }
 .s3c-streams { position: absolute; left: 0; top: 0; width: 0; height: 0; overflow: visible; z-index: 1; pointer-events: none; }
 .s3c-strip { position: absolute; left: 0; top: 0; width: 20px; height: 5px; border-radius: 1px; box-shadow: 0 0 0 1px #FFFFFF; }
 
-/* The histogram of the 1,000 G1s and the mark of the average. */
+/* The histogram of the 1,000 returns and the mark of the average. */
 .s3c-hist { position: relative; width: 180px; height: 158px; }
 .s3c-hsvg { display: block; overflow: visible; }
 .s3c-hbar.loss { fill: var(--loss); fill-opacity: 0.8; }
@@ -844,8 +846,9 @@ sup { top: -0.55em; }
 /* sec3c.css: page 3, proto-REINFORCE (agent A5, 2026-11-14), scenes 300 to 349 and 400 to 499. Classes start with
    s3c-. Words scale with --tx (core.css); tables, canvases, boxes of numbers and the chart are plain px.
 
-   The diagram of sketch page 25 is one grid. From 1120 px wide: the bets and the probability table on top with the
-   Before and After of one bet on their right; the runs, their G1, the average G1 and its After below. Below 1120 px
+   The diagram of sketch page 25 is one grid. From 1120 px wide: the preferences and the probability table on top
+   with the Before and After of one preference on their right; the episodes, their returns, the average return and
+   its After below. Below 1120 px
    it stacks in two columns (a phone may scroll). The loop runs above the diagram and down its right side, so the grid
    keeps room for it (padding top and right). */
 
@@ -874,13 +877,14 @@ sup { top: -0.55em; }
 .s3c-cell { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
 .s3c-cap { font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); line-height: calc(1.5 * var(--lh, 1)); color: var(--ink2); letter-spacing: 0.06em; text-align: center; white-space: nowrap; }
 
-/* The runs: n and a brace beside the ten rows on their stack (sec3c-runs.js and .css); the histogram of G1. */
+/* The episodes: n and a brace beside the ten rows on their stack (sec3c-runs.js and .css); the histogram of the
+   returns. */
 .s3c-rbox { display: flex; align-items: center; gap: 4px; }
 .s3c-n { font-size: calc(calc(12px * var(--tx)) * var(--fz, 1)); line-height: 1; padding-right: 2px; }
 .s3c-brace { display: block; width: 14px; height: calc(var(--s3c-h) - 12px); overflow: visible; align-self: flex-start; }
 .s3c-brace polyline { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linejoin: miter; }
 
-/* The boxes of numbers, of the make of tables.js's zoomed cell: a bet Before and After, the average G1. */
+/* The boxes of numbers, of the make of tables.js's zoomed cell: a preference Before and After, the average return. */
 .s3c-ab, .s3c-aa { height: calc(var(--s3c-h) + 4px); justify-content: center; }
 .s3c-zb, .s3c-za { height: calc(5 * var(--s3c-rh)); justify-content: center; }
 .s3c-dia .tb-zoom { padding: 8px 12px 10px; gap: 6px; }
@@ -905,7 +909,7 @@ sup { top: -0.55em; }
 .s3c-new { background: var(--yellow); padding: 0 0.2em; }
 @media (max-width: 1119px) { .s3c-upd { grid-row: auto; grid-column: auto; grid-area: zb / zb / za / za; } }
 
-/* The loop: an arrow from the average G1 back to the bets, above the diagram and down its right side. */
+/* The loop: an arrow from the average return back to the preferences, above the diagram and down its right side. */
 .s3c-loop { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 4; }
 .s3c-loop polyline { fill: none; stroke: var(--ink); stroke-width: 4; stroke-linecap: square; stroke-linejoin: miter; }
 .s3c-loop polygon { fill: var(--ink); }
@@ -922,9 +926,9 @@ sup { top: -0.55em; }
 }
 .s3c-fbox { min-width: 230px; }
 
-/* The reward plot and the movie (scenes 410 and 420, main session, 2026-11-16, evening): the whole diagram of one
+/* The learning curve and the movie (scenes 410 and 420, main session, 2026-11-16, evening): the whole diagram of one
    update (s3c-mvd), the panel of its backward pass and its update (hop) where scene 400 writes the update, and the
-   reward plot (plot) beside the average G1. The cells aa, zb and za are not used. */
+   learning curve (plot) beside the average return. The cells aa, zb and za are not used. */
 .s3c-dia.s3c-mvd { padding: 12px 0 0 0; grid-template-areas: "bets prob" "runs g1" "ab plot" "hop hop"; }
 .s3c-mvd > .s3c-aa, .s3c-mvd > .s3c-zb, .s3c-mvd > .s3c-za { display: none; }
 @media (min-width: 1120px) {
@@ -1013,7 +1017,7 @@ sup { top: -0.55em; }
 /* A piece of arithmetic kept on one line: an inline block, so that the line breaks before it when it does not fit. */
 .s3d-nw { display: inline-block; white-space: nowrap; }
 
-/* 350. Before and after: the bet's row on top, the average's below; an arrow between each before and after. */
+/* 350. Before and after: the preference's row on top, the average's below; an arrow between each before and after. */
 .s3d-ba {
   display: grid; grid-template-columns: auto minmax(150px, 220px) auto;
   row-gap: calc(18px * var(--tx)); align-items: center; justify-items: center;
@@ -1087,8 +1091,8 @@ sup { top: -0.55em; }
 .s3d-new { outline: 4px solid var(--yellow); outline-offset: 3px; }
 
 /* 380. Why this update: four cards in a row, each a small copy of 360's triangle of the hop (the axes and their names,
-   BEFORE and AFTER, the tinted right triangle, the words of its sides, its slope) over the line of the bet and its
-   move, then two short lines. The picture is an SVG board: its words and strokes are in the units of its viewBox,
+   BEFORE and AFTER, the tinted right triangle, the words of its sides, its slope) over the line of the preference and
+   its move, then two short lines. The picture is an SVG board: its words and strokes are in the units of its viewBox,
    plain px on a desk, and shrink with it. Colours, strokes and faces as on 360's plot in the look Grand Prix. */
 .s3d-whys {
   display: grid; grid-template-columns: repeat(4, minmax(0, 256px)); justify-content: center; align-items: stretch;
@@ -1123,7 +1127,7 @@ sup { top: -0.55em; }
 .s3d-wc { font-size: calc(calc(12px * var(--tx)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1)); white-space: nowrap; }
 .s3d-we { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1)); color: var(--ink2); letter-spacing: 0.06em; white-space: nowrap; }
 
-/* 390. The update worked out, the equals signs one under the other; then the new bet alone in the same place. */
+/* 390. The update worked out, the equals signs one under the other; then the new preference alone in the same place. */
 .s3d-stack { display: grid; justify-items: center; align-items: center; }
 .s3d-stack > * { grid-area: 1 / 1; }
 .s3d-work {
@@ -1168,6 +1172,8 @@ sup { top: -0.55em; }
    the nabla of the triangle and the G1 of the axis title. */
 .s3d-tex { font-family: KaTeX_Main, "Times New Roman", serif; font-weight: 400; font-style: normal; letter-spacing: normal; }
 .s3d-tex.s3d-tmath { font-family: KaTeX_Math, "Times New Roman", serif; font-style: italic; font-size: calc(var(--tex, 1.12) * 1em); }
+/* The macron of G bar 1 in the SVG titles (gBar in sec3d.js): KaTeX_Main, at the size of the G. */
+.s3d-tex.s3d-tbar { font-size: calc(var(--tex, 1.12) * 1em); }
 
 /* 360 since 2026-11-16 (agent W): the table of 350's four numbers beside the plot, the subtractions written on the
    sides of the triangle (HTML laid over the SVG, sized with it by --s3d-k), nabla as a fraction; the copy of 350
@@ -1370,7 +1376,7 @@ button { font-family: var(--px); }
 .s1-roll { border: 1.5px dashed #AEB4BE; }
 .s1-out1 .count b { font-weight: 700; }
 
-/* Runs: a timing strip per run. */
+/* Episodes (runs.js): a timing strip per episode. */
 .runs-cells { border: 0; background: #FFFFFF; gap: 2px; padding: 2px; }
 .runs-cell { color: rgba(15, 17, 22, 0.72); border-radius: 1px; }
 .runs-canvas, .runs-g1col { border: 0; outline: 1px solid var(--line); }
@@ -1506,15 +1512,20 @@ button { font-family: var(--px); }
 /* bessie.js: Old Bessie, the MDP of weekend 3's visualization, shared by every section.
 
    The model is the FS26 arcade's van, rl-arcade/repair-or-replace/js/van.js (commit 05dea09), unchanged:
-   four states of wear, three actions, the same money and the same chances. In the browser it is window.B;
-   in node, require('./bessie.js'). tools/check_bessie.js asserts every number the pages rely on.
+   four states of wear, three actions, the same money and the same transition probabilities. In the browser it is
+   window.B; in node, require('./bessie.js'). tools/check_bessie.js asserts every number the pages rely on.
 
-   A run is one quarter, WEEKS = 13 weeks, from HEALTHY. Its cumulative reward is
-   G1 = r1 + GAMMA r2 + GAMMA^2 r3 + ... + GAMMA^12 r13, GAMMA = 0.9.
+   Words (TERMINOLOGY.md, since 2026-11-17): the names below keep the words of 2026-11-14 (playRun, avgG1, randomBets,
+   PROTO.bets); in the pages and these comments a run is an episode, a bet an action preference, a strict policy a
+   deterministic policy, a cumulative reward the return.
 
-   Dice. Every week of a run uses exactly two random numbers from B.dice: the first picks the action (unused by a
-   strict policy, but always spent), the second the outcome of the transition dynamics. Two policies played on the
-   same dice therefore meet the same luck, and a change in their averages comes from the policies alone. */
+   An episode is one quarter, WEEKS = 13 weeks, from HEALTHY. Its return is
+   G1 = r1 + GAMMA r2 + GAMMA^2 r3 + ... + GAMMA^12 r13, GAMMA = 0.9 (the discount factor).
+
+   Dice. Every week of an episode uses exactly two random numbers from B.dice: the first picks the action (unused by
+   a deterministic policy, but always spent), the second the outcome of the transition dynamics. Two policies
+   followed on the same dice therefore meet the same luck, and a change in their averages comes from the policies
+   alone. */
 (function (root) {
   'use strict';
 
@@ -1524,7 +1535,7 @@ button { font-family: var(--px); }
   const RUN = 0, SERVICE = 1, REPLACE = 2;
 
   const REV_RUN = [95, 72, 40, 16];          // RUN: the week's profit, by wear
-  const P_BD = [0.02, 0.08, 0.28, 0.55];     // RUN: chance of a breakdown, by wear
+  const P_BD = [0.02, 0.08, 0.28, 0.55];     // RUN: probability of a breakdown, by wear
   const BREAKDOWN_COST = 280;                // on top of the profit; the van ends FAILING
   const DEGR = [                             // RUN without a breakdown: wears 0, 1 or 2 levels
     [0.35, 0.55, 0.10],
@@ -1546,7 +1557,7 @@ button { font-family: var(--px); }
 
   /* The transition dynamics of state s and action a: every outcome, in a fixed order, as
      {p, next, reward, face}. face as in the arcade's van.js: 'breakdown', 'wear0' to 'wear2' (RUN),
-     'fix0' to 'fix2' (SERVICE), 'new' (REPLACE). Outcomes with no chance are left out; two outcomes that land
+     'fix0' to 'fix2' (SERVICE), 'new' (REPLACE). Outcomes of probability 0 are left out; two outcomes that land
      in the same state with the same reward stay apart (they differ in what happened). */
   function outcomes(s, a) {
     const out = [];
@@ -1589,7 +1600,7 @@ button { font-family: var(--px); }
     };
   }
 
-  /* The dice of n runs: n * weeks * 2 numbers, run by run, week by week, (action, transition). */
+  /* The dice of n episodes: n * weeks * 2 numbers, episode by episode, week by week, (action, transition). */
   function dice(seed, n, weeks) {
     weeks = weeks || WEEKS;
     const r = rng(seed);
@@ -1601,7 +1612,8 @@ button { font-family: var(--px); }
   }
 
   /* The action a policy takes in state s with the random number u. A policy is either a column of four actions
-     (a strict policy, one action per state) or a table of four rows of three probabilities. */
+     (a deterministic policy, one action per state) or a table of four rows of three probabilities (a stochastic
+     policy). */
   function act(policy, s, u) {
     const row = policy[s];
     if (typeof row === 'number') return row;
@@ -1613,7 +1625,8 @@ button { font-family: var(--px); }
     return 2;
   }
 
-  /* Run i of the dice: states S1..S13 (and the state after the last week), actions, rewards, faces, G1. */
+  /* Episode i of the dice: states S1..S13 (and the state after the last week), actions, rewards, faces, the return
+     G1. */
   function playRun(policy, d, i) {
     const weeks = d.weeks || WEEKS;
     const states = [], actions = [], rewards = [], faces = [];
@@ -1631,14 +1644,14 @@ button { font-family: var(--px); }
     return { states, actions, rewards, faces, G1: G };
   }
 
-  /* G1 of a list of rewards. */
+  /* The return G1 of a list of rewards. */
   function g1(rewards) {
     let G = 0, disc = 1;
     for (const r of rewards) { G += disc * r; disc *= GAMMA; }
     return G;
   }
 
-  /* The average G1 of the first n runs of the dice (all of them by default). */
+  /* The average return of the first n episodes of the dice (all of them by default). */
   function avgG1(policy, d, n) {
     n = n || d.n;
     let sum = 0;
@@ -1646,7 +1659,7 @@ button { font-family: var(--px); }
     return sum / n;
   }
 
-  /* Softmax of one row of bets: exponential of every entry, then the row divided by its sum. */
+  /* Softmax of one row of preferences: exponential of every entry, then the row divided by its sum. */
   function softmax(row) {
     const m = Math.max.apply(null, row);
     const e = row.map((x) => Math.exp(x - m));
@@ -1655,7 +1668,7 @@ button { font-family: var(--px); }
   }
   function softmaxTable(W) { return W.map(softmax); }
 
-  /* The exact expected G1 of a policy (over all runs, weighted by their chances): for checks only. */
+  /* The exact expected return of a policy (over all episodes, weighted by their probabilities): for checks only. */
   function expectedG1(policy) {
     let dist = [0, 0, 0, 0];
     dist[START] = 1;
@@ -1681,8 +1694,8 @@ button { font-family: var(--px); }
     return J;
   }
 
-  /* One hop of the backward pass of proto-REINFORCE: the average G1 before and after adding eps to the bet
-     W[s][a], both on the same dice; the change; nabla = change / eps. */
+  /* One hop of the backward pass of proto-REINFORCE: the average return before and after adding eps to the
+     preference W[s][a] (theta_{s,a} on the pages), both on the same dice; the change; nabla = change / eps. */
   function hop(W, s, a, eps, d, n) {
     const before = avgG1(softmaxTable(W), d, n);
     const W2 = W.map((row) => row.slice());
@@ -1691,11 +1704,11 @@ button { font-family: var(--px); }
     return { before, after, change: after - before, nabla: (after - before) / eps, W2 };
   }
 
-  /* Random bets, one decimal (the starting table of proto-REINFORCE): every bet uniform in [-1, 1], from rng(seed).
-     With a second seed xseed, about one bet in four is extreme instead, between 5 and 10 or between -10 and -5
-     (Carlos, 2026-11-16: "Don't make them all between -1 and 1 ... make them between -10 and 10"): for each bet in
-     turn, row by row, rng(xseed) gives three numbers; the first below 0.25 makes the bet extreme, the second sets its
-     size, 5 + 5 x u, the third its sign, minus below 0.5. */
+  /* Random preferences, one decimal (the starting table of proto-REINFORCE): every preference uniform in [-1, 1],
+     from rng(seed). With a second seed xseed, about one preference in four is extreme instead, between 5 and 10 or
+     between -10 and -5 (Carlos, 2026-11-16: "Don't make them all between -1 and 1 ... make them between -10 and 10"):
+     for each preference in turn, row by row, rng(xseed) gives three numbers; the first below 0.25 makes the preference
+     extreme, the second sets its size, 5 + 5 x u, the third its sign, minus below 0.5. */
   function randomBets(seed, xseed) {
     const r = rng(seed);
     const W = [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
@@ -1715,25 +1728,26 @@ button { font-family: var(--px); }
     REV_RUN, P_BD, BREAKDOWN_COST, DEGR, C_SERVICE, SERV_UP, C_REPLACE,
     GAMMA, WEEKS, START,
     outcomes, step, rng, dice, act, playRun, g1, avgG1, softmax, softmaxTable, expectedG1, hop, randomBets,
-    /* The arcade's optimal strict policy at gamma 0.9: RUN, SERVICE, REPLACE, REPLACE. Over one quarter from
-       HEALTHY it is also the best of the 81 strict policies (expected G1 242.08, tools/check_bessie.js). */
+    /* The arcade's optimal deterministic policy at gamma 0.9: RUN, SERVICE, REPLACE, REPLACE. Over one quarter from
+       HEALTHY it is also the best of the 81 deterministic policies (expected return 242.08, tools/check_bessie.js). */
     BEST: [RUN, SERVICE, REPLACE, REPLACE],
-    /* The example strategy of pages 2 and 3, "RUN until it fails": RUN, RUN, RUN, REPLACE (expected G1 136.18, 12th of
-       the 81). Carlos, 2026-11-16: an example never shows the optimal strategy, which the pages reveal later. */
+    /* The example policy of pages 2 and 3, "RUN until it fails": RUN, RUN, RUN, REPLACE (expected return 136.18, 12th
+       of the 81). Carlos, 2026-11-16: an example never shows the optimal policy, which the pages reveal later. */
     EXAMPLE: [RUN, RUN, RUN, REPLACE],
-    /* Try it (section 4, A4a): ten runs, the same dice for every try. */
+    /* Try it (section 4, A4a): ten episodes, the same dice for every policy tried. */
     TRY: { n: 10, diceSeed: 11 },
-    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17, 68), two of them
-       extreme: -6.9 (WORN, REPLACE) and 10 (SHAKY, REPLACE); until 2026-11-16 they were B.randomBets(17), all between
-       -1 and 1. Extreme seed 68 is the first, counting from 1, whose table (1) has no extreme bet in HEALTHY's row (the
-       roulette of scene 260, scenes 220 and 230, the close-up and the softmax aside read that row), (2) has a bet of 5
-       or more and one of -5 or less, (3) has highest bets other than B.BEST (an example never shows the best
-       strategy), (4) ends the 300 updates of tools/proto_movie.js on B.BEST (a big bet on a wrong action stalls the
-       learning: softmax gives that action a chance near 1, and a hop of its bets changes almost nothing), and (5)
-       reads right in the softmax aside with three decimals (every e to the power of a bet above 0.000, every shown
-       sum the sum of its row's shown numbers). The entry is drawn by B.rng(17 * 7919) among the twelve and lands on
-       (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000). Shown with two decimals: average G1 before -172.24, after
-       -170.50, change 1.74, nabla 174, w = 0.40 + 0.01 x 174 = 2.14, average G1 after the update 73.57 (same dice). */
+    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The preferences (bets) are B.randomBets(17, 68),
+       two of them extreme: -6.9 (WORN, REPLACE) and 10 (SHAKY, REPLACE); until 2026-11-16 they were B.randomBets(17),
+       all between -1 and 1. Extreme seed 68 is the first, counting from 1, whose table (1) has no extreme preference in
+       HEALTHY's row (the roulette of scene 260, scenes 220 and 230, the close-up and the softmax aside read that row),
+       (2) has a preference of 5 or more and one of -5 or less, (3) has highest preferences other than B.BEST (an
+       example never shows the optimal policy), (4) ends the 300 updates of tools/proto_movie.js on B.BEST (a big
+       preference for a wrong action stalls the learning: softmax gives that action a probability near 1, and a hop of
+       its preferences changes almost nothing), and (5) reads right in the softmax aside with three decimals (every e to
+       the power of a preference above 0.000, every shown sum the sum of its row's shown numbers). The entry is drawn by
+       B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 episodes on B.dice(12, 1000). Shown with two
+       decimals: average return before -172.24, after -170.50, change 1.74, nabla 174, theta = 0.40 + 0.01 x 174 = 2.14,
+       average return after the update 73.57 (same dice). */
     PROTO: {
       betsSeed: 17,
       betsXSeed: 68,
@@ -2920,26 +2934,28 @@ button { font-family: var(--px); }
 })();
 </script>
 <script>/* runs.js */
-/* runs.js: the run symbol of "Old Bessie" (agent A3, 2026-11-14), drawn on pages 2 and 3. OB.runs.
+/* runs.js: the episode symbol of "Old Bessie" (agent A3, 2026-11-14), drawn on pages 2 and 3. OB.runs (the names of
+   this file and of its API keep the word run of 2026-11-14; the pages say episode since 2026-11-17, TERMINOLOGY.md).
 
-   A run is one row: one cell per week, the cell coloured by the van's state that week (the wear colours of core.css),
-   the action's glyph small inside it (art.js, in ink), a breakdown marked by a small yellow bolt in the cell's corner,
-   and at the end of the row a slot for the run's G1, hidden until a scene shows it. Many runs are a block of rows.
-   Up to 20 runs (by default) are drawn as elements, one legible row each; more are drawn as a compact block on a
-   canvas, one thin line per run (1,000 runs fit in a few hundred pixels), with an optional G1 column of thin bars.
+   An episode is one row: one cell per week, the cell coloured by the van's state that week (the wear colours of
+   core.css), the action's glyph small inside it (art.js, in ink), a breakdown marked by a small yellow bolt in the
+   cell's corner, and at the end of the row a slot for the episode's return G1, hidden until a scene shows it. Many
+   episodes are a block of rows. Up to 20 episodes (by default) are drawn as elements, one legible row each; more are
+   drawn as a compact block on a canvas, one thin line per episode (1,000 episodes fit in a few hundred pixels), with
+   an optional G1 column of thin bars.
 
    API (stable from 2026-11-14; additions only):
 
-     OB.runs.play(policy, d, n)    the first n runs (default d.n) of the dice d under policy: an array of
+     OB.runs.play(policy, d, n)    the first n episodes (default d.n) of the dice d following policy: an array of
                                    B.playRun(policy, d, i), each { states, actions, rewards, faces, G1 }.
-     OB.runs.block(runs, opts)     an element .runs-block that draws the runs. opts (all optional):
+     OB.runs.block(runs, opts)     an element .runs-block that draws the episodes. opts (all optional):
          compact   true or false   default: runs.length > 20
          g1        true            rows: a G1 slot at the end of each row; compact: a G1 column of bars. Hidden
                                    (class ob-hide) until shown with OB.runs.showG1 or api.show
          head      true            rows: a line above the rows with the week numbers and the head "G1" of the slots
-         label     true            rows: the run's number at the left of its row (1, 2, 3, ...)
+         label     true            rows: the episode's number at the left of its row (1, 2, 3, ...)
          places    0               decimals of the G1 slots (OB.money)
-         height    0               compact: the block's height in px (default: 1 px a run, at most 320 px)
+         height    0               compact: the block's height in px (default: 1 px an episode, at most 320 px)
          width     0               compact: the block's width in px (default 13 x 8 px)
        The element carries: .runs (the data), .rows[i] and .cells[i][t] (rows), .g1s[i] (the G1 slots of the rows),
        .g1head (the head "G1" over the slots), .canvas and .g1col (compact).
@@ -3035,7 +3051,7 @@ button { font-family: var(--px); }
     return b;
   }
 
-  /* Compact: a canvas with one line per run (13 columns of the state colours), and a G1 column of bars. */
+  /* Compact: a canvas with one line per episode (13 columns of the state colours), and a G1 column of bars. */
   function compactBlock(runs, opts) {
     var b = el("div", "runs-block compact");
     b.runs = runs;
@@ -3133,8 +3149,8 @@ button { font-family: var(--px); }
 })();
 </script>
 <script>/* tables.js */
-/* tables.js: the bets table W, the probability table and a strict strategy's column, for page 3 of "Old Bessie"
-   (agent A4b, 2026-11-14). Agents A4a, A5 and A6 reuse it; the API below is stable.
+/* tables.js: the table of preferences theta, the probability table and a deterministic policy's column, for page 3 of
+   "Old Bessie" (agent A4b, 2026-11-14). Agents A4a, A5 and A6 reuse it; the API below is stable.
 
    Rows are the states HEALTHY, WORN, SHAKY, FAILING (S1 to S4), top to bottom, each with the van of art.js. Columns
    are the actions RUN, SERVICE, REPLACE (a1 to a3), left to right, each with its glyph and lever colour. Sizes are
@@ -3147,13 +3163,13 @@ button { font-family: var(--px); }
    OB.tables.table(values, opts) -> T
      values      4 rows of 3 numbers (exact values: the table rounds them for display), or null (empty cells); a row
                  or a cell may be null too
-     opts.kind   "bets" (signed, 2 decimals), "prob" (2 decimals, each cell's chance also drawn as a bar),
+     opts.kind   "bets" (signed, 2 decimals), "prob" (2 decimals, each cell's probability also drawn as a bar),
                  "exp" (3 decimals: the first step of softmax)
      opts.size   "l" (default), "m", or "s" (a compact table for a diagram)
      opts.heads  true (default): vans on the left, actions on top; "top": actions only; "side": vans only; false
      opts.sum    true: a column at the right for the rows' sums, empty until T.sum fills it
      opts.rows   the states drawn, default [0, 1, 2, 3]
-     opts.cap    a caption under the table, e.g. "BETS TABLE W" (HTML allowed)
+     opts.cap    a caption under the table, e.g. "PREFERENCES" and theta (HTML allowed)
      opts.places the decimals, in place of the kind's
    T.el                        the element (div.tb); append it where you want it
    T.cell(s, a), T.num(s, a)   a cell and its number (a span); T.side(s) a row's van; T.top(a) an action's head;
@@ -3166,7 +3182,7 @@ button { font-family: var(--px); }
                                (true: no motion, for a cell that a fly lands on)
    T.setRow(s, row, o), T.setCell(s, a, v, o)   the same for one row or one cell
    T.sum(s, v, o)              the sum v of row s in the sum column (null hides it); a "prob" sum also draws the row's
-                               chances as one full bar. o.delay
+                               probabilities as one full bar. o.delay
    T.rings(list)               exactly these blinking rings: [s, a] a cell, [s, null] a row, [null, a] a column;
                                rings already on stay on without blinking again; [] or null clears them
    T.ring(s, a, on)            one ring on (default) or off
@@ -3175,14 +3191,14 @@ button { font-family: var(--px); }
    T.zoom(s, a, o) -> Z        a large copy of a cell in a box, not attached: Z.el, Z.num, Z.cap; o.cap (a caption
                                above, "BEFORE"), o.value (default the cell's), o.head (false: no state and action chips)
    T.lift(s, a, Z, o)          rings the cell, then a copy of it flies out and grows into Z.el (o.delay, default 600)
-   OB.tables.column(policy, opts) -> C   a strict strategy (B.BEST, a column of four actions): C.el, C.entry(s) (the
-                               cell, clickable), C.chip(s), C.side(s), C.get(s), C.values(), C.set(s, a) (the new chip
-                               fades in), C.rings(list of states); opts.size, opts.heads (vans, default true), opts.cap
-                               (default "STRATEGY"), opts.rows. A column and a table of the same size line up row by
-                               row when their tops align (the same head height and row height).
+   OB.tables.column(policy, opts) -> C   a deterministic policy (B.BEST, a column of four actions): C.el, C.entry(s)
+                               (the cell, clickable), C.chip(s), C.side(s), C.get(s), C.values(), C.set(s, a) (the new
+                               chip fades in), C.rings(list of states); opts.size, opts.heads (vans, default true),
+                               opts.cap (default "POLICY"), opts.rows. A column and a table of the same size line up row
+                               by row when their tops align (the same head height and row height).
    OB.tables.fmt(kind, x, places)   a number as a table of that kind writes it ("-0.60", "0.47", "1.492")
    OB.tables.PLACES            { bets: 2, prob: 2, exp: 3 }
-   OB.tables.chances(row)      B.softmax(row), the exact chances of a row of bets */
+   OB.tables.chances(row)      B.softmax(row), the exact probabilities of a row of preferences */
 (function () {
   "use strict";
   var OB = window.OB, B = window.B, art = OB.art;
@@ -3206,7 +3222,8 @@ button { font-family: var(--px); }
     };
   }
   /* A number longer than LONG characters is drawn smaller so that it stays inside its cell: 22,026.466, e to the power
-     of the bet 10 in the softmax aside, at 7/10 of the table's size (--fit on the number, read by tables.css). */
+     of the preference 10 in the softmax aside, at 7/10 of the table's size (--fit on the number, read by
+     tables.css). */
   var LONG = 7;
   function fitN(n, s) {
     if (s.length > LONG) n.style.setProperty("--fit", (LONG / s.length).toFixed(3));
@@ -3230,7 +3247,7 @@ button { font-family: var(--px); }
     return h;
   }
 
-  /* A table: bets, probabilities or exponentials. */
+  /* A table: preferences, probabilities or exponentials. */
   function table(values, opts) {
     opts = opts || {};
     var kind = opts.kind || "bets", size = opts.size || "l";
@@ -3480,7 +3497,7 @@ button { font-family: var(--px); }
     return T;
   }
 
-  /* A strict strategy as a column: one action per state, the state's van on the left. */
+  /* A deterministic policy as a column: one action per state, the state's van on the left. */
   function column(policy, opts) {
     opts = opts || {};
     var size = opts.size || "l", rows = opts.rows || [0, 1, 2, 3], side = opts.heads !== false;
@@ -3502,7 +3519,7 @@ button { font-family: var(--px); }
       entries[s] = e;
     });
     root.appendChild(grid);
-    C.cap = OB.html("div", "tb-cap", opts.cap === undefined ? "STRATEGY" : opts.cap);
+    C.cap = OB.html("div", "tb-cap", opts.cap === undefined ? "POLICY" : opts.cap);
     if (opts.cap !== "") root.appendChild(C.cap);
     C.el = root;
     C.grid = grid;
@@ -3550,16 +3567,16 @@ button { font-family: var(--px); }
    (this file loads after core.js and before sec3a.js); in node require("./sec3a-data.js"), which tools/check_try.js
    uses to assert every number the scene shows.
 
-   Every strategy plays on the same dice, B.dice(B.TRY.diceSeed, B.TRY.n): ten runs of 13 weeks from HEALTHY. A
-   strict strategy spends each week's first number (the action's) without using it, so every strategy meets the same
-   luck, and a change in the average G1 comes from the change in the strategy alone. A what-if changes one state's
-   action: its runs stay the same when no run is in that state in any week (sameRuns).
+   Every policy plays on the same dice, B.dice(B.TRY.diceSeed, B.TRY.n): ten episodes of 13 weeks from HEALTHY. A
+   deterministic policy spends each week's first number (the action's) without using it, so every policy meets the
+   same luck, and a change in the average return comes from the change in the policy alone. A what-if changes one
+   state's action: its episodes stay the same when no episode is in that state in any week (sameRuns).
 
    The scene writes dollars with OB.money (whole dollars); the functions that write words take that formatter as an
    argument, so the check can call them with a copy of it. The change of a what-if is the difference of the two
    averages as the screen shows them (whole dollars), so before, after and the change agree on the screen. The words
    mark their formulas between \( and \) in TeX: the scene draws them with OB.texIn (tex.js, KaTeX), node checks the
-   plain text. BAR is the TeX of the average G1. */
+   plain text. BAR is the TeX of the average return. */
 (function (root) {
   "use strict";
   var node = typeof module !== "undefined" && module.exports;
@@ -3576,7 +3593,7 @@ button { font-family: var(--px); }
   /* An amount as OB.money writes it, as TeX (OB.texNum of tex.js, repeated for node). */
   function tnum(s) { return String(s).replace(/\$/g, "\\$").replace(/,/g, "{,}"); }
 
-  /* A try: the ten runs of the strategy col on the dice, their G1 and their average. */
+  /* A try: the ten episodes of the policy col on the dice, their returns G1 and their average. */
   function play(col) {
     var runs = [], sum = 0;
     for (var i = 0; i < N; i++) {
@@ -3586,7 +3603,7 @@ button { font-family: var(--px); }
     }
     return { col: col.slice(), runs: runs, g1: runs.map(function (r) { return r.G1; }), avg: sum / N };
   }
-  /* The states in which some run takes an action (its 13 weeks; the state after the last week takes none). */
+  /* The states in which some episode takes an action (its 13 weeks; the state after the last week takes none). */
   function visited(t) {
     var v = [false, false, false, false];
     t.runs.forEach(function (r) { for (var w = 0; w < r.actions.length; w++) v[r.states[w]] = true; });
@@ -3600,15 +3617,15 @@ button { font-family: var(--px); }
     }
     return true;
   }
-  /* The strategy col with state s taking action a. */
+  /* The policy col with state s taking action a. */
   function change(col, s, a) { var c = col.slice(); c[s] = a; return c; }
   /* An average as whole dollars, the number OB.money shows. */
   function whole(x) { return +x.toFixed(0); }
 
-  /* The what-if of state s: bef and aft are the tries of the strategy before and after the change. delta: the change
-     of the average in whole dollars, after minus before as the screen shows them. kind: "same-runs" (no run is in
-     state s in any week: the same runs, the same average), "equal" (other runs, the same whole dollars), "higher",
-     "lower". */
+  /* The what-if of state s: bef and aft are the tries of the policy before and after the change. delta: the change
+     of the average in whole dollars, after minus before as the screen shows them. kind: "same-runs" (no episode is
+     in state s in any week: the same episodes, the same average), "equal" (other episodes, the same whole dollars),
+     "higher", "lower". */
   function compare(bef, aft, s) {
     var d = whole(aft.avg) - whole(bef.avg);
     var kind = sameRuns(bef, aft) ? "same-runs" : d > 0 ? "higher" : d < 0 ? "lower" : "equal";
@@ -3620,9 +3637,9 @@ button { font-family: var(--px); }
 
   /* The words of the walk, beats 1 to 4: edit (the column can be changed), runs, g1, avg (cur: the try). */
   function words(step, cur, money) {
-    if (step === "edit") return "A strategy: one action per state. Tap an entry to change it, then press Done.";
-    if (step === "runs") return "Ten runs with this strategy: one row per run, one cell per week.";
-    if (step === "g1") return "The " + G1 + " of each run. What is their average? Guess, then press Compute.";
+    if (step === "edit") return "A policy: one action per state. Tap an entry to change it, then press Done.";
+    if (step === "runs") return "Ten episodes with this policy: one row per episode, one cell per week.";
+    if (step === "g1") return "The return " + G1 + " of each episode. What is their average? Guess, then press Compute.";
     return "Their average: \\(" + BAR + " = " + tnum(money(cur.avg)) + "\\).";
   }
 
@@ -3636,8 +3653,8 @@ button { font-family: var(--px); }
     }
     if (step === "menu") return S[o.s] + " takes " + A[o.a] + ". What if it took another action? Choose one.";
     var head = "What if " + S[o.s] + " takes " + A[o.to] + " in place of " + A[o.from] + "? ";
-    if (o.kind === "same-runs") return head + "No run is " + S[o.s] + " in any week: the same runs, the same " + GBAR + ".";
-    if (o.kind === "equal") return head + "Other runs, the same " + GBAR + " to the dollar.";
+    if (o.kind === "same-runs") return head + "No episode is " + S[o.s] + " in any week: the same episodes, the same " + GBAR + ".";
+    if (o.kind === "equal") return head + "Other episodes, the same " + GBAR + " to the dollar.";
     return head + "On the same luck, " + GBAR + " goes " + (o.kind === "higher" ? "up" : "down") + " by " + money(Math.abs(o.delta)) + ".";
   }
 
@@ -3659,19 +3676,20 @@ button { font-family: var(--px); }
    110 try       5 beats (counted from 0 here; the deep link counts from 1):
                  0 the column "OLD BESSIE", RUN everywhere at first: a tap on an entry rings it and opens a keypad of
                    the three actions, a press sets the entry, Done (or Next, "Play") plays the column;
-                 1 its ten runs on the dice of sec3a-data.js; 2 each run's G1; 3 their average;
-                 4 the what-if. The column holds the strategy of beats 1 to 4 (the base), and nothing in it is edited
+                 1 its ten episodes on the dice of sec3a-data.js; 2 each episode's return G1; 3 their average;
+                 4 the what-if. The column holds the policy of beats 1 to 4 (the base), and nothing in it is edited
                    freely: a tap on a state rings it and opens a menu of its three actions under the column, the
-                   current one marked NOW. A choice shows at once, with no motion and no beats, the ten runs of the
-                   changed strategy with their G1 (AFTER) beside the base's (BEFORE), on the same dice, and under them
-                   the two averages with an arrow that carries the change in dollars, UP or DOWN: the grammar of the
-                   close-up of the hop (sec3d.js, scene 350), which the room meets here first. The cells of the picked
-                   state are marked in both blocks. Keep (beside the averages) makes the changed strategy the base for
-                   the next what-if; Leave, a tap on the ringed state, or a tap on another state drops it. One change
+                   current one marked NOW. A choice shows at once, with no motion and no beats, the ten episodes of the
+                   changed policy with their returns G1 (AFTER) beside the base's (BEFORE), on the same dice, and under
+                   them the two averages with an arrow that carries the change in dollars, UP or DOWN: the grammar of
+                   the close-up of the hop (sec3d.js, scene 350), which the room meets here first. The cells of the
+                   picked state are marked in both blocks. Keep (beside the averages) makes the changed policy the base
+                   for the next what-if; Leave, a tap on the ringed state, or a tap on another state drops it. One
+                   change
                    at a time. Next goes on to the next scene.
 
    The scene keeps its state on the spec (S), so Back, the pager and a deep link show their beat as the room left it:
-   S.col is the strategy of beats 1 to 4, S.wi the what-if (its base, the state picked, the action chosen, the change
+   S.col is the policy of beats 1 to 4, S.wi the what-if (its base, the state picked, the action chosen, the change
    kept last). The what-if starts afresh from S.col when beat 5 follows the walk of another column. A deep link to
    beat 5 on a fresh page shows the fixed what-if D.FIX: RUN everywhere, FAILING taking REPLACE. Every number and
    every sentence with a number comes from sec3a-data.js, which tools/check_try.js asserts. */
@@ -3699,11 +3717,11 @@ button { font-family: var(--px); }
 
   OB.scene({
     page: 3, key: "try-card", order: 100, title: "Try it",
-    card: { kicker: "REINFORCE", title: "Try it", line: "Ten runs of a strategy and their average. Then one change at a time: the average before and after.", wear: 0 }
+    card: { kicker: "REINFORCE", title: "Try it", line: "Ten episodes of a policy and their average. Then one change at a time: the average before and after.", wear: 0 }
   });
 
   OB.scene({
-    page: 3, key: "try", order: 110, title: "Try a strategy", beats: 5,
+    page: 3, key: "try", order: 110, title: "Try a policy", beats: 5,
 
     build: function (root) {
       this.S = { col: D.START.slice(), sel: -1, walked: false, wi: null };
@@ -3726,7 +3744,8 @@ button { font-family: var(--px); }
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
     },
 
-    /* Beats 1 to 4: the column, its runs, their G1, their average, in a row (sketch page 24); Done under the column. */
+    /* Beats 1 to 4: the column, its episodes, their returns G1, their average, in a row (sketch page 24); Done under
+       the column. */
     buildWalk: function (root) {
       var self = this, P = this.P;
       var dia = P.dia = el("div", "s3a-dia");
@@ -3756,13 +3775,13 @@ button { font-family: var(--px); }
       dia.appendChild(colW);
       dia.appendChild(el("span", "s3a-arr s3a-a1"));
 
-      // The runs: a block of ten rows, a dashed frame in its place while the column is being chosen.
+      // The episodes: a block of ten rows, a dashed frame in its place while the column is being chosen.
       var runsW = el("div", "s3a-runsw");
       P.hold = el("div", "s3a-hold");
       P.ph = el("div", "s3a-ph", "?");
       P.hold.appendChild(P.ph);
       runsW.appendChild(P.hold);
-      runsW.appendChild(el("div", "s3a-cap", "RUNS"));
+      runsW.appendChild(el("div", "s3a-cap", "EPISODES"));
       dia.appendChild(runsW);
       dia.appendChild(el("span", "s3a-arr s3a-a2"));
 
@@ -3789,8 +3808,8 @@ button { font-family: var(--px); }
       root.appendChild(dia);
     },
 
-    /* Beat 5: the column and the menu of the picked state; BEFORE and AFTER, each with its ten runs; the two averages
-       and the arrow of the change between them; Keep and Leave under the menu. */
+    /* Beat 5: the column and the menu of the picked state; BEFORE and AFTER, each with its ten episodes; the two
+       averages and the arrow of the change between them; Keep and Leave under the menu. */
     buildWhatIf: function (root) {
       var self = this, W = this.W;
       var wi = W.root = el("div", "s3a-wi ob-gone");
@@ -3826,7 +3845,7 @@ button { font-family: var(--px); }
       menu.appendChild(W.mkeys);
       wi.appendChild(menu);
 
-      // BEFORE and AFTER: a head (the caption, the picked state and its action), then the ten runs.
+      // BEFORE and AFTER: a head (the caption, the picked state and its action), then the ten episodes.
       function side(cls, cap) {
         var o = { el: el("div", "ob-box white s3a-side " + cls) };
         var h = el("div", "s3a-shead");
@@ -3903,7 +3922,7 @@ button { font-family: var(--px); }
       if (live) api.fade(P.lead, true, { dur: 900 });
       vis(P.done, k === 0);
 
-      // The runs, under a dashed frame while the column is being chosen.
+      // The episodes, under a dashed frame while the column is being chosen.
       if (k === 0) {
         vis(P.block, false);
         vis(P.ph, true);
@@ -3929,7 +3948,7 @@ button { font-family: var(--px); }
         }
       }
 
-      // The average: each run's G1 flies into the box, then the number rolls to their average.
+      // The average: each episode's return G1 flies into the box, then the number rolls to their average.
       if (k === 3) {
         this.setAv(cur.avg);
         if (live) {
@@ -4091,7 +4110,7 @@ button { font-family: var(--px); }
     /* A change of the what-if is drawn at once: the beat plays again without motion, which also ends any motion still
        running (the fade-in of beat 5, a kept action fading into the column). */
     redraw: function () { OB.go(this.index, 4); },
-    /* The runs of a try for the what-if, built once per strategy, with their G1. */
+    /* The episodes of a try for the what-if, built once per policy, with their returns G1. */
     wiBlock: function (tr) {
       var k = keyOf(tr.col);
       if (!this.wblocks[k]) {
@@ -4146,7 +4165,7 @@ button { font-family: var(--px); }
         W.aft.chips.appendChild(aft ? art.actionChip(wi.alt) : el("span", "ob-chip s3a-qchip", "?"));
       }
 
-      // The runs, the cells of the picked state marked.
+      // The episodes, the cells of the picked state marked.
       var bb = this.wiBlock(bef);
       this.put(W.bef.slot, bb);
       this.mark(bb, p);
@@ -4187,17 +4206,17 @@ button { font-family: var(--px); }
    In the browser it is window.S3B (loaded before sec3b.js); in node, require('./sec3b-data.js'), for
    tools/check_tables.js, which asserts every shown number.
 
-   W     the bets of proto-REINFORCE, B.PROTO.bets (= B.randomBets(17, 68), between -10 and 10, two of them extreme,
-         -6.9 and 10, since the evening of 2026-11-16), the table that agent A5 starts from; since 2026-11-16 also the
-         table of bets that scene 210 introduces, so one table runs through the page (its highest bets give RUN, RUN,
-         REPLACE, SERVICE, a strategy other than B.BEST)
-   READ  the two entries of W that scenes 220 and 230 ring and read out: [state, action], a positive bet and a negative
-         one
+   W     the preferences of proto-REINFORCE (theta on the page), B.PROTO.bets (= B.randomBets(17, 68), between -10 and
+         10, two of them extreme, -6.9 and 10, since the evening of 2026-11-16), the table that agent A5 starts from;
+         since 2026-11-16 also the table of preferences that scene 210 introduces, so one table runs through the page
+         (its highest preferences give RUN, RUN, REPLACE, SERVICE, a policy other than B.BEST)
+   READ  the two entries of W that scenes 220 and 230 ring and read out: [state, action], a positive preference and a
+         negative one
    P     its probability table, B.softmaxTable(W), shown with 2 decimals
-   E     the exponential of every bet (step 1 of softmax), shown with 3 decimals; ESUM the rows' sums
+   E     the exponential of every preference (step 1 of softmax), shown with 3 decimals; ESUM the rows' sums
    DRAW  the draws of the policy in HEALTHY: B.act(P, HEALTHY, u) with u the action number of each "week" of
          B.dice(3, 100, 1). Seed 3 is the first seed, counting from 1, whose six draws come out 3 RUN, 1 SERVICE and
-         2 REPLACE, HEALTHY's chances (0.47, 0.17, 0.35) times 6, rounded */
+         2 REPLACE, HEALTHY's probabilities (0.47, 0.17, 0.35) times 6, rounded */
 (function (root) {
   "use strict";
   var NODE = typeof module !== "undefined" && module.exports;
@@ -4220,7 +4239,7 @@ button { font-family: var(--px); }
   var E = W.map(function (r) { return r.map(Math.exp); });
   var ESUM = E.map(function (r) { return r[0] + r[1] + r[2]; });
   var READ = [[B.HEALTHY, B.RUN], [B.HEALTHY, B.SERVICE]];
-  /* The highest bet and the highest chance of each row: the same action. */
+  /* The highest preference and the highest probability of each row: the same action. */
   function argmax(r) { var k = 0; for (var a = 1; a < r.length; a++) if (r[a] > r[k]) k = a; return k; }
   var TOPW = W.map(argmax), TOPP = P.map(argmax);
 
@@ -4233,7 +4252,7 @@ button { font-family: var(--px); }
     DRAW.count[a]++;
   }
 
-  /* The worked example of step 1 (e to the power of HEALTHY's bet on RUN) and the step 2 lines of HEALTHY. */
+  /* The worked example of step 1 (e to the power of HEALTHY's preference for RUN) and the step 2 lines of HEALTHY. */
   var EX = { s: B.HEALTHY, a: B.RUN, bet: W[0][0], value: E[0][0] };
   function sumLine(s) { return E[s].map(function (x) { return show("exp", x); }).join(" + ") + " = " + show("exp", ESUM[s]); }
   function divLines(s) {
@@ -4261,15 +4280,15 @@ button { font-family: var(--px); }
    Beats (k from 0):
    0     the probability table, alone; HEALTHY's row ringed, the other rows dimmed
    1     the table makes room; HEALTHY's little bars leave their cells, stretch and line up end to end into one bar,
-         each segment as long as its chance (the exact chances: the shown ones, rounded, add up to 0.99)
+         each segment as long as its probability (the exact probabilities: the shown ones, rounded, add up to 0.99)
    2     a spin: the pin drops onto the bar, runs along it, bounces at its ends, slows down and stops at the point of
          the first draw
    3     the segment under the pin lights up; its glyph flies out and the action is announced, glyph and name large
    4..8  spins 2 to 6, each a quick spin; each action flies into its slot (spin 1, the announced one, at beat 4)
-   9     the 100 spins: a second bar under the chances fills spin by spin, then shows the counts
-   Numbers: window.S3B (sec3b-data.js): P, the probability table (softmax of the bets of proto-REINFORCE), and DRAW,
-   the draws in HEALTHY (u on B.dice(3, 100, 1), the action by B.act, the counts of 100). The first spin lands on the
-   first draw. In node this file exports its text model and draws nothing; tools/check_pick.js asserts every number
+   9     the 100 spins: a second bar under the probabilities fills spin by spin, then shows the counts
+   Numbers: window.S3B (sec3b-data.js): P, the probability table (softmax of the preferences of proto-REINFORCE), and
+   DRAW, the draws in HEALTHY (u on B.dice(3, 100, 1), the action by B.act, the counts of 100). The first spin lands on
+   the first draw. In node this file exports its text model and draws nothing; tools/check_pick.js asserts every number
    and line against S3B and bessie.js.
 
    Motion. Every beat sets its state at once; reached with Next from the beat before, it plays smooth vector motion
@@ -4277,7 +4296,7 @@ button { font-family: var(--px); }
    cubic-bezier(.45,.05,.3,1) (the Matchmaker's flying numbers), the spin on cubic-bezier(.12,.75,.2,1) (the Mirror's
    roulette needle), fades on cubic-bezier(.2,.7,.2,1). Flights are copies on fixed position (FLIP: measured at their
    source, flown along a low arc to the box of their target, handed over to the real element when they land; a token
-   that leaves the bar for a place below it drops first and glides sideways after, clear of the chances). The
+   that leaves the bar for a place below it drops first and glides sideways after, clear of the probabilities). The
    engine's animate hands its tick a cubic in-and-out p; lin() undoes it, so that each motion keeps its own curve while
    the engine still finishes every motion when the reader moves on. Durations: the table's glide 0.7 s, the bars 1.15 s
    each, staggered by 0.11 s from the right, the first spin 3.4 s, quick spins 1.4 s, glyphs 0.75 to 0.9 s, the tally
@@ -4292,12 +4311,12 @@ button { font-family: var(--px); }
     var acts = DR.acts.slice(0, n), first = N[acts[0]];
     var leads = [
       "Bessie is " + S[H] + ". The policy uses " + S[H] + "'s row.",
-      S[H] + "'s chances, end to end, fill one bar.",
+      S[H] + "'s probabilities, end to end, fill one bar.",
       "A spin: the pin stops at a random point of the bar.",
       "The pin is on " + first + ": the policy picks " + first + "."
     ];
-    for (var j = 1; j < n; j++) leads.push("Spin again: each spin picks an action.");
-    leads.push("In " + DR.n + " spins, each action comes up about as often as its chance says.");
+    for (var j = 1; j < n; j++) leads.push("Spin again: each spin samples an action.");
+    leads.push("In " + DR.n + " spins, each action comes up about as often as its probability says.");
     var cum = [0], c = 0;
     D.P[H].forEach(function (p) { c += p; cum.push(c); });
     return {
@@ -4305,7 +4324,7 @@ button { font-family: var(--px); }
       chances: D.P[H].slice(), cum: cum, chanceText: D.P[H].map(function (p) { return D.show("prob", p); }),
       u: DR.u.slice(0, n), acts: acts, names: acts.map(function (a) { return N[a]; }),
       n: DR.n, all: DR.acts.slice(), count: DR.count.slice(), countText: DR.count.map(String),
-      cap: S[H] + "'S CHANCES", tableCap: "PROBABILITY TABLE = POLICY",
+      cap: S[H] + "'S PROBABILITIES", tableCap: "PROBABILITY TABLE = POLICY",
       slotCaps: acts.map(function (a, i) { return "SPIN " + (i + 1); }),
       countCap: "IN " + DR.n + " SPINS"
     };
@@ -4397,7 +4416,7 @@ button { font-family: var(--px); }
   /* A token flies from an element (or a glyph inside a segment) to a token, grows or shrinks on the way, and lands.
      Out of the bar it drops into the lane between the bar and the places below, glides along the lane and settles
      into its place, the three moves overlapping into one curve, and keeps its size until it settles: it never
-     crosses the chances written in the bar nor the tokens already in their slots. Between places on one level it
+     crosses the probabilities written in the bar nor the tokens already in their slots. Between places on one level it
      rises on an arc. */
   function c01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function flyTok(api, delay, dur, from, to, a, land, isGlyph) {
@@ -4460,7 +4479,7 @@ button { font-family: var(--px); }
     });
     P.fills = [0, 1, 2].map(function (a) { return P.T.cell(H, a).querySelector(".tb-bar i"); });
 
-    // The bar of HEALTHY's chances and its pin.
+    // The bar of HEALTHY's probabilities and its pin.
     var R = P.right = el("div", "s3p-right");
     P.cap = el("div", "s3p-cap", M.cap);
     R.appendChild(P.cap);
@@ -4726,7 +4745,7 @@ button { font-family: var(--px); }
     light(P, api, t + 1400, a, true);
     flyTok(api, t + 1560, 760, P.labs[a].glyph, S.tok, a, function () { landSlot(P, api, d); }, true);
   }
-  /* 9: the pin and the slots leave; under the chances a bar fills with the 100 spins, then shows its counts. */
+  /* 9: the pin and the slots leave; under the probabilities a bar fills with the 100 spins, then shows its counts. */
   PLAY[LAST] = function (P, api) {
     var d = SHOWN - 1, a0 = M.acts[d];
     setLit(P, a0, 1);
@@ -4763,30 +4782,34 @@ button { font-family: var(--px); }
 })(typeof window !== "undefined" ? window : this);
 </script>
 <script>/* sec3b.js */
-/* sec3b.js: page 3, section 4 of the weekend, bets and softmax (agent A4b, 2026-11-14; reordered by agent T on
+/* sec3b.js: page 3, section 4 of the weekend, preferences and softmax (agent A4b, 2026-11-14; reordered by agent T on
    2026-11-16 at Carlos's request), scenes 200 to 299. Every number comes from sec3b-data.js (window.S3B, computed
    from bessie.js) and is asserted by tools/check_tables.js. The tables are tables.js.
 
    Carlos, 2026-11-16: "One slide introduced the table of bets. The other is what ... every entry on the table of bets
    means. And then the third one, clarify that you allow negative bets. Then afterwards show how the table of bets
    gives rise to a probabilistic strategy. Then show the table normalize to the softmax. There you include the link
-   towards the softmax explanation, but don't explain it there." One table runs through the section: the bets of
+   towards the softmax explanation, but don't explain it there." One table runs through the section: the preferences of
    proto-REINFORCE, S3B.W (B.randomBets(17, 68)).
 
-   200 card "Bets"
-   210 A table of bets (2 beats): why a strategy is written as a table of bets; a row per state, a column per action
-   220 What a bet says (2 beats): the rule; HEALTHY's bet on RUN, 0.40, ringed and read out
-   230 Negative bets (2 beats): the table allows them; HEALTHY's bet on SERVICE, -0.60, ringed and read out
-   240 From bets to chances (2 beats): HEALTHY's row of bets gives HEALTHY's chances; the higher the bet, the higher
-       the chance
-   250 Softmax (2 beats): softmax turns the table of bets into the probability table; it is a policy. A button opens
-       the aside "How softmax works, and why"
-   260 is agent V's scene "pick" (sec3b-policy.js): how the policy draws an action, the six draws and the counts of 100.
+   200 card "Preferences"
+   210 A table of preferences (2 beats): why a policy is written as a table of preferences; a row per state, a
+       column per action
+   220 What a preference says (2 beats): the rule; HEALTHY's preference for RUN, 0.40, ringed and read out
+   230 Negative preferences (2 beats): the table allows them; HEALTHY's preference for SERVICE, -0.60, ringed and
+       read out
+   240 From preferences to probabilities (2 beats): HEALTHY's row of preferences gives HEALTHY's probabilities; the
+       higher the preference, the higher the probability
+   250 Softmax (2 beats): softmax turns the table of preferences into the probability table; it is a stochastic policy.
+       A button opens the aside "How softmax works, and why"
+   260 is agent V's scene "pick" (sec3b-policy.js): how the policy samples an action, the six draws and the counts of
+       100.
    The aside of 250 (core.js, aside: "softmax"; outside the main flow, 10 beats):
-   282 Softmax, step 1: e to the power (4 beats): the two steps; e to the power of 0.40, guessed then computed; every bet
-   284 Softmax, step 2: divide by the sum (5 beats): HEALTHY's sum; its chances, guessed then computed; every row; the
-       two steps are softmax
-   286 Softmax, why it works (1 beat): the chances of each row add up to 1 */
+   282 Softmax, step 1: e to the power (4 beats): the two steps; e to the power of 0.40, guessed then computed; every
+       preference
+   284 Softmax, step 2: divide by the sum (5 beats): HEALTHY's sum; its probabilities, guessed then computed; every row;
+       the two steps are softmax
+   286 Softmax, why it works (1 beat): the probabilities of each row add up to 1 */
 (function () {
   "use strict";
   var OB = window.OB, B = window.B, el = OB.el, TB = OB.tables, D = window.S3B;
@@ -4808,17 +4831,17 @@ button { font-family: var(--px); }
 
   /* 200. The card of this part. */
   OB.scene({
-    page: 3, key: "bets-card", order: 200, title: "Bets",
-    card: { kicker: "REINFORCE", title: "Bets", line: "A strategy written as a table of bets, and the bets turned into chances.", wear: 1 }
+    page: 3, key: "bets-card", order: 200, title: "Preferences",
+    card: { kicker: "REINFORCE", title: "Preferences", line: "A policy written as a table of preferences, and the preferences turned into probabilities.", wear: 1 }
   });
 
-  /* Scenes 210 to 230 share one board: the lead, the table of bets, a line that reads out one entry, a note. Each
-     keeps the room of every part, so the table stays put from scene to scene. */
+  /* Scenes 210 to 230 share one board: the lead, the table of preferences, a line that reads out one entry, a note.
+     Each keeps the room of every part, so the table stays put from scene to scene. */
   function board(root) {
     var P = {};
     P.lead = lead(root);
     var flow = el("div", "s3b-flow");
-    P.T = TB.table(D.W, { kind: "bets", cap: "BETS TABLE " + OB.tex("W") });
+    P.T = TB.table(D.W, { kind: "bets", cap: "PREFERENCES " + OB.tex("\\theta") });
     flow.appendChild(P.T.el);
     root.appendChild(flow);
     P.read = el("p", "ob-say s3b-read");
@@ -4826,9 +4849,9 @@ button { font-family: var(--px); }
     P.note = note(root, "");
     return P;
   }
-  /* An entry read out: "In HEALTHY, we bet 0.40 that RUN is the right action." */
+  /* An entry read out: "In HEALTHY, the preference for RUN is 0.40." */
   function readOut(e) {
-    return "In " + STATES[e[0]] + ", we bet " + D.show("bets", D.W[e[0]][e[1]]) + " that " + NAMES[e[1]] + " is the right action.";
+    return "In " + STATES[e[0]] + ", the preference for " + NAMES[e[1]] + " is " + D.show("bets", D.W[e[0]][e[1]]) + ".";
   }
   function showRead(P, e, on, api) {
     P.read.textContent = readOut(e);
@@ -4836,17 +4859,17 @@ button { font-family: var(--px); }
     P.T.rings(on ? [e] : []);
   }
 
-  /* 210. A table of bets (Carlos: "For us to let a computer discover the optimal policy, we represent a strategy
+  /* 210. A table of preferences (Carlos: "For us to let a computer discover the optimal policy, we represent a strategy
      through a table of bets"). */
   var L210 = [
-    "To let a computer discover the best strategy, we write a strategy as a table of bets.",
-    "A table of bets: a row per state, a column per action."
+    "To let a computer discover the optimal policy, we write a policy as a table of preferences.",
+    "A table of preferences: a row per state, a column per action."
   ];
   OB.scene({
-    page: 3, key: "bets-table", order: 210, title: "A table of bets", beats: L210.length,
+    page: 3, key: "bets-table", order: 210, title: "A table of preferences", beats: L210.length,
     build: function (root) {
       var P = this.parts = board(root);
-      P.note.textContent = "Bets picked at random, between -10 and 10.";
+      P.note.textContent = "Preferences picked at random, between -10 and 10.";
       P.read.textContent = readOut(D.READ[0]);
       P.read.classList.add("ob-hide");
     },
@@ -4859,14 +4882,14 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 220. What a bet says (Carlos: "every entry in the table indicates how much we bet that one action is the right
-     action for a particular state"). */
-  var L220 = "Every entry says how much we bet that its action is the right action in its state.";
+  /* 220. What a preference says (Carlos: "every entry in the table indicates how much we bet that one action is the
+     right action for a particular state"). */
+  var L220 = "Every entry says how strongly the policy prefers its action in its state.";
   OB.scene({
-    page: 3, key: "bet-meaning", order: 220, title: "What a bet says", beats: 2,
+    page: 3, key: "bet-meaning", order: 220, title: "What a preference says", beats: 2,
     build: function (root) {
       var P = this.parts = board(root);
-      P.note.textContent = "A bet is a plain number, with no unit.";
+      P.note.textContent = "A preference is a plain number, with no unit.";
     },
     beat: function (k, api) {
       var P = this.parts;
@@ -4876,10 +4899,10 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 230. Negative bets (Carlos: "Note that the table allows negative bets"). */
-  var L230 = "The table allows negative bets.";
+  /* 230. Negative preferences (Carlos: "Note that the table allows negative bets"). */
+  var L230 = "The table allows negative preferences.";
   OB.scene({
-    page: 3, key: "negative-bets", order: 230, title: "Negative bets", beats: 2,
+    page: 3, key: "negative-bets", order: 230, title: "Negative preferences", beats: 2,
     build: function (root) {
       var P = this.parts = board(root);
       P.note.classList.add("ob-hide");
@@ -4892,8 +4915,8 @@ button { font-family: var(--px); }
   });
 })();
 
-/* Scenes 240 and 250: a row of bets gives the chances of its state; softmax turns the whole table into the probability
-   table, the policy. How the policy draws an action is agent V's scene 260 (sec3b-policy.js). */
+/* Scenes 240 and 250: a row of preferences gives the probabilities of its state; softmax turns the whole table into
+   the probability table, the policy. How the policy samples an action is agent V's scene 260 (sec3b-policy.js). */
 (function () {
   "use strict";
   var OB = window.OB, B = window.B, el = OB.el, TB = OB.tables, D = window.S3B;
@@ -4910,20 +4933,20 @@ button { font-family: var(--px); }
   function dy() { return window.matchMedia && window.matchMedia("(max-width: 760px)").matches ? 0 : -22; }
   var H = B.HEALTHY;
 
-  /* 240. From bets to chances (Carlos: "show how the table of bets gives rise to a probabilistic strategy"), on
-     HEALTHY's row. */
+  /* 240. From preferences to probabilities (Carlos: "show how the table of bets gives rise to a probabilistic
+     strategy"), on HEALTHY's row. */
   var L240 = [
-    "Each row of bets gives the chances of the actions in its state.",
-    "The higher the bet, the higher the chance."
+    "Each row of preferences gives the probabilities of the actions in its state.",
+    "The higher the preference, the higher the probability."
   ];
   OB.scene({
-    page: 3, key: "chances", order: 240, title: "From bets to chances", beats: L240.length,
+    page: 3, key: "chances", order: 240, title: "From preferences to probabilities", beats: L240.length,
     build: function (root) {
       var P = this.parts = {};
       P.lead = lead(root);
       var row = el("div", "s3b-flow s3b-wide s3b-rows");
-      P.W = TB.table(D.W, { kind: "bets", size: "m", rows: [H], cap: "HEALTHY'S BETS" });
-      P.C = TB.table(null, { kind: "prob", size: "m", rows: [H], cap: "HEALTHY'S CHANCES" });
+      P.W = TB.table(D.W, { kind: "bets", size: "m", rows: [H], cap: "HEALTHY'S PREFERENCES" });
+      P.C = TB.table(null, { kind: "prob", size: "m", rows: [H], cap: "HEALTHY'S PROBABILITIES" });
       row.appendChild(P.W.el);
       row.appendChild(P.C.el);
       root.appendChild(row);
@@ -4931,11 +4954,11 @@ button { font-family: var(--px); }
     beat: function (k, api) {
       var P = this.parts, W = P.W, C = P.C, go = live(api, k);
       say(P.lead, L240[k], api);
-      // Beat 0: HEALTHY's chances roll up from 0, after the arrow.
+      // Beat 0: HEALTHY's probabilities roll up from 0, after the arrow.
       if (k === 0 && go) api.unarrow("ch");
       api.arrow("ch", W.el, C.el, { delay: k === 0 && go ? 500 : 0 });
       C.setRow(H, D.P[H], { from: 0, delay: k === 0 && go ? 1500 : 0, cstagger: k === 0 && go ? 300 : 0 });
-      // Beat 1: the highest bet and the highest chance.
+      // Beat 1: the highest preference and the highest probability.
       W.mark(k === 1 ? [[H, D.TOPW[H]]] : []);
       C.mark(k === 1 ? [[H, D.TOPP[H]]] : []);
     }
@@ -4944,8 +4967,8 @@ button { font-family: var(--px); }
   /* 250. Softmax (Carlos: "show the table normalize to the softmax. There you include the link towards the softmax
      explanation, but don't explain it there"). The button opens the aside, scenes 282 to 286. */
   var L250 = [
-    "Softmax turns each row of bets into chances.",
-    "The probability table is a policy: a strategy with chances."
+    "Softmax turns each row of preferences into probabilities.",
+    "The probability table is a stochastic policy: a policy with probabilities."
   ];
   OB.scene({
     page: 3, key: "softmax", order: 250, title: "Softmax", beats: L250.length,
@@ -4953,7 +4976,7 @@ button { font-family: var(--px); }
       var P = this.parts = {};
       P.lead = lead(root);
       var flow = el("div", "s3b-flow s3b-wide");
-      P.W = TB.table(D.W, { kind: "bets", size: "m", cap: "BETS TABLE " + OB.tex("W") });
+      P.W = TB.table(D.W, { kind: "bets", size: "m", cap: "PREFERENCES " + OB.tex("\\theta") });
       P.P = TB.table(null, { kind: "prob", size: "m", cap: "PROBABILITY TABLE" });
       flow.appendChild(P.W.el);
       flow.appendChild(P.P.el);
@@ -4968,7 +4991,7 @@ button { font-family: var(--px); }
       say(P.lead, L250[k], api);
       if (k === 0 && go) api.unarrow("sm");
       api.arrow("sm", W.el, T.el, { label: "SOFTMAX", labelDy: dy(), delay: k === 0 && go ? 600 : 0 });
-      // The chances, row by row, rolling up from 0: shown, computed nowhere in the main flow.
+      // The probabilities, row by row, rolling up from 0: shown, computed nowhere in the main flow.
       [H, B.WORN, B.SHAKY, B.FAILING].forEach(function (s, i) {
         T.setRow(s, D.P[s], { from: 0, delay: k === 0 && go ? 1400 + 500 * i : 0 });
       });
@@ -5005,12 +5028,12 @@ button { font-family: var(--px); }
   function eTex(s) { return s.replace(/\be\b/g, function () { return E; }); }
   var exT = OB.texFmt(function (x) { return OB.num(x, 3); });
 
-  /* 282. Step 1: e to the power of every bet. */
+  /* 282. Step 1: e to the power of every preference. */
   var L282 = [
-    "Softmax works in two steps: e to the power of every bet, then each row divided by its sum.",
+    "Softmax works in two steps: e to the power of every preference, then each row divided by its sum.",
     "Step 1. e is the number 2.718. What is e to the power of 0.40?",
     "e to the power of 0.40 is 1.492.",
-    "Every bet becomes e to the power of the bet."
+    "Every preference becomes e to the power of the preference."
   ];
   OB.scene({
     page: 3, key: "softmax-step1", order: 282, aside: "softmax", title: "Softmax, step 1: e to the power",
@@ -5019,8 +5042,8 @@ button { font-family: var(--px); }
       var P = this.parts = {};
       P.lead = lead(root);
       var flow = el("div", "s3b-flow s3b-wide");
-      P.W = TB.table(D.W, { kind: "bets", size: "m", cap: "BETS TABLE " + OB.tex("W") });
-      P.X = TB.table(null, { kind: "exp", size: "m", cap: E + " TO THE POWER OF EACH BET" });
+      P.W = TB.table(D.W, { kind: "bets", size: "m", cap: "PREFERENCES " + OB.tex("\\theta") });
+      P.X = TB.table(null, { kind: "exp", size: "m", cap: E + " TO THE POWER OF EACH PREFERENCE" });
       flow.appendChild(P.W.el);
       flow.appendChild(P.X.el);
       root.appendChild(flow);
@@ -5031,7 +5054,7 @@ button { font-family: var(--px); }
       ex.appendChild(P.exv);
       P.ex = ex;
       root.appendChild(ex);
-      P.note = el("p", "ob-note s3b-note", "Every number is now above 0, and a higher bet gives a larger number.");
+      P.note = el("p", "ob-note s3b-note", "Every number is now above 0, and a higher preference gives a larger number.");
       root.appendChild(P.note);
     },
     beat: function (k, api) {
@@ -5064,7 +5087,7 @@ button { font-family: var(--px); }
         P.exv.classList.add("s3b-q");
         X.setCell(EX.s, EX.a, null);
       }
-      // Every other cell rolls from its bet to e to the power of its bet, row by row.
+      // Every other cell rolls from its preference to e to the power of its preference, row by row.
       [H].concat(OTHER).forEach(function (s, r) {
         for (var a = 0; a < 3; a++) {
           if (s === EX.s && a === EX.a) continue;
@@ -5078,10 +5101,10 @@ button { font-family: var(--px); }
   /* 284. Step 2: each row divided by its sum. */
   var L284 = [
     "Step 2. Each row is divided by its sum.",
-    "HEALTHY's sum is " + D.show("exp", D.ESUM[H]) + ". What are HEALTHY's chances?",
-    "Each number of the row divided by the row's sum: HEALTHY's chances.",
+    "HEALTHY's sum is " + D.show("exp", D.ESUM[H]) + ". What are HEALTHY's probabilities?",
+    "Each number of the row divided by the row's sum: HEALTHY's probabilities.",
     "Every row, the same way.",
-    "e to the power of every bet, then each row divided by its sum: that is softmax."
+    "e to the power of every preference, then each row divided by its sum: that is softmax."
   ];
   OB.scene({
     page: 3, key: "softmax-step2", order: 284, aside: "softmax", title: "Softmax, step 2: divide by the sum", beats: L284.length,
@@ -5089,7 +5112,7 @@ button { font-family: var(--px); }
       var P = this.parts = {};
       P.lead = lead(root);
       var flow = el("div", "s3b-flow s3b-wide");
-      P.X = TB.table(D.E, { kind: "exp", size: "m", sum: true, cap: E + " TO THE POWER OF EACH BET" });
+      P.X = TB.table(D.E, { kind: "exp", size: "m", sum: true, cap: E + " TO THE POWER OF EACH PREFERENCE" });
       P.P = TB.table(null, { kind: "prob", size: "m", heads: "top", cap: "PROBABILITY TABLE" });
       flow.appendChild(P.X.el);
       flow.appendChild(P.P.el);
@@ -5123,25 +5146,26 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 286. Why it works: the chances of each row add up to 1 (every number of step 1 is above 0, and the order of the
-     bets is kept: the note of 282 and the beat "The higher the bet, the higher the chance" of 240). */
+  /* 286. Why it works: the probabilities of each row add up to 1 (every number of step 1 is above 0, and the order
+     of the preferences is kept: the note of 282 and the beat "The higher the preference, the higher the
+     probability" of 240). */
   OB.scene({
     page: 3, key: "softmax-why", order: 286, aside: "softmax", title: "Softmax, why it works", beats: 1,
     build: function (root) {
       var P = this.parts = {};
       P.lead = lead(root);
       var flow = el("div", "s3b-flow s3b-wide");
-      P.W = TB.table(D.W, { kind: "bets", size: "m", cap: "BETS TABLE " + OB.tex("W") });
+      P.W = TB.table(D.W, { kind: "bets", size: "m", cap: "PREFERENCES " + OB.tex("\\theta") });
       P.P = TB.table(D.P, { kind: "prob", size: "m", sum: true, cap: "PROBABILITY TABLE" });
       flow.appendChild(P.W.el);
       flow.appendChild(P.P.el);
       root.appendChild(flow);
-      P.note = OB.html("p", "ob-note s3b-note", "Chances are rounded to two decimals.");
+      P.note = OB.html("p", "ob-note s3b-note", "Probabilities are rounded to two decimals.");
       root.appendChild(P.note);
     },
     beat: function (k, api) {
       var P = this.parts, T = P.P, go = live(api, 0);
-      say(P.lead, "The chances of each row add up to 1.", api);
+      say(P.lead, "The probabilities of each row add up to 1.", api);
       api.arrow("sm", P.W.el, T.el, { label: "SOFTMAX", labelDy: dy() });
       [H].concat(OTHER).forEach(function (s, i) {
         T.sum(s, 1, { delay: go ? 600 + 600 * i : 0 });
@@ -5154,7 +5178,7 @@ button { font-family: var(--px); }
 <script>/* sec3c-data.js */
 /* sec3c-data.js: GENERATED by tools/proto_movie.js (agent A5) from game/bessie.js; do not edit by hand.
    Every number of the proto-REINFORCE scenes of page 3 (sec3c.js). In the browser window.S3C; in node a module.
-   tools/check_proto.js recomputes it from bessie.js and asserts it. Seeds: bets B.randomBets(17, 68), picks B.rng(134623),
+   tools/check_proto.js recomputes it from bessie.js and asserts it. Seeds: preferences B.randomBets(17, 68), picks B.rng(134623),
    dice B.dice(12, 1000) for rounds 1 and 2, B.dice(2000 + round, 1000) for rounds 3 to 300. */
 (function (root) {
   "use strict";
@@ -5164,38 +5188,39 @@ button { font-family: var(--px); }
 })(typeof window !== "undefined" ? window : this);
 </script>
 <script>/* sec3c-runs.js */
-/* sec3c-runs.js: the runs of the proto-REINFORCE diagram (agent W, 2026-11-16), OB.s3cRuns, drawn by sec3c.js in
+/* sec3c-runs.js: the episodes of the proto-REINFORCE diagram (agent W, 2026-11-16), OB.s3cRuns, drawn by sec3c.js in
    the scenes 310, 320, 400 and 410. Carlos (2026-11-16): "do it also reinforce into 1,000 run because it's very
    obscure. Or a small number so we can see the runs in more detail."
 
-   The first ten runs are drawn in detail, the way page 2 draws a run (OB.runs.row: a cell per week in the colour of
-   the van's state, the action's glyph, the bolt of a breakdown, the run's G1 at the end); the other 990 arrive as a
-   stream of small strips (each one a real run's states) along the arrow from the probability table, into a stack of
-   cards behind the ten, while the count under them goes from 10 to 1,000. The G1s: the ten as numbers at the ends of
+   The first ten episodes are drawn in detail, the way page 2 draws an episode (OB.runs.row: a cell per week in the
+   colour of the van's state, the action's glyph, the bolt of a breakdown, the episode's return G1 at the end); the
+   other 990 arrive as a stream of small strips (each one a real episode's states) along the arrow from the
+   probability table, into a stack of cards behind the ten, while the count under them goes from 10 to 1,000. The
+   returns: the ten as numbers at the ends of
    their rows, each flying into its bin of a histogram ($100 bins, one scale for every policy of the diagram,
    S3C.hist.max) where it lands as a block; then the other 990 pour in and the bars rise to their counts. The average
    is a mark on the histogram whose number flies into the average box.
    Vector shapes only (HTML and SVG); every motion through the engine's api (core.js), eased, finished by the engine
    when the reader moves on.
 
-   R = OB.s3cRuns.View()        R.box (the runs: the sheet of ten and its stack), R.face (the sheet, the arrows'
+   R = OB.s3cRuns.View()        R.box (the episodes: the sheet of ten and its stack), R.face (the sheet, the arrows'
                                 end), R.hist (the histogram's box), R.count (the number of the caption n = 1,000)
    R.src = element              where the stream starts (the probability table)
-   R.layer(V, key, mean)        the runs of the bets V on the dice of the diagram; key names V in S3C.ten (W0, W0h,
-                                W1), mean is the average G1 the scenes say; both are checked against the runs
-                                (console.error when they differ). Returns the layer's index.
-   R.runsOn(i, api, go, o)      shows layer i's runs (-1: none). go: the motion of Next. From none: the ten rows play
-                                one after another, then the stream and the count. From another layer: the ten rows
+   R.layer(V, key, mean)        the episodes of the preferences V on the dice of the diagram; key names V in S3C.ten
+                                (W0, W0h, W1), mean is the average return the scenes say; both are checked against the
+                                episodes (console.error when they differ). Returns the layer's index.
+   R.runsOn(i, api, go, o)      shows layer i's episodes (-1: none). go: the motion of Next. From none: the ten rows
+                                play one after another, then the stream and the count. From another layer: the ten rows
                                 are played again under a playhead, then the stream.
-   R.g1On(i, api, go, o)        layer i's G1s (-1: none). From none: the ten G1s at the ends of the rows, each flies
-                                into its bin, then the bars rise. From another layer: the bars move.
+   R.g1On(i, api, go, o)        layer i's returns (-1: none). From none: the ten returns at the ends of the rows, each
+                                flies into its bin, then the bars rise. From another layer: the bars move.
    R.markOn(i, api, go, o)      the mark of layer i's average on the histogram (-1: none): drawn, moved or hidden.
    R.flyAvg(api, to, o)         a copy of the mark's number flies into the element to, hidden until it lands; with
                                 o.set, to keeps what it shows and o.set() gives it the number when the copy lands.
-   R.frame(S)                   the movie of scenes 410 and 420 (main session, 2026-11-16, evening): the runs of a
-                                summary S at once, with no layer and no motion: the ten rows (their cells changed in
+   R.frame(S)                   the movie of scenes 410 and 420 (main session, 2026-11-16, evening): the episodes of
+                                a summary S at once, with no layer and no motion: the ten rows (their cells changed in
                                 place), the full stack and its count, the G1 slots, the bars, the mark at S.mean.
-   OB.s3cRuns.summary(runs)     what the diagram draws of a policy's runs: { ten, bins, mean }.
+   OB.s3cRuns.summary(runs)     what the diagram draws of a policy's episodes: { ten, bins, mean }.
    o: { delay } in ms. */
 (function () {
   "use strict";
@@ -5207,12 +5232,12 @@ button { font-family: var(--px); }
   /* The histogram's box in px: the mark's number on top, the bars (a G1 of the ten lands as a block of UNIT px), "$0". */
   var HW = 180, HH = 158, X0 = 4, X1 = HW - 4, HT = 21, HB = 140, UNIT = 4;
   var STRIPS = 40, LIFT = 7;          // the strips of a stream; they ride LIFT px above the arrow's line
-  /* The dice of the diagram: 1,000 runs of B.dice(12), the same luck for every policy (also OB.s3c.dice). */
+  /* The dice of the diagram: 1,000 episodes of B.dice(12), the same luck for every policy (also OB.s3c.dice). */
   var DICE = null;
   function dice() { return DICE || (DICE = B.dice(D.seeds.dice, D.n)); }
 
   function money0(x) { return OB.money(x, 0); }
-  /* The counts of G1s in the histogram's $100 bins (a G1 outside the scale counts in the bin at its end). */
+  /* The counts of returns in the histogram's $100 bins (a return outside the scale counts in the bin at its end). */
   function binsOf(g1s) {
     var bins = [];
     for (var b = 0; b < NB; b += 1) bins.push(0);
@@ -5224,7 +5249,7 @@ button { font-family: var(--px); }
     runs.forEach(function (q) { sum += q.G1; });
     return { ten: runs.slice(0, TEN), bins: binsOf(runs.map(function (q) { return q.G1; })), mean: sum / runs.length };
   }
-  /* A cell of a run for state s, action a and a breakdown, cloned from one made once by OB.runs.cell. */
+  /* A cell of an episode for state s, action a and a breakdown, cloned from one made once by OB.runs.cell. */
   var CELLS = {};
   function cellOf(s, a, bd) {
     var k = s + "." + a + (bd ? "b" : "");
@@ -5278,7 +5303,7 @@ button { font-family: var(--px); }
   function View() {
     var R = { layers: [], cur: { runs: -1, g1: -1, mark: -1 }, src: null };
 
-    /* The runs: a sheet of ten rows on a stack of cards. */
+    /* The episodes: a sheet of ten rows on a stack of cards. */
     R.box = el("div", "s3c-sheet");
     R.deck = el("div", "s3c-deck");
     R.cards = [];
@@ -5329,7 +5354,7 @@ button { font-family: var(--px); }
       R.mline.style.transform = "";
     }
 
-    /* A layer: the runs of the bets V, their G1s and bins, the average. */
+    /* A layer: the episodes of the preferences V, their returns and bins, the average. */
     R.layer = function (V, key, mean) {
       var runs = OB.runs.play(B.softmaxTable(V), dice(), D.n);
       var L = { runs: runs, key: key, mean: mean, bins: [], g1: runs.map(function (q) { return q.G1; }) };
@@ -5341,10 +5366,10 @@ button { font-family: var(--px); }
         L.bins[Math.max(0, Math.min(NB - 1, k))] += 1;
       });
       var avg = sum / runs.length;
-      if (money2(avg) !== money2(mean)) console.error("sec3c-runs: the average G1 of " + key + " is " + money2(avg) + ", the scenes say " + money2(mean));
+      if (money2(avg) !== money2(mean)) console.error("sec3c-runs: the average return of " + key + " is " + money2(avg) + ", the scenes say " + money2(mean));
       var ten = (D.ten && D.ten[key]) || [];
       for (var j = 0; j < TEN && ten.length; j += 1) {
-        if (money0(runs[j].G1) !== money0(ten[j])) console.error("sec3c-runs: run " + (j + 1) + " of " + key + " has G1 " + money0(runs[j].G1) + ", S3C.ten says " + money0(ten[j]));
+        if (money0(runs[j].G1) !== money0(ten[j])) console.error("sec3c-runs: episode " + (j + 1) + " of " + key + " has G1 " + money0(runs[j].G1) + ", S3C.ten says " + money0(ten[j]));
       }
       L.block = null;
       R.layers.push(L);
@@ -5377,8 +5402,8 @@ button { font-family: var(--px); }
       R.cards.forEach(function (cd, j) { cd.style.opacity = String(clamp01((f - 0.12 - 0.3 * j) / 0.12)); });
     }
 
-    /* The stream: STRIPS strips, each a run of the layer (runs 11 to 58), from the source along the arrow's elbow into
-       the stack; f(frac) is told how much of the stream has arrived. */
+    /* The stream: STRIPS strips, each an episode of the layer (episodes 11 to 58), from the source along the arrow's
+       elbow into the stack; f(frac) is told how much of the stream has arrived. */
     function stream(api, i, delay, emit, fly, f) {
       var L = R.layers[i];
       api.at(delay, function () {
@@ -5461,7 +5486,7 @@ button { font-family: var(--px); }
         return;
       }
       if (prev < 0) {
-        // The first play: the sheet, then each run week by week, one after another; then the stream and the count.
+        // The first play: the sheet, then each episode week by week, one after another; then the stream and the count.
         setBlock(i);
         var bk = R.block;
         bk.rows.forEach(function (rw) { rw.style.clipPath = "inset(0 100% 0 0)"; });
@@ -5551,7 +5576,7 @@ button { font-family: var(--px); }
         return;
       }
       if (prev < 0) {
-        // The ten G1s at the ends of their rows, one after another; each flies into its bin and lands there as a
+        // The ten returns at the ends of their rows, one after another; each flies into its bin and lands there as a
         // block; then the other 990 pour in and the bars rise from the blocks to their counts.
         var bk = R.block, hs = R.bars.map(function () { return 0; }), fin = heights(L.bins);
         setH(hs);
@@ -5643,7 +5668,7 @@ button { font-family: var(--px); }
         api.animate(1100, function (p) { placeMark(xa + (xb - xa) * p, P0.mean + (L.mean - P0.mean) * p); }, function () { placeMark(xb, L.mean); });
       });
     };
-    /* The movie: the runs of the summary S, at once (see the head of the file). */
+    /* The movie: the episodes of the summary S, at once (see the head of the file). */
     R.frame = function (S) {
       var bk = R.block;
       if (!bk || !bk.movie) {
@@ -5741,69 +5766,70 @@ button { font-family: var(--px); }
   var E = D.end, LAST = D.rounds;
   function sa(h) { return STATES[h.s] + " and " + ACTIONS[h.a]; }
 
-  /* Chances of a row of bets, two decimals (B.softmax, repeated for node). */
+  /* Probabilities of a row of preferences, two decimals (B.softmax, repeated for node). */
   function softmax(row) {
     var m = Math.max.apply(null, row);
     var e = row.map(function (x) { return Math.exp(x - m); });
     var s = e.reduce(function (x, y) { return x + y; }, 0);
     return e.map(function (x) { return x / s; });
   }
-  var P1H = softmax(D.W1[h1.s]);          // HEALTHY's chances after the first update
+  var P1H = softmax(D.W1[h1.s]);          // HEALTHY's probabilities after the first update
 
   var T = {
     num: num, money: money, bet: bet, G1: G1, AVG: AVG, STATES: STATES, ACTIONS: ACTIONS,
     card: { kicker: "REINFORCE", title: "proto-REINFORCE",
-      line: "Bets picked at random, many runs, their average, then one small change at a time." },
+      line: "Random preferences, many episodes, their average, then one small change at a time." },
 
     /* 310, the forward pass. */
     forward: [
-      "proto-REINFORCE starts from a table of bets picked at random.",
-      "Softmax turns the bets into the probability table: the policy.",
-      "The policy plays " + tx("n = " + tn(N)) + " runs.",
-      "Each run has its " + G1 + ".",
+      "proto-REINFORCE starts from a table of preferences picked at random.",
+      "Softmax turns the preferences into the probability table: the policy.",
+      "The policy is followed for " + tx("n = " + tn(N)) + " episodes.",
+      "Each episode has its return " + G1 + ".",
       "Their average: " + tx("\\bar{G}_1 = " + tn(money(D.start))) + ".",
-      "Change the bets to raise this number."
+      "Change the preferences to raise this number."
     ],
 
-    /* 320, the backward pass: one small change of one bet (in the manner of weekend 2's nudge). */
+    /* 320, the backward pass: one small change of one preference (in the manner of weekend 2's nudge). */
     backward: [
-      "Which bet should change? One bet, picked at random.",
-      sa(h1) + ". Its bet, " + bet(h1.w) + ", is Before.",
+      "Which preference should change? One preference, picked at random.",
+      sa(h1) + ". Its preference, " + bet(h1.w) + ", is Before.",
       "Add a little, " + EPS + ": After is " + bet(h1.w + D.eps) + ".",
-      "With " + bet(h1.w + D.eps) + " in the table, softmax gives " + STATES[h1.s] + " new chances.",
-      "The " + N + " runs again, with the same luck: the average " + G1 + " After is " + money(h1.after) + ".",
-      "Before and after, side by side: the bet and the average " + G1 + ".",
+      "With " + bet(h1.w + D.eps) + " in the table, softmax gives " + STATES[h1.s] + " new probabilities.",
+      "The " + N + " episodes again, with the same luck: the average return " + AVG + " After is " + money(h1.after) + ".",
+      "Before and after, side by side: the preference and the average return " + AVG + ".",
       "Four numbers to look at closely."
     ],
 
     /* 400, the update applied in the diagram. */
     update: [
-      "The update puts the new bet into the table: " + bet(h1.wNew) + ".",
-      "Softmax gives " + STATES[h1.s] + " new chances: " + ACTIONS[h1.a] + " is now " + num(P1H[h1.a], 2) + ".",
-      "The " + N + " runs again, with the same luck. Will the average " + G1 + " go up or down?",
+      "The update puts the new preference into the table: " + bet(h1.wNew) + ".",
+      "Softmax gives " + STATES[h1.s] + " new probabilities: " + ACTIONS[h1.a] + " is now " + num(P1H[h1.a], 2) + ".",
+      "The " + N + " episodes again, with the same luck. Will the average return " + AVG + " go up or down?",
       (h1.upd > h1.before ? "Up" : "Down") + ": from " + money(h1.before) + " to " + money(h1.upd) + "."
     ],
     updLines: [
-      "w = w + \\alpha\\nabla",
-      "w = " + bet(h1.w) + " + " + ALPHA + " \\times " + paren(h1.nabla) + " = " + bet(h1.wNew)
+      "\\theta_{s,a} = \\theta_{s,a} + \\alpha\\nabla",
+      "\\theta_{s,a} = " + bet(h1.w) + " + " + ALPHA + " \\times " + paren(h1.nabla) + " = " + bet(h1.wNew)
     ],
 
-    /* 410, the reward plot: how its points are made (main session, 2026-11-16, evening; scene 410 "Again" went at
+    /* 410, the learning curve: how its points are made (main session, 2026-11-16, evening; scene 410 "Again" went at
        Carlos's word: "show me only one loop"). */
     plot: [
-      "The reward plot: across, the number of updates; up, the average " + G1 + " after them.",
-      "No update yet: the bets picked at random give " + money(D.start) + ". The first point.",
+      "The learning curve: across, the number of updates; up, the average return " + AVG + " after them.",
+      "No update yet: the preferences picked at random give " + money(D.start) + ". The first point.",
       "After update 1: " + money(h1.upd) + ". The second point. Every update adds one."
     ],
 
     /* 420, the movie: every update with the whole diagram, its backward pass, its update and its point. */
     movie: [
-      "Each update in full: a bet picked at random, its " + tx("\\nabla") + " and its update, " + N + " new runs, one more point.",
+      "Each update in full: a preference picked at random, its " + tx("\\nabla") + " and its update, " + N + " new episodes, one more point.",
       "After " + LAST + " updates, the likeliest action in each state is " +
-        E.top.map(function (a) { return ACTIONS[a]; }).join(", ") + ": the best strategy."
+        E.top.map(function (a) { return ACTIONS[a]; }).join(", ") + ": the optimal policy."
     ],
-    /* The numbers of update i (1 to 300) as the movie's panel writes them: its bet, Before and After of the bet and
-       of the average, their changes, nabla and the new bet. r: { s, a, w, wNew, before, after, change, nabla }. */
+    /* The numbers of update i (1 to 300) as the movie's panel writes them: its preference, Before and After of the
+       preference and of the average, their changes, nabla and the new preference. r: { s, a, w, wNew, before, after,
+       change, nabla }. */
     hop: function (r) {
       return {
         state: STATES[r.s], action: ACTIONS[r.a],
@@ -5812,8 +5838,8 @@ button { font-family: var(--px); }
         change: num(r.change, 2), nabla: num(r.nabla, 0), nablaP: paren(r.nabla), wNew: bet(r.wNew)
       };
     },
-    /* The label of the best strategy's line in the plot: its average G1 on the runs of the last update. */
-    bestLab: "BEST STRATEGY: " + money(E.best),
+    /* The label of the optimal policy's line in the plot: its average return on the episodes of the last update. */
+    bestLab: "OPTIMAL POLICY: " + money(E.best),
     counter: function (i) { return "UPDATE " + i + " OF " + LAST; }
   };
   if (NODE) module.exports = T;
@@ -5829,21 +5855,22 @@ button { font-family: var(--px); }
    after value for that entry appears. Then we show through an arrow how this new value produces a new average G1".
 
    Every number comes from sec3c-data.js (window.S3C, generated by tools/proto_movie.js from bessie.js) and every
-   line that holds one from sec3c-text.js (window.S3CT); tools/check_proto.js asserts both. The runs are played on
-   B.dice(12, 1000), the same luck for every policy, and drawn by OB.s3cRuns (sec3c-runs.js, agent W, 2026-11-16):
-   the first ten in detail, the other 990 as a stream into a stack, the G1s as ten numbers and a histogram, the
-   average as a mark on it; the tables with OB.tables (tables.js).
+   line that holds one from sec3c-text.js (window.S3CT); tools/check_proto.js asserts both. The episodes are
+   generated on B.dice(12, 1000), the same luck for every policy, and drawn by OB.s3cRuns (sec3c-runs.js, agent W,
+   2026-11-16): the first ten in detail, the other 990 as a stream into a stack, the returns G1 as ten numbers and a
+   histogram, the average as a mark on it; the tables with OB.tables (tables.js).
 
    300 card "proto-REINFORCE"
-   310 The forward pass (6 beats): the bets picked at random; softmax and the probability table; the policy plays
-       the runs: ten runs week by week, then the stream of the other 990, counted from 10 to 1,000; each run's G1:
-       the ten at the ends of their rows fly to their dots under the histogram, then its bars rise; the average G1:
-       its mark on the histogram, whose number, -$172.24, flies into the average box; the loop back to the bets
-   320 The backward pass (7 beats): the twelve bets light up and one is ringed (HEALTHY, RUN); its bet taken apart,
-       Before 0.40; +0.01, After 0.41; softmax with 0.41; the same 1,000 runs played again (the ten under a
-       playhead, the stream), the histogram moves, the mark rolls to -$170.50 and flies into the box After; the
-       four boxes lit together; the diagram fades and the four numbers move to the middle, in the places of agent
-       A6's scene 350 (the bet's Before and After on top, the average's below)
+   310 The forward pass (6 beats): the preferences picked at random; softmax and the probability table; the policy
+       is followed for the episodes: ten episodes week by week, then the stream of the other 990, counted from 10 to
+       1,000; each episode's return G1: the ten at the ends of their rows fly to their dots under the histogram, then
+       its bars rise; the average return: its mark on the histogram, whose number, -$172.24, flies into the average
+       box; the loop back to the preferences
+   320 The backward pass (7 beats): the twelve preferences light up and one is ringed (HEALTHY, RUN); its preference
+       taken apart, Before 0.40; +0.01, After 0.41; softmax with 0.41; the same 1,000 episodes generated again (the ten
+       under a playhead, the stream), the histogram moves, the mark rolls to -$170.50 and flies into the box After; the
+       four boxes lit together; the diagram fades and the four numbers move to the middle, in the places of agent A6's
+       scene 350 (the preference's Before and After on top, the average's below)
 
    OB.s3c is the kit that sec3c2.js reuses: Dia (the diagram), avgBox, updBox, lead, say, live, hopW, sym. */
 (function () {
@@ -5877,7 +5904,7 @@ button { font-family: var(--px); }
     return o;
   }
 
-  /* The dice of the diagram: 1,000 runs of B.dice(12), the same luck for every policy (sec3c-runs.js). */
+  /* The dice of the diagram: 1,000 episodes of B.dice(12), the same luck for every policy (sec3c-runs.js). */
   var RV = OB.s3cRuns;
   if (!RV) { console.error("sec3c: sec3c-runs.js is missing"); return; }
   var dice = RV.dice;
@@ -5889,8 +5916,9 @@ button { font-family: var(--px); }
     return sv;
   }
 
-  /* A box for an average G1, of the make of tables.js's zoomed cell (as agent A6's close-up draws it): a caption
-     (BEFORE or AFTER), the name AVERAGE G1 in a tag, the number in money, green for a gain and red for a loss. */
+  /* A box for an average return, of the make of tables.js's zoomed cell (as agent A6's close-up draws it): a
+     caption (BEFORE or AFTER), the name AVERAGE and the symbol of the average return in a tag, the number in money,
+     green for a gain and red for a loss. */
   function avgBox(v, cap) {
     var A = { el: el("div", "tb-zoom ob-box white s3c-avg") };
     A.cap = el("div", "tb-zcap" + (cap ? "" : " ob-gone"), cap || "");
@@ -5932,8 +5960,8 @@ button { font-family: var(--px); }
     return A;
   }
 
-  /* The update written out: its lines, each a formula in TeX, the last one ending in the new bet (U.res, which flies
-     into the table: a number in the face of the formulas, OB.texNumEl). */
+  /* The update written out: its lines, each a formula in TeX, the last one ending in the new preference (U.res, which
+     flies into the table: a number in the face of the formulas, OB.texNumEl). */
   function updBox(lines) {
     var U = { el: el("div", "s3c-upd ob-box white ob-hide") };
     U.cap = el("div", "tb-zcap", "THE UPDATE");
@@ -5970,9 +5998,10 @@ button { font-family: var(--px); }
   window.addEventListener("resize", function () { requestAnimationFrame(redrawLoops); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawLoops);
 
-  /* The diagram of sketch page 25 for the bets W: the bets table, softmax, the probability table, the runs (one
-     layer per policy, added with d.layer), their G1, the average G1 (d.A); the cells zb, za (a bet before and after)
-     and aa (the average after), filled by the scenes; the loop from the average back to the bets. */
+  /* The diagram of sketch page 25 for the preferences W: the table of preferences, softmax, the probability table,
+     the episodes (one layer per policy, added with d.layer), their returns G1, the average return (d.A); the cells
+     zb, za (a preference before and after) and aa (the average after), filled by the scenes; the loop from the
+     average back to the preferences. */
   function Dia(W, o) {
     o = o || {};
     var d = { W: W };
@@ -5987,12 +6016,12 @@ button { font-family: var(--px); }
     }
     d.c = { bets: cell("bets"), prob: cell("prob"), runs: cell("runs"), g1: cell("g1"),
       ab: cell("ab", "s3c-ab"), aa: cell("aa", "s3c-aa"), zb: cell("zb", "s3c-zb"), za: cell("za", "s3c-za") };
-    d.T = TB.table(o.empty ? null : W, { kind: "bets", size: "s", cap: "BETS TABLE " + OB.tex("W") });
+    d.T = TB.table(o.empty ? null : W, { kind: "bets", size: "s", cap: "PREFERENCES " + OB.tex("\\theta") });
     d.c.bets.appendChild(d.T.el);
     d.Q = TB.table(B.softmaxTable(W), { kind: "prob", size: "s", heads: "top", cap: "PROBABILITY TABLE" });
     d.c.prob.appendChild(d.Q.el);
-    /* The runs and their G1 (sec3c-runs.js): the ten in detail on the stack of all 1,000, n and its brace; the
-       histogram of the 1,000 G1s. d.stack and d.gstack are the ends of the arrows. */
+    /* The episodes and their returns G1 (sec3c-runs.js): the ten in detail on the stack of all 1,000, n and its
+       brace; the histogram of the 1,000 returns. d.stack and d.gstack are the ends of the arrows. */
     var R = d.R = RV.View();
     var rb = el("div", "s3c-rbox");
     d.n = OB.html("span", "s3c-n", OB.tex("n"));
@@ -6004,17 +6033,18 @@ button { font-family: var(--px); }
     d.rcap = el("div", "s3c-cap");
     d.rcap.appendChild(OB.texEl("n =\\;"));
     d.rcap.appendChild(R.count);
-    d.rcap.appendChild(document.createTextNode(" RUNS"));
+    d.rcap.appendChild(document.createTextNode(" EPISODES"));
     d.c.runs.appendChild(d.rcap);
     d.stack = R.face;
     d.gstack = R.hist;
     d.c.g1.appendChild(R.hist);
-    d.gcap = OB.html("div", "s3c-cap", OB.texIn(X.G1) + " OF EACH RUN");
+    d.gcap = OB.html("div", "s3c-cap", "RETURN " + OB.texIn(X.G1) + " OF EACH EPISODE");
     d.c.g1.appendChild(d.gcap);
     d.A = avgBox(o.avg === undefined ? null : o.avg, o.avgCap || "");
     d.c.ab.appendChild(d.A.el);
     R.src = d.Q.el;
-    /* A layer of runs and G1s for the bets V, named key in S3C.ten, whose average G1 the scenes say is mean. */
+    /* A layer of episodes and returns for the preferences V, named key in S3C.ten, whose average return the scenes
+       say is mean. */
     d.layer = function (V, key, mean) { return R.layer(V, key, mean); };
     d.runsOn = function (i, api, go, o2) { R.runsOn(i, api, go, o2); };
     d.g1On = function (i, api, go, o2) { R.g1On(i, api, go, o2); };
@@ -6040,7 +6070,7 @@ button { font-family: var(--px); }
       });
     };
 
-    /* The loop: from the average G1 out to the right, up above the diagram, and down into the bets. */
+    /* The loop: from the average return out to the right, up above the diagram, and down into the preferences. */
     d.loop = { el: OB.svgEl("svg", { "class": "s3c-loop ob-hide", "aria-hidden": "true" }), p: 1 };
     d.loop.line = OB.svgEl("polyline", {});
     d.loop.head = OB.svgEl("polygon", {});
@@ -6078,7 +6108,7 @@ button { font-family: var(--px); }
     return d;
   }
 
-  /* The four numbers of a hop in the middle of the screen, in the places of agent A6's scene 350: the bet's
+  /* The four numbers of a hop in the middle of the screen, in the places of agent A6's scene 350: the preference's
      Before and After on top, the average's Before and After below. */
   function fourPanel(T, s, a, w0, w1, g0, g1) {
     var F = { el: el("div", "s3c-four ob-hide") };
@@ -6129,14 +6159,14 @@ button { font-family: var(--px); }
     beat: function (k, api) {
       var P = this.parts, d = P.d, go = live(api, k);
       say(P.lead, X.forward[k], api);
-      // 0: the bets, picked at random, cell by cell.
+      // 0: the preferences, picked at random, cell by cell.
       d.T.set(D.W0, go && k === 0 ? { delay: 500, cstagger: 110 } : undefined);
       // 1: softmax, then the probability table.
       api.show(d.Q.el, k >= 1, opt(go && k === 1, 1300));
-      // 2: the policy plays the runs: ten week by week, then the other 990, counted.
+      // 2: the policy is followed for the episodes: ten week by week, then the other 990, counted.
       [d.n, d.brace, d.rcap].forEach(function (e) { api.show(e, k >= 2, opt(go && k === 2, 900)); });
       d.runsOn(k >= 2 ? 0 : -1, api, go && k === 2, { delay: 900 });
-      // 3: each run's G1: the ten as numbers, then the histogram of the 1,000.
+      // 3: each episode's return G1: the ten as numbers, then the histogram of the 1,000.
       api.show(d.gcap, k >= 3, opt(go && k === 3, 3300));
       d.g1On(k >= 3 ? 0 : -1, api, go && k === 3, { delay: 200 });
       // 4: their average: its mark on the histogram, and its number flies into the box.
@@ -6154,7 +6184,7 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 320. The backward pass: one bet, a little more, and the average G1 that comes of it. */
+  /* 320. The backward pass: one preference, a little more, and the average return that comes of it. */
   OB.scene({
     page: 3, key: "proto-backward", order: 320, title: "The backward pass", beats: X.backward.length,
     build: function (root) {
@@ -6183,16 +6213,17 @@ button { font-family: var(--px); }
       // The forward pass stands from the start, until the hand-over.
       var ov = api.root.querySelector(".ob-overlay");
       if (!hand && ov) { ov.classList.remove("ob-hide"); ov.style.opacity = ""; }
-      // The runs and their G1 of the bets Before; at 4 of the bets After, played again with the same luck.
+      // The episodes and their returns of the preferences Before; at 4 of the preferences After, generated again
+      // with the same luck.
       d.runsOn(k >= 4 ? 1 : 0, api, go && k === 4, { delay: 600 });
       d.g1On(k >= 4 ? 1 : 0, api, go && k === 4, { delay: 2300 });
       d.markOn(k >= 4 ? 1 : 0, api, go && k === 4, { delay: 2500 });
-      // 0: the twelve bets light up; one is picked at random and ringed.
+      // 0: the twelve preferences light up; one is picked at random and ringed.
       if (go && k === 0) {
         d.T.mark(ALL12);
         api.at(1600, function () { d.T.mark([cell]); d.T.rings([cell]); });
       } else if (!hand) { d.T.mark([cell]); d.T.rings([cell]); }
-      // 1: its bet taken apart: Before. The average G1 of these bets is its Before too.
+      // 1: its preference taken apart: Before. The average return of these preferences is its Before too.
       if (k >= 1) {
         if (go && k === 1) d.T.lift(h.s, h.a, P.zb, { delay: 300 });
         else { P.zb.el.classList.remove("ob-hide"); P.zb.el.style.visibility = ""; }
@@ -6202,11 +6233,11 @@ button { font-family: var(--px); }
       if (k >= 2 && !hand) api.arrow("hop", P.zb.el, P.za.el, { label: "+" + OB.num(EPS, 2), labelDy: -22, delay: go && k === 2 ? 200 : 0, dur: go && k === 2 ? undefined : 1 });
       else api.unarrow("hop");
       api.show(P.za.el, k >= 2, opt(go && k === 2, 1400));
-      // 3: the After goes into the table; softmax gives HEALTHY new chances.
+      // 3: the After goes into the table; softmax gives HEALTHY new probabilities.
       d.T.setCell(h.s, h.a, k >= 3 ? W1[h.s][h.a] : h.w, go && k === 3 ? { delay: 300 } : undefined);
       d.Q.setRow(h.s, B.softmax(k >= 3 ? W1[h.s] : D.W0[h.s]), go && k === 3 ? { delay: 1500 } : undefined);
       d.Q.rings(k === 3 ? [[h.s, null]] : []);
-      // 4: the same runs again, and the average G1 After: its number flies from the mark into the box.
+      // 4: the same episodes again, and the average return After: its number flies from the mark into the box.
       api.show(P.ga.el, k >= 4, opt(go && k === 4, 3000));
       P.ga.set(h.after);
       if (go && k === 4) d.flyAvg(api, P.ga.num, { delay: 3800, dur: 1100, arc: 56 });   // high, over the box Before
@@ -6249,19 +6280,21 @@ button { font-family: var(--px); }
 /* sec3c2.js: page 3, proto-REINFORCE after agent A6's close-up (agent A5, 2026-11-14), scenes 400 to 499. The kit
    of the diagram is OB.s3c (sec3c.js); every number comes from sec3c-data.js and every line from sec3c-text.js.
 
-   400 The update (4 beats): the new bet 2.14 flies from the update into the table; softmax gives HEALTHY new
-       chances (RUN 0.84); the same 1,000 runs again (the ten played again under a playhead, the stream, the
-       histogram moves right), the mark of the average goes and the room guesses (Compute); the mark at $73.57 and
+   400 The update (4 beats): the new preference 2.14 flies from the update into the table; softmax gives HEALTHY
+       new probabilities (RUN 0.84); the same 1,000 episodes again (the ten played again under a playhead, the stream,
+       the histogram moves right), the mark of the average goes and the room guesses (Compute); the mark at $73.57 and
        its number flies into the box: up, from -$172.24 to $73.57
-   The runs are drawn by OB.s3cRuns (sec3c-runs.js, agent W, 2026-11-16) through the diagram's d.layer, d.runsOn,
+   The episodes are drawn by OB.s3cRuns (sec3c-runs.js, agent W, 2026-11-16) through the diagram's d.layer, d.runsOn,
    d.g1On, d.markOn and d.flyAvg.
-   410 The reward plot (3 beats, main session, 2026-11-16, evening): the whole diagram after update 1, the panel of
-       its backward pass and its update, and an empty plot (across the updates, up the average G1); the average of
-       the bets at random, -$172.24, flies to the first point; the average after update 1, $73.57, to the second
+   410 The learning curve (3 beats, main session, 2026-11-16, evening): the whole diagram after update 1, the panel of
+       its backward pass and its update, and an empty plot (across the updates, up the average return); the average
+       of the preferences at random, -$172.24, flies to the first point; the average after update 1, $73.57, to the
+       second
    420 Many updates (2 beats): the movie of updates 2 to 300 with the whole diagram, every part set at each update
-       (the bet picked at random, its Before, After and change, nabla, the update, the bets, the chances, the 1,000
-       runs of the new policy, their histogram and average, the plot's new point), faster and faster, with Pause and
-       Again; the end: the likeliest actions RUN, SERVICE, REPLACE, REPLACE, the best strategy
+       (the preference picked at random, its Before, After and change, nabla, the update, the preferences, the
+       probabilities, the 1,000 episodes of the new policy, their histogram and average, the plot's new point), faster
+       and faster, with Pause and Again; the end: the likeliest actions RUN, SERVICE, REPLACE, REPLACE, the optimal
+       policy
    Scene 410 "Again" (a second update shown slowly) went at Carlos's word that evening: "show me only one loop".
 
    The movie runs on its own requestAnimationFrame loop (the engine's motions are for single moves): it is stopped in
@@ -6290,7 +6323,7 @@ button { font-family: var(--px); }
       K.say(P.lead, X.update[k], api);
       if (k === 2) api.nextLabel("Compute");
       d.arrows(api, ["sm", "play", "g1", "avg"]);
-      // 0: the update, and its new bet flies into the table.
+      // 0: the update, and its new preference flies into the table.
       api.show(P.U.el, true);
       d.T.mark([cell]);
       if (go && k === 0) {
@@ -6303,11 +6336,11 @@ button { font-family: var(--px); }
         d.T.setCell(h.s, h.a, h.wNew, { now: true });
         d.T.num(h.s, h.a).style.visibility = "";
       }
-      // 1: softmax gives HEALTHY new chances.
+      // 1: softmax gives HEALTHY new probabilities.
       d.Q.setRow(h.s, B.softmax(k >= 1 ? D.W1[h.s] : D.W0[h.s]), go && k === 1 ? { delay: 300 } : undefined);
       d.Q.rings(k === 1 ? [[h.s, null]] : []);
       d.Q.mark(k === 1 ? [cell] : []);
-      // 2: the same runs again, the mark of the average goes; the room guesses.
+      // 2: the same episodes again, the mark of the average goes; the room guesses.
       d.runsOn(k >= 2 ? 1 : 0, api, go && k === 2, { delay: 300 });
       d.g1On(k >= 2 ? 1 : 0, api, go && k === 2, { delay: 2000 });
       d.markOn(k === 2 ? -1 : k >= 3 ? 1 : 0, api, go && (k === 2 || k === 3), { delay: 300 });
@@ -6326,12 +6359,13 @@ button { font-family: var(--px); }
      plot, I want you to show me everything ... You don't have to do this part step by step ... but I want you to
      show me all the values there. And at the same speed at which you are doing the iterations in this last slide."
      Both scenes show the whole diagram of one update (OB.s3c.Dia), a panel with its backward pass and its update, and
-     the reward plot. The diagram stands after the update: its bets, chances, runs and average are those of the new
-     bets, on the dice of the update's round, so the average box holds the plot's newest point. */
+     the learning curve. The diagram stands after the update: its preferences, probabilities, episodes and average
+     are those of the new preferences, on the dice of the update's round, so the average box holds the plot's newest
+     point. */
 
-  /* The frames: FR[0] the bets at random; FR[i] update i: its bet, its numbers, then the bets and the chances after
-     it, rebuilt from the movie's rows in hundredths (whole numbers, so the sums are exact). tools/check_proto.js
-     checks that the rebuilt bets end on D.end.W. */
+  /* The frames: FR[0] the preferences at random; FR[i] update i: its preference, its numbers, then the preferences
+     and the probabilities after it, rebuilt from the movie's rows in hundredths (whole numbers, so the sums are exact).
+     tools/check_proto.js checks that the rebuilt preferences end on D.end.W. */
   var FR = (function () {
     var H = D.W0.map(function (r) { return r.map(function (x) { return Math.round(x * 100); }); });
     function bets() { return H.map(function (r) { return r.map(function (x) { return x / 100; }); }); }
@@ -6347,23 +6381,24 @@ button { font-family: var(--px); }
   })();
   var N = FR.length - 1, FIRST = 1;
 
-  /* The runs of frame i's bets on its round's dice (dice 12 for the bets at random and rounds 1 and 2, B.dice(2000 + i)
-     after), played here and kept as the diagram draws them; their average must be the data's (a console error if
-     not). About 2 ms a frame, once. */
+  /* The episodes of frame i's preferences on its round's dice (dice 12 for the preferences at random and rounds 1
+     and 2, B.dice(2000 + i) after), generated here and kept as the diagram draws them; their average must be the data's
+     (a console error if not). About 2 ms a frame, once. */
   var SUM = [];
   function runsOf(i) {
     if (!SUM[i]) {
       var d = i <= 2 ? RV.dice() : B.dice(D.seeds.movieDiceBase + i, D.n);
       SUM[i] = RV.summary(OB.runs.play(FR[i].P, d, D.n));
       if (OB.money(SUM[i].mean, 2) !== OB.money(FR[i].g, 2)) {
-        console.error("sec3c2: the runs of frame " + i + " average " + OB.money(SUM[i].mean, 2) + ", the data says " + OB.money(FR[i].g, 2));
+        console.error("sec3c2: the episodes of frame " + i + " average " + OB.money(SUM[i].mean, 2) + ", the data says " + OB.money(FR[i].g, 2));
       }
     }
     return SUM[i];
   }
 
-  /* The panel of update i: the bet picked at random (its state and action), Before, After and their change for the bet
-     and for the average G1, then nabla and the update. The formulas are drawn once; a frame only writes numbers. */
+  /* The panel of update i: the preference picked at random (its state and action), Before, After and their change
+     for the preference and for the average return, then nabla and the update. The formulas are drawn once; a frame only
+     writes numbers. */
   function Panel() {
     var P = { el: el("div", "s3c-hp ob-box white") };
     P.el.appendChild(el("div", "tb-zcap", "BACKWARD PASS AND UPDATE"));
@@ -6375,7 +6410,7 @@ button { font-family: var(--px); }
     ["", "BEFORE", "AFTER", "CHANGE"].forEach(function (t) { g.appendChild(el("div", "s3c-hph", t)); });
     /* A number of the grid: its cell, and in it the number's own span (which a flight carries). */
     function cell(cls) { var c = el("div", "s3c-hpc"), e = el("span", "s3c-hpn" + (cls ? " " + cls : "")); c.appendChild(e); g.appendChild(c); return e; }
-    g.appendChild(OB.html("div", "s3c-hpl", "BET " + OB.tex("w")));
+    g.appendChild(OB.html("div", "s3c-hpl", "PREFERENCE " + OB.tex("\\theta_{s,a}")));
     P.w = cell(); P.w1 = cell(); P.dw = cell("s3c-hpd");
     g.appendChild(OB.html("div", "s3c-hpl", "AVERAGE " + OB.texIn(X.AVG)));
     P.gb = cell(); P.ga = cell(); P.dg = cell("s3c-hpd");
@@ -6392,7 +6427,7 @@ button { font-family: var(--px); }
     P.uw = OB.texNumEl("", "");
     P.un = OB.texNumEl("", "");
     P.res = OB.texNumEl("", "s3c-new");
-    P.l2 = line([OB.texEl("w =\\;"), P.uw, OB.texEl("\\;+\\;" + X.num(D.alpha, 2) + "\\;\\times\\;"), P.un, OB.texEl("\\;=\\;"), P.res]);
+    P.l2 = line([OB.texEl("\\theta_{s,a} =\\;"), P.uw, OB.texEl("\\;+\\;" + X.num(D.alpha, 2) + "\\;\\times\\;"), P.un, OB.texEl("\\;=\\;"), P.res]);
     function money(e, t, x) {
       var r = +x.toFixed(2);
       e.textContent = t;
@@ -6418,8 +6453,8 @@ button { font-family: var(--px); }
     return P;
   }
 
-  /* The reward plot: the average G1 after each update, point by point. Across, the updates from 0 to the larger of 10
-     and the newest point's update: the first points stand apart, and the axis grows with the movie. Up, D.chart's
+  /* The learning curve: the average return after each update, point by point. Across, the updates from 0 to the larger
+     of 10 and the newest point's update: the first points stand apart, and the axis grows with the movie. Up, D.chart's
      scale. Two tags (HTML over the plot) carry the numbers of points 0 and 1 in scene 410. */
   var XMIN = 10;
   function Plot() {
@@ -6557,9 +6592,9 @@ button { font-family: var(--px); }
   }
   window.addEventListener("resize", function () { VIEWS.forEach(function (V) { if (V.plot.key) V.plot.draw(); }); });
 
-  /* Update i, everything at once: in the panel its backward pass and its update; in the diagram the bets after it
-     (the changed bet ringed), their chances, the runs of the new policy on the update's dice, their histogram and
-     average. plotN: the plot's last point (default i). */
+  /* Update i, everything at once: in the panel its backward pass and its update; in the diagram the preferences after
+     it (the changed preference ringed), their probabilities, the episodes of the new policy on the update's dice, their
+     histogram and average. plotN: the plot's last point (default i). */
   function render(V, i, plotN) {
     var d = V.d, r = FR[i];
     d.T.set(r.W, { now: true });
@@ -6579,9 +6614,9 @@ button { font-family: var(--px); }
     else api.unarrow("pt");
   }
 
-  /* 410. The reward plot: its axes, then its first two points, each flying from the number it plots. */
+  /* 410. The learning curve: its axes, then its first two points, each flying from the number it plots. */
   OB.scene({
-    page: 3, key: "proto-plot", order: 410, title: "The reward plot", beats: X.plot.length,
+    page: 3, key: "proto-plot", order: 410, title: "The learning curve", beats: X.plot.length,
     build: function (root) { this.V = View(root, false); },
     beat: function (k, api) {
       var V = this.V, d = V.d, go = K.live(api, k), C = V.plot;
@@ -6589,7 +6624,7 @@ button { font-family: var(--px); }
       C.tagsOn = [k >= 1, k >= 2];
       render(V, 1, k >= 2 && !(go && k === 2) ? 1 : k >= 1 && !(go && k === 1) ? 0 : -1);
       arrows(V, api, k >= 2 ? (go && k === 2 ? { delay: 200 } : true) : false);
-      // 1: the average of the bets at random (the panel's Before) flies to point 0.
+      // 1: the average of the preferences at random (the panel's Before) flies to point 0.
       V.hop.gb.classList.toggle("s3c-lit", k === 1);
       if (go && k === 1) {
         api.fly(V.hop.gb, C.tags[0], { delay: 400, arc: 50 });
@@ -6622,7 +6657,7 @@ button { font-family: var(--px); }
       V.M.shown = k;
       render(V, k);
     },
-    /* The end of the movie (beat 1): the best strategy's line and its average, the likeliest actions lit. */
+    /* The end of the movie (beat 1): the optimal policy's line and its average, the likeliest actions lit. */
     extras: function (on) {
       var V = MOVIE.V;
       V.plot.showBest = on;
@@ -6692,18 +6727,19 @@ button { font-family: var(--px); }
    In the browser it is window.S3D (loaded before sec3d.js); in node, require('./sec3d-data.js'), for
    tools/check_closeup.js, which asserts every shown number.
 
-   The guided example B.PROTO: the bet on RUN in HEALTHY (B.PROTO.pick), 1,000 runs on B.dice(12, 1000), the hop
-   epsilon = 0.01, the step alpha = 0.01. B.hop gives the average G1 before and after the hop, on the same dice.
+   The guided example B.PROTO: the preference for RUN in HEALTHY (B.PROTO.pick), 1,000 episodes on B.dice(12, 1000),
+   the hop epsilon = 0.01, the step size alpha = 0.01. B.hop gives the average return before and after the hop, on
+   the same dice.
 
    Every number is shown with two decimals, as B.PROTO's comment says, and every shown number follows from the shown
    numbers before it, worked in hundredths (whole numbers, so the arithmetic is exact):
      change = after - before            -170.50 - (-172.24) = 1.74
      nabla  = change / epsilon          1.74 / 0.01 = 174
      w      = w + alpha x nabla         0.40 + 0.01 x 174 = 0.40 + 1.74 = 2.14
-   The update climbs (w + alpha nabla): the average G1 has to go up (Carlos, 2026-11-14, "yes!").
+   The update climbs (theta_{s,a} + alpha nabla): the average return has to go up (Carlos, 2026-11-14, "yes!").
 
    DOLLARS: true writes the averages and their change as money (OB.money: "-$172.24", "$1.74"), as page 2 and Try it
-   write every G1; nabla, the bets, epsilon and alpha are plain numbers. */
+   write every return; nabla, the preferences, epsilon and alpha are plain numbers. */
 (function (root) {
   "use strict";
   var NODE = typeof module !== "undefined" && module.exports;
@@ -6728,14 +6764,15 @@ button { font-family: var(--px); }
   }
   /* A whole number of hundredths as text with two decimals (214 -> "2.14", -17224 -> "-172.24"). */
   function hund(i) { return num(i / 100, 2); }
-  /* An average G1 (or its change) as the page writes it. */
+  /* An average return (or its change) as the page writes it. */
   function avg(x, sign) { return DOLLARS ? money(x, 2, sign) : (sign && x > 0 ? "+" : "") + num(x, 2); }
 
   var P = B.PROTO, S = P.pick[0], A = P.pick[1];
   var dice = B.dice(P.diceSeed, P.n);
   var hop = B.hop(P.bets, S, A, P.eps, dice, P.n);
 
-  /* In hundredths: the bet before and after the hop, the averages before and after, the change, epsilon, alpha. */
+  /* In hundredths: the preference before and after the hop, the averages before and after, the change, epsilon,
+     alpha. */
   var U = {
     w0: Math.round(P.bets[S][A] * 100),            // 40
     eps: Math.round(P.eps * 100),                  // 1
@@ -6758,7 +6795,7 @@ button { font-family: var(--px); }
     w0: hund(U.w0), w1: hund(U.w1), eps: hund(U.eps), alpha: hund(U.alpha),
     before: avg(V.before), after: avg(V.after), change: avg(V.change), changeUp: avg(V.change, true),
     changeNum: hund(U.change), nabla: num(NABLA, 0), step: hund(U.step), wNew: hund(U.wNew),
-    perUnit: DOLLARS ? money(NABLA, 0) : num(NABLA, 0),   // nabla read as the rise of the average for one unit of bet
+    perUnit: DOLLARS ? money(NABLA, 0) : num(NABLA, 0),   // nabla read as the rise of the average for one unit of preference
     n: num(P.n, 0)
   };
 
@@ -6776,23 +6813,23 @@ button { font-family: var(--px); }
    before and after, because having the entire diagram there is too distracting. So if we can just for a moment fade
    the diagram and then focus on this before and after calculation slowly, in particular in explaining ... why the W
    must be updated using this update formula." Agent A5's scene before 350 fades the diagram and leaves four values;
-   its scene 400 brings the diagram back with the updated bet. Every number comes from sec3d-data.js (window.S3D,
+   its scene 400 brings the diagram back with the updated preference. Every number comes from sec3d-data.js (window.S3D,
    computed from bessie.js) and is asserted by tools/check_closeup.js; no number is written here.
 
-   350 Up close: before and after (4 beats): the four values; the bet moved by epsilon = 0.01; did the average G1 go
-       up or down? (the room guesses); Compute: after minus before, $2.01
+   350 Up close: before and after (4 beats): the four values; the preference moved by epsilon = 0.01; did the average
+       return go up or down? (the room guesses); Compute: after minus before, $2.01
    360 The triangle of the hop (5 beats), beside the table of 350's four numbers (agent W, 2026-11-16): before and
-       after as two points, their numbers flying out of the table; across, 0.41 - 0.40 = 0.01 from the two bets;
+       after as two points, their numbers flying out of the table; across, 0.41 - 0.40 = 0.01 from the two preferences;
        up, -$170.50 - (-$172.24) = $1.74 from the two averages; nabla = 1.74 / 0.01 as a fraction, its two numbers
        flying from the sides (the room guesses); Compute: 174. Next from 350's last beat flies 350's four numbers
        into the table
-   370 The update (2 beats): w = w + alpha nabla, alpha = 0.01; the sign: weekend 2's loss had to go down (minus),
-       here the average G1 has to go up (plus)
-   380 Why this update (4 beats): a positive nabla raises the bet; a negative one lowers it; a steep slope moves it
-       more; alpha keeps each move small. Since 2026-11-16 each rule is a small copy of 360's triangle of the hop
+   370 The update (2 beats): theta_{s,a} = theta_{s,a} + alpha nabla, alpha = 0.01; the sign: weekend 2's loss had to
+       go down (minus, w = w - alpha nabla), here the average return has to go up (plus)
+   380 Why this update (4 beats): a positive nabla raises the preference; a negative one lowers it; a steep slope moves
+       it more; alpha keeps each move small. Since 2026-11-16 each rule is a small copy of 360's triangle of the hop
        (BEFORE, AFTER, across +epsilon, the vertical side UP or DOWN, the slope), drawn in when its card comes
-   390 The update, worked out (3 beats): w = 0.40 + 0.01 x 174 = ? (the room guesses); Compute: 2.14; the new bet
-       alone on the screen, for A5's scene 400 */
+   390 The update, worked out (3 beats): theta_{s,a} = 0.40 + 0.01 x 174 = ? (the room guesses); Compute: 2.14; the new
+       preference alone on the screen, for A5's scene 400 */
 (function () {
   "use strict";
   var OB = window.OB, art = OB.art, el = OB.el, TB = OB.tables, D = window.S3D;
@@ -6801,7 +6838,7 @@ button { font-family: var(--px); }
   /* Formulas by KaTeX (tex.js), in LaTeX's standard font: tx(src) is the markup of the TeX src. A number that rolls at
      the end of a formula is an element in the face of the formulas (class ob-texn, OB.texFmt). */
   var tx = OB.tex;
-  var NAB = tx("\\nabla"), G1 = tx("G_1"), AVG = tx("\\bar{G}_1");
+  var NAB = tx("\\nabla"), AVG = tx("\\bar{G}_1");
   var INK = art.C.ink, INK2 = art.C.ink2;
 
   /* The lead line of a scene: its words change with the beat and fade in on Next (as in sec3b.js). The words sit in
@@ -6821,14 +6858,15 @@ button { font-family: var(--px); }
   function betFmt(x) { return OB.tables.fmt("bets", x); }
   var avgT = OB.texFmt(avgFmt), betT = OB.texFmt(betFmt), intT = OB.texFmt(function (x) { return OB.num(x, 0); });
 
-  /* The entry as the tables draw it: a never-shown table of the guided bets lends its zoom (tables.js, T.zoom). */
+  /* The entry as the tables draw it: a never-shown table of the guided preferences lends its zoom (tables.js,
+     T.zoom). */
   var T0 = TB.table(D.bets, { kind: "bets" });
   function betBox(cap, value) {
     var Z = T0.zoom(D.s, D.a, { cap: cap, value: value });
     Z.el.classList.add("s3d-box");
     return Z;
   }
-  /* An average G1 in a box of the same make: caption, head, the number. */
+  /* An average return in a box of the same make: caption, head, the number. */
   function avgBox(cap, value) {
     var Z = { el: el("div", "tb-zoom ob-box white s3d-box s3d-gbox") };
     Z.cap = el("div", "tb-zcap", cap);
@@ -6853,10 +6891,10 @@ button { font-family: var(--px); }
 
   /* 350. Up close: the four values that A5's diagram leaves, then the change of each, slowly. */
   var L350 = [
-    "Four numbers: the bet and the average " + G1 + " it gives, before and after.",
-    "The bet moved by " + nw(tx("\\varepsilon = " + T.eps) + "."),
-    "And the average " + G1 + ": did it go up or down? Guess, then press Compute.",
-    "Up, by " + T.change + ": the average " + G1 + " after, minus before."
+    "Four numbers: the preference and the average return " + AVG + " it gives, before and after.",
+    "The preference moved by " + nw(tx("\\varepsilon = " + T.eps) + "."),
+    "And the average return " + nw(AVG + ":") + " did it go up or down? Guess, then press Compute.",
+    "Up, by " + T.change + ": the average return " + AVG + " after, minus before."
   ];
   OB.scene({
     page: 3, key: "closeup", order: 350, title: "Up close: before and after", beats: L350.length,
@@ -6911,10 +6949,10 @@ button { font-family: var(--px); }
       this.k = k;
       say(P.lead, L350[k], api);
       if (k === 2) api.nextLabel("Compute");
-      // The row in focus: the bet's at beat 1, the average's at beats 2 and 3.
+      // The row in focus: the preference's at beat 1, the average's at beats 2 and 3.
       [P.zb.el, P.za.el].forEach(function (e) { e.classList.toggle("s3d-lit", k === 1); });
       [P.gb.el, P.ga.el].forEach(function (e) { e.classList.toggle("s3d-lit", k >= 2); });
-      // The bet's arrow, +0.01 on it and epsilon under it.
+      // The preference's arrow, +0.01 on it and epsilon under it.
       if (k >= 1) api.arrow("bet", P.zb.el, P.za.el, { delay: k === 1 && go ? 400 : 0 }); else api.unarrow("bet");
       api.show(P.m1.top, k >= 1, { delay: k === 1 && go ? 1500 : 0 });
       api.show(P.m1.bot, k >= 1, { delay: k === 1 && go ? 2400 : 0 });
@@ -6953,6 +6991,14 @@ button { font-family: var(--px); }
     n.textContent = t;
     return n;
   }
+  /* The symbol of the average return, G bar 1, at the end of an SVG text t, in the faces KaTeX draws it with: the
+     italic G, KaTeX_Main's macron (character 713) set over it the way KaTeX sets an accent over a capital (back
+     0.56 em of the G, raised 0.252 em), then the subscript 1 (class sub) after the G. */
+  function gBar(t, sub) {
+    add(t, "tspan", { "class": "s3d-tex s3d-tmath" }).textContent = "G";
+    add(t, "tspan", { "class": "s3d-tex s3d-tbar", dx: "-0.56em", "baseline-shift": "0.252em" }).textContent = String.fromCharCode(713);
+    add(t, "tspan", { "class": "s3d-tex " + sub, dx: "0.1em", dy: "3" }).textContent = "1";
+  }
   /* A line drawn from its start in 1.2 s when go is true, or there at once. */
   function drawIn(api, n, go, delay) {
     var len = Math.hypot(+n.getAttribute("x2") - +n.getAttribute("x1"), +n.getAttribute("y2") - +n.getAttribute("y1"));
@@ -6975,11 +7021,11 @@ button { font-family: var(--px); }
      highlight the corresponding numbers in the table ... when you calculate nabla as a fraction, show the numbers in
      the two sides of the rectangle triangle moving toward the fraction ... And then do the calculation."
 
-     The four numbers of 350 stand in a table on the left for the whole scene, the plot on the right: the bet across,
-     the average G1 up, before and after as two points whose coordinates fly out of the table. Across, the two bets
-     light up and fly into the subtraction written under the bottom side (0.41 - 0.40 = 0.01); up, the two averages
-     light up and fly into the subtraction written beside the right side, one number under the other; then the two
-     results fly from the sides into the fraction of nabla, the room guesses, and Compute works it out. Every
+     The four numbers of 350 stand in a table on the left for the whole scene, the plot on the right: the preference
+     across, the average return up, before and after as two points whose coordinates fly out of the table. Across, the
+     two preferences light up and fly into the subtraction written under the bottom side (0.41 - 0.40 = 0.01); up, the
+     two averages light up and fly into the subtraction written beside the right side, one number under the other; then
+     the two results fly from the sides into the fraction of nabla, the room guesses, and Compute works it out. Every
      computation stays on the plot to the end.
 
      The hand-over from 350: when Next leaves 350 at its last beat, 350's leave() keeps a still copy of its picture
@@ -7059,8 +7105,8 @@ button { font-family: var(--px); }
     });
   }
 
-  /* The table of the four numbers: BEFORE and AFTER across the top, the bet (the entry's chips) and the average G1
-     down the side. lit("bet" | "avg" | "") lights a row's two numbers. */
+  /* The table of the four numbers: BEFORE and AFTER across the top, the preference (the entry's chips) and the
+     average return down the side. lit("bet" | "avg" | "") lights a row's two numbers. */
   function table4() {
     var Tb = { el: el("div", "s3d-tab ob-box white") };
     function put(e) { Tb.el.appendChild(e); return e; }
@@ -7118,9 +7164,9 @@ button { font-family: var(--px); }
     return C;
   }
 
-  /* 360's plot, in the units of its viewBox (plain px on a desk, scaled down on a phone): the bet across, the average
-     G1 up, before and after as two points, the right triangle and its slope. The words on its sides are HTML laid
-     over it (s3d-pov), sized with the plot by --s3d-k. */
+  /* 360's plot, in the units of its viewBox (plain px on a desk, scaled down on a phone): the preference across, the
+     average return up, before and after as two points, the right triangle and its slope. The words on its sides are
+     HTML laid over it (s3d-pov), sized with the plot by --s3d-k. */
   var PV = { w: 600, h: 330 };
   var AX = { x: 150, y: 270, top: 34, right: 585 };
   var PB = { x: 250, y: 228 }, PA = { x: 452, y: 66 };
@@ -7144,12 +7190,8 @@ button { font-family: var(--px); }
     P.axes = add(svg, "g", { "class": "s3d-pax" });
     add(P.axes, "line", { x1: AX.x, y1: AX.y, x2: AX.right, y2: AX.y });
     add(P.axes, "line", { x1: AX.x, y1: AX.top, x2: AX.x, y2: AX.y });
-    var yt = svgText(P.axes, AX.x, 20, "AVERAGE ", "s3d-ptit", "start");
-    var g = add(yt, "tspan", { "class": "s3d-tex s3d-tmath" });
-    g.textContent = "G";
-    var sub = add(yt, "tspan", { "class": "s3d-tex s3d-psub", dy: "3" });
-    sub.textContent = "1";
-    svgText(P.axes, AX.right, PV.h - 6, "THE BET", "s3d-ptit", "end");
+    gBar(svgText(P.axes, AX.x, 20, "AVERAGE ", "s3d-ptit", "start"), "s3d-psub");
+    svgText(P.axes, AX.right, PV.h - 6, "THE PREFERENCE", "s3d-ptit", "end");
     P.B = point(PB, T.w0, T.before);
     P.A = point(PA, T.w1, T.after);
     // The triangle: its tint, across, up, and the slope from before to after.
@@ -7176,11 +7218,11 @@ button { font-family: var(--px); }
   window.addEventListener("resize", function () { PLOTS.forEach(fitK); });
 
   var L360 = [
-    "In a picture: the bet across, the average " + G1 + " up. Before and after are two points.",
-    "Across: the bet moved by " + T.eps + ".",
-    "Up: the average " + G1 + " rose by " + T.change + ".",
+    "In a picture: the preference across, the average return " + AVG + " up. Before and after are two points.",
+    "Across: the preference moved by " + T.eps + ".",
+    "Up: the average return " + AVG + " rose by " + T.change + ".",
     nw(NAB + ",") + " nabla, is the slope of the triangle: up divided by across. Guess it, then press Compute.",
-    nw(tx("\\nabla = " + T.nabla) + ":") + " near this bet, the average " + G1 + " rises by " + T.perUnit + " for each unit of bet."
+    nw(tx("\\nabla = " + T.nabla) + ":") + " near this preference, the average return " + AVG + " rises by " + T.perUnit + " for each unit of preference."
   ];
   OB.scene({
     page: 3, key: "closeup-slope", order: 360, title: "The triangle of the hop", beats: L360.length,
@@ -7221,7 +7263,7 @@ button { font-family: var(--px); }
       fitK(P);
       if (P.snap && P.snap.parentNode) P.snap.parentNode.removeChild(P.snap);
       P.snap = null;
-      // The table: the bets lit while across is worked out (1), the averages while up is (2).
+      // The table: the preferences lit while across is worked out (1), the averages while up is (2).
       P.tab.lit(k === 1 ? "bet" : k === 2 ? "avg" : "");
 
       // Beat 0: the table (from 350, or at once), then before and after come onto the axes, their numbers flying
@@ -7329,23 +7371,23 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 370. The update, w = w + alpha nabla, and its sign. */
+  /* 370. The update, theta_{s,a} = theta_{s,a} + alpha nabla, and its sign. */
   function wCell(markup, tag, cls) {
     var c = el("div", "s3d-uc" + (cls ? " " + cls : ""));
     c.appendChild(OB.html("span", "s3d-us", markup));
     c.appendChild(el("span", "s3d-ut ob-hide", tag || ""));
     return c;
   }
-  function signCard(kicker, line, sign, cls) {
+  function signCard(kicker, line, v, sign, cls) {
     var c = el("div", "s3d-sign ob-box " + cls);
     c.appendChild(el("div", "s3d-sk", kicker));
     c.appendChild(OB.html("div", "s3d-sl", line));
-    c.appendChild(OB.html("div", "s3d-sf", tx("w = w \\mathbin{\\htmlClass{s3d-sg}{" + sign + "}} \\alpha\\nabla")));
+    c.appendChild(OB.html("div", "s3d-sf", tx(v + " = " + v + " \\mathbin{\\htmlClass{s3d-sg}{" + sign + "}} \\alpha\\nabla")));
     return c;
   }
   var L370 = [
-    "Call the bet " + tx("w") + ". The update adds " + nw(tx("\\alpha\\nabla")) + " to " + tx("w") + ", with " + nw(tx("\\alpha = " + T.alpha) + "."),
-    "In weekend 2 a loss had to go down: " + nw(tx("w - \\alpha\\nabla") + ".") + " Here the average " + G1 + " has to go up: " + nw(tx("w + \\alpha\\nabla") + ".")
+    "Call the preference " + tx("\\theta_{s,a}") + ". The update adds " + nw(tx("\\alpha\\nabla")) + " to " + tx("\\theta_{s,a}") + ", with " + nw(tx("\\alpha = " + T.alpha) + "."),
+    "In weekend 2 a loss had to go down: " + nw(tx("w - \\alpha\\nabla") + ".") + " Here the average return " + AVG + " has to go up: " + nw(tx("\\theta_{s,a} + \\alpha\\nabla") + ".")
   ];
   OB.scene({
     page: 3, key: "closeup-update", order: 370, title: "The update", beats: L370.length,
@@ -7353,9 +7395,9 @@ button { font-family: var(--px); }
       var P = this.parts = {};
       P.lead = lead(root);
       var f = el("div", "s3d-upf");
-      f.appendChild(wCell(tx("w"), "NEW BET"));
+      f.appendChild(wCell(tx("\\theta_{s,a}"), "NEW"));
       f.appendChild(wCell(tx("=")));
-      f.appendChild(wCell(tx("w"), "BET NOW"));
+      f.appendChild(wCell(tx("\\theta_{s,a}"), "NOW"));
       P.plus = wCell(tx("+"), "", "s3d-plus");
       f.appendChild(P.plus);
       f.appendChild(wCell(tx("\\alpha\\nabla")));
@@ -7365,8 +7407,8 @@ button { font-family: var(--px); }
       P.al = OB.html("div", "s3d-al ob-hide", tx("\\alpha = " + T.alpha));
       root.appendChild(P.al);
       var cards = el("div", "s3d-signs ob-hide");
-      cards.appendChild(signCard("WEEKEND 2", "A LOSS HAD TO GO DOWN", "-", "s3d-old"));
-      cards.appendChild(signCard("OLD BESSIE", "THE AVERAGE " + G1 + " HAS TO GO UP", "+", "s3d-new"));
+      cards.appendChild(signCard("WEEKEND 2", "A LOSS HAD TO GO DOWN", "w", "-", "s3d-old"));
+      cards.appendChild(signCard("OLD BESSIE", "THE AVERAGE RETURN " + AVG + " HAS TO GO UP", "\\theta_{s,a}", "+", "s3d-new"));
       P.cards = cards;
       root.appendChild(cards);
     },
@@ -7383,21 +7425,21 @@ button { font-family: var(--px); }
   /* 380. Why this update: four rules, one per Next, each drawn as a small copy of 360's triangle of the hop (Carlos,
      2026-11-16: "When you explain the update with different slopes, make sure that they look like rectangle triangles
      as in the previous image, so that the participant can really connect where the slope is coming from"). A card has
-     360's axes and their names (the bet across, the average G1 up), BEFORE and AFTER as its square points, the tinted
-     right triangle with its across side (the hop, +epsilon, the same in every card), its vertical side (the change of
-     the average G1: UP in green, DOWN in red) and its hypotenuse, the slope nabla; below them, the line of the bet and
-     the move that the update gives it. A card that comes with Next draws its triangle in 360's order (across, the
-     vertical side, the slope and its tint), then the move. The shapes are schematic: the only numbers are the hop and
-     alpha, both from S3D. */
+     360's axes and their names (the preference across, the average return up), BEFORE and AFTER as its square points,
+     the tinted right triangle with its across side (the hop, +epsilon, the same in every card), its vertical side (the
+     change of the average return: UP in green, DOWN in red) and its hypotenuse, the slope nabla; below them, the line
+     of the preference and the move that the update gives it. A card that comes with Next draws its triangle in 360's
+     order (across, the vertical side, the slope and its tint), then the move. The shapes are schematic: the only
+     numbers are the hop and alpha, both from S3D. */
   var WV = { w: 232, h: 268 };                       // the card's viewBox, plain px on a desk
   var WA = { x: 20, y: 190, top: 22, right: 228 };   // the axes: their corner (x, y), the top of the up axis, the end of the across axis
-  var WB = 84, WH = 80, WL = 244;                    // BEFORE's place across, the hop (the across side), the line of the bet
+  var WB = 84, WH = 80, WL = 244;                    // BEFORE's place across, the hop (the across side), the line of the preference
   /* Each card: BEFORE's height y, AFTER's height minus BEFORE's dy (below zero: AFTER above, the average rose), the
-     move of the bet (0.85 of the vertical side in every card, so a taller side moves the bet more), the move without
-     alpha (ghost, on the card of alpha). */
+     move of the preference (0.85 of the vertical side in every card, so a taller side moves the preference more), the
+     move without alpha (ghost, on the card of alpha). */
   var WHY = [
-    { y: 136, dy: -60, move: 51, cond: tx("\\nabla > 0"), eff: "BET UP" },
-    { y: 76, dy: 60, move: -51, cond: tx("\\nabla < 0"), eff: "BET DOWN" },
+    { y: 136, dy: -60, move: 51, cond: tx("\\nabla > 0"), eff: "PREFERENCE UP" },
+    { y: 76, dy: 60, move: -51, cond: tx("\\nabla < 0"), eff: "PREFERENCE DOWN" },
     { y: 162, dy: -132, move: 112, cond: "STEEP", eff: "BIG MOVE" },
     { y: 162, dy: -132, move: 18, ghost: 112, cond: tx("\\alpha = " + T.alpha), eff: "SMALL MOVE" }
   ];
@@ -7416,12 +7458,11 @@ button { font-family: var(--px); }
     var axes = add(svg, "g", { "class": "s3d-wax" });
     add(axes, "line", { x1: WA.x, y1: WA.y, x2: WA.right, y2: WA.y });
     add(axes, "line", { x1: WA.x, y1: WA.top, x2: WA.x, y2: WA.y });
-    var yt = svgText(svg, WA.x, 15, "AVERAGE ", "s3d-wtit", "start");
-    add(yt, "tspan", { "class": "s3d-tex s3d-tmath" }).textContent = "G";
-    add(yt, "tspan", { "class": "s3d-tex s3d-wsub", dy: "3" }).textContent = "1";
-    svgText(svg, WA.right, WA.y + 19, "THE BET", "s3d-wtit", "end");
+    gBar(svgText(svg, WA.x, 15, "AVERAGE ", "s3d-wtit", "start"), "s3d-wsub");
+    svgText(svg, WA.right, WA.y + 19, "THE PREFERENCE", "s3d-wtit", "end");
     // The right triangle, under the points: its tint, across (the hop), the vertical side (the change of the average
-    // G1) and the slope from BEFORE to AFTER; the words of the two sides; nabla beside the slope, away from the tint.
+    // return) and the slope from BEFORE to AFTER; the words of the two sides; nabla beside the slope, away from the
+    // tint.
     var R = c.tri = {};
     R.fill = add(svg, "polygon", { "class": "s3d-wtf", points: [bx, by, ax, by, ax, ay].join(",") });
     R.across = add(svg, "line", { "class": "s3d-wleg", x1: bx, y1: by, x2: ax, y2: by });
@@ -7438,8 +7479,8 @@ button { font-family: var(--px); }
     var pa = add(svg, "g", {});
     add(pa, "rect", { "class": "s3d-wpt", x: ax - 7, y: ay - 7, width: 14, height: 14 });
     svgText(pa, ax + 12, rise ? ay - 3 : ay + 15, "AFTER", "s3d-wtag", "start");
-    // The line of the bet, the bet on it under BEFORE, and the move that the update gives it; on the card of alpha,
-    // under the line, the move without alpha, dashed.
+    // The line of the preference, the preference on it under BEFORE, and the move that the update gives it; on the card
+    // of alpha, under the line, the move without alpha, dashed.
     add(svg, "line", { "class": "s3d-wbl", x1: WA.x, y1: WL, x2: WA.right, y2: WL });
     add(svg, "rect", { "class": "s3d-wbet", x: bx - 5, y: WL - 5, width: 10, height: 10 });
     c.ghost = w.ghost ? moveArrow(svg, bx, w.ghost, WL + 14, "s3d-wghost") : null;
@@ -7474,8 +7515,8 @@ button { font-family: var(--px); }
   /* A card at rest, or drawn in when go is true: the card fades in from 200 ms with its axes and its two points;
      across grows from BEFORE (the hop), the vertical side from the corner to AFTER (the change of the average), the
      slope from BEFORE to AFTER with the tint and nabla, each side in 1.2 s as on 360 and each starting as the one
-     before ends; then the move of the bet grows from the bet, and on the card of alpha the dashed move without alpha
-     comes first. The last motion ends about 6.3 s after Next (7.5 s on the card of alpha). */
+     before ends; then the move of the preference grows from the preference, and on the card of alpha the dashed move
+     without alpha comes first. The last motion ends about 6.3 s after Next (7.5 s on the card of alpha). */
   function drawWhy(api, c, go) {
     var R = c.tri, t = 1200, d = OB.DUR.arrow;
     grow(api, R.across, go, t, d);
@@ -7494,10 +7535,10 @@ button { font-family: var(--px); }
     api.show(c.mv.head, true, { delay: go ? t + 1100 : 0, dur: 400 });
   }
   var L380 = [
-    "A positive " + nw(NAB) + " says that raising the bet raised the average " + G1 + ". So the update raises the bet.",
-    "A negative " + nw(NAB) + " says that raising the bet lowered the average " + G1 + ". So the update lowers the bet.",
-    "A steep slope, a large " + nw(NAB + ",") + " moves the bet more.",
-    nw(tx("\\alpha = " + T.alpha)) + " keeps each move small: one hundredth of " + nw(NAB + ".") + " The slope was measured near this bet."
+    "A positive " + nw(NAB) + " says that raising the preference raised the average return " + nw(AVG + ".") + " So the update raises the preference.",
+    "A negative " + nw(NAB) + " says that raising the preference lowered the average return " + nw(AVG + ".") + " So the update lowers the preference.",
+    "A steep slope, a large " + nw(NAB + ",") + " moves the preference more.",
+    nw(tx("\\alpha = " + T.alpha)) + " keeps each move small: one hundredth of " + nw(NAB + ".") + " The slope was measured near this preference."
   ];
   OB.scene({
     page: 3, key: "closeup-why", order: 380, title: "Why this update", beats: L380.length,
@@ -7520,7 +7561,7 @@ button { font-family: var(--px); }
     }
   });
 
-  /* 390. The update worked out on the guided bet, then the new bet alone, for A5's scene 400. */
+  /* 390. The update worked out on the guided preference, then the new preference alone, for A5's scene 400. */
   function eqRow(left, right) {
     var r = el("div", "s3d-wrow");
     r.appendChild(OB.html("span", "s3d-wl", left));
@@ -7531,9 +7572,9 @@ button { font-family: var(--px); }
     return r;
   }
   var L390 = [
-    "Our bet: " + nw(tx("w = " + T.w0) + ",") + " with " + nw(tx("\\nabla = " + T.nabla) + ".") + " What is the new bet? Guess, then press Compute.",
-    nw(tx(OB.texArith(T.alpha + " x " + T.nabla + " = " + T.step)) + ",") + " and " + nw(tx(T.w0 + " + " + T.step + " = " + T.wNew) + ":") + " the new bet.",
-    "The new bet, " + T.wNew + ", goes back into the table of bets."
+    "Our preference: " + nw(tx("\\theta_{s,a} = " + T.w0) + ",") + " with " + nw(tx("\\nabla = " + T.nabla) + ".") + " What is the new preference? Guess, then press Compute.",
+    nw(tx(OB.texArith(T.alpha + " x " + T.nabla + " = " + T.step)) + ",") + " and " + nw(tx(T.w0 + " + " + T.step + " = " + T.wNew) + ":") + " the new preference.",
+    "The new preference, " + T.wNew + ", goes back into the table of preferences."
   ];
   OB.scene({
     page: 3, key: "closeup-worked", order: 390, title: "The update, worked out", beats: L390.length,
@@ -7542,7 +7583,7 @@ button { font-family: var(--px); }
       P.lead = lead(root);
       var stack = el("div", "s3d-stack");
       var w = el("div", "s3d-work ob-box white");
-      w.appendChild(eqRow(tx("w"), tx("w + \\alpha\\nabla")));
+      w.appendChild(eqRow(tx("\\theta_{s,a}"), tx("\\theta_{s,a} + \\alpha\\nabla")));
       w.appendChild(eqRow("", tx(OB.texArith(T.w0 + " + " + T.alpha + " x " + T.nabla))));
       P.r3 = eqRow("", "");
       P.q = el("span", "s3d-q ob-texn", "?");
@@ -7556,7 +7597,7 @@ button { font-family: var(--px); }
       w.appendChild(P.r4);
       P.work = w;
       stack.appendChild(w);
-      P.Z = betBox("NEW BET", V.wNew);
+      P.Z = betBox("NEW PREFERENCE", V.wNew);
       P.Z.el.classList.add("s3d-final", "ob-hide");
       stack.appendChild(P.Z.el);
       root.appendChild(stack);
@@ -7565,7 +7606,7 @@ button { font-family: var(--px); }
       var P = this.parts, go = live(api, k);
       say(P.lead, L390[k], api);
       if (k === 0) api.nextLabel("Compute");
-      // Beat 0: the question mark. Beat 1: 0.01 x 174 becomes 1.74, then the sum rolls up from the bet now.
+      // Beat 0: the question mark. Beat 1: 0.01 x 174 becomes 1.74, then the sum rolls up from the preference now.
       P.q.classList.toggle("ob-gone", k >= 1);
       P.sum.classList.toggle("ob-gone", k < 1);
       if (k === 1 && go) P.sum.classList.add("ob-hide");
@@ -7575,7 +7616,7 @@ button { font-family: var(--px); }
         if (k === 1 && go) api.roll(P.res, V.wNew, { from: V.w0, fmt: betT, delay: 2000 });
         else { P.res.textContent = OB.texText(T.wNew); P.res.dataset.v = String(V.wNew); }
       }
-      // Beat 2: the working fades, and the new bet flies into the box of the entry, left alone on the screen.
+      // Beat 2: the working fades, and the new preference flies into the box of the entry, left alone on the screen.
       if (k >= 2) {
         if (go) {
           api.fade(P.work, false, { dur: 900 });

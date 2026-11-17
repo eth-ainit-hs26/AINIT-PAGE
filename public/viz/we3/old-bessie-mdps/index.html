@@ -503,7 +503,7 @@ button { font-family: var(--px); }
 .s1-roll { border: 1.5px dashed #AEB4BE; }
 .s1-out1 .count b { font-weight: 700; }
 
-/* Runs: a timing strip per run. */
+/* Episodes (runs.js): a timing strip per episode. */
 .runs-cells { border: 0; background: #FFFFFF; gap: 2px; padding: 2px; }
 .runs-cell { color: rgba(15, 17, 22, 0.72); border-radius: 1px; }
 .runs-canvas, .runs-g1col { border: 0; outline: 1px solid var(--line); }
@@ -639,15 +639,20 @@ button { font-family: var(--px); }
 /* bessie.js: Old Bessie, the MDP of weekend 3's visualization, shared by every section.
 
    The model is the FS26 arcade's van, rl-arcade/repair-or-replace/js/van.js (commit 05dea09), unchanged:
-   four states of wear, three actions, the same money and the same chances. In the browser it is window.B;
-   in node, require('./bessie.js'). tools/check_bessie.js asserts every number the pages rely on.
+   four states of wear, three actions, the same money and the same transition probabilities. In the browser it is
+   window.B; in node, require('./bessie.js'). tools/check_bessie.js asserts every number the pages rely on.
 
-   A run is one quarter, WEEKS = 13 weeks, from HEALTHY. Its cumulative reward is
-   G1 = r1 + GAMMA r2 + GAMMA^2 r3 + ... + GAMMA^12 r13, GAMMA = 0.9.
+   Words (TERMINOLOGY.md, since 2026-11-17): the names below keep the words of 2026-11-14 (playRun, avgG1, randomBets,
+   PROTO.bets); in the pages and these comments a run is an episode, a bet an action preference, a strict policy a
+   deterministic policy, a cumulative reward the return.
 
-   Dice. Every week of a run uses exactly two random numbers from B.dice: the first picks the action (unused by a
-   strict policy, but always spent), the second the outcome of the transition dynamics. Two policies played on the
-   same dice therefore meet the same luck, and a change in their averages comes from the policies alone. */
+   An episode is one quarter, WEEKS = 13 weeks, from HEALTHY. Its return is
+   G1 = r1 + GAMMA r2 + GAMMA^2 r3 + ... + GAMMA^12 r13, GAMMA = 0.9 (the discount factor).
+
+   Dice. Every week of an episode uses exactly two random numbers from B.dice: the first picks the action (unused by
+   a deterministic policy, but always spent), the second the outcome of the transition dynamics. Two policies
+   followed on the same dice therefore meet the same luck, and a change in their averages comes from the policies
+   alone. */
 (function (root) {
   'use strict';
 
@@ -657,7 +662,7 @@ button { font-family: var(--px); }
   const RUN = 0, SERVICE = 1, REPLACE = 2;
 
   const REV_RUN = [95, 72, 40, 16];          // RUN: the week's profit, by wear
-  const P_BD = [0.02, 0.08, 0.28, 0.55];     // RUN: chance of a breakdown, by wear
+  const P_BD = [0.02, 0.08, 0.28, 0.55];     // RUN: probability of a breakdown, by wear
   const BREAKDOWN_COST = 280;                // on top of the profit; the van ends FAILING
   const DEGR = [                             // RUN without a breakdown: wears 0, 1 or 2 levels
     [0.35, 0.55, 0.10],
@@ -679,7 +684,7 @@ button { font-family: var(--px); }
 
   /* The transition dynamics of state s and action a: every outcome, in a fixed order, as
      {p, next, reward, face}. face as in the arcade's van.js: 'breakdown', 'wear0' to 'wear2' (RUN),
-     'fix0' to 'fix2' (SERVICE), 'new' (REPLACE). Outcomes with no chance are left out; two outcomes that land
+     'fix0' to 'fix2' (SERVICE), 'new' (REPLACE). Outcomes of probability 0 are left out; two outcomes that land
      in the same state with the same reward stay apart (they differ in what happened). */
   function outcomes(s, a) {
     const out = [];
@@ -722,7 +727,7 @@ button { font-family: var(--px); }
     };
   }
 
-  /* The dice of n runs: n * weeks * 2 numbers, run by run, week by week, (action, transition). */
+  /* The dice of n episodes: n * weeks * 2 numbers, episode by episode, week by week, (action, transition). */
   function dice(seed, n, weeks) {
     weeks = weeks || WEEKS;
     const r = rng(seed);
@@ -734,7 +739,8 @@ button { font-family: var(--px); }
   }
 
   /* The action a policy takes in state s with the random number u. A policy is either a column of four actions
-     (a strict policy, one action per state) or a table of four rows of three probabilities. */
+     (a deterministic policy, one action per state) or a table of four rows of three probabilities (a stochastic
+     policy). */
   function act(policy, s, u) {
     const row = policy[s];
     if (typeof row === 'number') return row;
@@ -746,7 +752,8 @@ button { font-family: var(--px); }
     return 2;
   }
 
-  /* Run i of the dice: states S1..S13 (and the state after the last week), actions, rewards, faces, G1. */
+  /* Episode i of the dice: states S1..S13 (and the state after the last week), actions, rewards, faces, the return
+     G1. */
   function playRun(policy, d, i) {
     const weeks = d.weeks || WEEKS;
     const states = [], actions = [], rewards = [], faces = [];
@@ -764,14 +771,14 @@ button { font-family: var(--px); }
     return { states, actions, rewards, faces, G1: G };
   }
 
-  /* G1 of a list of rewards. */
+  /* The return G1 of a list of rewards. */
   function g1(rewards) {
     let G = 0, disc = 1;
     for (const r of rewards) { G += disc * r; disc *= GAMMA; }
     return G;
   }
 
-  /* The average G1 of the first n runs of the dice (all of them by default). */
+  /* The average return of the first n episodes of the dice (all of them by default). */
   function avgG1(policy, d, n) {
     n = n || d.n;
     let sum = 0;
@@ -779,7 +786,7 @@ button { font-family: var(--px); }
     return sum / n;
   }
 
-  /* Softmax of one row of bets: exponential of every entry, then the row divided by its sum. */
+  /* Softmax of one row of preferences: exponential of every entry, then the row divided by its sum. */
   function softmax(row) {
     const m = Math.max.apply(null, row);
     const e = row.map((x) => Math.exp(x - m));
@@ -788,7 +795,7 @@ button { font-family: var(--px); }
   }
   function softmaxTable(W) { return W.map(softmax); }
 
-  /* The exact expected G1 of a policy (over all runs, weighted by their chances): for checks only. */
+  /* The exact expected return of a policy (over all episodes, weighted by their probabilities): for checks only. */
   function expectedG1(policy) {
     let dist = [0, 0, 0, 0];
     dist[START] = 1;
@@ -814,8 +821,8 @@ button { font-family: var(--px); }
     return J;
   }
 
-  /* One hop of the backward pass of proto-REINFORCE: the average G1 before and after adding eps to the bet
-     W[s][a], both on the same dice; the change; nabla = change / eps. */
+  /* One hop of the backward pass of proto-REINFORCE: the average return before and after adding eps to the
+     preference W[s][a] (theta_{s,a} on the pages), both on the same dice; the change; nabla = change / eps. */
   function hop(W, s, a, eps, d, n) {
     const before = avgG1(softmaxTable(W), d, n);
     const W2 = W.map((row) => row.slice());
@@ -824,11 +831,11 @@ button { font-family: var(--px); }
     return { before, after, change: after - before, nabla: (after - before) / eps, W2 };
   }
 
-  /* Random bets, one decimal (the starting table of proto-REINFORCE): every bet uniform in [-1, 1], from rng(seed).
-     With a second seed xseed, about one bet in four is extreme instead, between 5 and 10 or between -10 and -5
-     (Carlos, 2026-11-16: "Don't make them all between -1 and 1 ... make them between -10 and 10"): for each bet in
-     turn, row by row, rng(xseed) gives three numbers; the first below 0.25 makes the bet extreme, the second sets its
-     size, 5 + 5 x u, the third its sign, minus below 0.5. */
+  /* Random preferences, one decimal (the starting table of proto-REINFORCE): every preference uniform in [-1, 1],
+     from rng(seed). With a second seed xseed, about one preference in four is extreme instead, between 5 and 10 or
+     between -10 and -5 (Carlos, 2026-11-16: "Don't make them all between -1 and 1 ... make them between -10 and 10"):
+     for each preference in turn, row by row, rng(xseed) gives three numbers; the first below 0.25 makes the preference
+     extreme, the second sets its size, 5 + 5 x u, the third its sign, minus below 0.5. */
   function randomBets(seed, xseed) {
     const r = rng(seed);
     const W = [0, 1, 2, 3].map(() => [0, 1, 2].map(() => Math.round((r() * 2 - 1) * 10) / 10));
@@ -848,25 +855,26 @@ button { font-family: var(--px); }
     REV_RUN, P_BD, BREAKDOWN_COST, DEGR, C_SERVICE, SERV_UP, C_REPLACE,
     GAMMA, WEEKS, START,
     outcomes, step, rng, dice, act, playRun, g1, avgG1, softmax, softmaxTable, expectedG1, hop, randomBets,
-    /* The arcade's optimal strict policy at gamma 0.9: RUN, SERVICE, REPLACE, REPLACE. Over one quarter from
-       HEALTHY it is also the best of the 81 strict policies (expected G1 242.08, tools/check_bessie.js). */
+    /* The arcade's optimal deterministic policy at gamma 0.9: RUN, SERVICE, REPLACE, REPLACE. Over one quarter from
+       HEALTHY it is also the best of the 81 deterministic policies (expected return 242.08, tools/check_bessie.js). */
     BEST: [RUN, SERVICE, REPLACE, REPLACE],
-    /* The example strategy of pages 2 and 3, "RUN until it fails": RUN, RUN, RUN, REPLACE (expected G1 136.18, 12th of
-       the 81). Carlos, 2026-11-16: an example never shows the optimal strategy, which the pages reveal later. */
+    /* The example policy of pages 2 and 3, "RUN until it fails": RUN, RUN, RUN, REPLACE (expected return 136.18, 12th
+       of the 81). Carlos, 2026-11-16: an example never shows the optimal policy, which the pages reveal later. */
     EXAMPLE: [RUN, RUN, RUN, REPLACE],
-    /* Try it (section 4, A4a): ten runs, the same dice for every try. */
+    /* Try it (section 4, A4a): ten episodes, the same dice for every policy tried. */
     TRY: { n: 10, diceSeed: 11 },
-    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The bets are B.randomBets(17, 68), two of them
-       extreme: -6.9 (WORN, REPLACE) and 10 (SHAKY, REPLACE); until 2026-11-16 they were B.randomBets(17), all between
-       -1 and 1. Extreme seed 68 is the first, counting from 1, whose table (1) has no extreme bet in HEALTHY's row (the
-       roulette of scene 260, scenes 220 and 230, the close-up and the softmax aside read that row), (2) has a bet of 5
-       or more and one of -5 or less, (3) has highest bets other than B.BEST (an example never shows the best
-       strategy), (4) ends the 300 updates of tools/proto_movie.js on B.BEST (a big bet on a wrong action stalls the
-       learning: softmax gives that action a chance near 1, and a hop of its bets changes almost nothing), and (5)
-       reads right in the softmax aside with three decimals (every e to the power of a bet above 0.000, every shown
-       sum the sum of its row's shown numbers). The entry is drawn by B.rng(17 * 7919) among the twelve and lands on
-       (HEALTHY, RUN); 1,000 runs on B.dice(12, 1000). Shown with two decimals: average G1 before -172.24, after
-       -170.50, change 1.74, nabla 174, w = 0.40 + 0.01 x 174 = 2.14, average G1 after the update 73.57 (same dice). */
+    /* The guided example of proto-REINFORCE (section 4, A5 and A6). The preferences (bets) are B.randomBets(17, 68),
+       two of them extreme: -6.9 (WORN, REPLACE) and 10 (SHAKY, REPLACE); until 2026-11-16 they were B.randomBets(17),
+       all between -1 and 1. Extreme seed 68 is the first, counting from 1, whose table (1) has no extreme preference in
+       HEALTHY's row (the roulette of scene 260, scenes 220 and 230, the close-up and the softmax aside read that row),
+       (2) has a preference of 5 or more and one of -5 or less, (3) has highest preferences other than B.BEST (an
+       example never shows the optimal policy), (4) ends the 300 updates of tools/proto_movie.js on B.BEST (a big
+       preference for a wrong action stalls the learning: softmax gives that action a probability near 1, and a hop of
+       its preferences changes almost nothing), and (5) reads right in the softmax aside with three decimals (every e to
+       the power of a preference above 0.000, every shown sum the sum of its row's shown numbers). The entry is drawn by
+       B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 episodes on B.dice(12, 1000). Shown with two
+       decimals: average return before -172.24, after -170.50, change 1.74, nabla 174, theta = 0.40 + 0.01 x 174 = 2.14,
+       average return after the update 73.57 (same dice). */
     PROTO: {
       betsSeed: 17,
       betsXSeed: 68,
