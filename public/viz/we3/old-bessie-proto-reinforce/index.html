@@ -332,6 +332,59 @@ sup { top: -0.55em; }
   .runs-legend { gap: 6px 10px; font-size: calc(8px * var(--fz, 1)); }
 }
 </style>
+<style>/* runs_tip.css */
+/* runs_tip.css: the card of one week of an episode (runs_tip.js, main session, 2026-11-17). Classes start with rt-. */
+
+.rt-on .runs-cell { cursor: pointer; }
+.runs-cell.rt-cur { outline: 3px solid var(--ink); outline-offset: 1px; z-index: 2; box-shadow: 0 0 0 5px var(--yellow); }
+
+.rt-card {
+  position: fixed; z-index: 80; left: 0; top: 0; pointer-events: none;
+  padding: 12px 22px 14px; min-width: 300px;
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0s linear 0.16s;
+}
+.rt-card.below { transform: translateY(-6px); }
+.rt-card.on { opacity: 1; visibility: visible; transform: none; transition: opacity 0.16s ease, transform 0.16s ease; }
+/* The caret: under the card, or above it when the card is below the cell. */
+.rt-card::after {
+  content: ""; position: absolute; left: var(--rt-cx, 50%); top: 100%; margin-left: -9px;
+  border-left: 9px solid transparent; border-right: 9px solid transparent; border-top: 10px solid #FFFFFF;
+}
+.rt-card.below::after { top: auto; bottom: 100%; border-top: 0; border-bottom: 10px solid #FFFFFF; }
+
+.rt-head {
+  font-family: var(--disp); font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ink2); font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1.2; text-align: center;
+}
+.rt-flow { display: flex; align-items: flex-end; justify-content: center; gap: 4px 12px; margin-top: 8px; }
+.rt-st { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.rt-st .ob-van .tag { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); }
+.rt-mid { display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: calc(26px * var(--tx)); }
+.rt-mid .ob-chip { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); }
+.rt-sym { line-height: 1; }
+.rt-arrow { position: relative; display: block; width: calc(70px + 24px * var(--tx)); height: 3px; background: var(--ink); margin-right: 10px; }
+.rt-arrow::after {
+  content: ""; position: absolute; right: -11px; top: 50%; transform: translateY(-50%);
+  border-left: 12px solid var(--ink); border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+}
+.rt-rew { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
+.rt-money { font-size: calc(calc(16px * var(--tx)) * var(--fz, 1)); line-height: 1; font-weight: 700; }
+.rt-bd {
+  display: inline-flex; align-items: center; gap: 5px; margin-left: 6px;
+  font-family: var(--disp); font-weight: 700; letter-spacing: 0.08em; color: var(--loss);
+  font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1;
+}
+.rt-bolt { line-height: 0; }
+.rt-bolt svg { width: 14px; height: auto; display: block; }
+
+@media (max-width: 560px) {
+  .rt-card { padding: 10px 14px 12px; min-width: 0; }
+  .rt-flow { gap: 4px 8px; }
+  .rt-arrow { width: 54px; }
+  .rt-mid { padding-bottom: 22px; }
+}
+</style>
 <style>/* tables.css */
 /* tables.css: the table of preferences theta, the probability table and a policy's column (agent A4b; tables.js has the
    API). Classes start with tb-. Tables are plain px (they keep their size on large screens); a phone gets smaller
@@ -628,68 +681,114 @@ sup { top: -0.55em; }
   .s3a-wctl { flex-direction: row; margin-left: 0; width: 100%; justify-content: center; gap: 14px; }
 }
 </style>
+<style>/* sec3a2.css */
+/* sec3a2.css: page 3, scene 190 "Human learning" (sec3a2.js, main session, 2026-11-17). Classes start with s3h-. */
+
+.s3h-lead { max-width: 30em; margin: 0 auto; text-align: center; }
+.s3h-grid { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: calc(14px * var(--tx)); }
+.s3h-panel { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 18px 26px 22px; }
+.s3h-title {
+  font-family: var(--disp); font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: calc(calc(16px * var(--tx)) * var(--fz, 1)); line-height: 1; color: var(--ink);
+}
+.s3h-human .s3h-title { color: var(--wear0); }
+.s3h-pcpanel .s3h-title { color: var(--red); }
+.s3h-row { display: flex; align-items: center; gap: 18px; }
+.s3h-who { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.s3h-face, .s3h-pc { line-height: 0; }
+.s3h-face svg, .s3h-pc svg { display: block; }
+.s3h-name {
+  font-family: var(--disp); font-weight: 700; letter-spacing: 0.08em; color: var(--ink2);
+  font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1; white-space: nowrap;
+}
+.s3h-arr { position: relative; display: block; width: 46px; height: 3px; background: var(--ink); margin-right: 10px; }
+.s3h-arr::after {
+  content: ""; position: absolute; right: -11px; top: 50%; transform: translateY(-50%);
+  border-left: 12px solid var(--ink); border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+}
+/* Between the panels: a large arrow, from what we did to what comes next. */
+.s3h-next { position: relative; display: block; width: 40px; height: 6px; background: var(--red); margin-right: 16px; }
+.s3h-next::after {
+  content: ""; position: absolute; right: -17px; top: 50%; transform: translateY(-50%);
+  border-left: 18px solid var(--red); border-top: 12px solid transparent; border-bottom: 12px solid transparent;
+}
+
+@media (max-width: 560px) {
+  .s3h-grid { flex-direction: column; gap: 12px; }
+  .s3h-panel { min-width: 0; padding: 12px 14px 14px; }
+  .s3h-row { gap: 8px; }
+  .s3h-arr { width: 26px; margin-right: 10px; }
+  .s3h-pc svg { width: 66px; height: auto; }
+  .s3h-next { transform: rotate(90deg); margin: 6px 0 10px; }
+}
+</style>
 <style>/* sec3b-policy.css */
-/* sec3b-policy.css: page 3, scene 260 "pick" (agent V, 2026-11-16; the script is sec3b-policy.js). Classes start
-   with s3p-. Words scale with --tx (core.css) and the skin's --fz; the bars, the pin, the tokens and the table keep
-   plain px. Every shape is a CSS box or an SVG path; the motion is in the script. This file loads before skin.css,
-   so a rule that must win over the skin is more specific than the skin's. */
+/* sec3b-policy.css: page 3, scene 260 "pick" (agent V, 2026-11-16; the roulette since 2026-11-17; the script is
+   sec3b-policy.js). Classes start with s3p-. Words scale with --tx (core.css) and the skin's --fz; the wheel, the ball,
+   the tokens and the table keep plain px. Every shape is a CSS box or an SVG path; the motion is in the script. This
+   file loads before skin.css, so a rule that must win over the skin is more specific than the skin's. */
 
 .s3p-lead { min-height: 2.8em; display: flex; align-items: center; justify-content: center; }
 .s3p-lead > span { display: block; }
 
-/* The table on the left, the bar of HEALTHY's probabilities on the right, its top level with HEALTHY's row (desks). */
-.s3p-wrap { --s3p-L: 520px; display: flex; align-items: flex-start; justify-content: center; gap: 64px; }
-.s3p-right { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; width: calc(var(--s3p-L) + 24px); max-width: 100%; }
+/* The table on the left, the roulette of HEALTHY's probabilities on the right (desks). */
+.s3p-wrap { --s3p-W: 300px; --s3p-L: 440px; display: flex; align-items: flex-start; justify-content: center; gap: 64px; }
+.s3p-right { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; width: var(--s3p-L); max-width: 100%; }
 @media (min-width: 761px) { .s3p-wrap.s3p-k0 .s3p-right { display: none; } }
 .s3p-cap { font-family: var(--disp); font-weight: 700; letter-spacing: 0.06em; color: var(--ink2); text-align: center; white-space: nowrap;
   font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1)); }
-.s3p-right > .s3p-cap { height: 24px; display: flex; align-items: flex-end; justify-content: center; }
+.s3p-right > .s3p-cap { height: 20px; display: flex; align-items: flex-end; justify-content: center; }
 
-/* The bar: three segments, each as long as its probability, 2 px apart on the stage (no track: the segments land in
-   empty space and become the bar); the pin is two pointers, one above the bar and one below it. */
-.s3p-barbox { position: relative; width: var(--s3p-L); max-width: 100%; padding-top: 26px; }
-.s3p-bar { position: relative; height: 56px; }
-.s3p-seg, .s3p-cseg { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; min-width: 0;
-  box-shadow: 0 1.5px 0 rgba(21, 23, 28, 0.13); }
-.s3p-seg { outline: 4px solid transparent; outline-offset: 3px; }
-.s3p-seg.lit { z-index: 2; }
-.s3p-seg.a0, .s3p-cseg.a0, .s3p-fly.a0, .s3p-tok.a0 { background: var(--run); color: #FFFFFF; }
-.s3p-seg.a1, .s3p-cseg.a1, .s3p-fly.a1, .s3p-tok.a1 { background: var(--service); color: #1E1405; }
-.s3p-seg.a2, .s3p-cseg.a2, .s3p-fly.a2, .s3p-tok.a2 { background: var(--replace); color: #FFFFFF; }
-.s3p-lab { display: inline-flex; align-items: center; gap: 6px; font-family: var(--px); font-weight: 700; line-height: 1; white-space: nowrap;
-  font-size: calc(17px * var(--fz, 1)); font-variant-numeric: tabular-nums lining-nums; }
+/* The wheel: the slots, a rim the ball runs on, the hub with HEALTHY's van; labels laid over it in %. */
+.s3p-wheel { position: relative; width: var(--s3p-W); height: var(--s3p-W); margin-top: 6px; }
+.s3p-wsvg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.s3p-rim { fill: none; stroke: #C3C8D0; stroke-width: 2; }
+.s3p-rim2 { fill: #FFFFFF; stroke: none; filter: drop-shadow(0 1.5px 0 rgba(21, 23, 28, 0.13)); }
+.s3p-hub { fill: #FFFFFF; stroke: #D3D8DF; stroke-width: 2; }
+.s3p-hubvan { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+.s3p-seg.a0, .s3p-cseg.a0 { fill: var(--run); }
+.s3p-seg.a1, .s3p-cseg.a1 { fill: var(--service); }
+.s3p-seg.a2, .s3p-cseg.a2 { fill: var(--replace); }
+.s3p-lit { fill: none; stroke: var(--yellow); stroke-width: 5; stroke-linejoin: round; opacity: 0; pointer-events: none; }
+.s3p-ctrack { fill: none; stroke: #AEB4BE; stroke-dasharray: 3 4; stroke-opacity: 0.8; }
+.s3p-ctrack { stroke-width: 1.5px; }
+.s3p-ball { fill: #FFFFFF; stroke: var(--ink); stroke-width: 2.4; }
+.s3p-ballsh { fill: var(--ink); opacity: 0.22; transform: translate(1.5px, 2.5px); }
+.s3p-wlab, .s3p-clab { position: absolute; transform: translate(-50%, -50%); pointer-events: none; }
+.s3p-wlab.a0, .s3p-wlab.a2 { color: #FFFFFF; }
+.s3p-wlab.a1 { color: #1E1405; }
+.s3p-clab { font-family: var(--px); font-weight: 700; line-height: 1; color: #FFFFFF; font-size: calc(12px * var(--fz, 1)); font-variant-numeric: tabular-nums lining-nums; }
+.s3p-clab.a1 { color: #1E1405; }
+.s3p-lab { display: inline-flex; align-items: center; gap: 5px; font-family: var(--px); font-weight: 700; line-height: 1; white-space: nowrap;
+  font-size: calc(16px * var(--fz, 1)); font-variant-numeric: tabular-nums lining-nums; }
 .s3p-lab .g { display: inline-flex; line-height: 0; }
-.s3p-seg .s3p-lab svg { width: 20px; height: 20px; }
-.s3p-cseg .s3p-lab { font-size: calc(15px * var(--fz, 1)); }
-.s3p-cseg .s3p-lab svg { width: 16px; height: 16px; }
-.s3p-pin { position: absolute; top: -14px; bottom: -14px; width: 20px; margin-left: -10px; z-index: 3; pointer-events: none; }
-.s3p-pin svg { position: absolute; left: 0; width: 20px; height: 16px; overflow: visible; fill: var(--ink); filter: drop-shadow(0 1px 1px rgba(21, 23, 28, 0.25)); }
-.s3p-pin svg.t { top: 0; }
-.s3p-pin svg.b { bottom: 0; transform: scaleY(-1); }
+.s3p-wlab .s3p-lab svg, .s3p-wlab svg { width: 18px; height: 18px; }
 
-/* Below the bar, one place for the announcement, the six slots and the counts of 100 spins (stacked, so nothing
-   moves when one gives way to the next). */
-.s3p-res { display: grid; width: var(--s3p-L); max-width: 100%; margin-top: 22px; justify-items: center; align-items: start; }
+/* Flyers: tokens and the little bars carry the colour of their action. */
+.s3p-fly.a0, .s3p-tok.a0 { background: var(--run); color: #FFFFFF; }
+.s3p-fly.a1, .s3p-tok.a1 { background: var(--service); color: #1E1405; }
+.s3p-fly.a2, .s3p-tok.a2 { background: var(--replace); color: #FFFFFF; }
+
+/* Below the wheel, one place for the announcement, the six spins and the caption of the 100 spins (stacked, so
+   nothing moves when one gives way to the next). */
+.s3p-res { display: grid; width: var(--s3p-L); max-width: 100%; margin-top: 16px; justify-items: center; align-items: start; }
 .s3p-res > * { grid-area: 1 / 1; }
-.s3p-ann { display: flex; align-items: center; justify-content: center; gap: 18px; padding-top: 4px; }
+.s3p-ann { display: flex; align-items: center; justify-content: center; gap: 18px; padding-top: 2px; }
 .s3p-tok { display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; flex: 0 0 auto; }
 .s3p-tok svg { width: 62%; height: 62%; }
-.s3p-ann .s3p-tok { width: 64px; height: 64px; }
+.s3p-ann .s3p-tok { width: 56px; height: 56px; }
 .s3p-name { font-family: var(--disp); font-weight: 700; letter-spacing: 0.04em; line-height: 1; white-space: nowrap; }
 .s3p-name.a0 { color: var(--run); }
 .s3p-name.a1 { color: #A35F00; }
 .s3p-name.a2 { color: var(--replace); }
-.s3p-ann .s3p-name { font-style: italic; font-weight: 800; letter-spacing: 0.02em; font-size: calc(calc(34px * (1 + (var(--tx) - 1) * 0.3846)) * var(--fz, 1)); }
+.s3p-ann .s3p-name { font-style: italic; font-weight: 800; letter-spacing: 0.02em; font-size: calc(calc(30px * (1 + (var(--tx) - 1) * 0.3846)) * var(--fz, 1)); }
 .s3p-slots { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; width: 100%; }
-.s3p-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 2px 9px; border: 1.5px dashed #AEB4BE; min-width: 0; }
+.s3p-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 7px 2px 8px; border: 1.5px dashed #AEB4BE; min-width: 0; }
 .s3p-slot .no { font-family: var(--disp); font-weight: 700; letter-spacing: 0.06em; color: var(--ink2); white-space: nowrap; line-height: 1;
   font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); }
-.s3p-slot .s3p-tok { width: 34px; height: 34px; }
+.s3p-slot .s3p-tok { width: 30px; height: 30px; }
 .s3p-slot .s3p-name { font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); }
-.s3p-cnt { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-/* The count bar's track, dashed like the slots: the counts fill it from the left. */
-.s3p-cbar { position: relative; width: 100%; height: 40px; }
-.s3p-cbar::before { content: ""; position: absolute; inset: 0; border: 1.5px dashed #AEB4BE; }
+.s3p-cnt { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding-top: 6px; }
 
 /* HEALTHY's row: a ring that fades in (the script sets its opacity). */
 .s3p-table .tb-rf.s3p-hl { outline: 3px solid var(--red); outline-offset: -1px; }
@@ -698,27 +797,23 @@ sup { top: -0.55em; }
 .s3p-fly { position: fixed; left: 0; top: 0; z-index: 40; margin: 0; pointer-events: none; transform-origin: 50% 50%; }
 .s3p-flybar { box-shadow: 0 1.5px 0 rgba(21, 23, 28, 0.13); }
 
-/* Narrower screens: a shorter bar; below 761 px the bar goes under the table. */
-@media (max-width: 1099px) { .s3p-wrap { --s3p-L: 430px; gap: 40px; } }
+/* The 1180 x 820 desk has more height and less width; below 761 px the wheel goes under the table. */
+@media (max-width: 1099px) { .s3p-wrap { --s3p-L: 400px; gap: 40px; } }
 @media (max-width: 760px) {
-  .s3p-wrap { --s3p-L: min(520px, calc(100vw - 56px)); flex-direction: column; align-items: center; gap: 18px; }
+  .s3p-wrap { --s3p-W: min(290px, calc(100vw - 80px)); --s3p-L: min(440px, calc(100vw - 56px)); flex-direction: column; align-items: center; gap: 18px; }
   .s3p-right > .s3p-cap { height: auto; }
-  .s3p-barbox { padding-top: 22px; }
 }
 @media (max-width: 560px) {
-  .s3p-wrap { --s3p-L: min(350px, calc(100vw - 40px)); gap: 14px; }
+  .s3p-wrap { --s3p-W: min(250px, calc(100vw - 80px)); --s3p-L: min(350px, calc(100vw - 40px)); gap: 14px; }
   .s3p-lead { min-height: 4.1em; }
-  .s3p-bar { height: 46px; }
-  .s3p-cbar { height: 36px; }
-  .s3p-lab { font-size: calc(13px * var(--fz, 1)); gap: 4px; }
-  .s3p-seg .s3p-lab svg { width: 15px; height: 15px; }
-  .s3p-cseg .s3p-lab { font-size: calc(12px * var(--fz, 1)); }
-  .s3p-cseg .s3p-lab svg { width: 13px; height: 13px; }
-  .s3p-res { margin-top: 16px; }
+  .s3p-lab { font-size: calc(12px * var(--fz, 1)); gap: 3px; }
+  .s3p-wlab .s3p-lab svg, .s3p-wlab svg { width: 14px; height: 14px; }
+  .s3p-clab { font-size: calc(10px * var(--fz, 1)); }
+  .s3p-res { margin-top: 12px; }
   .s3p-slots { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   .s3p-slot { padding: 6px 2px 7px; gap: 5px; }
   .s3p-slot .s3p-tok { width: 28px; height: 28px; }
-  .s3p-ann .s3p-tok { width: 52px; height: 52px; }
+  .s3p-ann .s3p-tok { width: 48px; height: 48px; }
 }
 </style>
 <style>/* sec3b.css */
@@ -914,18 +1009,6 @@ sup { top: -0.55em; }
 .s3c-loop polyline { fill: none; stroke: var(--ink); stroke-width: 4; stroke-linecap: square; stroke-linejoin: miter; }
 .s3c-loop polygon { fill: var(--ink); }
 
-/* The hand-over: the four numbers in the middle, in the places of the close-up's first scene (350). */
-.s3c-four {
-  position: absolute; inset: 0; z-index: 3;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(14px * var(--tx));
-}
-.s3c-fspace { visibility: hidden; }
-.s3c-fgrid {
-  display: grid; grid-template-columns: auto minmax(150px, 220px) auto;
-  row-gap: calc(18px * var(--tx)); align-items: center; justify-items: center;
-}
-.s3c-fbox { min-width: 230px; }
-
 /* The learning curve and the movie (scenes 410 and 420, main session, 2026-11-16, evening): the whole diagram of one
    update (s3c-mvd), the panel of its backward pass and its update (hop) where scene 400 writes the update, and the
    learning curve (plot) beside the average return. The cells aa, zb and za are not used. */
@@ -992,12 +1075,6 @@ sup { top: -0.55em; }
   .s3c-dia .s3c-gname { font-size: calc(7px * var(--fz, 1)); }
   .s3c-dia .tb-zoom { padding: 6px 8px 8px; }
   .s3c-line { font-size: calc(8px * var(--fz, 1)); }
-  .s3c-fgrid { grid-template-columns: auto auto; column-gap: 10px; row-gap: 14px; }
-  .s3c-fmid { display: none; }
-  .s3c-fbox { min-width: 0; }
-  .s3c-four .tb-zn { font-size: calc(15px * var(--fz, 1)); }
-  .s3c-four .tb-zoom { padding: 8px 8px 10px; }
-  .s3c-four .s3c-gname, .s3c-four .tb-zhead .ob-chip { font-size: calc(8px * var(--fz, 1)); }
   .s3c-count { min-width: 0; }
   .s3c-dia.s3c-mvd { padding: 10px 0 0 0; grid-template-areas: "bets bets" "prob prob" "runs runs" "g1 g1" "ab ab" "plot plot" "hop hop"; }
   .s3c-hpc, .s3c-hpn { font-size: calc(13px * var(--fz, 1)); }
@@ -1007,8 +1084,9 @@ sup { top: -0.55em; }
 }
 </style>
 <style>/* sec3d.css */
-/* sec3d.css: page 3, the close-up of the hop and the update (agent A6), scenes 350 to 399. Classes start with s3d-.
-   Words scale with --tx (core.css); the boxes of the entry, the plot and the small pictures are plain px. */
+/* sec3d.css: page 3, the close-up of the hop and the update (agent A6), scenes 360 and 370 (350, 380 and 390 until
+   2026-11-17). Classes start with s3d-. Words scale with --tx (core.css); the tables, the plot and the small pictures
+   are plain px. */
 
 /* The lead line keeps two lines of room, so the pictures below it stay put from beat to beat. */
 .s3d-lead { min-height: calc(2 * 1.75em); display: flex; align-items: center; justify-content: center; }
@@ -1017,33 +1095,12 @@ sup { top: -0.55em; }
 /* A piece of arithmetic kept on one line: an inline block, so that the line breaks before it when it does not fit. */
 .s3d-nw { display: inline-block; white-space: nowrap; }
 
-/* 350. Before and after: the preference's row on top, the average's below; an arrow between each before and after. */
-.s3d-ba {
-  display: grid; grid-template-columns: auto minmax(150px, 220px) auto;
-  row-gap: calc(18px * var(--tx)); align-items: center; justify-items: center;
-}
-.s3d-zb { grid-area: 1 / 1; } .s3d-m1 { grid-area: 1 / 2; } .s3d-za { grid-area: 1 / 3; }
-.s3d-gb { grid-area: 2 / 1; } .s3d-m2 { grid-area: 2 / 2; } .s3d-ga { grid-area: 2 / 3; }
-.s3d-box { min-width: 230px; }
-.s3d-mid { position: relative; align-self: stretch; justify-self: stretch; min-height: 48px; }
-.s3d-mtop, .s3d-mbot { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; line-height: 1; }
-.s3d-mtop { bottom: calc(50% + 14px); font-size: calc(calc(13px * var(--tx)) * var(--fz, 1)); padding: 6px 7px 5px; background: var(--box); border: 2px solid var(--ink); }
-.s3d-mbot { top: calc(50% + 16px); font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); }
-.s3d-gainlab, .s3d-upword { color: var(--gain); }
+/* The name of the average return in a box, as the tables write it (the table of the four numbers of 360). */
 .s3d-gname {
   display: inline-block; white-space: nowrap;
   font-size: calc(11px * var(--fz, 1)); line-height: 1; padding: 0.55em 0.7em 0.5em;
   border: 3px solid var(--ink); background: var(--box);
 }
-.s3d-gn.loss { color: var(--loss); }
-.s3d-gn.gain { color: var(--gain); }
-.s3d-calc { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 22px; }
-.s3d-ccap { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1.2; color: var(--ink2); letter-spacing: 0.08em; }
-.s3d-cline {
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 0 0.6em;
-  font-size: calc(calc(17px * var(--tx)) * var(--fz, 1)); line-height: calc(1.35 * var(--lh, 1));
-}
-.s3d-cexp, .s3d-cres { white-space: nowrap; }
 
 /* 360. The plot of the hop (an SVG board: its words are in the units of its viewBox). */
 .s3d-plot { line-height: 0; max-width: 100%; }
@@ -1090,9 +1147,10 @@ sup { top: -0.55em; }
 .s3d-old .s3d-sg { background: var(--press); }
 .s3d-new { outline: 4px solid var(--yellow); outline-offset: 3px; }
 
-/* 380. Why this update: four cards in a row, each a small copy of 360's triangle of the hop (the axes and their names,
-   BEFORE and AFTER, the tinted right triangle, the words of its sides, its slope) over the line of the preference and
-   its move, then two short lines. The picture is an SVG board: its words and strokes are in the units of its viewBox,
+/* 370's why cards (scene 380 until 2026-11-17): four cards in a row, each a small copy of 360's triangle of the hop
+   (the axes and their names, BEFORE and AFTER, the tinted right triangle, the words of its sides, its slope) over the
+   line of the preference and its move, then two short lines. The picture is an SVG board: its words and strokes are
+   in the units of its viewBox,
    plain px on a desk, and shrink with it. Colours, strokes and faces as on 360's plot in the look Grand Prix. */
 .s3d-whys {
   display: grid; grid-template-columns: repeat(4, minmax(0, 256px)); justify-content: center; align-items: stretch;
@@ -1127,9 +1185,7 @@ sup { top: -0.55em; }
 .s3d-wc { font-size: calc(calc(12px * var(--tx)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1)); white-space: nowrap; }
 .s3d-we { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1)); color: var(--ink2); letter-spacing: 0.06em; white-space: nowrap; }
 
-/* 390. The update worked out, the equals signs one under the other; then the new preference alone in the same place. */
-.s3d-stack { display: grid; justify-items: center; align-items: center; }
-.s3d-stack > * { grid-area: 1 / 1; }
+/* 370's update worked out (scene 390 until 2026-11-17), the equals signs one under the other. */
 .s3d-work {
   display: flex; flex-direction: column; gap: 12px; padding: 18px 28px 16px;
   font-size: calc(calc(20px * (1 + (var(--tx) - 1) * 0.923)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1));
@@ -1138,23 +1194,9 @@ sup { top: -0.55em; }
 .s3d-wl { width: 1.4em; text-align: right; flex: 0 0 auto; }
 .s3d-weq { width: 2em; text-align: center; flex: 0 0 auto; }
 .s3d-wr { white-space: nowrap; }
-.s3d-final .tb-zn { font-size: calc(56px * var(--fz, 1)); }
 
 @media (max-width: 560px) {
   .s3d-lead { min-height: calc(3 * 1.75em); }
-  .s3d-ba { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
-  .s3d-zb { grid-area: 1 / 1; } .s3d-m1 { grid-area: 2 / 1; } .s3d-za { grid-area: 3 / 1; }
-  .s3d-gb { grid-area: 4 / 1; margin-top: 14px; } .s3d-m2 { grid-area: 5 / 1; } .s3d-ga { grid-area: 6 / 1; }
-  .s3d-mid { min-height: 46px; }
-  /* On a phone the six boxes stand in one column: smaller margins, and each AFTER box drops the head that the
-     BEFORE box right above it shows. */
-  .s3d-ba .tb-zoom { padding: 8px 14px 10px; gap: 6px; }
-  .s3d-za .tb-zhead, .s3d-ga .tb-zhead { display: none; }
-  .s3d-mtop { bottom: auto; top: 50%; left: calc(50% + 16px); transform: translateY(-50%); font-size: calc(11px * var(--fz, 1)); }
-  .s3d-mbot { top: 50%; left: auto; right: calc(50% + 16px); transform: translateY(-50%); font-size: calc(10px * var(--fz, 1)); }
-  .s3d-box { min-width: 0; }
-  .s3d-calc { padding: 10px 12px; }
-  .s3d-cline { font-size: calc(12px * var(--fz, 1)); }
   .s3d-eq { font-size: calc(15px * var(--fz, 1)); }
   .s3d-us { font-size: calc(30px * var(--fz, 1)); }
   .s3d-al { font-size: calc(13px * var(--fz, 1)); }
@@ -1165,7 +1207,6 @@ sup { top: -0.55em; }
   .s3d-wc { font-size: calc(10px * var(--fz, 1)); }
   .s3d-we { font-size: calc(8px * var(--fz, 1)); }
   .s3d-work { font-size: calc(14px * var(--fz, 1)); padding: 12px 14px; }
-  .s3d-final .tb-zn { font-size: calc(34px * var(--fz, 1)); }
 }
 
 /* Letters of formulas inside the SVG plot of 360 (since 2026-11-16), in the faces KaTeX draws formulas with (tex.js):
@@ -1175,9 +1216,10 @@ sup { top: -0.55em; }
 /* The macron of G bar 1 in the SVG titles (gBar in sec3d.js): KaTeX_Main, at the size of the G. */
 .s3d-tex.s3d-tbar { font-size: calc(var(--tex, 1.12) * 1em); }
 
-/* 360 since 2026-11-16 (agent W): the table of 350's four numbers beside the plot, the subtractions written on the
-   sides of the triangle (HTML laid over the SVG, sized with it by --s3d-k), nabla as a fraction; the copy of 350
-   (s3d-snap) and the numbers in flight (s3d-fly) of the hand-over. */
+/* 360 since 2026-11-16 (agent W): the table of the four numbers beside the plot, the subtractions written on the
+   sides of the triangle (HTML laid over the SVG, sized with it by --s3d-k), nabla as a fraction; the copy of the scene
+   before (s3d-snap) and the numbers in flight (s3d-fly) of the hand-overs. Since 2026-11-17 the table of preferences
+   stands over the table of the four numbers (s3d-tcol). */
 .s3d-trow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: calc(16px * var(--tx)) calc(30px * var(--tx)); max-width: 100%; }
 .s3d-tab {
   display: grid; grid-template-columns: auto auto auto; align-items: stretch; justify-items: stretch;
@@ -1232,6 +1274,137 @@ sup { top: -0.55em; }
   .s3d-td { padding: 9px 10px; }
   .s3d-trow .s3d-psvg { width: 100%; }
   .s3d-plot { width: 100%; }
+}
+
+/* Since 2026-11-17 (main session): the table of preferences theta, small, on 360 and 370, its entry lit; 360's left
+   column; 370 on one screen: the table, the update and the sign on top, the update worked out under the table and the
+   four why cards beside it; the arrow from theta_{s,a} to its entry (s3d-route, drawn by sec3d.js). */
+.s3d-theta { flex: 0 0 auto; }
+.s3d-tcol { display: flex; flex-direction: column; align-items: center; gap: calc(12px * var(--tx)); }
+.s3d-rcol { display: flex; flex-direction: column; align-items: center; gap: calc(4px * var(--tx)); max-width: 100%; }
+.s3d-ugrid {
+  display: grid; width: 100%; padding-top: 20px; box-sizing: border-box;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "th form signs" "work whys whys";
+  column-gap: calc(16px * var(--tx)); row-gap: calc(12px * var(--tx));
+  align-items: start; justify-items: center;
+}
+.s3d-uth { grid-area: th; }
+.s3d-uform { grid-area: form; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 12px; }
+.s3d-uform .s3d-us { font-size: calc(calc(32px * (1 + (var(--tx) - 1) * 0.154)) * var(--fz, 1)); }
+.s3d-uform .s3d-ut:empty { min-height: 0; }
+.s3d-uform .s3d-upf { gap: calc(10px * var(--tx)); }
+.s3d-ual { white-space: nowrap; }
+.s3d-usigns { grid-area: signs; flex-direction: column; flex-wrap: nowrap; gap: calc(8px * var(--tx)); }
+.s3d-usigns .s3d-sign { padding: 6px 12px 7px; gap: 3px; }
+.s3d-usigns .s3d-sf { font-size: calc(calc(15px * var(--tx)) * var(--fz, 1)); }
+.s3d-uwork { grid-area: work; justify-self: stretch; padding: 12px 16px 10px; gap: 8px;
+  font-size: calc(calc(17px * (1 + (var(--tx) - 1) * 0.923)) * var(--fz, 1)); }
+.s3d-uwhys { grid-area: whys; grid-template-columns: repeat(4, minmax(0, 176px)); gap: calc(10px * var(--tx)); }
+.s3d-uwhys .s3d-why { padding: 6px 8px 8px; gap: 3px; }
+.s3d-uwhys .s3d-wsvg { max-width: 128px; }
+.s3d-route { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; z-index: 6; }
+@media (max-width: 999px) {
+  .s3d-ugrid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "th" "form" "signs" "whys" "work"; padding-top: 0; }
+  .s3d-usigns { flex-direction: row; flex-wrap: wrap; }
+  .s3d-uwork { justify-self: center; }
+}
+@media (max-width: 560px) {
+  .s3d-uform .s3d-us { font-size: calc(26px * var(--fz, 1)); }
+  .s3d-uwhys { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .s3d-usigns .s3d-sf { font-size: calc(14px * var(--fz, 1)); }
+  .s3d-uwork { font-size: calc(14px * var(--fz, 1)); padding: 10px 12px; }
+  .s3d-rcol { width: 100%; }
+}
+</style>
+<style>/* sec3e.css */
+/* sec3e.css: page 3, scene 430 "What we learned" (sec3e.js, main session, 2026-11-17). Classes start with s3e-.
+   Words scale with --tx (core.css) and the skin's --fz; the pictures are SVG boards in plain px on a desk. */
+
+.s3e-lead { min-height: calc(2 * 1.75em); display: flex; align-items: center; justify-content: center; text-align: center; max-width: 46em; margin: 0 auto; }
+.s3e-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 360px)); justify-content: center;
+  gap: calc(12px * var(--tx)) calc(16px * var(--tx)); margin-top: calc(8px * var(--tx));
+}
+.s3e-card { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 14px 12px; min-width: 0; }
+.s3e-card.s3e-on { outline: 3px solid var(--red); outline-offset: 4px; }
+.s3e-head { display: flex; align-items: center; gap: 12px; }
+.s3e-no {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 24px; padding: 0 6px;
+  transform: skewX(-14deg); background: var(--red); color: #FFFFFF; font-family: var(--disp); font-style: italic; font-weight: 800;
+  font-size: 17px; line-height: 1; flex: 0 0 auto;
+}
+.s3e-human .s3e-no { background: var(--wear0); }
+.s3e-name {
+  font-family: var(--disp); font-style: italic; font-weight: 800; letter-spacing: 0.05em; color: var(--ink); white-space: nowrap;
+  font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); line-height: 1;
+}
+.s3e-human .s3e-name { color: var(--wear0); }
+.s3e-pic { height: 122px; display: flex; align-items: center; justify-content: center; min-width: 0; }
+.s3e-cap {
+  font-family: var(--disp); font-weight: 700; letter-spacing: 0.05em; color: var(--ink2); text-align: center;
+  font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); line-height: 1.3;
+}
+
+/* The SVG boards: words in the units of the viewBox. */
+.s3e-svg { display: block; max-width: 100%; height: auto; overflow: visible; }
+.s3e-svg text { font-family: var(--disp); font-weight: 700; letter-spacing: 0.05em; fill: var(--ink2); }
+.s3e-svg .s3e-lab { font-size: calc(8.5px * var(--fz, 1)); }
+.s3e-svg .s3e-num { font-family: var(--px); font-weight: 700; letter-spacing: 0; fill: var(--ink); font-size: calc(11px * var(--fz, 1)); }
+.s3e-svg .s3e-gain { fill: var(--gain); }
+.s3e-svg .s3e-tex { font-family: KaTeX_Main, "Times New Roman", serif; font-weight: 400; letter-spacing: normal; fill: var(--ink); }
+.s3e-svg .s3e-tmath { font-family: KaTeX_Math, "Times New Roman", serif; font-style: italic; }
+.s3e-ax { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: square; }
+.s3e-cell { fill: #FFFFFF; stroke: var(--line); stroke-width: 1.5; }
+.s3e-am.a0, .s3e-bar.a0, .s3e-slot.a0 { fill: var(--run); }
+.s3e-am.a1, .s3e-bar.a1, .s3e-slot.a1 { fill: var(--service); }
+.s3e-am.a2, .s3e-bar.a2, .s3e-slot.a2 { fill: var(--replace); }
+.s3e-sm.w0 { fill: var(--wear0); } .s3e-sm.w1 { fill: var(--wear1); } .s3e-sm.w2 { fill: var(--wear2); } .s3e-sm.w3 { fill: var(--wear3); }
+.s3e-slot { stroke: #FFFFFF; stroke-width: 1.5; }
+.s3e-hub { fill: #FFFFFF; stroke: #D3D8DF; stroke-width: 2; }
+.s3e-arl { stroke: var(--ink); stroke-width: 2.5; }
+.s3e-arh { fill: var(--ink); }
+.s3e-tf { fill: var(--yellow); fill-opacity: 0.6; }
+.s3e-leg { stroke: var(--ink); stroke-width: 4; stroke-linecap: square; }
+.s3e-leg.s3e-up { stroke: var(--gain); }
+.s3e-hyp { stroke: var(--ink); stroke-width: 2.5; }
+.s3e-pt { fill: var(--ink); stroke: var(--ink); stroke-width: 2; }
+.s3e-pt.s3e-old { fill: #FFFFFF; }
+.s3e-lit { fill: var(--yellow); stroke: var(--red); stroke-width: 2.5; }
+.s3e-best { stroke: var(--ink2); stroke-width: 2; stroke-dasharray: 5 4; }
+.s3e-curve { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-linejoin: round; }
+
+/* The pictures made of elements: the helmet and a policy, the episodes and their average, the update. */
+.s3e-hum, .s3e-fwd, .s3e-upd, .s3e-rep { display: flex; align-items: center; justify-content: center; gap: 12px; min-width: 0; }
+.s3e-face { line-height: 0; }
+.s3e-face svg { display: block; }
+.s3e-into { position: relative; display: block; width: 28px; height: 3px; background: var(--ink); margin-right: 9px; flex: 0 0 auto; }
+.s3e-into::after {
+  content: ""; position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+  border-left: 11px solid var(--ink); border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+}
+.s3e-pol { display: flex; flex-direction: column; gap: 4px; }
+.s3e-prow { display: flex; align-items: center; gap: 6px; }
+.s3e-prow .ob-van { line-height: 0; }
+.s3e-prow .ob-chip { font-size: calc(8.5px * var(--fz, 1)); }
+.s3e-runs { --rc: 13px; gap: 2px; }
+.s3e-runs .runs-row { gap: 6px; }
+.s3e-runs .runs-g1 { min-width: 3.4em; font-size: calc(8px * var(--fz, 1)); }
+.s3e-brace { align-self: stretch; width: 7px; border: 2.5px solid var(--ink); border-left: 0; margin: 2px 0; flex: 0 0 auto; }
+.s3e-avg { font-size: calc(17px * var(--fz, 1)); }
+.s3e-add { font-size: calc(17px * var(--fz, 1)); white-space: nowrap; }
+.s3e-rep .s3e-svg { flex: 0 1 190px; }
+
+@media (max-width: 999px) {
+  .s3e-grid { grid-template-columns: repeat(2, minmax(0, 360px)); }
+}
+@media (max-width: 560px) {
+  .s3e-lead { min-height: calc(3 * 1.75em); }
+  .s3e-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .s3e-card { padding: 8px 10px 10px; }
+  .s3e-name { font-size: calc(13px * var(--fz, 1)); }
+  .s3e-cap { font-size: calc(10px * var(--fz, 1)); }
+  .s3e-pic { height: auto; min-height: 100px; }
 }
 </style>
 <style>/* skin-base.css */
@@ -3148,6 +3321,141 @@ button { font-family: var(--px); }
   OB.runs = { play: play, block: block, showG1: showG1, row: row, cell: cell, legend: legend };
 })();
 </script>
+<script>/* runs_tip.js */
+/* runs_tip.js: the card of one week of an episode, on the cells of a block of episodes (main session, 2026-11-17).
+   Carlos: "whenever I hover over one of the entries of the matrix describing the runs and what happens at each week,
+   I want a description of what happened, what was the action taken, what was the state, what was the new state ...
+   a pop-up showing me what happened there in a bit more detail, graphically, not a lot of text."
+
+   OB.runs.tip(block) gives every cell of a block of rows (OB.runs.block, not compact) a card: the episode and the
+   week; the van in its state S_t; the arrow with the action a_t; the van in the next state S_t+1; the reward $r_t of
+   the week, and the bolt when the van broke down. A mouse shows it on hover; a touch screen on a tap, and a tap
+   elsewhere hides it. One card for the page, fixed above the cell (below it when there is no room), inside the
+   window; Escape, a scroll, a resize or a change of the hash hides it. Returns the block. Used by Try it (sec3a.js).
+
+   Loaded after runs.js on pages 2 and 3 (the shells' pattern runs*.js; "runs.js" < "runs_tip.js"); nothing changes
+   until a scene calls OB.runs.tip. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B;
+  if (!OB || !OB.runs || !B) return;
+  var el = OB.el, art = OB.art;
+  var card = null, cur = null, timer = 0, lastType = "mouse";
+
+  function phone() { return window.matchMedia && window.matchMedia("(max-width: 560px)").matches; }
+
+  function make() {
+    if (card) return card;
+    card = el("div", "rt-card ob-box white");
+    card.setAttribute("role", "tooltip");
+    card.setAttribute("aria-hidden", "true");
+    document.body.appendChild(card);
+    return card;
+  }
+
+  /* A van with its symbol above it: S_t or S_t+1. */
+  function stateCol(sym, s, px) {
+    var c = el("div", "rt-st");
+    c.appendChild(OB.html("span", "rt-sym", OB.tex(sym)));
+    c.appendChild(art.van(s, { size: px, gauge: false, label: true }));
+    return c;
+  }
+
+  function fill(run, i, t, cell) {
+    var C = make(), s = run.states[t], a = run.actions[t], s2 = run.states[t + 1], r = run.rewards[t];
+    var px = phone() ? 56 : 84, w = String(t + 1), w2 = String(t + 2);
+    C.textContent = "";
+    C.appendChild(el("div", "rt-head", "EPISODE " + (i + 1) + ", WEEK " + w));
+    var f = el("div", "rt-flow");
+    f.appendChild(stateCol("S_{" + w + "}", s, px));
+    var m = el("div", "rt-mid");
+    m.appendChild(OB.html("span", "rt-sym", OB.tex("a_{" + w + "}")));
+    m.appendChild(art.actionChip(a));
+    m.appendChild(el("span", "rt-arrow"));
+    f.appendChild(m);
+    f.appendChild(stateCol("S_{" + w2 + "}", s2, px));
+    C.appendChild(f);
+    var rw = el("div", "rt-rew");
+    rw.appendChild(OB.html("span", "rt-rsym", OB.tex("\\$r_{" + w + "} =")));
+    var mon = OB.moneyEl(r, 0);
+    mon.classList.add("rt-money");
+    rw.appendChild(mon);
+    if (run.faces[t] === "breakdown") {
+      var bd = el("span", "rt-bd");
+      var bolt = cell.querySelector(".runs-bolt");
+      if (bolt) { var b2 = bolt.cloneNode(true); b2.className = "rt-bolt"; bd.appendChild(b2); }
+      bd.appendChild(el("span", "", "BREAKDOWN"));
+      rw.appendChild(bd);
+    }
+    C.appendChild(rw);
+  }
+
+  /* Above the cell, centred on it, kept 8 px inside the window; below it when the top has no room. The caret points
+     at the cell's centre. */
+  function place(cell) {
+    var C = card, r = cell.getBoundingClientRect(), W = window.innerWidth, H = window.innerHeight;
+    var cw = C.offsetWidth, ch = C.offsetHeight, gap = 12;
+    var x = Math.max(8, Math.min(W - cw - 8, r.left + r.width / 2 - cw / 2));
+    var below = r.top - gap - ch < 8;
+    var y = below ? Math.min(H - ch - 8, r.bottom + gap) : r.top - gap - ch;
+    C.style.left = Math.round(x) + "px";
+    C.style.top = Math.round(y) + "px";
+    C.classList.toggle("below", below);
+    C.style.setProperty("--rt-cx", Math.round(r.left + r.width / 2 - x) + "px");
+  }
+
+  function show(b, i, t, cell) {
+    clearTimeout(timer);
+    if (cur && cur !== cell) cur.classList.remove("rt-cur");
+    cur = cell;
+    cell.classList.add("rt-cur");
+    fill(b.runs[i], i, t, cell);
+    card.classList.add("on");
+    place(cell);
+  }
+  function hide() {
+    clearTimeout(timer);
+    if (cur) cur.classList.remove("rt-cur");
+    cur = null;
+    if (card) card.classList.remove("on");
+  }
+  /* A mouse that leaves a cell: the card waits a moment, so that moving to the next cell does not flicker. */
+  function soon() { clearTimeout(timer); timer = setTimeout(hide, 90); }
+
+  function tip(b) {
+    if (!b || !b.cells || b.rtOn) return b;
+    b.rtOn = true;
+    b.classList.add("rt-on");
+    b.cells.forEach(function (row, i) {
+      row.forEach(function (c, t) {
+        c.removeAttribute("title");
+        c.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") show(b, i, t, c); });
+        c.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse" && cur === c) soon(); });
+        // A touch or a pen: the tap shows the card, a second tap on the same cell hides it (a mouse has its hover).
+        c.addEventListener("pointerdown", function (e) { lastType = e.pointerType || "mouse"; });
+        c.addEventListener("click", function () {
+          if (lastType === "mouse") return;
+          if (cur === c && card.classList.contains("on")) hide(); else show(b, i, t, c);
+        });
+      });
+    });
+    return b;
+  }
+
+  /* A press anywhere but on a cell of a block with cards hides the card (a tap elsewhere, Next, Back, the pager). */
+  document.addEventListener("pointerdown", function (e) {
+    if (!cur) return;
+    var t = e.target;
+    if (!(t && t.closest && t.closest(".rt-on .runs-cell"))) hide();
+  }, true);
+  document.addEventListener("keydown", function (e) { if (cur) hide(); }, true);
+  window.addEventListener("scroll", function () { if (cur) hide(); }, true);
+  window.addEventListener("resize", function () { if (cur) hide(); });
+  window.addEventListener("hashchange", function () { if (cur) hide(); });
+
+  OB.runs.tip = tip;
+})();
+</script>
 <script>/* tables.js */
 /* tables.js: the table of preferences theta, the probability table and a deterministic policy's column, for page 3 of
    "Old Bessie" (agent A4b, 2026-11-14). Agents A4a, A5 and A6 reuse it; the API below is stable.
@@ -3979,6 +4287,7 @@ button { font-family: var(--px); }
       var P = this.P, k = keyOf(tr.col);
       if (P.block && P.blockKey === k) return P.block;
       var b = OB.runs.block(tr.runs, { label: true, head: true, g1: true });
+      if (OB.runs.tip) OB.runs.tip(b);
       b.classList.add("ob-hide");
       if (P.block) P.hold.replaceChild(b, P.block); else P.hold.insertBefore(b, P.ph);
       P.block = b;
@@ -4115,6 +4424,7 @@ button { font-family: var(--px); }
       var k = keyOf(tr.col);
       if (!this.wblocks[k]) {
         var b = OB.runs.block(tr.runs, { label: true, head: true, g1: true });
+        if (OB.runs.tip) OB.runs.tip(b);
         b.g1s.forEach(function (g) { g.classList.remove("ob-hide"); });
         if (b.g1head) b.g1head.classList.remove("ob-hide");
         this.wblocks[k] = b;
@@ -4201,6 +4511,97 @@ button { font-family: var(--px); }
   });
 })();
 </script>
+<script>/* sec3a2.js */
+/* sec3a2.js: page 3, scene 190 "Human learning" (main session, 2026-11-17), between Try it and the next section.
+   Carlos: "At the end of slide one ... a slide that says, what we did was human learning. We as humans used our
+   intelligence to find the best policy. Now in section two, we're going to show how we can let a computer do this
+   for our system."
+
+   Two beats, two panels side by side (one above the other on a phone):
+   0  HUMAN LEARNING: the helmet (the player, the one who chooses) and the policy it chose, a column of actions
+      (B.EXAMPLE: no example shows the optimal policy, which the page reveals at its end)
+   1  A COMPUTER LEARNS: a computer and the table it will learn, the preferences, empty until the next section */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, TB = OB && OB.tables;
+  if (!OB || !B || !TB) return;
+  var el = OB.el, art = OB.art;
+
+  var LEAD = [
+    "What we did was human learning: we used our own intelligence to look for the optimal policy.",
+    "Now we let a computer do this for us."
+  ];
+
+  /* A computer, flat, in the look's colours: a dark screen with a small table on it, and its base. */
+  function computer(w) {
+    var h = Math.round(w * 50 / 64), cells = "";
+    for (var r = 0; r < 4; r++) {
+      for (var c = 0; c < 3; c++) {
+        var lit = r === 0 && c === 0;
+        cells += '<rect x="' + (20 + c * 8.6) + '" y="' + (10.2 + r * 5.4) + '" width="7.4" height="4.4" rx="0.8" fill="' +
+          (lit ? "#FFD21F" : "#5C6371") + '"/>';
+      }
+    }
+    var svg = '<svg viewBox="0 0 64 50" width="' + w + '" height="' + h + '" aria-hidden="true">' +
+      '<rect x="7" y="3" width="50" height="34" rx="3.5" fill="#15171C"/>' +
+      '<rect x="10.5" y="6.5" width="43" height="27" rx="1.5" fill="#2B2F38"/>' +
+      '<rect x="13" y="10.2" width="4.6" height="21" rx="0.8" fill="#E1251B"/>' + cells +
+      '<path d="M2 39 H62 L57.5 46.5 H6.5 Z" fill="#C3C8D0"/><rect x="25" y="39" width="14" height="2.2" rx="1" fill="#9AA1AD"/>' +
+      "</svg>";
+    return OB.html("span", "s3h-pc", svg);
+  }
+
+  /* A panel: its title, the one who chooses (an icon with its name under it), an arrow, the thing chosen. */
+  function panel(cls, title, icon, who, thing) {
+    var p = el("div", "ob-box white s3h-panel " + cls);
+    p.appendChild(el("div", "s3h-title", title));
+    var row = el("div", "s3h-row");
+    var w = el("div", "s3h-who");
+    w.appendChild(icon);
+    w.appendChild(el("div", "s3h-name", who));
+    row.appendChild(w);
+    var a = el("span", "s3h-arr");
+    row.appendChild(a);
+    var t = el("div", "s3h-thing");
+    t.appendChild(thing);
+    row.appendChild(t);
+    p.appendChild(row);
+    p.who = w;
+    p.arr = a;
+    p.thing = t;
+    return p;
+  }
+
+  OB.scene({
+    page: 3, key: "human-learning", order: 190, title: "Human learning", beats: LEAD.length,
+    build: function (root) {
+      var P = this.parts = {};
+      P.lead = el("p", "ob-say s3h-lead");
+      root.appendChild(P.lead);
+      var g = el("div", "s3h-grid");
+      var col = TB.column(B.EXAMPLE, { size: "s", cap: "POLICY" });
+      P.h = panel("s3h-human", "HUMAN LEARNING", OB.html("span", "s3h-face", art.face(8)), "WE CHOOSE", col.el);
+      var tab = TB.table(null, { kind: "bets", size: "s", cap: "PREFERENCES " + OB.tex("\\theta") });
+      P.c = panel("s3h-pcpanel", "A COMPUTER LEARNS", computer(84), "A COMPUTER", tab.el);
+      P.mid = el("span", "s3h-next");
+      g.appendChild(P.h);
+      g.appendChild(P.mid);
+      g.appendChild(P.c);
+      root.appendChild(g);
+    },
+    beat: function (k, api) {
+      var P = this.parts, go = api.forward && !api.instant && api.from === k - 1;
+      if (P.lead.dataset.k !== String(k)) {
+        P.lead.dataset.k = String(k);
+        P.lead.textContent = LEAD[k];
+        if (go) api.fade(P.lead, true, { dur: 900 });
+      }
+      api.show(P.mid, k >= 1, { delay: go && k === 1 ? 200 : 0 });
+      api.show(P.c, k >= 1, { delay: go && k === 1 ? 700 : 0 });
+    }
+  });
+})();
+</script>
 <script>/* sec3b-data.js */
 /* sec3b-data.js: every number that the scenes of sec3b.js show (agent A4b, 2026-11-14), computed from bessie.js.
    In the browser it is window.S3B (loaded before sec3b.js); in node, require('./sec3b-data.js'), for
@@ -4268,7 +4669,8 @@ button { font-family: var(--px); }
 })(typeof window !== "undefined" ? window : this);
 </script>
 <script>/* sec3b-policy.js */
-/* sec3b-policy.js: page 3, scene 260 "pick" (agent V, 2026-11-16): how the policy picks an action, in HEALTHY.
+/* sec3b-policy.js: page 3, scene 260 "pick" (agent V, 2026-11-16; the roulette since 2026-11-17, main session): how
+   the policy picks an action, in HEALTHY.
 
    Carlos, 2026-11-16: "We need a slide that explains in more detail how the probabilistic strategy chooses actions
    ... when you show how the probabilistic policy works, you highlight one row, then you take the probability values
@@ -4276,31 +4678,37 @@ button { font-family: var(--px); }
    amplify the moving transition from there, becoming one single bar where the roulette spins. Then you spin the
    roulette and then you announce the chosen action. And then the rest you do as you show it." It follows scene 250,
    Softmax, and takes the place of the scene "The policy" (order 240 until that day).
+   Carlos, 2026-11-17: "we are now using roulettes ... it would be nice if when you say how the policy picks an
+   action, you form a roulette instead of the bar." The bar became a roulette wheel: the slots of the three actions,
+   each as large as its probability, clockwise from the top in the order RUN, SERVICE, REPLACE (the notebooks' roulette:
+   "each action's slot, starting where the slot before it ends"); a ball runs round the rim and stops at the point u of
+   the wheel, u turns from the top.
 
    Beats (k from 0):
    0     the probability table, alone; HEALTHY's row ringed, the other rows dimmed
-   1     the table makes room; HEALTHY's little bars leave their cells, stretch and line up end to end into one bar,
-         each segment as long as its probability (the exact probabilities: the shown ones, rounded, add up to 0.99)
-   2     a spin: the pin drops onto the bar, runs along it, bounces at its ends, slows down and stops at the point of
-         the first draw
-   3     the segment under the pin lights up; its glyph flies out and the action is announced, glyph and name large
-   4..8  spins 2 to 6, each a quick spin; each action flies into its slot (spin 1, the announced one, at beat 4)
-   9     the 100 spins: a second bar under the probabilities fills spin by spin, then shows the counts
-   Numbers: window.S3B (sec3b-data.js): P, the probability table (softmax of the preferences of proto-REINFORCE), and
-   DRAW, the draws in HEALTHY (u on B.dice(3, 100, 1), the action by B.act, the counts of 100). The first spin lands on
-   the first draw. In node this file exports its text model and draws nothing; tools/check_pick.js asserts every number
-   and line against S3B and bessie.js.
+   1     the table makes room and the empty wheel fades in; HEALTHY's little bars leave their cells, fly into the
+         wheel and open, one after the other, into its three slots (the exact probabilities: the shown ones, rounded,
+         add up to 0.99)
+   2     a spin: the ball drops onto the rim at the top, runs round it three times and more, slows down and stops at
+         the point of the first draw
+   3     the slot under the ball lights up; its glyph flies out and the action is announced, glyph and name large
+   4..8  spins 2 to 6, each a quick spin; each action flies into its place (spin 1, the announced one, at beat 4)
+   9     the 100 spins: a ring inside the slots fills spin by spin, each action's part as large as its count, then
+         shows the counts
+   Numbers: window.S3B (sec3b-data.js): P, the probability table (softmax of the preferences of proto-REINFORCE), and DRAW,
+   the draws in HEALTHY (u on B.dice(3, 100, 1), the action by B.act, the counts of 100). The first spin lands on the
+   first draw. In node this file exports its text model and draws nothing; tools/check_pick.js asserts every number
+   and line against S3B and bessie.js, and runs the ball's arithmetic (endTurn) read out of this file.
 
    Motion. Every beat sets its state at once; reached with Next from the beat before, it plays smooth vector motion
    into that state (Back, the pager and a deep link land at rest). The curves are weekend 2's: flights on
    cubic-bezier(.45,.05,.3,1) (the Matchmaker's flying numbers), the spin on cubic-bezier(.12,.75,.2,1) (the Mirror's
    roulette needle), fades on cubic-bezier(.2,.7,.2,1). Flights are copies on fixed position (FLIP: measured at their
-   source, flown along a low arc to the box of their target, handed over to the real element when they land; a token
-   that leaves the bar for a place below it drops first and glides sideways after, clear of the probabilities). The
+   source, flown along a low arc to the box of their target, handed over to the real element when they land). The
    engine's animate hands its tick a cubic in-and-out p; lin() undoes it, so that each motion keeps its own curve while
-   the engine still finishes every motion when the reader moves on. Durations: the table's glide 0.7 s, the bars 1.15 s
-   each, staggered by 0.11 s from the right, the first spin 3.4 s, quick spins 1.4 s, glyphs 0.75 to 0.9 s, the tally
-   of 100 spins 2.6 s, fades 0.3 to 0.8 s. */
+   the engine still finishes every motion when the reader moves on. Durations: the table's glide 0.7 s, the bars 1 s
+   each, 0.38 s apart, each slot opening in 0.55 s as its bar lands, the first spin 3.4 s, quick spins 1.4 s, glyphs
+   0.75 to 0.9 s, the tally of 100 spins 2.6 s, fades 0.3 to 0.8 s. */
 (function (root) {
   "use strict";
   var NODE = typeof module !== "undefined" && module.exports;
@@ -4311,9 +4719,9 @@ button { font-family: var(--px); }
     var acts = DR.acts.slice(0, n), first = N[acts[0]];
     var leads = [
       "Bessie is " + S[H] + ". The policy uses " + S[H] + "'s row.",
-      S[H] + "'s probabilities, end to end, fill one bar.",
-      "A spin: the pin stops at a random point of the bar.",
-      "The pin is on " + first + ": the policy picks " + first + "."
+      S[H] + "'s probabilities make a roulette: each action's slot is as large as its probability.",
+      "A spin: the ball stops at a random point of the roulette.",
+      "The ball is in " + first + "'s slot: the policy samples " + first + "."
     ];
     for (var j = 1; j < n; j++) leads.push("Spin again: each spin samples an action.");
     leads.push("In " + DR.n + " spins, each action comes up about as often as its probability says.");
@@ -4324,7 +4732,7 @@ button { font-family: var(--px); }
       chances: D.P[H].slice(), cum: cum, chanceText: D.P[H].map(function (p) { return D.show("prob", p); }),
       u: DR.u.slice(0, n), acts: acts, names: acts.map(function (a) { return N[a]; }),
       n: DR.n, all: DR.acts.slice(), count: DR.count.slice(), countText: DR.count.map(String),
-      cap: S[H] + "'S PROBABILITIES", tableCap: "PROBABILITY TABLE = POLICY",
+      cap: S[H] + "'S ROULETTE", tableCap: "PROBABILITY TABLE = POLICY",
       slotCaps: acts.map(function (a, i) { return "SPIN " + (i + 1); }),
       countCap: "IN " + DR.n + " SPINS"
     };
@@ -4384,17 +4792,25 @@ button { font-family: var(--px); }
     var r = g.getBoundingClientRect(), s = Math.max(r.width, r.height) / 0.62;
     return { x: r.left + r.width / 2 - s / 2, y: r.top + r.height / 2 - s / 2, w: s, h: s };
   }
-  /* The pin runs right from 0, bounces at 1, runs left to 0, bounces: its place at phase f. */
-  function tri(f) { var m = f % 2; if (m < 0) m += 2; return m <= 1 ? m : 2 - m; }
-  /* The first phase at least min after f0 at which the pin stands on u. */
-  function endPhase(f0, u, min) {
-    for (var n = 0; n < 64; n++) {
-      if (2 * n + u >= f0 + min) return 2 * n + u;
-      if (2 * n + 2 - u >= f0 + min) return 2 * n + 2 - u;
+  /* The wheel, in the units of its viewBox (300 x 300, drawn 300 px wide on a desk): the hub, the ring of the 100
+     spins' counts, the slots, the rim the ball runs on. A point of the wheel is a number of turns t, clockwise from
+     the top: the slot of action a runs from cum[a] to cum[a + 1]. */
+  var WV = 300, CX = 150, CY = 150, RH = 31, RC1 = 35, RC2 = 58, R1 = 64, R2 = 126, RT = 139, RB = 8.5, GAP = 0.004;
+  function pt(r, t) { var a = 2 * Math.PI * t; return [CX + r * Math.sin(a), CY - r * Math.cos(a)]; }
+  function xy(p) { return p[0].toFixed(2) + " " + p[1].toFixed(2); }
+  /* A slot of a ring: between the radii r1 and r2, from t0 to t1 turns (the whole ring when t1 - t0 reaches 1). */
+  function sector(r1, r2, t0, t1) {
+    if (t1 - t0 <= 1e-6) return "";
+    if (t1 - t0 >= 0.9999) {
+      return "M" + xy(pt(r2, 0)) + " A" + r2 + " " + r2 + " 0 1 1 " + xy(pt(r2, 0.5)) + " A" + r2 + " " + r2 + " 0 1 1 " + xy(pt(r2, 0)) +
+        " Z M" + xy(pt(r1, 0)) + " A" + r1 + " " + r1 + " 0 1 0 " + xy(pt(r1, 0.5)) + " A" + r1 + " " + r1 + " 0 1 0 " + xy(pt(r1, 0)) + " Z";
     }
-    return f0;
+    var big = t1 - t0 > 0.5 ? 1 : 0;
+    return "M" + xy(pt(r2, t0)) + " A" + r2 + " " + r2 + " 0 " + big + " 1 " + xy(pt(r2, t1)) +
+      " L" + xy(pt(r1, t1)) + " A" + r1 + " " + r1 + " 0 " + big + " 0 " + xy(pt(r1, t0)) + " Z";
   }
-
+  /* The ball's resting turns: the first t at least min turns after f0 at which the ball stands on u (t mod 1 = u). */
+  function endTurn(f0, u, min) { return Math.ceil(f0 + min - u) + u; }
   /* Flyers: copies on fixed position, above the page, removed when they land. */
   function flyer(cls, markup) {
     var f = el("div", "s3p-fly " + cls);
@@ -4413,11 +4829,9 @@ button { font-family: var(--px); }
     f.style.transform = sk ? "skewX(" + sk.toFixed(3) + "deg)" : "";
   }
   function lift(A, Z, k, lo, hi) { return Math.min(hi, Math.max(lo, k * Math.hypot(Z.x - A.x, Z.y - A.y))); }
-  /* A token flies from an element (or a glyph inside a segment) to a token, grows or shrinks on the way, and lands.
-     Out of the bar it drops into the lane between the bar and the places below, glides along the lane and settles
-     into its place, the three moves overlapping into one curve, and keeps its size until it settles: it never
-     crosses the probabilities written in the bar nor the tokens already in their slots. Between places on one level it
-     rises on an arc. */
+  /* A token flies from an element (or a glyph inside a slot of the wheel) to a token, grows or shrinks on the way, and
+     lands, on a low arc. (From a bar of class s3p-bar, which the scene no longer has, it would drop into the lane
+     under the bar first.) */
   function c01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function flyTok(api, delay, dur, from, to, a, land, isGlyph) {
     api.at(delay, function () {
@@ -4451,11 +4865,17 @@ button { font-family: var(--px); }
     l.glyph = g;
     return l;
   }
-  /* A segment's place in its bar, in % of the bar, with a gap of 2 px between neighbours. */
-  function segAt(s, start, len, first, last) {
-    var gl = first ? 0 : 1, gr = last ? 0 : 1;
-    s.style.left = "calc(" + (start * 100).toFixed(4) + "% + " + gl + "px)";
-    s.style.width = "calc(" + (len * 100).toFixed(4) + "% - " + (gl + gr) + "px)";
+  /* A slot's path: its part of the ring of slots, cut back by half a gap at each end; open (0 to 1) draws only the
+     first part of it, as the slot opens clockwise in beat 1. */
+  function slotPath(a, open) {
+    var t0 = M.cum[a] + GAP / 2, t1 = (a === 2 ? 1 : M.cum[a + 1]) - GAP / 2;
+    return sector(R1, R2, t0, t0 + (t1 - t0) * (open === undefined ? 1 : open));
+  }
+  /* A label on the wheel: placed at the middle of its slot (or its part of the counts' ring), in % of the wheel. */
+  function onWheel(e, r, t) {
+    var p = pt(r, t);
+    e.style.left = (p[0] / WV * 100).toFixed(3) + "%";
+    e.style.top = (p[1] / WV * 100).toFixed(3) + "%";
   }
 
   function build(root) {
@@ -4479,32 +4899,50 @@ button { font-family: var(--px); }
     });
     P.fills = [0, 1, 2].map(function (a) { return P.T.cell(H, a).querySelector(".tb-bar i"); });
 
-    // The bar of HEALTHY's probabilities and its pin.
+    // The roulette of HEALTHY's probabilities: the hub with the van, the counts' ring, the slots, the rim, the ball.
     var R = P.right = el("div", "s3p-right");
     P.cap = el("div", "s3p-cap", M.cap);
     R.appendChild(P.cap);
-    var bb = el("div", "s3p-barbox");
-    var bar = P.bar = el("div", "s3p-bar");
-    P.segs = [];
+    var wb = P.wheel = el("div", "s3p-wheel");
+    var svg = OB.svgEl("svg", { "class": "s3p-wsvg", viewBox: "0 0 " + WV + " " + WV, "aria-hidden": "true" });
+    function add(tag, attrs) { var n = OB.svgEl(tag, attrs); svg.appendChild(n); return n; }
+    add("circle", { "class": "s3p-rim", cx: CX, cy: CY, r: RT });
+    add("circle", { "class": "s3p-rim2", cx: CX, cy: CY, r: R2 + 5 });
+    P.ctrack = add("circle", { "class": "s3p-ctrack", cx: CX, cy: CY, r: (RC1 + RC2) / 2, "stroke-width": RC2 - RC1 });
+    P.cring = [0, 1, 2].map(function (a) { return add("path", { "class": "s3p-cseg a" + a, d: "" }); });
+    P.segs = [0, 1, 2].map(function (a) { return add("path", { "class": "s3p-seg a" + a, d: slotPath(a) }); });
+    P.lits = [0, 1, 2].map(function (a) {
+      var t0 = M.cum[a] + GAP / 2, t1 = (a === 2 ? 1 : M.cum[a + 1]) - GAP / 2;
+      return add("path", { "class": "s3p-lit", d: sector(R1 - 3, R2 + 3, t0, t1) });
+    });
+    add("circle", { "class": "s3p-hub", cx: CX, cy: CY, r: RH });
+    P.ballG = add("g", { "class": "s3p-ballg" });
+    P.ballSh = OB.svgEl("circle", { "class": "s3p-ballsh", r: RB, cx: 0, cy: 0 });
+    P.ball = OB.svgEl("circle", { "class": "s3p-ball", r: RB, cx: 0, cy: 0 });
+    P.ballG.appendChild(P.ballSh);
+    P.ballG.appendChild(P.ball);
+    wb.appendChild(svg);
+    P.svg = svg;
+    var van = art.van(H, { size: 40, gauge: false, label: false });
+    van.classList.add("s3p-hubvan");
+    wb.appendChild(van);
+    // The labels of the slots (glyph and probability) and of the counts' ring (the counts), laid over the wheel.
     P.labs = [];
+    P.clabs = [];
     for (var a = 0; a < 3; a++) {
-      var s = el("div", "s3p-seg a" + a);
-      segAt(s, M.cum[a], a === 2 ? 1 - M.cum[2] : M.chances[a], a === 0, a === 2);
+      var mid = (M.cum[a] + (a === 2 ? 1 : M.cum[a + 1])) / 2;
       var l = label(a, M.chanceText[a], 20);
-      s.appendChild(l);
-      bar.appendChild(s);
-      P.segs.push(s);
+      l.classList.add("s3p-wlab", "a" + a);
+      onWheel(l, (R1 + R2) / 2, mid);
+      wb.appendChild(l);
       P.labs.push(l);
+      var cl = el("span", "s3p-clab a" + a, M.countText[a]);
+      wb.appendChild(cl);
+      P.clabs.push(cl);
     }
-    P.pin = el("div", "s3p-pin");
-    // Two pointers, above and below the bar, so that no line crosses the segments' words.
-    var tip = '<path d="M3 1.2 H17 Q19.4 1.2 18.1 3.2 L11.4 13.6 Q10 15.6 8.6 13.6 L1.9 3.2 Q0.6 1.2 3 1.2 Z"/>';
-    P.pin.innerHTML = '<svg class="t" viewBox="0 0 20 16" aria-hidden="true">' + tip + '</svg><svg class="b" viewBox="0 0 20 16" aria-hidden="true">' + tip + '</svg>';
-    bar.appendChild(P.pin);
-    bb.appendChild(bar);
-    R.appendChild(bb);
+    R.appendChild(wb);
 
-    // Below the bar, one place for three things: the announcement, the six slots, the counts of 100 spins.
+    // Below the wheel, one place for three things: the announcement, the six spins, the count of the 100 spins.
     var res = el("div", "s3p-res");
     P.ann = el("div", "s3p-ann");
     P.annTok = token(M.acts[0]);
@@ -4524,22 +4962,11 @@ button { font-family: var(--px); }
     });
     res.appendChild(P.slots);
     P.cnt = el("div", "s3p-cnt");
-    var cb = el("div", "s3p-cbar");
-    P.csegs = [];
-    P.clabs = [];
-    for (var c = 0; c < 3; c++) {
-      var cs = el("div", "s3p-cseg a" + c), cl = label(c, M.countText[c], 18);
-      cs.appendChild(cl);
-      cb.appendChild(cs);
-      P.csegs.push(cs);
-      P.clabs.push(cl);
-    }
-    P.cnt.appendChild(cb);
     var cc = el("div", "s3p-cap s3p-ccap");
     cc.appendChild(document.createTextNode("IN "));
     P.cnum = el("span", "n", String(M.n));
     cc.appendChild(P.cnum);
-    cc.appendChild(document.createTextNode(" SPINS"));
+    cc.appendChild(document.createTextNode(" SPINS: THE INNER RING"));
     P.cnt.appendChild(cc);
     res.appendChild(P.cnt);
     R.appendChild(res);
@@ -4553,21 +4980,32 @@ button { font-family: var(--px); }
     P.hl.style.opacity = p >= 1 ? "" : String(p);
     P.dims.forEach(function (e) { e.style.opacity = String(1 - 0.72 * p); });
   }
-  function pinX(P, x) { P.pin.style.left = (x * 100).toFixed(3) + "%"; }
-  function pinFade(P, a, dy) {
-    P.pin.style.opacity = a >= 1 ? "" : String(a);
-    P.pin.style.visibility = a > 0 ? "" : "hidden";
-    P.pin.style.transform = dy ? "translateY(" + dy.toFixed(2) + "px)" : "";
+  /* Every slot open to the degree p (0 to 1), its label shown when it is open. */
+  function setOpen(P, a, p) {
+    P.segs[a].setAttribute("d", slotPath(a, p));
+    P.segs[a].style.visibility = p > 0 ? "" : "hidden";
   }
-  /* The segment of action a lit to the degree p (0 to 1): the others dim, a yellow frame closes in on it. a < 0: none. */
+  /* The ball at t turns from the top, on the rim, or out by dr (it drops in from outside). */
+  function ballAt(P, t, dr) {
+    var p = pt(RT + (dr || 0), t);
+    P.ballG.setAttribute("transform", "translate(" + p[0].toFixed(2) + " " + p[1].toFixed(2) + ")");
+  }
+  function ballFade(P, a) {
+    P.ballG.style.opacity = a >= 1 ? "" : String(a);
+    P.ballG.style.visibility = a > 0 ? "" : "hidden";
+  }
+  /* The slot of action a lit to the degree p (0 to 1): the others dim, a yellow frame closes in on it. a < 0: none. */
   function setLit(P, a, p) {
     var q = Math.max(0, Math.min(1, p));
     P.segs.forEach(function (s, b) {
+      var dim = a >= 0 && b !== a && q > 0 ? String(1 - 0.62 * q) : "";
+      s.style.opacity = dim;
+      P.labs[b].style.opacity = dim;
+    });
+    P.lits.forEach(function (l, b) {
       var on = b === a && q > 0;
-      s.classList.toggle("lit", on);
-      s.style.opacity = a >= 0 && b !== a && q > 0 ? String(1 - 0.62 * q) : "";
-      s.style.outlineColor = on ? "rgba(255, 210, 31, " + q.toFixed(3) + ")" : "";
-      s.style.outlineOffset = on ? mix(14, 3, q).toFixed(2) + "px" : "";
+      l.style.opacity = on ? q.toFixed(3) : "0";
+      l.style.strokeWidth = on ? mix(12, 5, q).toFixed(2) : "";
     });
   }
   function setAnn(P, on) {
@@ -4586,25 +5024,26 @@ button { font-family: var(--px); }
       S.name.style.opacity = "";
     });
   }
-  /* The counts of the first i of the 100 spins, as a bar that grows from the left. */
+  /* The counts of the first i of the 100 spins, as the inner ring, filled clockwise from the top. */
   function tally(P, i) {
-    var c = [0, 0, 0], a;
+    var c = [0, 0, 0], a, start = 0;
     for (var t = 0; t < i; t++) c[M.all[t]] += 1;
-    var on = [0, 1, 2].filter(function (b) { return c[b] > 0; }), start = 0;
     for (a = 0; a < 3; a++) {
-      var s = P.csegs[a];
-      if (!c[a]) { s.style.visibility = "hidden"; s.style.left = "0"; s.style.width = "0"; continue; }
-      s.style.visibility = "";
-      segAt(s, start, c[a] / M.n, a === on[0], a === on[on.length - 1] && i >= M.n);
-      start += c[a] / M.n;
+      var len = c[a] / M.n, g = len > 0 && i >= M.n ? GAP / 2 : 0;
+      P.cring[a].setAttribute("d", sector(RC1, RC2, start + g, start + len - g));
+      if (len > 0) onWheel(P.clabs[a], (RC1 + RC2) / 2, start + len / 2);
+      start += len;
     }
     P.cnum.textContent = String(i);
   }
   function setCount(P, on, i) {
     P.cnt.style.visibility = on ? "" : "hidden";
     P.cnt.style.opacity = "";
-    tally(P, i);
-    P.clabs.forEach(function (l) { l.style.opacity = i >= M.n ? "" : "0"; });
+    P.ctrack.style.visibility = on ? "" : "hidden";
+    P.ctrack.style.opacity = "";
+    P.cring.forEach(function (s) { s.style.visibility = on ? "" : "hidden"; });
+    tally(P, on ? i : 0);
+    P.clabs.forEach(function (l) { l.style.opacity = on && i >= M.n ? "" : "0"; });
   }
   function say(P, text, api, k) {
     if (P.leadIn.textContent === text) return;
@@ -4625,10 +5064,11 @@ button { font-family: var(--px); }
     P.T.el.style.transform = "";
     setFocus(P, 1);
     P.cap.style.opacity = "";
-    P.segs.forEach(function (s) { s.style.visibility = ""; });
+    P.wheel.style.opacity = "";
+    [0, 1, 2].forEach(function (a) { setOpen(P, a, 1); });
     P.labs.forEach(function (l) { l.style.opacity = ""; });
-    pinX(P, mid ? M.u[d] : 0);
-    pinFade(P, mid ? 1 : 0, 0);
+    ballAt(P, mid ? M.u[d] : 0);
+    ballFade(P, mid ? 1 : 0);
     setLit(P, k >= 3 && k < LAST ? M.acts[d] : -1, 1);
     setAnn(P, k === 3);
     setSlots(P, k >= 4 && k < LAST, k >= 4 ? d + 1 : 0);
@@ -4640,10 +5080,10 @@ button { font-family: var(--px); }
     e.style.opacity = "0";
     tween(api, delay, dur, function (p) { e.style.opacity = p >= 1 ? "" : String(EOUT(p)); });
   }
-  /* A spin: the pin runs from x0 at least min bar lengths, bouncing at the ends, and comes to rest on u. */
+  /* A spin: the ball runs clockwise from x0 at least min turns and comes to rest on u. */
   function spin(P, api, delay, dur, x0, u, min) {
-    var f1 = endPhase(x0, u, min);
-    tween(api, delay, dur, function (p) { pinX(P, p >= 1 ? u : tri(mix(x0, f1, ESPIN(p)))); });
+    var f1 = endTurn(x0, u, min);
+    tween(api, delay, dur, function (p) { ballAt(P, p >= 1 ? u : mix(x0, f1, ESPIN(p))); });
   }
   function light(P, api, delay, a, on) {
     tween(api, delay, on ? 520 : 380, function (p) {
@@ -4664,14 +5104,16 @@ button { font-family: var(--px); }
     setFocus(P, 0);
     tween(api, 300, 800, function (p) { setFocus(P, EOUT(p)); });
   };
-  /* 1: the table glides to make room (desks; on a phone the bar is below it), then the three little bars fly. */
+  /* 1: the table glides to make room (desks; on a phone the wheel is below it), the empty wheel fades in, then the
+     three little bars fly into the wheel, one after the other, and each opens into its slot as it lands. */
   PLAY[1] = function (P, api) {
     var tb = P.T.el;
     P.wrap.classList.add("s3p-k0");
     var a0 = box(tb);
     P.wrap.classList.remove("s3p-k0");
     var a1 = box(tb), dx = a0.x - a1.x, dy = a0.y - a1.y, slide = Math.abs(dx) + Math.abs(dy) > 2 ? 700 : 0;
-    var src = P.fills.map(fillBox), tgt = P.segs.map(box), sk = skewOf(P.fills[0] && P.fills[0].parentNode);
+    var src = P.fills.map(fillBox), sk = skewOf(P.fills[0] && P.fills[0].parentNode);
+    var tgt = P.labs.map(function (l) { var b = box(l); return { x: b.x + b.w / 2 - 34, y: b.y + b.h / 2 - 7, w: 68, h: 14 }; });
     if (slide) {
       tb.style.transform = "translate(" + dx.toFixed(2) + "px," + dy.toFixed(2) + "px)";
       tween(api, 0, slide, function (p) {
@@ -4680,33 +5122,33 @@ button { font-family: var(--px); }
       });
     }
     fadeIn(api, slide, 600, P.cap);
-    P.segs.forEach(function (s) { s.style.visibility = "hidden"; });
+    fadeIn(api, slide, 600, P.wheel);
+    [0, 1, 2].forEach(function (a) { setOpen(P, a, 0); });
     P.labs.forEach(function (l) { l.style.opacity = "0"; });
-    var STG = 110, DUR = 1150, total = DUR + 2 * STG, order = [2, 1, 0], t0 = slide + 150;
-    var up = lift(src[0], tgt[0], 0.1, 14, 46);
-    api.at(t0, function () {
-      var fl = [0, 1, 2].map(function (a) { var f = flyer("s3p-flybar a" + a); placeAt(f, src[a], tgt[a], 0, 0, sk); return f; });
-      api.animate(total, function (e) {
-        var t = lin(e) * total;
-        order.forEach(function (a, i) {
-          var q = EFLY(Math.max(0, Math.min(1, (t - i * STG) / DUR)));
-          placeAt(fl[a], src[a], tgt[a], q, up * Math.sin(Math.PI * q), mix(sk, 0, q));
-        });
-      }, function () {
-        fl.forEach(drop);
-        P.segs.forEach(function (s) { s.style.visibility = ""; });
+    var STG = 380, DUR = 1000, OPEN = 550, t0 = slide + 150;
+    [0, 1, 2].forEach(function (a, i) {
+      var start = t0 + i * STG, up = lift(src[a], tgt[a], 0.1, 14, 46);
+      api.at(start, function () {
+        var f = flyer("s3p-flybar a" + a);
+        placeAt(f, src[a], tgt[a], 0, 0, sk);
+        api.animate(DUR, function (e) {
+          var q = EFLY(lin(e));
+          placeAt(f, src[a], tgt[a], q, up * Math.sin(Math.PI * q), mix(sk, 0, q));
+          f.style.opacity = q > 0.8 ? String(1 - (q - 0.8) / 0.2) : "";
+        }, function () { drop(f); });
       });
+      tween(api, start + DUR * 0.82, OPEN, function (p) { setOpen(P, a, p >= 1 ? 1 : EOUT(p)); });
+      fadeIn(api, start + DUR * 0.82 + OPEN - 100, 420, P.labs[a]);
     });
-    P.labs.forEach(function (l, a) { fadeIn(api, t0 + total + 80 * a, 450, l); });
   };
-  /* 2: the pin drops onto the left end and the first spin runs. */
+  /* 2: the ball drops onto the rim at the top and the first spin runs. */
   PLAY[2] = function (P, api) {
-    pinX(P, 0);
-    pinFade(P, 0, -16);
-    tween(api, 0, 420, function (p) { var q = EOUT(p); pinFade(P, p >= 1 ? 1 : q, p >= 1 ? 0 : -16 * (1 - q)); });
+    ballAt(P, 0, 22);
+    ballFade(P, 0);
+    tween(api, 0, 420, function (p) { var q = EOUT(p); ballFade(P, p >= 1 ? 1 : q); ballAt(P, 0, p >= 1 ? 0 : 22 * (1 - q)); });
     spin(P, api, 300, 3400, 0, M.u[0], 3.1);
   };
-  /* 3: the segment under the pin lights up, its glyph flies into the announcement, the name slides in. */
+  /* 3: the slot under the ball lights up, its glyph flies into the announcement, the name slides in. */
   PLAY[3] = function (P, api) {
     var a = M.acts[0];
     setLit(P, -1, 1);
@@ -4720,12 +5162,12 @@ button { font-family: var(--px); }
       P.annName.style.transform = p >= 1 ? "" : "translateX(" + (-20 * (1 - q)).toFixed(2) + "px)";
     });
   };
-  /* 4 to 8: a quick spin, its segment lights up, its glyph flies into its slot. At 4 the announcement first goes into
-     slot 1 and the slots come in. */
+  /* 4 to 8: a quick spin, its slot lights up, its glyph flies into its place. At 4 the announcement first goes into
+     place 1 and the places come in. */
   function quick(P, k, api) {
     var d = drawAt(k), a0 = M.acts[d - 1], a = M.acts[d], S = P.slot[d], t = 0;
     setLit(P, a0, 1);
-    pinX(P, M.u[d - 1]);
+    ballAt(P, M.u[d - 1]);
     S.tok.style.visibility = "hidden";
     S.name.style.visibility = "hidden";
     if (d === 1) {
@@ -4745,23 +5187,24 @@ button { font-family: var(--px); }
     light(P, api, t + 1400, a, true);
     flyTok(api, t + 1560, 760, P.labs[a].glyph, S.tok, a, function () { landSlot(P, api, d); }, true);
   }
-  /* 9: the pin and the slots leave; under the probabilities a bar fills with the 100 spins, then shows its counts. */
+  /* 9: the ball and the places leave; inside the slots a ring fills with the 100 spins, then shows its counts. */
   PLAY[LAST] = function (P, api) {
     var d = SHOWN - 1, a0 = M.acts[d];
     setLit(P, a0, 1);
-    pinX(P, M.u[d]);
-    pinFade(P, 1, 0);
+    ballAt(P, M.u[d]);
+    ballFade(P, 1);
     setSlots(P, true, SHOWN);
     P.cnt.style.opacity = "0";
+    P.ctrack.style.opacity = "0";
     tally(P, 0);
     P.clabs.forEach(function (l) { l.style.opacity = "0"; });
     light(P, api, 0, a0, false);
-    tween(api, 0, 380, function (p) { pinFade(P, p >= 1 ? 0 : 1 - EOUT(p), 0); if (p >= 1) pinX(P, 0); });
+    tween(api, 0, 380, function (p) { ballFade(P, p >= 1 ? 0 : 1 - EOUT(p)); });
     tween(api, 0, 450, function (p) {
       if (p >= 1) { setSlots(P, false, SHOWN); return; }
       P.slots.style.opacity = String(1 - EOUT(p));
     });
-    tween(api, 350, 450, function (p) { P.cnt.style.opacity = p >= 1 ? "" : String(EOUT(p)); });
+    tween(api, 350, 450, function (p) { var o = p >= 1 ? "" : String(EOUT(p)); P.cnt.style.opacity = o; P.ctrack.style.opacity = o; });
     tween(api, 700, 2600, function (p) { tally(P, Math.round(M.n * EIO(p))); });
     P.clabs.forEach(function (l, a) { fadeIn(api, 3350 + 90 * a, 420, l); });
   };
@@ -5797,8 +6240,7 @@ button { font-family: var(--px); }
       "Add a little, " + EPS + ": After is " + bet(h1.w + D.eps) + ".",
       "With " + bet(h1.w + D.eps) + " in the table, softmax gives " + STATES[h1.s] + " new probabilities.",
       "The " + N + " episodes again, with the same luck: the average return " + AVG + " After is " + money(h1.after) + ".",
-      "Before and after, side by side: the preference and the average return " + AVG + ".",
-      "Four numbers to look at closely."
+      "Before and after, side by side: the preference and the average return " + AVG + "."
     ],
 
     /* 400, the update applied in the diagram. */
@@ -5866,11 +6308,14 @@ button { font-family: var(--px); }
        1,000; each episode's return G1: the ten at the ends of their rows fly to their dots under the histogram, then
        its bars rise; the average return: its mark on the histogram, whose number, -$172.24, flies into the average
        box; the loop back to the preferences
-   320 The backward pass (7 beats): the twelve preferences light up and one is ringed (HEALTHY, RUN); its preference
-       taken apart, Before 0.40; +0.01, After 0.41; softmax with 0.41; the same 1,000 episodes generated again (the ten
-       under a playhead, the stream), the histogram moves, the mark rolls to -$170.50 and flies into the box After; the
-       four boxes lit together; the diagram fades and the four numbers move to the middle, in the places of agent A6's
-       scene 350 (the preference's Before and After on top, the average's below)
+   320 The backward pass (6 beats): the twelve preferences light up and one is ringed (HEALTHY, RUN); its preference
+       taken apart, Before 0.40; +0.01, After 0.41; softmax with 0.41; the same 1,000 episodes generated again (the
+       ten under a playhead, the stream), the histogram moves, the mark rolls to -$170.50 and flies into the box
+       After; the four boxes lit together. Next from there goes to scene 360, the triangle of the hop (sec3d.js): the
+       table of preferences flies to its place there and the four numbers into its table (OB.s3dTake). Until
+       2026-11-17 a seventh beat moved the four numbers to the middle for agent A6's scene 350, which went at Carlos's
+       word: "I think we can skip slide 10 and simply from the four numbers just jump to the triangle of the hop.
+       Again, the table of bets would not disappear, so we always keep context."
 
    OB.s3c is the kit that sec3c2.js reuses: Dia (the diagram), avgBox, updBox, lead, say, live, hopW, sym. */
 (function () {
@@ -6108,37 +6553,6 @@ button { font-family: var(--px); }
     return d;
   }
 
-  /* The four numbers of a hop in the middle of the screen, in the places of agent A6's scene 350: the preference's
-     Before and After on top, the average's Before and After below. */
-  function fourPanel(T, s, a, w0, w1, g0, g1) {
-    var F = { el: el("div", "s3c-four ob-hide") };
-    var g = el("div", "s3c-fgrid");
-    F.zb = T.zoom(s, a, { cap: "BEFORE", value: w0 });
-    F.za = T.zoom(s, a, { cap: "AFTER", value: w1 });
-    F.gb = avgBox(g0, "BEFORE");
-    F.ga = avgBox(g1, "AFTER");
-    [F.zb.el, el("div", "s3c-fmid"), F.za.el, F.gb.el, el("div", "s3c-fmid"), F.ga.el].forEach(function (e) { g.appendChild(e); });
-    F.boxes = [F.zb.el, F.za.el, F.gb.el, F.ga.el];
-    F.boxes.forEach(function (e) { e.classList.add("s3c-fbox"); });
-    F.el.appendChild(g);
-    // A hidden copy of the sum box that scene 350 (agent A6) keeps below its grid: it takes the same room here, so
-    // the four boxes stand where scene 350 shows them and the cut to it does not jump (main session, 2026-11-14).
-    var S = window.S3D && window.S3D.T;
-    if (S) {
-      var c = el("div", "s3d-calc ob-box s3c-fspace");
-      c.appendChild(el("div", "s3d-ccap", "AFTER - BEFORE"));
-      var line = el("div", "s3d-cline");
-      line.appendChild(OB.html("span", "s3d-cexp", OB.tex(OB.texArith(S.after + " - (" + S.before + ")"))));
-      var res = el("span", "s3d-cres");
-      res.appendChild(OB.texEl("=\\;"));
-      res.appendChild(OB.texNumEl(S.change, "ob-money gain"));
-      line.appendChild(res);
-      c.appendChild(line);
-      F.el.appendChild(c);
-    }
-    return F;
-  }
-
   OB.s3c = { Dia: Dia, avgBox: avgBox, updBox: updBox, lead: lead, say: say, live: live, hopW: hopW, sym: sym,
     fmtM: fmtM, opt: opt, ALL12: ALL12, dice: dice, reveal: reveal };
 
@@ -6190,6 +6604,7 @@ button { font-family: var(--px); }
     build: function (root) {
       root.classList.add("s3c-root");
       var P = this.parts = {}, h = D.hop1;
+      P.root = root;
       P.lead = lead(root);
       var d = P.d = Dia(D.W0, { avg: D.start, avgCap: "BEFORE" });
       d.A.capOn(false);
@@ -6202,17 +6617,19 @@ button { font-family: var(--px); }
       P.ga = avgBox(h.after, "AFTER");
       d.c.aa.appendChild(P.ga.el);
       [P.zb.el, P.za.el, P.ga.el].forEach(function (e) { e.classList.add("ob-hide"); });
-      P.F = fourPanel(d.T, h.s, h.a, h.w, h.w + EPS, h.before, h.after);
-      d.wrap.appendChild(P.F.el);
       root.appendChild(d.wrap);
     },
+    /* Leaving at the last beat (Next to 360): the scene keeps a still copy of its picture, the place of its table of
+       preferences and the places of the four numbers, which scene 360 flies into its own tables (sec3d.js). */
+    leave: function () {
+      var P = this.parts;
+      if (P && this.k === X.backward.length - 1 && OB.s3dTake) OB.s3dTake(P.root, [P.zb.num, P.za.num, P.d.A.num, P.ga.num], P.d.T.el);
+    },
     beat: function (k, api) {
-      var P = this.parts, d = P.d, h = D.hop1, go = live(api, k), hand = k >= 6;
+      var P = this.parts, d = P.d, h = D.hop1, go = live(api, k);
       var cell = [h.s, h.a], W1 = hopW(D.W0, h.s, h.a);
+      this.k = k;
       say(P.lead, X.backward[k], api);
-      // The forward pass stands from the start, until the hand-over.
-      var ov = api.root.querySelector(".ob-overlay");
-      if (!hand && ov) { ov.classList.remove("ob-hide"); ov.style.opacity = ""; }
       // The episodes and their returns of the preferences Before; at 4 of the preferences After, generated again
       // with the same luck.
       d.runsOn(k >= 4 ? 1 : 0, api, go && k === 4, { delay: 600 });
@@ -6222,7 +6639,7 @@ button { font-family: var(--px); }
       if (go && k === 0) {
         d.T.mark(ALL12);
         api.at(1600, function () { d.T.mark([cell]); d.T.rings([cell]); });
-      } else if (!hand) { d.T.mark([cell]); d.T.rings([cell]); }
+      } else { d.T.mark([cell]); d.T.rings([cell]); }
       // 1: its preference taken apart: Before. The average return of these preferences is its Before too.
       if (k >= 1) {
         if (go && k === 1) d.T.lift(h.s, h.a, P.zb, { delay: 300 });
@@ -6230,7 +6647,7 @@ button { font-family: var(--px); }
       } else api.show(P.zb.el, false);
       d.A.capOn(k >= 1, api, opt(go && k === 1, 1900));
       // 2: a little more, After.
-      if (k >= 2 && !hand) api.arrow("hop", P.zb.el, P.za.el, { label: "+" + OB.num(EPS, 2), labelDy: -22, delay: go && k === 2 ? 200 : 0, dur: go && k === 2 ? undefined : 1 });
+      if (k >= 2) api.arrow("hop", P.zb.el, P.za.el, { label: "+" + OB.num(EPS, 2), labelDy: -22, delay: go && k === 2 ? 200 : 0, dur: go && k === 2 ? undefined : 1 });
       else api.unarrow("hop");
       api.show(P.za.el, k >= 2, opt(go && k === 2, 1400));
       // 3: the After goes into the table; softmax gives HEALTHY new probabilities.
@@ -6241,37 +6658,12 @@ button { font-family: var(--px); }
       api.show(P.ga.el, k >= 4, opt(go && k === 4, 3000));
       P.ga.set(h.after);
       if (go && k === 4) d.flyAvg(api, P.ga.num, { delay: 3800, dur: 1100, arc: 56 });   // high, over the box Before
-      if (k >= 4 && !hand) api.arrow("flow", P.za.el, P.ga.el, { delay: go && k === 4 ? 3000 : 0, dur: go && k === 4 ? undefined : 1 });
+      if (k >= 4) api.arrow("flow", P.za.el, P.ga.el, { delay: go && k === 4 ? 3000 : 0, dur: go && k === 4 ? undefined : 1 });
       else api.unarrow("flow");
       // 5: the four boxes together.
       [P.zb.el, P.za.el, d.A.el, P.ga.el].forEach(function (e) { e.classList.toggle("s3c-lit", k === 5); });
-      // The forward arrows, then the hand-over (6): the rest fades, the four numbers move to the middle.
-      var parts = [d.c.bets, d.c.prob, d.c.runs, d.c.g1];
-      var src = [P.zb.el, P.za.el, d.A.el, P.ga.el];
-      if (!hand) {
-        d.arrows(api, ["sm", "play", "g1", "avg"]);
-        parts.forEach(function (c) { c.classList.remove("ob-hide"); c.style.opacity = ""; });
-        d.A.el.classList.remove("ob-hide");     // the other three boxes are set above, beat by beat
-        P.F.el.classList.add("ob-hide");
-        P.F.boxes.forEach(function (e) { e.style.visibility = ""; });
-        return;
-      }
-      d.T.rings([]);
-      P.F.el.classList.remove("ob-hide");
-      if (go) {
-        parts.forEach(function (c) { api.fade(c, false); });
-        if (ov) api.fade(ov, false);
-        api.at(1200, function () { api.unarrow(); if (ov) { ov.classList.remove("ob-hide"); ov.style.opacity = ""; } });
-        src.forEach(function (e, i) {
-          api.fly(e, P.F.boxes[i], { delay: 1300 + i * 150, arc: 20 });
-          api.at(1300 + i * 150, function () { e.classList.add("ob-hide"); });
-        });
-      } else {
-        api.unarrow();
-        parts.forEach(function (c) { c.classList.add("ob-hide"); c.style.opacity = ""; });
-        src.forEach(function (e) { e.classList.add("ob-hide"); });
-        P.F.boxes.forEach(function (e) { e.style.visibility = ""; });
-      }
+      // The forward arrows stand from the start.
+      d.arrows(api, ["sm", "play", "g1", "avg"]);
     }
   });
 })();
@@ -6812,24 +7204,34 @@ button { font-family: var(--px); }
    Carlos (REQUEST.md): "do a separate slide for this where we do the calculation on how to update, how to do the
    before and after, because having the entire diagram there is too distracting. So if we can just for a moment fade
    the diagram and then focus on this before and after calculation slowly, in particular in explaining ... why the W
-   must be updated using this update formula." Agent A5's scene before 350 fades the diagram and leaves four values;
-   its scene 400 brings the diagram back with the updated preference. Every number comes from sec3d-data.js (window.S3D,
-   computed from bessie.js) and is asserted by tools/check_closeup.js; no number is written here.
+   must be updated using this update formula." Agent A5's scene 320 ends on the four numbers of the hop; its scene 400
+   brings the diagram back with the updated preference. Every number comes from sec3d-data.js (window.S3D, computed
+   from bessie.js) and is asserted by tools/check_closeup.js; no number is written here.
 
-   350 Up close: before and after (4 beats): the four values; the preference moved by epsilon = 0.01; did the average
-       return go up or down? (the room guesses); Compute: after minus before, $2.01
-   360 The triangle of the hop (5 beats), beside the table of 350's four numbers (agent W, 2026-11-16): before and
-       after as two points, their numbers flying out of the table; across, 0.41 - 0.40 = 0.01 from the two preferences;
-       up, -$170.50 - (-$172.24) = $1.74 from the two averages; nabla = 1.74 / 0.01 as a fraction, its two numbers
-       flying from the sides (the room guesses); Compute: 174. Next from 350's last beat flies 350's four numbers
-       into the table
-   370 The update (2 beats): theta_{s,a} = theta_{s,a} + alpha nabla, alpha = 0.01; the sign: weekend 2's loss had to
-       go down (minus, w = w - alpha nabla), here the average return has to go up (plus)
-   380 Why this update (4 beats): a positive nabla raises the preference; a negative one lowers it; a steep slope moves
-       it more; alpha keeps each move small. Since 2026-11-16 each rule is a small copy of 360's triangle of the hop
-       (BEFORE, AFTER, across +epsilon, the vertical side UP or DOWN, the slope), drawn in when its card comes
-   390 The update, worked out (3 beats): theta_{s,a} = 0.40 + 0.01 x 174 = ? (the room guesses); Compute: 2.14; the new
-       preference alone on the screen, for A5's scene 400 */
+   Carlos, 2026-11-17, on the close-up: "keep showing me at all times the table of bets, and you highlight the entry
+   we are analyzing so people don't lose context ... I think we can skip slide 10 and simply from the four numbers
+   just jump to the triangle of the hop. Again, the table of bets would not disappear, so we always keep context ...
+   when the W appears, it would be nice to show an arrow to that entry in the table so it is clear. The slide 13
+   should appear side by side with slide 14 and 12. I don't want that the formula disappears when we move to 13 and
+   then to 14. Keep the formula there. Don't disappear things. Also keep the table of bets there, visible at all
+   times, so that we know where the 0.40 appears when it appears in the formula. The new bet 2.14 goes back to the
+   table of bets." So scene 350 (Up close: before and after) went, and scenes 370, 380 and 390 became one scene.
+
+   360 The triangle of the hop (5 beats): on the left the table of preferences theta, small, its entry (HEALTHY, RUN)
+       lit and ringed, and under it the table of the four numbers; on the right the plot: before and after as two
+       points, their numbers flying out of the table; across, 0.41 - 0.40 = 0.01 from the two preferences; up,
+       -$170.50 - (-$172.24) = $1.74 from the two averages; nabla = 1.74 / 0.01 as a fraction, its two numbers flying
+       from the sides (the room guesses); Compute: 174. Next from 320's last beat flies 320's table of preferences to
+       its place here and 320's four numbers into the table of the four numbers
+   370 The update (9 beats): the table of preferences stays at the top left, its entry lit and ringed, the table
+       flying in from 360. 0: theta_{s,a} = theta_{s,a} + alpha nabla with alpha = 0.01, and an arrow from the
+       symbol theta_{s,a} to its entry; 1: the sign: weekend 2's loss had to go down (minus, w = w - alpha nabla),
+       here the average return has to go up (plus); 2 to 5, why this update, one card per Next, each a small copy of
+       360's triangle of the hop (BEFORE, AFTER, across +epsilon, the vertical side UP or DOWN, the slope): a
+       positive nabla raises the preference, a negative one lowers it, a steep slope moves it more, alpha keeps each
+       move small; 6: the update worked out under the table, theta_{s,a} = 0.40 + 0.01 x 174 = ?, the 0.40 flying out
+       of the table, 0.01 and 174 out of the line under the formula (the room guesses); 7, Compute: 2.14; 8: the new
+       preference, 2.14, flies back into the table. Nothing that comes goes until the scene ends. */
 (function () {
   "use strict";
   var OB = window.OB, art = OB.art, el = OB.el, TB = OB.tables, D = window.S3D;
@@ -6858,126 +7260,7 @@ button { font-family: var(--px); }
   function betFmt(x) { return OB.tables.fmt("bets", x); }
   var avgT = OB.texFmt(avgFmt), betT = OB.texFmt(betFmt), intT = OB.texFmt(function (x) { return OB.num(x, 0); });
 
-  /* The entry as the tables draw it: a never-shown table of the guided preferences lends its zoom (tables.js,
-     T.zoom). */
-  var T0 = TB.table(D.bets, { kind: "bets" });
-  function betBox(cap, value) {
-    var Z = T0.zoom(D.s, D.a, { cap: cap, value: value });
-    Z.el.classList.add("s3d-box");
-    return Z;
-  }
-  /* An average return in a box of the same make: caption, head, the number. */
-  function avgBox(cap, value) {
-    var Z = { el: el("div", "tb-zoom ob-box white s3d-box s3d-gbox") };
-    Z.cap = el("div", "tb-zcap", cap);
-    Z.el.appendChild(Z.cap);
-    var hd = el("div", "tb-zhead");
-    hd.appendChild(OB.html("span", "s3d-gname", "AVERAGE " + AVG));
-    Z.el.appendChild(hd);
-    Z.num = el("span", "tb-zn s3d-gn " + (value < 0 ? "loss" : "gain"), D.avg(value));
-    Z.num.dataset.v = String(value);
-    Z.el.appendChild(Z.num);
-    return Z;
-  }
-  /* The space between a before and an after: the arrow runs through its middle, a label above it, a note below. */
-  function mid(cls) {
-    var m = { el: el("div", "s3d-mid " + cls) };
-    m.top = el("div", "s3d-mtop ob-hide");
-    m.bot = el("div", "s3d-mbot ob-hide");
-    m.el.appendChild(m.top);
-    m.el.appendChild(m.bot);
-    return m;
-  }
-
-  /* 350. Up close: the four values that A5's diagram leaves, then the change of each, slowly. */
-  var L350 = [
-    "Four numbers: the preference and the average return " + AVG + " it gives, before and after.",
-    "The preference moved by " + nw(tx("\\varepsilon = " + T.eps) + "."),
-    "And the average return " + nw(AVG + ":") + " did it go up or down? Guess, then press Compute.",
-    "Up, by " + T.change + ": the average return " + AVG + " after, minus before."
-  ];
-  OB.scene({
-    page: 3, key: "closeup", order: 350, title: "Up close: before and after", beats: L350.length,
-    build: function (root) {
-      var P = this.parts = {};
-      P.lead = lead(root);
-      var g = el("div", "s3d-ba");
-      P.zb = betBox("BEFORE", V.w0);
-      P.za = betBox("AFTER", V.w1);
-      P.gb = avgBox("BEFORE", V.before);
-      P.ga = avgBox("AFTER", V.after);
-      P.m1 = mid("s3d-m1");
-      P.m2 = mid("s3d-m2");
-      P.zb.el.classList.add("s3d-zb");
-      P.za.el.classList.add("s3d-za");
-      P.gb.el.classList.add("s3d-gb");
-      P.ga.el.classList.add("s3d-ga");
-      [P.zb.el, P.m1.el, P.za.el, P.gb.el, P.m2.el, P.ga.el].forEach(function (e) { g.appendChild(e); });
-      P.m1.top.textContent = "+" + T.eps;
-      P.m1.bot.innerHTML = tx("\\varepsilon = " + T.eps);
-      P.m2.bot.textContent = "UP";
-      P.m2.bot.classList.add("s3d-upword");
-      root.appendChild(g);
-      // After minus before, worked on the shown numbers.
-      var c = el("div", "s3d-calc ob-box");
-      c.appendChild(el("div", "s3d-ccap", "AFTER - BEFORE"));
-      var line = el("div", "s3d-cline");
-      line.appendChild(OB.html("span", "s3d-cexp", tx(OB.texArith(T.after + " - (" + T.before + ")"))));
-      var res = el("span", "s3d-cres");
-      res.appendChild(OB.texEl("=\\;"));
-      P.chg = OB.texNumEl(T.change, "ob-money gain");
-      P.chg.dataset.v = String(V.change);
-      res.appendChild(P.chg);
-      line.appendChild(res);
-      c.appendChild(line);
-      P.calc = c;
-      root.appendChild(c);
-    },
-    /* Leaving at the last beat (Next to 360): a still copy of the picture and the places of the four numbers, which
-       360's first beat flies into its table (HAND, below). */
-    leave: function () {
-      var P = this.parts;
-      HAND = null;
-      if (!P || this.k !== L350.length - 1) return;
-      HAND = { snap: snapshot(P.lead.parentNode), nums: [P.zb, P.za, P.gb, P.ga].map(function (Z) {
-        return { r: Z.num.getBoundingClientRect(), html: Z.num.outerHTML };
-      }) };
-      setTimeout(function () { HAND = null; }, 0);
-    },
-    beat: function (k, api) {
-      var P = this.parts, go = live(api, k);
-      this.k = k;
-      say(P.lead, L350[k], api);
-      if (k === 2) api.nextLabel("Compute");
-      // The row in focus: the preference's at beat 1, the average's at beats 2 and 3.
-      [P.zb.el, P.za.el].forEach(function (e) { e.classList.toggle("s3d-lit", k === 1); });
-      [P.gb.el, P.ga.el].forEach(function (e) { e.classList.toggle("s3d-lit", k >= 2); });
-      // The preference's arrow, +0.01 on it and epsilon under it.
-      if (k >= 1) api.arrow("bet", P.zb.el, P.za.el, { delay: k === 1 && go ? 400 : 0 }); else api.unarrow("bet");
-      api.show(P.m1.top, k >= 1, { delay: k === 1 && go ? 1500 : 0 });
-      api.show(P.m1.bot, k >= 1, { delay: k === 1 && go ? 2400 : 0 });
-      // The average's arrow: a question mark while the room guesses, then the change.
-      if (k >= 2) api.arrow("avg", P.gb.el, P.ga.el, { delay: k === 2 && go ? 400 : 0 }); else api.unarrow("avg");
-      var answered = k >= 3;
-      if (P.m2.top.dataset.k !== String(answered)) {
-        P.m2.top.dataset.k = String(answered);
-        P.m2.top.textContent = answered ? T.changeUp : "?";
-        P.m2.top.classList.toggle("s3d-q", !answered);
-        P.m2.top.classList.toggle("s3d-gainlab", answered);
-        if (answered && go) P.m2.top.classList.add("ob-hide");
-      }
-      api.show(P.m2.top, k >= 2, { delay: k === 2 && go ? 1500 : k === 3 && go ? 2600 : 0 });
-      api.show(P.m2.bot, k >= 3, { delay: k === 3 && go ? 3200 : 0 });
-      // Compute: the subtraction comes, its result rolls up from $0.00.
-      api.show(P.calc, k >= 3, { delay: k === 3 && go ? 200 : 0 });
-      if (k >= 3) {
-        if (go) api.roll(P.chg, V.change, { from: 0, fmt: avgT, delay: 1100 });
-        else { P.chg.textContent = OB.texText(T.change); P.chg.dataset.v = String(V.change); }
-      }
-    }
-  });
-
-  /* Small SVG tools for the plot of 360 and the pictures of 380. */
+  /* Small SVG tools for the plot of 360 and the why cards of 370. */
   function add(parent, tag, attrs) { var n = OB.svgEl(tag, attrs); parent.appendChild(n); return n; }
   function svgText(parent, x, y, t, cls, anchor) {
     var n = add(parent, "text", { x: x, y: y, "class": cls || "", "text-anchor": anchor || "middle" });
@@ -7021,23 +7304,29 @@ button { font-family: var(--px); }
      highlight the corresponding numbers in the table ... when you calculate nabla as a fraction, show the numbers in
      the two sides of the rectangle triangle moving toward the fraction ... And then do the calculation."
 
-     The four numbers of 350 stand in a table on the left for the whole scene, the plot on the right: the preference
-     across, the average return up, before and after as two points whose coordinates fly out of the table. Across, the
-     two preferences light up and fly into the subtraction written under the bottom side (0.41 - 0.40 = 0.01); up, the
-     two averages light up and fly into the subtraction written beside the right side, one number under the other; then
-     the two results fly from the sides into the fraction of nabla, the room guesses, and Compute works it out. Every
-     computation stays on the plot to the end.
+     The four numbers of the hop stand in a table on the left for the whole scene, under the table of preferences, the
+     plot on the right: the preference across, the average return up, before and after as two points whose
+     coordinates fly out of the table. Across, the two preferences light up and fly into the subtraction written
+     under the bottom side (0.41 - 0.40 = 0.01); up, the two averages light up and fly into the subtraction written
+     beside the right side, one number under the other; then the two results fly from the sides into the fraction of
+     nabla, the room guesses, and Compute works it out. Every computation stays on the plot to the end.
 
-     The hand-over from 350: when Next leaves 350 at its last beat, 350's leave() keeps a still copy of its picture
-     (the lead, the four boxes, their arrows, the sum box) and the place of each of its four numbers. The first beat
-     of 360 lays that copy over itself where 350 drew it, flies the four numbers into the table and fades the copy
-     out, so nothing jumps. Any other way into 360 shows the table at once. */
+     The hand-overs (main session, 2026-11-17; from agent W's hand-over of 2026-11-16): when Next leaves a scene at
+     its last beat, the scene calls take() (OB.s3dTake for scene 320 of sec3c.js), which keeps a still copy of its
+     picture, the place of its table of preferences and the place of each number that flies on. The first beat of
+     the next scene lays that copy over itself where the scene before drew it, flies the table of preferences (a copy
+     of its own) from the old place to its new one and the numbers into their new places, and fades the copy out, so
+     nothing jumps and the table never leaves the screen: 320 hands over to 360, 360 to 370. Any other way into a
+     scene shows it at once. */
   var HAND = null;
-  function snapshot(root) {
+  /* A still copy of the children of root (the line of words aside, it changes as on every Next) on fixed position,
+     where they are drawn now. The elements away (the table and the numbers that fly on) are hidden in the copy. */
+  function snapshot(root, away) {
+    away.forEach(function (e) { if (e) e.setAttribute("data-s3d-away", "1"); });
     var layer = el("div", "s3d-snap");
     Array.prototype.forEach.call(root.children, function (c) {
       if (c.classList.contains("ob-hide") || c.classList.contains("ob-gone")) return;
-      if (c.classList.contains("ob-say")) return;     // the line of words changes as on every Next
+      if (c.classList.contains("ob-say")) return;
       var r = c.getBoundingClientRect();
       if (!r.width || !r.height) return;
       var k = c.cloneNode(true);
@@ -7051,17 +7340,50 @@ button { font-family: var(--px); }
       k.style.height = r.height + "px";
       layer.appendChild(k);
     });
+    away.forEach(function (e) { if (e) e.removeAttribute("data-s3d-away"); });
+    Array.prototype.forEach.call(layer.querySelectorAll("[data-s3d-away]"), function (n) {
+      n.removeAttribute("data-s3d-away");
+      n.style.visibility = "hidden";
+    });
     return layer;
   }
+  /* Called by a scene that Next leaves at its last beat: root, the numbers that fly on (elements), the table of
+     preferences (an element). The hand-over is for the beat that comes at once; anything later finds none. */
+  function take(root, nums, tab) {
+    nums = nums || [];
+    HAND = {
+      snap: snapshot(root, nums.concat([tab])),
+      tab: tab ? tab.getBoundingClientRect() : null,
+      nums: nums.map(function (n) { return { r: n.getBoundingClientRect(), html: n.outerHTML }; })
+    };
+    setTimeout(function () { HAND = null; }, 0);
+  }
+  OB.s3dTake = take;
+  /* The first beat of a scene, entered with Next: lays the copy of the scene before over the scene and fades it out
+     from 250 ms in 900 ms; flies a copy of the table of preferences th (tables.js) from the old place to th. */
+  function handIn(api, P, H) {
+    if (P.snap && P.snap.parentNode) P.snap.parentNode.removeChild(P.snap);
+    P.snap = H.snap;
+    api.root.appendChild(P.snap);
+    var snap = P.snap;
+    api.at(250, function () {
+      api.animate(900, function (p) { snap.style.opacity = String(1 - p); },
+        function () { if (snap.parentNode) snap.parentNode.removeChild(snap); if (P.snap === snap) P.snap = null; });
+    });
+    if (H.tab) flyFrom(api, P.th.el.outerHTML, H.tab, P.th.el, { now: true, delay: 150, dur: 1300, arc: 0, plain: true });
+  }
+  function handOut(P) { if (P && P.snap) { var s = P.snap; P.snap = null; if (s.parentNode) s.parentNode.removeChild(s); } }
 
   /* A copy of an element, or of the markup html, flown from the rectangle a to the element to (fixed position, one
      scale that keeps its shape, centred on to); to stays hidden until the copy lands. As api.fly, but from a place
-     that no element holds any more (the hand-over), and centred rather than stretched. */
+     that no element holds any more (the hand-over), and centred rather than stretched. o.plain: no white ground in
+     flight (a whole table). o.keep: to keeps what it shows until the copy is nearly on it (a value it replaces);
+     o.land() runs as the copy lands (it writes the new value). */
   function flyFrom(api, html, a, to, o) {
     o = o || {};
     if (!to) return;
-    to.style.visibility = "hidden";
-    function land() { to.style.visibility = ""; }
+    if (!o.keep) to.style.visibility = "hidden";
+    function land() { if (o.land) o.land(); to.style.visibility = ""; }
     if (api.instant || !a || !a.width) { api.at(o.delay || 0, land); return; }
     // The copy stands at its start at once (o.now: it takes over from an element that has just gone), or from
     // o.delay; then it travels. A white ground fades in under it in flight, so it reads where it crosses numbers.
@@ -7090,7 +7412,8 @@ button { font-family: var(--px); }
       var arc = o.arc === undefined ? 30 : o.arc;
       api.animate(o.dur || 1100, function (p) {
         g.style.transform = "translate(" + (dx * p) + "px," + (dy * p - Math.sin(Math.PI * p) * arc) + "px) scale(" + (1 + (s - 1) * p) + ")";
-        g.style.backgroundColor = "rgba(255,255,255," + (0.88 * Math.max(0, Math.min(1, p / 0.12, (1 - p) / 0.12))).toFixed(3) + ")";
+        if (o.keep && p >= 0.85) to.style.visibility = "hidden";
+        if (!o.plain) g.style.backgroundColor = "rgba(255,255,255," + (0.88 * Math.max(0, Math.min(1, p / 0.12, (1 - p) / 0.12))).toFixed(3) + ")";
       }, function () { if (g && g.parentNode) g.parentNode.removeChild(g); land(); });
     });
   }
@@ -7098,12 +7421,22 @@ button { font-family: var(--px); }
   function flyEl(api, from, to, o) {
     o = o || {};
     if (!from || !to) return;
-    to.style.visibility = "hidden";
+    if (!o.keep) to.style.visibility = "hidden";
     api.at(o.delay || 0, function () {
       flyFrom(api, (o.ghost || from).outerHTML, from.getBoundingClientRect(), to,
-        { dur: o.dur, arc: o.arc, fs: window.getComputedStyle(from).fontSize });
+        { dur: o.dur, arc: o.arc, fs: window.getComputedStyle(from).fontSize, keep: o.keep, land: o.land });
     });
   }
+
+  /* The table of preferences theta, small, as scene 320 draws it, its entry (HEALTHY, RUN) lit in yellow and ringed:
+     on 360 and 370 at all times. thetaOn sets the light and the ring (in beat, where the engine allows a ring). */
+  var CELL = [D.s, D.a];
+  function thetaTable() {
+    var Tt = TB.table(D.bets, { kind: "bets", size: "s", cap: "PREFERENCES " + tx("\\theta") });
+    Tt.el.classList.add("s3d-theta");
+    return Tt;
+  }
+  function thetaOn(Tt) { Tt.mark([CELL]); Tt.rings([CELL]); }
 
   /* The table of the four numbers: BEFORE and AFTER across the top, the preference (the entry's chips) and the
      average return down the side. lit("bet" | "avg" | "") lights a row's two numbers. */
@@ -7228,10 +7561,15 @@ button { font-family: var(--px); }
     page: 3, key: "closeup-slope", order: 360, title: "The triangle of the hop", beats: L360.length,
     build: function (root) {
       var P = this.parts = hopPlot();
+      P.root = root;
       P.lead = lead(root);
       var row = el("div", "s3d-trow");
+      var col = el("div", "s3d-tcol");
+      P.th = thetaTable();
+      col.appendChild(P.th.el);
       P.tab = table4();
-      row.appendChild(P.tab.el);
+      col.appendChild(P.tab.el);
+      row.appendChild(col);
       var box = el("div", "s3d-plot");
       box.appendChild(P.svg);
       var ov = el("div", "s3d-pov");
@@ -7241,7 +7579,10 @@ button { font-family: var(--px); }
       ov.appendChild(P.cy.el);
       box.appendChild(ov);
       P.box = box;
-      row.appendChild(box);
+      // The plot and, under it, nabla as a fraction (the right column; the tables are the left one).
+      var rc = el("div", "s3d-rcol");
+      rc.appendChild(box);
+      row.appendChild(rc);
       root.appendChild(row);
       // nabla as a fraction: up over across; the two numbers fly in from the sides, the result waits for Compute.
       var eq = el("div", "s3d-eq ob-hide");
@@ -7251,36 +7592,37 @@ button { font-family: var(--px); }
       P.eq = eq;
       P.fn = eq.querySelector(".s3d-fn");
       P.fd = eq.querySelector(".s3d-fd");
-      root.appendChild(eq);
+      rc.appendChild(eq);
       PLOTS.push(P);
     },
-    leave: function () { if (this.parts && this.parts.snap) { var s = this.parts.snap; this.parts.snap = null; if (s.parentNode) s.parentNode.removeChild(s); } },
+    /* Leaving: the copy of 320 goes; at the last beat (Next to 370) the table of preferences flies on. */
+    leave: function () {
+      var P = this.parts;
+      handOut(P);
+      if (P && this.k === L360.length - 1) take(P.root, [], P.th.el);
+    },
     beat: function (k, api) {
       var P = this.parts, go = live(api, k), H = k === 0 && go && api.from === -1 ? HAND : null;
       HAND = null;
+      this.k = k;
       say(P.lead, L360[k], api);
       if (k === 3) api.nextLabel("Compute");
       fitK(P);
-      if (P.snap && P.snap.parentNode) P.snap.parentNode.removeChild(P.snap);
-      P.snap = null;
+      handOut(P);
+      // The table of preferences: the entry in focus, at every beat.
+      thetaOn(P.th);
+      P.th.el.style.visibility = "";
       // The table: the preferences lit while across is worked out (1), the averages while up is (2).
       P.tab.lit(k === 1 ? "bet" : k === 2 ? "avg" : "");
 
-      // Beat 0: the table (from 350, or at once), then before and after come onto the axes, their numbers flying
+      // Beat 0: the tables (from 320, or at once), then before and after come onto the axes, their numbers flying
       // out of the table.
       var t = 0;
       if (k === 0 && go) {
         if (H) {
-          P.snap = H.snap;
-          api.root.appendChild(P.snap);
-          Array.prototype.forEach.call(P.snap.querySelectorAll(".tb-zn"), function (n) { n.style.visibility = "hidden"; });
+          handIn(api, P, H);
           [P.tab.w0, P.tab.w1, P.tab.g0, P.tab.g1].forEach(function (c, i) {
-            flyFrom(api, H.nums[i].html, H.nums[i].r, c.num, { now: true, delay: 120 + i * 90, dur: 1200, arc: 16 });
-          });
-          var snap = P.snap;
-          api.at(250, function () {
-            api.animate(900, function (p) { snap.style.opacity = String(1 - p); },
-              function () { if (snap.parentNode) snap.parentNode.removeChild(snap); if (P.snap === snap) P.snap = null; });
+            if (H.nums[i]) flyFrom(api, H.nums[i].html, H.nums[i].r, c.num, { now: true, delay: 120 + i * 90, dur: 1200, arc: 16 });
           });
           P.tab.el.classList.add("ob-hide");
           api.show(P.tab.el, true, { delay: 350, dur: 1000 });
@@ -7385,44 +7727,8 @@ button { font-family: var(--px); }
     c.appendChild(OB.html("div", "s3d-sf", tx(v + " = " + v + " \\mathbin{\\htmlClass{s3d-sg}{" + sign + "}} \\alpha\\nabla")));
     return c;
   }
-  var L370 = [
-    "Call the preference " + tx("\\theta_{s,a}") + ". The update adds " + nw(tx("\\alpha\\nabla")) + " to " + tx("\\theta_{s,a}") + ", with " + nw(tx("\\alpha = " + T.alpha) + "."),
-    "In weekend 2 a loss had to go down: " + nw(tx("w - \\alpha\\nabla") + ".") + " Here the average return " + AVG + " has to go up: " + nw(tx("\\theta_{s,a} + \\alpha\\nabla") + ".")
-  ];
-  OB.scene({
-    page: 3, key: "closeup-update", order: 370, title: "The update", beats: L370.length,
-    build: function (root) {
-      var P = this.parts = {};
-      P.lead = lead(root);
-      var f = el("div", "s3d-upf");
-      f.appendChild(wCell(tx("\\theta_{s,a}"), "NEW"));
-      f.appendChild(wCell(tx("=")));
-      f.appendChild(wCell(tx("\\theta_{s,a}"), "NOW"));
-      P.plus = wCell(tx("+"), "", "s3d-plus");
-      f.appendChild(P.plus);
-      f.appendChild(wCell(tx("\\alpha\\nabla")));
-      P.f = f;
-      P.tags = Array.prototype.slice.call(f.querySelectorAll(".s3d-ut"));
-      root.appendChild(f);
-      P.al = OB.html("div", "s3d-al ob-hide", tx("\\alpha = " + T.alpha));
-      root.appendChild(P.al);
-      var cards = el("div", "s3d-signs ob-hide");
-      cards.appendChild(signCard("WEEKEND 2", "A LOSS HAD TO GO DOWN", "w", "-", "s3d-old"));
-      cards.appendChild(signCard("OLD BESSIE", "THE AVERAGE RETURN " + AVG + " HAS TO GO UP", "\\theta_{s,a}", "+", "s3d-new"));
-      P.cards = cards;
-      root.appendChild(cards);
-    },
-    beat: function (k, api) {
-      var P = this.parts, go = live(api, k);
-      say(P.lead, L370[k], api);
-      P.tags.forEach(function (t) { api.show(t, true, { delay: k === 0 && go ? 1300 : 0 }); });
-      api.show(P.al, true, { delay: k === 0 && go ? 2300 : 0 });
-      api.show(P.cards, k >= 1, { delay: k === 1 && go ? 300 : 0 });
-      P.plus.classList.toggle("s3d-lit", k >= 1);
-    }
-  });
-
-  /* 380. Why this update: four rules, one per Next, each drawn as a small copy of 360's triangle of the hop (Carlos,
+  /* 370's why cards (agent A6's scene 380 until 2026-11-17): four rules, one per Next, each drawn as a small copy of
+     360's triangle of the hop (Carlos,
      2026-11-16: "When you explain the update with different slopes, make sure that they look like rectangle triangles
      as in the previous image, so that the participant can really connect where the slope is coming from"). A card has
      360's axes and their names (the preference across, the average return up), BEFORE and AFTER as its square points,
@@ -7534,34 +7840,7 @@ button { font-family: var(--px); }
     if (go) c.mv.head.classList.add("ob-hide");
     api.show(c.mv.head, true, { delay: go ? t + 1100 : 0, dur: 400 });
   }
-  var L380 = [
-    "A positive " + nw(NAB) + " says that raising the preference raised the average return " + nw(AVG + ".") + " So the update raises the preference.",
-    "A negative " + nw(NAB) + " says that raising the preference lowered the average return " + nw(AVG + ".") + " So the update lowers the preference.",
-    "A steep slope, a large " + nw(NAB + ",") + " moves the preference more.",
-    nw(tx("\\alpha = " + T.alpha)) + " keeps each move small: one hundredth of " + nw(NAB + ".") + " The slope was measured near this preference."
-  ];
-  OB.scene({
-    page: 3, key: "closeup-why", order: 380, title: "Why this update", beats: L380.length,
-    build: function (root) {
-      var P = this.parts = {};
-      P.lead = lead(root);
-      var row = el("div", "s3d-whys");
-      P.cards = WHY.map(function (w) { var c = whyCard(w); row.appendChild(c); return c; });
-      root.appendChild(row);
-    },
-    beat: function (k, api) {
-      var P = this.parts, go = live(api, k);
-      say(P.lead, L380[k], api);
-      P.cards.forEach(function (c, i) {
-        var fresh = i === k && go;
-        api.show(c, i <= k, { delay: fresh ? 200 : 0 });
-        c.classList.toggle("s3d-lit", i === k);
-        if (i <= k) drawWhy(api, c, fresh);
-      });
-    }
-  });
-
-  /* 390. The update worked out on the guided preference, then the new preference alone, for A5's scene 400. */
+  /* A line of the update worked out: the left side, the equals sign, the right side (r.right). */
   function eqRow(left, right) {
     var r = el("div", "s3d-wrow");
     r.appendChild(OB.html("span", "s3d-wl", left));
@@ -7571,20 +7850,117 @@ button { font-family: var(--px); }
     r.right = rt;
     return r;
   }
-  var L390 = [
+
+  /* 370's arrow from the symbol theta_{s,a} of the formula to its entry of the table (Carlos: "when the W appears, it
+     would be nice to show an arrow to that entry in the table so it is clear"): up from the symbol, across above the
+     table and down into the entry at the right of its column, so that it passes beside the action's name; at right
+     angles, as the engine draws its arrows (core.js), in the scene's own layer (div.scene-inner is position relative).
+     Only where the formula stands beside the table (the grid of desks, min-width 1000 px). */
+  function wideGrid() { return !window.matchMedia || window.matchMedia("(min-width: 1000px)").matches; }
+  var ROUTES = [];
+  function Route(root, from, to, over) {
+    var R = { on: false, p: 1, from: from, to: to, over: over };
+    R.svg = OB.svgEl("svg", { "class": "ob-arrow s3d-route", width: "1", height: "1", "aria-hidden": "true" });
+    R.line = OB.svgEl("polyline", {});
+    R.head = OB.svgEl("polygon", {});
+    R.svg.appendChild(R.line);
+    R.svg.appendChild(R.head);
+    root.appendChild(R.svg);
+    R.draw = function (p) {
+      if (p !== undefined) R.p = p;
+      var o = root.getBoundingClientRect(), a = R.from.getBoundingClientRect(), c = R.to.getBoundingClientRect();
+      var t = R.over.getBoundingClientRect();
+      if (!R.on || !wideGrid() || !a.width || !c.width || !t.width) { R.svg.style.display = "none"; return; }
+      R.svg.style.display = "";
+      var h = 14, x0 = a.left + a.width / 2 - o.left, y0 = a.top - o.top - 4;
+      var yT = t.top - o.top - 16, x1 = c.right - o.left - 11, y1 = c.top - o.top - 2;
+      var pts = [[x0, y0], [x0, yT], [x1, yT], [x1, y1 - h]];
+      var len = 0;
+      for (var i = 1; i < pts.length; i++) len += Math.abs(pts[i][0] - pts[i - 1][0]) + Math.abs(pts[i][1] - pts[i - 1][1]);
+      R.line.setAttribute("points", pts.map(function (q) { return q[0].toFixed(1) + "," + q[1].toFixed(1); }).join(" "));
+      R.line.style.strokeDasharray = len + " " + len;
+      R.line.style.strokeDashoffset = String(len * (1 - R.p));
+      R.head.setAttribute("points", [x1, y1, x1 - h * 0.62, y1 - h, x1 + h * 0.62, y1 - h].map(function (v) { return v.toFixed(1); }).join(","));
+      R.head.style.opacity = R.p >= 1 ? "1" : "0";
+    };
+    /* On (drawn from its start in 1.2 s from delay when go is true, else at once) or off. */
+    R.set = function (on, api, go, delay) {
+      R.on = on;
+      if (!on || !go) { R.draw(1); return; }
+      R.draw(0);
+      api.at(delay || 0, function () { api.animate(OB.DUR.arrow, function (p) { R.draw(p); }, function () { R.draw(1); }); });
+    };
+    ROUTES.push(R);
+    return R;
+  }
+  window.addEventListener("resize", function () { ROUTES.forEach(function (R) { R.draw(); }); });
+
+  /* 370. The update, why it works and the update worked out, in one scene: the lines of agent A6's scenes 370, 380 and
+     390, one per beat. */
+  var L370 = [
+    "Call the preference " + tx("\\theta_{s,a}") + ". The update adds " + nw(tx("\\alpha\\nabla")) + " to " + tx("\\theta_{s,a}") + ", with " + nw(tx("\\alpha = " + T.alpha) + "."),
+    "In weekend 2 a loss had to go down: " + nw(tx("w - \\alpha\\nabla") + ".") + " Here the average return " + AVG + " has to go up: " + nw(tx("\\theta_{s,a} + \\alpha\\nabla") + "."),
+    "A positive " + nw(NAB) + " says that raising the preference raised the average return " + nw(AVG + ".") + " So the update raises the preference.",
+    "A negative " + nw(NAB) + " says that raising the preference lowered the average return " + nw(AVG + ".") + " So the update lowers the preference.",
+    "A steep slope, a large " + nw(NAB + ",") + " moves the preference more.",
+    nw(tx("\\alpha = " + T.alpha)) + " keeps each move small: one hundredth of " + nw(NAB + ".") + " The slope was measured near this preference.",
     "Our preference: " + nw(tx("\\theta_{s,a} = " + T.w0) + ",") + " with " + nw(tx("\\nabla = " + T.nabla) + ".") + " What is the new preference? Guess, then press Compute.",
     nw(tx(OB.texArith(T.alpha + " x " + T.nabla + " = " + T.step)) + ",") + " and " + nw(tx(T.w0 + " + " + T.step + " = " + T.wNew) + ":") + " the new preference.",
     "The new preference, " + T.wNew + ", goes back into the table of preferences."
   ];
+  var WHY0 = 2, WORK = 6;     // the first beat of the why cards, the beat of the update worked out
   OB.scene({
-    page: 3, key: "closeup-worked", order: 390, title: "The update, worked out", beats: L390.length,
+    page: 3, key: "closeup-update", order: 370, title: "The update", beats: L370.length,
     build: function (root) {
       var P = this.parts = {};
+      P.root = root;
       P.lead = lead(root);
-      var stack = el("div", "s3d-stack");
-      var w = el("div", "s3d-work ob-box white");
+      var g = el("div", "s3d-ugrid");
+      // Top left: the table of preferences.
+      var cth = el("div", "s3d-uth");
+      P.th = thetaTable();
+      cth.appendChild(P.th.el);
+      g.appendChild(cth);
+      // Beside it: the update, each part with its tag; under it alpha, and from beat 6 nabla.
+      var cf = el("div", "s3d-uform");
+      var f = el("div", "s3d-upf");
+      P.newC = wCell(tx("\\theta_{s,a}"), "NEW");
+      f.appendChild(P.newC);
+      f.appendChild(wCell(tx("=")));
+      f.appendChild(wCell(tx("\\theta_{s,a}"), "NOW"));
+      P.plus = wCell(tx("+"), "", "s3d-plus");
+      f.appendChild(P.plus);
+      f.appendChild(wCell(tx("\\alpha\\nabla")));
+      P.f = f;
+      P.tags = Array.prototype.slice.call(f.querySelectorAll(".s3d-ut"));
+      cf.appendChild(f);
+      P.al = el("div", "s3d-al s3d-ual ob-hide");
+      P.al.appendChild(OB.texEl("\\alpha =\\;"));
+      P.alN = OB.texNumEl(T.alpha, "s3d-anum");
+      P.al.appendChild(P.alN);
+      P.nb = el("span", "s3d-unb ob-hide");
+      P.nb.appendChild(OB.texEl(",\\quad\\nabla =\\;"));
+      P.nbN = OB.texNumEl(T.nabla, "s3d-anum");
+      P.nb.appendChild(P.nbN);
+      P.al.appendChild(P.nb);
+      cf.appendChild(P.al);
+      g.appendChild(cf);
+      // Right: the sign, weekend 2's and this one, one under the other.
+      var cards = el("div", "s3d-signs s3d-usigns ob-hide");
+      cards.appendChild(signCard("WEEKEND 2", "A LOSS HAD TO GO DOWN", "w", "-", "s3d-old"));
+      cards.appendChild(signCard("OLD BESSIE", "THE AVERAGE RETURN " + AVG + " HAS TO GO UP", "\\theta_{s,a}", "+", "s3d-new"));
+      P.cards = cards;
+      g.appendChild(cards);
+      // Under the table: the update worked out; each number of its second line is an element, for the flights.
+      var w = el("div", "s3d-work s3d-uwork ob-box white ob-hide");
       w.appendChild(eqRow(tx("\\theta_{s,a}"), tx("\\theta_{s,a} + \\alpha\\nabla")));
-      w.appendChild(eqRow("", tx(OB.texArith(T.w0 + " + " + T.alpha + " x " + T.nabla))));
+      var r2 = eqRow("", "");
+      P.w0 = OB.texNumEl(T.w0, "s3d-cn");
+      P.a2 = OB.texNumEl(T.alpha, "s3d-cn");
+      P.n2 = OB.texNumEl(T.nabla, "s3d-cn");
+      P.ops2 = [op("+", "s3d-bin"), op("\\times", "s3d-bin")];
+      [P.w0, P.ops2[0], P.a2, P.ops2[1], P.n2].forEach(function (e) { r2.right.appendChild(e); });
+      w.appendChild(r2);
       P.r3 = eqRow("", "");
       P.q = el("span", "s3d-q ob-texn", "?");
       P.sum = OB.html("span", "", tx(T.w0 + " + " + T.step));
@@ -7596,40 +7972,317 @@ button { font-family: var(--px); }
       P.r4.right.appendChild(P.res);
       w.appendChild(P.r4);
       P.work = w;
-      stack.appendChild(w);
-      P.Z = betBox("NEW PREFERENCE", V.wNew);
-      P.Z.el.classList.add("s3d-final", "ob-hide");
-      stack.appendChild(P.Z.el);
-      root.appendChild(stack);
+      g.appendChild(w);
+      // Under the formula and the sign: why this update, four cards.
+      var row = el("div", "s3d-whys s3d-uwhys");
+      P.whys = WHY.map(function (wy) { var c = whyCard(wy); row.appendChild(c); return c; });
+      g.appendChild(row);
+      root.appendChild(g);
+      P.route = Route(root, P.newC.querySelector(".s3d-us"), P.th.cell(D.s, D.a), P.th.el);
     },
+    leave: function () { handOut(this.parts); },
     beat: function (k, api) {
-      var P = this.parts, go = live(api, k);
-      say(P.lead, L390[k], api);
-      if (k === 0) api.nextLabel("Compute");
-      // Beat 0: the question mark. Beat 1: 0.01 x 174 becomes 1.74, then the sum rolls up from the preference now.
-      P.q.classList.toggle("ob-gone", k >= 1);
-      P.sum.classList.toggle("ob-gone", k < 1);
-      if (k === 1 && go) P.sum.classList.add("ob-hide");
-      if (k >= 1) api.show(P.sum, true, { delay: k === 1 && go ? 300 : 0 });
-      api.show(P.r4, k >= 1, { delay: k === 1 && go ? 1600 : 0 });
-      if (k >= 1) {
-        if (k === 1 && go) api.roll(P.res, V.wNew, { from: V.w0, fmt: betT, delay: 2000 });
+      var P = this.parts, go = live(api, k), H = k === 0 && go && api.from === -1 ? HAND : null;
+      HAND = null;
+      say(P.lead, L370[k], api);
+      if (k === WORK) api.nextLabel("Compute");
+      handOut(P);
+      // The table of preferences, its entry in focus: 0.40 until the new preference lands in it (beat 8).
+      thetaOn(P.th);
+      P.th.el.style.visibility = "";
+      if (!(k === 8 && go)) {
+        P.th.setCell(D.s, D.a, k >= 8 ? V.wNew : V.w0, { now: true });
+        P.th.num(D.s, D.a).style.visibility = "";
+      }
+
+      // 0: the table (from 360), the update, its tags, alpha; the arrow from theta_{s,a} to its entry.
+      var g0 = k === 0 && go, t = H ? 900 : 0;
+      if (H) handIn(api, P, H);
+      if (g0) P.f.classList.add("ob-hide");
+      api.show(P.f, true, { delay: g0 ? t + 200 : 0 });
+      P.tags.forEach(function (e) { api.show(e, true, { delay: g0 ? t + 1300 : 0 }); });
+      api.show(P.al, true, { delay: g0 ? t + 2200 : 0 });
+      P.route.set(true, api, g0, t + 2800);
+
+      // 1: the sign, beside weekend 2's.
+      api.show(P.cards, k >= 1, { delay: k === 1 && go ? 300 : 0 });
+      P.plus.classList.toggle("s3d-lit", k >= 1);
+
+      // 2 to 5: why this update, one card per Next, the newest lit.
+      P.whys.forEach(function (c, i) {
+        var at = WHY0 + i, fresh = k === at && go;
+        api.show(c, k >= at, { delay: fresh ? 200 : 0 });
+        c.classList.toggle("s3d-lit", k === at);
+        if (k >= at) drawWhy(api, c, fresh);
+      });
+
+      // 6: the update worked out: nabla comes under the formula, then the box; the preference now flies out of the
+      // table, alpha and nabla out of their line; the room guesses.
+      var g6 = k === WORK && go;
+      api.show(P.nb, k >= WORK, { delay: g6 ? 300 : 0 });
+      api.show(P.work, k >= WORK, { delay: g6 ? 900 : 0 });
+      if (g6) {
+        P.ops2.forEach(function (e) { e.classList.add("ob-hide"); api.show(e, true, { delay: 3300, dur: 600 }); });
+        flyEl(api, P.th.num(D.s, D.a), P.w0, { delay: 1700, dur: 1100, arc: 30 });
+        flyEl(api, P.alN, P.a2, { delay: 2050, dur: 1100, arc: 30 });
+        flyEl(api, P.nbN, P.n2, { delay: 2400, dur: 1100, arc: 30 });
+      } else {
+        P.ops2.forEach(function (e) { e.classList.remove("ob-hide"); e.style.opacity = ""; });
+        [P.w0, P.a2, P.n2].forEach(function (e) { e.style.visibility = ""; });
+      }
+
+      // 7, Compute: 0.01 x 174 becomes 1.74, then the sum rolls up from the preference now.
+      P.q.classList.toggle("ob-gone", k >= WORK + 1);
+      P.sum.classList.toggle("ob-gone", k < WORK + 1);
+      if (k === WORK + 1 && go) P.sum.classList.add("ob-hide");
+      if (k >= WORK + 1) api.show(P.sum, true, { delay: k === WORK + 1 && go ? 300 : 0 });
+      api.show(P.r4, k >= WORK + 1, { delay: k === WORK + 1 && go ? 1600 : 0 });
+      if (k >= WORK + 1) {
+        if (k === WORK + 1 && go) api.roll(P.res, V.wNew, { from: V.w0, fmt: betT, delay: 2000 });
         else { P.res.textContent = OB.texText(T.wNew); P.res.dataset.v = String(V.wNew); }
       }
-      // Beat 2: the working fades, and the new preference flies into the box of the entry, left alone on the screen.
-      if (k >= 2) {
-        if (go) {
-          api.fade(P.work, false, { dur: 900 });
-          api.show(P.Z.el, true, { delay: 500 });
-          api.fly(P.res, P.Z.num, { delay: 1100 });
-        } else {
-          api.show(P.work, false);
-          api.show(P.Z.el, true);
-          P.Z.num.style.visibility = "";
-        }
+
+      // 8: the new preference flies back into the table and takes the place of the preference now, which stays
+      // until the new one is nearly on it.
+      if (k === 8 && go) {
+        P.th.setCell(D.s, D.a, V.w0, { now: true });
+        flyEl(api, P.res, P.th.num(D.s, D.a), { delay: 500, dur: 1400, arc: 60, keep: true,
+          land: function () { P.th.setCell(D.s, D.a, V.wNew, { now: true }); } });
+      }
+    }
+  });
+})();
+</script>
+<script>/* sec3e.js */
+/* sec3e.js: page 3, scene 430 "What we learned" (main session, 2026-11-17), the last scene of the page.
+   Carlos: "Other conclusion slide, summarizing what we learned through all this process."
+
+   Six cards, one per Next, the newest lit; each a number, a name, a small picture and a short caption:
+   0  HUMAN LEARNING: the helmet and the policy we chose (B.EXAMPLE, as scene 190 shows it)
+   1  THE POLICY: the preferences theta, softmax, the probabilities, HEALTHY's roulette (from S3C.W0)
+   2  THE FORWARD PASS: the first four of the n episodes of scene 310 (OB.runs.play on S3C's dice), their returns, the
+      average G bar 1
+   3  THE BACKWARD PASS: the triangle of the hop (schematic, as the why cards of scene 370), the hop S3C.eps
+   4  THE UPDATE: the table of preferences, its entry lit, and theta_{s,a} + alpha nabla
+   5  REPEAT: the learning curve of scene 420 (S3C.start and the S3C.rounds updates of S3C.movie), the optimal policy's
+      line (S3C.end.best), and the likeliest action in each state after the last update (S3C.end.top, B.BEST)
+   Every number comes from S3C (sec3c-data.js), S3CT (sec3c-text.js) or B (bessie.js); none is written here. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, D = window.S3C, X = window.S3CT, TB = OB && OB.tables;
+  if (!OB || !B || !D || !X || !TB || !OB.runs) { console.error("sec3e: bessie.js, sec3c-data.js, sec3c-text.js or runs.js is missing"); return; }
+  var el = OB.el, art = OB.art, tx = OB.tex, sv = OB.svgEl;
+  var C = art.C;
+  var N = X.num(D.n, 0), EPS = X.num(D.eps, 2), ALPHA = X.num(D.alpha, 2), LAST = X.num(D.rounds, 0);
+  var TH = tx("\\theta"), AVG = tx("\\bar{G}_1"), NAB = tx("\\nabla"), UPD = tx("\\theta_{s,a} = \\theta_{s,a} + \\alpha\\nabla");
+  var TOP = D.end.top;
+  if (TOP.join() !== B.BEST.join()) console.error("sec3e: the likeliest actions after the last update are " + TOP.join() + ", B.BEST is " + B.BEST.join());
+
+  var LEAD = [
+    "Human learning: we chose the actions ourselves and searched for the optimal policy.",
+    "The policy: softmax turns the preferences " + TH + " of each state into probabilities, and a roulette samples the action.",
+    "The forward pass: the policy plays " + tx("n = " + OB.texNum(N)) + " episodes. Their average return is " + AVG + ".",
+    "The backward pass: one preference hops by " + EPS + ". The slope " + NAB + " is the change of " + AVG + " divided by " + EPS + ".",
+    "The update: " + UPD + ", with " + tx("\\alpha = " + ALPHA) + ". It moves the preference along the slope, so that " + AVG + " goes up.",
+    "Repeat: after " + LAST + " updates the likeliest action in each state is the optimal policy's."
+  ];
+  var CARDS = [
+    { name: "HUMAN LEARNING", cap: "WE CHOOSE THE POLICY", cls: "s3e-human" },
+    { name: "THE POLICY", cap: "THE ROULETTE SAMPLES THE ACTION" },
+    { name: "THE FORWARD PASS", cap: tx("n = " + OB.texNum(N)) + " EPISODES, THEIR AVERAGE " + AVG },
+    { name: "THE BACKWARD PASS", cap: NAB + " = UP DIVIDED BY ACROSS" },
+    { name: "THE UPDATE", cap: UPD },
+    { name: "REPEAT", cap: LAST + " UPDATES: THE OPTIMAL POLICY" }
+  ];
+
+  function add(p, tag, attrs) { var n = sv(tag, attrs); p.appendChild(n); return n; }
+  function svgText(p, x, y, t, cls, anchor) {
+    var n = add(p, "text", { x: x, y: y, "class": cls || "", "text-anchor": anchor || "start" });
+    n.textContent = t;
+    return n;
+  }
+  function board(w, h) { return sv("svg", { "class": "s3e-svg", viewBox: "0 0 " + w + " " + h, width: w, height: h, "aria-hidden": "true" }); }
+
+  /* A policy as a column: a van per state, the action chosen in it. */
+  function policyCol(policy) {
+    var c = el("div", "s3e-pol");
+    policy.forEach(function (a, s) {
+      var r = el("div", "s3e-prow");
+      r.appendChild(art.van(s, { size: 30, gauge: false, label: false }));
+      r.appendChild(art.actionChip(a, { glyph: 12 }));
+      c.appendChild(r);
+    });
+    return c;
+  }
+  /* A table of 4 states by 3 actions, schematic: a colour mark per state and per action; cell(s, a, x, y, w, h) draws
+     inside each cell. */
+  function grid(svg, x0, y0, cw, ch, cell) {
+    var g = add(svg, "g", {});
+    for (var a = 0; a < 3; a++) add(g, "rect", { "class": "s3e-am a" + a, x: x0 + a * cw + cw / 2 - 4, y: y0 - 11, width: 8, height: 6 });
+    for (var s = 0; s < 4; s++) {
+      add(g, "rect", { "class": "s3e-sm w" + s, x: x0 - 11, y: y0 + s * ch + ch / 2 - 4, width: 7, height: 8 });
+      for (a = 0; a < 3; a++) {
+        add(g, "rect", { "class": "s3e-cell", x: x0 + a * cw, y: y0 + s * ch, width: cw, height: ch });
+        if (cell) cell(g, s, a, x0 + a * cw, y0 + s * ch, cw, ch);
+      }
+    }
+    return g;
+  }
+  function arrowR(svg, x1, x2, y) {
+    add(svg, "line", { "class": "s3e-arl", x1: x1, y1: y, x2: x2 - 8, y2: y });
+    add(svg, "polygon", { "class": "s3e-arh", points: [x2, y, x2 - 9, y - 5, x2 - 9, y + 5].join(",") });
+  }
+
+  /* 1. The policy: preferences, softmax, probabilities, HEALTHY's roulette. */
+  function policyPic() {
+    var P = B.softmaxTable(D.W0), W = 300, H = 118, svg = board(W, H);
+    grid(svg, 14, 22, 17, 17);
+    svgText(svg, 39.5, 112, "PREFERENCES", "s3e-lab", "middle");
+    arrowR(svg, 72, 112, 56);
+    svgText(svg, 92, 47, "SOFTMAX", "s3e-lab", "middle");
+    grid(svg, 126, 22, 17, 17, function (g, s, a, x, y, w, h) {
+      add(g, "rect", { "class": "s3e-bar a" + a, x: x + 2, y: y + h - 5, width: Math.max(0.5, (w - 4) * P[s][a]), height: 3 });
+    });
+    svgText(svg, 151.5, 112, "PROBABILITIES", "s3e-lab", "middle");
+    arrowR(svg, 184, 212, 56);
+    // HEALTHY's roulette: one slot per action, as large as its probability, from the top, clockwise.
+    var cx = 252, cy = 56, r = 38, t = -Math.PI / 2;
+    P[0].forEach(function (p, a) {
+      var t2 = t + p * 2 * Math.PI, big = p > 0.5 ? 1 : 0;
+      add(svg, "path", { "class": "s3e-slot a" + a, d: "M" + cx + " " + cy + " L" + (cx + r * Math.cos(t)).toFixed(2) + " " + (cy + r * Math.sin(t)).toFixed(2) +
+        " A" + r + " " + r + " 0 " + big + " 1 " + (cx + r * Math.cos(t2)).toFixed(2) + " " + (cy + r * Math.sin(t2)).toFixed(2) + " Z" });
+      t = t2;
+    });
+    add(svg, "circle", { "class": "s3e-hub", cx: cx, cy: cy, r: 9 });
+    svgText(svg, cx, 112, "ROULETTE", "s3e-lab", "middle");
+    return svg;
+  }
+
+  /* 2. The forward pass: the first four episodes of scene 310 and their returns, then the average. */
+  function forwardPic() {
+    var runs = OB.runs.play(B.softmaxTable(D.W0), B.dice(D.seeds.dice, D.n), 4);
+    var w = el("div", "s3e-fwd");
+    var bk = OB.runs.block(runs, { compact: false, head: false, label: false, g1: true, places: 0 });
+    bk.classList.add("s3e-runs");
+    (bk.g1s || []).forEach(function (g) { g.classList.remove("ob-hide"); });
+    w.appendChild(bk);
+    w.appendChild(el("span", "s3e-brace"));
+    w.appendChild(OB.html("span", "s3e-avg", AVG));
+    return w;
+  }
+
+  /* 3. The backward pass: the triangle of the hop, schematic (no average is drawn to scale). */
+  function backwardPic() {
+    var W = 300, H = 118, svg = board(W, H), ax = { x: 30, y: 96, top: 4, right: 270 };
+    var Bp = { x: 104, y: 78 }, Ap = { x: 196, y: 30 };
+    add(svg, "line", { "class": "s3e-ax", x1: ax.x, y1: ax.y, x2: ax.right, y2: ax.y });
+    add(svg, "line", { "class": "s3e-ax", x1: ax.x, y1: ax.top, x2: ax.x, y2: ax.y });
+    svgText(svg, ax.x + 8, ax.top + 8, "AVERAGE RETURN", "s3e-lab", "start");
+    svgText(svg, ax.right, H - 2, "THE PREFERENCE", "s3e-lab", "end");
+    add(svg, "polygon", { "class": "s3e-tf", points: [Bp.x, Bp.y, Ap.x, Bp.y, Ap.x, Ap.y].join(",") });
+    add(svg, "line", { "class": "s3e-leg", x1: Bp.x, y1: Bp.y, x2: Ap.x, y2: Bp.y });
+    add(svg, "line", { "class": "s3e-leg s3e-up", x1: Ap.x, y1: Bp.y, x2: Ap.x, y2: Ap.y });
+    add(svg, "line", { "class": "s3e-hyp", x1: Bp.x, y1: Bp.y, x2: Ap.x, y2: Ap.y });
+    svgText(svg, (Bp.x + Ap.x) / 2, Bp.y + 15, "+" + EPS, "s3e-num", "middle");
+    svgText(svg, Ap.x + 8, (Bp.y + Ap.y) / 2 + 4, "UP", "s3e-lab s3e-gain", "start");
+    var nb = svgText(svg, (Bp.x + Ap.x) / 2 - 16, (Bp.y + Ap.y) / 2 - 4, String.fromCharCode(8711), "s3e-tex s3e-nab", "middle");
+    nb.setAttribute("font-size", "22");
+    add(svg, "rect", { "class": "s3e-pt s3e-old", x: Bp.x - 6, y: Bp.y - 6, width: 12, height: 12 });
+    add(svg, "rect", { "class": "s3e-pt", x: Ap.x - 6, y: Ap.y - 6, width: 12, height: 12 });
+    svgText(svg, Bp.x - 10, Bp.y + 4, "BEFORE", "s3e-lab", "end");
+    svgText(svg, Ap.x + 10, Ap.y + 4, "AFTER", "s3e-lab", "start");
+    return svg;
+  }
+
+  /* 4. The update: what is added, and the table of preferences with its entry lit. */
+  function updatePic() {
+    var w = el("div", "s3e-upd");
+    var svg = board(92, 104);
+    grid(svg, 18, 22, 22, 18, function (g, s, a, x, y, cw, ch) {
+      if (s === 0 && a === 0) add(g, "rect", { "class": "s3e-lit", x: x, y: y, width: cw, height: ch });
+    });
+    w.appendChild(OB.html("span", "s3e-add", tx("+\\,\\alpha\\nabla")));
+    w.appendChild(el("span", "s3e-into"));
+    w.appendChild(svg);
+    return w;
+  }
+
+  /* 5. Repeat: the learning curve of scene 420 and the policy it ends on. */
+  function repeatPic() {
+    var w = el("div", "s3e-rep");
+    var W = 190, H = 118, svg = board(W, H), x0 = 14, x1 = 186, yT = 10, yB = 98;
+    var lo = D.chart.lo, hi = D.chart.hi;
+    function Y(v) { return yB - (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (yB - yT); }
+    var pts = [D.start].concat(D.movie.map(function (r) { return r[3]; }));
+    function X(i) { return x0 + i / (pts.length - 1) * (x1 - x0); }
+    add(svg, "line", { "class": "s3e-ax", x1: x0, y1: yB, x2: x1, y2: yB });
+    add(svg, "line", { "class": "s3e-ax", x1: x0, y1: yT - 4, x2: x0, y2: yB });
+    add(svg, "line", { "class": "s3e-best", x1: x0, y1: Y(D.end.best), x2: x1, y2: Y(D.end.best) });
+    svgText(svg, x1, Y(D.end.best) - 6, "OPTIMAL POLICY", "s3e-lab", "end");
+    var line = add(svg, "polyline", { "class": "s3e-curve", points: pts.map(function (v, i) { return X(i).toFixed(1) + "," + Y(v).toFixed(1); }).join(" ") });
+    svgText(svg, x1, H - 4, LAST + " UPDATES", "s3e-lab", "end");
+    w.appendChild(svg);
+    w.appendChild(policyCol(TOP));
+    w.curve = line;
+    return w;
+  }
+
+  function humanPic() {
+    var w = el("div", "s3e-hum");
+    w.appendChild(OB.html("span", "s3e-face", art.face(6)));
+    w.appendChild(el("span", "s3e-into"));
+    w.appendChild(policyCol(B.EXAMPLE));
+    return w;
+  }
+
+  function card(i, c, pic) {
+    var k = el("div", "ob-box white s3e-card ob-hide" + (c.cls ? " " + c.cls : ""));
+    var h = el("div", "s3e-head");
+    h.appendChild(el("span", "s3e-no", String(i + 1)));
+    h.appendChild(el("span", "s3e-name", c.name));
+    k.appendChild(h);
+    var p = el("div", "s3e-pic");
+    p.appendChild(pic);
+    k.appendChild(p);
+    k.appendChild(OB.html("div", "s3e-cap", c.cap));
+    return k;
+  }
+
+  OB.scene({
+    page: 3, key: "summary", order: 430, title: "What we learned", beats: LEAD.length,
+    build: function (root) {
+      var P = this.parts = {};
+      P.lead = el("p", "ob-say s3e-lead");
+      root.appendChild(P.lead);
+      var g = el("div", "s3e-grid");
+      var pics = [humanPic(), policyPic(), forwardPic(), backwardPic(), updatePic(), repeatPic()];
+      P.rep = pics[5];
+      P.cards = CARDS.map(function (c, i) { var k = card(i, c, pics[i]); g.appendChild(k); return k; });
+      root.appendChild(g);
+    },
+    beat: function (k, api) {
+      var P = this.parts, go = api.forward && !api.instant && api.from === k - 1;
+      if (P.lead.dataset.k !== String(k)) {
+        P.lead.dataset.k = String(k);
+        P.lead.innerHTML = "<span>" + LEAD[k] + "</span>";
+        if (go) api.fade(P.lead, true, { dur: 900 });
+      }
+      P.cards.forEach(function (c, i) {
+        api.show(c, i <= k, { delay: i === k && go ? 250 : 0 });
+        c.classList.toggle("s3e-on", i === k);
+      });
+      // The learning curve draws itself from its start when its card comes with Next.
+      var cv = P.rep.curve, len = cv.getTotalLength ? cv.getTotalLength() : 0;
+      if (k === 5 && go && len) {
+        cv.style.strokeDasharray = len + " " + len;
+        cv.style.strokeDashoffset = String(len);
+        api.at(600, function () {
+          api.animate(2200, function (p) { cv.style.strokeDashoffset = String(len * (1 - p)); },
+            function () { cv.style.strokeDashoffset = "0"; });
+        });
       } else {
-        api.show(P.work, true);
-        api.show(P.Z.el, false);
+        cv.style.strokeDasharray = "";
+        cv.style.strokeDashoffset = "";
       }
     }
   });
