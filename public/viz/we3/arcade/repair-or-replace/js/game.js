@@ -101,7 +101,7 @@
     mode = m;
     stage.setAttribute("data-mode", m);
     if (window.Music && window.Music.setTrack) {
-      try { window.Music.setTrack(m === "title" ? "title" : m === "tutorial" ? "tutorial" : "boss"); } catch (e) { /* no music */ }
+      try { window.Music.setTrack(m); } catch (e) { /* no music */ }
     }
   }
 
@@ -505,6 +505,9 @@
     var have = STARS.filter(function (t) { return bank >= t; }).length;
     var b = K.best(BEST_KEY, bank);
     sfx(bank > 0 ? "win" : "loss");
+    if (window.Music && window.Music.setTrack) {
+      try { window.Music.setTrack("end", { gap: 1.4 }); } catch (e) { /* no music */ }
+    }
     endCard = K.endScreen(stage, {
       title: WEEKS + " WEEKS DONE!",
       big: money(bank),
