@@ -4,58 +4,85 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PRESS START</title>
-  <link rel="stylesheet" href="css/arcade.css">
+  <link rel="stylesheet" href="cover/cover.css">
 </head>
-<body>
-  <header class="top">
-    <span class="fs-host" data-fullscreen></span>
-  </header>
+<body class="hall">
+  <header class="top"><span class="fs-host" data-fullscreen></span></header>
+  <div class="floor" aria-hidden="true"></div>
 
-  <main class="arcade">
-    <h1 class="logo">PRESS START</h1>
-    <p class="prompt"><span class="blink">&#9654;</span> CHOOSE A GAME</p>
-
-    <nav class="carts" aria-label="Games">
-      <a class="cart" href="repair-or-replace/index.html" data-sprite="van" style="--acc:#9aa7ff">
-        <span class="cart-label"></span>
-        <span class="cart-sprite"></span>
-        <span class="cart-text">
-          <span class="cart-name">OLD BESSIE</span>
-          <span class="cart-sub">REPAIR OR REPLACE</span>
-          <span class="cart-blurb">One old van, 13 weeks. Drive her, fix her or buy new!</span>
+  <main class="cover">
+    <h1 class="sign"><span class="txt">PRESS START</span></h1>
+    <p class="tag">CHOOSE A GAME</p>
+    <nav class="row" aria-label="Games">
+      <a class="cart" href="repair-or-replace/index.html" style="--c:#E04A3A; --cd:#962519; --cl:#FFE3DD; --ct:#EC8F85">
+        <span class="glow" aria-hidden="true"></span>
+        <span class="cab">
+          <span class="mq"><span class="nm"><span class="l"><b>OLD</b> BESSIE</span></span></span>
+          <span class="bez">
+            <span class="sub">REPAIR OR REPLACE</span>
+            <span class="scr" data-scene="bessie" data-text="off"></span>
+          </span>
+          <span class="cp"><i class="stick" aria-hidden="true"></i><span class="play">PLAY</span><i class="btn" aria-hidden="true"></i></span>
+          <span class="bd">
+            <span class="card"><span class="blurb" data-sentence>One old van, 13 weeks. Drive her, fix her or buy new!</span></span>
+            <span class="door" aria-hidden="true"><i></i><i></i></span>
+          </span>
+          <span class="kick" aria-hidden="true"></span>
         </span>
       </a>
-      <a class="cart" href="anymal/index.html" data-sprite="robot" style="--acc:#60a5fa">
-        <span class="cart-label"></span>
-        <span class="cart-sprite"></span>
-        <span class="cart-text">
-          <span class="cart-name">ANYMAL</span>
-          <span class="cart-sub">TREAT HUNT</span>
-          <span class="cart-blurb">One robot dog, 100 steps. Grab the treats, dodge the ghosts!</span>
+      <a class="cart" href="anymal/index.html" style="--c:#2E8BE6; --cd:#1C62AE; --cl:#DCEEFF; --ct:#7DB7F0">
+        <span class="glow" aria-hidden="true"></span>
+        <span class="cab">
+          <span class="mq"><span class="nm"><span class="l"><b class="r">ANY</b>MAL</span></span></span>
+          <span class="bez">
+            <span class="sub">TREAT HUNT</span>
+            <span class="scr" data-scene="anymal" data-text="off"></span>
+          </span>
+          <span class="cp"><i class="stick" aria-hidden="true"></i><span class="play">PLAY</span><i class="btn" aria-hidden="true"></i></span>
+          <span class="bd">
+            <span class="card"><span class="blurb" data-sentence>One robot dog, 100 steps. Grab the treats, dodge the two ghosts!</span></span>
+            <span class="door" aria-hidden="true"><i></i><i></i></span>
+          </span>
+          <span class="kick" aria-hidden="true"></span>
         </span>
       </a>
-      <a class="cart" href="last-minute-pricing/index.html" data-sprite="tag" style="--acc:#ff8a3c">
-        <span class="cart-label"></span>
-        <span class="cart-sprite"></span>
-        <span class="cart-text">
-          <span class="cart-name">LAST-MINUTE PRICING</span>
-          <span class="cart-sub">FILL THE FLIGHT</span>
-          <span class="cart-blurb">One plane, 5 seats, 4 days to takeoff. Pick a price each day!</span>
+      <a class="cart" href="last-minute-pricing/index.html" style="--c:#F7A21B; --cd:#B86E00; --cl:#FFF0D2; --ct:#FAC572">
+        <span class="glow" aria-hidden="true"></span>
+        <span class="cab">
+          <span class="mq"><span class="nm"><span class="l s"><b>LAST-MINUTE</b></span> <span class="l">PRICING</span></span></span>
+          <span class="bez">
+            <span class="sub">FILL THE FLIGHT</span>
+            <span class="scr" data-scene="pricing" data-text="off"></span>
+          </span>
+          <span class="cp"><i class="stick" aria-hidden="true"></i><span class="play">PLAY</span><i class="btn" aria-hidden="true"></i></span>
+          <span class="bd">
+            <span class="card"><span class="blurb" data-sentence>One plane, 5 seats, 4 days to takeoff. Pick a price each day!</span></span>
+            <span class="door" aria-hidden="true"><i></i><i></i></span>
+          </span>
+          <span class="kick" aria-hidden="true"></span>
         </span>
       </a>
-      <a class="cart" href="pokemon-battle/index.html" data-sprite="pokeball" style="--acc:#ffe000">
-        <span class="cart-label"></span>
-        <span class="cart-sprite"></span>
-        <span class="cart-text">
-          <span class="cart-name">POKEMON BATTLE</span>
-          <span class="cart-sub"></span>
-          <span class="cart-blurb">A wild CHARMANDER appeared!</span>
+      <a class="cart" href="pokemon-battle/index.html" style="--c:#8E5BD9; --cd:#6A3FB0; --cl:#EEE4FF; --ct:#B999E7">
+        <span class="glow" aria-hidden="true"></span>
+        <span class="cab">
+          <span class="mq"><span class="nm"><span class="l s"><b class="p">POKEMON</b></span> <span class="l">BATTLE</span></span></span>
+          <span class="bez">
+            <span class="sub dots" aria-hidden="true"></span>
+            <span class="scr" data-scene="battle" data-text="off"></span>
+          </span>
+          <span class="cp"><i class="stick" aria-hidden="true"></i><span class="play">PLAY</span><i class="btn" aria-hidden="true"></i></span>
+          <span class="bd">
+            <span class="card"><span class="blurb" data-sentence>Pick one of 3 moves each turn. Win the battle!</span></span>
+            <span class="door" aria-hidden="true"><i></i><i></i></span>
+          </span>
+          <span class="kick" aria-hidden="true"></span>
         </span>
       </a>
     </nav>
   </main>
 
-  <script src="js/arcade.js"></script>
-  <script src="js/fullscreen.js"></script>
+  <script src="cover/art.js"></script>
+  <script src="cover/cover.js"></script>
+  <script src="cover/fullscreen.js"></script>
 </body>
 </html>
