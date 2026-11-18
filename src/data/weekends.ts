@@ -762,7 +762,17 @@ export const weekends: Weekend[] = [
       { time: '16:00', title: 'Guest lecture: Alina Dubatovka', type: 'lecture' },
     ],
     saturday: [
-      { time: '08:15', title: 'Preparation for the project', type: 'project' },
+      {
+        time: '08:15',
+        title: 'RL with representations',
+        type: 'lecture',
+        // "Coupon of the Week", from w3-cx-private 06_coupon_of_the_week (Carlos, 2026-11-18: "I want to teach them how
+        // representations come in reinforcement learning"): a supermarket app sends one coupon a week; the state s is a
+        // row of 24 numbers, z = s W, the action preferences theta = z E, softmax, the roulette, and proto-REINFORCE on
+        // the weights of W and E. Published at his "Publish" of 2026-11-18. The row follows the Syllabus tab of that
+        // day, where "RL with representations" is Saturday 08:00; until then it was "Preparation for the project".
+        links: [{ label: 'Coupon of the Week', url: viz(3, 'coupon-of-the-week') }],
+      },
       { time: '09:00', title: 'Preparation for the project', type: 'exercise' },
       { time: '10:00', title: 'Coffee break outside the classroom, until 10:30', type: 'break' },
       { time: '10:30', title: 'More preparation for the project', type: 'project' },
