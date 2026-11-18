@@ -1057,9 +1057,14 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
        preference for a wrong action stalls the learning: softmax gives that action a probability near 1, and a hop of
        its preferences changes almost nothing), and (5) reads right in the softmax aside with three decimals (every e to
        the power of a preference above 0.000, every shown sum the sum of its row's shown numbers). The entry is drawn by
-       B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 episodes on B.dice(12, 1000). Shown with two
-       decimals: average return before -172.24, after -170.50, change 1.74, nabla 174, theta = 0.40 + 0.01 x 174 = 2.14,
-       average return after the update 73.57 (same dice). */
+       B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 episodes on B.dice(12, 1000).
+       Since 2026-11-18 the hop eps is 0.02 and the step size alpha 0.01 (Carlos: "we should use an alpha different from
+       the hop size because it's getting confusing ... let the hop be 0.02 and the alpha be 0.01"). The averages are
+       shown with two decimals; nabla = change / 0.02 exactly (a multiple of 0.5, shown with one decimal when it is not
+       whole); the new preference theta + 0.01 x nabla is exact with three decimals and kept so (no rounding), shown
+       with two decimals, or three when the third is not 0. Round 1: average return before -172.24, after -167.87,
+       change 4.37, nabla 4.37 / 0.02 = 218.5, theta = 0.40 + 0.01 x 218.5 = 2.585, average return after the update
+       105.60 (same dice). Criterion (4) holds with the movie's dice base 12000 of tools/proto_movie.js. */
     PROTO: {
       betsSeed: 17,
       betsXSeed: 68,
@@ -1068,7 +1073,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       pick: [HEALTHY, RUN],
       diceSeed: 12,
       n: 1000,
-      eps: 0.01,
+      eps: 0.02,
       alpha: 0.01,
     },
   };
@@ -1199,6 +1204,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         if (t0 === null) t0 = now;
         var p = Math.min(1, (now - t0) / dur);
         safe(function () { tick(ease(p)); });
+        arrowsSoon();
         if (p >= 1) finish(); else requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
@@ -1334,6 +1340,18 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var p = side(a, fs), q = side(b, ts);
     var x1 = p.x + p.dx * gap - o.left, y1 = p.y + p.dy * gap - o.top;
     var x2 = q.x + q.dx * gap - o.left, y2 = q.y + q.dy * gap - o.top;
+    /* Straight arrows run exactly level or exactly plumb (Carlos, 2026-11-18: "make sure that the arrows are well
+       parallel"): two boxes of different heights side by side are joined at the middle of the band they share, so
+       both ends sit on one y; two boxes one above the other at the middle of the columns they share. An elbow whose
+       ends would differ by less than 3 px is drawn straight the same way, without a kink. */
+    var lr = function (sd) { return sd === "left" || sd === "right"; };
+    if (lr(fs) && lr(ts)) {
+      var t0 = Math.max(a.top, b.top), b0 = Math.min(a.bottom, b.bottom);
+      if (b0 > t0 && (!A.opts.elbow || Math.abs(y2 - y1) < 3)) y1 = y2 = (t0 + b0) / 2 - o.top;
+    } else if (!lr(fs) && !lr(ts)) {
+      var l0 = Math.max(a.left, b.left), r0 = Math.min(a.right, b.right);
+      if (r0 > l0 && (!A.opts.elbow || Math.abs(x2 - x1) < 3)) x1 = x2 = (l0 + r0) / 2 - o.left;
+    }
     var pts = [[x1, y1]];
     if (A.opts.elbow && x1 !== x2 && y1 !== y2) {
       if (fs === "left" || fs === "right") pts.push([(x1 + x2) / 2, y1], [(x1 + x2) / 2, y2]);
@@ -1376,7 +1394,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var ov = overlayOf(s), A = s.arrows[id];
     if (A) { A.from = from; A.to = to; A.opts = opts; drawArrow(s, A); return Promise.resolve(); }
     A = { id: id, from: from, to: to, opts: opts, p: 0, color: opts.color || null };
-    A.svg = svgEl("svg", { "class": "ob-arrow", width: "1", height: "1" });
+    A.svg = svgEl("svg", { "class": "ob-arrow", "data-id": id, width: "1", height: "1" });
     A.line = svgEl("polyline", {});
     A.head = svgEl("polygon", {});
     A.svg.appendChild(A.line);
@@ -1405,6 +1423,18 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var s = scenes[cur];
     if (s && s.arrows) Object.keys(s.arrows).forEach(function (k) { drawArrow(s, s.arrows[k]); });
     fitPager();
+  }
+  /* While a motion runs, the arrows of the scene follow the boxes they join (a stack that grows, a table that fades
+     in), once per frame. */
+  var arrowsQueued = false;
+  function arrowsSoon() {
+    if (arrowsQueued) return;
+    arrowsQueued = true;
+    requestAnimationFrame(function () {
+      arrowsQueued = false;
+      var s = scenes[cur];
+      if (s && s.arrows) Object.keys(s.arrows).forEach(function (k) { drawArrow(s, s.arrows[k]); });
+    });
   }
   var relayoutQueued = false;
   function relayoutSoon() {
@@ -2964,7 +2994,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       done: function (natural) {
         if (dot.parentNode) dot.parentNode.removeChild(dot);
         if (natural && A.head) {
-          A.head.classList.add("fx-head");
+          // No marker class on the head: nothing styles it, and a class left after a natural draw made the arrow
+          // differ from its rest state when Back redraws the beat (tools/interrupt.mjs, 2026-11-18).
           OB.animate(380, function (p) { var t = lin(p); A.head.style.scale = (1 + 0.55 * wobble(t) * Math.min(1, t * 10)).toFixed(4); },
             function () { A.head.style.scale = ""; });
         }

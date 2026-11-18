@@ -489,12 +489,14 @@ sup { top: -0.55em; }
 </style>
 <style>/* sec3a.css */
 /* sec3a.css: page 3, "Try it", scenes 100 to 199 (agent A4a, 2026-11-14; the what-if of beat 5 by agent U,
-   2026-11-16); sec3a.js has the scenes. Classes s3a-.
+   2026-11-16; the fan and the two histograms by agent TRY, 2026-11-18); sec3a.js has the scenes. Classes s3a-.
    Beats 1 to 4 on a desk: the sketch's row, the column, its episodes, their average; Done under the column. A phone
-   stacks them, the keypad under the column.
-   Beat 5 on a desk: the column, BEFORE and AFTER in a row; under the column the menu of the picked state, under BEFORE
-   and AFTER the two averages with the arrow of the change, Keep and Leave beside them. Below 1040 px: the column and
-   the menu side by side, the averages, then BEFORE and AFTER one under the other (the page may scroll). */
+   stacks them.
+   The fan (beats 1 and 5): three round glyph buttons on curved connectors out of the tapped entry, laid over the
+   scene (.s3a-root is its containing block); sec3a.js places it right of the entry, left of it or under it.
+   Beat 5 on a desk: the column with Keep and Leave under it, the chart of BEFORE and AFTER, the ten episodes of each
+   stacked on the right. Below 1040 px the episodes go under the chart; on a phone everything stacks (the page
+   scrolls). The chart's inner geometry is set in px by sec3a.js from its size here. */
 
 .s3a-lead { font-size: calc(calc(13px * var(--tx)) * var(--fz, 1)); line-height: calc(1.6 * var(--lh, 1)); max-width: 64ch; min-height: 2.5em; }
 
@@ -544,112 +546,6 @@ sup { top: -0.55em; }
 .s3a-sym { font-size: calc(calc(14px * var(--tx)) * var(--fz, 1)); line-height: calc(1.3 * var(--lh, 1)); }
 .s3a-av { display: inline-block; min-width: 5em; text-align: center; font-size: calc(calc(18px * var(--tx)) * var(--fz, 1)); line-height: 1.2; white-space: nowrap; }
 
-/* The keypad of beat 1: beside the selected entry on a desk (sec3a.js places it), under the column on a phone. The
-   keys serve the menu of beat 5 too. */
-.s3a-pad {
-  position: absolute; z-index: 6; left: 100%; top: 0;
-  display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 10px;
-  background: var(--box); border: 4px solid var(--ink); box-shadow: 6px 6px 0 0 rgba(24, 24, 24, 0.22);
-}
-.s3a-key {
-  display: inline-flex; align-items: center; gap: 0.6em; white-space: nowrap;
-  font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1; padding: 0.75em 0.9em 0.65em;
-  border: 3px solid currentColor; border-radius: 0; cursor: pointer; touch-action: manipulation;
-}
-.s3a-key svg { flex: 0 0 auto; }
-.s3a-key.a0 { color: var(--run); background: var(--run-soft); }
-.s3a-key.a1 { color: #9A5E00; background: var(--service-soft); border-color: var(--service); }
-.s3a-key.a2 { color: var(--replace); background: var(--replace-soft); }
-.s3a-key[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 2px; }
-.s3a-edit .tb-e { cursor: pointer; }
-.s3a-edit .tb-e:focus-visible { outline: 4px solid var(--ink); outline-offset: -4px; }
-@media (hover: hover) {
-  .s3a-edit .tb-e:hover { background: var(--yellow); }
-  .s3a-key:not(:disabled):hover { filter: brightness(0.94); }
-}
-
-/* Beat 5, the what-if. */
-.s3a-wi {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  grid-template-areas: "col bef aft" "menu avg avg";
-  column-gap: calc(10px * var(--tx)); row-gap: calc(10px * var(--tx));
-  justify-content: center; align-items: start;
-}
-.s3a-wcol { grid-area: col; display: flex; flex-direction: column; align-items: center; }
-.s3a-menu { grid-area: menu; display: flex; flex-direction: column; align-items: center; }
-.s3a-side.bef { grid-area: bef; }
-.s3a-side.aft { grid-area: aft; }
-.s3a-avgs { grid-area: avg; display: flex; align-items: center; justify-content: center; }
-
-/* The menu: the three actions of the picked state, the current one marked NOW. */
-.s3a-mkeys { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
-.s3a-mkey { justify-content: flex-start; }
-.s3a-kname { flex: 1 1 auto; text-align: left; }
-.s3a-now {
-  margin-left: 0.5em; padding: 0.3em 0.45em 0.25em; font-size: 0.75em; letter-spacing: 0.08em;
-  background: var(--box); color: var(--ink);
-}
-.s3a-mkey:disabled { cursor: default; }
-
-/* BEFORE and AFTER: a head (caption, the picked state and its action), then the ten episodes. */
-.s3a-side { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 14px 12px; }
-.s3a-shead { display: flex; align-items: center; gap: 8px; min-height: calc(calc(11px * var(--fz, 1)) * 2.1); }
-.s3a-scap, .s3a-gcap {
-  font-family: var(--disp, inherit); font-weight: 700;
-  font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1.2; color: var(--ink2); letter-spacing: 0.08em;
-}
-.s3a-scap { margin-right: 4px; }
-.s3a-chips { display: flex; gap: 6px; }
-.s3a-chips .ob-chip { font-size: calc(11px * var(--fz, 1)); }
-.s3a-qchip { color: var(--ink2); }
-.s3a-slot { position: relative; }
-.s3a-slot .runs-block { --rc: calc(10px + 6px * var(--tx)); }
-.s3a-slot .runs-no { width: 1.4em; }
-.s3a-slot .runs-wk { font-size: calc(calc(6.5px * var(--tx)) * var(--fz, 1)); }
-.s3a-slot .runs-g1 { min-width: 4.3em; font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); }
-/* The cells of the picked state. */
-.s3a-slot .runs-cell.s3a-use { box-shadow: inset 0 0 0 2px var(--ink); }
-
-/* The averages: BEFORE, the arrow with the change on it and UP or DOWN under it, AFTER. */
-.s3a-gbox { display: inline-flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 18px 12px; min-width: calc(150px + 30px * var(--tx)); }
-.s3a-gname {
-  display: inline-block; white-space: nowrap;
-  font-family: var(--disp, inherit); font-weight: 700; letter-spacing: 0.06em;
-  font-size: calc(11px * var(--fz, 1)); line-height: 1; padding: 0.55em 0.7em 0.5em;
-  background: var(--ink); color: #FFFFFF;
-}
-.s3a-gn { font-weight: 700; font-size: calc(calc(26px * (1 + (var(--tx) - 1) * 0.692)) * var(--fz, 1)); line-height: 1; white-space: nowrap; }
-.s3a-mid { position: relative; align-self: stretch; width: calc(110px + 40px * var(--tx)); min-height: 90px; }
-.s3a-mline { position: absolute; left: 10px; right: 22px; top: 50%; height: 4px; margin-top: -2px; background: var(--ink); }
-.s3a-mline::after {
-  content: ""; position: absolute; right: -14px; top: 50%; transform: translateY(-50%);
-  border-left: 14px solid var(--ink); border-top: 9px solid transparent; border-bottom: 9px solid transparent;
-}
-.s3a-mlab, .s3a-mword { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; line-height: 1; }
-.s3a-mlab {
-  bottom: calc(50% + 12px); padding: 6px 8px 5px; font-weight: 700; font-variant-numeric: tabular-nums lining-nums;
-  font-size: calc(calc(13px * var(--tx)) * var(--fz, 1)); background: var(--ink); color: #FFFFFF;
-}
-.s3a-mword {
-  top: calc(50% + 14px); font-family: var(--disp, inherit); font-weight: 700; letter-spacing: 0.08em;
-  font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); color: var(--ink2);
-}
-.s3a-mid.higher .s3a-mword { color: var(--gain); }
-.s3a-mid.lower .s3a-mword { color: var(--loss); }
-.s3a-wctl { display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-left: calc(14px * var(--tx)); }
-
-/* Below 1040 px: the column and the menu side by side, the averages, BEFORE, AFTER. */
-@media (max-width: 1040px) {
-  .s3a-wi {
-    grid-template-columns: auto auto;
-    grid-template-areas: "col menu" "avg avg" "bef bef" "aft aft";
-    justify-items: center; align-items: center;
-  }
-  .s3a-menu { justify-self: start; }
-  .s3a-avgs { flex-wrap: wrap; }
-}
-
 @media (max-width: 560px) {
   .s3a-lead { font-size: calc(12px * var(--fz, 1)); min-height: 0; }
   .s3a-dia {
@@ -663,23 +559,159 @@ sup { top: -0.55em; }
     border-top: 12px solid var(--ink); border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 0;
   }
   .s3a-hold .runs-block { --rc: 17px; }
-  .s3a-pad { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; margin-top: 10px; box-shadow: none; }
-  .s3a-key { font-size: calc(9px * var(--fz, 1)); }
+}
 
-  .s3a-wi { column-gap: 8px; row-gap: 12px; }
-  .s3a-mkeys { gap: 6px; }
-  .s3a-side { padding: 8px 8px 10px; }
-  .s3a-slot .runs-block { --rc: 17px; }
-  .s3a-slot .runs-g1 { min-width: 4.4em; font-size: calc(9px * var(--fz, 1)); }
-  .s3a-avgs { flex-wrap: wrap; row-gap: 10px; }
-  .s3a-gbox { min-width: 0; padding: 8px 10px 10px; gap: 6px; }
-  .s3a-gname { font-size: calc(9px * var(--fz, 1)); }
-  .s3a-gn { font-size: calc(18px * var(--fz, 1)); }
-  .s3a-mid { width: 92px; min-height: 80px; }
-  .s3a-mline { left: 4px; right: 16px; }
-  .s3a-mlab { font-size: calc(11px * var(--fz, 1)); padding: 5px 6px 4px; }
-  .s3a-mword { font-size: calc(9px * var(--fz, 1)); }
-  .s3a-wctl { flex-direction: row; margin-left: 0; width: 100%; justify-content: center; gap: 14px; }
+.s3a-root { position: relative; }
+
+/* The fan. */
+.s3a-fan { position: absolute; left: 0; top: 0; width: 0; height: 0; overflow: visible; z-index: 30; }
+.s3a-flines { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.s3a-fline { fill: none; stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.s3a-fdot { fill: var(--ink); transform-box: fill-box; transform-origin: center; }
+.s3a-fk {
+  position: absolute; display: flex; align-items: center; gap: 8px; padding: 0; margin: 0;
+  background: none; border: 0; cursor: pointer; touch-action: manipulation; white-space: nowrap;
+}
+.s3a-fan.left .s3a-fk { flex-direction: row-reverse; }
+.s3a-fan.below .s3a-fk, .s3a-fan.stack .s3a-fk { flex-direction: column; gap: 5px; }
+.s3a-fan.s3a-closing { pointer-events: none; }
+.s3a-fdisc {
+  position: relative; flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+  width: 54px; height: 54px; border-radius: 50%; border: 3px solid var(--ink); box-shadow: 3px 3px 0 0 var(--ink);
+  color: #FFFFFF; transition: transform 120ms ease-out;
+}
+.s3a-fk.a0 .s3a-fdisc { background: var(--run); }
+.s3a-fk.a1 .s3a-fdisc { background: var(--service); color: var(--ink); }
+.s3a-fk.a2 .s3a-fdisc { background: var(--replace); }
+.s3a-fname {
+  font-family: var(--sign); font-size: calc(11px * var(--fz, 1)); line-height: 1; letter-spacing: 0.04em;
+  padding: 5px 7px 4px; background: #FFFFFF; border: 2.5px solid var(--ink); border-radius: 999px; color: var(--ink);
+}
+.s3a-fnow {
+  position: absolute; left: 50%; top: -9px; transform: translateX(-50%);
+  font-family: var(--sign); font-size: 9px; line-height: 1; padding: 3px 5px 2px; border-radius: 6px;
+  background: var(--yellow); color: var(--ink); border: 2px solid var(--ink);
+}
+.s3a-fk.s3a-isnow .s3a-fdisc { box-shadow: 0 0 0 4px var(--yellow), 0 0 0 6.5px var(--ink); }
+.s3a-fk:disabled { cursor: default; }
+.s3a-fk:disabled .s3a-fdisc { filter: saturate(0.55); }
+.s3a-fk[aria-pressed="true"] .s3a-fname { background: var(--ink); color: #FFFFFF; }
+.s3a-fk:focus-visible { outline: none; }
+.s3a-fk:focus-visible .s3a-fdisc { outline: 3px solid var(--ink); outline-offset: 3px; }
+@media (hover: hover) {
+  .s3a-fk:not(:disabled):hover .s3a-fdisc { transform: scale(1.08); }
+  .s3a-edit .tb-e:hover { background: var(--yellow); }
+}
+.s3a-edit .tb-e { cursor: pointer; }
+.s3a-edit .tb-e:focus-visible { outline: 4px solid var(--ink); outline-offset: -4px; }
+
+/* Beat 5, the what-if. */
+.s3a-wi {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "col chart eps" "ctl chart eps";
+  column-gap: calc(12px * var(--tx)); row-gap: 14px;
+  justify-content: center; align-items: start; padding-top: 4px;
+}
+.s3a-wcol { grid-area: col; display: flex; flex-direction: column; align-items: center; }
+.s3a-wctl { grid-area: ctl; display: flex; justify-content: center; gap: 12px; }
+.s3a-eps { grid-area: eps; display: flex; flex-direction: column; gap: 10px; }
+
+/* The chart. */
+.s3a-chart { grid-area: chart; position: relative; width: calc(470px + 60px * var(--tx)); height: calc(330px + 60px * var(--tx)); }
+.s3a-chart > * { position: absolute; }
+.s3a-pan { background: #FFFFFF; border: 3px solid var(--ink); border-radius: 12px; box-shadow: 4px 4px 0 0 var(--ink); box-sizing: border-box; }
+.s3a-gsvg, .s3a-asvg { left: 0; top: 0; overflow: visible; pointer-events: none; }
+.s3a-gl { stroke: #E4DDF2; stroke-width: 1; }
+.s3a-gl.zero { stroke: var(--ink2); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.s3a-tk {
+  transform: translateY(-50%); white-space: nowrap; line-height: 1; text-align: right;
+  font-size: calc(10px * var(--fz, 1)); font-weight: 700; color: var(--ink2); font-variant-numeric: tabular-nums lining-nums;
+}
+.s3a-axt { transform: translateY(-100%); font-size: calc(13px * var(--fz, 1)); line-height: 1; }
+.s3a-chd { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow: hidden; }
+.s3a-ccap { font-family: var(--disp, inherit); font-weight: 700; font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1.2; color: var(--ink2); letter-spacing: 0.08em; }
+.s3a-chips { display: flex; gap: 4px; }
+.s3a-chips .ob-chip { font-size: calc(9.5px * var(--fz, 1)); }
+.s3a-chips .ob-chip svg { width: 14px; height: 14px; }
+.s3a-qchip { color: var(--ink2); }
+.s3a-cph {
+  display: flex; align-items: center; justify-content: center; box-sizing: border-box;
+  border: 3px dashed var(--ink2); border-radius: 10px; color: var(--ink2); font-family: var(--sign);
+  font-size: calc(24px * var(--fz, 1)); line-height: 1;
+}
+/* An episode: a chip with its number in its bin. */
+.s3a-ep {
+  box-sizing: border-box; display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--ink); border-radius: 4px; background: var(--box);
+  font-weight: 700; font-size: var(--chip-fs, 11px); line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums;
+  cursor: default; z-index: 2;
+}
+.s3a-ep.gain { background: var(--gain); }
+.s3a-ep.loss { background: var(--loss); }
+.s3a-ep.zero { background: var(--ink2); }
+.s3a-ep.s3a-lit { box-shadow: 0 0 0 2.5px var(--yellow), 0 0 0 4.5px var(--ink); z-index: 3; }
+.s3a-tiny .s3a-ep { font-size: 0; }
+/* The lines at the averages, their amounts, BEFORE's line across AFTER, the arrow and its tag. */
+.s3a-mk { background: var(--ink); border-radius: 2px; box-shadow: 0 0 0 1.5px #FFFFFF; z-index: 1; }
+.s3a-mtag {
+  z-index: 5; padding: 4px 6px 3px; background: #FFFFFF; border: 2.5px solid var(--ink); border-radius: 8px;
+  white-space: nowrap; line-height: 1;
+}
+.s3a-gn { font-family: var(--sign); font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); line-height: 1; white-space: nowrap; }
+.s3a-asvg { z-index: 5; }
+.s3a-ghost { stroke: var(--ink); stroke-width: 2.5; stroke-dasharray: 6 5; opacity: 0.55; }
+.s3a-aline { stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; stroke: var(--ink2); }
+.s3a-ahead { fill: var(--ink2); }
+.s3a-atag {
+  z-index: 6; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 5px 7px 4px; border: 2.5px solid var(--ink); border-radius: 9px; box-shadow: 2px 2px 0 0 var(--ink);
+  background: var(--ink2); color: #FFFFFF; white-space: nowrap; line-height: 1;
+}
+.s3a-mlab { font-family: var(--sign); font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); font-variant-numeric: tabular-nums lining-nums; }
+.s3a-mword { font-family: var(--disp, inherit); font-weight: 700; letter-spacing: 0.1em; font-size: calc(9px * var(--fz, 1)); }
+.s3a-atag.higher { background: var(--gain); }
+.s3a-atag.lower { background: var(--loss); }
+.s3a-asvg.higher .s3a-aline { stroke: var(--gain); }
+.s3a-asvg.higher .s3a-ahead { fill: var(--gain); }
+.s3a-asvg.lower .s3a-aline { stroke: var(--loss); }
+.s3a-asvg.lower .s3a-ahead { fill: var(--loss); }
+.s3a-small .s3a-tk { font-size: 9px; }
+.s3a-small .s3a-mtag { padding: 3px 4px 2px; }
+.s3a-small .s3a-gn, .s3a-small .s3a-mlab { font-size: 10px; }
+.s3a-small .s3a-ccap { font-size: 10px; }
+.s3a-small .s3a-chd { flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; }
+.s3a-small .s3a-chips .ob-chip { font-size: 8px; }
+
+/* The episodes of BEFORE and AFTER, small. */
+.s3a-side { display: flex; flex-direction: column; align-items: stretch; gap: 4px; padding: 6px 10px 8px; }
+.s3a-scap { font-family: var(--disp, inherit); font-weight: 700; font-size: calc(10px * var(--fz, 1)); line-height: 1.2; color: var(--ink2); letter-spacing: 0.08em; }
+.s3a-slot { position: relative; }
+.s3a-slot .runs-block { --rc: calc(5px + 6px * var(--tx)); gap: 1px; }
+.s3a-slot .runs-row { gap: 4px; }
+.s3a-slot .runs-cells { gap: 1px; }
+.s3a-slot .runs-no { width: 1.4em; font-size: calc(7px * var(--fz, 1)); }
+.s3a-slot .runs-wk { font-size: calc(5.5px * var(--fz, 1)); }
+.s3a-slot .runs-g1 { min-width: 3.9em; font-size: calc(7.5px * var(--fz, 1)); }
+.s3a-slot .runs-cell.s3a-use { box-shadow: inset 0 0 0 2px var(--ink); }
+.s3a-slot .runs-row.s3a-lit { outline: 2.5px solid var(--ink); outline-offset: 1px; background: var(--yellow); border-radius: 3px; }
+
+/* Below 1040 px: the episodes under the chart, side by side. */
+@media (max-width: 1040px) {
+  .s3a-wi { grid-template-columns: auto auto; grid-template-areas: "col chart" "ctl chart" "eps eps"; }
+  .s3a-eps { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+}
+@media (max-width: 560px) {
+  .s3a-wi { grid-template-columns: auto 1fr; grid-template-areas: "col ctl" "chart chart" "eps eps"; column-gap: 8px; justify-content: stretch; }
+  .s3a-wcol { justify-self: start; }
+  .s3a-wctl { flex-direction: column; align-self: center; }
+  .s3a-chart { width: 100%; height: 330px; justify-self: center; }
+  .s3a-eps { flex-direction: column; align-items: center; }
+  .s3a-slot .runs-block { --rc: 14px; }
+  .s3a-fdisc { width: 46px; height: 46px; }
+  .s3a-fdisc svg { width: 22px; height: 22px; }
+  .s3a-fname { font-size: 9.5px; }
 }
 </style>
 <style>/* sec3a2.css */
@@ -721,6 +753,27 @@ sup { top: -0.55em; }
   .s3h-arr { width: 26px; margin-right: 10px; }
   .s3h-pc svg { width: 66px; height: auto; }
   .s3h-next { transform: rotate(90deg); margin: 6px 0 10px; }
+}
+
+/* The optimal policy (agent OPT, 2026-11-18): beat 1 of scene 190 and scene 425 (sec3f.js) show B.BEST in the same
+   look, classes s3o-: a column captioned OPTIMAL POLICY in the look's red, its entries on a gold ground, and under it
+   in scene 190 its average return on Try it's ten episodes. */
+.s3o-mine { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.tb.s3o-opt .tb-e { background: #FFF1B8; transition: background-color 0.9s ease; }
+.tb.s3o-opt .tb-cap {
+  font-family: var(--sign); color: var(--red); letter-spacing: 0.06em; white-space: nowrap; max-width: none;
+}
+.s3o-avg {
+  font-size: calc(calc(15px * var(--tx)) * var(--fz, 1)); line-height: 1; padding: 6px 12px 7px;
+  border: 3px solid var(--ink); border-radius: 10px; background: var(--white); white-space: nowrap;
+}
+.s3o-tick { display: inline-block; line-height: 0; }
+.s3o-tick svg { width: 100%; height: 100%; fill: none; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+.s3o-tick.yes svg { stroke: #108A50; }
+.s3o-tick.no svg { stroke: var(--red); }
+
+@media (max-width: 560px) {
+  .s3o-avg { font-size: calc(12px * var(--fz, 1)); padding: 4px 8px 5px; }
 }
 </style>
 <style>/* sec3b-policy.css */
@@ -893,6 +946,11 @@ sup { top: -0.55em; }
   .s3b-ex { font-size: calc(20px * var(--fz, 1)); gap: 10px; padding: 10px 14px 8px; }
   .s3b-eqline { font-size: calc(9px * var(--fz, 1)); }
 }
+
+/* 240. A probability cell and the preference that gives it, lit together while the table builds (2026-11-18). */
+.tb-c.s3b-pair { background: #D9F4FC; box-shadow: inset 0 0 0 4px var(--cyan); }
+.s3b-rows .tb-c { transition: background-color 0.3s ease, box-shadow 0.3s ease; }
+html.fx-still .s3b-rows .tb-c { transition: none; }
 </style>
 <style>/* sec3c-runs.css */
 /* sec3c-runs.css: the episodes of the proto-REINFORCE diagram (agent W, 2026-11-16), OB.s3cRuns in sec3c-runs.js.
@@ -1318,6 +1376,31 @@ sup { top: -0.55em; }
   .s3d-uwork { font-size: calc(14px * var(--fz, 1)); padding: 10px 12px; }
   .s3d-rcol { width: 100%; }
 }
+
+/* Since 2026-11-18 (agent HOP): 360's sides show only their differences, the two numbers of each lit on the axis
+   (s3d-plit, a yellow box under an axis number); theta indexed by icons (sec3c-text.js, TH): the boxes ob-ics0 to 3
+   (the van of a state) and ob-ica0 to 2 (the glyph of an action), painted by sec3c-text.js, used on every scene of
+   page 3. */
+.s3d-plit { fill: var(--yellow); transition: opacity 0.35s ease; }
+.s3d-cx .s3d-cr, .s3d-cy .s3d-cr { font-size: 1.3em; }
+.s3d-cy { transform: translateY(-50%); }
+.s3d-closs { color: var(--loss); }
+.ob-ics0, .ob-ics1, .ob-ics2, .ob-ics3, .ob-ica0, .ob-ica1, .ob-ica2 {
+  display: inline-block; overflow: hidden; color: transparent;
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+.ob-ics0, .ob-ics1, .ob-ics2, .ob-ics3 { width: 1.3em; height: 0.72em; vertical-align: -0.08em; }
+.ob-ica0, .ob-ica1, .ob-ica2 { width: 0.8em; height: 0.8em; margin-left: 0.08em; vertical-align: -0.12em; }
+/* 370: the left side of the update worked out holds theta with its icons. */
+.s3d-uwork .s3d-wl { width: 2.3em; }
+/* 370: the update with theta's icons stays clear of the sign cards on a desk. */
+@media (min-width: 1000px) {
+  .s3d-uform .s3d-us { font-size: calc(calc(28px * (1 + (var(--tx) - 1) * 0.154)) * var(--fz, 1)); padding: 4px 4px 2px; }
+  .s3d-uform .s3d-upf { gap: calc(4px * var(--tx)); }
+}
+@media (min-width: 1000px) and (max-width: 1279px) {
+  .s3d-uform .s3d-us { font-size: calc(calc(25px * (1 + (var(--tx) - 1) * 0.154)) * var(--fz, 1)); }
+}
 </style>
 <style>/* sec3e.css */
 /* sec3e.css: page 3, scene 430 "What we learned" (sec3e.js, main session, 2026-11-17). Classes start with s3e-.
@@ -1407,6 +1490,27 @@ sup { top: -0.55em; }
   .s3e-name { font-size: calc(13px * var(--fz, 1)); }
   .s3e-cap { font-size: calc(10px * var(--fz, 1)); }
   .s3e-pic { height: auto; min-height: 100px; }
+}
+</style>
+<style>/* sec3f.css */
+/* sec3f.css: page 3, scene 425 "Computer meets human" (sec3f.js, agent OPT, 2026-11-18). Classes start with s3o-;
+   the column OPTIMAL POLICY takes its look from sec3a2.css (s3o-opt, s3o-tick). */
+
+.s3o-lead { max-width: 34em; margin: 0 auto; text-align: center; min-height: calc(2.6em * var(--lh, 1)); }
+.s3o-dia { display: flex; align-items: flex-start; justify-content: center; margin-top: calc(14px * var(--tx)); }
+/* The gap the arrows cross, row by row; the column has no vans and lines up with the table's rows. */
+.s3o-gap { flex: 0 0 auto; width: 72px; }
+.s3o-dia .tb-col .tb-e { position: relative; }
+.s3o-dia .s3o-tick { position: absolute; right: -40px; top: 50%; width: 30px; height: 30px; margin-top: -15px; }
+.s3o-dia .tb-col { margin-right: 44px; }
+.s3o-dia .tb-col .tb-e.s3o-hit { background: var(--yellow); }
+
+@media (max-width: 560px) {
+  .s3o-dia .tb.tb-m { --tb-cw: 52px; --tb-hw: 42px; --tb-van: 32px; --tb-ew: 90px; }
+  .s3o-dia .tb.s3o-tab .tb-cap { white-space: normal; line-height: 1.2; max-width: calc(var(--tb-hw) + 3 * var(--tb-cw)); }
+  .s3o-gap { width: 22px; }
+  .s3o-dia .tb-col { margin-right: 24px; }
+  .s3o-dia .s3o-tick { right: -26px; width: 22px; height: 22px; margin-top: -11px; }
 }
 </style>
 <style>/* skin-base.css */
@@ -2104,9 +2208,14 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
        preference for a wrong action stalls the learning: softmax gives that action a probability near 1, and a hop of
        its preferences changes almost nothing), and (5) reads right in the softmax aside with three decimals (every e to
        the power of a preference above 0.000, every shown sum the sum of its row's shown numbers). The entry is drawn by
-       B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 episodes on B.dice(12, 1000). Shown with two
-       decimals: average return before -172.24, after -170.50, change 1.74, nabla 174, theta = 0.40 + 0.01 x 174 = 2.14,
-       average return after the update 73.57 (same dice). */
+       B.rng(17 * 7919) among the twelve and lands on (HEALTHY, RUN); 1,000 episodes on B.dice(12, 1000).
+       Since 2026-11-18 the hop eps is 0.02 and the step size alpha 0.01 (Carlos: "we should use an alpha different from
+       the hop size because it's getting confusing ... let the hop be 0.02 and the alpha be 0.01"). The averages are
+       shown with two decimals; nabla = change / 0.02 exactly (a multiple of 0.5, shown with one decimal when it is not
+       whole); the new preference theta + 0.01 x nabla is exact with three decimals and kept so (no rounding), shown
+       with two decimals, or three when the third is not 0. Round 1: average return before -172.24, after -167.87,
+       change 4.37, nabla 4.37 / 0.02 = 218.5, theta = 0.40 + 0.01 x 218.5 = 2.585, average return after the update
+       105.60 (same dice). Criterion (4) holds with the movie's dice base 12000 of tools/proto_movie.js. */
     PROTO: {
       betsSeed: 17,
       betsXSeed: 68,
@@ -2115,7 +2224,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       pick: [HEALTHY, RUN],
       diceSeed: 12,
       n: 1000,
-      eps: 0.01,
+      eps: 0.02,
       alpha: 0.01,
     },
   };
@@ -2246,6 +2355,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         if (t0 === null) t0 = now;
         var p = Math.min(1, (now - t0) / dur);
         safe(function () { tick(ease(p)); });
+        arrowsSoon();
         if (p >= 1) finish(); else requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
@@ -2381,6 +2491,18 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var p = side(a, fs), q = side(b, ts);
     var x1 = p.x + p.dx * gap - o.left, y1 = p.y + p.dy * gap - o.top;
     var x2 = q.x + q.dx * gap - o.left, y2 = q.y + q.dy * gap - o.top;
+    /* Straight arrows run exactly level or exactly plumb (Carlos, 2026-11-18: "make sure that the arrows are well
+       parallel"): two boxes of different heights side by side are joined at the middle of the band they share, so
+       both ends sit on one y; two boxes one above the other at the middle of the columns they share. An elbow whose
+       ends would differ by less than 3 px is drawn straight the same way, without a kink. */
+    var lr = function (sd) { return sd === "left" || sd === "right"; };
+    if (lr(fs) && lr(ts)) {
+      var t0 = Math.max(a.top, b.top), b0 = Math.min(a.bottom, b.bottom);
+      if (b0 > t0 && (!A.opts.elbow || Math.abs(y2 - y1) < 3)) y1 = y2 = (t0 + b0) / 2 - o.top;
+    } else if (!lr(fs) && !lr(ts)) {
+      var l0 = Math.max(a.left, b.left), r0 = Math.min(a.right, b.right);
+      if (r0 > l0 && (!A.opts.elbow || Math.abs(x2 - x1) < 3)) x1 = x2 = (l0 + r0) / 2 - o.left;
+    }
     var pts = [[x1, y1]];
     if (A.opts.elbow && x1 !== x2 && y1 !== y2) {
       if (fs === "left" || fs === "right") pts.push([(x1 + x2) / 2, y1], [(x1 + x2) / 2, y2]);
@@ -2423,7 +2545,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var ov = overlayOf(s), A = s.arrows[id];
     if (A) { A.from = from; A.to = to; A.opts = opts; drawArrow(s, A); return Promise.resolve(); }
     A = { id: id, from: from, to: to, opts: opts, p: 0, color: opts.color || null };
-    A.svg = svgEl("svg", { "class": "ob-arrow", width: "1", height: "1" });
+    A.svg = svgEl("svg", { "class": "ob-arrow", "data-id": id, width: "1", height: "1" });
     A.line = svgEl("polyline", {});
     A.head = svgEl("polygon", {});
     A.svg.appendChild(A.line);
@@ -2452,6 +2574,18 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var s = scenes[cur];
     if (s && s.arrows) Object.keys(s.arrows).forEach(function (k) { drawArrow(s, s.arrows[k]); });
     fitPager();
+  }
+  /* While a motion runs, the arrows of the scene follow the boxes they join (a stack that grows, a table that fades
+     in), once per frame. */
+  var arrowsQueued = false;
+  function arrowsSoon() {
+    if (arrowsQueued) return;
+    arrowsQueued = true;
+    requestAnimationFrame(function () {
+      arrowsQueued = false;
+      var s = scenes[cur];
+      if (s && s.arrows) Object.keys(s.arrows).forEach(function (k) { drawArrow(s, s.arrows[k]); });
+    });
   }
   var relayoutQueued = false;
   function relayoutSoon() {
@@ -3759,6 +3893,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   function el(tag, cls, text) { return OB.el(tag, cls, text); }
   function fmt(kind, x, places) {
     var p = places !== undefined ? places : (PLACES[kind] !== undefined ? PLACES[kind] : 2);
+    // A preference kept in thousandths (2.585 since the hop of 0.02, 2026-11-18) shows its third decimal.
+    if (kind === "bets" && places === undefined && Math.round(x * 1000) % 10 !== 0) p = 3;
     return OB.num(x, p);
   }
   /* The formatter of a roll: an intermediate value drops decimals rather than show more characters than cap, so a
@@ -4207,8 +4343,20 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return head + "On the same luck, " + GBAR + " goes " + (o.kind === "higher" ? "up" : "down") + " by " + money(Math.abs(o.delta)) + ".";
   }
 
+  /* The histogram of a what-if's returns G1, BEFORE and AFTER on one scale for every policy: $200 bins from -$1,400 to
+     $600 (the returns of all 81 deterministic policies on these dice lie between -$1,376 and $418, tools/check_try.js).
+     slots(g1s): for each episode i, its bin b (0 the lowest) and its place j in the bin (episodes in their order). */
+  var HIST = { lo: -1400, hi: 600, bin: 200 };
+  HIST.n = Math.round((HIST.hi - HIST.lo) / HIST.bin);
+  function binOf(g) { return Math.max(0, Math.min(HIST.n - 1, Math.floor((g - HIST.lo) / HIST.bin))); }
+  function slots(g1s) {
+    var count = [];
+    for (var b = 0; b < HIST.n; b++) count.push(0);
+    return g1s.map(function (g) { var k = binOf(g); return { b: k, j: count[k]++ }; });
+  }
+
   var D = {
-    N: N, SEED: SEED, dice: dice, START: START, FIX: FIX, BAR: BAR,
+    N: N, SEED: SEED, dice: dice, START: START, FIX: FIX, BAR: BAR, HIST: HIST, binOf: binOf, slots: slots,
     play: play, visited: visited, sameRuns: sameRuns, change: change, whole: whole, compare: compare,
     label: label, word: word, words: words, wiWords: wiWords
   };
@@ -4218,50 +4366,227 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 </script>
 <script>/* sec3a.js */
 /* sec3a.js: page 3, "Try it", scenes 100 to 199 (agent A4a, 2026-11-14; the what-if of beat 5 by agent U,
-   2026-11-16), from Carlos's sketch page 24 and his words of 2026-11-16: "what if I change a particular action for a
-   particular state? How much this would impact the cumulative reward?"
+   2026-11-16; the fan of actions and the two histograms by agent TRY, 2026-11-18), from Carlos's sketch page 24 and
+   his words of 2026-11-16 ("what if I change a particular action for a particular state?") and 2026-11-18 ("When I
+   click on a possible action to state, I want the three options to pop up so I can see the connection"; "the before,
+   we show the nice distribution of rewards ... and then the after ... as a new distribution ... side to side").
 
    100 try-card  the card of this part.
    110 try       5 beats (counted from 0 here; the deep link counts from 1):
-                 0 the column "OLD BESSIE", RUN everywhere at first: a tap on an entry rings it and opens a keypad of
-                   the three actions, a press sets the entry, Done (or Next, "Play") plays the column;
+                 0 the column "OLD BESSIE", RUN everywhere at first: a tap on an entry rings it and fans its three
+                   actions out of it (the fan: three round glyph buttons on curved connectors from the entry, the
+                   current action marked NOW); a press sets the entry and the fan folds back into it; Done (or Next,
+                   "Play") plays the column;
                  1 its ten episodes on the dice of sec3a-data.js; 2 each episode's return G1; 3 their average;
-                 4 the what-if. The column holds the policy of beats 1 to 4 (the base), and nothing in it is edited
-                   freely: a tap on a state rings it and opens a menu of its three actions under the column, the
-                   current one marked NOW. A choice shows at once, with no motion and no beats, the ten episodes of the
-                   changed policy with their returns G1 (AFTER) beside the base's (BEFORE), on the same dice, and under
-                   them the two averages with an arrow that carries the change in dollars, UP or DOWN: the grammar of
-                   the close-up of the hop (sec3d.js, scene 350), which the room meets here first. The cells of the
-                   picked state are marked in both blocks. Keep (beside the averages) makes the changed policy the base
-                   for the next what-if; Leave, a tap on the ringed state, or a tap on another state drops it. One
-                   change
-                   at a time. Next goes on to the next scene.
+                 4 the what-if. The column holds the policy of beats 1 to 4 (the base). A tap on a state rings it and
+                   fans its actions out of it, the current one marked NOW and disabled. A choice folds the fan and
+                   draws the change: the returns G1 of BEFORE and AFTER as two histograms side by side on one scale
+                   (money upwards, $200 bins, each episode a numbered chip stacked in its bin), each with a line at its
+                   average and its amount; BEFORE's line runs on dashed across AFTER, and an arrow between the two
+                   lines carries the change of the average, green upwards, pink downwards, with its amount and UP or
+                   DOWN. With motion, each episode's chip flies from BEFORE to its bin in AFTER, then AFTER's line
+                   slides from BEFORE's level to its own and the arrow grows. The ten episodes of both stay on screen
+                   beside the chart (a chip under the pointer lights its row); the cells of the picked state are
+                   marked. Keep makes the changed policy the base (its chips slide into BEFORE); Leave, Escape or a
+                   tap on the ringed state while the fan is open drops it; a tap on the ringed state after a choice
+                   opens the fan again. One change at a time. Next goes on to the next scene.
 
    The scene keeps its state on the spec (S), so Back, the pager and a deep link show their beat as the room left it:
-   S.col is the policy of beats 1 to 4, S.wi the what-if (its base, the state picked, the action chosen, the change
-   kept last). The what-if starts afresh from S.col when beat 5 follows the walk of another column. A deep link to
-   beat 5 on a fresh page shows the fixed what-if D.FIX: RUN everywhere, FAILING taking REPLACE. Every number and
-   every sentence with a number comes from sec3a-data.js, which tools/check_try.js asserts. */
+   S.col is the policy of beats 1 to 4, S.wi the what-if (its base, the state picked, the action chosen, whether the fan
+   is open, the change kept last). The what-if starts afresh from S.col when beat 5 follows the walk of another column.
+   A deep link to beat 5 on a fresh page shows the fixed what-if D.FIX: RUN everywhere, FAILING taking REPLACE. Every
+   number and every sentence with a number comes from sec3a-data.js, which tools/check_try.js asserts.
+
+   Motion: a tap redraws the beat at once (OB.go, no engine motion); the fan and the histograms then move by the Web
+   Animations API, only when motion is allowed (no &instant, no reduced motion, no html.fx-still). Nothing waits on
+   them: the state is drawn at rest first, the motion only plays into it. */
 (function () {
   "use strict";
   var OB = window.OB, B = window.B, el = OB.el, D = OB.s3a;
   var STEP = ["edit", "runs", "g1", "avg"];
   var STATES = [0, 1, 2, 3];
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var SPRING = "cubic-bezier(0.34, 1.45, 0.64, 1)", GLIDE = "cubic-bezier(0.55, 0, 0.25, 1)", OUT = "cubic-bezier(0.2, 0.7, 0.3, 1)";
+  var H = D.HIST;
 
   function vis(e, on) { if (!e) return; e.classList.toggle("ob-hide", !on); e.style.opacity = ""; }
   function gone(e, on) { if (e) e.classList.toggle("ob-gone", !!on); }
   function money0(x) { return OB.money(x); }
   function keyOf(col) { return col.join(""); }
   function same(a, b) { return keyOf(a) === keyOf(b); }
-  /* A number of money as a span coloured gain or loss (OB.moneyEl's colours), its text set by the caller. */
-  function tone(e, x) {
-    var r = x === null ? 0 : D.whole(x);
-    e.classList.toggle("gain", r > 0);
-    e.classList.toggle("loss", r < 0);
+  function sv(tag, attrs) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]);
+    return e;
   }
+  function px(e, x, y, w, h) {
+    e.style.left = x.toFixed(1) + "px";
+    e.style.top = y.toFixed(1) + "px";
+    if (w !== undefined) e.style.width = w.toFixed(1) + "px";
+    if (h !== undefined) e.style.height = h.toFixed(1) + "px";
+  }
+  /* The class of an amount: gain, loss or neither, as OB.money rounds it. */
+  function sign(x) { var r = D.whole(x); return r > 0 ? "gain" : r < 0 ? "loss" : ""; }
   /* A click that came from a pointer gives the focus back, so that the space bar keeps meaning Next. */
   function unfocus(ev) {
     if (ev && ev.type === "click" && ev.detail > 0 && ev.currentTarget && ev.currentTarget.blur) ev.currentTarget.blur();
+  }
+  /* Motion of the fan and the histograms: never under &instant, reduced motion or the still switch of juice.js. */
+  function moving() {
+    if (OB.instant() || !Element.prototype.animate) return false;
+    if (document.documentElement.classList.contains("fx-still")) return false;
+    return !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+  function anim(e, frames, o) {
+    if (!e || !e.animate) return null;
+    return e.animate(frames, { duration: o.dur, delay: o.delay || 0, easing: o.ease || GLIDE, fill: "backwards" });
+  }
+
+  /* The fan: the three actions of an entry of a column, popped out of it on curved connectors. One layer in the
+     scene, laid over it at the scene's top left corner; it goes to the right of the entry when there is room, else to
+     its left, else under it. onChoose(a, ev) is called on a press. */
+  function Fan(root, onChoose) {
+    var F = { open: false, entry: null, geo: null };
+    var layer = F.el = el("div", "s3a-fan ob-gone");
+    var svg = sv("svg", { "class": "s3a-flines", width: "1", height: "1", "aria-hidden": "true" });
+    layer.appendChild(svg);
+    F.lines = [0, 1, 2].map(function () { var p = sv("path", { "class": "s3a-fline", pathLength: "1" }); svg.appendChild(p); return p; });
+    F.dot = sv("circle", { "class": "s3a-fdot", r: "5" });
+    svg.appendChild(F.dot);
+    layer.setAttribute("role", "group");
+    layer.setAttribute("aria-label", "Choose an action");
+    F.keys = [0, 1, 2].map(function (a) {
+      var b = el("button", "s3a-fk a" + a);
+      b.type = "button";
+      b.disc = el("span", "s3a-fdisc");
+      b.disc.innerHTML = OB.art.glyph(a, 26);
+      b.now = el("span", "s3a-fnow ob-hide", "NOW");
+      b.disc.appendChild(b.now);
+      b.appendChild(b.disc);
+      b.appendChild(el("span", "s3a-fname", B.ACTIONS[a]));
+      b.addEventListener("click", function (e) { unfocus(e); onChoose(a, e); });
+      layer.appendChild(b);
+      return b;
+    });
+    root.appendChild(layer);
+
+    /* Opens the fan at entry: cur is the action the state takes (marked NOW; disabled when o.lockNow), chosen the
+       action chosen last (pressed), o.animate pops it out of the entry. */
+    F.show = function (entry, cur, chosen, o) {
+      o = o || {};
+      F.entry = entry;
+      F.keys.forEach(function (b, a) {
+        var now = a === cur;
+        vis(b.now, now);
+        b.classList.toggle("s3a-isnow", now);
+        b.disabled = !!(o.lockNow && now);
+        b.setAttribute("aria-pressed", a === chosen ? "true" : "false");
+        b.setAttribute("aria-label", B.ACTIONS[a] + (now ? ", the action now" : ""));
+        b.getAnimations && b.getAnimations().forEach(function (x) { x.cancel(); });
+      });
+      F.lines.forEach(function (p) { p.getAnimations && p.getAnimations().forEach(function (x) { x.cancel(); }); });
+      layer.classList.remove("ob-gone", "s3a-closing");
+      F.open = true;
+      F.place();
+      if (o.animate && moving()) F.pop();
+    };
+    F.place = function () {
+      if (!F.open || !F.entry) return;
+      var R = root.getBoundingClientRect(), e = F.entry.getBoundingClientRect();
+      if (!e.width) return;
+      var W = root.clientWidth, small = W < 560, arm = small ? 30 : 44, gap = small ? 8 : 10;
+      var ex = e.left - R.left, ey = e.top - R.top, ew = e.width, eh = e.height, cy = ey + eh / 2, cx = ex + ew / 2;
+      function measure(mode) {
+        layer.className = "s3a-fan " + mode + (F.open ? "" : " s3a-closing");
+        return { w: Math.max.apply(null, F.keys.map(function (b) { return b.offsetWidth; })), h: F.keys[0].offsetHeight };
+      }
+      // right of the entry, then right with the names under the discs, left, left stacked, under it
+      var tries = ["right", "right stack", "left", "left stack"], mode = "below", m = null;
+      for (var t = 0; t < tries.length; t++) {
+        m = measure(tries[t]);
+        var fits = tries[t].indexOf("right") === 0 ? ex + ew + arm + m.w <= W - 4 : ex - arm - m.w >= 4;
+        if (fits) { mode = tries[t]; break; }
+      }
+      if (mode === "below") m = measure("below");
+      var side = mode.split(" ")[0];
+      var A, pos = [];
+      if (mode === "below") {
+        A = { x: cx, y: ey + eh };
+        var step = m.w + gap, x0 = cx - step - m.w / 2;
+        x0 = Math.max(4, Math.min(W - 4 - (3 * m.w + 2 * gap), x0));
+        [0, 1, 2].forEach(function (i) { pos.push({ x: x0 + i * step, y: ey + eh + arm }); });
+      } else {
+        A = { x: side === "right" ? ex + ew : ex, y: cy };
+        var vs = m.h + gap, top = cy - vs - m.h / 2;
+        // not above the column's top, so the fan never covers the words over the column
+        var tb = F.entry.closest(".tb-grid"), tTop = tb ? tb.getBoundingClientRect().top - R.top - 6 : 4;
+        top = Math.max(4, tTop, top);
+        [0, 1, 2].forEach(function (i) {
+          var w = F.keys[i].offsetWidth;
+          pos.push({ x: side === "right" ? ex + ew + arm : ex - arm - w, y: top + i * vs });
+        });
+      }
+      var centers = F.keys.map(function (b, i) {
+        px(b, pos[i].x, pos[i].y);
+        return { x: pos[i].x + b.disc.offsetLeft + b.disc.offsetWidth / 2, y: pos[i].y + b.disc.offsetTop + b.disc.offsetHeight / 2,
+          w: b.offsetWidth, h: b.offsetHeight };
+      });
+      var k = arm * 0.7;
+      F.lines.forEach(function (p, i) {
+        var c = centers[i], d;
+        if (mode === "below") d = "M" + A.x + " " + A.y + " C" + A.x + " " + (A.y + k) + " " + c.x + " " + (c.y - k) + " " + c.x + " " + c.y;
+        else {
+          var s = side === "right" ? 1 : -1;
+          d = "M" + A.x + " " + A.y + " C" + (A.x + s * k) + " " + A.y + " " + (c.x - s * k) + " " + c.y + " " + c.x + " " + c.y;
+        }
+        p.setAttribute("d", d);
+      });
+      F.dot.setAttribute("cx", A.x);
+      F.dot.setAttribute("cy", A.y);
+      F.geo = { A: A, C: centers, cell: { x: cx, y: cy } };
+    };
+    /* The fan pops out of the entry: each button from the anchor, its connector drawn along. */
+    F.pop = function () {
+      var g = F.geo;
+      if (!g) return;
+      F.keys.forEach(function (b, i) {
+        var c = g.C[i];
+        anim(b, [{ transform: "translate(" + (g.A.x - c.x).toFixed(1) + "px," + (g.A.y - c.y).toFixed(1) + "px) scale(0.2)", opacity: 0 },
+          { transform: "none", opacity: 1 }], { dur: 480, delay: 40 + i * 70, ease: SPRING });
+      });
+      F.lines.forEach(function (p, i) {
+        anim(p, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { dur: 360, delay: i * 70, ease: OUT });
+      });
+      anim(F.dot, [{ transform: "scale(0)" }, { transform: "scale(1)" }], { dur: 300, ease: SPRING });
+    };
+    /* Closes the fan; with fold, the chosen button flies into the entry and the others shrink back along their
+       connectors. */
+    F.hide = function (fold, chosen) {
+      if (!F.open) return;
+      F.open = false;
+      layer.classList.add("s3a-closing");
+      var g = F.geo;
+      if (!fold || !g || !moving()) { layer.classList.add("ob-gone"); return; }
+      var done = null;
+      F.keys.forEach(function (b, i) {
+        var c = g.C[i], to = i === chosen ? g.cell : g.A;
+        var a = b.animate([{ transform: "none", opacity: 1 },
+          { transform: "translate(" + (to.x - c.x).toFixed(1) + "px," + (to.y - c.y).toFixed(1) + "px) scale(" + (i === chosen ? 0.6 : 0.2) + ")", opacity: 0 }],
+          { duration: i === chosen ? 380 : 260, easing: GLIDE, fill: "forwards" });
+        if (!done || i === chosen) done = a;
+      });
+      F.lines.forEach(function (p) { p.animate([{ strokeDashoffset: 0 }, { strokeDashoffset: 1 }], { duration: 240, easing: GLIDE, fill: "forwards" }); });
+      done.onfinish = function () {
+        if (F.open) return;
+        layer.classList.add("ob-gone");
+        F.keys.forEach(function (b) { b.getAnimations().forEach(function (x) { x.cancel(); }); });
+        F.lines.forEach(function (p) { p.getAnimations().forEach(function (x) { x.cancel(); }); });
+      };
+    };
+    F.focusFirst = function () {
+      for (var i = 0; i < 3; i++) if (!F.keys[i].disabled) { F.keys[i].focus(); return; }
+    };
+    return F;
   }
 
   OB.scene({
@@ -4273,6 +4598,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     page: 3, key: "try", order: 110, title: "Try a policy", beats: 5,
 
     build: function (root) {
+      var self = this;
+      this.root = root;
+      root.classList.add("s3a-root");
       this.S = { col: D.START.slice(), sel: -1, walked: false, wi: null };
       this.cache = {};
       this.wblocks = {};
@@ -4285,10 +4613,19 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       root.appendChild(this.P.lead);
       this.buildWalk(root);
       this.buildWhatIf(root);
+      this.fan = Fan(root, function (a, ev) {
+        if (self.k === 4) self.choose(a, ev); else self.press(a, ev);
+      });
       this.ensureBlock(this.tryOf(D.START));
 
-      var self = this, redraw = function () { self.placePad(); };
-      if (window.ResizeObserver) new ResizeObserver(redraw).observe(this.P.colW);
+      // A tap outside the fan and the column closes the fan.
+      root.addEventListener("click", function (ev) {
+        if (!self.fan.open || self.fan.el.contains(ev.target) || (ev.target.closest && ev.target.closest(".tb-e"))) return;
+        if (self.k === 0) self.closePad(true);
+        else if (self.k === 4) self.dismiss();
+      });
+      var redraw = function () { self.fan.place(); if (self.k === 4 && self.S.wi) self.layoutChart(); };
+      if (window.ResizeObserver) new ResizeObserver(redraw).observe(root);
       window.addEventListener("resize", redraw);
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
     },
@@ -4301,19 +4638,6 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var colW = P.colW = el("div", "s3a-colw");
       var C = P.C = OB.tables.column(D.START, { size: "m", top: "OLD BESSIE" });
       colW.appendChild(C.el);
-      var pad = P.pad = el("div", "s3a-pad ob-gone");
-      pad.setAttribute("role", "group");
-      pad.setAttribute("aria-label", "Choose an action");
-      P.keys = [0, 1, 2].map(function (a) {
-        var b = el("button", "s3a-key a" + a);
-        b.type = "button";
-        b.innerHTML = OB.art.glyph(a, 18);
-        b.appendChild(document.createTextNode(B.ACTIONS[a]));
-        b.addEventListener("click", function (e) { self.press(a, e); });
-        pad.appendChild(b);
-        return b;
-      });
-      colW.appendChild(pad);
       STATES.forEach(function (s) {
         var e = C.entry(s);
         e.addEventListener("click", function (ev) { self.tap(s, ev); });
@@ -4357,8 +4681,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       root.appendChild(dia);
     },
 
-    /* Beat 5: the column and the menu of the picked state; BEFORE and AFTER, each with its ten episodes; the two
-       averages and the arrow of the change between them; Keep and Leave under the menu. */
+    /* Beat 5: the column, Keep and Leave under it; the chart of BEFORE and AFTER; the ten episodes of each. */
     buildWhatIf: function (root) {
       var self = this, W = this.W;
       var wi = W.root = el("div", "s3a-wi ob-gone");
@@ -4368,74 +4691,14 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       colW.appendChild(C.el);
       STATES.forEach(function (s) {
         var e = C.entry(s);
-        e.addEventListener("click", function (ev) { unfocus(ev); self.pick(s); });
+        e.addEventListener("click", function (ev) { unfocus(ev); self.pick(s, ev); });
         e.addEventListener("keydown", function (ev) {
-          if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); self.pick(s); }
+          if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); self.pick(s, ev); }
         });
       });
       wi.appendChild(colW);
 
-      // The menu of the picked state: its three actions, the current one marked NOW (it cannot be chosen).
-      var menu = W.menu = el("div", "s3a-menu");
-      W.mkeys = el("div", "s3a-mkeys ob-hide");
-      W.mkeys.setAttribute("role", "group");
-      W.mkeys.setAttribute("aria-label", "What if this state took another action?");
-      W.keys = [0, 1, 2].map(function (a) {
-        var b = el("button", "s3a-key s3a-mkey a" + a);
-        b.type = "button";
-        b.innerHTML = OB.art.glyph(a, 18);
-        b.appendChild(el("span", "s3a-kname", B.ACTIONS[a]));
-        b.now = el("span", "s3a-now ob-hide", "NOW");
-        b.appendChild(b.now);
-        b.addEventListener("click", function (e) { unfocus(e); self.choose(a); });
-        W.mkeys.appendChild(b);
-        return b;
-      });
-      menu.appendChild(W.mkeys);
-      wi.appendChild(menu);
-
-      // BEFORE and AFTER: a head (the caption, the picked state and its action), then the ten episodes.
-      function side(cls, cap) {
-        var o = { el: el("div", "ob-box white s3a-side " + cls) };
-        var h = el("div", "s3a-shead");
-        h.appendChild(el("span", "s3a-scap", cap));
-        o.chips = el("span", "s3a-chips");
-        h.appendChild(o.chips);
-        o.el.appendChild(h);
-        o.slot = el("div", "s3a-slot");
-        o.el.appendChild(o.slot);
-        wi.appendChild(o.el);
-        return o;
-      }
-      W.bef = side("bef", "BEFORE");
-      W.aft = side("aft", "AFTER");
-      // The empty AFTER: a hidden block of the same size under a dashed frame.
-      W.sizer = OB.runs.block(D.play(D.START).runs, { label: true, head: true, g1: true });
-      W.sizer.classList.add("ob-hide", "s3a-sizer");
-      W.aph = el("div", "s3a-ph", "?");
-
-      // The averages: BEFORE, the arrow with the change on it and UP or DOWN under it, AFTER.
-      var avgs = el("div", "s3a-avgs");
-      function gbox(cls, cap) {
-        var o = { el: el("div", "ob-box white s3a-gbox " + cls) };
-        o.el.appendChild(el("div", "s3a-gcap", cap));
-        o.el.appendChild(OB.html("div", "s3a-gname", "AVERAGE " + OB.tex(D.BAR)));
-        o.num = el("span", "s3a-gn ob-money", "?");
-        o.el.appendChild(o.num);
-        return o;
-      }
-      W.gb = gbox("bef", "BEFORE");
-      W.ga = gbox("aft", "AFTER");
-      var mid = W.mid = el("div", "s3a-mid");
-      W.mlab = el("span", "s3a-mlab ob-hide", "?");
-      W.mword = el("span", "s3a-mword ob-hide", "");
-      mid.appendChild(W.mlab);
-      mid.appendChild(el("span", "s3a-mline"));
-      mid.appendChild(W.mword);
-      avgs.appendChild(W.gb.el);
-      avgs.appendChild(mid);
-      avgs.appendChild(W.ga.el);
-      // Keep and Leave, beside the change they decide on.
+      // Keep and Leave, under the column.
       W.ctl = el("div", "s3a-wctl ob-hide");
       W.keep = el("button", "ob-btn s3a-keep", "Keep");
       W.keep.type = "button";
@@ -4445,26 +4708,119 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       W.leave.addEventListener("click", function (e) { unfocus(e); self.drop(); });
       W.ctl.appendChild(W.keep);
       W.ctl.appendChild(W.leave);
-      avgs.appendChild(W.ctl);
-      wi.appendChild(avgs);
+      wi.appendChild(W.ctl);
+
+      wi.appendChild(this.buildChart());
+
+      // The episodes of BEFORE and AFTER, small, the cells of the picked state marked.
+      var eps = el("div", "s3a-eps");
+      function side(cls, cap) {
+        var o = { el: el("div", "ob-box white s3a-side " + cls) };
+        o.el.appendChild(el("div", "s3a-scap", cap));
+        o.slot = el("div", "s3a-slot");
+        o.el.appendChild(o.slot);
+        eps.appendChild(o.el);
+        return o;
+      }
+      W.bef = side("bef", "BEFORE");
+      W.aft = side("aft", "AFTER");
+      // The empty AFTER: a hidden block of the same size under a dashed frame.
+      W.sizer = OB.runs.block(D.play(D.START).runs, { label: true, head: true, g1: true });
+      W.sizer.classList.add("ob-hide", "s3a-sizer");
+      W.aph = el("div", "s3a-ph", "?");
+      wi.appendChild(eps);
       root.appendChild(wi);
+    },
+
+    /* The chart: the axis of G1 ($200 bins, every $400 labelled), two panels BEFORE and AFTER with their heads, ten
+       chips each, a line at each average with its amount, BEFORE's line dashed across AFTER, the arrow of the change
+       with its tag. Laid out in px by layoutChart from the chart's size (sec3a.css sets it). */
+    buildChart: function () {
+      var self = this, W = this.W, X = W.ch = {};
+      X.el = el("div", "s3a-chart");
+      X.pan = ["bef", "aft"].map(function (c) { var p = el("div", "s3a-pan " + c); X.el.appendChild(p); return p; });
+      X.gsvg = sv("svg", { "class": "s3a-gsvg", "aria-hidden": "true" });
+      X.el.appendChild(X.gsvg);
+      X.grid = [];
+      for (var v = H.lo; v <= H.hi; v += H.bin) {
+        var ln = sv("line", { "class": "s3a-gl" + (v === 0 ? " zero" : "") });
+        ln.v = v;
+        X.gsvg.appendChild(ln);
+        X.grid.push(ln);
+      }
+      X.ticks = [];
+      for (var t = H.lo + H.bin; t < H.hi; t += 2 * H.bin) {
+        var tk = el("span", "s3a-tk", OB.money(t));
+        tk.v = t;
+        X.el.appendChild(tk);
+        X.ticks.push(tk);
+      }
+      X.axis = OB.html("span", "s3a-axt", OB.tex("G_1"));
+      X.el.appendChild(X.axis);
+      X.heads = ["bef", "aft"].map(function (c, k) {
+        var h = el("div", "s3a-chd " + c);
+        h.appendChild(el("span", "s3a-ccap", k ? "AFTER" : "BEFORE"));
+        h.chips = el("span", "s3a-chips");
+        h.appendChild(h.chips);
+        X.el.appendChild(h);
+        return h;
+      });
+      X.cph = el("div", "s3a-cph", "?");
+      X.el.appendChild(X.cph);
+      X.chips = [0, 1].map(function (k) {
+        var row = [];
+        for (var i = 0; i < D.N; i++) {
+          var c = el("span", "s3a-ep", String(i + 1));
+          c.i = i;
+          c.k = k;
+          c.addEventListener("pointerenter", function () { self.light(this.k, this.i, true); });
+          c.addEventListener("pointerleave", function () { self.light(this.k, this.i, false); });
+          X.el.appendChild(c);
+          row.push(c);
+        }
+        return row;
+      });
+      X.asvg = sv("svg", { "class": "s3a-asvg", "aria-hidden": "true" });
+      X.ghost = sv("line", { "class": "s3a-ghost" });
+      X.arr = sv("line", { "class": "s3a-aline", pathLength: "1" });
+      X.head = sv("path", { "class": "s3a-ahead" });
+      X.asvg.appendChild(X.ghost);
+      X.asvg.appendChild(X.arr);
+      X.asvg.appendChild(X.head);
+      X.el.appendChild(X.asvg);
+      X.mk = ["bef", "aft"].map(function (c) {
+        var m = { line: el("div", "s3a-mk " + c), tag: el("div", "s3a-mtag " + c) };
+        m.num = el("span", "s3a-gn ob-money", "?");
+        m.tag.appendChild(m.num);
+        X.el.appendChild(m.line);
+        X.el.appendChild(m.tag);
+        return m;
+      });
+      X.atag = el("div", "s3a-atag");
+      W.mlab = el("span", "s3a-mlab", "?");
+      W.mword = el("span", "s3a-mword", "");
+      X.atag.appendChild(W.mlab);
+      X.atag.appendChild(W.mword);
+      X.el.appendChild(X.atag);
+      return X.el;
     },
 
     beat: function (k, api) {
       var P = this.P, S = this.S, self = this;
       this.api = api;
       this.k = k;
-      this.closePad();
       var live = api.forward && !api.instant && api.from === k - 1;
       gone(P.dia, k === 4);
       gone(this.W.root, k !== 4);
       this.setEditing(k === 0);
       this.setPicking(k === 4);
       if (k === 4) {
+        this.closePad(false, true);
         this.showWhatIf();
         if (live) { api.fade(this.W.root, true, { dur: 900 }); api.fade(P.lead, true, { dur: 900 }); }
         return;
       }
+      this.closePad(false);
       if (k >= 1) S.walked = true;
       var cur = this.tryOf(S.col);
       P.lead.innerHTML = OB.texIn(D.words(STEP[k], cur, OB.money));
@@ -4508,16 +4864,16 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
       if (k === 0) api.nextLabel("Play");
       else if (k === 2) api.nextLabel("Compute");
-      requestAnimationFrame(function () { self.placePad(); });
+      requestAnimationFrame(function () { self.fan.place(); });
     },
 
     onkey: function (e) {
       if (e.key !== "Escape") return false;
-      if (this.k === 0 && this.S && this.S.sel >= 0) { this.closePad(); return true; }
+      if (this.k === 0 && this.S && this.S.sel >= 0) { this.closePad(true); return true; }
       if (this.k === 4 && this.S && this.S.wi && this.S.wi.pick >= 0) { this.drop(); return true; }
       return false;
     },
-    leave: function () { this.closePad(); },
+    leave: function () { this.closePad(false); },
 
     /* The try of a column, computed once. */
     tryOf: function (col) {
@@ -4539,12 +4895,11 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var av = this.P.av;
       delete av.dataset.v;
       if (x === null) { av.className = "s3a-av"; av.textContent = "?"; return; }
-      var r = D.whole(x);
-      av.className = "s3a-av ob-money" + (r > 0 ? " gain" : r < 0 ? " loss" : "");
+      av.className = "s3a-av ob-money " + sign(x);
       av.textContent = OB.money(x);
     },
 
-    /* Beat 1: a tap rings an entry and opens the keypad, a press sets the entry. */
+    /* Beat 1: a tap rings an entry and fans its actions out; a press sets the entry. */
     setEditing: function (on) {
       var C = this.P.C;
       this.editing = on;
@@ -4559,31 +4914,23 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     tap: function (s, ev) {
       if (!this.editing) return;
       unfocus(ev);
-      if (this.S.sel === s) { this.closePad(); return; }
-      this.openPad(s);
+      if (this.S.sel === s) { this.closePad(true); return; }
+      this.openPad(s, ev);
     },
-    openPad: function (s) {
+    openPad: function (s, ev) {
       var P = this.P, S = this.S;
       S.sel = s;
       P.C.rings([s]);
-      P.keys.forEach(function (b, a) { b.setAttribute("aria-pressed", S.col[s] === a ? "true" : "false"); });
-      P.pad.classList.remove("ob-gone");
-      this.placePad();
+      this.fan.show(P.C.entry(s), S.col[s], -1, { animate: true });
+      if (ev && ev.detail === 0) this.fan.focusFirst();
     },
-    placePad: function () {
-      var P = this.P, s = this.S ? this.S.sel : -1;
-      if (!P || !P.pad || s < 0) return;
-      if (getComputedStyle(P.pad).position !== "absolute") { P.pad.style.left = ""; P.pad.style.top = ""; return; }
-      var w = P.colW.getBoundingClientRect(), g = P.C.grid.getBoundingClientRect(), e = P.C.entry(s).getBoundingClientRect();
-      if (!w.width) return;
-      P.pad.style.left = Math.round(g.right - w.left + 14) + "px";
-      P.pad.style.top = Math.round(Math.max(0, e.top + e.height / 2 - w.top - P.pad.offsetHeight / 2)) + "px";
-    },
-    closePad: function () {
-      if (!this.P || !this.P.pad) return;
+    /* Closes the fan of beat 1 (fold: folds it into the entry, chosen: the action pressed); keepRing leaves the
+       rings of beat 5 alone. */
+    closePad: function (fold, keepRing, chosen) {
+      if (!this.P || !this.fan) return;
       this.S.sel = -1;
-      this.P.C.rings([]);
-      this.P.pad.classList.add("ob-gone");
+      if (!keepRing) this.P.C.rings([]);
+      if (this.k !== 4 || !keepRing) this.fan.hide(!!fold, chosen === undefined ? -1 : chosen);
     },
     press: function (a, ev) {
       var P = this.P, S = this.S, s = S.sel;
@@ -4593,13 +4940,13 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         P.C.set(s, a);
         P.C.entry(s).setAttribute("aria-label", B.STATES[s] + ": " + B.ACTIONS[a]);
       }
-      this.closePad();
+      this.closePad(true, false, a);
       if (ev && ev.detail === 0) P.C.entry(s).focus();
     },
     /* Done: the column plays from beat 2, with motion, as a press of Next does. */
     play: function () {
       if (!this.editing) return;
-      this.closePad();
+      this.closePad(false);
       OB.go(this.index, 1, { forward: true });
     },
 
@@ -4609,7 +4956,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var S = this.S;
       if (!S.wi || !same(S.wi.first, S.col)) {
         var fixed = !S.walked && same(S.col, D.START);
-        S.wi = { first: S.col.slice(), base: S.col.slice(), pick: fixed ? D.FIX.s : -1, alt: fixed ? D.FIX.a : -1, kept: null };
+        S.wi = { first: S.col.slice(), base: S.col.slice(), pick: fixed ? D.FIX.s : -1, alt: fixed ? D.FIX.a : -1, open: false, kept: null };
       }
       this.render();
     },
@@ -4623,21 +4970,39 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         else { e.removeAttribute("tabindex"); e.removeAttribute("role"); }
       });
     },
-    /* A tap on a state: it is picked and its menu opens; a tap on the state already picked drops the what-if. */
-    pick: function (s) {
+    /* A tap on a state: it is picked and its actions fan out. A tap on the picked state drops the what-if while the fan
+       is open with nothing chosen, and opens the fan again after a choice. */
+    pick: function (s, ev) {
       var wi = this.S.wi;
       if (!this.picking || !wi) return;
-      if (wi.pick === s) { this.drop(); return; }
-      wi.pick = s;
-      wi.alt = -1;
-      wi.kept = null;
+      if (wi.pick === s) {
+        if (wi.open || wi.alt < 0) { this.drop(); return; }
+        wi.open = true;
+      } else {
+        wi.pick = s;
+        wi.alt = -1;
+        wi.open = true;
+        wi.kept = null;
+      }
+      this.fx = { pop: true, focus: !!(ev && ev.detail === 0) };
       this.redraw();
     },
-    /* A choice in the menu: another action shows the what-if at once (the current one, NOW, is disabled). */
+    /* A press in the fan: another action folds the fan and shows the what-if (the current one, NOW, is disabled). */
     choose: function (a) {
       var wi = this.S.wi;
       if (!this.picking || !wi || wi.pick < 0 || a === wi.base[wi.pick]) return;
       wi.alt = a;
+      wi.open = false;
+      this.fx = { fold: a, after: true };
+      this.redraw();
+    },
+    /* A tap outside the open fan: it closes; with nothing chosen the what-if is dropped. */
+    dismiss: function () {
+      var wi = this.S.wi;
+      if (!wi) return;
+      if (wi.alt < 0) { this.drop(); return; }
+      wi.open = false;
+      this.fx = { fold: -1 };
       this.redraw();
     },
     keep: function () {
@@ -4647,6 +5012,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       wi.kept = { s: wi.pick, a: wi.alt };
       wi.pick = -1;
       wi.alt = -1;
+      wi.open = false;
+      this.fx = { kept: true, fold: -1 };
       this.redraw();
     },
     drop: function () {
@@ -4654,11 +5021,13 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       if (!wi) return;
       wi.pick = -1;
       wi.alt = -1;
+      wi.open = false;
       wi.kept = null;
+      this.fx = { fold: -1 };
       this.redraw();
     },
     /* A change of the what-if is drawn at once: the beat plays again without motion, which also ends any motion still
-       running (the fade-in of beat 5, a kept action fading into the column). */
+       running (the fade-in of beat 5); the fan and the chart then move (this.fx) by the Web Animations API. */
     redraw: function () { OB.go(this.index, 4); },
     /* The episodes of a try for the what-if, built once per policy, with their returns G1. */
     wiBlock: function (tr) {
@@ -4683,45 +5052,49 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       slot.textContent = "";
       slot.appendChild(child);
     },
-    /* Beat 5 drawn at once from S.wi. */
+    /* A chip under the pointer lights itself and its episode's row. */
+    light: function (k, i, on) {
+      var b = this.blk && this.blk[k], X = this.W.ch;
+      X.chips[k][i].classList.toggle("s3a-lit", on);
+      if (b && b.rows[i]) b.rows[i].classList.toggle("s3a-lit", on);
+    },
+
+    /* Beat 5 drawn at once from S.wi, then the motion of this.fx. */
     render: function () {
-      var W = this.W, wi = this.S.wi, base = wi.base, p = wi.pick, art = OB.art;
+      var W = this.W, wi = this.S.wi, base = wi.base, p = wi.pick, art = OB.art, fx = this.fx || {};
+      this.fx = null;
       var bef = this.tryOf(base);
       var aft = p >= 0 && wi.alt >= 0 ? this.tryOf(D.change(base, p, wi.alt)) : null;
       var c = aft ? D.compare(bef, aft, p) : null;
+      this.cur = { bef: bef, aft: aft, c: c };
 
       STATES.forEach(function (s) {
         W.C.set(s, base[s]);
         W.C.entry(s).setAttribute("aria-label", B.STATES[s] + ": " + B.ACTIONS[base[s]] + (s === p ? ", picked" : ""));
       });
       W.C.rings(p >= 0 ? [p] : []);
-
-      vis(W.mkeys, p >= 0);
-      W.keys.forEach(function (b, a) {
-        var now = p >= 0 && base[p] === a;
-        vis(b.now, now);
-        b.classList.toggle("s3a-isnow", now);
-        b.disabled = now;
-        b.setAttribute("aria-pressed", aft && wi.alt === a ? "true" : "false");
-      });
       vis(W.ctl, !!aft);
 
-      // The heads: the picked state and its action before and after ("?" until one is chosen).
-      W.bef.chips.textContent = "";
-      W.aft.chips.textContent = "";
+      // The fan of the picked state.
+      if (p >= 0 && wi.open) {
+        this.fan.show(W.C.entry(p), base[p], wi.alt, { lockNow: true, animate: !!fx.pop });
+        if (fx.focus) this.fan.focusFirst();
+      } else this.fan.hide(fx.fold !== undefined, fx.fold);
+
+      // The heads: the picked state's action before and after (the column rings the state) ("?" until one is chosen).
+      var X = W.ch;
+      X.heads.forEach(function (h) { h.chips.textContent = ""; });
       if (p >= 0) {
-        W.bef.chips.appendChild(art.stateChip(p));
-        W.bef.chips.appendChild(art.actionChip(base[p]));
-        W.aft.chips.appendChild(art.stateChip(p));
-        W.aft.chips.appendChild(aft ? art.actionChip(wi.alt) : el("span", "ob-chip s3a-qchip", "?"));
+        X.heads[0].chips.appendChild(art.actionChip(base[p]));
+        X.heads[1].chips.appendChild(aft ? art.actionChip(wi.alt) : el("span", "ob-chip s3a-qchip", "?"));
       }
 
       // The episodes, the cells of the picked state marked.
-      var bb = this.wiBlock(bef);
+      var bb = this.wiBlock(bef), ab = null;
       this.put(W.bef.slot, bb);
       this.mark(bb, p);
       if (aft) {
-        var ab = this.wiBlock(aft);
+        ab = this.wiBlock(aft);
         this.put(W.aft.slot, ab);
         this.mark(ab, p);
       } else if (W.aft.slot.firstChild !== W.sizer) {
@@ -4729,25 +5102,175 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         W.aft.slot.appendChild(W.sizer);
         W.aft.slot.appendChild(W.aph);
       }
+      this.blk = [bb, ab];
 
-      // The averages and the change.
-      W.gb.num.textContent = OB.money(bef.avg);
-      tone(W.gb.num, bef.avg);
-      W.ga.num.textContent = aft ? OB.money(aft.avg) : "?";
-      tone(W.ga.num, aft ? aft.avg : null);
-      vis(W.mlab, !!c);
-      vis(W.mword, !!c);
-      W.mid.className = "s3a-mid" + (c ? " " + c.kind : "");
+      // The chart's words and numbers: the averages, the change.
+      X.mk[0].num.textContent = OB.money(bef.avg);
+      X.mk[0].num.className = "s3a-gn ob-money " + sign(bef.avg);
+      X.mk[1].num.textContent = aft ? OB.money(aft.avg) : "?";
+      X.mk[1].num.className = "s3a-gn ob-money " + (aft ? sign(aft.avg) : "");
+      [0, 1].forEach(function (k) {
+        var t = k ? aft : bef;
+        X.chips[k].forEach(function (e, i) {
+          e.className = "s3a-ep" + (t ? " " + (sign(t.g1[i]) || "zero") : "");
+          e.title = t ? "Episode " + (i + 1) + ": " + OB.money(t.g1[i]) : "";
+          vis(e, !!t);
+        });
+      });
+      vis(X.cph, !aft);
+      vis(X.mk[1].line, !!aft);
+      vis(X.mk[1].tag, !!aft);
+      X.atag.className = "s3a-atag " + (c ? c.kind : "");
+      X.asvg.setAttribute("class", "s3a-asvg " + (c ? c.kind : ""));
+      vis(X.atag, !!c);
+      vis(X.asvg, !!c);
       if (c) {
         W.mlab.textContent = D.label(c, OB.money);
         W.mword.textContent = D.word(c);
       }
+      this.layoutChart();
+      if (fx.after && aft && moving()) this.playAfter();
+      if (fx.kept && moving()) this.playKept();
 
       var words = c ? D.wiWords("shown", c, OB.money)
         : p >= 0 ? D.wiWords("menu", { s: p, a: base[p] }, OB.money)
         : D.wiWords("pick", { kept: wi.kept }, OB.money);
       this.P.lead.innerHTML = OB.texIn(words);
       this.P.lead.style.opacity = "";
+    },
+
+    /* The chart in px from its size. */
+    layoutChart: function () {
+      var X = this.W.ch, cur = this.cur;
+      if (!cur) return;
+      var w = X.el.clientWidth, h = X.el.clientHeight;
+      if (!w || !h) return;
+      var small = w < 420, AX = small ? 50 : 66, GAP = small ? 64 : 96, HEAD = small ? 44 : 40, PAD = small ? 6 : 8;
+      var PW = (w - AX - GAP) / 2, XS = [AX, AX + PW + GAP], PT = HEAD + 4, PB = h - 2;
+      var BH = (PB - PT - 2 * PAD) / H.n, base = PB - PAD, CW = (PW - 2 * PAD - (D.N - 1) * 2) / D.N;
+      function yOf(v) { return base - (v - H.lo) / H.bin * BH; }
+      var G = X.geo = { AX: AX, GAP: GAP, PW: PW, XS: XS, PT: PT, PB: PB, BH: BH, CW: CW, PAD: PAD, yOf: yOf, small: small };
+      X.el.classList.toggle("s3a-small", small);
+      X.el.classList.toggle("s3a-tiny", CW < 15);
+      X.el.style.setProperty("--chip-fs", Math.max(8, Math.min(12, BH * 0.42, CW * 0.6)).toFixed(1) + "px");
+
+      X.pan.forEach(function (p, k) { px(p, XS[k], PT, PW, PB - PT); });
+      X.heads.forEach(function (hd, k) { px(hd, XS[k], 0, PW, HEAD); });
+      px(X.cph, XS[1] + PAD, PT + PAD, PW - 2 * PAD, PB - PT - 2 * PAD);
+      X.gsvg.setAttribute("width", w);
+      X.gsvg.setAttribute("height", h);
+      X.asvg.setAttribute("width", w);
+      X.asvg.setAttribute("height", h);
+      X.grid.forEach(function (ln) {
+        var y = yOf(ln.v).toFixed(1);
+        ln.setAttribute("x1", AX - 4);
+        ln.setAttribute("x2", XS[1] + PW);
+        ln.setAttribute("y1", y);
+        ln.setAttribute("y2", y);
+      });
+      X.ticks.forEach(function (tk) { tk.style.right = (w - AX + 8) + "px"; tk.style.top = yOf(tk.v).toFixed(1) + "px"; });
+      X.axis.style.right = (w - AX + 8) + "px";
+      X.axis.style.top = (PT - 2) + "px";
+
+      // The chips: episode i of a side in its bin b, at its place j.
+      var pos = X.pos = [null, null];
+      [cur.bef, cur.aft].forEach(function (t, k) {
+        if (!t) return;
+        var sl = D.slots(t.g1);
+        pos[k] = sl.map(function (q, i) {
+          var r = { x: XS[k] + PAD + q.j * (CW + 2), y: base - (q.b + 1) * BH + 1.5 };
+          px(X.chips[k][i], r.x, r.y, CW, BH - 3);
+          return r;
+        });
+      });
+
+      // The lines at the averages. Each amount sits at the right end of its panel, as near its line as it can
+      // without covering a chip: above the line, else below it, else further up or down, where the bins it spans hold
+      // few enough chips to leave it room.
+      var ys = [cur.bef ? yOf(cur.bef.avg) : 0, cur.aft ? yOf(cur.aft.avg) : 0];
+      X.ys = ys;
+      var counts = [cur.bef, cur.aft].map(function (t) {
+        var n = [];
+        for (var b = 0; b < H.n; b++) n.push(0);
+        if (t) D.slots(t.g1).forEach(function (q) { n[q.b]++; });
+        return n;
+      });
+      X.mk.forEach(function (m, k) {
+        px(m.line, XS[k] - 4, ys[k] - 2, PW + 8, 4);
+        var th = m.tag.offsetHeight || 22, tw = m.tag.offsetWidth || 60, right = XS[k] + PW - PAD;
+        function free(y) {
+          var most = 0;
+          for (var b = 0; b < H.n; b++) {
+            var top = base - (b + 1) * BH, bot = base - b * BH;
+            if (y < bot && y + th > top) most = Math.max(most, counts[k][b]);
+          }
+          return right - tw - 2 >= XS[k] + PAD + most * (CW + 2);
+        }
+        var ty = null, lo = PT + 2, hi = PB - th - 2;
+        for (var d = 0; d <= PB - PT && ty === null; d += 2) {
+          var up = ys[k] - th - 4 - d, dn = ys[k] + 5 + d;
+          if (up >= lo && free(up)) ty = up;
+          else if (dn <= hi && free(dn)) ty = dn;
+        }
+        if (ty === null) ty = Math.max(lo, ys[k] - th - 4);
+        px(m.tag, right - tw, ty);
+      });
+
+      // BEFORE's line dashed across AFTER, the arrow of the change between the two lines, its tag on it.
+      var c = cur.c;
+      if (!c) return;
+      var ax = XS[0] + PW + GAP / 2, y0 = ys[0], y1 = ys[1], dy = y1 - y0, hl = small ? 9 : 12, hw = small ? 7 : 9;
+      X.ghost.setAttribute("x1", XS[0] + PW + 4);
+      X.ghost.setAttribute("x2", XS[1] + PW + 4);
+      X.ghost.setAttribute("y1", y0.toFixed(1));
+      X.ghost.setAttribute("y2", y0.toFixed(1));
+      var moved = c.kind !== "same-runs" && Math.abs(dy) >= 1;
+      vis(X.arr, moved);
+      vis(X.head, moved);
+      if (moved) {
+        var dir = dy < 0 ? -1 : 1, tip = y1, stem = Math.abs(dy) > hl ? tip - dir * hl : y0;
+        X.arr.setAttribute("x1", ax);
+        X.arr.setAttribute("x2", ax);
+        X.arr.setAttribute("y1", y0.toFixed(1));
+        X.arr.setAttribute("y2", stem.toFixed(1));
+        X.head.setAttribute("d", "M" + (ax - hw) + " " + (tip - dir * hl).toFixed(1) + " L" + (ax + hw) + " " + (tip - dir * hl).toFixed(1) + " L" + ax + " " + tip.toFixed(1) + " Z");
+      }
+      var tw2 = X.atag.offsetWidth || 60, th2 = X.atag.offsetHeight || 34;
+      var my = moved ? (y0 + y1) / 2 : y0;
+      // a short arrow: the tag beside the head, on the side the arrow points to, so the arrow stays visible
+      if (moved && Math.abs(dy) < th2 + 2 * hl) my = dy < 0 ? Math.min(y0, y1) - th2 / 2 - 6 : Math.max(y0, y1) + th2 / 2 + 6;
+      my = Math.max(PT + th2 / 2, Math.min(PB - th2 / 2, my));
+      px(X.atag, ax - tw2 / 2, my - th2 / 2);
+    },
+
+    /* Motion after a choice: each episode's chip flies from BEFORE into its bin in AFTER, then AFTER's line slides from
+       BEFORE's level to its own, then the arrow grows and its tag pops. */
+    playAfter: function () {
+      var X = this.W.ch, G = X.geo, P = X.pos, ys = X.ys;
+      if (!P[0] || !P[1]) return;
+      X.chips[1].forEach(function (e, i) {
+        anim(e, [{ transform: "translate(" + (P[0][i].x - P[1][i].x).toFixed(1) + "px," + (P[0][i].y - P[1][i].y).toFixed(1) + "px)" },
+          { transform: "none" }], { dur: 650, delay: 120 + i * 70, ease: GLIDE });
+      });
+      var t0 = 120 + D.N * 70 + 500, dy = ys[0] - ys[1];
+      anim(X.mk[1].line, [{ transform: "translateY(" + dy.toFixed(1) + "px)", opacity: 0.3 }, { transform: "none", opacity: 1 }], { dur: 700, delay: t0 });
+      anim(X.mk[1].tag, [{ transform: "translateY(" + dy.toFixed(1) + "px)", opacity: 0 }, { transform: "none", opacity: 1 }], { dur: 700, delay: t0 });
+      anim(X.ghost, [{ opacity: 0 }, { opacity: 1 }], { dur: 400, delay: t0 });
+      anim(X.arr, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { dur: 600, delay: t0 + 650, ease: OUT });
+      anim(X.head, [{ opacity: 0 }, { opacity: 1 }], { dur: 200, delay: t0 + 1150 });
+      anim(X.atag, [{ transform: "scale(0.3)", opacity: 0 }, { transform: "none", opacity: 1 }], { dur: 480, delay: t0 + 1150, ease: SPRING });
+      anim(X.heads[1].chips, [{ opacity: 0 }, { opacity: 1 }], { dur: 400 });
+      void G;
+    },
+    /* Motion after Keep: the kept policy's chips and line slide from AFTER into BEFORE. */
+    playKept: function () {
+      var X = this.W.ch, G = X.geo, dx = (G.XS[1] - G.XS[0]).toFixed(1);
+      X.chips[0].forEach(function (e, i) {
+        anim(e, [{ transform: "translateX(" + dx + "px)" }, { transform: "none" }], { dur: 700, delay: i * 30, ease: GLIDE });
+      });
+      anim(X.mk[0].line, [{ transform: "translateX(" + dx + "px)" }, { transform: "none" }], { dur: 700, ease: GLIDE });
+      anim(X.mk[0].tag, [{ transform: "translateX(" + dx + "px)" }, { transform: "none" }], { dur: 700, ease: GLIDE });
+      anim(X.cph, [{ opacity: 0 }, { opacity: 1 }], { dur: 500, delay: 500 });
     }
   });
 })();
@@ -4758,20 +5281,58 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    intelligence to find the best policy. Now in section two, we're going to show how we can let a computer do this
    for our system."
 
-   Two beats, two panels side by side (one above the other on a phone):
+   Three beats, two panels side by side (one above the other on a phone):
    0  HUMAN LEARNING: the helmet (the player, the one who chooses) and the policy it chose, a column of actions
-      (B.EXAMPLE: no example shows the optimal policy, which the page reveals at its end)
-   1  A COMPUTER LEARNS: a computer and the table it will learn, the preferences, empty until the next section */
+      (B.EXAMPLE)
+   1  the optimal policy (agent OPT, 2026-11-18; Carlos: "at the end of the human learning part shows what is the
+      optimal policy"): the column turns into B.BEST, captioned OPTIMAL POLICY, the states that change ringed, and its
+      average return on Try it's ten episodes (B.TRY's dice), the highest of the 81 deterministic policies there (the
+      page logs a console error when it is not). Scene 425 (sec3f.js) puts the same column beside the probabilities
+      after the last update. Carlos lifted the rule that no example shows B.BEST for this beat.
+   2  A COMPUTER LEARNS: a computer and the table it will learn, the preferences, empty until the next section
+
+   OB.s3opt, for sec3f.js: avg (the average return of B.BEST on Try it's dice), best (true when no policy of the 81
+   beats it there), column(opts) (TB.column of B.BEST captioned OPTIMAL POLICY, class s3o-opt), tick(ok) (a tick, or
+   a cross when ok is false). tools/check_optimal.js asserts the numbers. */
 (function () {
   "use strict";
   var OB = window.OB, B = window.B, TB = OB && OB.tables;
   if (!OB || !B || !TB) return;
   var el = OB.el, art = OB.art;
 
+  /* The optimal policy on Try it's ten episodes: its average return, and whether it is the best of the 81. */
+  var TRY = B.dice(B.TRY.diceSeed, B.TRY.n);
+  var AVG = B.avgG1(B.BEST, TRY, B.TRY.n), BEST = true;
+  for (var c = 0; c < 81; c++) {
+    var col81 = [Math.floor(c / 27) % 3, Math.floor(c / 9) % 3, Math.floor(c / 3) % 3, c % 3];
+    if (B.avgG1(col81, TRY, B.TRY.n) > AVG + 1e-9) BEST = false;
+  }
+  if (!BEST) console.error("sec3a2: B.BEST is not the best of the 81 policies on Try it's ten episodes");
+  var OPT_CAP = "OPTIMAL POLICY";
+
+  function tick(ok) {
+    var path = ok ? '<path d="M4 12.5 L9.5 18 L20 6.5"/>' : '<path d="M6 6 L18 18 M18 6 L6 18"/>';
+    return OB.html("span", "s3o-tick " + (ok ? "yes" : "no"),
+      '<svg viewBox="0 0 24 24" aria-hidden="true">' + path + "</svg>");
+  }
+  OB.s3opt = {
+    avg: AVG, best: BEST, cap: OPT_CAP, tick: tick,
+    column: function (opts) {
+      opts = opts || {};
+      var C = TB.column(B.BEST, { size: opts.size || "s", heads: opts.heads, cap: OPT_CAP });
+      C.el.classList.add("s3o-opt");
+      return C;
+    }
+  };
+
   var LEAD = [
     "What we did was human learning: we used our own intelligence to look for the optimal policy.",
+    BEST ? "The optimal policy: of all 81 policies, the highest average return on our ten episodes."
+      : "The optimal policy: the highest expected return of all 81 policies.",
     "Now we let a computer do this for us."
   ];
+  /* The states where B.EXAMPLE and B.BEST differ: ringed on beat 1. */
+  var CHANGED = [0, 1, 2, 3].filter(function (s) { return B.EXAMPLE[s] !== B.BEST[s]; });
 
   /* A computer, flat, in the look's colours: a dark screen with a small table on it, and its base. */
   function computer(w) {
@@ -4820,8 +5381,13 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       P.lead = el("p", "ob-say s3h-lead");
       root.appendChild(P.lead);
       var g = el("div", "s3h-grid");
-      var col = TB.column(B.EXAMPLE, { size: "s", cap: "POLICY" });
-      P.h = panel("s3h-human", "HUMAN LEARNING", OB.html("span", "s3h-face", art.face(8)), "WE CHOOSE", col.el);
+      var col = P.col = TB.column(B.EXAMPLE, { size: "s", cap: "POLICY" });
+      var mine = el("div", "s3o-mine");
+      mine.appendChild(col.el);
+      P.avg = el("div", "s3o-avg");
+      P.avg.appendChild(OB.texEl("\\bar{G}_1 = " + OB.texNum(OB.money(AVG))));
+      mine.appendChild(P.avg);
+      P.h = panel("s3h-human", "HUMAN LEARNING", OB.html("span", "s3h-face", art.face(8)), "WE CHOOSE", mine);
       var tab = TB.table(null, { kind: "bets", size: "s", cap: "PREFERENCES " + OB.tex("\\theta") });
       P.c = panel("s3h-pcpanel", "A COMPUTER LEARNS", computer(84), "A COMPUTER", tab.el);
       P.mid = el("span", "s3h-next");
@@ -4837,8 +5403,16 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         P.lead.textContent = LEAD[k];
         if (go) api.fade(P.lead, true, { dur: 900 });
       }
-      api.show(P.mid, k >= 1, { delay: go && k === 1 ? 200 : 0 });
-      api.show(P.c, k >= 1, { delay: go && k === 1 ? 700 : 0 });
+      /* Beat 1 on: the column is the optimal policy (its new chips fade in), its average return under it. */
+      var opt = k >= 1, P0 = P.col;
+      [0, 1, 2, 3].forEach(function (s) { P0.set(s, opt ? B.BEST[s] : B.EXAMPLE[s]); });
+      P0.cap.textContent = opt ? OPT_CAP : "POLICY";
+      P0.el.classList.toggle("s3o-opt", opt);
+      P0.rings(k === 1 ? CHANGED : []);
+      api.show(P.avg, opt, { delay: go && k === 1 ? 900 : 0 });
+      if (k === 1 && go && OB.fx && OB.fx.celebrate) api.at(1100, function () { OB.fx.celebrate(P0.el); });
+      api.show(P.mid, k >= 2, { delay: go && k === 2 ? 200 : 0 });
+      api.show(P.c, k >= 2, { delay: go && k === 2 ? 700 : 0 });
     }
   });
 })();
@@ -5485,8 +6059,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    220 What a preference says (2 beats): the rule; HEALTHY's preference for RUN, 0.40, ringed and read out
    230 Negative preferences (2 beats): the table allows them; HEALTHY's preference for SERVICE, -0.60, ringed and
        read out
-   240 From preferences to probabilities (2 beats): HEALTHY's row of preferences gives HEALTHY's probabilities; the
-       higher the preference, the higher the probability
+   240 From preferences to probabilities (2 beats): the probability table appears cell by cell, each cell lit with
+       its preference (2026-11-18); the higher the preference, the higher the probability
    250 Softmax (2 beats): softmax turns the table of preferences into the probability table; it is a stochastic policy.
        A button opens the aside "How softmax works, and why"
    260 is agent V's scene "pick" (sec3b-policy.js): how the policy samples an action, the six draws and the counts of
@@ -5620,34 +6194,65 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   function dy() { return window.matchMedia && window.matchMedia("(max-width: 760px)").matches ? 0 : -22; }
   var H = B.HEALTHY;
 
-  /* 240. From preferences to probabilities (Carlos: "show how the table of bets gives rise to a probabilistic
-     strategy"), on HEALTHY's row. */
+  /* 240. From preferences to probabilities (Carlos, 2026-11-16: "show how the table of bets gives rise to a
+     probabilistic strategy"; 2026-11-18: "after the arrow appears, I want the table of probabilities to appear cell
+     by cell ... as every cell appears, the corresponding cell in the probability tables and in the preferences
+     highlights, so that we can see that there is a connection between them, that one induces the other").
+     Beat 0, with Next: the arrow, then the probability table cell by cell, row by row; as each cell rolls up from 0,
+     it and its preference light together (class s3b-pair). HEALTHY's row slowly, the other rows faster. The last
+     callback of the build clears the light, so a beat finished early stands at rest. */
   var L240 = [
-    "Each row of preferences gives the probabilities of the actions in its state.",
+    "Each preference gives the probability of its action in its state.",
     "The higher the preference, the higher the probability."
   ];
+  var B240 = { arrow: 500, first: 1800, slow: 1150, fast: 420, slowRoll: 900, fastRoll: 520, hold: 700 };
+  function pair(P, s, a) {
+    [P.W, P.C].forEach(function (T) {
+      T.el.querySelectorAll(".s3b-pair").forEach(function (c) { c.classList.remove("s3b-pair"); });
+      if (s !== null) { var c = T.cell(s, a); if (c) c.classList.add("s3b-pair"); }
+    });
+  }
   OB.scene({
     page: 3, key: "chances", order: 240, title: "From preferences to probabilities", beats: L240.length,
     build: function (root) {
       var P = this.parts = {};
       P.lead = lead(root);
       var row = el("div", "s3b-flow s3b-wide s3b-rows");
-      P.W = TB.table(D.W, { kind: "bets", size: "m", rows: [H], cap: "HEALTHY'S PREFERENCES" });
-      P.C = TB.table(null, { kind: "prob", size: "m", rows: [H], cap: "HEALTHY'S PROBABILITIES" });
+      P.W = TB.table(D.W, { kind: "bets", size: "m", cap: "PREFERENCES " + OB.tex("\\theta") });
+      P.C = TB.table(null, { kind: "prob", size: "m", cap: "PROBABILITY TABLE" });
       row.appendChild(P.W.el);
       row.appendChild(P.C.el);
       root.appendChild(row);
     },
     beat: function (k, api) {
-      var P = this.parts, W = P.W, C = P.C, go = live(api, k);
+      var P = this.parts, W = P.W, C = P.C, go = live(api, k) && k === 0;
       say(P.lead, L240[k], api);
-      // Beat 0: HEALTHY's probabilities roll up from 0, after the arrow.
-      if (k === 0 && go) api.unarrow("ch");
-      api.arrow("ch", W.el, C.el, { delay: k === 0 && go ? 500 : 0 });
-      C.setRow(H, D.P[H], { from: 0, delay: k === 0 && go ? 1500 : 0, cstagger: k === 0 && go ? 300 : 0 });
-      // Beat 1: the highest preference and the highest probability.
-      W.mark(k === 1 ? [[H, D.TOPW[H]]] : []);
-      C.mark(k === 1 ? [[H, D.TOPP[H]]] : []);
+      pair(P, null);
+      if (go) api.unarrow("ch");
+      api.arrow("ch", W.el, C.el, { delay: go ? B240.arrow : 0 });
+      if (!go) C.set(D.P);
+      else {
+        C.set(null);
+        var t = B240.first;
+        [H, B.WORN, B.SHAKY, B.FAILING].forEach(function (s, r) {
+          for (var a = 0; a < 3; a++) {
+            (function (s, a, t, slow) {
+              // The cell stays empty until its turn: its callback lights the pair and rolls it up from 0 (a beat
+              // finished early runs every callback at once, which sets every cell at rest).
+              api.at(t, function () {
+                pair(P, s, a);
+                C.setCell(s, a, D.P[s][a], { from: 0, dur: slow ? B240.slowRoll : B240.fastRoll });
+              });
+            })(s, a, t, r === 0);
+            t += r === 0 ? B240.slow : B240.fast;
+          }
+        });
+        api.at(t + B240.hold, function () { pair(P, null); });
+      }
+      // Beat 1: the highest preference and the highest probability of each row.
+      var tops = k === 1 ? [H, B.WORN, B.SHAKY, B.FAILING].map(function (s) { return [s, D.TOPW[s]]; }) : [];
+      W.mark(tops);
+      C.mark(k === 1 ? [H, B.WORN, B.SHAKY, B.FAILING].map(function (s) { return [s, D.TOPP[s]]; }) : []);
     }
   });
 
@@ -5866,10 +6471,10 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 /* sec3c-data.js: GENERATED by tools/proto_movie.js (agent A5) from game/bessie.js; do not edit by hand.
    Every number of the proto-REINFORCE scenes of page 3 (sec3c.js). In the browser window.S3C; in node a module.
    tools/check_proto.js recomputes it from bessie.js and asserts it. Seeds: preferences B.randomBets(17, 68), picks B.rng(134623),
-   dice B.dice(12, 1000) for rounds 1 and 2, B.dice(2000 + round, 1000) for rounds 3 to 300. */
+   dice B.dice(12, 1000) for rounds 1 and 2, B.dice(12000 + round, 1000) for rounds 3 to 300. */
 (function (root) {
   "use strict";
-  var S3C = {"seeds":{"bets":17,"betsX":68,"pick":134623,"dice":12,"movieDiceBase":2000},"n":1000,"eps":0.01,"alpha":0.01,"rounds":300,"W0":[[0.4,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"start":-172.24,"hop1":{"s":0,"a":0,"w":0.4,"before":-172.24,"after":-170.5,"change":1.74,"nabla":174,"wNew":2.14,"upd":73.57},"W1":[[2.14,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"g1":{"lo":-1200,"hi":700},"ten":{"W0":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W0h":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W1":[91,10,-229,198,340,-671,117,370,-14,155]},"hist":{"bin":100,"max":414},"movie":[[0,0,174,73.57,-172.24,-170.5],[0,2,-13,80.98,73.57,73.44],[2,2,0,96.7,96.7,96.7],[0,0,70,129.52,92.91,93.61],[3,0,-40,143.85,135.86,135.46],[2,1,0,137.54,137.54,137.54],[2,1,-2,134.23,134.23,134.21],[2,1,0,154.72,154.72,154.72],[3,1,-7,135.34,136.49,136.42],[3,0,-56,151.64,145.03,144.47],[3,2,12,143.97,142.21,142.33],[0,1,3,156.52,156.6,156.63],[3,0,-4,148.96,148.51,148.47],[0,2,-8,155.65,152.51,152.43],[2,0,0,155.05,155.05,155.05],[1,1,29,153.69,149.44,149.73],[1,1,9,153.07,151.2,151.29],[2,1,0,151.95,151.95,151.95],[0,1,-10,163.01,162.09,161.99],[3,1,-10,150.56,149.9,149.8],[2,0,0,159.12,159.12,159.12],[0,1,4,148.23,148.78,148.82],[0,0,3,158.27,157.21,157.24],[3,1,-6,149.11,149,148.94],[2,1,0,155.3,155.3,155.3],[3,0,41,155.63,159.14,159.55],[0,1,-10,165.34,163.44,163.34],[1,1,45,160.42,151.02,151.47],[1,2,-7,170.29,170.29,170.22],[1,1,-16,159.83,163.89,163.73],[0,2,-3,153.86,153.68,153.65],[0,1,-14,169.74,168.86,168.72],[1,0,-24,155.33,152.73,152.49],[1,2,0,160.44,160.44,160.44],[0,2,-31,161.31,153.16,152.85],[0,0,24,175.01,169.73,169.97],[3,0,-11,183.44,182.62,182.51],[1,2,0,181.5,181.5,181.5],[2,2,0,190.74,190.74,190.74],[2,0,0,183.99,183.99,183.99],[1,2,0,187.38,187.38,187.38],[1,2,0,177.53,177.53,177.53],[0,0,29,197.85,192.77,193.06],[0,0,12,195.1,192.89,193.01],[1,0,-1,202.79,202,201.99],[1,0,-16,197.38,193.86,193.7],[2,0,0,190.06,190.06,190.06],[0,2,-8,192.69,191.37,191.29],[0,0,18,199.28,196.88,197.06],[2,1,0,201.14,201.14,201.14],[2,2,0,195.51,195.51,195.51],[0,0,12,197.68,195.94,196.06],[3,2,13,193.31,192.84,192.97],[3,2,-2,195.89,196.14,196.12],[0,2,-4,199.88,199.34,199.3],[3,1,4,195.88,195.87,195.91],[2,1,0,213.73,213.73,213.73],[1,1,-17,196.93,199.53,199.36],[2,1,0,197.46,197.46,197.46],[3,0,-10,199.58,198.47,198.37],[0,0,8,198.41,198.1,198.18],[1,2,0,196.54,196.54,196.54],[0,2,0,190.99,190.99,190.99],[1,2,0,202.22,202.22,202.22],[0,0,-6,191.48,192.18,192.12],[1,1,51,204.45,197.88,198.39],[3,0,5,201.21,201.32,201.37],[0,0,6,201.8,201.47,201.53],[3,1,-44,209.94,208.88,208.44],[1,1,26,223.26,220.09,220.35],[1,0,19,209.57,210.33,210.52],[0,1,-12,199.35,199.03,198.91],[3,0,-11,204.57,203.6,203.49],[2,0,0,220.1,220.1,220.1],[2,0,0,206.17,206.17,206.17],[1,2,0,206.93,206.93,206.93],[1,2,0,209.15,209.15,209.15],[3,1,0,215.71,215.71,215.71],[3,0,0,203.56,203.56,203.56],[1,2,0,207.15,207.15,207.15],[1,0,11,203.46,204.61,204.72],[1,1,34,207.45,199.86,200.2],[2,1,0,209.37,209.37,209.37],[0,2,-17,206.51,205.56,205.39],[0,2,0,208.51,208.51,208.51],[2,2,0,208.62,208.62,208.62],[2,2,0,206.52,206.52,206.52],[0,1,0,205.02,205.02,205.02],[2,0,0,206.7,206.7,206.7],[3,2,13,207.08,205.09,205.22],[0,0,18,214.46,212.98,213.16],[2,1,0,211.8,211.8,211.8],[1,2,0,218.29,218.29,218.29],[2,1,0,208.1,208.1,208.1],[0,1,0,213.87,213.87,213.87],[1,1,-6,212.54,213.56,213.5],[0,1,0,211.34,211.34,211.34],[2,2,0,205.21,205.21,205.21],[3,2,0,209.82,209.82,209.82],[1,1,-5,209.58,209.92,209.87],[1,2,0,215.68,215.68,215.68],[1,2,0,215.34,215.34,215.34],[1,0,6,212.1,212.62,212.68],[1,1,14,210.79,209.94,210.08],[0,0,0,211.79,211.79,211.79],[3,2,39,216.26,212.62,213.01],[0,2,-16,222.31,221.73,221.57],[0,2,-22,219.93,219.33,219.11],[1,2,0,208.21,208.21,208.21],[3,1,3,223.45,223.5,223.53],[2,2,0,221.07,221.07,221.07],[3,1,10,221.34,221.76,221.86],[2,0,0,214.31,214.31,214.31],[3,1,-4,221.74,221.87,221.83],[3,1,1,210.04,210.03,210.04],[0,0,0,219.85,219.85,219.85],[3,1,4,221.33,221.76,221.8],[2,0,0,221.89,221.89,221.89],[2,1,0,218.31,218.31,218.31],[2,0,0,215.15,215.15,215.15],[3,1,0,223.52,223.52,223.52],[2,0,0,217.62,217.62,217.62],[2,1,0,205.61,205.61,205.61],[2,2,0,216,216,216],[3,0,0,219.62,219.62,219.62],[2,2,0,213.61,213.61,213.61],[0,1,-11,208.69,208.38,208.27],[1,2,0,220.36,220.36,220.36],[0,2,-8,214.79,214.38,214.3],[1,2,0,219.87,219.87,219.87],[2,0,0,210.35,210.35,210.35],[0,1,-4,209.04,208.98,208.94],[1,2,0,221.74,221.74,221.74],[2,2,0,214.96,214.96,214.96],[3,0,-18,220.72,219.99,219.81],[2,1,0,222.28,222.28,222.28],[3,1,0,211.32,211.32,211.32],[2,2,0,223.25,223.25,223.25],[0,0,10,221.98,221.56,221.66],[1,2,0,219.78,219.78,219.78],[1,2,0,224.33,224.33,224.33],[0,0,0,220.5,220.5,220.5],[1,2,0,222.99,222.99,222.99],[3,2,24,218.92,216.47,216.71],[3,1,1,219.04,219.03,219.04],[1,1,-1,217.67,217.71,217.7],[0,1,0,217.13,217.13,217.13],[0,1,-15,222.63,222.53,222.38],[0,0,5,221.75,221.33,221.38],[0,0,2,216.45,216.33,216.35],[0,1,0,227.29,227.29,227.29],[0,2,-8,221.01,220.86,220.78],[0,1,0,222.03,222.03,222.03],[1,0,3,222.18,222,222.03],[2,0,0,221.95,221.95,221.95],[3,1,-5,220.42,220.38,220.33],[2,1,0,214.03,214.03,214.03],[1,2,0,223.18,223.18,223.18],[2,0,0,223.55,223.55,223.55],[0,2,-8,228.19,227.93,227.85],[3,2,38,229.8,227.18,227.56],[1,1,13,222.96,222.76,222.89],[1,1,39,229.03,227.34,227.73],[1,0,11,226.29,227.01,227.12],[0,1,0,226.37,226.37,226.37],[0,2,0,225.86,225.86,225.86],[2,2,0,227.96,227.96,227.96],[0,0,0,231.75,231.75,231.75],[2,0,0,222.73,222.73,222.73],[1,0,-33,227.94,227.33,227],[2,1,0,232.23,232.23,232.23],[1,1,3,233.43,233.58,233.61],[1,2,0,227.74,227.74,227.74],[0,2,-10,231.19,230.96,230.86],[1,2,0,234.24,234.24,234.24],[3,1,-22,231.52,231.31,231.09],[0,2,-7,230.32,230.14,230.07],[3,2,0,241.86,241.86,241.86],[2,1,0,235.66,235.66,235.66],[2,1,0,224.94,224.94,224.94],[0,2,0,224.23,224.23,224.23],[1,0,-26,228.56,227.5,227.24],[1,2,0,223.33,223.33,223.33],[0,1,0,231.11,231.11,231.11],[3,2,0,228.47,228.47,228.47],[2,2,0,234.34,234.34,234.34],[1,2,0,226.64,226.64,226.64],[2,1,0,229.39,229.39,229.39],[1,2,0,229.94,229.94,229.94],[1,0,-8,229.27,228.59,228.51],[1,2,0,226.43,226.43,226.43],[0,2,-1,232.5,232.44,232.43],[3,0,-7,224.28,224.04,223.97],[1,0,0,232.63,232.63,232.63],[3,1,0,223.59,223.59,223.59],[1,1,13,222.61,221.88,222.01],[0,1,0,227.54,227.54,227.54],[1,1,0,231.09,231.09,231.09],[0,0,0,228.07,228.07,228.07],[1,0,-1,232.9,232.88,232.87],[0,0,1,232.88,232.87,232.88],[2,2,0,229.79,229.79,229.79],[0,2,0,228.08,228.08,228.08],[2,0,0,238.29,238.29,238.29],[1,0,-22,237.68,236.75,236.53],[2,0,0,230.7,230.7,230.7],[0,0,4,231.16,231,231.04],[3,1,0,239.42,239.42,239.42],[3,0,0,225.27,225.27,225.27],[2,0,0,229.11,229.11,229.11],[3,1,0,233.8,233.8,233.8],[3,0,0,230.06,230.06,230.06],[0,2,-18,247.21,246.81,246.63],[1,2,0,235.79,235.79,235.79],[2,2,0,230.1,230.1,230.1],[3,2,-2,240.67,240.7,240.68],[3,2,0,229.53,229.53,229.53],[1,2,0,233.48,233.48,233.48],[2,2,0,231.3,231.3,231.3],[0,0,11,233.51,233.22,233.33],[0,2,0,238.65,238.65,238.65],[2,1,0,234.03,234.03,234.03],[3,2,0,230.74,230.74,230.74],[0,0,0,236.05,236.05,236.05],[0,0,7,231.86,231.76,231.83],[1,0,-2,232.69,232.79,232.77],[2,1,0,232.18,232.18,232.18],[0,1,-10,232.87,232.67,232.57],[2,2,0,230.99,230.99,230.99],[3,2,0,236.96,236.96,236.96],[1,2,0,237.96,237.96,237.96],[0,0,0,224.28,224.28,224.28],[0,0,0,227.61,227.61,227.61],[1,1,0,235.75,235.75,235.75],[3,1,-10,233.51,233.52,233.42],[2,2,0,237.33,237.33,237.33],[0,2,0,229.63,229.63,229.63],[2,0,0,233.58,233.58,233.58],[3,1,0,233.03,233.03,233.03],[0,0,13,231.96,231.74,231.87],[1,1,5,232.44,232.57,232.62],[0,0,12,231.45,230.74,230.86],[2,0,0,232.34,232.34,232.34],[2,2,0,235.92,235.92,235.92],[0,2,0,233.4,233.4,233.4],[3,0,0,232.45,232.45,232.45],[1,1,0,232.61,232.61,232.61],[2,1,0,241.95,241.95,241.95],[2,0,0,233.29,233.29,233.29],[1,2,0,232.27,232.27,232.27],[1,1,0,234.14,234.14,234.14],[3,0,0,236.08,236.08,236.08],[3,1,20,232.9,233.01,233.21],[3,0,0,236.65,236.65,236.65],[2,0,0,234.64,234.64,234.64],[1,1,0,237.85,237.85,237.85],[0,2,0,231.61,231.61,231.61],[0,0,0,233.2,233.2,233.2],[2,2,0,230.25,230.25,230.25],[0,1,0,228.58,228.58,228.58],[0,1,0,235.18,235.18,235.18],[1,2,0,233.56,233.56,233.56],[1,2,0,231.32,231.32,231.32],[2,0,0,231.75,231.75,231.75],[1,0,0,233.18,233.18,233.18],[3,1,0,232.64,232.64,232.64],[3,0,0,235.05,235.05,235.05],[1,0,-4,231.5,231.43,231.39],[2,2,0,233.62,233.62,233.62],[0,0,0,235.74,235.74,235.74],[3,1,-11,232.75,232.74,232.63],[1,2,0,239.94,239.94,239.94],[3,1,0,230.51,230.51,230.51],[3,0,0,233.55,233.55,233.55],[0,0,0,236.74,236.74,236.74],[2,2,0,240.9,240.9,240.9],[2,1,0,240.93,240.93,240.93],[1,0,-10,243.61,243.68,243.58],[3,2,0,233.48,233.48,233.48],[3,2,25,239.55,238.68,238.93],[0,0,0,237.37,237.37,237.37],[3,2,0,239.95,239.95,239.95],[3,2,0,234.71,234.71,234.71],[3,2,0,233.23,233.23,233.23],[3,2,0,238.1,238.1,238.1],[0,1,0,236.8,236.8,236.8],[2,2,0,235.66,235.66,235.66],[3,2,7,234.95,234.71,234.78],[3,1,-19,234.14,234,233.81],[2,0,0,232.52,232.52,232.52],[2,2,0,241.71,241.71,241.71],[1,0,-1,239.07,239.07,239.06],[1,0,-20,236.18,235.82,235.62],[2,1,0,236.09,236.09,236.09],[1,2,0,235.75,235.75,235.75],[2,0,0,236.1,236.1,236.1],[3,0,-7,238.57,238.58,238.51],[1,2,0,236.22,236.22,236.22],[1,0,-2,243.57,243.52,243.5],[3,2,12,239.5,239.2,239.32]],"chart":{"lo":-300,"hi":300},"end":{"W":[[4.73,-1.39,-1.72],[-1.9,1.56,-6.97],[-0.4,0.08,10],[-0.78,-0.35,1.39]],"top":[0,1,2,2],"upd":239.5,"best":244.03}};
+  var S3C = {"seeds":{"bets":17,"betsX":68,"pick":134623,"dice":12,"movieDiceBase":12000},"n":1000,"eps":0.02,"alpha":0.01,"rounds":300,"W0":[[0.4,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"start":-172.24,"hop1":{"s":0,"a":0,"w":0.4,"before":-172.24,"after":-167.87,"change":4.37,"nabla":218.5,"wNew":2.585,"upd":105.6},"W1":[[2.585,-0.6,0.1],[-0.7,-0.8,-6.9],[-0.4,0.1,10],[0.4,0.6,-0.4]],"g1":{"lo":-1200,"hi":800},"ten":{"W0":[-350,322,-313,-91,-74,-500,146,-222,-93,-230],"W0h":[-350,322,-313,-91,-74,-278,146,-222,-93,-230],"W1":[91,10,-229,236,340,-671,117,370,58,177]},"hist":{"bin":100,"max":413},"movie":[[0,0,218.5,105.6,-172.24,-167.87],[0,2,-50,123.99,105.6,104.6],[2,2,0,134.28,134.28,134.28],[0,0,11.5,132.11,129.52,129.75],[3,0,-15,134.68,131.61,131.31],[2,1,0,145.61,145.61,145.61],[2,1,0,135.46,135.46,135.46],[2,1,0,140.46,140.46,140.46],[3,1,-8.5,140.62,142.25,142.08],[3,0,-7,145.87,144.58,144.44],[3,2,22,150.35,146.21,146.65],[0,1,-21,141.04,139.94,139.52],[3,0,-7.5,145.48,143.96,143.81],[0,2,-40.5,164.46,155.04,154.23],[2,0,0,153.78,153.78,153.78],[1,1,49,173.48,163.25,164.23],[1,1,-12.5,173.21,176.84,176.59],[2,1,0,161.2,161.2,161.2],[0,1,-19,166,164.49,164.11],[3,1,-14.5,163.58,164.46,164.17],[2,0,0,155.39,155.39,155.39],[0,1,-8.5,165.24,164.7,164.53],[0,0,14.5,161.46,159.17,159.46],[3,1,-21.5,170.14,171.19,170.76],[2,1,0,174.93,174.93,174.93],[3,0,-11.5,169.06,166.53,166.3],[0,1,23.5,166.26,166.59,167.06],[1,1,24,160.65,157.33,157.81],[1,2,0,179.02,179.02,179.02],[1,1,11.5,180.03,175.7,175.93],[0,2,-11,171.83,169.38,169.16],[0,1,-9.5,188.56,187.51,187.32],[1,0,-2,172.53,172.29,172.25],[1,2,0,170.53,170.53,170.53],[0,2,-22,184.44,181.33,180.89],[0,0,3,182.65,182.42,182.48],[3,0,-44,177.48,172.03,171.15],[1,2,0,182.42,182.42,182.42],[2,2,0,190.94,190.94,190.94],[2,0,0,188.41,188.41,188.41],[1,2,0,183.63,183.63,183.63],[1,2,0,187.27,187.27,187.27],[0,0,9.5,191,189.38,189.57],[0,0,28,188.63,184.74,185.3],[1,0,-65.5,211.14,202.34,201.03],[1,0,0.5,204.46,204.24,204.25],[2,0,0,198.66,198.66,198.66],[0,2,-4.5,198.38,197.65,197.56],[0,0,1,200.44,200.42,200.44],[2,1,0,197.15,197.15,197.15],[2,2,0,197.14,197.14,197.14],[0,0,9,197.2,196.63,196.81],[3,2,11,201.75,200.68,200.9],[3,2,25,201.92,200.07,200.57],[0,2,-15.5,216.37,215,214.69],[3,1,11,211.64,211.78,212],[2,1,0,208.62,208.62,208.62],[1,1,38.5,209.7,205.55,206.32],[2,1,0,221.64,221.64,221.64],[3,0,-0.5,215.98,215.98,215.97],[0,0,10.5,210.43,208.85,209.06],[1,2,0,222.13,222.13,222.13],[0,2,-1.5,209.43,209.43,209.4],[1,2,0,215.41,215.41,215.41],[0,0,15.5,216.64,215.04,215.35],[1,1,17.5,212.38,211.18,211.53],[3,0,-5,221.15,220.74,220.64],[0,0,16,218.14,216.33,216.65],[3,1,-2,212.1,212.4,212.36],[1,1,4,223.9,223.52,223.6],[1,0,-33.5,220.15,217.71,217.04],[0,1,-6,224.85,225.05,224.93],[3,0,0,219.46,219.46,219.46],[2,0,0,215.65,215.65,215.65],[2,0,0,219.67,219.67,219.67],[1,2,0,226.45,226.45,226.45],[1,2,-3,229.65,229.65,229.59],[3,1,-3,216.81,216.48,216.42],[3,0,-9,211.1,210.88,210.7],[1,2,0,221.95,221.95,221.95],[1,0,4.5,216.19,216.28,216.37],[1,1,0,222.39,222.39,222.39],[2,1,0,215.78,215.78,215.78],[0,2,-3.5,222.54,222.46,222.39],[0,2,0,215.7,215.7,215.7],[2,2,0,225.33,225.33,225.33],[2,2,0,217.05,217.05,217.05],[0,1,0,226.35,226.35,226.35],[2,0,0,227.79,227.79,227.79],[3,2,14,216.81,215.99,216.27],[0,0,15,222.78,221.23,221.53],[2,1,0,215.76,215.76,215.76],[1,2,0,224.02,224.02,224.02],[2,1,0,219.64,219.64,219.64],[0,1,0,215.78,215.78,215.78],[1,1,-8.5,215.5,216.1,215.93],[0,1,-13.5,224.55,224.3,224.03],[2,2,0,227.42,227.42,227.42],[3,2,3.5,225.86,225.73,225.8],[1,1,3.5,226.14,225.89,225.96],[1,2,0,219.36,219.36,219.36],[1,2,0,230.83,230.83,230.83],[1,0,3,228.07,228.16,228.22],[1,1,4.5,220.21,220.31,220.4],[0,0,16,222.01,220.78,221.1],[3,2,2,228.59,228.55,228.59],[0,2,-5,234.68,234.49,234.39],[0,2,-1,225.14,225.09,225.07],[1,2,0,223.33,223.33,223.33],[3,1,-5,225.01,224.84,224.74],[2,2,0,221.39,221.39,221.39],[3,1,-6.5,226.97,226.72,226.59],[2,0,0,230.45,230.45,230.45],[3,1,0,232.62,232.62,232.62],[3,1,-5,219.66,219.68,219.58],[0,0,13,218.77,218.17,218.43],[3,1,-4.5,218.17,217.85,217.76],[2,0,0,221.7,221.7,221.7],[2,1,0,224.26,224.26,224.26],[2,0,0,215.59,215.59,215.59],[3,1,0,223.09,223.09,223.09],[2,0,0,215.26,215.26,215.26],[2,1,0,235.12,235.12,235.12],[2,2,0,228.25,228.25,228.25],[3,0,-4.5,231.57,231.42,231.33],[2,2,0,226.08,226.08,226.08],[0,1,0,228.69,228.69,228.69],[1,2,0,222.14,222.14,222.14],[0,2,-1.5,226.02,226.02,225.99],[1,2,0,219.52,219.52,219.52],[2,0,0,229.02,229.02,229.02],[0,1,3,219.74,219.68,219.74],[1,2,0,228.44,228.44,228.44],[2,2,0,221.12,221.12,221.12],[3,0,-11,226.54,225.58,225.36],[2,1,0,234.23,234.23,234.23],[3,1,-5,223.79,223.55,223.45],[2,2,0,221.94,221.94,221.94],[0,0,5,223.88,223.7,223.8],[1,2,0,222.39,222.39,222.39],[1,2,0,233.5,233.5,233.5],[0,0,10.5,222.75,221.99,222.2],[1,2,0,223.22,223.22,223.22],[3,2,4,228.29,228.11,228.19],[3,1,0,227.5,227.5,227.5],[1,1,5,229.11,228.88,228.98],[0,1,0,235.07,235.07,235.07],[0,1,0,235.91,235.91,235.91],[0,0,6,219.69,219.62,219.74],[0,0,-2,222.38,222.51,222.47],[0,1,-2,227.59,227.44,227.4],[0,2,0,219.14,219.14,219.14],[0,1,0,233.09,233.09,233.09],[1,0,-8,229.77,229.58,229.42],[2,0,0,233.99,233.99,233.99],[3,1,-4,220.78,220.78,220.7],[2,1,0,226.54,226.54,226.54],[1,2,0,222.98,222.98,222.98],[2,0,0,228.06,228.06,228.06],[0,2,0.5,225.43,225.43,225.44],[3,2,4,221.81,221.64,221.72],[1,1,-5.5,229.89,230.23,230.12],[1,1,11.5,220.92,220.12,220.35],[1,0,-9,233.3,232.15,231.97],[0,1,0,229.97,229.97,229.97],[0,2,0,231.53,231.53,231.53],[2,2,0,231.08,231.08,231.08],[0,0,0,216.37,216.37,216.37],[2,0,0,230.6,230.6,230.6],[1,0,0,231.84,231.84,231.84],[2,1,0,227.11,227.11,227.11],[1,1,-6.5,231.8,232.17,232.04],[1,2,0,213.86,213.86,213.86],[0,2,0.5,231.64,231.63,231.64],[1,2,0,223.7,223.7,223.7],[3,1,0,230.85,230.85,230.85],[0,2,0,229.23,229.23,229.23],[3,2,-0.5,230.81,230.95,230.94],[2,1,0,231.32,231.32,231.32],[2,1,0,234.18,234.18,234.18],[0,2,0,228.52,228.52,228.52],[1,0,-28,232.67,230.83,230.27],[1,2,0,228.51,228.51,228.51],[0,1,0,234.46,234.46,234.46],[3,2,27,230.62,229.49,230.03],[2,2,0,226.44,226.44,226.44],[1,2,0,229.99,229.99,229.99],[2,1,0,228.45,228.45,228.45],[1,2,0,228.59,228.59,228.59],[1,0,1,228.46,228.48,228.5],[1,2,0,232.89,232.89,232.89],[0,2,-3,228.3,228.29,228.23],[3,0,1,223.64,223.62,223.64],[1,0,-10,232.02,232.01,231.81],[3,1,-5.5,236.86,237,236.89],[1,1,3.5,233.97,233.93,234],[0,1,-7,230.4,230.2,230.06],[1,1,5.5,232.49,232.14,232.25],[0,0,2.5,230.94,230.89,230.94],[1,0,-4,230.45,230.36,230.28],[0,0,0,227.19,227.19,227.19],[2,2,0,233.73,233.73,233.73],[0,2,-2.5,236.11,236.03,235.98],[2,0,0,238.01,238.01,238.01],[1,0,-9,236.96,236.4,236.22],[2,0,0,234.72,234.72,234.72],[0,0,3.5,228.58,228.51,228.58],[3,1,0,223.15,223.15,223.15],[3,0,0,235.27,235.27,235.27],[2,0,0,232.58,232.58,232.58],[3,1,0,234.38,234.38,234.38],[3,0,0,238.53,238.53,238.53],[0,2,0,234.19,234.19,234.19],[1,2,0,238.74,238.74,238.74],[2,2,0,229.97,229.97,229.97],[3,2,0,225.54,225.54,225.54],[3,2,29.5,230.19,229.5,230.09],[1,2,0,229.19,229.19,229.19],[2,2,0,227.37,227.37,227.37],[0,0,8,232.53,231.91,232.07],[0,2,0,236.87,236.87,236.87],[2,1,0,235.59,235.59,235.59],[3,2,5.5,239.42,239.26,239.37],[0,0,4,231.47,231.39,231.47],[0,0,-10,232.75,233.04,232.84],[1,0,-6.5,236.5,236.39,236.26],[2,1,0,233.58,233.58,233.58],[0,1,-3,226.82,226.78,226.72],[2,2,0,229.01,229.01,229.01],[3,2,0,233.84,233.84,233.84],[1,2,0,233.42,233.42,233.42],[0,0,4.5,233.56,233.43,233.52],[0,0,7,230.7,230.31,230.45],[1,1,6.5,236.58,236.46,236.59],[3,1,-4,233.08,233.11,233.03],[2,2,0,232.86,232.86,232.86],[0,2,0,232.27,232.27,232.27],[2,0,0,238.42,238.42,238.42],[3,1,-6.5,238.98,238.92,238.79],[0,0,4,239.83,239.67,239.75],[1,1,12,238.66,238.45,238.69],[0,0,0,237.33,237.33,237.33],[2,0,0,228.41,228.41,228.41],[2,2,0,231.52,231.52,231.52],[0,2,0,234.59,234.59,234.59],[3,0,-5,228.09,227.99,227.89],[1,1,-1,228.34,228.39,228.37],[2,1,0,229.25,229.25,229.25],[2,0,0,238.95,238.95,238.95],[1,2,0,233.86,233.86,233.86],[1,1,7,235.69,235.67,235.81],[3,0,-3,235.99,236.02,235.96],[3,1,-1,238.33,238.33,238.31],[3,0,2,236.74,236.7,236.74],[2,0,0,232.6,232.6,232.6],[1,1,-3,231.74,232.04,231.98],[0,2,0,243.97,243.97,243.97],[0,0,10.5,232.3,231.82,232.03],[2,2,0,238.07,238.07,238.07],[0,1,0,239.27,239.27,239.27],[0,1,0,228,228,228],[1,2,0,238.93,238.93,238.93],[1,2,0,233.69,233.69,233.69],[2,0,0,236.8,236.8,236.8],[1,0,-5.5,236.61,236.55,236.44],[3,1,0,236.06,236.06,236.06],[3,0,-2,234.92,234.92,234.88],[1,0,2,232.37,232.33,232.37],[2,2,0,236.14,236.14,236.14],[0,0,0,226.77,226.77,226.77],[3,1,-3.5,230.64,230.65,230.58],[1,2,0,229.62,229.62,229.62],[3,1,0,226.1,226.1,226.1],[3,0,0,233.69,233.69,233.69],[0,0,6.5,236.67,236.4,236.53],[2,2,0,234.02,234.02,234.02],[2,1,0,237.17,237.17,237.17],[1,0,0.5,241.25,241.29,241.3],[3,2,12.5,236.87,236.68,236.93],[3,2,-1,240.02,240,239.98],[0,0,2.5,227.8,227.75,227.8],[3,2,0,230.91,230.91,230.91],[3,2,0,230.27,230.27,230.27],[3,2,0,244.12,244.12,244.12],[3,2,-1.5,233.45,233.45,233.42],[0,1,0,241.44,241.44,241.44],[2,2,0,229.74,229.74,229.74],[3,2,2,235.23,235.19,235.23],[3,1,-9.5,236.93,236.84,236.65],[2,0,0,241.5,241.5,241.5],[2,2,0,228.68,228.68,228.68],[1,0,-14,236.12,235.96,235.68],[1,0,-7.5,240.03,240.12,239.97],[2,1,0,231.33,231.33,231.33],[1,2,0,234.17,234.17,234.17],[2,0,0,233.5,233.5,233.5],[3,0,1.5,234.88,234.88,234.91],[1,2,0,234.2,234.2,234.2],[1,0,1.5,238.89,238.86,238.89],[3,2,5,234.57,234.47,234.57]],"chart":{"lo":-300,"hi":300},"end":{"W":[[4.835,-1.23,-1.505],[-2.595,0.865,-6.93],[-0.4,0.1,10],[-0.805,-0.385,1.24]],"top":[0,1,2,2],"upd":234.57,"best":242.18}};
   if (typeof module !== "undefined" && module.exports) module.exports = S3C;
   else root.S3C = S3C;
 })(typeof window !== "undefined" ? window : this);
@@ -6440,8 +7045,20 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var body = "$" + num(Math.abs(r), p);
     return r < 0 ? "-" + body : body;
   }
-  function bet(x) { return num(x, 2); }
-  function paren(x) { return x < 0 ? "(" + num(x, 0) + ")" : num(x, 0); }
+  /* A preference: exact in thousandths since 2026-11-18 (hop 0.02, alpha 0.01: see tools/proto_movie.js), written
+     with two decimals, or three when its third is not 0 (0.40, 2.585). nabla: change / 0.02, a multiple of 0.5,
+     written whole or with one decimal (218.5). */
+  function thou(x) { return Math.round(x * 1000) / 1000; }
+  function bet(x) { var t = Math.round(x * 1000); return num(x, t % 10 ? 3 : 2); }
+  function nab(x) { return num(x, Math.round(x * 2) % 2 ? 1 : 0); }
+  function paren(x) { return x < 0 ? "(" + nab(x) + ")" : nab(x); }
+  /* theta indexed by icons (Carlos, 2026-11-18: "don't index it by letters, index it by icons. So the S converted
+     into the green car ... and the round converted into the blue wheel"): TeX for theta whose subscript is the van of
+     state s and the glyph of action a. Each icon is a \htmlClass box (ob-ics0 to 3, ob-ica0 to 2) that sec3d.css
+     sizes and this file paints, in the browser, with the skin's van and the action's glyph (iconStyle below). */
+  function TH(s, a) {
+    return "\\theta_{\\htmlClass{ob-ics" + s + "}{\\phantom{0}}\\htmlClass{ob-ica" + a + "}{\\phantom{0}}}";
+  }
   /* A formula of a line, and a number or an amount as TeX (OB.texNum of tex.js, repeated for node). */
   function tx(s) { return "\\(" + s + "\\)"; }
   function tn(s) { return String(s).replace(/\$/g, "\\$").replace(/,/g, "{,}"); }
@@ -6450,6 +7067,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   var AVG = tx("\\bar{G}_1");
   var N = num(D.n, 0), EPS = num(D.eps, 2), ALPHA = num(D.alpha, 2);
   var h1 = D.hop1;
+  var THW = TH(h1.s, h1.a);              // theta of the worked entry, HEALTHY and RUN
   var E = D.end, LAST = D.rounds;
   function sa(h) { return STATES[h.s] + " and " + ACTIONS[h.a]; }
 
@@ -6463,7 +7081,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   var P1H = softmax(D.W1[h1.s]);          // HEALTHY's probabilities after the first update
 
   var T = {
-    num: num, money: money, bet: bet, G1: G1, AVG: AVG, STATES: STATES, ACTIONS: ACTIONS,
+    num: num, money: money, bet: bet, nab: nab, thou: thou, TH: TH, THW: THW, G1: G1, AVG: AVG, STATES: STATES, ACTIONS: ACTIONS,
     card: { kicker: "REINFORCE", title: "proto-REINFORCE",
       line: "Random preferences, many episodes, their average, then one small change at a time." },
 
@@ -6481,8 +7099,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     backward: [
       "Which preference should change? One preference, picked at random.",
       sa(h1) + ". Its preference, " + bet(h1.w) + ", is Before.",
-      "Add a little, " + EPS + ": After is " + bet(h1.w + D.eps) + ".",
-      "With " + bet(h1.w + D.eps) + " in the table, softmax gives " + STATES[h1.s] + " new probabilities.",
+      "Add a little, " + EPS + ": After is " + bet(thou(h1.w + D.eps)) + ".",
+      "With " + bet(thou(h1.w + D.eps)) + " in the table, softmax gives " + STATES[h1.s] + " new probabilities.",
       "The " + N + " episodes again, with the same luck: the average return " + AVG + " After is " + money(h1.after) + ".",
       "Before and after, side by side: the preference and the average return " + AVG + "."
     ],
@@ -6495,8 +7113,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       (h1.upd > h1.before ? "Up" : "Down") + ": from " + money(h1.before) + " to " + money(h1.upd) + "."
     ],
     updLines: [
-      "\\theta_{s,a} = \\theta_{s,a} + \\alpha\\nabla",
-      "\\theta_{s,a} = " + bet(h1.w) + " + " + ALPHA + " \\times " + paren(h1.nabla) + " = " + bet(h1.wNew)
+      THW + " = " + THW + " + \\alpha\\nabla",
+      THW + " = " + bet(h1.w) + " + " + ALPHA + " \\times " + paren(h1.nabla) + " = " + bet(h1.wNew)
     ],
 
     /* 410, the learning curve: how its points are made (main session, 2026-11-16, evening; scene 410 "Again" went at
@@ -6519,17 +7137,33 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     hop: function (r) {
       return {
         state: STATES[r.s], action: ACTIONS[r.a],
-        w: bet(r.w), w1: bet(r.w + D.eps), dw: EPS,
+        w: bet(r.w), w1: bet(thou(r.w + D.eps)), dw: EPS,
         before: money(r.before), after: money(r.after), dg: money(r.change),
-        change: num(r.change, 2), nabla: num(r.nabla, 0), nablaP: paren(r.nabla), wNew: bet(r.wNew)
+        change: num(r.change, 2), nabla: nab(r.nabla), nablaP: paren(r.nabla), wNew: bet(r.wNew)
       };
     },
     /* The label of the optimal policy's line in the plot: its average return on the episodes of the last update. */
     bestLab: "OPTIMAL POLICY: " + money(E.best),
     counter: function (i) { return "UPDATE " + i + " OF " + LAST; }
   };
+  /* In the browser: the icons of TH, painted as backgrounds of their boxes from the skin's art (OB.art, loaded before
+     this file): the van of each state, the glyph of each action in its lever colour. */
+  function iconStyle() {
+    var art = root.OB && root.OB.art, doc = root.document;
+    if (!art || !doc || doc.getElementById("ob-th-icons")) return;
+    function url(svg) { return "url(\"data:image/svg+xml," + encodeURIComponent(svg) + "\")"; }
+    var css = [];
+    for (var s = 0; s < 4; s++) css.push(".ob-ics" + s + " { background-image: " + url(art.vanSvg(s, 4)) + "; }");
+    for (var a = 0; a < 3; a++) {
+      css.push(".ob-ica" + a + " { background-image: " + url(art.glyph(a, 24).replace(/currentColor/g, art.C.lever[a])) + "; }");
+    }
+    var st = doc.createElement("style");
+    st.id = "ob-th-icons";
+    st.textContent = css.join("\n");
+    doc.head.appendChild(st);
+  }
   if (NODE) module.exports = T;
-  else root.S3CT = T;
+  else { root.S3CT = T; iconStyle(); }
 })(typeof window !== "undefined" ? window : this);
 </script>
 <script>/* sec3c.js */
@@ -6553,8 +7187,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
        its bars rise; the average return: its mark on the histogram, whose number, -$172.24, flies into the average
        box; the loop back to the preferences
    320 The backward pass (6 beats): the twelve preferences light up and one is ringed (HEALTHY, RUN); its preference
-       taken apart, Before 0.40; +0.01, After 0.41; softmax with 0.41; the same 1,000 episodes generated again (the
-       ten under a playhead, the stream), the histogram moves, the mark rolls to -$170.50 and flies into the box
+       taken apart, Before 0.40; +0.02, After 0.42; softmax with 0.42; the same 1,000 episodes generated again (the
+       ten under a playhead, the stream), the histogram moves, the mark rolls to -$167.87 and flies into the box
        After; the four boxes lit together. Next from there goes to scene 360, the triangle of the hop (sec3d.js): the
        table of preferences flies to its place there and the four numbers into its table (OB.s3dTake). Until
        2026-11-17 a seventh beat moved the four numbers to the middle for agent A6's scene 350, which went at Carlos's
@@ -6916,15 +7550,15 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 /* sec3c2.js: page 3, proto-REINFORCE after agent A6's close-up (agent A5, 2026-11-14), scenes 400 to 499. The kit
    of the diagram is OB.s3c (sec3c.js); every number comes from sec3c-data.js and every line from sec3c-text.js.
 
-   400 The update (4 beats): the new preference 2.14 flies from the update into the table; softmax gives HEALTHY
-       new probabilities (RUN 0.84); the same 1,000 episodes again (the ten played again under a playhead, the stream,
-       the histogram moves right), the mark of the average goes and the room guesses (Compute); the mark at $73.57 and
-       its number flies into the box: up, from -$172.24 to $73.57
+   400 The update (4 beats): the new preference 2.585 flies from the update into the table; softmax gives HEALTHY
+       new probabilities; the same 1,000 episodes again (the ten played again under a playhead, the stream, the
+       histogram moves right), the mark of the average goes and the room guesses (Compute); the mark at $105.60 and
+       its number flies into the box: up, from -$172.24 to $105.60 (hop 0.02, alpha 0.01 since 2026-11-18)
    The episodes are drawn by OB.s3cRuns (sec3c-runs.js, agent W, 2026-11-16) through the diagram's d.layer, d.runsOn,
    d.g1On, d.markOn and d.flyAvg.
    410 The learning curve (3 beats, main session, 2026-11-16, evening): the whole diagram after update 1, the panel of
        its backward pass and its update, and an empty plot (across the updates, up the average return); the average
-       of the preferences at random, -$172.24, flies to the first point; the average after update 1, $73.57, to the
+       of the preferences at random, -$172.24, flies to the first point; the average after update 1, $105.60, to the
        second
    420 Many updates (2 beats): the movie of updates 2 to 300 with the whole diagram, every part set at each update
        (the preference picked at random, its Before, After and change, nabla, the update, the preferences, the
@@ -7000,7 +7634,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
      point. */
 
   /* The frames: FR[0] the preferences at random; FR[i] update i: its preference, its numbers, then the preferences
-     and the probabilities after it, rebuilt from the movie's rows in hundredths (whole numbers, so the sums are exact).
+     and the probabilities after it, rebuilt from the movie's rows in hundredths (since 2026-11-18 a step alpha nabla is a multiple of half a
+     hundredth, as nabla = change / 0.02 with the change in cents; halves are exact in floating point, so the sums are
+     exact).
      tools/check_proto.js checks that the rebuilt preferences end on D.end.W. */
   var FR = (function () {
     var H = D.W0.map(function (r) { return r.map(function (x) { return Math.round(x * 100); }); });
@@ -7046,7 +7682,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     ["", "BEFORE", "AFTER", "CHANGE"].forEach(function (t) { g.appendChild(el("div", "s3c-hph", t)); });
     /* A number of the grid: its cell, and in it the number's own span (which a flight carries). */
     function cell(cls) { var c = el("div", "s3c-hpc"), e = el("span", "s3c-hpn" + (cls ? " " + cls : "")); c.appendChild(e); g.appendChild(c); return e; }
-    g.appendChild(OB.html("div", "s3c-hpl", "PREFERENCE " + OB.tex("\\theta_{s,a}")));
+    P.thl = OB.html("div", "s3c-hpl", OB.tex(X.THW));
+    g.appendChild(P.thl);
     P.w = cell(); P.w1 = cell(); P.dw = cell("s3c-hpd");
     g.appendChild(OB.html("div", "s3c-hpl", "AVERAGE " + OB.texIn(X.AVG)));
     P.gb = cell(); P.ga = cell(); P.dg = cell("s3c-hpd");
@@ -7063,7 +7700,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     P.uw = OB.texNumEl("", "");
     P.un = OB.texNumEl("", "");
     P.res = OB.texNumEl("", "s3c-new");
-    P.l2 = line([OB.texEl("\\theta_{s,a} =\\;"), P.uw, OB.texEl("\\;+\\;" + X.num(D.alpha, 2) + "\\;\\times\\;"), P.un, OB.texEl("\\;=\\;"), P.res]);
+    P.th2 = OB.texEl(X.THW + " =\\;");
+    P.l2 = line([P.th2, P.uw, OB.texEl("\\;+\\;" + X.num(D.alpha, 2) + "\\;\\times\\;"), P.un, OB.texEl("\\;=\\;"), P.res]);
     function money(e, t, x) {
       var r = +x.toFixed(2);
       e.textContent = t;
@@ -7074,6 +7712,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var h = X.hop(r);
       P.cs.forEach(function (c, s) { c.classList.toggle("ob-gone", s !== r.s); });
       P.ca.forEach(function (c, a) { c.classList.toggle("ob-gone", a !== r.a); });
+      // theta of the entry picked, indexed by the icons of its state and action (Carlos, 2026-11-18).
+      P.thl.innerHTML = OB.tex(X.TH(r.s, r.a));
+      P.th2.innerHTML = OB.tex(X.TH(r.s, r.a) + " =\\;");
       P.w.textContent = h.w;
       P.w1.textContent = h.w1;
       P.dw.textContent = h.dw;
@@ -7374,17 +8015,18 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    tools/check_closeup.js, which asserts every shown number.
 
    The guided example B.PROTO: the preference for RUN in HEALTHY (B.PROTO.pick), 1,000 episodes on B.dice(12, 1000),
-   the hop epsilon = 0.01, the step size alpha = 0.01. B.hop gives the average return before and after the hop, on
-   the same dice.
+   the hop epsilon = 0.02, the step size alpha = 0.01 (since 2026-11-18; Carlos: "let the hop be 0.02 and the alpha be
+   0.01"). B.hop gives the average return before and after the hop, on the same dice.
 
-   Every number is shown with two decimals, as B.PROTO's comment says, and every shown number follows from the shown
-   numbers before it, worked in hundredths (whole numbers, so the arithmetic is exact):
-     change = after - before            -170.50 - (-172.24) = 1.74
-     nabla  = change / epsilon          1.74 / 0.01 = 174
-     w      = w + alpha x nabla         0.40 + 0.01 x 174 = 0.40 + 1.74 = 2.14
-   The update climbs (theta_{s,a} + alpha nabla): the average return has to go up (Carlos, 2026-11-14, "yes!").
+   The averages are shown with two decimals, as B.PROTO's comment says, and every shown number follows from the shown
+   numbers before it, worked in thousandths (whole numbers, so the arithmetic is exact):
+     change = after - before            -167.87 - (-172.24) = 4.37
+     nabla  = change / epsilon          4.37 / 0.02 = 218.5 (a multiple of 0.5, written with one decimal)
+     w      = w + alpha x nabla         0.40 + 0.01 x 218.5 = 0.40 + 2.185 = 2.585 (exact, kept with three decimals)
+   A preference is written with two decimals, or three when its third is not 0 (sec3c-text.js, bet).
+   The update climbs (theta + alpha nabla): the average return has to go up (Carlos, 2026-11-14, "yes!").
 
-   DOLLARS: true writes the averages and their change as money (OB.money: "-$172.24", "$1.74"), as page 2 and Try it
+   DOLLARS: true writes the averages and their change as money (OB.money: "-$172.24", "$4.37"), as page 2 and Try it
    write every return; nabla, the preferences, epsilon and alpha are plain numbers. */
 (function (root) {
   "use strict";
@@ -7408,8 +8050,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     if (r < 0) return "-" + body;
     return (sign && r > 0 ? "+" : "") + body;
   }
-  /* A whole number of hundredths as text with two decimals (214 -> "2.14", -17224 -> "-172.24"). */
-  function hund(i) { return num(i / 100, 2); }
+  /* A whole number of thousandths as text: two decimals, or three when the third is not 0 (2585 -> "2.585", 400 ->
+     "0.40", -172240 -> "-172.24"). */
+  function thou(i) { return num(i / 1000, i % 10 ? 3 : 2); }
   /* An average return (or its change) as the page writes it. */
   function avg(x, sign) { return DOLLARS ? money(x, 2, sign) : (sign && x > 0 ? "+" : "") + num(x, 2); }
 
@@ -7417,37 +8060,40 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   var dice = B.dice(P.diceSeed, P.n);
   var hop = B.hop(P.bets, S, A, P.eps, dice, P.n);
 
-  /* In hundredths: the preference before and after the hop, the averages before and after, the change, epsilon,
+  /* In thousandths: the preference before and after the hop, the averages before and after, the change, epsilon,
      alpha. */
   var U = {
-    w0: Math.round(P.bets[S][A] * 100),            // 40
-    eps: Math.round(P.eps * 100),                  // 1
-    alpha: Math.round(P.alpha * 100),              // 1
-    before: Math.round(hop.before * 100),          // -17224
-    after: Math.round(hop.after * 100)             // -17050
+    w0: Math.round(P.bets[S][A] * 1000),           // 400
+    eps: Math.round(P.eps * 1000),                 // 20
+    alpha: Math.round(P.alpha * 1000),             // 10
+    before: Math.round(hop.before * 100) * 10,     // -172240: the average shown with two decimals
+    after: Math.round(hop.after * 100) * 10        // -167870
   };
-  U.w1 = U.w0 + U.eps;                             // 41
-  U.change = U.after - U.before;                   // 174: the change is 1.74
-  var NABLA = U.change / U.eps;                    // 174: 1.74 / 0.01, a whole number since epsilon is one hundredth
-  U.step = U.alpha * NABLA;                        // 174: 0.01 x 174 = 1.74
-  U.wNew = U.w0 + U.step;                          // 214: 0.40 + 1.74 = 2.14
+  U.w1 = U.w0 + U.eps;                             // 420
+  U.change = U.after - U.before;                   // 4370: the change is 4.37
+  var NABLA = U.change / U.eps;                    // 218.5: 4.37 / 0.02, a multiple of 0.5 since the change is whole hundredths
+  U.step = Math.round(NABLA * U.alpha);            // 2185: 0.01 x 218.5 = 2.185 (alpha x nabla in thousandths, whole)
+  U.wNew = U.w0 + U.step;                          // 2585: 0.40 + 2.185 = 2.585
 
   var V = {                                        // the shown numbers as numbers
-    w0: U.w0 / 100, w1: U.w1 / 100, eps: U.eps / 100, alpha: U.alpha / 100,
-    before: U.before / 100, after: U.after / 100, change: U.change / 100,
-    nabla: NABLA, step: U.step / 100, wNew: U.wNew / 100
+    w0: U.w0 / 1000, w1: U.w1 / 1000, eps: U.eps / 1000, alpha: U.alpha / 1000,
+    before: U.before / 1000, after: U.after / 1000, change: U.change / 1000,
+    nabla: NABLA, step: U.step / 1000, wNew: U.wNew / 1000
   };
+  /* nabla as written: whole, or with one decimal. */
+  function nabT(x) { return num(x, Math.round(x * 2) % 2 ? 1 : 0); }
   var T = {                                        // the shown numbers as text
-    w0: hund(U.w0), w1: hund(U.w1), eps: hund(U.eps), alpha: hund(U.alpha),
+    w0: thou(U.w0), w1: thou(U.w1), eps: thou(U.eps), alpha: thou(U.alpha),
     before: avg(V.before), after: avg(V.after), change: avg(V.change), changeUp: avg(V.change, true),
-    changeNum: hund(U.change), nabla: num(NABLA, 0), step: hund(U.step), wNew: hund(U.wNew),
-    perUnit: DOLLARS ? money(NABLA, 0) : num(NABLA, 0),   // nabla read as the rise of the average for one unit of preference
+    changeNum: num(V.change, 2), nabla: nabT(NABLA), step: thou(U.step), wNew: thou(U.wNew),
+    // nabla read as the rise of the average for one unit of preference
+    perUnit: DOLLARS ? money(NABLA, Number.isInteger(NABLA) ? 0 : 2) : nabT(NABLA),
     n: num(P.n, 0)
   };
 
   var S3D = {
     DOLLARS: DOLLARS, s: S, a: A, n: P.n, U: U, V: V, T: T, hop: hop, bets: P.bets,
-    num: num, money: money, hund: hund, avg: avg
+    num: num, money: money, thou: thou, nabT: nabT, avg: avg
   };
   if (NODE) module.exports = S3D;
   else root.S3D = S3D;
@@ -7473,24 +8119,30 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
    360 The triangle of the hop (5 beats): on the left the table of preferences theta, small, its entry (HEALTHY, RUN)
        lit and ringed, and under it the table of the four numbers; on the right the plot: before and after as two
-       points, their numbers flying out of the table; across, 0.41 - 0.40 = 0.01 from the two preferences; up,
-       -$170.50 - (-$172.24) = $1.74 from the two averages; nabla = 1.74 / 0.01 as a fraction, its two numbers flying
-       from the sides (the room guesses); Compute: 174. Next from 320's last beat flies 320's table of preferences to
-       its place here and 320's four numbers into the table of the four numbers
+       points, their numbers flying out of the table; across, the two preferences light up (0.40 and 0.42, in the
+       table and on the axis) and the difference 0.02 appears on the side; up, the two averages light up and $4.37
+       appears on the side (Carlos, 2026-11-18: "Just highlight the values and then show the difference. Don't put
+       the subtraction formula there because it is distracting"); nabla = 4.37 / 0.02 as a fraction, its two numbers
+       flying from the sides (the room guesses); Compute: 218.5. Next from 320's last beat flies 320's table of
+       preferences to its place here and 320's four numbers into the table of the four numbers
    370 The update (9 beats): the table of preferences stays at the top left, its entry lit and ringed, the table
-       flying in from 360. 0: theta_{s,a} = theta_{s,a} + alpha nabla with alpha = 0.01, and an arrow from the
-       symbol theta_{s,a} to its entry; 1: the sign: weekend 2's loss had to go down (minus, w = w - alpha nabla),
+       flying in from 360. 0: theta = theta + alpha nabla with alpha = 0.01, theta indexed by icons (the van of the
+       state, the glyph of the action; Carlos, 2026-11-18: "index it by icons"), and an arrow from the symbol theta to
+       its entry; 1: the sign: weekend 2's loss had to go down (minus, w = w - alpha nabla),
        here the average return has to go up (plus); 2 to 5, why this update, one card per Next, each a small copy of
        360's triangle of the hop (BEFORE, AFTER, across +epsilon, the vertical side UP or DOWN, the slope): a
        positive nabla raises the preference, a negative one lowers it, a steep slope moves it more, alpha keeps each
-       move small; 6: the update worked out under the table, theta_{s,a} = 0.40 + 0.01 x 174 = ?, the 0.40 flying out
-       of the table, 0.01 and 174 out of the line under the formula (the room guesses); 7, Compute: 2.14; 8: the new
-       preference, 2.14, flies back into the table. Nothing that comes goes until the scene ends. */
+       move small; 6: the update worked out under the table, theta = 0.40 + 0.01 x 218.5 = ?, the 0.40 flying out
+       of the table, 0.01 and 218.5 out of the line under the formula (the room guesses); 7, Compute: 2.585; 8: the new
+       preference, 2.585, flies back into the table. Since 2026-11-18 the hop is 0.02 and alpha 0.01, and the new
+       preference is exact with three decimals (sec3d-data.js). Nothing that comes goes until the scene ends. */
 (function () {
   "use strict";
   var OB = window.OB, art = OB.art, el = OB.el, TB = OB.tables, D = window.S3D;
   if (!TB || !D) { console.error("sec3d: tables.js or sec3d-data.js is missing"); return; }
-  var T = D.T, V = D.V;
+  var T = D.T, V = D.V, X = window.S3CT;
+  /* theta indexed by the icons of the worked entry (sec3c-text.js, TH): TeX source. */
+  var THS = X && X.TH ? X.TH(D.s, D.a) : "\\theta_{s,a}";
   /* Formulas by KaTeX (tex.js), in LaTeX's standard font: tx(src) is the markup of the TeX src. A number that rolls at
      the end of a formula is an element in the face of the formulas (class ob-texn, OB.texFmt). */
   var tx = OB.tex;
@@ -7511,8 +8163,11 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   /* True when beat k was reached with Next from the beat before it (or entered with Next): motion may play. */
   function live(api, k) { return api.forward && !api.instant && api.from === k - 1; }
   function avgFmt(x) { return D.avg(x); }
-  function betFmt(x) { return OB.tables.fmt("bets", x); }
-  var avgT = OB.texFmt(avgFmt), betT = OB.texFmt(betFmt), intT = OB.texFmt(function (x) { return OB.num(x, 0); });
+  /* A preference rolling: two decimals, or three when the third is not 0 (as sec3d-data.js writes them); nabla
+     rolling: in halves, whole or with one decimal. */
+  function betFmt(x) { return D.thou(Math.round(x * 1000)); }
+  function nabFmt(x) { return D.nabT(Math.round(x * 2) / 2); }
+  var avgT = OB.texFmt(avgFmt), betT = OB.texFmt(betFmt), nabTx = OB.texFmt(nabFmt);
 
   /* Small SVG tools for the plot of 360 and the why cards of 370. */
   function add(parent, tag, attrs) { var n = OB.svgEl(tag, attrs); parent.appendChild(n); return n; }
@@ -7560,10 +8215,11 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
      The four numbers of the hop stand in a table on the left for the whole scene, under the table of preferences, the
      plot on the right: the preference across, the average return up, before and after as two points whose
-     coordinates fly out of the table. Across, the two preferences light up and fly into the subtraction written
-     under the bottom side (0.41 - 0.40 = 0.01); up, the two averages light up and fly into the subtraction written
-     beside the right side, one number under the other; then the two results fly from the sides into the fraction of
-     nabla, the room guesses, and Compute works it out. Every computation stays on the plot to the end.
+     coordinates fly out of the table. Across, the two preferences light up in the table and on the axis, the side
+     draws and the difference (0.02) appears under it; up, the two averages light up likewise and the difference
+     ($4.37) appears beside the right side; no subtraction is written (2026-11-18). Then the two differences fly from
+     the sides into the fraction of nabla, the room guesses, and Compute works it out. Every number stays on the plot
+     to the end.
 
      The hand-overs (main session, 2026-11-17; from agent W's hand-over of 2026-11-16): when Next leaves a scene at
      its last beat, the scene calls take() (OB.s3dTake for scene 320 of sec3c.js), which keeps a still copy of its
@@ -7691,6 +8347,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return Tt;
   }
   function thetaOn(Tt) { Tt.mark([CELL]); Tt.rings([CELL]); }
+  /* The entry of the table to the preference v, written as sec3d-data.js writes it (2.585 keeps its three decimals). */
+  function setEntry(Tt, v) { Tt.setCell(D.s, D.a, v, { now: true }); Tt.num(D.s, D.a).textContent = betFmt(v); }
 
   /* The table of the four numbers: BEFORE and AFTER across the top, the preference (the entry's chips) and the
      average return down the side. lit("bet" | "avg" | "") lights a row's two numbers. */
@@ -7722,34 +8380,19 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return Tb;
   }
 
-  /* The subtractions written on the sides of the triangle, in the face of the formulas: across, on one line under
-     the bottom side; up, one number under the other beside the right side. Each number is its own element, so the
-     numbers of the table can fly into it. */
+  /* The differences written on the sides of the triangle, in the face of the formulas: across, under the bottom
+     side; up, beside the right side. No subtraction is written (Carlos, 2026-11-18): the two numbers light up, then
+     the difference appears on its side. */
+  /* An operator of a line of arithmetic (370's update worked out), in the face of the formulas. */
   function op(src, cls) { return OB.html("span", "s3d-op" + (cls ? " " + cls : ""), tx(src)); }
-  function acrossCalc() {
-    var C = { el: el("div", "s3d-cx") };
-    C.a = OB.texNumEl(T.w1, "s3d-cn");
-    C.b = OB.texNumEl(T.w0, "s3d-cn");
-    C.r = OB.texNumEl(T.eps, "s3d-cn s3d-cr");
-    C.ops = [op("-", "s3d-bin"), op("=", "s3d-bin")];
-    [C.a, C.ops[0], C.b, C.ops[1], C.r].forEach(function (e) { C.el.appendChild(e); });
+  function diffOn(cls, text, extra) {
+    var C = { el: el("div", cls) };
+    C.r = OB.texNumEl(text, "s3d-cn s3d-cr" + (extra ? " " + extra : ""));
+    C.el.appendChild(C.r);
     return C;
   }
-  function upCalc() {
-    var C = { el: el("div", "s3d-cy") };
-    var l1 = el("div", "s3d-cyl"), l2 = el("div", "s3d-cyl"), l3 = el("div", "s3d-cyl");
-    C.a = OB.texNumEl(T.after, "s3d-cn");
-    l1.appendChild(C.a);
-    C.ops = [op("-", "s3d-cyop"), op("(")];
-    C.b = OB.texNumEl(T.before, "s3d-cn");
-    C.ops.push(op(")"));
-    [C.ops[0], C.ops[1], C.b, C.ops[2]].forEach(function (e) { l2.appendChild(e); });
-    C.rule = el("div", "s3d-cyr");
-    C.r = OB.texNumEl(T.change, "s3d-cn s3d-cr s3d-cgain");
-    l3.appendChild(C.r);
-    [l1, l2, C.rule, l3].forEach(function (e) { C.el.appendChild(e); });
-    return C;
-  }
+  function acrossCalc() { return diffOn("s3d-cx", T.eps); }
+  function upCalc() { return diffOn("s3d-cy", T.change, V.change < 0 ? "s3d-closs" : "s3d-cgain"); }
 
   /* 360's plot, in the units of its viewBox (plain px on a desk, scaled down on a phone): the preference across, the
      average return up, before and after as two points, the right triangle and its slope. The words on its sides are
@@ -7795,6 +8438,20 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     svgText(P.A.over, PA.x + 16, PA.y - 6, "AFTER", "s3d-ptag", "start");
     add(P.A.over, "rect", { "class": "s3d-ppt", x: PA.x - 8, y: PA.y - 8, width: 16, height: 16 });
     return P;
+  }
+  /* A number on an axis of the plot lit in yellow (as the table's cells): a yellow box drawn under the text. */
+  function litLabel(t, on) {
+    var r = t.s3dLit;
+    if (!on) { if (r) r.style.opacity = "0"; return; }
+    var b = t.getBBox ? t.getBBox() : null;
+    if (!b || !b.width) return;
+    if (!r) {
+      r = t.s3dLit = OB.svgEl("rect", { "class": "s3d-plit" });
+      t.parentNode.insertBefore(r, t);
+    }
+    r.setAttribute("x", b.x - 4); r.setAttribute("y", b.y - 2);
+    r.setAttribute("width", b.width + 8); r.setAttribute("height", b.height + 4);
+    r.style.opacity = "1";
   }
   /* The plot's scale (rendered width over the viewBox's), for the HTML words laid over it. */
   function fitK(P) {
@@ -7911,31 +8568,24 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         [P.tab.w0, P.tab.w1, P.tab.g0, P.tab.g1].forEach(function (c) { c.num.style.visibility = ""; });
       }
 
-      // A side of the triangle and its subtraction: shown from beat n; at beat n with motion, the two numbers of the
-      // table fly into it, the sign and the result fade in, the side draws from its start.
-      function side(C, line, n, from) {
+      // A side of the triangle and its difference: shown from beat n. At beat n the two numbers light up in the
+      // table and on the axis; with motion, the side then draws from its start and the difference appears on it.
+      function side(C, line, n, labels) {
         var on = k >= n, fresh = k === n && go;
+        labels.forEach(function (t) { litLabel(t, k === n); });
         if (!on) { C.el.classList.add("ob-hide"); hideLine(line); return; }
-        C.el.classList.remove("ob-hide");
-        C.el.style.opacity = "";
-        var rest = C.ops.concat(C.rule ? [C.rule] : [], [C.r]);
         if (!fresh) {
-          rest.forEach(function (e) { e.classList.remove("ob-hide"); e.style.opacity = ""; });
-          C.a.style.visibility = C.b.style.visibility = "";
+          C.el.classList.remove("ob-hide");
+          C.el.style.opacity = "";
           drawIn(api, line, false);
           return;
         }
-        rest.forEach(function (e) { e.classList.add("ob-hide"); });
-        // The after number first; the before number leaves later on a higher arc, over the after cell.
-        flyEl(api, from[0], C.a, { delay: 250, dur: 1000, arc: 24 });
-        flyEl(api, from[1], C.b, { delay: 650, dur: 1000, arc: 72 });
-        C.ops.forEach(function (e) { api.show(e, true, { delay: 1100, dur: 600 }); });
-        if (C.rule) api.show(C.rule, true, { delay: 1700, dur: 500 });
-        api.show(C.r, true, { delay: 1950, dur: 700 });
-        drawIn(api, line, true, 1850);
+        C.el.classList.add("ob-hide");
+        drawIn(api, line, true, 900);
+        api.show(C.el, true, { delay: 2000, dur: 800 });
       }
-      side(P.cx, P.across, 1, [P.tab.w1.num, P.tab.w0.num]);
-      side(P.cy, P.up, 2, [P.tab.g1.num, P.tab.g0.num]);
+      side(P.cx, P.across, 1, [P.B.xt, P.A.xt]);
+      side(P.cy, P.up, 2, [P.B.yt, P.A.yt]);
 
       // Beat 3: the slope, its tint, nabla; the fraction, its two numbers flying from the sides.
       var g3 = k === 3 && go;
@@ -7957,7 +8607,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       // Beat 4, Compute: nabla rolls up from 0.
       if (k >= 4) {
         P.nv.classList.remove("s3d-q");
-        if (go) api.roll(P.nv, V.nabla, { from: 0, fmt: intT, delay: 300 });
+        if (go) api.roll(P.nv, V.nabla, { from: 0, fmt: nabTx, delay: 300 });
         else { P.nv.textContent = OB.texText(T.nabla); P.nv.dataset.v = String(V.nabla); }
       } else {
         P.nv.textContent = "?";
@@ -7967,7 +8617,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     }
   });
 
-  /* 370. The update, theta_{s,a} = theta_{s,a} + alpha nabla, and its sign. */
+  /* 370. The update, theta = theta + alpha nabla (theta indexed by icons), and its sign. */
   function wCell(markup, tag, cls) {
     var c = el("div", "s3d-uc" + (cls ? " " + cls : ""));
     c.appendChild(OB.html("span", "s3d-us", markup));
@@ -8105,7 +8755,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return r;
   }
 
-  /* 370's arrow from the symbol theta_{s,a} of the formula to its entry of the table (Carlos: "when the W appears, it
+  /* 370's arrow from the symbol theta of the formula to its entry of the table (Carlos: "when the W appears, it
      would be nice to show an arrow to that entry in the table so it is clear"): up from the symbol, across above the
      table and down into the entry at the right of its column, so that it passes beside the action's name; at right
      angles, as the engine draws its arrows (core.js), in the scene's own layer (div.scene-inner is position relative).
@@ -8152,13 +8802,13 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   /* 370. The update, why it works and the update worked out, in one scene: the lines of agent A6's scenes 370, 380 and
      390, one per beat. */
   var L370 = [
-    "Call the preference " + tx("\\theta_{s,a}") + ". The update adds " + nw(tx("\\alpha\\nabla")) + " to " + tx("\\theta_{s,a}") + ", with " + nw(tx("\\alpha = " + T.alpha) + "."),
-    "In weekend 2 a loss had to go down: " + nw(tx("w - \\alpha\\nabla") + ".") + " Here the average return " + AVG + " has to go up: " + nw(tx("\\theta_{s,a} + \\alpha\\nabla") + "."),
+    "Call the preference " + nw(tx(THS) + ":") + " the van is its state, the wheel its action. The update adds " + nw(tx("\\alpha\\nabla")) + " to it, with " + nw(tx("\\alpha = " + T.alpha) + "."),
+    "In weekend 2 a loss had to go down: " + nw(tx("w - \\alpha\\nabla") + ".") + " Here the average return " + AVG + " has to go up: " + nw(tx(THS + " + \\alpha\\nabla") + "."),
     "A positive " + nw(NAB) + " says that raising the preference raised the average return " + nw(AVG + ".") + " So the update raises the preference.",
     "A negative " + nw(NAB) + " says that raising the preference lowered the average return " + nw(AVG + ".") + " So the update lowers the preference.",
     "A steep slope, a large " + nw(NAB + ",") + " moves the preference more.",
     nw(tx("\\alpha = " + T.alpha)) + " keeps each move small: one hundredth of " + nw(NAB + ".") + " The slope was measured near this preference.",
-    "Our preference: " + nw(tx("\\theta_{s,a} = " + T.w0) + ",") + " with " + nw(tx("\\nabla = " + T.nabla) + ".") + " What is the new preference? Guess, then press Compute.",
+    "Our preference: " + nw(tx(THS + " = " + T.w0) + ",") + " with " + nw(tx("\\nabla = " + T.nabla) + ".") + " What is the new preference? Guess, then press Compute.",
     nw(tx(OB.texArith(T.alpha + " x " + T.nabla + " = " + T.step)) + ",") + " and " + nw(tx(T.w0 + " + " + T.step + " = " + T.wNew) + ":") + " the new preference.",
     "The new preference, " + T.wNew + ", goes back into the table of preferences."
   ];
@@ -8178,10 +8828,10 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       // Beside it: the update, each part with its tag; under it alpha, and from beat 6 nabla.
       var cf = el("div", "s3d-uform");
       var f = el("div", "s3d-upf");
-      P.newC = wCell(tx("\\theta_{s,a}"), "NEW");
+      P.newC = wCell(tx(THS), "NEW");
       f.appendChild(P.newC);
       f.appendChild(wCell(tx("=")));
-      f.appendChild(wCell(tx("\\theta_{s,a}"), "NOW"));
+      f.appendChild(wCell(tx(THS), "NOW"));
       P.plus = wCell(tx("+"), "", "s3d-plus");
       f.appendChild(P.plus);
       f.appendChild(wCell(tx("\\alpha\\nabla")));
@@ -8202,12 +8852,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       // Right: the sign, weekend 2's and this one, one under the other.
       var cards = el("div", "s3d-signs s3d-usigns ob-hide");
       cards.appendChild(signCard("WEEKEND 2", "A LOSS HAD TO GO DOWN", "w", "-", "s3d-old"));
-      cards.appendChild(signCard("OLD BESSIE", "THE AVERAGE RETURN " + AVG + " HAS TO GO UP", "\\theta_{s,a}", "+", "s3d-new"));
+      cards.appendChild(signCard("OLD BESSIE", "THE AVERAGE RETURN " + AVG + " HAS TO GO UP", THS, "+", "s3d-new"));
       P.cards = cards;
       g.appendChild(cards);
       // Under the table: the update worked out; each number of its second line is an element, for the flights.
       var w = el("div", "s3d-work s3d-uwork ob-box white ob-hide");
-      w.appendChild(eqRow(tx("\\theta_{s,a}"), tx("\\theta_{s,a} + \\alpha\\nabla")));
+      w.appendChild(eqRow(tx(THS), tx(THS + " + \\alpha\\nabla")));
       var r2 = eqRow("", "");
       P.w0 = OB.texNumEl(T.w0, "s3d-cn");
       P.a2 = OB.texNumEl(T.alpha, "s3d-cn");
@@ -8245,11 +8895,11 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       thetaOn(P.th);
       P.th.el.style.visibility = "";
       if (!(k === 8 && go)) {
-        P.th.setCell(D.s, D.a, k >= 8 ? V.wNew : V.w0, { now: true });
+        setEntry(P.th, k >= 8 ? V.wNew : V.w0);
         P.th.num(D.s, D.a).style.visibility = "";
       }
 
-      // 0: the table (from 360), the update, its tags, alpha; the arrow from theta_{s,a} to its entry.
+      // 0: the table (from 360), the update, its tags, alpha; the arrow from theta to its entry.
       var g0 = k === 0 && go, t = H ? 900 : 0;
       if (H) handIn(api, P, H);
       if (g0) P.f.classList.add("ob-hide");
@@ -8285,7 +8935,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         [P.w0, P.a2, P.n2].forEach(function (e) { e.style.visibility = ""; });
       }
 
-      // 7, Compute: 0.01 x 174 becomes 1.74, then the sum rolls up from the preference now.
+      // 7, Compute: 0.01 x 218.5 becomes 2.185, then the sum rolls up from the preference now.
       P.q.classList.toggle("ob-gone", k >= WORK + 1);
       P.sum.classList.toggle("ob-gone", k < WORK + 1);
       if (k === WORK + 1 && go) P.sum.classList.add("ob-hide");
@@ -8301,7 +8951,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       if (k === 8 && go) {
         P.th.setCell(D.s, D.a, V.w0, { now: true });
         flyEl(api, P.res, P.th.num(D.s, D.a), { delay: 500, dur: 1400, arc: 60, keep: true,
-          land: function () { P.th.setCell(D.s, D.a, V.wNew, { now: true }); } });
+          land: function () { setEntry(P.th, V.wNew); } });
       }
     }
   });
@@ -8317,7 +8967,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    2  THE FORWARD PASS: the first four of the n episodes of scene 310 (OB.runs.play on S3C's dice), their returns, the
       average G bar 1
    3  THE BACKWARD PASS: the triangle of the hop (schematic, as the why cards of scene 370), the hop S3C.eps
-   4  THE UPDATE: the table of preferences, its entry lit, and theta_{s,a} + alpha nabla
+   4  THE UPDATE: the table of preferences, its entry lit, and theta + alpha nabla, theta indexed by the icons of the
+      worked entry (the van of HEALTHY, the wheel of RUN; sec3c-text.js, TH)
    5  REPEAT: the learning curve of scene 420 (S3C.start and the S3C.rounds updates of S3C.movie), the optimal policy's
       line (S3C.end.best), and the likeliest action in each state after the last update (S3C.end.top, B.BEST)
    Every number comes from S3C (sec3c-data.js), S3CT (sec3c-text.js) or B (bessie.js); none is written here. */
@@ -8328,7 +8979,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   var el = OB.el, art = OB.art, tx = OB.tex, sv = OB.svgEl;
   var C = art.C;
   var N = X.num(D.n, 0), EPS = X.num(D.eps, 2), ALPHA = X.num(D.alpha, 2), LAST = X.num(D.rounds, 0);
-  var TH = tx("\\theta"), AVG = tx("\\bar{G}_1"), NAB = tx("\\nabla"), UPD = tx("\\theta_{s,a} = \\theta_{s,a} + \\alpha\\nabla");
+  var TH = tx("\\theta"), AVG = tx("\\bar{G}_1"), NAB = tx("\\nabla"), THW = X.TH(D.hop1.s, D.hop1.a), UPD = tx(THW + " = " + THW + " + \\alpha\\nabla");
   var TOP = D.end.top;
   if (TOP.join() !== B.BEST.join()) console.error("sec3e: the likeliest actions after the last update are " + TOP.join() + ", B.BEST is " + B.BEST.join());
 
@@ -8538,6 +9189,91 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         cv.style.strokeDasharray = "";
         cv.style.strokeDashoffset = "";
       }
+    }
+  });
+})();
+</script>
+<script>/* sec3f.js */
+/* sec3f.js: page 3, scene 425 "Computer meets human" (agent OPT, 2026-11-18), after 420 "Many updates" and before
+   430 "What we learned". Carlos: "after the many updates, it would be nice if you take a look at the probability
+   table we obtained and you compare it with the optimal policy that was discovered using human learning before ...
+   And then you close the link here in this part."
+
+   The probabilities after the last update (softmax of S3C.end.W) beside the column OPTIMAL POLICY of scene 190
+   (OB.s3opt, sec3a2.js, the same look), rows side by side. Six beats:
+   0  the two, side by side
+   1 to 4  one state each, top to bottom: the likeliest action of its row lit in the table, an arrow from the row to
+      the column's entry, then a tick on the entry when they agree (a cross when not); the earlier rows stay lit
+   5  the closing line, and confetti over the column when every row agrees
+   Every number from S3C and B at run time; the page logs a console error when a row's likeliest action differs from
+   B.BEST or from S3C.end.top. tools/check_optimal.js asserts the numbers. */
+(function () {
+  "use strict";
+  var OB = window.OB, B = window.B, D = window.S3C, TB = OB && OB.tables, O = OB && OB.s3opt;
+  if (!OB || !B || !TB) return;
+  if (!D || !D.end || !O) { console.error("sec3f: S3C.end or OB.s3opt (sec3a2.js) is missing"); return; }
+  var el = OB.el;
+
+  var P = B.softmaxTable(D.end.W);
+  var TOP = P.map(function (r) { var b = 0; for (var a = 1; a < r.length; a++) if (r[a] > r[b]) b = a; return b; });
+  var AGREE = TOP.map(function (a, s) { return a === B.BEST[s]; });
+  var ALL = AGREE.every(Boolean);
+  TOP.forEach(function (a, s) {
+    if (!AGREE[s]) console.error("sec3f: " + B.STATES[s] + ": the likeliest action " + B.ACTIONS[a] + " differs from the optimal policy's " + B.ACTIONS[B.BEST[s]]);
+    if (D.end.top && D.end.top[s] !== a) console.error("sec3f: " + B.STATES[s] + ": the likeliest action differs from S3C.end.top");
+  });
+
+  var LEAD = ["After " + OB.num(D.rounds) + " updates: the computer's probabilities, beside the optimal policy of human learning."];
+  TOP.forEach(function (a, s) {
+    LEAD.push(B.STATES[s] + ": the likeliest action is " + B.ACTIONS[a] + " (" + TB.fmt("prob", P[s][a]) + ")." +
+      (AGREE[s] ? " Human learning chose " + B.ACTIONS[a] + " too." : " Human learning chose " + B.ACTIONS[B.BEST[s]] + "."));
+  });
+  LEAD.push(ALL ? "The computer found the policy that human learning found."
+    : "The computer's likeliest actions differ from the optimal policy in " + AGREE.filter(function (x) { return !x; }).length + " states.");
+
+  OB.scene({
+    page: 3, key: "computer-meets-human", order: 425, title: "Computer meets human", beats: LEAD.length,
+    build: function (root) {
+      var V = this.parts = {};
+      V.lead = el("p", "ob-say s3o-lead");
+      root.appendChild(V.lead);
+      var g = el("div", "s3o-dia");
+      V.T = TB.table(P, { kind: "prob", size: "m", cap: "PROBABILITIES AFTER " + OB.num(D.rounds) + " UPDATES" });
+      V.T.el.classList.add("s3o-tab");
+      V.C = O.column({ size: "m", heads: false });
+      V.ticks = [0, 1, 2, 3].map(function (s) {
+        var t = O.tick(AGREE[s]);
+        V.C.entry(s).appendChild(t);
+        return t;
+      });
+      g.appendChild(V.T.el);
+      g.appendChild(el("span", "s3o-gap"));
+      g.appendChild(V.C.el);
+      root.appendChild(g);
+    },
+    beat: function (k, api) {
+      var V = this.parts, go = api.forward && !api.instant && api.from === k - 1;
+      if (V.lead.dataset.k !== String(k)) {
+        V.lead.dataset.k = String(k);
+        V.lead.textContent = LEAD[k];
+        if (go) api.fade(V.lead, true, { dur: 900 });
+      }
+      var lit = [];
+      for (var s = 0; s < 4; s++) {
+        var on = k >= s + 1, now = k === s + 1 && go;
+        if (on) lit.push([s, TOP[s]]);
+        if (on) {
+          api.arrow("s3o-r" + s, V.T.rowFrame(s), V.C.entry(s), {
+            from: "right", to: "left", gap: 6, delay: now ? 500 : 0, color: AGREE[s] ? "#108A50" : "var(--red)"
+          });
+        } else api.unarrow("s3o-r" + s);
+        api.show(V.ticks[s], on, { delay: now ? 1500 : 0 });
+        V.C.entry(s).classList.toggle("s3o-hit", on);
+      }
+      V.T.mark(lit);
+      V.T.rings(k >= 1 && k <= 4 ? [[k - 1, TOP[k - 1]]] : []);
+      V.C.rings(k >= 1 && k <= 4 ? [k - 1] : []);
+      if (k === LEAD.length - 1 && go && ALL && OB.fx && OB.fx.celebrate) api.at(500, function () { OB.fx.celebrate(V.C.el); });
     }
   });
 })();
@@ -8976,7 +9712,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       done: function (natural) {
         if (dot.parentNode) dot.parentNode.removeChild(dot);
         if (natural && A.head) {
-          A.head.classList.add("fx-head");
+          // No marker class on the head: nothing styles it, and a class left after a natural draw made the arrow
+          // differ from its rest state when Back redraws the beat (tools/interrupt.mjs, 2026-11-18).
           OB.animate(380, function (p) { var t = lin(p); A.head.style.scale = (1 + 0.55 * wobble(t) * Math.min(1, t * 10)).toFixed(4); },
             function () { A.head.style.scale = ""; });
         }
