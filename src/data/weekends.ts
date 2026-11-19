@@ -698,35 +698,50 @@ export const weekends: Weekend[] = [
     saturdayRoom: 'HG D 7.2',
     project: 'Reinforcement learning for vehicle routing',
     summary:
-      'This weekend introduces reinforcement learning: Markov decision processes (MDPs), episodes and returns, and the REINFORCE algorithm, first as proto-REINFORCE, then with baselines. Guest lecture on Friday afternoon.',
+      'This weekend introduces reinforcement learning: Markov decision processes (MDPs), episodes and returns, and proto-REINFORCE, first with a table of action preferences, then with representations. Guest lecture on Friday afternoon.',
     // Agenda from the Syllabus tab of the master spreadsheet, read on 2026-11-14 (Carlos that day: "update the schedule
-    // to what I have so far, because I'm changing the schedule for that weekend"). Each day's first row stays at 08:15,
-    // the Vorlesungsverzeichnis time, where the spreadsheet says 08:00; the break rows keep the programme office's
-    // venues. The spreadsheet has no Saturday 12:00 row for this weekend.
+    // to what I have so far, because I'm changing the schedule for that weekend") and again on 2026-11-19, when he asked
+    // to bring the site in line with the tab ("Sync it"). Each day's first row stays at 08:15, the Vorlesungsverzeichnis
+    // time, where the spreadsheet says 08:00; the break rows keep the programme office's venues. Since 2026-11-19 each
+    // proto-REINFORCE notebook sits on the exercise row of its topic: episodes and returns at 10:00, after the lecture at
+    // 09:00; Old Bessie's forward and backward pass at 12:00, after the lecture at 11:00; Last-Minute Pricing's at 15:00,
+    // after the lecture at 14:00. Until then all six were on a 14:00 exercise row, numbered 1) to 6).
     friday: [
       {
         time: '08:15',
         title: 'MDPs',
-        type: 'lecture',
+        type: 'exercise',
         // "Press Start", four games of the FS26 arcade, played only (Carlos, 2026-11-14: "In the first section, we're
         // going to show some video games for them to play"): Old Bessie, ANYmal, Last-Minute Pricing, Pokemon. Built
         // in the private repository eth-ainit-hs26/w3-cx-private, folder 01_arcade, copied here without its tools
         // and CLAUDE.md files.
         // Then "Old Bessie 1: MDPs", the first page of the visualization (states, actions, transition dynamics), from
         // w3-cx-private 02_old_bessie (Carlos: "I don't want slides. I want a visualization").
+        // A lecture until 2026-11-19; the tab's first row is "CX MDPs" since.
         links: [
           { label: 'Press Start, four games', url: viz(3, 'arcade') },
           { label: 'Old Bessie 1: MDPs', url: viz(3, 'old-bessie-mdps') },
         ],
       },
-      { time: '09:00', title: 'MDPs', type: 'exercise' },
       {
-        time: '10:00',
+        time: '09:00',
         title: 'Episodes and returns',
         type: 'lecture',
         // The second page of the visualization, from w3-cx-private 02_old_bessie: episodes, episodes are random, the
         // return G1 and the goal of RL. Its folder was old-bessie-runs until 2026-11-17 (that address redirects here).
+        // On the 10:00 row until 2026-11-19.
         links: [{ label: 'Old Bessie 2: Episodes and returns', url: viz(3, 'old-bessie-episodes') }],
+      },
+      {
+        time: '10:00',
+        title: 'Episodes and returns',
+        type: 'exercise',
+        // The first part of each game's proto-REINFORCE notebooks, from w3-cx-private 03_proto_reinforce (Carlos,
+        // 2026-11-17: notebooks "for each of the video games we have available except Pokemon"), public in w3-cx-public.
+        links: [
+          { label: 'Old Bessie, episodes and returns', url: colab('w3-cx-public', '03_cx_proto_reinforce_1a_old_bessie_episodes_and_returns_student.ipynb') },
+          { label: 'Last-Minute Pricing, episodes and returns', url: colab('w3-cx-public', '03_cx_proto_reinforce_2a_last_minute_pricing_episodes_and_returns_student.ipynb') },
+        ],
       },
       { time: '10:30', title: 'Coffee break at Dozentenfoyer, until 11:00', type: 'break' },
       {
@@ -737,27 +752,31 @@ export const weekends: Weekend[] = [
         // the forward and backward pass of proto-REINFORCE, the update up close, and a movie of 300 updates.
         links: [{ label: 'Old Bessie 3: proto-REINFORCE', url: viz(3, 'old-bessie-proto-reinforce') }],
       },
-      { time: '12:00', title: 'Coding bazaar', type: 'lab' },
-      { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
       {
-        time: '14:00',
+        time: '12:00',
         title: 'proto-REINFORCE',
         type: 'exercise',
-        // The proto-REINFORCE notebooks of w3-cx-public, each game in three parts, built in w3-cx-private 03_proto_reinforce (Carlos, 2026-11-17: notebooks
-        // "for each of the video games we have available except Pokemon. That is last minute pricing. They repair or
-        // replace."): proto-REINFORCE on Old Bessie, which replays page 3, then on Last-Minute Pricing.
+        // Old Bessie's notebooks: the forward pass, then the backward pass with the forward pass given (Carlos, 2026-11-17:
+        // "Divide the notebooks into two separate parts that don't depend on each other"). The coding bazaar of this hour
+        // left the agenda on 2026-11-19.
         links: [
-          // Since 2026-11-17 afternoon Old Bessie is two parts (Carlos: "Divide the notebooks into two separate parts
-          // that don't depend on each other"): the forward pass, then the backward pass with the forward pass given.
-          { label: '1) Old Bessie, episodes and returns', url: colab('w3-cx-public', '03_cx_proto_reinforce_1a_old_bessie_episodes_and_returns_student.ipynb') },
-          { label: '2) Old Bessie, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1b_old_bessie_forward_pass_student.ipynb') },
-          { label: '3) Old Bessie, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1c_old_bessie_backward_pass_student.ipynb') },
-          { label: '4) Last-Minute Pricing, episodes and returns', url: colab('w3-cx-public', '03_cx_proto_reinforce_2a_last_minute_pricing_episodes_and_returns_student.ipynb') },
-          { label: '5) Last-Minute Pricing, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2b_last_minute_pricing_forward_pass_student.ipynb') },
-          { label: '6) Last-Minute Pricing, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2c_last_minute_pricing_backward_pass_student.ipynb') },
+          { label: 'Old Bessie, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1b_old_bessie_forward_pass_student.ipynb') },
+          { label: 'Old Bessie, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_1c_old_bessie_backward_pass_student.ipynb') },
         ],
       },
-      { time: '15:00', title: 'REINFORCE with baselines', type: 'lecture' },
+      { time: '13:00', title: 'Lunch break at Dozentenfoyer, until 14:00', type: 'break' },
+      { time: '14:00', title: 'proto-REINFORCE for last-minute pricing', type: 'lecture' },
+      {
+        time: '15:00',
+        title: 'proto-REINFORCE 2',
+        type: 'exercise',
+        // Last-Minute Pricing's notebooks, after the lecture at 14:00. Until 2026-11-19 this hour was the lecture "REINFORCE
+        // with baselines", which the tab no longer has.
+        links: [
+          { label: 'Last-Minute Pricing, forward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2b_last_minute_pricing_forward_pass_student.ipynb') },
+          { label: 'Last-Minute Pricing, backward pass', url: colab('w3-cx-public', '03_cx_proto_reinforce_2c_last_minute_pricing_backward_pass_student.ipynb') },
+        ],
+      },
       { time: '15:30', title: 'Coffee break at Polysnack, until 16:00', type: 'break' },
       { time: '16:00', title: 'Guest lecture: Alina Dubatovka', type: 'lecture' },
     ],
@@ -775,8 +794,11 @@ export const weekends: Weekend[] = [
       },
       { time: '09:00', title: 'Preparation for the project', type: 'exercise' },
       { time: '10:00', title: 'Coffee break outside the classroom, until 10:30', type: 'break' },
-      { time: '10:30', title: 'More preparation for the project', type: 'project' },
+      // "Epilogue" since 2026-11-19, from the tab; until then "More preparation for the project".
+      { time: '10:30', title: 'Epilogue', type: 'lecture' },
+      // The tab gives the project intro two hours, 11:00 and 12:00, since 2026-11-19.
       { time: '11:00', title: 'Project intro: Reinforcement learning for vehicle routing', type: 'project' },
+      { time: '12:00', title: 'Project intro: Reinforcement learning for vehicle routing', type: 'project' },
     ],
     resources: [
       { group: 'Lecture slides', label: 'Reinforcement learning', url: SOON },
