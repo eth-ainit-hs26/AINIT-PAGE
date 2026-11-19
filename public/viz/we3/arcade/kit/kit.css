@@ -31,7 +31,8 @@
   --k-gold-dark: #D99A00;
   --k-green: #2FB463;
   --k-green-dark: #1F8545;
-  --k-red: #E0452F;
+  --k-green-text: #22A35A;  /* --k-green dark enough for large words, 3.2:1 on white (2026-11-19) */
+  --k-red: #C0262D;        /* darker since 2026-11-19: apart from --k-green for a deuteranope, 5.9:1 on white */
   --k-display: 'Lilita One', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
   --k-text: 'Nunito', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -233,7 +234,7 @@ button, a { touch-action: manipulation; }
   font-size: calc(26px * var(--tx));
   white-space: nowrap;
   pointer-events: none;
-  color: var(--k-green);
+  color: var(--k-green-text);
   text-shadow: 3px 0 0 #fff, -3px 0 0 #fff, 0 3px 0 #fff, 0 -3px 0 #fff, 2px 2px 0 #fff, -2px -2px 0 #fff,
     2px -2px 0 #fff, -2px 2px 0 #fff, 0 5px 6px rgba(34, 49, 77, 0.3);
   animation: k-pop 1.5s ease-out forwards;
@@ -288,7 +289,7 @@ button, a { touch-action: manipulation; }
   font-family: var(--k-display);
   font-size: calc(46px * var(--tx));
   line-height: 1.05;
-  color: var(--k-green);
+  color: var(--k-green-text);
 }
 .k-end-big.k-bad { color: var(--k-red); }
 .k-end-line { font-size: calc(15px * var(--tx)); font-weight: 800; margin: 4px 0 8px; }

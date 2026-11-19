@@ -1,14 +1,15 @@
 /* art.js: the pictures of Old Bessie's town, as inline SVG strings (window.OBArt). Flat, saturated, light.
-   The van is coloured by her wear with the colours of the slides (02_old_bessie/source/game/art.js: wear,
-   wearDark), and her wear shows as scratches (WORN), a plaster and a dent (SHAKY), rust and a cracked window
-   (FAILING). The garage is amber like SERVICE and the dealer red like REPLACE (js/actions.js). */
+   The van is coloured by her wear with the colours of the Old Bessie pages (02_old_bessie/source/game/skin.css,
+   --wear0 to --wear3), colour-blind safe since 2026-11-19 (w3-cx-private/COLOR.md), and her wear shows as scratches
+   (WORN), a plaster and a dent (SHAKY), rust and a cracked window (FAILING). The garage is amber like SERVICE and
+   the dealer raspberry like REPLACE (js/actions.js). */
 (function () {
   "use strict";
   var INK = "#22314D";
-  var WEAR = ["#2E8B57", "#C99A33", "#E07A2A", "#D33A2C"];
-  var WEAR_DARK = ["#1E6B40", "#9C7417", "#B85A16", "#9E2A20"];
-  var WEAR_TEXT = ["#2E8B57", "#9C7417", "#C25F14", "#D33A2C"];
-  var CALL = { run: "#1666C8", service: "#E08A00", replace: "#D33A2C" };
+  var WEAR = ["#2EC4B6", "#FFD447", "#FF7F27", "#D81B60"];
+  var WEAR_DARK = ["#1A9A8E", "#D9A514", "#D45F0E", "#A8124A"];
+  var WEAR_TEXT = ["#0B776D", "#8A6500", "#B4500E", "#B3124E"];
+  var CALL = { run: "#1666C8", service: "#E08A00", replace: "#C2185B" };
 
   function wheel(x, y) {
     return '<g transform="translate(' + x + ' ' + y + ')"><g class="ob-wheel">' +

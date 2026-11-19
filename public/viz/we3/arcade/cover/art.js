@@ -26,7 +26,7 @@
   }
   /* Old Bessie, HEALTHY, facing right, viewBox 200 x 112 */
   function van(opts) {
-    var o = opts || {}, body = "#2E8B57", dark = "#1E6B40";
+    var o = opts || {}, body = "#2EC4B6", dark = "#1A9A8E";   /* HEALTHY, as in the game (COLOR.md) */
     return '<svg class="cv-van" viewBox="0 0 200 112" aria-hidden="true">' +
       '<ellipse cx="104" cy="105" rx="88" ry="6" fill="' + INK + '" opacity="0.16"/>' +
       '<g class="cv-van-body">' +

@@ -59,8 +59,8 @@ body.k-game.ob { height: 100vh; height: 100dvh; overflow: hidden; }
 .ob-pips i.now { background: #FFFFFF; box-shadow: inset 0 0 0 3px var(--k-gold-dark); }
 .ob-pips i.run { background: #1666C8; box-shadow: none; }
 .ob-pips i.service { background: #E08A00; box-shadow: none; }
-.ob-pips i.replace { background: #D33A2C; box-shadow: none; }
-.ob-pips i.bd { box-shadow: 0 0 0 3px #D33A2C; }
+.ob-pips i.replace { background: #C2185B; box-shadow: none; }
+.ob-pips i.bd { box-shadow: 0 0 0 3px var(--k-red); }
 
 .ob-meter { display: flex; gap: 4px; }
 .ob-meter i {
@@ -70,15 +70,17 @@ body.k-game.ob { height: 100vh; height: 100dvh; overflow: hidden; }
   background: #E3EAF4;
   box-shadow: inset 0 -3px 0 rgba(34, 49, 77, 0.12);
 }
-.ob-cond.w0 .ob-meter i.lit { background: #2E8B57; }
-.ob-cond.w1 .ob-meter i.lit { background: #C99A33; }
-.ob-cond.w2 .ob-meter i.lit { background: #E07A2A; }
-.ob-cond.w3 .ob-meter i.lit { background: #D33A2C; }
+/* The states' colours since 2026-11-19, the same as the Old Bessie pages (w3-cx-private/COLOR.md): turquoise,
+   yellow, orange, raspberry, apart for every kind of colour blindness; the names in darker inks, for contrast. */
+.ob-cond.w0 .ob-meter i.lit { background: #2EC4B6; }
+.ob-cond.w1 .ob-meter i.lit { background: #FFD447; }
+.ob-cond.w2 .ob-meter i.lit { background: #FF7F27; }
+.ob-cond.w3 .ob-meter i.lit { background: #D81B60; }
 .ob-cond-name { font-family: var(--k-display); font-size: calc(20px * var(--tx)); min-width: 5.2em; }
-.ob-cond.w0 .ob-cond-name { color: #2E8B57; }
-.ob-cond.w1 .ob-cond-name { color: #9C7417; }
-.ob-cond.w2 .ob-cond-name { color: #C25F14; }
-.ob-cond.w3 .ob-cond-name { color: #D33A2C; }
+.ob-cond.w0 .ob-cond-name { color: #0B776D; }
+.ob-cond.w1 .ob-cond-name { color: #8A6500; }
+.ob-cond.w2 .ob-cond-name { color: #B4500E; }
+.ob-cond.w3 .ob-cond-name { color: #B3124E; }
 
 /* ---- the town ---- */
 .ob-field {
@@ -178,8 +180,9 @@ body.k-game.ob { height: 100vh; height: 100dvh; overflow: hidden; }
   animation: ob-tag-in 300ms cubic-bezier(.2, 1.5, .4, 1) both;
 }
 .ob-tag svg { width: 1.2em; height: 1.2em; }
-.ob-tag.t0 { background: #2E8B57; } .ob-tag.t1 { background: #C99A33; } .ob-tag.t2 { background: #E07A2A; } .ob-tag.t3 { background: #D33A2C; }
-.ob-tag.bad { background: #D33A2C; }
+.ob-tag.t0 { background: #2EC4B6; color: #22314D; } .ob-tag.t1 { background: #FFD447; color: #22314D; }
+.ob-tag.t2 { background: #FF7F27; color: #22314D; } .ob-tag.t3 { background: #D81B60; }
+.ob-tag.bad { background: var(--k-red); }
 @keyframes ob-tag-in { from { opacity: 0; transform: translate(-50%, -60%) scale(0.6); } }
 .ob-wrench {
   width: min(13cqh, 9cqw); aspect-ratio: 1; border-radius: 50%; background: #FFFFFF; color: #E08A00;
@@ -218,7 +221,7 @@ body.k-game.ob { height: 100vh; height: 100dvh; overflow: hidden; }
 }
 .ob-run { --b: #1666C8; --bd: #0D4A94; }
 .ob-service { --b: #E08A00; --bd: #A35F00; }
-.ob-replace { --b: #D33A2C; --bd: #962519; }
+.ob-replace { --b: #C2185B; --bd: #8A0F40; }
 .ob-call .ob-ic {
   flex: 0 0 auto;
   width: calc(34px * var(--tx)); height: calc(34px * var(--tx));

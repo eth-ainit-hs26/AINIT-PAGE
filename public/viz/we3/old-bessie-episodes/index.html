@@ -390,9 +390,9 @@ sup { top: -0.55em; }
 /* sec2.css: page 2, section 3 of the weekend, "Episodes and returns" (agent A3, 2026-11-14). Classes s2-. */
 
 :root {
-  --s2-blue: #1F4FA8;      /* the sketch's step 2 */
+  --s2-blue: #173A86;      /* the sketch's step 2; darker since 2026-11-19 so that protanopes tell it from step 4 */
   --s2-green: #1B7A47;     /* step 3 */
-  --s2-purple: #8A3FC0;    /* step 4 */
+  --s2-purple: #7E3FD0;    /* step 4 */
   --s2-or: #EE8A12;        /* the orange of the return (sketch page 20) */
   --s2-or-text: #B35A00;   /* the same orange, dark enough for words */
 }
@@ -561,9 +561,14 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
   --yellow: #FFC736; --orange: #FF8A2A; --pink: #F2386F; --violet: #7A3FE0; --cyan: #19B6E8; --ring: #F2386F;
   --run: #2F6BFF; --service: #FF9E1B; --replace: #F2386F;
   --run-soft: #E1E9FF; --service-soft: #FFEFD6; --replace-soft: #FFE0EA;
-  --wear0: #22B573; --wear1: #FFC233; --wear2: #FF8A2A; --wear3: #F2445A;
-  --wear0-soft: #D3F3E3; --wear1-soft: #FFF0C7; --wear2-soft: #FFE2CA; --wear3-soft: #FFD7DD;
-  --gain: #0F9A5A; --loss: #E0264F;
+  /* Colour-blind safe since 2026-11-19 (COLOR.md): the van's states run cool to hot in the marquee's own hues,
+     turquoise, yellow, orange, raspberry, each pair apart under protanopia, deuteranopia and tritanopia (until then
+     a traffic light whose green and red merged for a deuteranope); money won petrol, money lost crimson, both dark
+     enough for words and for white numbers; --good marks the human and an agreement beside the pink computer. */
+  --wear0: #2EC4B6; --wear1: #FFD447; --wear2: #FF7F27; --wear3: #D81B60;
+  --wear0-soft: #D2F4F0; --wear1-soft: #FFF4C6; --wear2-soft: #FFE4D1; --wear3-soft: #FBD3E1;
+  --wear0-ink: #0B776D; --wear1-ink: #8A6500; --wear2-ink: #B4500E; --wear3-ink: #B3124E;
+  --gain: #0E7490; --loss: #C21848; --good: #0B74A6;
   --sunset: linear-gradient(180deg, var(--yellow) 0 25%, var(--orange) 25% 50%, var(--pink) 50% 75%, var(--violet) 75%);
 }
 body { font-family: var(--px); font-weight: 500; background: var(--bg); color: var(--ink); }
@@ -624,7 +629,7 @@ button { font-family: var(--px); color: var(--ink); }
 .ob-van .gauge { border: 2.5px solid var(--ink); border-radius: 999px; background: #FFFFFF; padding: 3px 6px; gap: 3px; }
 .ob-van .gauge i { width: 10px; height: 10px; border-radius: 50%; border: 0; background: #E4DDF2; opacity: 1; }
 .ob-van .tag { font-family: var(--sign); letter-spacing: 0.04em; }
-.ob-van.w0 .tag { color: #108A50; } .ob-van.w1 .tag { color: #9A6A00; } .ob-van.w2 .tag { color: #C2560A; } .ob-van.w3 .tag { color: #D12A45; }
+.ob-van.w0 .tag { color: var(--wear0-ink); } .ob-van.w1 .tag { color: var(--wear1-ink); } .ob-van.w2 .tag { color: var(--wear2-ink); } .ob-van.w3 .tag { color: var(--wear3-ink); }
 .ob-game .label { font-family: var(--sign); font-size: 12px; letter-spacing: 0.03em; }
 .ob-ring { outline: 4px solid var(--pink); outline-offset: 5px; border-radius: 6px; }
 .ob-arrow line, .ob-arrow polyline { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
@@ -775,7 +780,7 @@ button { font-family: var(--px); color: var(--ink); }
 
 /* Scene 190, Human learning (sec3a2). */
 .s3h-title { font-family: var(--disp); font-style: normal; font-weight: 400; letter-spacing: 0.04em; }
-.s3h-human .s3h-title { color: #108A50; }
+.s3h-human .s3h-title { color: var(--good); }
 .s3h-name { font-family: var(--px); font-weight: 700; }
 .s3h-arr, .s3h-into { border-radius: 3px; }
 .s3h-next { border-radius: 3px; }
@@ -796,9 +801,9 @@ button { font-family: var(--px); color: var(--ink); }
 .s3e-card.s3e-on { outline: 4px solid var(--pink); outline-offset: 5px; }
 .s3e-no { transform: none; min-width: 30px; width: 30px; height: 30px; padding: 0; border-radius: 50%; background: var(--yellow); color: var(--ink);
   border: 2.5px solid var(--ink); box-shadow: 0 2.5px 0 0 var(--ink); font-family: var(--sign); font-style: normal; font-weight: 400; font-size: 14px; }
-.s3e-human .s3e-no { background: var(--wear0); color: #FFFFFF; }
+.s3e-human .s3e-no { background: var(--wear0); color: var(--ink); }
 .s3e-name { font-family: var(--disp); font-style: normal; font-weight: 400; letter-spacing: 0.03em; }
-.s3e-human .s3e-name { color: #108A50; }
+.s3e-human .s3e-name { color: var(--good); }
 .s3e-cap { font-family: var(--px); font-weight: 700; }
 .s3e-svg text { font-family: var(--px); font-weight: 700; letter-spacing: 0.03em; }
 .s3e-hub { stroke: var(--ink); stroke-width: 2.5; }
@@ -2288,8 +2293,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   "use strict";
   var OB = window.OB, S = OB.skin;
   var NAVY = "#1E1442";
-  var WEAR = ["#22B573", "#FFC233", "#FF8A2A", "#F2445A"];
-  var WEARD = ["#138A55", "#D69A0E", "#D4660E", "#C22740"];
+  var WEAR = ["#2EC4B6", "#FFD447", "#FF7F27", "#D81B60"];   /* colour-blind safe since 2026-11-19, skin.css */
+  var WEARD = ["#1A9A8E", "#D9A514", "#D45F0E", "#A8124A"];
 
   function vanBody(wear, body, dark) {
     var o = 'stroke="' + NAVY + '" stroke-width="3" stroke-linejoin="round"';
@@ -2357,8 +2362,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     vanSvg: vanSvg, icon: icon, face: face, die: die, bolt: bolt,
     colors: {
       ink: NAVY, ink2: "#5A5378", box: "#FFFFFF", white: "#FFFFFF", yellow: "#FFC736",
-      wear: WEAR, wearDark: WEARD, wearSoft: ["#D3F3E3", "#FFF0C7", "#FFE2CA", "#FFD7DD"],
-      wearText: ["#108A50", "#9A6A00", "#C2560A", "#D12A45"],
+      wear: WEAR, wearDark: WEARD, wearSoft: ["#D2F4F0", "#FFF4C6", "#FFE4D1", "#FBD3E1"],
+      wearText: ["#0B776D", "#8A6500", "#B4500E", "#B3124E"],
       lever: ["#2F6BFF", "#FF9E1B", "#F2386F"], leverText: ["#2456D6", "#A35F00", "#D1245A"],
       leverSoft: ["#E1E9FF", "#FFEFD6", "#FFE0EA"]
     }
@@ -2611,7 +2616,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var gg = gc.getContext("2d");
       runs.forEach(function (run, i) {
         var x1 = Math.round((run.G1 - lo) / span * (gw - 2)) + 1;
-        gg.fillStyle = run.G1 >= 0 ? "#1F7A45" : "#C0302A";
+        gg.fillStyle = run.G1 >= 0 ? "#0E7490" : "#C21848";   /* --gain, --loss of skin.css */
         gg.fillRect(Math.min(x0, x1), i * rowPx, Math.max(1, Math.abs(x1 - x0)), rowPx);
       });
       gg.fillStyle = art.C.ink;
@@ -3631,7 +3636,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     cap: 240             // particles at most on the screen
   };
   var COL = { yellow: "#FFC736", orange: "#FF8A2A", pink: "#F2386F", violet: "#7A3FE0", cyan: "#19B6E8",
-    green: "#22B573", navy: "#1E1442", white: "#FFFFFF", gold: "#FFB81F", goldDark: "#C98A00", smoke: "#B9B3CC" };
+    green: "#2EC4B6", navy: "#1E1442", white: "#FFFFFF", gold: "#FFB81F", goldDark: "#C98A00", smoke: "#B9B3CC" };
   var PARTY = [COL.yellow, COL.orange, COL.pink, COL.violet, COL.cyan, COL.green];
 
   /* Curves, in linear time t from 0 to 1. The engine hands its ticks a cubic in-and-out p; lin(p) undoes it. */

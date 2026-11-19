@@ -386,13 +386,13 @@ sup { top: -0.55em; }
 .cw-mc { width: 18px; height: 12px; border-radius: 2px; background: #F1EDF9; }
 .cw-mc.o0 { background: #DCD5EC; }
 .cw-mc.o1 { background: var(--yellow); }
-.cw-mc.o2 { background: var(--wear0, #22B573); }
+.cw-mc.o2 { background: var(--wear0); }
 .cw-mg { width: 46px; text-align: right; font-size: 10.5px; font-weight: 700; font-variant-numeric: tabular-nums lining-nums; }
 .cw-mhead .cw-mg .katex { font-size: 11px; }
 .cw-mmore { font-size: 9px; font-weight: 700; color: var(--ink2); text-align: center; padding-top: 3px; }
 .cw-legend { display: flex; gap: 12px; margin-top: 5px; font-family: var(--sign); font-size: calc(calc(7.5px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.04em; color: var(--ink2); }
 .cw-legend i { display: inline-block; width: 13px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
-.cw-legend i.o0 { background: #DCD5EC; } .cw-legend i.o1 { background: var(--yellow); } .cw-legend i.o2 { background: var(--wear0, #22B573); }
+.cw-legend i.o0 { background: #DCD5EC; } .cw-legend i.o1 { background: var(--yellow); } .cw-legend i.o2 { background: var(--wear0); }
 
 /* The histogram. */
 .cw-histw { position: relative; display: flex; flex-direction: column; align-items: center; }
@@ -528,11 +528,11 @@ sup { top: -0.55em; }
 .cw-habbox { padding: 12px 16px 10px; display: flex; flex-direction: column; gap: 8px; }
 .cw-habs { display: flex; gap: 10px; }
 .cw-hab { position: relative; display: flex; flex-direction: column; align-items: center; width: 60px; padding: 6px 0 5px; border-radius: 10px; background: #FFF3C4; border: 2px solid var(--ink); }
-.cw-hab.new { background: #D3F3E3; }
+.cw-hab.new { background: var(--wear0-soft); }
 .cw-habw { position: relative; display: flex; flex-direction: column; align-items: center; }
 .cw-hi { font-size: 30px; line-height: 1.1; }
 .cw-hp { font-weight: 700; font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); font-variant-numeric: tabular-nums lining-nums; }
-.cw-hfrom { position: absolute; bottom: -22px; white-space: nowrap; font-family: var(--sign); font-size: 9px; letter-spacing: 0.04em; color: #108A50; }
+.cw-hfrom { position: absolute; bottom: -22px; white-space: nowrap; font-family: var(--sign); font-size: 9px; letter-spacing: 0.04em; color: var(--wear0-ink); }
 .cw-ticket.big { min-width: 190px; padding: 12px 26px 14px; }
 .cw-ticket.big .cw-tk-ic { font-size: 54px; }
 .cw-stamp { position: absolute; right: -26px; top: -16px; rotate: 12deg; font-family: var(--sign); font-size: 16px; letter-spacing: 0.06em;
@@ -549,7 +549,7 @@ sup { top: -0.55em; }
 .cw-qtk { position: relative; width: 60px; height: 48px; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--ink); border-radius: 8px; background: #FFFDF6; }
 .cw-qic { font-size: 32px; line-height: 1; }
 .cw-qout { font-family: var(--sign); font-size: 10px; letter-spacing: 0.04em; border-radius: 999px; padding: 3px 6px 2px; border: 2px solid var(--ink); }
-.cw-qout.o0 { background: #DCD5EC; } .cw-qout.o1 { background: var(--yellow); } .cw-qout.o2 { background: var(--wear0, #22B573); color: #FFFFFF; }
+.cw-qout.o0 { background: #DCD5EC; } .cw-qout.o1 { background: var(--yellow); } .cw-qout.o2 { background: var(--wear0); color: var(--ink); }
 .cw-qhab { font-family: var(--sign); font-size: 9.5px; letter-spacing: 0.03em; color: var(--ink2); }
 .cw-qr { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); white-space: nowrap; }
 /* the number only: a rule on every span would also reach the spans of KaTeX's r_t and make it bold */
@@ -573,7 +573,7 @@ sup { top: -0.55em; }
 .cw-ocs i { font-style: normal; font-size: 24px; line-height: 1; }
 .cw-ocs b { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 28px; background: #FFFFFF;
   border: 1.5px solid var(--ink); border-radius: 3px; font-weight: 700; font-size: 15px; }
-.cw-ocs b.hab { background: #D3F3E3; }
+.cw-ocs b.hab { background: var(--wear0-soft); }
 .cw-ocw { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 2px 6px 6px 2px; }
 .cw-octab { display: grid; grid-template-columns: 150px repeat(3, 168px); background: #FFFFFF; border: 3px solid var(--ink); border-radius: 10px;
   box-shadow: 3px 3px 0 0 var(--ink); }
@@ -592,10 +592,10 @@ sup { top: -0.55em; }
 .cw-octab > .cw-occ.p:last-child { color: var(--gain); }
 .cw-ocf { white-space: nowrap; }
 
-/* 110 and 112: the stamp in the colour of its chip (USED yellow, HABIT green); the reward line under the row; the
+/* 110 and 112: the stamp in the colour of its chip (USED yellow, HABIT turquoise); the reward line under the row; the
    habit in focus. */
 .cw-stamp.o1 { background: var(--yellow); color: var(--ink); }
-.cw-stamp.o2 { background: var(--wear0, #22B573); color: #FFFFFF; }
+.cw-stamp.o2 { background: var(--wear0); color: var(--ink); }
 .cw-wkrw { margin-top: 30px; }
 .cw-hab.cw-focus { outline: 3px solid var(--pink); outline-offset: 2px; }
 
@@ -658,7 +658,7 @@ sup { top: -0.55em; }
 .cw-pys { border-bottom: 1.5px solid var(--line, #DCD5EC); }
 .cw-pyp { border-bottom: 3px solid var(--ink); font-weight: 700; font-size: 11.5px; color: var(--gain); font-variant-numeric: tabular-nums lining-nums; }
 .cw-pys.hab { background: var(--yellow); }
-.cw-pys.new { background: #D3F3E3; }
+.cw-pys.new { background: var(--wear0-soft); }
 .cw-pyblk .cw-pycol:nth-child(2) .cw-pys, .cw-pyblk .cw-pycol:nth-child(2) .cw-pyp { border-left: 3px solid var(--ink); }
 .cw-pyblk .cw-pycol:last-child .cw-pys, .cw-pyblk .cw-pycol:last-child .cw-pyp { border-right: 3px solid var(--ink); }
 .cw-pycol.act { cursor: pointer; }
@@ -972,7 +972,7 @@ sup { top: -0.55em; }
 .cw-mic.s { font-size: 15px; }
 .cw-mp { font-family: var(--px); font-weight: 700; font-size: 15px; fill: var(--ink); text-anchor: middle; paint-order: stroke; stroke: #FFFFFF;
   stroke-width: 4px; stroke-linejoin: round; }
-.cw-mitem.habit .cw-mdisc { stroke: #22B573; stroke-width: 4.5; }
+.cw-mitem.habit .cw-mdisc { stroke: var(--wear0); stroke-width: 4.5; }
 .cw-mitem.top .cw-mdisc { stroke-width: 4.5; }
 .cw-mitem.dim { opacity: 0.28; }
 .cw-mz line { stroke: var(--pink); stroke-width: 4; stroke-linecap: round; }
@@ -1035,9 +1035,14 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
   --yellow: #FFC736; --orange: #FF8A2A; --pink: #F2386F; --violet: #7A3FE0; --cyan: #19B6E8; --ring: #F2386F;
   --run: #2F6BFF; --service: #FF9E1B; --replace: #F2386F;
   --run-soft: #E1E9FF; --service-soft: #FFEFD6; --replace-soft: #FFE0EA;
-  --wear0: #22B573; --wear1: #FFC233; --wear2: #FF8A2A; --wear3: #F2445A;
-  --wear0-soft: #D3F3E3; --wear1-soft: #FFF0C7; --wear2-soft: #FFE2CA; --wear3-soft: #FFD7DD;
-  --gain: #0F9A5A; --loss: #E0264F;
+  /* Colour-blind safe since 2026-11-19 (COLOR.md): the van's states run cool to hot in the marquee's own hues,
+     turquoise, yellow, orange, raspberry, each pair apart under protanopia, deuteranopia and tritanopia (until then
+     a traffic light whose green and red merged for a deuteranope); money won petrol, money lost crimson, both dark
+     enough for words and for white numbers; --good marks the human and an agreement beside the pink computer. */
+  --wear0: #2EC4B6; --wear1: #FFD447; --wear2: #FF7F27; --wear3: #D81B60;
+  --wear0-soft: #D2F4F0; --wear1-soft: #FFF4C6; --wear2-soft: #FFE4D1; --wear3-soft: #FBD3E1;
+  --wear0-ink: #0B776D; --wear1-ink: #8A6500; --wear2-ink: #B4500E; --wear3-ink: #B3124E;
+  --gain: #0E7490; --loss: #C21848; --good: #0B74A6;
   --sunset: linear-gradient(180deg, var(--yellow) 0 25%, var(--orange) 25% 50%, var(--pink) 50% 75%, var(--violet) 75%);
 }
 body { font-family: var(--px); font-weight: 500; background: var(--bg); color: var(--ink); }
@@ -1098,7 +1103,7 @@ button { font-family: var(--px); color: var(--ink); }
 .ob-van .gauge { border: 2.5px solid var(--ink); border-radius: 999px; background: #FFFFFF; padding: 3px 6px; gap: 3px; }
 .ob-van .gauge i { width: 10px; height: 10px; border-radius: 50%; border: 0; background: #E4DDF2; opacity: 1; }
 .ob-van .tag { font-family: var(--sign); letter-spacing: 0.04em; }
-.ob-van.w0 .tag { color: #108A50; } .ob-van.w1 .tag { color: #9A6A00; } .ob-van.w2 .tag { color: #C2560A; } .ob-van.w3 .tag { color: #D12A45; }
+.ob-van.w0 .tag { color: var(--wear0-ink); } .ob-van.w1 .tag { color: var(--wear1-ink); } .ob-van.w2 .tag { color: var(--wear2-ink); } .ob-van.w3 .tag { color: var(--wear3-ink); }
 .ob-game .label { font-family: var(--sign); font-size: 12px; letter-spacing: 0.03em; }
 .ob-ring { outline: 4px solid var(--pink); outline-offset: 5px; border-radius: 6px; }
 .ob-arrow line, .ob-arrow polyline { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
@@ -1249,7 +1254,7 @@ button { font-family: var(--px); color: var(--ink); }
 
 /* Scene 190, Human learning (sec3a2). */
 .s3h-title { font-family: var(--disp); font-style: normal; font-weight: 400; letter-spacing: 0.04em; }
-.s3h-human .s3h-title { color: #108A50; }
+.s3h-human .s3h-title { color: var(--good); }
 .s3h-name { font-family: var(--px); font-weight: 700; }
 .s3h-arr, .s3h-into { border-radius: 3px; }
 .s3h-next { border-radius: 3px; }
@@ -1270,9 +1275,9 @@ button { font-family: var(--px); color: var(--ink); }
 .s3e-card.s3e-on { outline: 4px solid var(--pink); outline-offset: 5px; }
 .s3e-no { transform: none; min-width: 30px; width: 30px; height: 30px; padding: 0; border-radius: 50%; background: var(--yellow); color: var(--ink);
   border: 2.5px solid var(--ink); box-shadow: 0 2.5px 0 0 var(--ink); font-family: var(--sign); font-style: normal; font-weight: 400; font-size: 14px; }
-.s3e-human .s3e-no { background: var(--wear0); color: #FFFFFF; }
+.s3e-human .s3e-no { background: var(--wear0); color: var(--ink); }
 .s3e-name { font-family: var(--disp); font-style: normal; font-weight: 400; letter-spacing: 0.03em; }
-.s3e-human .s3e-name { color: #108A50; }
+.s3e-human .s3e-name { color: var(--good); }
 .s3e-cap { font-family: var(--px); font-weight: 700; }
 .s3e-svg text { font-family: var(--px); font-weight: 700; letter-spacing: 0.03em; }
 .s3e-hub { stroke: var(--ink); stroke-width: 2.5; }
@@ -2695,8 +2700,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   "use strict";
   var OB = window.OB, S = OB.skin;
   var NAVY = "#1E1442";
-  var WEAR = ["#22B573", "#FFC233", "#FF8A2A", "#F2445A"];
-  var WEARD = ["#138A55", "#D69A0E", "#D4660E", "#C22740"];
+  var WEAR = ["#2EC4B6", "#FFD447", "#FF7F27", "#D81B60"];   /* colour-blind safe since 2026-11-19, skin.css */
+  var WEARD = ["#1A9A8E", "#D9A514", "#D45F0E", "#A8124A"];
 
   function vanBody(wear, body, dark) {
     var o = 'stroke="' + NAVY + '" stroke-width="3" stroke-linejoin="round"';
@@ -2764,8 +2769,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     vanSvg: vanSvg, icon: icon, face: face, die: die, bolt: bolt,
     colors: {
       ink: NAVY, ink2: "#5A5378", box: "#FFFFFF", white: "#FFFFFF", yellow: "#FFC736",
-      wear: WEAR, wearDark: WEARD, wearSoft: ["#D3F3E3", "#FFF0C7", "#FFE2CA", "#FFD7DD"],
-      wearText: ["#108A50", "#9A6A00", "#C2560A", "#D12A45"],
+      wear: WEAR, wearDark: WEARD, wearSoft: ["#D2F4F0", "#FFF4C6", "#FFE4D1", "#FBD3E1"],
+      wearText: ["#0B776D", "#8A6500", "#B4500E", "#B3124E"],
       lever: ["#2F6BFF", "#FF9E1B", "#F2386F"], leverText: ["#2456D6", "#A35F00", "#D1245A"],
       leverSoft: ["#E1E9FF", "#FFEFD6", "#FFE0EA"]
     }
@@ -3304,7 +3309,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
   /* The roulette wheel: one slice per product with a probability above 0, in the order of the 24, clockwise from the
      top; the pointer stays on top. W.spin(u, api, o) turns the wheel so that the pointer lands on u (0 to 1). */
-  var WHEEL_COLORS = ["#FFC736", "#FF8A2A", "#F2386F", "#7A3FE0", "#19B6E8", "#2F6BFF", "#22B573"];
+  var WHEEL_COLORS = ["#FFC736", "#FF8A2A", "#F2386F", "#7A3FE0", "#19B6E8", "#2F6BFF", "#2EC4B6"];
   K.Wheel = function (size) {
     var R = size / 2, Wh = { size: size }, wrap = el("div", "cw-wheelw");
     var svg = OB.svgEl("svg", { viewBox: "0 0 " + size + " " + (size + 20), width: size, height: size + 20, class: "cw-wheel" });
@@ -3460,7 +3465,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   }
 
   /* The view of week t of the example episode (scenes 110 and 112): the habits of its state with their profits (a
-     habit the household did not have at the start in green), the coupon with its product's profit and a stamp, the
+     habit the household did not have at the start in turquoise), the coupon with its product's profit and a stamp, the
      coupon's part of the reward, and the reward line r_t = habits + coupon of scene 130. When the coupon makes a habit,
      its tile waits hidden at the end of the habits (newHab). */
   function weekView(root, t) {
@@ -5510,9 +5515,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   /* 430. What the app learned: E as points on a map, coloured by the circle of tastes that the app never sees. */
   var MS = 400, MC = MS / 2, MR = 3.7, MK = (MC - 16) / MR;
   var mapXY = function (e) { return [MC + e[0] * MK, MC - e[1] * MK]; };
-  /* The colour of product j: its place on the circle of tastes (healthy green, premium orange, indulgent magenta,
-     budget blue). */
-  var HUE = function (j) { return "hsl(" + ((120 - 15 * j + 360) % 360) + ", 78%, 62%)"; };
+  /* The colour of product j: its place on the circle of tastes, healthy turquoise (j 0), premium gold (6), indulgent
+     raspberry (12), budget blue (18), joined evenly in OKLCH. Colour-blind safe since 2026-11-19 (COLOR.md): the four
+     groups stay apart for a protanope, a deuteranope and a tritanope; the hue circle hsl(120 - 15 j, 78%, 62%) before
+     merged healthy with premium and indulgent with budget. Written by python3 tools/color_audit.py --circle. */
+  var TASTE = ["#2EC4B6", "#4ACBA3", "#6ED08C", "#94D273", "#BAD159", "#DECD41", "#FFC736", "#FFAE2D", "#FE9322", "#FE751C", "#F65936", "#E93C4D", "#D81B60", "#CF2389", "#BF30AF", "#AA3ED0", "#8F4CE9", "#6B5BFA", "#2F6BFF", "#0284E6", "#0595D4", "#0CA2CB", "#04AEC5", "#03BABF"];
+  var HUE = function (j) { return TASTE[j]; };
   var HAB0 = K.EP.weeks[0].s;
   var POL = CW.policy(D.end.W, D.end.E, HAB0);
   var G1END = CW.playEpisode(D.end.W, D.end.E, K.guided(), D.EXAMPLE, false);
@@ -5775,7 +5783,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     cap: 240             // particles at most on the screen
   };
   var COL = { yellow: "#FFC736", orange: "#FF8A2A", pink: "#F2386F", violet: "#7A3FE0", cyan: "#19B6E8",
-    green: "#22B573", navy: "#1E1442", white: "#FFFFFF", gold: "#FFB81F", goldDark: "#C98A00", smoke: "#B9B3CC" };
+    green: "#2EC4B6", navy: "#1E1442", white: "#FFFFFF", gold: "#FFB81F", goldDark: "#C98A00", smoke: "#B9B3CC" };
   var PARTY = [COL.yellow, COL.orange, COL.pink, COL.violet, COL.cyan, COL.green];
 
   /* Curves, in linear time t from 0 to 1. The engine hands its ticks a cubic in-and-out p; lin(p) undoes it. */
