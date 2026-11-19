@@ -429,6 +429,12 @@ sup { top: -0.55em; }
 .cw-fly { position: fixed; z-index: 41; margin: 0; pointer-events: none; transform-origin: 0 0; box-sizing: border-box; display: flex;
   align-items: center; justify-content: center; white-space: nowrap; line-height: 1; background: rgba(255, 255, 255, 0.88); border-radius: 4px; }
 .cw-lit { background: #FFF3C4 !important; }
+/* A block in flight (K.glide), and the copy of the last view of a scene laid over the next one (K.handIn). While a
+   scene comes in by a hand-off, its arrows wait (cw-arrows-off) and then fade in (cw-arrows-in). */
+.cw-glide { position: fixed; z-index: 41; margin: 0; pointer-events: none; box-sizing: border-box; }
+.cw-ghost { position: fixed !important; z-index: 40; margin: 0 !important; max-width: none !important; pointer-events: none; box-sizing: border-box; }
+.cw-arrows-in svg.ob-arrow, .cw-arrows-in .ob-arrow-label { transition: opacity 0.5s ease; }
+.cw-arrows-off svg.ob-arrow, .cw-arrows-off .ob-arrow-label { opacity: 0 !important; }
 
 /* The roulette wheel. */
 .cw-wheelw { display: flex; justify-content: center; }
@@ -821,11 +827,13 @@ sup { top: -0.55em; }
 
 /* Scene 320 (2026-11-19): the diagram of the backward pass and the close-up of the hop in one cell of a grid, both at
    its top (cw-3proto.js, flow()). During the change (cw-going) the households, the histogram and the loop fade; the
-   strip and the four boxes leave by their own motions. The strip's copy in flight: cw-glide. */
+   strip and the four boxes leave by their own motions. The strip's copy in flight: cw-glide (cw-0kit.css). */
 .cw-bt { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; }
-.cw-bt > .cw-bt1, .cw-bt > .cw-bt2 { grid-area: 1 / 1; align-self: start; min-width: 0; }
+.cw-bt > .cw-bt1, .cw-bt > .cw-bt2, .cw-bt > .cw-bt3 { grid-area: 1 / 1; align-self: start; min-width: 0; }
+/* From beat 10 the update view (cw-bt3): on the right, update 1 and update 2 share one cell (cw-upan). */
+.cw-upan { display: grid; justify-items: center; align-items: start; min-width: 0; }
+.cw-upan > .cw-ccol { grid-area: 1 / 1; }
 .cw-dia.cw-going > :not(.cw-ga-strip):not(.cw-ba) { opacity: 0 !important; transition: opacity 0.6s ease; }
-.cw-glide { position: fixed; z-index: 41; margin: 0; pointer-events: none; box-sizing: border-box; }
 
 /* The table of Before and After. */
 .cw-ct { display: grid; grid-template-columns: auto 112px 112px; align-items: center; padding: 10px 14px 12px; column-gap: 6px; row-gap: 6px; }
@@ -3292,8 +3300,18 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       ["fontSize", "fontFamily", "fontWeight", "color", "letterSpacing"].forEach(function (k) { g.style[k] = cs[k]; });
       g.style.left = a.left + "px"; g.style.top = a.top + "px"; g.style.width = a.width + "px"; g.style.height = a.height + "px";
       g.style.visibility = "visible"; g.style.opacity = "";
-      document.body.appendChild(g);
       var s = b.height / a.height;
+      if (o.tight) {
+        // o.tight: a number in a cell of another size; it scales by the two font sizes and lands on the target's text,
+        // wherever the cell sets it (right-aligned in a wide cell, say).
+        var fa = parseFloat(cs.fontSize), fb = parseFloat(window.getComputedStyle(to).fontSize);
+        if (fa > 0 && fb > 0) s = fb / fa;
+        var rt = document.createRange();
+        rt.selectNodeContents(to);
+        var tb = rt.getBoundingClientRect();
+        if (tb.width) b = tb;
+      }
+      document.body.appendChild(g);
       var dx = b.left + (b.width - a.width * s) / 2 - a.left, dy = b.top + (b.height - a.height * s) / 2 - a.top;
       var arc = o.arc === undefined ? 30 : o.arc;
       api.animate(o.dur || 1300, function (p) {
@@ -3305,6 +3323,63 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         if (OB.fx && OB.fx.bump && !api.instant) OB.fx.bump(to, 0.25, 420);
       });
     });
+  };
+  /* A block glides (the strip of the 96 weights): a copy in the body; the source stays hidden, the target shows on
+     landing. A number moves: a copy flies from its place, which empties, to the target, which shows it on landing.
+     copyTo: the same, the source keeping its number. (Scenes 320 and 410; in cw-3proto.js until 2026-11-19.) */
+  K.glide = function (api, from, to, o) {
+    o = o || {};
+    to.style.visibility = "hidden";
+    if (api.instant) { to.style.visibility = ""; return; }
+    api.at(o.delay || 0, function () {
+      var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+      if (!a.width || !b.width) { to.style.visibility = ""; return; }
+      var g = from.cloneNode(true);
+      g.classList.add("cw-glide");
+      g.style.left = a.left + "px"; g.style.top = a.top + "px"; g.style.width = a.width + "px"; g.style.height = a.height + "px";
+      document.body.appendChild(g);
+      from.style.visibility = "hidden";
+      var dx = b.left - a.left, dy = b.top - a.top;
+      api.animate(o.dur || 1100, function (p) { g.style.transform = "translate(" + (dx * p) + "px," + (dy * p) + "px)"; },
+        function () { if (g.parentNode) g.parentNode.removeChild(g); to.style.visibility = ""; });
+    });
+  };
+  K.move = function (api, from, to, delay, dur) {
+    to.style.visibility = "hidden";
+    K.flyKeep(api, from, to, { delay: delay, dur: dur, arc: 40 });
+    api.at(delay, function () { from.style.visibility = "hidden"; });
+  };
+  K.copyTo = function (api, from, to, delay, dur) {
+    to.style.visibility = "hidden";
+    K.flyKeep(api, from, to, { delay: delay, dur: dur, arc: 30 });
+  };
+
+  /* The hand-off from one scene to the next (2026-11-19; Carlos: "Between slide 12 and 13 there is a hard transition.
+     Fix that. Flow flow flow"). The engine switches scenes at once. K.handOut, called in the leaving scene's leave()
+     while its section still shows, keeps a copy of its view and where it stood; the parts the next scene reuses are
+     named (data-hand). K.handIn, in the next scene's first beat reached with Next, lays the copy over the new view at
+     the same place (class cw-ghost) and returns it: H.part(name) finds a named part in it, for K.move, K.glide and
+     api.fade; the copy goes after ms, or at once when the beat is cut short. Any other way in returns null. */
+  K.hand = null;
+  K.handOut = function (key, root, parts) {
+    var names = Object.keys(parts).filter(function (n) { return parts[n]; });
+    names.forEach(function (n) { parts[n].setAttribute("data-hand", n); });
+    var copy = root.cloneNode(true);
+    names.forEach(function (n) { parts[n].removeAttribute("data-hand"); });
+    var r = root.getBoundingClientRect();
+    K.hand = r.width ? { key: key, t: Date.now(), copy: copy, rect: r } : null;
+  };
+  K.handIn = function (api, key, ms) {
+    var h = K.hand;
+    K.hand = null;
+    if (!h || h.key !== key || Date.now() - h.t > 1500 || !api.forward || api.instant || api.from !== -1) return null;
+    var g = h.copy, r = h.rect;
+    g.classList.add("cw-ghost");
+    g.removeAttribute("id");
+    g.style.left = r.left + "px"; g.style.top = r.top + "px"; g.style.width = r.width + "px"; g.style.height = r.height + "px";
+    (document.getElementById("stage") || document.body).appendChild(g);
+    api.at(ms || 2600, function () { if (g.parentNode) g.parentNode.removeChild(g); });
+    return { el: g, part: function (n) { return g.querySelector("[data-hand=\"" + n + "\"]"); } };
   };
 
   /* The roulette wheel: one slice per product with a probability above 0, in the order of the 24, clockwise from the
@@ -4614,16 +4689,19 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    310 The forward pass (5 beats): the 96 weights picked at random; the policy picks the coupons of 1,000 households
        for 12 weeks (ten drawn, a stack for the rest); each household's return G1 and their histogram; the average
        return; the loop back to the weights
-   320 The backward pass, then the triangle of the hop (10 beats, one scene since 2026-11-19; scene 360 before). Beats
-       0 to 4: one weight picked at random (the first number of fresh pasta in E); Before; the hop +0.2, After; the
-       same 1,000 households again, with the same luck: the average return After; the four boxes. Beat 5, the flow:
-       the rest fades, the strip glides, the four numbers fly from the boxes into a table and on to the chart's axes,
-       the two points. Beats 6 to 9: across 0.2; up 0.10; nabla, guessed, then computed. The head reads "The triangle
-       of the hop" from beat 5 (K.title)
-   370 The update (5 beats): w = w + alpha nabla with alpha = 0.5; the new weight, guessed, then computed, flies into
-       its place; the average return after the update, guessed, then shown
-   380 Update 2 (4 beats): a weight of W (the first number of carrots in W), a change below 0, a slope below 0,
-       the weight goes down; the loop of every update
+   320 The backward pass, the triangle of the hop, the update, update 2 (19 beats, one scene since 2026-11-19; scenes
+       360, 370 and 380 before). Beats 0 to 4: one weight picked at random (the first number of fresh pasta in E);
+       Before; the hop +0.2, After; the same 1,000 households again, with the same luck: the average return After;
+       the four boxes. Beat 5, the flow: the rest fades, the strip glides, the four numbers fly from the boxes into a
+       table and on to the chart's axes, the two points. Beats 6 to 9: across 0.2; up 0.10; nabla, guessed, then
+       computed. Beat 10, the flow: the chart, the table and nabla fade while the strip glides, the weight 0.70 flies
+       into its box, 52.48 into the box Before the update and nabla's 0.5 into the update; w = w + alpha nabla with
+       alpha = 0.5. Beats 11 to 14: the new weight, guessed, then computed, flies into its place; the average return
+       after the update, guessed, then shown. Beat 15, the flow: the update and the box Before fade, a weight of W is
+       picked at random (the first number of carrots in W) and takes the weight's box. Beats 16 to 18: its hop (52.63
+       flies from the box After the update into the table), a slope below 0, the weight goes down; the loop of every
+       update. The head follows the part (K.title): "The backward pass", "The triangle of the hop", "The update",
+       "Update 2"
 
    Every number comes from coupon-data.js through OB.cw.round(i); the households are played here on the guided luck
    (OB.cw.guided()), and their averages are checked against the data when the scenes are built. */
@@ -4818,8 +4896,10 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
      while the rest vanishes so that the participant sees where each number comes from. No sudden transition. Flow").
      Beats 0 to 4 draw the diagram. Beat 5 is the flow (flow() below); beats 5 to 9 are the triangle. The diagram and
      the close-up share one cell of a grid, both at its top; from beat 5 the diagram is hidden but keeps its room, so
-     nothing moves when the close-up takes over (a phone drops it, ob-gone). */
-  var TRI = 5, TITLES = ["The backward pass", "The triangle of the hop"];
+     nothing moves when the close-up takes over (a phone drops it, ob-gone). Since the same day (Carlos: "Between
+     slide 12 and 13 there is a hard transition. Fix that. Flow flow flow") the update (beats 10 to 14) and update 2
+     (beats 15 to 18) follow in the same scene, in a third layer of the cell (upView() below). */
+  var TRI = 5, UPD = 10, UP2 = 15, TITLES = ["The backward pass", "The triangle of the hop", "The update", "Update 2"];
   var L320 = [
     "Which weight should change? One of the 96, picked at random: " + ws(R1.k, ",") + " " + where(R1) + ".",
     "Its value, " + K.wf(R1.v) + ", is Before. The average return Before: " + K.n2(R1.before) + ".",
@@ -4830,41 +4910,23 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     "Across: the weight moved by " + HOPS + ".",
     "Up: the average return " + (R1.change >= 0 ? "rose" : "fell") + " by " + K.n2(Math.abs(R1.change)) + " CHF.",
     "The slope of the triangle, \\(\\nabla\\): up divided by across. Guess it, then press Compute.",
-    "\\(\\nabla = " + nab(R1.nabla) + "\\): near this weight, the average return " + (R1.nabla >= 0 ? "rises" : "falls") + " by CHF " + K.n2(Math.abs(R1.nabla)) + " for each unit of the weight."
+    "\\(\\nabla = " + nab(R1.nabla) + "\\): near this weight, the average return " + (R1.nabla >= 0 ? "rises" : "falls") + " by CHF " + K.n2(Math.abs(R1.nabla)) + " for each unit of the weight.",
+    "The update adds \\(\\alpha \\nabla\\) to the weight. \\(\\alpha = " + ALPHAS + "\\) is the step size.",
+    "The new weight: guess it, then press Compute.",
+    "The new weight: " + K.wf(R1.vNew) + ". A slope above 0 raises the weight.",
+    "The 1,000 households again, with the same luck. Will the average return go up or down?",
+    (R1.upd >= R1.before ? "Up" : "Down") + ": from " + K.n2(R1.before) + " to " + K.n2(R1.upd) + ".",
+    "Update 2 picks another weight at random, this time in \\(W\\): " + ws(R2.k, ",") + " " + where(R2) + ".",
+    "The hop: from " + K.wf(R2.v) + " to " + K.wf(R2.vh) + ". The average return, with the same luck: from " + K.n2(R2.before) + " to " + K.n2(R2.after) + ".",
+    "A change below 0, so a slope below 0: the update lowers the weight, to " + K.wf(R2.vNew) + ".",
+    "Every update does the same: one weight of the 96 picked at random, the hop, the slope, the update."
   ];
   function nablaTex(r, done) {
     return OB.tex("\\nabla = \\frac{" + K.n2(r.change) + "}{" + HOPS + "} =\\;") + "<span class=\"ob-texn cw-nres" + (done ? " done" : "") + "\">" + (done ? OB.texText(nab(r.nabla)) : "?") + "</span>";
   }
 
-  /* The strip glides from the diagram to the close-up: a copy in the body; the source stays hidden (the diagram goes
-     after it), the target shows on landing. */
-  function glide(api, from, to, o) {
-    to.style.visibility = "hidden";
-    if (api.instant) { to.style.visibility = ""; return; }
-    api.at(o.delay || 0, function () {
-      var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
-      if (!a.width || !b.width) { to.style.visibility = ""; return; }
-      var g = from.cloneNode(true);
-      g.classList.add("cw-glide");
-      g.style.left = a.left + "px"; g.style.top = a.top + "px"; g.style.width = a.width + "px"; g.style.height = a.height + "px";
-      document.body.appendChild(g);
-      from.style.visibility = "hidden";
-      var dx = b.left - a.left, dy = b.top - a.top;
-      api.animate(o.dur || 1100, function (p) { g.style.transform = "translate(" + (dx * p) + "px," + (dy * p) + "px)"; },
-        function () { if (g.parentNode) g.parentNode.removeChild(g); to.style.visibility = ""; });
-    });
-  }
-  /* A number moves: a copy flies from its place, which empties, to the target, which shows it on landing. */
-  function move(api, from, to, delay, dur) {
-    to.style.visibility = "hidden";
-    K.flyKeep(api, from, to, { delay: delay, dur: dur, arc: 40 });
-    api.at(delay, function () { from.style.visibility = "hidden"; });
-  }
-  /* The same, the source keeping its number. */
-  function copyTo(api, from, to, delay, dur) {
-    to.style.visibility = "hidden";
-    K.flyKeep(api, from, to, { delay: delay, dur: dur, arc: 30 });
-  }
+  /* The strip glides (K.glide); a number moves, its place emptying (K.move), or flies as a copy (K.copyTo). */
+  var glide = K.glide, move = K.move, copyTo = K.copyTo;
   function axisNums(C) { return [C.tk.xb, C.tk.xa, C.tk.yb, C.tk.ya]; }
   function boxes(d) { return [d.wb, d.wa, d.ab, d.aa]; }
 
@@ -4895,8 +4957,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   /* Beats 0 to 4: the diagram. */
   function backBeat(P, k, api, go) {
     var d = P.d, m = mem();
-    P.row.classList.add("ob-gone");
-    d.el.classList.remove("ob-hide", "ob-gone");
+    layer(P, 1);
+    api.unarrow("u");
     d.grid.classList.remove("cw-going");
     d.S.el.style.visibility = "";
     boxes(d).forEach(function (b) { b.num.style.visibility = ""; b.el.style.opacity = ""; });
@@ -4944,13 +5006,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   function triBeat(P, k, api, go) {
     var d = P.d, C = P.C;
     d.loopOn(false);
+    api.unarrow("u");
     if (go && k === 0) flow(P, api);
     else {
       arrows(api, []);
-      P.row.classList.remove("ob-gone");
+      layer(P, 2);
       d.grid.classList.remove("cw-going");
-      d.el.classList.remove("ob-hide", "ob-gone");
-      d.el.classList.add(K.phone() ? "ob-gone" : "ob-hide");
       d.S.el.style.visibility = "hidden";
       boxes(d).forEach(function (b) { b.num.style.visibility = "hidden"; b.el.style.opacity = ""; b.el.classList.add("ob-hide"); });
       [P.S.el, P.t, C.svg].concat(P.tn, axisNums(C), C.pts).forEach(function (e) { e.style.visibility = ""; e.style.opacity = ""; e.classList.remove("ob-hide"); });
@@ -4966,6 +5027,228 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     P.f.innerHTML = nablaTex(R1, k >= 4);
     if (k === 3) api.nextLabel("Compute");
     if (go && k === 4 && OB.fx && OB.fx.bump) OB.fx.bump(P.f.querySelector(".cw-nres"), 0.3, 500);
+  }
+
+  /* Which layer of the cell shows: 1 the diagram (beats 0 to 4), 2 the close-up (beats 5 to 9), 3 the update view
+     (beats 10 to 18). A hidden diagram or close-up keeps its room on a computer, so nothing moves; a phone drops it. */
+  function layer(P, n) {
+    var off = K.phone() ? "ob-gone" : "ob-hide";
+    [P.d.el, P.row, P.U.el].forEach(function (e) { e.classList.remove("ob-hide", "ob-gone"); });
+    if (n !== 1) P.d.el.classList.add(off);
+    if (n === 1) P.row.classList.add("ob-gone");
+    else if (n === 3) P.row.classList.add(off);
+    if (n !== 3) P.U.el.classList.add("ob-gone");
+  }
+
+  /* The line of an update: the weight = its value + alpha x nabla = result. */
+  function upTex(r) {
+    return K.wsym(r.k) + " " + OB.tex("= " + K.wf(r.v) + " + " + ALPHAS + " \\times " + (r.nabla < 0 ? "(" + nab(r.nabla) + ")" : nab(r.nabla)) + " =\\;");
+  }
+
+  /* The update view, the third layer: the strip and the weight on the left; on the right, in one cell, update 1 (the
+     update, the boxes Before and After the update) and update 2 (its table, nabla and update); the loop below. */
+  function upView(st) {
+    var m = mem(), U = {};
+    U.el = el("div", "cw-bt3 ob-gone");
+    var row = el("div", "cw-crow"), left = el("div", "cw-ccol"), right = el("div", "cw-upan");
+    U.S = K.Strip();
+    U.S.set(m.S0.W, m.S0.E);
+    U.S.mark(R1.k);
+    U.S.dim(true);
+    left.appendChild(U.S.el);
+    U.wbox = K.ba("THE WEIGHT", K.wsym(R1.k), "cw-wbox");
+    U.wbox.chip.classList.add("w");
+    left.appendChild(U.wbox.el);
+    // Update 1.
+    var pa = el("div", "cw-ccol cw-pa");
+    U.f = el("div", "ob-box cw-ubox");
+    U.f.appendChild(OB.html("div", "cw-ugen", K.wsym(R1.k) + " " + OB.tex("=") + " " + K.wsym(R1.k) + " " + OB.tex("+\\; \\alpha \\nabla")));
+    var ua = OB.html("div", "cw-ua", OB.tex("\\alpha = " + ALPHAS + ", \\quad \\nabla =\\;"));
+    U.nab = OB.texNumEl(nab(R1.nabla), "cw-una");
+    ua.appendChild(U.nab);
+    U.f.appendChild(ua);
+    U.res = el("span", "ob-texn cw-ures", K.wf(R1.vNew));
+    U.line = OB.html("div", "cw-unum", upTex(R1));
+    U.line.appendChild(U.res);
+    U.f.appendChild(U.line);
+    pa.appendChild(U.f);
+    var avg = el("div", "cw-uavg");
+    U.ab = K.avgBox("BEFORE THE UPDATE");
+    U.ab.setAvg(R1.before);
+    U.aa = K.avgBox("AFTER THE UPDATE");
+    U.aa.setAvg(R1.upd);
+    avg.appendChild(U.ab.el);
+    avg.appendChild(U.aa.el);
+    pa.appendChild(avg);
+    // Update 2.
+    var pb = el("div", "cw-ccol cw-pb");
+    U.t2 = closeTable(R2);
+    U.tn2 = [].slice.call(U.t2.querySelectorAll(".cw-ctn"));
+    pb.appendChild(U.t2);
+    U.n2 = OB.html("div", "cw-nabla small", nablaTex(R2, true));
+    pb.appendChild(U.n2);
+    U.u2 = OB.html("div", "cw-unum small", upTex(R2));
+    U.res2 = el("span", "ob-texn cw-ures done", K.wf(R2.vNew));
+    U.u2.appendChild(U.res2);
+    pb.appendChild(U.u2);
+    right.appendChild(pa);
+    right.appendChild(pb);
+    row.appendChild(left);
+    row.appendChild(right);
+    U.el.appendChild(row);
+    U.loop = el("div", "cw-loop");
+    ["PICK A WEIGHT", "HOP", "SLOPE", "UPDATE"].forEach(function (s, i) {
+      if (i) U.loop.appendChild(el("span", "cw-larr"));
+      U.loop.appendChild(el("span", "cw-lchip", s));
+    });
+    U.loop.appendChild(el("span", "cw-lback", "AND AGAIN"));
+    U.el.appendChild(U.loop);
+    st.appendChild(U.el);
+    // Update 2 starts where update 1 ends: the same weights but one, the same average return.
+    var g = function (X, k) { return CW.getW(X.W, X.E, CW.weightOf(k)); };
+    for (var k = 0; k < 96; k++) {
+      if (g(m.S1, k) !== (k === R1.k ? R1.vNew : g(m.S0, k))) { console.error("cw-3proto: the weights after update 1 differ at weight " + k); break; }
+    }
+    if (g(m.S1, R2.k) !== R2.v) console.error("cw-3proto: update 2 does not start from the weights after update 1");
+    if (K.n2(R2.before) !== K.n2(R1.upd)) console.error("cw-3proto: update 2 starts from " + R2.before + ", update 1 ends at " + R1.upd);
+    return U;
+  }
+
+  /* Beat 10 reached with Next: 0.70 takes off from the table towards the weight's box, 52.48 towards the box Before
+     the update, nabla's 0.5 towards the update; the chart, the table and nabla fade while the numbers fly; the strip
+     glides to the update view; each new box comes where an old one has gone (the update where the chart was, the
+     weight's box where the table was, the box Before the update where nabla was), before its number lands. About
+     2 s. */
+  function flowUp1(P, api) {
+    var U = P.U, C = P.C;
+    P.f.innerHTML = nablaTex(R1, true);
+    U.el.classList.remove("ob-hide", "ob-gone");
+    [U.wbox.el, U.f, U.ab.el].forEach(function (e) { e.classList.add("ob-hide"); e.style.opacity = ""; });
+    move(api, P.tn[0], U.wbox.num, 100, 1200);
+    move(api, P.tn[2], U.ab.num, 250, 1200);
+    move(api, P.f.querySelector(".cw-nres"), U.nab, 400, 1200);
+    api.fade(C.svg, false, { dur: 600 });
+    api.fade(P.t, false, { delay: 300, dur: 450 });
+    api.fade(P.f, false, { delay: 550, dur: 450 });
+    glide(api, P.S.el, U.S.el, { delay: 150, dur: 1000 });
+    api.show(U.f, true, { delay: 600, dur: 500 });
+    api.show(U.wbox.el, true, { delay: 800, dur: 450 });
+    api.show(U.ab.el, true, { delay: 1000, dur: 450 });
+    api.at(2000, function () { P.row.classList.add(K.phone() ? "ob-gone" : "ob-hide"); });
+  }
+
+  /* Beat 15 reached with Next: the arrow, the update and the box Before the update fade; the box After the update stays,
+     since update 2 starts from its 52.63; the mark runs over the strip and stops on the weight of update 2, whose
+     symbol and value take the weight's box. About 2.9 s. */
+  function flowUp2(P, api) {
+    var U = P.U, sec = P.lead.closest("section.scene"), q = P.seq2;
+    if (sec) sec.querySelectorAll("svg.ob-arrow, .ob-arrow-label").forEach(function (a) { a.style.transition = "opacity 0.5s"; a.style.opacity = "0"; });
+    api.at(550, function () { api.unarrow("u"); });
+    api.fade(U.f, false, { dur: 500 });
+    api.fade(U.ab.el, false, { dur: 500 });
+    U.S.mark(q[0]);
+    api.animate(2400, function (p) { U.S.mark(q[Math.min(q.length - 1, Math.floor(p * q.length))]); }, function () { U.S.mark(R2.k); });
+    // The weight's box: the weight of update 1 fades as the mark slows down, the new one comes as it stops (one
+    // motion after the other, so an early end of the beat cannot leave the box empty).
+    var wb = [U.wbox.chip, U.wbox.num];
+    api.at(2000, function () {
+      api.animate(400, function (p) { wb.forEach(function (e) { e.style.opacity = String(1 - p); }); }, function () {
+        U.wbox.chip.innerHTML = K.wsym(R2.k);
+        U.wbox.set(K.wf(R2.v));
+        api.animate(500, function (p) { wb.forEach(function (e) { e.style.opacity = String(p); }); }, function () { wb.forEach(function (e) { e.style.opacity = ""; }); });
+      });
+    });
+  }
+
+  /* Beats 10 to 14 (k from 0): the update. */
+  function u1Beat(P, k, api, go) {
+    var U = P.U, m = mem();
+    P.d.loopOn(false);
+    arrows(api, []);
+    if (go && k === 0) flowUp1(P, api);
+    else {
+      layer(P, 3);
+      [U.S.el, U.wbox.num, U.ab.num, U.nab].forEach(function (e) { e.style.visibility = ""; });
+      [U.wbox.el, U.f].forEach(function (e) { e.classList.remove("ob-hide"); e.style.opacity = ""; });
+      api.show(U.ab.el, true);
+    }
+    [U.wbox.chip, U.wbox.num].forEach(function (e) { e.classList.remove("ob-hide"); e.style.opacity = ""; });
+    U.wbox.chip.innerHTML = K.wsym(R1.k);
+    [U.t2, U.n2, U.u2, U.loop].forEach(function (e) { api.show(e, false); });
+    U.S.set(m.S0.W, m.S0.E);
+    U.S.mark(R1.k);
+    // 1: the numbers in the formula, the result to guess. 2: the result, which flies into its place.
+    api.show(U.line, k >= 1, K.opt(go && k === 1, 300));
+    U.res.textContent = k >= 2 ? K.wf(R1.vNew) : "?";
+    U.res.classList.toggle("done", k >= 2);
+    if (k === 1) api.nextLabel("Compute");
+    var setW = function (v) { U.wbox.set(K.wf(v)); U.S.setOne(R1.k, v); };
+    if (go && k === 2) {
+      setW(R1.v);
+      if (OB.fx && OB.fx.bump) OB.fx.bump(U.res, 0.3, 500);
+      K.flyKeep(api, U.res, U.wbox.num, { delay: 900, land: function () { setW(R1.vNew); } });
+    } else setW(k >= 2 ? R1.vNew : R1.v);
+    U.wbox.el.classList.toggle("cw-lit", k === 2);
+    // 3: the average return after the update, to guess. 4: the answer.
+    api.show(U.aa.el, k >= 3, K.opt(go && k === 3, 700));
+    if (k === 3) { U.aa.num.textContent = "?"; api.nextLabel("Compute"); }
+    else {
+      U.aa.setAvg(R1.upd);
+      if (go && k === 4) {
+        api.roll(U.aa.num, R1.upd, { from: R1.before, fmt: K.n2, delay: 200 });
+        if (OB.fx && OB.fx.celebrate && R1.upd > R1.before) api.at(200 + OB.DUR.roll, function () { OB.fx.celebrate(U.aa.el); });
+      }
+    }
+    U.aa.el.classList.toggle("cw-lit", k >= 4);
+    if (k >= 3) api.arrow("u", U.ab.el, U.aa.el, { delay: go && k === 3 ? 700 : 0, dur: go && k === 3 ? undefined : 1 });
+    else api.unarrow("u");
+  }
+
+  /* Beats 15 to 18 (k from 0): update 2, on the weights after update 1. */
+  function u2Beat(P, k, api, go) {
+    var U = P.U, m = mem();
+    P.d.loopOn(false);
+    arrows(api, []);
+    U.S.set(m.S1.W, m.S1.E);
+    if (go && k === 0) flowUp2(P, api);
+    else {
+      layer(P, 3);
+      api.unarrow("u");
+      [U.S.el, U.wbox.num, U.aa.num].forEach(function (e) { e.style.visibility = ""; });
+      [U.wbox.el, U.wbox.chip, U.wbox.num].forEach(function (e) { e.classList.remove("ob-hide"); e.style.opacity = ""; });
+      U.wbox.chip.innerHTML = K.wsym(R2.k);
+      U.S.mark(R2.k);
+      [U.f, U.ab.el].forEach(function (e) { api.show(e, false); });
+    }
+    U.aa.setAvg(R1.upd);
+    U.aa.el.classList.remove("cw-lit");
+    // 2: the new weight flies from the update into its place.
+    var setW = function (v) { U.wbox.set(K.wf(v)); U.S.setOne(R2.k, v); };
+    if (go && k === 2) {
+      setW(R2.v);
+      K.flyKeep(api, U.res2, U.wbox.num, { delay: 2200, land: function () { setW(R2.vNew); } });
+    } else if (!(go && k === 0)) setW(k >= 2 ? R2.vNew : R2.v);
+    U.wbox.el.classList.toggle("cw-lit", k === 2);
+    // 1: the table of update 2's hop. Its Before: the weight's 0.30 from its box, and 52.63, the average return after
+    // update 1, from the box After the update, which then fades; its After comes once they have landed.
+    if (go && k === 1) {
+      api.show(U.t2, true, { delay: 200, dur: 500 });
+      copyTo(api, U.wbox.num, U.tn2[0], 700, 1100);
+      move(api, U.aa.num, U.tn2[2], 850, 1100);
+      api.fade(U.aa.el, false, { delay: 1050, dur: 500 });
+      [[1, 2100], [3, 2350]].forEach(function (c) {
+        var e = U.tn2[c[0]];
+        e.style.visibility = "hidden";
+        api.at(c[1], function () { e.style.visibility = ""; if (OB.fx && OB.fx.bump) OB.fx.bump(e, 0.25, 420); });
+      });
+    } else {
+      api.show(U.t2, k >= 1);
+      U.tn2.forEach(function (e) { e.style.visibility = ""; });
+      api.show(U.aa.el, k === 0);
+    }
+    api.show(U.n2, k >= 2, K.opt(go && k === 2, 300));
+    api.show(U.u2, k >= 2, K.opt(go && k === 2, 900));
+    api.show(U.loop, k >= 3, K.opt(go && k === 3, 300));
   }
 
   OB.scene({
@@ -5003,152 +5286,30 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       row.appendChild(right);
       st.appendChild(row);
       P.row = row;
+      // The update view, and the pick of update 2: fifteen weights light in turn, the last one the weight of round 2.
+      P.U = upView(st);
+      var seq2 = [], r2 = CW.rng(3802);
+      for (var i2 = 0; i2 < 14; i2++) seq2.push(Math.floor(r2() * 96));
+      seq2.push(R2.k);
+      P.seq2 = seq2;
     },
     beat: function (k, api) {
       var P = this.parts, go = K.live(api, k);
       K.say(P.lead, L320[k], api);
-      K.title(P.lead, TITLES[k < TRI ? 0 : 1], api);
-      if (k < TRI) backBeat(P, k, api, go); else triBeat(P, k - TRI, api, go);
-    }
-  });
-
-  /* The line of an update: the weight = its value + alpha x nabla = result. */
-  function upTex(r) {
-    return K.wsym(r.k) + " " + OB.tex("= " + K.wf(r.v) + " + " + ALPHAS + " \\times " + (r.nabla < 0 ? "(" + nab(r.nabla) + ")" : nab(r.nabla)) + " =\\;");
-  }
-
-  /* 370. The update. */
-  var L370 = [
-    "The update adds \\(\\alpha \\nabla\\) to the weight. \\(\\alpha = " + ALPHAS + "\\) is the step size.",
-    "The new weight: guess it, then press Compute.",
-    "The new weight: " + K.wf(R1.vNew) + ". A slope above 0 raises the weight.",
-    "The 1,000 households again, with the same luck. Will the average return go up or down?",
-    (R1.upd >= R1.before ? "Up" : "Down") + ": from " + K.n2(R1.before) + " to " + K.n2(R1.upd) + "."
-  ];
-  OB.scene({
-    key: "closeup-update", order: 370, title: "The update", beats: L370.length,
-    build: function (root) {
-      root.classList.add("cw-root");
-      var P = this.parts = {}, m = mem();
-      P.lead = K.lead(root);
-      var row = el("div", "cw-crow"), left = el("div", "cw-ccol"), right = el("div", "cw-ccol");
-      P.S = K.Strip();
-      P.S.set(m.S0.W, m.S0.E);
-      P.S.mark(R1.k);
-      P.S.dim(true);
-      left.appendChild(P.S.el);
-      P.wbox = K.ba("THE WEIGHT", K.wsym(R1.k), "cw-wbox");
-      P.wbox.chip.classList.add("w");
-      left.appendChild(P.wbox.el);
-      var f = el("div", "ob-box cw-ubox");
-      f.appendChild(OB.html("div", "cw-ugen", K.wsym(R1.k) + " " + OB.tex("=") + " " + K.wsym(R1.k) + " " + OB.tex("+\\; \\alpha \\nabla")));
-      f.appendChild(OB.html("div", "cw-ua", OB.tex("\\alpha = " + ALPHAS + ", \\quad \\nabla = " + nab(R1.nabla))));
-      P.res = el("span", "ob-texn cw-ures", K.wf(R1.vNew));
-      P.line = OB.html("div", "cw-unum", upTex(R1));
-      P.line.appendChild(P.res);
-      f.appendChild(P.line);
-      right.appendChild(f);
-      var avg = el("div", "cw-uavg");
-      P.ab = K.avgBox("BEFORE THE UPDATE");
-      P.ab.setAvg(R1.before);
-      P.aa = K.avgBox("AFTER THE UPDATE");
-      P.aa.setAvg(R1.upd);
-      avg.appendChild(P.ab.el);
-      avg.appendChild(P.aa.el);
-      right.appendChild(avg);
-      row.appendChild(left);
-      row.appendChild(right);
-      root.appendChild(row);
+      K.title(P.lead, TITLES[k < TRI ? 0 : k < UPD ? 1 : k < UP2 ? 2 : 3], api);
+      if (k < TRI) backBeat(P, k, api, go);
+      else if (k < UPD) triBeat(P, k - TRI, api, go);
+      else if (k < UP2) u1Beat(P, k - UPD, api, go);
+      else u2Beat(P, k - UP2, api, go);
     },
-    beat: function (k, api) {
-      var P = this.parts, go = K.live(api, k);
-      K.say(P.lead, L370[k], api);
-      // 1: the numbers in the formula, the result to guess. 2: the result, which flies into its place.
-      api.show(P.line, k >= 1, K.opt(go && k === 1, 300));
-      P.res.textContent = k >= 2 ? K.wf(R1.vNew) : "?";
-      P.res.classList.toggle("done", k >= 2);
-      if (k === 1) api.nextLabel("Compute");
-      var setW = function (v) { P.wbox.set(K.wf(v)); P.S.setOne(R1.k, v); };
-      if (go && k === 2) {
-        setW(R1.v);
-        if (OB.fx && OB.fx.bump) OB.fx.bump(P.res, 0.3, 500);
-        K.flyKeep(api, P.res, P.wbox.num, { delay: 900, land: function () { setW(R1.vNew); } });
-      } else setW(k >= 2 ? R1.vNew : R1.v);
-      P.wbox.el.classList.toggle("cw-lit", k === 2);
-      // 3: the average return after the update, to guess. 4: the answer.
-      api.show(P.ab.el, k >= 3, K.opt(go && k === 3, 300));
-      api.show(P.aa.el, k >= 3, K.opt(go && k === 3, 700));
-      if (k === 3) { P.aa.num.textContent = "?"; api.nextLabel("Compute"); }
-      else {
-        P.aa.setAvg(R1.upd);
-        if (go && k === 4) {
-          api.roll(P.aa.num, R1.upd, { from: R1.before, fmt: K.n2, delay: 200 });
-          if (OB.fx && OB.fx.celebrate && R1.upd > R1.before) api.at(200 + OB.DUR.roll, function () { OB.fx.celebrate(P.aa.el); });
-        }
-      }
-      P.aa.el.classList.toggle("cw-lit", k >= 4);
-      if (k >= 3) api.arrow("u", P.ab.el, P.aa.el, { delay: go && k === 3 ? 700 : 0, dur: go && k === 3 ? undefined : 1 });
-      else api.unarrow("u");
-    }
-  });
-
-  /* 380. Update 2: a weight of W. */
-  var L380 = [
-    "Update 2 picks another weight at random, this time in \\(W\\): " + ws(R2.k, ",") + " " + where(R2) + ".",
-    "The hop: from " + K.wf(R2.v) + " to " + K.wf(R2.vh) + ". The average return, with the same luck: from " + K.n2(R2.before) + " to " + K.n2(R2.after) + ".",
-    "A change below 0, so a slope below 0: the update lowers the weight, to " + K.wf(R2.vNew) + ".",
-    "Every update does the same: one weight of the 96 picked at random, the hop, the slope, the update."
-  ];
-  OB.scene({
-    key: "update-two", order: 380, title: "Update 2", beats: L380.length,
-    build: function (root) {
-      root.classList.add("cw-root");
-      var P = this.parts = {};
-      P.lead = K.lead(root);
-      var row = el("div", "cw-crow"), left = el("div", "cw-ccol"), right = el("div", "cw-ccol");
-      var X1 = K.copy(K.weightsAt(1));
-      P.S = K.Strip();
-      P.S.set(X1.W, X1.E);
-      P.S.mark(R2.k);
-      P.S.dim(true);
-      left.appendChild(P.S.el);
-      P.wbox = K.ba("THE WEIGHT", K.wsym(R2.k), "cw-wbox");
-      P.wbox.chip.classList.add("w");
-      left.appendChild(P.wbox.el);
-      P.t = closeTable(R2);
-      right.appendChild(P.t);
-      P.n = OB.html("div", "cw-nabla small", nablaTex(R2, true));
-      right.appendChild(P.n);
-      P.u = el("div", "cw-unum small");
-      P.u.innerHTML = upTex(R2);
-      P.res = el("span", "ob-texn cw-ures done", K.wf(R2.vNew));
-      P.u.appendChild(P.res);
-      right.appendChild(P.u);
-      row.appendChild(left);
-      row.appendChild(right);
-      root.appendChild(row);
-      var loop = el("div", "cw-loop");
-      ["PICK A WEIGHT", "HOP", "SLOPE", "UPDATE"].forEach(function (s, i) {
-        if (i) loop.appendChild(el("span", "cw-larr"));
-        loop.appendChild(el("span", "cw-lchip", s));
-      });
-      loop.appendChild(el("span", "cw-lback", "AND AGAIN"));
-      P.loop = loop;
-      root.appendChild(loop);
-    },
-    beat: function (k, api) {
-      var P = this.parts, go = K.live(api, k);
-      K.say(P.lead, L380[k], api);
-      api.show(P.t, k >= 1, K.opt(go && k === 1, 300));
-      api.show(P.n, k >= 2, K.opt(go && k === 2, 300));
-      api.show(P.u, k >= 2, K.opt(go && k === 2, 900));
-      var setW = function (v) { P.wbox.set(K.wf(v)); P.S.setOne(R2.k, v); };
-      if (go && k === 2) {
-        setW(R2.v);
-        K.flyKeep(api, P.res, P.wbox.num, { delay: 2200, land: function () { setW(R2.vNew); } });
-      } else setW(k >= 2 ? R2.vNew : R2.v);
-      P.wbox.el.classList.toggle("cw-lit", k === 2);
-      api.show(P.loop, k >= 3, K.opt(go && k === 3, 300));
+    /* Left from the last beat: a copy of the view for scene 410, which takes update 2's table into its panel and the
+       strip into its diagram (K.handOut; cw-4learn.js, handIn410). */
+    leave: function (api) {
+      var P = this.parts, U = P && P.U;
+      if (!U || api.beat !== L320.length - 1) { K.hand = null; return; }
+      var lab = U.t2.querySelectorAll(".cw-ctl");
+      K.handOut("proto-backward", api.root, { lead: P.lead, strip: U.S.el, wbox: U.wbox.el, t2: U.t2, sym: lab[0], n0: U.tn2[0],
+        n1: U.tn2[1], n2: U.tn2[2], n3: U.tn2[3], nabla: U.n2, upd: U.u2, loop: U.loop });
     }
   });
 })();
@@ -5341,7 +5502,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     V.hop = Panel();
     V.hop.el.classList.add("cw-ga-hop");
     d.grid.appendChild(V.hop.el);
-    var pc = el("div", "cw-plotc cw-ga-plot");
+    var pc = V.pc = el("div", "cw-plotc cw-ga-plot");
     V.plot = Plot();
     pc.appendChild(V.plot.el);
     if (bar) {
@@ -5389,6 +5550,47 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     else api.unarrow("pt");
   }
 
+  /* 410 reached with Next from the last beat of scene 320 (2026-11-19; Carlos: "Between slide 12 and 13 there is a hard
+     transition. Fix that. Flow flow flow"): 320's view, laid over this one by K.handIn, hands over. The lead line, the
+     weight's box, nabla, the update and the loop fade; the strip glides into the diagram; the four numbers of update
+     2's table (0.30, 0.50, 52.63, 52.62) fly into the panel of update 2, whose frame comes as the table's goes; then the
+     households, the histogram, the average after the update, the curve's axes and the arrows come in. About 2.4 s. */
+  function handIn410(V, H, api) {
+    var d = V.d, P = V.hop, sec = api.sec;
+    function part(n) { return H.part(n); }
+    api.fade(part("lead"), false, { dur: 300 });
+    ["wbox", "nabla", "upd", "loop"].forEach(function (n, i) { api.fade(part(n), false, { delay: 60 * i, dur: 450 }); });
+    if (part("strip")) K.glide(api, part("strip"), d.S.el, { delay: 100, dur: 1000 });
+    // The four numbers travel together, as the grid they form, without an arc, each to its cell of the panel.
+    [["n0", P.v], ["n1", P.vh], ["n2", P.b], ["n3", P.a]].forEach(function (p, i) {
+      var from = part(p[0]);
+      if (!from) return;
+      p[1].style.visibility = "hidden";
+      K.flyKeep(api, from, p[1], { delay: 300 + 30 * i, dur: 1000, arc: 0, tight: true });
+      api.at(300 + 30 * i, function () { from.style.visibility = "hidden"; });
+    });
+    api.fade(part("t2"), false, { delay: 650, dur: 450 });
+    V.lead.classList.add("ob-hide");
+    api.show(V.lead, true, { delay: 350, dur: 450 });
+    P.el.classList.add("ob-hide");
+    api.show(P.el, true, { delay: 800, dur: 500 });
+    // By opacity alone: these boxes are ends of arrows, and on a phone a box of the diagram with ob-hide leaves the
+    // layout (cw-0kit.css), so its arrow, drawn now, would find no end and stay undrawn.
+    [d.M.el, d.H.el, d.ab.el, V.pc].forEach(function (e, i) {
+      e.style.opacity = "0";
+      api.at(1200 + 200 * i, function () {
+        api.animate(550, function (p) { e.style.opacity = String(p); }, function () { e.style.opacity = ""; });
+      });
+    });
+    if (sec) {
+      // hidden at once (no transition yet), then faded in
+      sec.classList.add("cw-arrows-off");
+      api.at(1700, function () { sec.classList.add("cw-arrows-in"); });
+      api.at(1800, function () { sec.classList.remove("cw-arrows-off"); });
+      api.at(2400, function () { sec.classList.remove("cw-arrows-in"); });
+    }
+  }
+
   /* 410. The learning curve: its axes, then its first three points, two of them flying from the numbers they plot. */
   var L410 = [
     "The learning curve: across, the number of updates; up, the average return \\(\\bar{G}_1\\) after them.",
@@ -5400,7 +5602,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     build: function (root) { this.V = View(root, false); },
     beat: function (k, api) {
       var V = this.V, d = V.d, C = V.plot, go = K.live(api, k);
-      K.say(V.lead, L410[k], api);
+      var H = k === 0 ? K.handIn(api, "proto-backward", 2600) : null;
+      K.say(V.lead, L410[k], H ? null : api);
       render(V, FIRST, -1);
       arrows(V, api, k >= 2 ? (go && k === 2 ? { delay: 200 } : true) : false);
       V.hop.b.classList.toggle("cw-lit", k === 1);
@@ -5409,6 +5612,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       if (!go || k === 0) {
         C.draw(n);
         C.tags.forEach(function (t, j) { t.classList.toggle("ob-hide", j > n); });
+        if (H) handIn410(V, H, api);
         return;
       }
       if (k === 1) {
