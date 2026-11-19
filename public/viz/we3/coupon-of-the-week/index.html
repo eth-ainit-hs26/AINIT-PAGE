@@ -450,6 +450,10 @@ sup { top: -0.55em; }
   border-bottom: 2.5px dashed var(--ink2); padding-bottom: 4px; }
 .cw-tk-ic { font-size: 38px; line-height: 1.15; }
 .cw-tk-nm { font-weight: 700; font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); white-space: nowrap; }
+/* The profit of one purchase (K.ticket with profit, scenes 104, 110 and 112). */
+.cw-tk-pr { margin-top: 3px; padding-top: 4px; border-top: 2.5px dashed var(--ink2); white-space: nowrap; line-height: 1.2; }
+.cw-tk-prl { font-family: var(--sign); font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.05em; color: var(--ink2); }
+.cw-tk-prn { font-weight: 700; font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); color: var(--gain); font-variant-numeric: tabular-nums lining-nums; }
 
 .cw-tl.cw-tlb { display: none; }
 @media (max-width: 560px) {
@@ -492,7 +496,8 @@ sup { top: -0.55em; }
 }
 </style>
 <style>/* cw-1game.css */
-/* cw-1game.css: scenes 0 to 199 of "Coupon of the Week" (main session, 2026-11-18). */
+/* cw-1game.css: scenes 0 to 199 of "Coupon of the Week" (main session, 2026-11-18; scenes 102, 104 and 112 since
+   2026-11-19). The state table of 102 and the reward lines of 110 and 112 take their classes from cw-1play.css. */
 
 /* The card: three coupons fanned out. */
 .cw-fan { position: relative; display: flex; justify-content: center; align-items: flex-end; gap: 0; height: 120px; }
@@ -534,7 +539,6 @@ sup { top: -0.55em; }
   color: #FFFFFF; background: var(--gain); border: 3px solid var(--ink); border-radius: 8px; padding: 6px 10px 4px; box-shadow: 3px 3px 0 0 var(--ink); }
 .cw-coupbox { padding: 12px 18px 10px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
 .cw-cline { font-size: calc(calc(15px * var(--tx)) * var(--fz, 1)); }
-.cw-rbox { margin-top: 16px; padding: 12px 22px; font-size: calc(calc(15px * var(--tx)) * var(--fz, 1)); }
 .cw-rnum, .cw-gnum { font-weight: 700; font-size: 1.15em; background: var(--yellow); border-radius: 4px; padding: 0 0.2em; }
 
 /* 120: one quarter. */
@@ -553,8 +557,55 @@ sup { top: -0.55em; }
 .cw-gbox { margin-top: 18px; padding: 12px 24px; font-size: calc(calc(16px * var(--tx)) * var(--fz, 1)); display: flex; align-items: center; gap: 4px; }
 .cw-gunit { font-family: var(--sign); font-size: 0.6em; letter-spacing: 0.05em; margin-left: 8px; color: var(--ink2); }
 
+/* 102: the state, and the habits' profits summed. */
+.cw-st { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.cw-sttab .cw-pyp.lit { background: var(--yellow); }
+.cw-stsum { padding: 10px 22px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.cw-stf { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-size: calc(calc(15px * var(--tx)) * var(--fz, 1)); }
+.cw-stf .cw-pyres { gap: 8px; }
+.cw-stop { white-space: nowrap; }
+
+/* 104: what a coupon does. The ticket and the state now on the left, the table of the three outcomes on the right. */
+.cw-oc { display: flex; align-items: center; justify-content: center; gap: 34px; }
+.cw-ocl { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.cw-ocnow { padding: 8px 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw-ocs { display: inline-flex; align-items: center; gap: 6px; }
+.cw-ocs i { font-style: normal; font-size: 24px; line-height: 1; }
+.cw-ocs b { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 28px; background: #FFFFFF;
+  border: 1.5px solid var(--ink); border-radius: 3px; font-weight: 700; font-size: 15px; }
+.cw-ocs b.hab { background: #D3F3E3; }
+.cw-ocw { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 2px 6px 6px 2px; }
+.cw-octab { display: grid; grid-template-columns: 150px repeat(3, 168px); background: #FFFFFF; border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 3px 3px 0 0 var(--ink); }
+.cw-ocr { display: flex; align-items: center; justify-content: flex-end; text-align: right; padding: 8px 12px; font-family: var(--sign);
+  font-size: calc(calc(7.5px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.05em; line-height: 1.3; color: var(--ink);
+  border-bottom: 1.5px solid var(--line, #DCD5EC); }
+.cw-och { display: flex; align-items: center; justify-content: center; padding: 9px 6px; border-left: 1.5px solid var(--line, #DCD5EC); }
+.cw-ocr.top, .cw-och { border-bottom: 3px solid var(--ink); }
+.cw-och .cw-qout { font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); transition: outline-color 0.3s; }
+.cw-och.ring .cw-qout { outline: 3px solid var(--pink); outline-offset: 2px; }
+.cw-occ { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 0.4em; text-align: center; padding: 8px 10px;
+  font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); line-height: 1.3; border-left: 1.5px solid var(--line, #DCD5EC);
+  border-bottom: 1.5px solid var(--line, #DCD5EC); }
+.cw-ocr.last, .cw-occ.last { border-bottom: 0; }
+.cw-occ.p { font-weight: 700; font-variant-numeric: tabular-nums lining-nums; }
+.cw-octab > .cw-occ.p:last-child { color: var(--gain); }
+.cw-ocf { white-space: nowrap; }
+
+/* 110 and 112: the stamp in the colour of its chip (USED yellow, HABIT green); the reward line under the row; the
+   habit in focus. */
+.cw-stamp.o1 { background: var(--yellow); color: var(--ink); }
+.cw-stamp.o2 { background: var(--wear0, #22B573); color: #FFFFFF; }
+.cw-wkrw { margin-top: 30px; }
+.cw-hab.cw-focus { outline: 3px solid var(--pink); outline-offset: 2px; }
+
+/* 120: the week in focus. */
+.cw-qcol.cw-focus { border-color: var(--pink); box-shadow: 3px 3px 0 0 var(--pink); outline: 3px solid var(--pink); outline-offset: 2px; }
+
 @media (max-width: 1119px) {
   .cw-shelf { grid-template-columns: repeat(6, 110px); }
+  .cw-oc { flex-direction: column; gap: 18px; }
+  .cw-ocl { flex-direction: row; gap: 18px; }
   .cw-qstrip { grid-template-columns: repeat(6, 84px); }
   .cw-weekrow { flex-wrap: wrap; gap: 26px; }
 }
@@ -564,6 +615,19 @@ sup { top: -0.55em; }
   .cw-shelf { grid-template-columns: repeat(3, 108px); }
   .cw-qstrip { grid-template-columns: repeat(3, 96px); }
   .cw-habs { flex-wrap: wrap; justify-content: center; }
+  .cw-st { gap: 14px; }
+  .cw-stf { font-size: 14px; gap: 6px; }
+  .cw-ticket.big { min-width: 150px; padding: 10px 16px 12px; }
+  .cw-ticket.big .cw-tk-ic { font-size: 44px; }
+  .cw-ocl { gap: 12px; }
+  .cw-octab { grid-template-columns: 76px repeat(3, 88px); }
+  .cw-ocr { padding: 6px 6px; font-size: 8px; }
+  .cw-occ { padding: 6px 4px; font-size: 10.5px; }
+  .cw-och { padding: 7px 2px; }
+  .cw-och .cw-qout { font-size: 8.5px; padding: 3px 4px 2px; }
+  .cw-ocs i { font-size: 18px; }
+  .cw-ocs b { width: 24px; height: 24px; font-size: 12px; }
+  .cw-wkrw { margin-top: 26px; }
 }
 </style>
 <style>/* cw-1play.css */
@@ -623,6 +687,9 @@ sup { top: -0.55em; }
 .cw-pycn { white-space: nowrap; line-height: 1.2; }
 .cw-pyrn { font-size: 1.25em; }
 .cw-pybox .cw-bnum { font-size: 22px; }
+/* The line under the reward: what the household did with the last coupon (2026-11-19). */
+.cw-pywhy { max-width: 820px; text-align: center; font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); line-height: 1.4; color: var(--ink); }
+.cw-pywhy .cw-qout { display: inline-block; margin-right: 8px; font-size: 0.8em; vertical-align: 0.1em; }
 
 /* The weeks: as scene 120, a little lower; the week being played is pink, the weeks to come are pale. */
 .cw-pystrip .cw-qcol { padding: 5px 2px 6px; gap: 4px; }
@@ -684,6 +751,12 @@ sup { top: -0.55em; }
    780 x 468 px with its padding; cross 2, theta = z E with the probabilities: 1110 x 176 px. Both fit 1180 x 820 and
    1366 x 768 under a lead of two lines; narrower, they scroll sideways (ob-hscroll). */
 .cw-cxw { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 6px 6px 4px; }
+/* Scene 220: the two crosses in one cell of a grid, so the slide keeps its size while z glides from cross 1 to cross 2;
+   during the glide s and W fade (cw-going), z and its label stay. */
+.cw-pol { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; }
+.cw-pol > .cw-pol1, .cw-pol > .cw-pol2 { grid-area: 1 / 1; align-self: center; justify-self: center; min-width: 0; max-width: 100%; }
+.cw-pol2 { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.cw-cx1.cw-going > :not(.cw-cxz):not(.cw-zl) { opacity: 0 !important; transition: opacity 0.6s ease; }
 .cw-cx1 { display: grid; grid-template-columns: 26px repeat(24, 24px) 26px 54px 54px 32px; grid-template-rows: 18px repeat(24, 16px) 26px 30px; }
 .cw-cx2 { display: grid; grid-template-columns: 26px 54px 54px 22px repeat(24, 38px) 30px; grid-template-rows: 32px 28px 28px 18px 30px 34px; }
 .cw-cxh { display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; font-family: var(--sign); font-size: 10px; color: var(--ink2); }
@@ -711,7 +784,9 @@ sup { top: -0.55em; }
 .cw-c1-w.top { border-top: 3px solid var(--ink); }
 .cw-c1-w.bot { border-bottom: 3px solid var(--ink); }
 .cw-c1-w .cw-tn { font-size: 11.5px; }
-.cw-c1-w.lit, .cw-c1-s.lit { background: var(--yellow); }
+.cw-c1-s.lit { background: var(--yellow); }
+/* W and E carry their heat colours inline (K.heat); a lit row or column turns yellow over them. */
+.cw-c1-w.lit, .cw-c2-e.lit { background: var(--yellow) !important; }
 
 /* Cross 2: z, E, theta and the probabilities. */
 .cw-c2-ic { position: relative; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-size: 21px; line-height: 1;
@@ -728,7 +803,7 @@ sup { top: -0.55em; }
 .cw-c2-p .cw-tn { font-size: 11.5px; }
 .cw-c2-e.first, .cw-c2-th.first, .cw-c2-p.first { border-left: 3px solid var(--ink); }
 .cw-c2-e.last, .cw-c2-th.last, .cw-c2-p.last { border-right: 3px solid var(--ink); }
-.cw-c2-e.lit, .cw-c2-th.lit { background: var(--yellow); }
+.cw-c2-th.lit { background: var(--yellow); }
 .cw-c2-e.mute .cw-tn { color: #B9B2CE; }
 .cw-c2-th.blank, .cw-c2-p.blank { background: repeating-linear-gradient(45deg, #F3EFFA 0 4px, #FFFFFF 4px 8px); }
 .cw-c2-th.ring, .cw-c2-p.ring { outline: 3px solid var(--pink); outline-offset: -3px; z-index: 2; }
@@ -744,6 +819,14 @@ sup { top: -0.55em; }
 .cw-crow { display: flex; align-items: flex-start; justify-content: center; gap: 44px; margin-top: 6px; }
 .cw-ccol { display: flex; flex-direction: column; align-items: center; gap: 18px; }
 
+/* Scene 320 (2026-11-19): the diagram of the backward pass and the close-up of the hop in one cell of a grid, both at
+   its top (cw-3proto.js, flow()). During the change (cw-going) the households, the histogram and the loop fade; the
+   strip and the four boxes leave by their own motions. The strip's copy in flight: cw-glide. */
+.cw-bt { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; }
+.cw-bt > .cw-bt1, .cw-bt > .cw-bt2 { grid-area: 1 / 1; align-self: start; min-width: 0; }
+.cw-dia.cw-going > :not(.cw-ga-strip):not(.cw-ba) { opacity: 0 !important; transition: opacity 0.6s ease; }
+.cw-glide { position: fixed; z-index: 41; margin: 0; pointer-events: none; box-sizing: border-box; }
+
 /* The table of Before and After. */
 .cw-ct { display: grid; grid-template-columns: auto 112px 112px; align-items: center; padding: 10px 14px 12px; column-gap: 6px; row-gap: 6px; }
 .cw-cth { font-family: var(--sign); font-size: calc(calc(8.5px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.06em; text-align: center; color: var(--ink); }
@@ -752,6 +835,7 @@ sup { top: -0.55em; }
 .cw-ctv { font-family: var(--sign); font-size: 21px; line-height: 1; text-align: center; padding: 7px 4px 6px; border-radius: 6px; color: var(--ink);
   font-variant-numeric: tabular-nums lining-nums; transition: background-color 0.3s; }
 .cw-ctv.r2 { color: var(--violet); }
+.cw-ctn { display: inline-block; }
 .cw-ctv.lit { background: var(--yellow); }
 
 /* The chart of the hop. */
@@ -770,7 +854,7 @@ sup { top: -0.55em; }
 .cw-cpt { stroke: var(--ink); stroke-width: 3; }
 .cw-cpt.b { fill: #FFFFFF; }
 .cw-cpt.a { fill: var(--yellow); }
-.cw-ctk { font-family: var(--px); font-weight: 700; font-size: 12.5px; fill: var(--ink2); text-anchor: middle; }
+.cw-ctk { font-family: var(--px); font-weight: 700; font-size: 12.5px; fill: var(--ink2); text-anchor: middle; transform-box: fill-box; transform-origin: center; }
 .cw-ctk.y { text-anchor: end; }
 .cw-cname { font-family: var(--sign); font-size: 10.5px; letter-spacing: 0.05em; fill: var(--ink); text-anchor: start; }
 .cw-cname.e { text-anchor: end; }
@@ -825,10 +909,11 @@ sup { top: -0.55em; }
   .cw-mvd .cw-ga-hop, .cw-mvd .cw-ga-plot { align-self: center; }
 }
 
-/* The panel of an update. */
+/* The panel of an update: its number, Before and After, and the triangle of the hop beside them (2026-11-19). */
 .cw-up { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 9px 16px 11px; }
+.cw-upr { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .cw-hpc { font-family: var(--sign); font-size: calc(calc(8.5px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.06em; color: var(--ink); }
-.cw-hpg { display: grid; grid-template-columns: auto repeat(3, auto); column-gap: 16px; row-gap: 1px; align-items: center; }
+.cw-hpg { display: grid; grid-template-columns: auto repeat(2, auto); column-gap: 16px; row-gap: 1px; align-items: center; }
 .cw-hph { font-family: var(--sign); font-size: calc(calc(7px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.06em; color: var(--ink2); text-align: right; }
 .cw-hpl { display: flex; justify-content: flex-end; font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); }
 .cw-hpl .cw-bachip { font-size: calc(calc(7px * var(--tx)) * var(--fz, 1)); }
@@ -837,10 +922,22 @@ sup { top: -0.55em; }
 .cw-hpn.r2 { color: var(--violet); }
 .cw-hpn.gain { color: var(--gain); }
 .cw-hpn.loss { color: var(--pink); }
-.cw-hpd { color: var(--ink2); }
-.cw-hpf { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); white-space: nowrap; text-align: center; }
-.cw-hpf .ob-texn { font-variant-numeric: tabular-nums; }
-.cw-hpnew { background: var(--yellow); padding: 0 0.2em; border-radius: 3px; }
+/* The triangle of the hop in the panel (cw-4learn.js, tri()). */
+.cw-ut { display: block; overflow: visible; flex: 0 0 auto; }
+.cw-utax { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: miter; }
+.cw-utt { font-family: var(--sign); font-size: 8.5px; letter-spacing: 0.05em; fill: var(--ink2); text-anchor: start; }
+.cw-utt.e { text-anchor: end; }
+.cw-utri { fill: rgba(255, 199, 54, 0.4); stroke: none; }
+.cw-utleg { stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; }
+.cw-utleg.gain { stroke: var(--gain); }
+.cw-utleg.loss { stroke: var(--pink); }
+.cw-utl { font-family: var(--px); font-weight: 700; font-size: 14px; fill: var(--ink); text-anchor: middle; font-variant-numeric: tabular-nums lining-nums; }
+.cw-utl.s { text-anchor: start; }
+.cw-utl.gain { fill: var(--gain); }
+.cw-utl.loss { fill: var(--pink); }
+.cw-utpt { stroke: var(--ink); stroke-width: 2.5; }
+.cw-utpt.b { fill: #FFFFFF; }
+.cw-utpt.a { fill: var(--yellow); }
 
 /* The learning curve. */
 .cw-plotc { display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -905,8 +1002,8 @@ sup { top: -0.55em; }
 @media (max-width: 560px) {
   .cw-up { padding: 8px 10px 10px; }
   .cw-hpg { column-gap: 8px; }
+  .cw-upr { flex-wrap: wrap; }
   .cw-hpn { font-size: 14px; min-width: 0; }
-  .cw-hpf { font-size: calc(8.5px * var(--fz, 1)); }
   .cw-cards { grid-template-columns: minmax(0, 1fr); }
   .cw-cardt { white-space: normal; }
 }
@@ -2796,6 +2893,14 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     p.innerHTML = "<span>" + markup + "</span>";
     if (api && api.forward && !api.instant) api.fade(p, true);
   };
+  /* The head of a scene whose title changes between beats (scenes 220 and 320, 2026-11-19); the new title fades in
+     when its beat is reached with motion. inside: any element of the scene. */
+  K.title = function (inside, text, api) {
+    var sec = inside && inside.closest ? inside.closest("section.scene") : null, h = sec ? sec.querySelector(".scene-head h2") : null;
+    if (!h || h.textContent === text) return;
+    h.textContent = text;
+    if (api && api.forward && !api.instant) api.fade(h, true, { dur: 800 });
+  };
   K.live = function (api, k) { return api.forward && !api.instant && api.from === k - 1; };
   K.opt = function (go, delay, extra) { var o = extra || {}; if (go && delay) o.delay = delay; return o; };
   K.phone = function () { return window.matchMedia && window.matchMedia("(max-width: 560px)").matches; };
@@ -3250,27 +3355,50 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   };
 
   /* A coupon ticket: CHF 3 off, the product's icon and name. */
-  K.ticket = function (j, cls) {
+  /* With profit, the ticket also shows the supermarket's profit on one purchase of the product (Carlos, 2026-11-19:
+     "show also the price of the tiramisu so it is clear for the calculation of the final profit"; the model has
+     profits only, and the reward uses them). */
+  K.ticket = function (j, cls, profit) {
     var t = el("div", "cw-ticket" + (cls ? " " + cls : ""));
     t.appendChild(el("div", "cw-tk-off", "CHF 3 OFF"));
     t.appendChild(el("div", "cw-tk-ic", j === undefined || j === null ? "" : CW.ICONS[j]));
     t.appendChild(el("div", "cw-tk-nm", j === undefined || j === null ? "" : CW.NAMES[j]));
+    if (profit && j !== undefined && j !== null) {
+      var pr = el("div", "cw-tk-pr");
+      pr.appendChild(el("span", "cw-tk-prl", "PROFIT "));
+      pr.appendChild(el("span", "cw-tk-prn", K.chf(CW.PROFIT[j])));
+      t.appendChild(pr);
+    }
     return t;
   };
 })();
 </script>
 <script>/* cw-1game.js */
-/* cw-1game.js: the game, scenes 0 to 199 of "Coupon of the Week" (main session, 2026-11-18).
+/* cw-1game.js: the game, scenes 0 to 199 of "Coupon of the Week" (main session, 2026-11-18). Scenes 102, 104 and 112,
+   the profit on the coupon and the reward lines of 110 and 112 since 2026-11-19, at Carlos's request: "show also the
+   price of the tiramisu so it is clear for the calculation of the final profit. Unclear how the reward is calculated.
+   So the state is the habit of a household, a coupon may or may not expand this set and yields a reward. Explain this
+   and explain also how the reward is calculated after an action. If necessary explain this in a few more slides".
 
      0 card "Coupon of the Week"
    100 One coupon a week (4 beats): the 24 products; their profits; the habits of the example household; the 20
        products a coupon can go to
-   110 One week (5 beats): week 1 of the example household: the coupon, used, its profit minus CHF 3, a new habit,
-       the reward r1
-   120 One quarter (3 beats): the 12 weeks of the example household, their rewards, the return G1
+   102 The state (2 beats): the habits as the state s, 24 numbers; the habits' profits, made every week
+   104 What a coupon does (5 beats): the action, a coupon for tiramisu with its profit; the three outcomes as the columns
+       of a table, IGNORED, USED, HABIT: what the household does, what the coupon adds to this week's reward, tiramisu
+       in next week's state, what tiramisu adds to every later reward; the household's taste decides
+   110 One week (5 beats): week 1 of the example household: the coupon for tiramisu with its profit, used, its profit
+       minus CHF 3, a new habit (HABIT), the reward r1 = habits + coupon
+   112 Week 2 (4 beats): the state with tiramisu, the coupon for avocados, USED, r2 = habits + coupon, tiramisu's loss in
+       week 1 against its profit in every later week
+   120 One quarter (4 beats): the 12 weeks of the example household, their rewards, week 4 (IGNORED: the habits alone),
+       the return G1
 
-   The example household is CWD.EXAMPLE of the guided luck under the starting weights (tools/make_data.js has the
-   criteria). */
+   The state table of 102 and the reward lines of 110 and 112 take the look and the classes of scene 130 (cw-1play.css:
+   cw-pytab, cw-pyblk, cw-pycol, cw-pys, cw-pyp; cw-pyrw, cw-pybox, cw-pych, cw-pycn), so the state and r_t = habits +
+   coupon look the same wherever they appear. The example household is CWD.EXAMPLE of the guided luck under the starting
+   weights (tools/make_data.js has the criteria); the scenes log a console error when its weeks 1, 2 and 4 stop being
+   HABIT, USED and IGNORED. */
 (function () {
   "use strict";
   var OB = window.OB, CW = window.CW, D = window.CWD, K = OB.cw, el = OB.el;
@@ -3279,10 +3407,155 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   var EP = CW.playEpisode(D.init.W, D.init.E, K.guided(), D.EXAMPLE, true);
   var HH = EP.household, HAB = [];
   HH.basket.forEach(function (b, j) { if (b) HAB.push(j); });
-  var W1 = EP.weeks[0], A1 = W1.a;
+  var W1 = EP.weeks[0], A1 = W1.a, W2 = EP.weeks[1], A2 = W2.a;
   K.EP = EP;
   K.HAB = HAB;
   var habNames = K.list(HAB.map(K.name));
+
+  var OUT = ["IGNORED", "USED", "HABIT"];
+  var outOf = function (w) { return w.habit ? 2 : w.used ? 1 : 0; };
+  var habOf = function (s) { var h = []; s.forEach(function (b, j) { if (b) h.push(j); }); return h; };
+  var sumOf = function (h) { return h.reduce(function (a, j) { return a + CW.PROFIT[j]; }, 0); };
+  var cap = function (s) { return s.charAt(0).toUpperCase() + s.slice(1); };
+  /* The coupon's part of the reward when it is used: the product's profit minus the CHF 3 of the coupon. */
+  var part = function (a) { return CW.PROFIT[a] - CW.DISCOUNT; };
+  var partTex = function (a) { return OB.num(CW.PROFIT[a], 2) + " - 3 = " + OB.num(part(a), 2); };
+  var IG = -1;
+  EP.weeks.some(function (w, t) { if (!w.used) { IG = t; return true; } return false; });
+  if (!(W1.used && W1.habit) || !(W2.used && !W2.habit) || IG < 0) {
+    console.error("cw-1game: the example household's weeks 1 and 2 must be HABIT and USED, and one week IGNORED");
+  }
+
+  /* The state table: the 24 products in three blocks of 8 (one row from 1120 px on), rows icon, state s, profit, as in
+     scene 130. */
+  function stateTab(s) {
+    var tab = el("div", "cw-pytab cw-sttab"), blocks = [], cols = [];
+    for (var b = 0; b < 3; b++) {
+      var blk = el("div", "cw-pyblk" + (b ? " more" : ""));
+      var labs = el("div", "cw-pylabs");
+      labs.appendChild(el("div", "cw-pyl ic", ""));
+      labs.appendChild(OB.html("div", "cw-pyl s", "STATE " + OB.tex("s")));
+      var pl = el("div", "cw-pyl p", "PROFIT");
+      labs.appendChild(pl);
+      blk.appendChild(labs);
+      for (var j = 8 * b; j < 8 * b + 8; j++) {
+        var c = el("div", "cw-pycol");
+        var ic = el("div", "cw-pyic", CW.ICONS[j]);
+        var sv = el("div", "cw-pys" + (s[j] ? " hab" : ""));
+        sv.appendChild(el("span", "cw-tn", s[j] ? "1" : "0"));
+        /* The profit's number in a span of its own: the cell keeps its frame while the number is hidden. */
+        var p = el("div", "cw-pyp"), pn = el("span", "cw-ppn", OB.num(CW.PROFIT[j], 2));
+        p.appendChild(pn);
+        c.appendChild(ic);
+        c.appendChild(sv);
+        c.appendChild(p);
+        c.title = CW.NAMES[j];
+        blk.appendChild(c);
+        cols.push({ el: c, ic: ic, s: sv, p: p, pn: pn });
+      }
+      tab.appendChild(blk);
+      blocks.push({ el: blk, pl: pl });
+    }
+    return { el: tab, blocks: blocks, cols: cols };
+  }
+
+  /* The view of week t of the example episode (scenes 110 and 112): the habits of its state with their profits (a
+     habit the household did not have at the start in green), the coupon with its product's profit and a stamp, the
+     coupon's part of the reward, and the reward line r_t = habits + coupon of scene 130. When the coupon makes a habit,
+     its tile waits hidden at the end of the habits (newHab). */
+  function weekView(root, t) {
+    var W = EP.weeks[t], H = habOf(W.s), V = { W: W, H: H };
+    var row = el("div", "cw-weekrow");
+    var hb = el("div", "ob-box cw-habbox");
+    hb.appendChild(el("div", "cw-boxh", "HABITS"));
+    var hl = el("div", "cw-habs");
+    V.tiles = H.map(function (j) {
+      var h = el("div", "cw-hab" + (HH.basket[j] ? "" : " new"));
+      h.appendChild(el("span", "cw-hi", CW.ICONS[j]));
+      h.appendChild(el("span", "cw-hp", OB.num(CW.PROFIT[j], 2)));
+      h.title = CW.NAMES[j];
+      hl.appendChild(h);
+      return h;
+    });
+    if (W.habit) {
+      /* The new habit: its tile and, under it, the caption, both in one wrapper (the caption is wider than the tile). */
+      V.newHab = el("div", "cw-habw");
+      var nt = el("div", "cw-hab new");
+      nt.appendChild(el("span", "cw-hi", CW.ICONS[W.a]));
+      nt.appendChild(el("span", "cw-hp", OB.num(CW.PROFIT[W.a], 2)));
+      nt.title = CW.NAMES[W.a];
+      V.newHab.appendChild(nt);
+      V.newHab.appendChild(el("span", "cw-hfrom", "FROM WEEK " + (t + 2)));
+      hl.appendChild(V.newHab);
+    }
+    hb.appendChild(hl);
+    hb.appendChild(el("div", "cw-boxf", "PROFIT PER PURCHASE, CHF"));
+    row.appendChild(hb);
+    V.ticket = K.ticket(W.a, "big", true);
+    V.stamp = el("div", "cw-stamp o1");
+    V.stampT = el("span", "", OUT[1]);
+    V.stamp.appendChild(V.stampT);
+    V.ticket.appendChild(V.stamp);
+    row.appendChild(V.ticket);
+    var cb = V.cb = el("div", "ob-box cw-coupbox");
+    cb.appendChild(el("div", "cw-boxh", "THE COUPON"));
+    V.cline = OB.html("div", "cw-cline", OB.tex(W.used ? partTex(W.a) : "0"));
+    cb.appendChild(V.cline);
+    cb.appendChild(el("div", "cw-boxf", W.used ? "PROFIT MINUS CHF 3" : "NOT USED"));
+    row.appendChild(cb);
+    root.appendChild(row);
+
+    /* The reward line, as in scene 130. */
+    var rw = el("div", "cw-pyrw cw-wkrw");
+    var sym = OB.html("span", "cw-pyop", OB.tex("r_{" + (t + 1) + "} ="));
+    var hbx = el("div", "ob-box cw-pybox");
+    hbx.appendChild(el("div", "cw-bah", H.length + " HABITS"));
+    V.hnum = el("div", "cw-bnum", OB.num(sumOf(H), 2));
+    hbx.appendChild(V.hnum);
+    var cbx = el("div", "ob-box cw-pybox");
+    var cbh = el("div", "cw-bah cw-pych");
+    cbh.appendChild(document.createTextNode("COUPON "));
+    cbh.appendChild(el("span", "cw-pyci", CW.ICONS[W.a]));
+    var o = outOf(W);
+    cbh.appendChild(el("span", "cw-qout o" + o, OUT[o]));
+    cbx.appendChild(cbh);
+    V.cnum = OB.html("div", "cw-pycn", OB.tex(W.used ? partTex(W.a) : "0"));
+    cbx.appendChild(V.cnum);
+    var plus = OB.html("span", "cw-pyop", OB.tex("+"));
+    var res = el("span", "cw-pyres");
+    res.appendChild(OB.html("span", "cw-pyop", OB.tex("=")));
+    V.rnum = el("span", "cw-rnum cw-pyrn", OB.num(W.reward, 2));
+    res.appendChild(V.rnum);
+    V.rparts = [sym, hbx, plus, cbx, res];
+    V.rparts.forEach(function (e) { rw.appendChild(e); });
+    root.appendChild(rw);
+    V.hps = V.tiles.map(function (h) { return h.querySelector(".cw-hp"); });
+    return V;
+  }
+  /* The reward line of a week (Carlos, 2026-11-19: "when computing the reward, animate the profits of all habits by
+     moving them towards the total sum so it is clear where the reward comes from"). With motion: r_t = and the habits'
+     box; the habits' profits fly from their tiles into its number, which counts up (juice.js, tally); then the
+     coupon's part flies down from the coupon's box; then = and the reward. Without motion, all at once. */
+  function rewardIn(api, V, on, go) {
+    var R = V.rparts;
+    V.hnum.textContent = OB.num(sumOf(V.H), 2);
+    if (!on || !go) { R.forEach(function (e) { api.show(e, on); }); return; }
+    var n = V.H.length, d0 = 700, st = 220, dur = 700;
+    api.show(R[0], true, { delay: 200 });
+    api.show(R[1], true, { delay: 200 });
+    var tallied = OB.fx && OB.fx.tally && OB.fx.tally(V.hps, V.H.map(function (j) { return CW.PROFIT[j]; }), V.hnum, sumOf(V.H),
+      function (x) { return OB.num(x, 2); }, { delay: d0, stagger: st, dur: dur });
+    var d1 = tallied ? d0 + st * (n - 1) + dur + 150 : 700, d2 = d1 + 300;
+    api.show(R[2], true, { delay: d1 });
+    api.show(R[3], true, { delay: d1 });
+    if (V.W.used) { api.fly(V.cline, V.cnum, { delay: d2, dur: 900, arc: 30 }); d2 += 1000; }
+    api.show(R[4], true, { delay: d2 });
+    if (OB.fx && OB.fx.bump) api.at(d2 + 700, function () { OB.fx.bump(V.rnum, 0.34, 460); });
+  }
+  function setStamp(V, o) {
+    V.stamp.className = "cw-stamp o" + o;
+    V.stampT.textContent = OUT[o];
+  }
 
   /* 0. The card, with three coupons. */
   OB.scene({
@@ -3339,15 +3612,135 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     },
   });
 
-  /* 110. One week. */
-  var r1 = W1.reward, coup = CW.PROFIT[A1] - CW.DISCOUNT;
-  var sumTex = HAB.map(function (j) { return OB.num(CW.PROFIT[j], 2); }).join(" + ") + " + (" + OB.num(coup, 2) + ")";
+  /* 102. The state: the habits as 24 numbers; the habits' profits, made every week. */
+  var HSUM = sumOf(HAB);
+  var L102 = [
+    "The state \\(s\\): the household's habits as 24 numbers, 1 for a product it buys every week, 0 for the others.",
+    "Every week the household buys its habits, and the supermarket makes their profits: CHF " + OB.num(HSUM, 2) + " a week.",
+  ];
+  OB.scene({
+    key: "state", order: 102, title: "The state", beats: L102.length,
+    build: function (root) {
+      root.classList.add("cw-root");
+      var P = this.parts = {};
+      P.lead = K.lead(root);
+      var box = el("div", "cw-st");
+      P.tab = stateTab(HH.basket);
+      box.appendChild(P.tab.el);
+      var sb = P.sum = el("div", "ob-box cw-stsum");
+      sb.appendChild(el("div", "cw-boxh", "THE HABITS, EVERY WEEK"));
+      var f = el("div", "cw-stf");
+      P.terms = HAB.map(function (j, i) {
+        if (i) f.appendChild(OB.html("span", "cw-stop", OB.tex("+")));
+        var tm = OB.html("span", "cw-stt", OB.tex(OB.num(CW.PROFIT[j], 2)));
+        f.appendChild(tm);
+        return tm;
+      });
+      var res = el("span", "cw-pyres");
+      res.appendChild(OB.html("span", "cw-stop", OB.tex("=")));
+      res.appendChild(el("span", "cw-rnum cw-sttot", OB.num(HSUM, 2)));
+      res.appendChild(el("span", "cw-gunit", "CHF"));
+      P.res = res;
+      f.appendChild(res);
+      sb.appendChild(f);
+      box.appendChild(sb);
+      root.appendChild(box);
+    },
+    beat: function (k, api) {
+      var P = this.parts, go = K.live(api, k), fly = go && k === 1, n = HAB.length;
+      K.say(P.lead, L102[k], api);
+      P.tab.cols.forEach(function (c, j) {
+        api.show(c.pn, k >= 1, K.opt(fly, 200 + 25 * j));
+        c.p.classList.toggle("lit", k >= 1 && !!HH.basket[j]);
+      });
+      P.tab.blocks.forEach(function (b) { api.show(b.pl, k >= 1, K.opt(fly, 200)); });
+      api.show(P.sum, k >= 1, K.opt(fly, 900));
+      /* Each habit's profit flies from the table into the sum. */
+      P.terms.forEach(function (tm, i) {
+        if (k < 1) { tm.classList.add("ob-hide"); tm.style.visibility = ""; return; }
+        if (fly) { tm.classList.add("ob-hide"); api.fly(P.tab.cols[HAB[i]].pn, tm, { delay: 1300 + 350 * i, dur: 1200 }); }
+        else { tm.classList.remove("ob-hide"); tm.style.visibility = ""; }
+      });
+      P.sum.querySelectorAll(".cw-stop").forEach(function (e, i) {
+        api.show(e, k >= 1, K.opt(fly, i < n - 1 ? 1300 + 350 * (i + 1) + 600 : 1300 + 350 * n + 900));
+      });
+      api.show(P.res, k >= 1, K.opt(fly, 1300 + 350 * n + 900));
+    },
+  });
+
+  /* 104. What a coupon does: the action and its three outcomes. The coupon of the example is week 1's, tiramisu. */
+  var pA = OB.num(CW.PROFIT[A1], 2);
+  var L104 = [
+    "The action: a coupon for a product with 0 in the state, here " + K.name(A1) + ". The supermarket makes CHF " + pA + " on one " + K.name(A1) + ".",
+    "Ignored: the household does not buy " + K.name(A1) + ". The reward gets nothing, and the state stays the same.",
+    "Used: the household buys one " + K.name(A1) + " with CHF 3 off. The supermarket makes \\(" + partTex(A1) + "\\) on it. The state stays the same.",
+    "Habit: used, and from next week on the household buys " + K.name(A1) + " every week. Its 0 in the state turns to 1.",
+    "Which of the three happens is random. A product that fits the household's taste is used more often, and more often becomes a habit. The app does not see the taste.",
+  ];
+  OB.scene({
+    key: "outcomes", order: 104, title: "What a coupon does", beats: L104.length,
+    build: function (root) {
+      root.classList.add("cw-root");
+      var P = this.parts = {};
+      P.lead = K.lead(root);
+      var box = el("div", "cw-oc");
+      var left = el("div", "cw-ocl");
+      left.appendChild(K.ticket(A1, "big", true));
+      var now = el("div", "ob-box cw-ocnow");
+      now.appendChild(el("div", "cw-boxh", "IN THE STATE NOW"));
+      now.appendChild(OB.html("div", "cw-ocs", "<i>" + CW.ICONS[A1] + "</i><b>0</b>"));
+      left.appendChild(now);
+      box.appendChild(left);
+
+      /* The table: a column per outcome, a row per effect. */
+      var wrap = el("div", "cw-ocw ob-hscroll"), g = el("div", "cw-octab");
+      var stateCell = function (v) { return "<span class=\"cw-ocs\"><i>" + CW.ICONS[A1] + "</i><b" + (v ? " class=\"hab\"" : "") + ">" + v + "</b></span>"; };
+      var used = "<span class=\"cw-ocf\">" + OB.tex(OB.num(CW.PROFIT[A1], 2) + " - 3") + "</span><span class=\"cw-ocf\">" + OB.tex("= " + OB.num(part(A1), 2)) + "</span>";
+      var ROWS = [
+        { h: "THE HOUSEHOLD", cls: "w", v: ["does not buy it", "buys one", "buys one, then one every week"] },
+        { h: "ADDED TO THIS WEEK'S REWARD", cls: "f", v: [OB.tex("0"), used, used] },
+        { h: "NEXT WEEK'S STATE", cls: "s", v: [stateCell(0), stateCell(0), stateCell(1)] },
+        { h: "ADDED TO EVERY LATER REWARD", cls: "p", v: ["0", "0", pA] },
+      ];
+      P.cols = [[], [], []];
+      g.appendChild(el("div", "cw-ocr top", ""));
+      P.heads = OUT.map(function (o, i) {
+        var h = el("div", "cw-och");
+        h.appendChild(el("span", "cw-qout o" + i, o));
+        g.appendChild(h);
+        P.cols[i].push(h);
+        return h;
+      });
+      ROWS.forEach(function (r, ri) {
+        g.appendChild(el("div", "cw-ocr" + (ri === ROWS.length - 1 ? " last" : ""), r.h));
+        r.v.forEach(function (v, i) {
+          var c = OB.html("div", "cw-occ " + r.cls + (ri === ROWS.length - 1 ? " last" : ""), v);
+          g.appendChild(c);
+          P.cols[i].push(c);
+        });
+      });
+      wrap.appendChild(g);
+      box.appendChild(wrap);
+      root.appendChild(box);
+    },
+    beat: function (k, api) {
+      var P = this.parts, go = K.live(api, k);
+      K.say(P.lead, L104[k], api);
+      P.cols.forEach(function (col, i) {
+        col.forEach(function (c, r) { api.show(c, k >= i + 1, K.opt(go && k === i + 1, 300 + 260 * r)); });
+      });
+      P.heads.forEach(function (h) { h.classList.toggle("ring", k >= 4); });
+      if (go && k === 4 && OB.fx && OB.fx.bump) P.heads.forEach(function (h, i) { api.at(200 + 200 * i, function () { OB.fx.bump(h, 0.3, 460); }); });
+    },
+  });
+
+  /* 110. One week: week 1, the coupon for tiramisu, HABIT, the reward r1. */
   var L110 = [
-    "Week 1: the app sends this household a coupon for " + K.name(A1) + ".",
-    "The household uses it. Whether a household uses a coupon depends on its taste, which the app does not see.",
-    "On a used coupon the supermarket makes the profit of the product minus the CHF 3 of the coupon.",
-    K.name(A1).charAt(0).toUpperCase() + K.name(A1).slice(1) + " becomes a habit: from week 2 on, the household buys it every week.",
-    "The reward of the week, \\(r_1\\): the profits of the habits plus the coupon's.",
+    "Week 1. The state: the household's " + HAB.length + " habits. The app's action: a coupon for " + K.name(A1) + ".",
+    "The household uses the coupon: it buys one " + K.name(A1) + " with CHF 3 off.",
+    "The coupon's part of the reward: the profit of one " + K.name(A1) + " minus the CHF 3 of the coupon.",
+    cap(K.name(A1)) + " becomes a habit: HABIT. From week 2 on, the state has a 1 for " + K.name(A1) + ".",
+    "The reward \\(r_1\\): the profits of the " + HAB.length + " habits of week 1 plus the coupon's part. " + cap(K.name(A1)) + " counts from week 2.",
   ];
   OB.scene({
     key: "week", order: 110, title: "One week", beats: L110.length,
@@ -3355,70 +3748,67 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       root.classList.add("cw-root");
       var P = this.parts = {};
       P.lead = K.lead(root);
-      var row = el("div", "cw-weekrow");
-      var hb = el("div", "ob-box cw-habbox");
-      hb.appendChild(el("div", "cw-boxh", "HABITS"));
-      var hl = el("div", "cw-habs");
-      HAB.forEach(function (j) {
-        var h = el("div", "cw-hab");
-        h.appendChild(el("span", "cw-hi", CW.ICONS[j]));
-        h.appendChild(el("span", "cw-hp", OB.num(CW.PROFIT[j], 2)));
-        hl.appendChild(h);
-      });
-      /* The new habit: its tile and, under it, the caption, both in one wrapper (the caption is wider than the tile). */
-      P.newHab = el("div", "cw-habw");
-      var nt = el("div", "cw-hab new");
-      nt.appendChild(el("span", "cw-hi", CW.ICONS[A1]));
-      nt.appendChild(el("span", "cw-hp", OB.num(CW.PROFIT[A1], 2)));
-      P.newHab.appendChild(nt);
-      P.newHab.appendChild(el("span", "cw-hfrom", "FROM WEEK 2"));
-      hl.appendChild(P.newHab);
-      hb.appendChild(hl);
-      hb.appendChild(el("div", "cw-boxf", "PROFIT PER PURCHASE, CHF"));
-      row.appendChild(hb);
-      P.ticket = K.ticket(A1, "big");
-      P.stamp = el("div", "cw-stamp");
-      P.stamp.appendChild(el("span", "", "USED"));
-      P.ticket.appendChild(P.stamp);
-      row.appendChild(P.ticket);
-      var cb = el("div", "ob-box cw-coupbox");
-      cb.appendChild(el("div", "cw-boxh", "THE COUPON"));
-      P.cline = OB.html("div", "cw-cline", OB.tex(OB.num(CW.PROFIT[A1], 2) + " - 3 = " + OB.num(coup, 2)));
-      cb.appendChild(P.cline);
-      cb.appendChild(el("div", "cw-boxf", "PROFIT MINUS CHF 3"));
-      P.cb = cb;
-      row.appendChild(cb);
-      root.appendChild(row);
-      P.rw = OB.html("div", "ob-box cw-rbox", OB.tex("r_1 = " + sumTex + " =\\;") + "<span class=\"ob-texn cw-rnum\">" + OB.num(r1, 2) + "</span>");
-      root.appendChild(P.rw);
+      P.V = weekView(root, 0);
     },
     beat: function (k, api) {
-      var P = this.parts, go = K.live(api, k);
+      var P = this.parts, V = P.V, go = K.live(api, k);
       K.say(P.lead, L110[k], api);
-      api.show(P.stamp, k >= 1, K.opt(go && k === 1, 500));
-      api.show(P.cb, k >= 2, K.opt(go && k === 2, 300));
-      if (k >= 3 && go && k === 3) {
-        P.newHab.classList.add("ob-hide");
-        api.fly(P.ticket.querySelector(".cw-tk-ic"), P.newHab.querySelector(".cw-hi"), { delay: 300 });
-        api.at(300, function () { P.newHab.classList.remove("ob-hide"); P.newHab.querySelector(".cw-hp").classList.add("ob-hide"); P.newHab.querySelector(".cw-hfrom").classList.add("ob-hide"); });
-        api.at(300 + OB.DUR.fly, function () { P.newHab.querySelector(".cw-hp").classList.remove("ob-hide"); P.newHab.querySelector(".cw-hfrom").classList.remove("ob-hide"); });
+      api.show(V.stamp, k >= 1, K.opt(go && k === 1, 500));
+      setStamp(V, k >= 3 ? 2 : 1);
+      if (go && k === 3 && OB.fx && OB.fx.bump) OB.fx.bump(V.stamp, 0.35, 480);
+      api.show(V.cb, k >= 2, K.opt(go && k === 2, 300));
+      var nh = V.newHab;
+      if (go && k === 3) {
+        nh.classList.add("ob-hide");
+        api.fly(V.ticket.querySelector(".cw-tk-ic"), nh.querySelector(".cw-hi"), { delay: 300 });
+        api.at(300, function () { nh.classList.remove("ob-hide"); nh.querySelector(".cw-hp").classList.add("ob-hide"); nh.querySelector(".cw-hfrom").classList.add("ob-hide"); });
+        api.at(300 + OB.DUR.fly, function () { nh.querySelector(".cw-hp").classList.remove("ob-hide"); nh.querySelector(".cw-hfrom").classList.remove("ob-hide"); });
       } else {
-        P.newHab.classList.toggle("ob-hide", k < 3);
-        P.newHab.querySelectorAll(".cw-hp, .cw-hfrom, .cw-hi").forEach(function (e) { e.classList.remove("ob-hide"); e.style.visibility = ""; });
+        nh.classList.toggle("ob-hide", k < 3);
+        nh.querySelectorAll(".cw-hp, .cw-hfrom, .cw-hi").forEach(function (e) { e.classList.remove("ob-hide"); e.style.visibility = ""; });
       }
-      api.show(P.rw, k >= 4, K.opt(go && k === 4, 300));
+      rewardIn(api, V, k >= 4, go && k === 4);
+    },
+  });
+
+  /* 112. Week 2: the state with tiramisu, the coupon for avocados, USED, the reward r2. */
+  var H2 = habOf(W2.s);
+  var L112 = [
+    "Week 2. The state: " + H2.length + " habits, " + K.name(A1) + " among them. The app's action: a coupon for " + K.name(A2) + ".",
+    "The household uses the coupon but does not take up " + K.name(A2) + " as a habit: USED. A used coupon becomes a habit only sometimes. The state stays the same for week 3.",
+    "The reward \\(r_2\\): the profits of the " + H2.length + " habits, " + K.name(A1) + "'s " + pA + " among them, plus the coupon's part.",
+    cap(K.name(A1)) + "'s coupon lost CHF " + OB.num(-part(A1), 2) + " in week 1. As a habit, " + K.name(A1) + " brings CHF " + pA + " in each of the " + (CW.WEEKS - 1) + " weeks after, CHF " + OB.num(CW.PROFIT[A1] * (CW.WEEKS - 1), 2) + " in all.",
+  ];
+  OB.scene({
+    key: "week2", order: 112, title: "Week 2", beats: L112.length,
+    build: function (root) {
+      root.classList.add("cw-root");
+      var P = this.parts = {};
+      P.lead = K.lead(root);
+      P.V = weekView(root, 1);
+      P.tir = P.V.tiles[P.V.H.indexOf(A1)];
+    },
+    beat: function (k, api) {
+      var P = this.parts, V = P.V, go = K.live(api, k);
+      K.say(P.lead, L112[k], api);
+      api.show(V.stamp, k >= 1, K.opt(go && k === 1, 500));
+      api.show(V.cb, k >= 1, K.opt(go && k === 1, 1100));
+      rewardIn(api, V, k >= 2, go && k === 2);
+      P.tir.classList.toggle("cw-focus", k >= 3);
+      if (go && k === 3 && OB.fx && OB.fx.bump) OB.fx.bump(P.tir, 0.35, 480);
     },
   });
 
   /* 120. One quarter: the episode of the example household. */
   var HCOUNT = [];
   (function () { var n = HAB.length; EP.weeks.forEach(function (w) { HCOUNT.push(n); if (w.habit) n++; }); HCOUNT.push(n); })();
+  var WI = EP.weeks[IG];
   var L120 = [
     "One quarter, 12 weeks, one coupon a week: an episode. Its coupons were picked by the app's policy.",
     "Every week has its reward. The habits pay every week: " + HCOUNT[0] + " habits in week 1, " + HCOUNT[CW.WEEKS - 1] + " in week 12.",
+    "Week " + (IG + 1) + ": the household ignores the coupon for " + K.name(WI.a) + ". The reward is the habits' profits alone: \\(r_{" + (IG + 1) + "} = " + OB.num(WI.reward, 2) + "\\).",
     "The return \\(G_1\\): the sum of the 12 rewards.",
   ];
-  var OUT = ["IGNORED", "USED", "HABIT"];
   OB.scene({
     key: "quarter", order: 120, title: "One quarter", beats: L120.length,
     build: function (root) {
@@ -3433,7 +3823,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         tk.appendChild(el("span", "cw-qic", CW.ICONS[w.a]));
         tk.title = CW.NAMES[w.a];
         c.appendChild(tk);
-        var o = w.habit ? 2 : w.used ? 1 : 0;
+        var o = outOf(w);
         c.appendChild(el("div", "cw-qout o" + o, OUT[o]));
         var hn = el("div", "cw-qhab", HCOUNT[t] + " HABITS");
         c.appendChild(hn);
@@ -3455,9 +3845,11 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         else c.el.classList.remove("ob-hide");
         api.show(c.hn, k >= 1, K.opt(go && k === 1, 200 + 120 * t, { dur: 900 }));
         api.show(c.r, k >= 1, K.opt(go && k === 1, 200 + 120 * t, { dur: 900 }));
+        c.el.classList.toggle("cw-focus", k === 2 && t === IG);
       });
-      api.show(P.g, k >= 2, K.opt(go && k === 2, 300));
-      if (go && k === 2 && OB.fx && OB.fx.celebrate) api.at(300 + OB.DUR.fade, function () { OB.fx.celebrate(P.g); });
+      if (go && k === 2 && OB.fx && OB.fx.bump) OB.fx.bump(P.cols[IG].el, 0.3, 460);
+      api.show(P.g, k >= 3, K.opt(go && k === 3, 300));
+      if (go && k === 3 && OB.fx && OB.fx.celebrate) api.at(300 + OB.DUR.fade, function () { OB.fx.celebrate(P.g); });
     },
   });
 })();
@@ -3474,7 +3866,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    (coupon.js), so a product picked by both meets the same chances, and the return G1 compares with the app's.
    The picks live on the scene (this.S), so Back and the pager keep the game; AGAIN starts it over. A tap draws the
    week at once with OB.go(index, 0, { forward: true }); this.fx then moves the new week in (the icon flies to its
-   week, the outcome, the reward line, the reward flies to its week, a new habit's 0 turns to 1). */
+   week, the outcome, the reward line, the reward flies to its week, a new habit's 0 turns to 1).
+   Since 2026-11-19 (Carlos: "when computing the reward, animate the profits of all habits by moving them towards the
+   total sum so it is clear where the reward comes from. Why hasn't the milkshake become a habit after the coupon was
+   used? This is unclear"): the habits' profits fly from the table into the habits' box of the reward line, which counts
+   up (juice.js, tally), a used coupon's profit flies into the coupon's box, and a line under the reward says what the
+   household did, with the chance of a habit for a USED week. */
 (function () {
   "use strict";
   var OB = window.OB, CW = window.CW, D = window.CWD, K = OB.cw, el = OB.el;
@@ -3507,6 +3904,15 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
   function unfocus(ev) {
     if (ev && ev.type === "click" && ev.detail > 0 && ev.currentTarget && ev.currentTarget.blur) ev.currentTarget.blur();
+  }
+  /* The line under the reward: what the household did with the last coupon. Product names are singular or plural, so
+     no verb takes a name as its subject. */
+  function why(W) {
+    var nm = K.name(W.a);
+    if (W.out === 0) return "The household did not buy " + nm + ". The reward is the habits' profits alone.";
+    if (W.out === 1) return "The household bought " + nm + " once, with CHF 3 off, but did not take up " + nm + " as a habit: its 0 stays. " +
+      "A used coupon becomes a habit only sometimes, more often for a product that fits the household's taste.";
+    return "The household bought " + nm + " with CHF 3 off and buys " + nm + " every week from now on: its 0 turns to 1, and its profit counts from next week.";
   }
   function lead(R) {
     var t = R.weeks.length;
@@ -3544,7 +3950,10 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
           sv.appendChild(sn);
           c.appendChild(ic);
           c.appendChild(sv);
-          c.appendChild(el("div", "cw-pyp", OB.num(CW.PROFIT[j], 2)));
+          /* The profit's number in a span of its own, which flies into the reward. */
+          var pp = el("div", "cw-pyp"), pn = el("span", "cw-ppn", OB.num(CW.PROFIT[j], 2));
+          pp.appendChild(pn);
+          c.appendChild(pp);
           c.title = CW.NAMES[j];
           c.dataset.j = String(j);
           (function (jj, cc) {
@@ -3554,7 +3963,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
             });
           })(j, c);
           blk.appendChild(c);
-          P.cols.push({ el: c, ic: ic, s: sv, sn: sn });
+          P.cols.push({ el: c, ic: ic, s: sv, sn: sn, pn: pn });
         }
         tab.appendChild(blk);
         P.blocks.push(blk);
@@ -3588,6 +3997,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       res.appendChild(P.rnum);
       [P.rsym, hb, P.plus, cb, res].forEach(function (e) { rw.appendChild(e); });
       box.appendChild(rw);
+      var wy = P.why = el("div", "cw-pywhy");
+      P.whyChip = el("span", "cw-qout", "");
+      P.whyT = el("span", "cw-pywt", "");
+      wy.appendChild(P.whyChip);
+      wy.appendChild(P.whyT);
+      box.appendChild(wy);
 
       /* The episode so far: one cell per week. */
       var strip = el("div", "cw-qstrip cw-pystrip");
@@ -3677,8 +4092,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         P.cbo.textContent = OUT[last.out];
         P.cbn.innerHTML = last.used ? OB.tex(OB.num(CW.PROFIT[last.a], 2) + " - 3 = " + OB.num(CW.PROFIT[last.a] - CW.DISCOUNT, 2)) : OB.tex("0");
         P.rnum.textContent = OB.num(last.reward, 2);
+        P.whyChip.className = "cw-qout o" + last.out;
+        P.whyChip.textContent = OUT[last.out];
+        P.whyT.textContent = why(last);
       }
       P.rw.classList.toggle("ob-hide", !last);
+      P.why.classList.toggle("ob-hide", !last);
 
       /* The episode so far. */
       P.wk.forEach(function (w, i) {
@@ -3711,16 +4130,31 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         api.fly(col.ic, w.ic, { dur: 900, arc: 50 });
         w.chip.classList.add("ob-hide");
         api.show(w.chip, true, { delay: 900, dur: 450 });
-        [P.rsym, P.hb, P.plus, P.cb, P.eq, P.rnum].forEach(function (e, i) {
-          e.classList.add("ob-hide");
-          api.show(e, true, { delay: 1000 + 160 * i, dur: 450 });
-        });
+        /* The reward: the habits' profits fly from the table into the habits' box, which counts up; then the coupon's
+           part (a used coupon's profit flies from the table into the coupon's box); then = and the reward, which flies
+           to its week. The habits are those of the week's state: a new habit counts from the next week. */
+        [P.rsym, P.hb, P.plus, P.cb, P.eq, P.rnum, P.why].forEach(function (e) { e.classList.add("ob-hide"); });
+        api.show(P.rsym, true, { delay: 1000, dur: 450 });
+        api.show(P.hb, true, { delay: 1000, dur: 450 });
+        var hs = [];
+        R.s.forEach(function (b, j) { if (b && !(W.habit && j === W.a)) hs.push(j); });
+        if (hs.length !== W.nh) console.error("cw-1play: week " + (fx.t + 1) + " has " + W.nh + " habits, the table " + hs.length);
+        var d0 = 1300, st = 150, dur = 650;
+        var tallied = OB.fx && OB.fx.tally && OB.fx.tally(hs.map(function (j) { return P.cols[j].pn; }), hs.map(function (j) { return CW.PROFIT[j]; }),
+          P.hbn, W.hab, function (x) { return OB.num(x, 2); }, { delay: d0, stagger: st, dur: dur });
+        var t1 = tallied ? d0 + st * (hs.length - 1) + dur + 150 : 1300, t2 = t1 + 350;
+        api.show(P.plus, true, { delay: t1, dur: 450 });
+        api.show(P.cb, true, { delay: t1, dur: 450 });
+        if (W.used) { api.fly(col.pn, P.cbn, { delay: t1 + 300, dur: 800, arc: 40 }); t2 = t1 + 1200; }
+        api.show(P.eq, true, { delay: t2, dur: 450 });
+        api.show(P.rnum, true, { delay: t2, dur: 450 });
+        api.show(P.why, true, { delay: t2 + 200, dur: 600 });
         w.r.classList.remove("ob-hide");
-        api.fly(P.rnum, w.rn, { delay: 2000, dur: 800, arc: 30 });
+        api.fly(P.rnum, w.rn, { delay: t2 + 500, dur: 800, arc: 30 });
         if (W.habit) {
           col.sn.textContent = "0";
           col.s.classList.remove("new");
-          api.at(2600, function () {
+          api.at(t2 + 1000, function () {
             col.sn.textContent = "1";
             col.s.classList.add("new");
             if (OB.fx && OB.fx.bump) OB.fx.bump(col.s, 0.35, 480);
@@ -3728,8 +4162,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         }
         if (R.done) {
           P.end.classList.add("ob-hide");
-          api.show(P.end, true, { delay: 2900, dur: 700 });
-          if (OB.fx && OB.fx.celebrate) api.at(2900 + 700, function () { OB.fx.celebrate(P.g); });
+          api.show(P.end, true, { delay: t2 + 1300, dur: 700 });
+          if (OB.fx && OB.fx.celebrate) api.at(t2 + 2000, function () { OB.fx.celebrate(P.g); });
         }
       }
       if (fx && fx.key >= 0) {
@@ -3753,17 +4187,23 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    the page shows W[r][j] in row j, column r and E[a][c] in row c, column a.
 
    200 card "The policy"
-   220 Two numbers per household (4 beats), cross 1 (cross1()): s on the left, W turned above z; the habits' rows of W
-       light, z guessed, then computed: the lit numbers of each column of W fly down into z
-   230 Two numbers per product (4 beats), cross 2 (cross2()): z on the left, E above theta; the preference of tiramisu
-       as the inner product of z and its column of E, guessed, then computed; the preferences of the 20 coupons
+   220 Two numbers per household, then per product (8 beats), one slide since 2026-11-19 (until then scenes 220 and
+       230); the head reads "Two numbers per household" in beats 0 to 3 and "Two numbers per product" from beat 4
+       (K.title). Beats 0 to 3, cross 1 (cross1()): s on the left, W turned above z; the habits' rows of W light, z guessed, then
+       computed: the lit numbers of each column of W fly down into z. Beat 4: s and W fade, z glides to the left, where
+       it stands in cross 2 (cross2()), and E builds around it. Beats 4 to 7: z on the left, E above theta; the
+       preference of tiramisu as the inner product of z and its column of E, guessed, then computed; the preferences of
+       the 20 coupons
    240 From preferences to probabilities (2 beats): cross 2 with the probabilities under theta; the sum 1
    250 The roulette (3 beats): the wheel; the spin samples tiramisu; week 2 starts from a new state
 
    The crosses are wider than a phone: there they scroll sideways (class ob-hscroll; the walk does not count their
    hidden part as text that leaves the window), cross 1 opened at its right end, where W and z stand, cross 2 at the
    column of the coupon in focus, and draw no arrows. Every number is computed from CWD.init (the starting weights) and
-   the example household's week 1 and week 2 (cw-1game.js keeps its episode in OB.cw.EP). */
+   the example household's week 1 and week 2 (cw-1game.js keeps its episode in OB.cw.EP).
+   The cells of W and E carry the colours of the weights in the forward pass from their first appearance (K.heat: blue
+   above 0, pink below, full colour from 2.5; Carlos, 2026-11-19: "When showing W and E at first, show them with the
+   heatmap colors you use in the forward pass so that the user gets used to the heatmap colors"). */
 (function () {
   "use strict";
   var OB = window.OB, CW = window.CW, D = window.CWD, K = OB.cw, el = OB.el;
@@ -3810,6 +4250,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var wrap = el("div", "cw-cxw ob-hscroll"), g = el("div", "cw-cx1"), put = placer(g);
     wrap.appendChild(g);
     X.el = wrap;
+    X.g = g;
     state.forEach(function (b, j) { if (b) X.hab.push(j); });
     for (var r = 0; r < 2; r++) X.wh.push(put(el("div", "cw-cxh", String(r + 1)), 1, 27 + r));
     for (var j = 0; j < N; j++) {
@@ -3819,6 +4260,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var row = [], rown = [];
       for (var c = 0; c < 2; c++) {
         var wc = put(el("div", "cw-c1-w r" + c + (j === 0 ? " top" : "") + (j === N - 1 ? " bot" : "")), 2 + j, 27 + c);
+        wc.style.background = K.heat(IW[c][j]);
         var wn = el("span", "cw-tn", K.wf(IW[c][j]));
         wc.appendChild(wn);
         row.push(wc);
@@ -3835,7 +4277,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     }
     X.slab = put(OB.html("div", "cw-cxl l", OB.tex("s")), 27, 1);
     X.wlab = put(OB.html("div", "cw-cxl r", OB.tex("W")), 2, 29, N);
-    X.zlab = put(OB.html("div", "cw-cxl r", OB.tex("z")), 27, 29);
+    X.zlab = put(OB.html("div", "cw-cxl r cw-zl", OB.tex("z")), 27, 29);
     for (var i = 0; i < 2; i++) {
       var x = put(el("div", "cw-cxz"), 27, 27 + i);
       var zn = el("span", "cw-zn", "?"), pad = el("span", "cw-pad");
@@ -3876,6 +4318,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       Y.ic.push(ic);
       for (var r = 0; r < 2; r++) {
         var ec = put(el("div", "cw-c2-e r" + r + ends), 2 + r, 5 + a), en = el("span", "cw-tn", K.wf(IE[a][r]));
+        ec.style.background = K.heat(IE[a][r]);
         ec.appendChild(en);
         Y.e[r].push(ec);
         Y.en[r].push(en);
@@ -3910,90 +4353,129 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   function grow(api, e, d, dur) { e.classList.add("ob-hide"); api.show(e, true, { delay: d, dur: dur || 700 }); }
   function bare(list, on) { list.forEach(function (e) { e.classList.toggle("ob-hide", !on); e.style.opacity = ""; }); }
 
-  /* 220. Two numbers per household: z = s W, cross 1. */
+  /* 220. Two numbers per household, then two per product, in one slide (Carlos, 2026-11-19: "From "two numbers per
+     household" to "two numbers per product", don't do a hard transition. Show the two-dim embedding and move it to the
+     left of the screen before you continue with the animation. But don't change slides. Transition smoothly"). Beats 0
+     to 3: cross 1, z = s W. Beat 4: s and W fade, z glides to the left, to its place in cross 2, then E builds around
+     it. Beats 4 to 7: cross 2, theta = z E. The two crosses share one cell of a grid (cw-pol), so the slide keeps its
+     size. */
+  var e1 = IE[A1], th1 = POL1.theta[A1];
   var L220 = [
     "The state \\(s\\): a row of 24 numbers, one per product, 1 for a habit and 0 otherwise.",
-    "The weights \\(W\\): 24 rows of two numbers, one row per product, picked at random to start.",
+    "The weights \\(W\\): 24 rows of two numbers, one row per product, picked at random to start. Blue above 0, pink below 0: the stronger the colour, the farther from 0.",
     "\\(z = s W\\): add up the rows of \\(W\\) of the habits, one column at a time. Guess, then press Compute.",
     "The household's two numbers: \\(z_1 = " + K.n2(Z[0]) + "\\) and \\(z_2 = " + K.n2(Z[1]) + "\\). 24 numbers became two: the household's representation.",
+    "Each product \\(a\\) has two numbers too, its column \\(e_a\\) of the weights \\(E\\), picked at random to start, in the colours of \\(W\\).",
+    "The preference for a coupon \\(a\\): the inner product of \\(z\\) and \\(e_a\\), as in weekend 2. For " + K.name(A1) + ": guess, then press Compute.",
+    "The preference for " + K.name(A1) + ": " + K.n2(th1) + ".",
+    "\\(\\theta = z E\\): the preferences of the " + NC + " coupons. The habits get none: they get no coupon.",
   ];
-  var C1_ARROWS = ["c1-s", "c1-w1", "c1-w2"];
+  var C1_ARROWS = ["c1-s", "c1-w1", "c1-w2"], C2_ARROWS = ["c2-z", "c2-e"];
+  /* Beat 4 with motion: s and W fade (FADE ms), z glides (GLIDE ms), then E builds from BUILD ms. */
+  var FADE = 700, GLIDE = 1600, BUILD = FADE + GLIDE + 200;
+
+  /* Cross 1 at beats 0 to 3. */
+  function beat1(X, k, api, go) {
+    var N = CW.N;
+    bare(X.sEls, true);
+    bare(X.wEls, k >= 1);
+    X.w.forEach(function (row) { bare(row, k >= 1); });
+    bare(X.zEls, k >= 2);
+    X.el.scrollLeft = X.el.scrollWidth;
+    // With motion: s from left to right; W row by row, top to bottom, with its icons; then z.
+    if (go && k === 0) {
+      grow(api, X.slab, 200);
+      for (var i = 0; i < N; i++) { grow(api, X.sic[i], 200 + 40 * i); grow(api, X.s[i], 260 + 40 * i); }
+    }
+    if (go && k === 1) {
+      grow(api, X.wlab, 200);
+      X.wh.forEach(function (h, c) { grow(api, h, 200 + 150 * c); });
+      for (var j = 0; j < N; j++) { grow(api, X.wic[j], 300 + 45 * j); grow(api, X.w[j][0], 340 + 45 * j); grow(api, X.w[j][1], 380 + 45 * j); }
+    }
+    if (go && k === 2) X.zEls.forEach(function (e, n) { grow(api, e, 300 + 150 * n); });
+    X.w.forEach(function (row, j) { row.forEach(function (c) { c.classList.toggle("lit", k >= 2 && X.hab.indexOf(j) >= 0); }); });
+    X.wic.forEach(function (e, j) { e.classList.toggle("lit", k >= 2 && X.hab.indexOf(j) >= 0); });
+    // The arrows of the cross: s straight right into z, each column of W straight down into its number of z.
+    if (k >= 2 && !X.scrolls()) {
+      var o = function (d, from, to) { var a = { from: from, to: to, gap: 3, head: 11 }; if (go && k === 2) a.delay = d; else a.dur = 1; return a; };
+      api.arrow("c1-s", X.s[N - 1], X.z[0].x, o(700, "right", "left"));
+      api.arrow("c1-w1", X.w[N - 1][0], X.z[0].x, o(900, "bottom", "top"));
+      api.arrow("c1-w2", X.w[N - 1][1], X.z[1].x, o(1050, "bottom", "top"));
+    } else C1_ARROWS.forEach(function (id) { api.unarrow(id); });
+    if (k === 2) { X.z.forEach(function (z) { z.n.textContent = "?"; }); api.nextLabel("Compute"); }
+    if (k >= 3) {
+      X.z.forEach(function (z, c) { z.n.textContent = K.n2(Z[c]); z.x.classList.add("lit"); });
+      if (go && k === 3) {
+        X.z.forEach(function (z, c) {
+          z.x.classList.remove("lit");
+          z.n.textContent = "0.00";
+          var sum = 0;
+          X.hab.forEach(function (j, h) {
+            var d = 250 + 520 * h + 260 * c;
+            sum += IW[c][j];
+            var part = sum;
+            api.fly(X.wn[j][c], z.pad, { delay: d, arc: 30 });
+            api.at(d + OB.DUR.fly, function () { z.n.textContent = K.n2(part); if (OB.fx && OB.fx.bump) OB.fx.bump(z.n, 0.25, 300); });
+          });
+          api.at(250 + 520 * X.hab.length + 260 * c + OB.DUR.fly, function () { z.x.classList.add("lit"); });
+        });
+      }
+    } else X.z.forEach(function (z) { z.x.classList.remove("lit"); });
+  }
+
+  /* Cross 2 at beats 4 to 7 (k here 0 to 3). With motion at k = 0, E builds after z's glide (from BUILD ms). */
+  function beat2(P, k, api, go) {
+    var Y = P.Y, N = CW.N, d = go && k === 0 ? BUILD : 200;
+    bare(Y.zEls, true);
+    bare(Y.eEls, true);
+    bare(Y.p.concat([Y.plab]), false);
+    if (go && k === 0) {
+      Y.zh.forEach(function (h, c) { grow(api, h, d + 120 * c); });
+      grow(api, Y.elab, d);
+      Y.eh.forEach(function (h, c) { grow(api, h, d + 150 * c); });
+      for (var a = 0; a < N; a++) { grow(api, Y.ic[a], d + 100 + 45 * a); grow(api, Y.e[0][a], d + 140 + 45 * a); grow(api, Y.e[1][a], d + 180 + 45 * a); }
+    }
+    if (k === 0) Y.el.scrollLeft = 0;
+    // theta: tiramisu alone at k 1 and 2 (its value from k 2), all of them at k 3.
+    Y.th.forEach(function (c, a) { c.classList.toggle("ob-hide", !(k >= 3 || (k >= 1 && a === A1))); c.style.opacity = ""; });
+    Y.thlab.classList.toggle("ob-hide", k < 1);
+    Y.thn[A1].textContent = k >= 2 ? K.n2(th1) : "?";
+    var lit = k >= 1 && k <= 2;
+    // z stays lit from cross 1 until the preferences of all coupons.
+    Y.z.forEach(function (z) { z.x.classList.toggle("lit", k <= 2); });
+    Y.e[0][A1].classList.toggle("lit", lit);
+    Y.e[1][A1].classList.toggle("lit", lit);
+    Y.ic[A1].classList.toggle("lit", lit);
+    Y.th[A1].classList.toggle("lit", k >= 1);
+    if (go && k === 1) grow(api, Y.th[A1], 300);
+    if (k === 1 || k === 2) Y.focus(A1);
+    // The arrows of tiramisu's preference: z straight right into it, its column of E straight down into it.
+    if (lit && !Y.scrolls()) {
+      var o = function (d, from, to) { var a = { from: from, to: to, gap: 3, head: 11 }; if (go && k === 1) a.delay = d; else a.dur = 1; return a; };
+      api.arrow("c2-z", Y.z[1].x, Y.th[A1], o(500, "right", "left"));
+      api.arrow("c2-e", Y.e[1][A1], Y.th[A1], o(700, "bottom", "top"));
+    } else C2_ARROWS.forEach(function (id) { api.unarrow(id); });
+    api.show(P.f, k >= 1, K.opt(go && k === 1, 900));
+    if (k === 1) api.nextLabel("Compute");
+    P.res.textContent = k >= 2 ? K.n2(th1) : "?";
+    P.res.classList.toggle("done", k >= 2);
+    if (go && k === 2) api.fly(P.res, Y.thn[A1], { delay: 300 });
+    if (go && k === 3) Y.th.forEach(function (c, a) { if (a !== A1) grow(api, c, 200 + 50 * a); });
+  }
+
   OB.scene({
     key: "household", order: 220, title: "Two numbers per household", beats: L220.length,
     build: function (root) {
       root.classList.add("cw-root");
       var P = this.parts = {};
       P.lead = K.lead(root);
+      var stage = el("div", "cw-pol");
       P.X = cross1(W1.s);
-      root.appendChild(P.X.el);
-    },
-    beat: function (k, api) {
-      var P = this.parts, X = P.X, go = K.live(api, k), N = CW.N;
-      K.say(P.lead, L220[k], api);
-      bare(X.sEls, true);
-      bare(X.wEls, k >= 1);
-      X.w.forEach(function (row) { bare(row, k >= 1); });
-      bare(X.zEls, k >= 2);
-      X.el.scrollLeft = X.el.scrollWidth;
-      // With motion: s from left to right; W row by row, top to bottom, with its icons; then z.
-      if (go && k === 0) {
-        grow(api, X.slab, 200);
-        for (var i = 0; i < N; i++) { grow(api, X.sic[i], 200 + 40 * i); grow(api, X.s[i], 260 + 40 * i); }
-      }
-      if (go && k === 1) {
-        grow(api, X.wlab, 200);
-        X.wh.forEach(function (h, c) { grow(api, h, 200 + 150 * c); });
-        for (var j = 0; j < N; j++) { grow(api, X.wic[j], 300 + 45 * j); grow(api, X.w[j][0], 340 + 45 * j); grow(api, X.w[j][1], 380 + 45 * j); }
-      }
-      if (go && k === 2) X.zEls.forEach(function (e, n) { grow(api, e, 300 + 150 * n); });
-      X.w.forEach(function (row, j) { row.forEach(function (c) { c.classList.toggle("lit", k >= 2 && X.hab.indexOf(j) >= 0); }); });
-      X.wic.forEach(function (e, j) { e.classList.toggle("lit", k >= 2 && X.hab.indexOf(j) >= 0); });
-      // The arrows of the cross: s straight right into z, each column of W straight down into its number of z.
-      if (k >= 2 && !X.scrolls()) {
-        var o = function (d, from, to) { var a = { from: from, to: to, gap: 3, head: 11 }; if (go && k === 2) a.delay = d; else a.dur = 1; return a; };
-        api.arrow("c1-s", X.s[N - 1], X.z[0].x, o(700, "right", "left"));
-        api.arrow("c1-w1", X.w[N - 1][0], X.z[0].x, o(900, "bottom", "top"));
-        api.arrow("c1-w2", X.w[N - 1][1], X.z[1].x, o(1050, "bottom", "top"));
-      } else C1_ARROWS.forEach(function (id) { api.unarrow(id); });
-      if (k === 2) { X.z.forEach(function (z) { z.n.textContent = "?"; }); api.nextLabel("Compute"); }
-      if (k >= 3) {
-        X.z.forEach(function (z, c) { z.n.textContent = K.n2(Z[c]); z.x.classList.add("lit"); });
-        if (go && k === 3) {
-          X.z.forEach(function (z, c) {
-            z.x.classList.remove("lit");
-            z.n.textContent = "0.00";
-            var sum = 0;
-            X.hab.forEach(function (j, h) {
-              var d = 250 + 520 * h + 260 * c;
-              sum += IW[c][j];
-              var part = sum;
-              api.fly(X.wn[j][c], z.pad, { delay: d, arc: 30 });
-              api.at(d + OB.DUR.fly, function () { z.n.textContent = K.n2(part); if (OB.fx && OB.fx.bump) OB.fx.bump(z.n, 0.25, 300); });
-            });
-            api.at(250 + 520 * X.hab.length + 260 * c + OB.DUR.fly, function () { z.x.classList.add("lit"); });
-          });
-        }
-      } else X.z.forEach(function (z) { z.x.classList.remove("lit"); });
-    },
-  });
-
-  /* 230. Two numbers per product: theta = z E, cross 2. */
-  var e1 = IE[A1], th1 = POL1.theta[A1];
-  var L230 = [
-    "Each product \\(a\\) has two numbers too, its column \\(e_a\\) of the weights \\(E\\), picked at random to start.",
-    "The preference for a coupon \\(a\\): the inner product of \\(z\\) and \\(e_a\\), as in weekend 2. For " + K.name(A1) + ": guess, then press Compute.",
-    "The preference for " + K.name(A1) + ": " + K.n2(th1) + ".",
-    "\\(\\theta = z E\\): the preferences of the " + NC + " coupons. The habits get none: they get no coupon.",
-  ];
-  var C2_ARROWS = ["c2-z", "c2-e"];
-  OB.scene({
-    key: "product", order: 230, title: "Two numbers per product", beats: L230.length,
-    build: function (root) {
-      root.classList.add("cw-root");
-      var P = this.parts = {};
-      P.lead = K.lead(root);
+      P.X.el.classList.add("cw-pol1");
+      stage.appendChild(P.X.el);
+      var two = P.two = el("div", "cw-pol2");
       P.Y = cross2(W1.s, POL1);
-      root.appendChild(P.Y.el);
+      two.appendChild(P.Y.el);
       var f = el("div", "ob-box cw-fbox");
       f.appendChild(OB.html("div", "cw-fgen", OB.tex("\\theta_{s,a} = z_1\\, e_{1,a} + z_2\\, e_{2,a}")));
       P.res = el("span", "ob-texn cw-fres", "?");
@@ -4001,43 +4483,38 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       line.appendChild(P.res);
       f.appendChild(line);
       P.f = f;
-      root.appendChild(f);
+      two.appendChild(f);
+      stage.appendChild(two);
+      root.appendChild(stage);
     },
     beat: function (k, api) {
-      var P = this.parts, Y = P.Y, go = K.live(api, k), N = CW.N;
-      K.say(P.lead, L230[k], api);
-      bare(Y.zEls, true);
-      bare(Y.eEls, true);
-      bare(Y.p.concat([Y.plab]), false);
-      if (go && k === 0) {
-        grow(api, Y.elab, 200);
-        Y.eh.forEach(function (h, c) { grow(api, h, 200 + 150 * c); });
-        for (var a = 0; a < N; a++) { grow(api, Y.ic[a], 300 + 45 * a); grow(api, Y.e[0][a], 340 + 45 * a); grow(api, Y.e[1][a], 380 + 45 * a); }
+      var P = this.parts, X = P.X, Y = P.Y, go = K.live(api, k);
+      K.say(P.lead, L220[k], api);
+      K.title(P.lead, k < 4 ? "Two numbers per household" : "Two numbers per product", api);
+      X.g.classList.remove("cw-going");
+      X.el.classList.toggle("ob-hide", k >= 4);
+      P.two.classList.toggle("ob-hide", k < 4);
+      if (k < 4) {
+        C2_ARROWS.forEach(function (id) { api.unarrow(id); });
+        beat1(X, k, api, go);
+        return;
       }
-      // theta: tiramisu alone at beats 1 and 2 (its value from beat 2), all of them at beat 3.
-      Y.th.forEach(function (c, a) { c.classList.toggle("ob-hide", !(k >= 3 || (k >= 1 && a === A1))); c.style.opacity = ""; });
-      Y.thlab.classList.toggle("ob-hide", k < 1);
-      Y.thn[A1].textContent = k >= 2 ? K.n2(th1) : "?";
-      var lit = k >= 1 && k <= 2;
-      Y.z.forEach(function (z) { z.x.classList.toggle("lit", lit); });
-      Y.e[0][A1].classList.toggle("lit", lit);
-      Y.e[1][A1].classList.toggle("lit", lit);
-      Y.ic[A1].classList.toggle("lit", lit);
-      Y.th[A1].classList.toggle("lit", k >= 1);
-      if (go && k === 1) grow(api, Y.th[A1], 300);
-      if (k === 1 || k === 2) Y.focus(A1);
-      // The arrows of tiramisu's preference: z straight right into it, its column of E straight down into it.
-      if (lit && !Y.scrolls()) {
-        var o = function (d, from, to) { var a = { from: from, to: to, gap: 3, head: 11 }; if (go && k === 1) a.delay = d; else a.dur = 1; return a; };
-        api.arrow("c2-z", Y.z[1].x, Y.th[A1], o(500, "right", "left"));
-        api.arrow("c2-e", Y.e[1][A1], Y.th[A1], o(700, "bottom", "top"));
-      } else C2_ARROWS.forEach(function (id) { api.unarrow(id); });
-      api.show(P.f, k >= 1, K.opt(go && k === 1, 900));
-      if (k === 1) api.nextLabel("Compute");
-      P.res.textContent = k >= 2 ? K.n2(th1) : "?";
-      P.res.classList.toggle("done", k >= 2);
-      if (go && k === 2) api.fly(P.res, Y.thn[A1], { delay: 300 });
-      if (go && k === 3) Y.th.forEach(function (c, a) { if (a !== A1) grow(api, c, 200 + 50 * a); });
+      beat2(P, k - 4, api, go);
+      if (!(go && k === 4)) { C1_ARROWS.forEach(function (id) { api.unarrow(id); }); return; }
+      /* The transition: cross 1 stays while s, W and their arrows fade (CSS, cw-going); z and its label glide to their
+         places in cross 2, still lit; cross 1 goes once they leave. */
+      X.el.classList.remove("ob-hide");
+      X.g.classList.add("cw-going");
+      C1_ARROWS.forEach(function (id) {
+        document.querySelectorAll("svg.ob-arrow[data-id=\"" + id + "\"]").forEach(function (a) { a.style.transition = "opacity 0.6s"; a.style.opacity = "0"; });
+      });
+      X.z.forEach(function (z, c) { api.fly(z.x, Y.z[c].x, { delay: FADE, dur: GLIDE, arc: 40 }); });
+      api.fly(X.zlab, Y.zlab, { delay: FADE, dur: GLIDE, arc: 40 });
+      api.at(FADE + 40, function () {
+        C1_ARROWS.forEach(function (id) { api.unarrow(id); });
+        X.el.classList.add("ob-hide");
+        X.g.classList.remove("cw-going");
+      });
     },
   });
 
@@ -4132,9 +4609,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    310 The forward pass (5 beats): the 96 weights picked at random; the policy picks the coupons of 1,000 households
        for 12 weeks (ten drawn, a stack for the rest); each household's return G1 and their histogram; the average
        return; the loop back to the weights
-   320 The backward pass (5 beats): one weight picked at random (the first number of fresh pasta in E); Before; the
-       hop +0.2, After; the same 1,000 households again, with the same luck: the average return After; the four boxes
-   360 The triangle of the hop (5 beats): the two points; across 0.2; up 0.10; nabla, guessed, then computed
+   320 The backward pass, then the triangle of the hop (10 beats, one scene since 2026-11-19; scene 360 before). Beats
+       0 to 4: one weight picked at random (the first number of fresh pasta in E); Before; the hop +0.2, After; the
+       same 1,000 households again, with the same luck: the average return After; the four boxes. Beat 5, the flow:
+       the rest fades, the strip glides, the four numbers fly from the boxes into a table and on to the chart's axes,
+       the two points. Beats 6 to 9: across 0.2; up 0.10; nabla, guessed, then computed. The head reads "The triangle
+       of the hop" from beat 5 (K.title)
    370 The update (5 beats): w = w + alpha nabla with alpha = 0.5; the new weight, guessed, then computed, flies into
        its place; the average return after the update, guessed, then shown
    380 Update 2 (4 beats): a weight of W (the first number of carrots in W), a change below 0, a slope below 0,
@@ -4279,83 +4759,21 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     }
   });
 
-  /* 320. The backward pass. */
-  var L320 = [
-    "Which weight should change? One of the 96, picked at random: " + ws(R1.k, ",") + " " + where(R1) + ".",
-    "Its value, " + K.wf(R1.v) + ", is Before. The average return Before: " + K.n2(R1.before) + ".",
-    "Add a little, " + HOPS + ": After is " + K.wf(R1.vh) + ".",
-    "The 1,000 households again, with the same luck: " + OB.num(mem().nOther, 0) + " of them get other coupons. The average return After: " + K.n2(R1.after) + ".",
-    "Before and After, side by side: the weight and the average return."
-  ];
-  OB.scene({
-    key: "proto-backward", order: 320, title: "The backward pass", beats: L320.length,
-    build: function (root) {
-      root.classList.add("cw-root");
-      var P = this.parts = {};
-      P.lead = K.lead(root);
-      P.d = dia(root);
-      P.d.ab.head.classList.remove("ob-gone");
-      P.d.ab.head.textContent = "BEFORE";
-      // The pick: fifteen weights light in turn, the last one the weight of round 1.
-      var seq = [], r = CW.rng(3201);
-      for (var i = 0; i < 14; i++) seq.push(Math.floor(r() * 96));
-      seq.push(R1.k);
-      P.seq = seq;
-    },
-    beat: function (k, api) {
-      var P = this.parts, d = P.d, go = K.live(api, k), m = mem();
-      K.say(P.lead, L320[k], api);
-      d.M.showG(true);
-      d.H.showMark(true);
-      // 0: the pick.
-      d.S.dim(true);
-      if (go && k === 0) {
-        d.S.mark(P.seq[0]);
-        api.animate(2400, function (p) { d.S.mark(P.seq[Math.min(P.seq.length - 1, Math.floor(p * P.seq.length))]); }, function () { d.S.mark(R1.k); });
-      } else d.S.mark(R1.k);
-      // 1: Before. 2: the hop, After.
-      api.show(d.wb.el, k >= 1, K.opt(go && k === 1, 300));
-      api.show(d.wa.el, k >= 2, K.opt(go && k === 2, 1000));
-      // 3: the households again, the histogram, the mark, and the average After flies into its box.
-      var after = k >= 3;
-      if (go && k === 3) {
-        api.at(400, function () { d.M.set(m.PH); });
-        d.H.morph(m.PH.G, api, { delay: 600, dur: 1500 });
-        api.at(600, function () {
-          api.animate(1500, function (p) { d.H.markAt(R1.before + (R1.after - R1.before) * p); }, function () { d.H.markAt(R1.after); });
-        });
-        api.fly(d.H.lab, d.aa.num, { delay: 2300, arc: 60 });
-      } else {
-        d.M.set(after ? m.PH : m.P0);
-        d.H.draw(d.H.heights(after ? m.PH.G : m.P0.G));
-        d.H.markAt(after ? R1.after : R1.before);
-      }
-      api.show(d.aa.el, k >= 3, K.opt(go && k === 3, 2100));
-      // 4: the four boxes.
-      [d.wb.el, d.wa.el, d.ab.el, d.aa.el].forEach(function (e) { e.classList.toggle("cw-lit", k >= 4); });
-      var A = [
-        ["pol", d.S.el, d.M.el, { from: "bottom", to: "top", gap: 4, dur: 1 }],
-        ["m2h", d.M.el, d.H.el, { dur: 1 }],
-        ["h2a", d.H.el, d.ab.el, { dur: 1 }]
-      ];
-      if (k >= 2) A.push(["hop", d.wb.el, d.wa.el, { label: "+" + HOPS, labelDy: K.wide() ? -24 : 0, delay: go && k === 2 ? 300 : 0, dur: go && k === 2 ? undefined : 1 }]);
-      if (k >= 3) A.push(["w2a", d.wa.el, d.aa.el, { delay: go && k === 3 ? 200 : 0, dur: go && k === 3 ? undefined : 1 }]);
-      arrows(api, A);
-      d.loopOn(false);
-    }
-  });
-
-  /* The close-up: a table of Before and After, and the chart of the hop. */
+  /* The close-up: a table of Before and After, each number in a span (the target of its flight), and the chart of
+     the hop. */
   function closeTable(r) {
     var t = el("div", "ob-box cw-ct");
+    var v = function (cls, s) { return "<div class=\"cw-ctv " + cls + "\"><span class=\"cw-ctn\">" + s + "</span></div>"; };
     t.innerHTML = "<div></div><div class=\"cw-cth\">BEFORE</div><div class=\"cw-cth\">AFTER</div>" +
-      "<div class=\"cw-ctl\">" + K.wsym(r.k) + "</div><div class=\"cw-ctv r1\">" + K.wf(r.v) + "</div><div class=\"cw-ctv r1\">" + K.wf(r.vh) + "</div>" +
-      "<div class=\"cw-ctl\"><span class=\"cw-bachip\">AVERAGE " + OB.tex("\\bar{G}_1") + "</span></div><div class=\"cw-ctv r2\">" + K.n2(r.before) + "</div><div class=\"cw-ctv r2\">" + K.n2(r.after) + "</div>";
+      "<div class=\"cw-ctl\">" + K.wsym(r.k) + "</div>" + v("r1", K.wf(r.v)) + v("r1", K.wf(r.vh)) +
+      "<div class=\"cw-ctl\"><span class=\"cw-bachip\">AVERAGE " + OB.tex("\\bar{G}_1") + "</span></div>" + v("r2", K.n2(r.before)) + v("r2", K.n2(r.after));
     return t;
   }
   var CWW = 440, CWH = 300, CX0 = 76, CY0 = 30, CXW = 300, CYH = 210;
+  /* C.tk: the four numbers on the axes (xb and xa across, yb and ya up); C.pts: the two points, their guides and
+     names. */
   function chart(r) {
-    var C = {}, svg = OB.svgEl("svg", { viewBox: "0 0 " + CWW + " " + CWH, width: CWW, height: CWH, "class": "cw-chart" });
+    var C = { pts: [] }, svg = OB.svgEl("svg", { viewBox: "0 0 " + CWW + " " + CWH, width: CWW, height: CWH, "class": "cw-chart" });
     var x0 = CX0 + 0.22 * CXW, x1 = CX0 + 0.78 * CXW;
     var up = r.after >= r.before;
     var yb = up ? CY0 + 0.78 * CYH : CY0 + 0.3 * CYH, ya = up ? CY0 + 0.3 * CYH : CY0 + 0.78 * CYH;
@@ -4363,33 +4781,47 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     function text(x, y, s, cls) { var e = OB.svgEl("text", { x: x, y: y, "class": cls }); e.textContent = s; svg.appendChild(e); return e; }
     line({ x1: CX0, y1: CY0 - 8, x2: CX0, y2: CY0 + CYH, "class": "cw-cax" });
     line({ x1: CX0, y1: CY0 + CYH, x2: CX0 + CXW + 24, y2: CY0 + CYH, "class": "cw-cax" });
-    line({ x1: CX0, y1: yb, x2: x0, y2: yb, "class": "cw-cg" });
-    line({ x1: x0, y1: yb, x2: x0, y2: CY0 + CYH, "class": "cw-cg" });
-    line({ x1: CX0, y1: ya, x2: x1, y2: ya, "class": "cw-cg" });
-    line({ x1: x1, y1: ya, x2: x1, y2: CY0 + CYH, "class": "cw-cg" });
+    C.pts.push(line({ x1: CX0, y1: yb, x2: x0, y2: yb, "class": "cw-cg" }));
+    C.pts.push(line({ x1: x0, y1: yb, x2: x0, y2: CY0 + CYH, "class": "cw-cg" }));
+    C.pts.push(line({ x1: CX0, y1: ya, x2: x1, y2: ya, "class": "cw-cg" }));
+    C.pts.push(line({ x1: x1, y1: ya, x2: x1, y2: CY0 + CYH, "class": "cw-cg" }));
     C.tri = OB.svgEl("polygon", { points: x0 + "," + yb + " " + x1 + "," + yb + " " + x1 + "," + ya, "class": "cw-ctri" });
     svg.appendChild(C.tri);
     C.across = line({ x1: x0, y1: yb, x2: x1, y2: yb, "class": "cw-cleg" });
     C.upl = line({ x1: x1, y1: yb, x2: x1, y2: ya, "class": "cw-cleg " + (up ? "gain" : "loss") });
     C.lacross = text((x0 + x1) / 2, yb + (up ? 24 : -12), HOPS, "cw-clab");
     C.lup = text(x1 + 12, (ya + yb) / 2 + 6, (r.change >= 0 ? "+" : "") + K.n2(r.change), "cw-clab l " + (up ? "gain" : "loss"));
-    svg.appendChild(OB.svgEl("circle", { cx: x0, cy: yb, r: 7, "class": "cw-cpt b" }));
-    svg.appendChild(OB.svgEl("circle", { cx: x1, cy: ya, r: 7, "class": "cw-cpt a" }));
-    text(CX0 - 9, yb + 4, K.n2(r.before), "cw-ctk y");
-    text(x0, CY0 + CYH + 18, K.wf(r.v), "cw-ctk");
-    text(CX0 - 9, ya + 4, K.n2(r.after), "cw-ctk y");
-    text(x1, CY0 + CYH + 18, K.wf(r.vh), "cw-ctk");
-    text(x0 - 12, yb - 12, "BEFORE", "cw-cname e");
-    text(x1 - 12, ya - 12, "AFTER", "cw-cname e");
+    [[x0, yb, "b"], [x1, ya, "a"]].forEach(function (q) {
+      var c = OB.svgEl("circle", { cx: q[0], cy: q[1], r: 7, "class": "cw-cpt " + q[2] });
+      svg.appendChild(c);
+      C.pts.push(c);
+    });
+    C.tk = {
+      yb: text(CX0 - 9, yb + 4, K.n2(r.before), "cw-ctk y"), xb: text(x0, CY0 + CYH + 18, K.wf(r.v), "cw-ctk"),
+      ya: text(CX0 - 9, ya + 4, K.n2(r.after), "cw-ctk y"), xa: text(x1, CY0 + CYH + 18, K.wf(r.vh), "cw-ctk")
+    };
+    C.pts.push(text(x0 - 12, yb - 12, "BEFORE", "cw-cname e"));
+    C.pts.push(text(x1 - 12, ya - 12, "AFTER", "cw-cname e"));
     text(CX0 + CXW + 24, CY0 + CYH + 40, "THE WEIGHT", "cw-caxt e");
     text(CX0 - 6, CY0 - 16, "AVERAGE RETURN", "cw-caxt");
     C.svg = svg;
     return C;
   }
 
-  /* 360. The triangle of the hop. */
-  var L360 = [
-    "In a picture: the weight across, the average return \\(\\bar{G}_1\\) up. Before and After are two points.",
+  /* 320. The backward pass, then the triangle of the hop: one scene since 2026-11-19 (Carlos: "From "the backward pass"
+     to "the triangle of the hop" the transition is abrupt. I want that the numbers flow from one place to the other
+     while the rest vanishes so that the participant sees where each number comes from. No sudden transition. Flow").
+     Beats 0 to 4 draw the diagram. Beat 5 is the flow (flow() below); beats 5 to 9 are the triangle. The diagram and
+     the close-up share one cell of a grid, both at its top; from beat 5 the diagram is hidden but keeps its room, so
+     nothing moves when the close-up takes over (a phone drops it, ob-gone). */
+  var TRI = 5, TITLES = ["The backward pass", "The triangle of the hop"];
+  var L320 = [
+    "Which weight should change? One of the 96, picked at random: " + ws(R1.k, ",") + " " + where(R1) + ".",
+    "Its value, " + K.wf(R1.v) + ", is Before. The average return Before: " + K.n2(R1.before) + ".",
+    "Add a little, " + HOPS + ": After is " + K.wf(R1.vh) + ".",
+    "The 1,000 households again, with the same luck: " + OB.num(mem().nOther, 0) + " of them get other coupons. The average return After: " + K.n2(R1.after) + ".",
+    "Before and After, side by side: the weight and the average return.",
+    "The four numbers go into a table, then into a picture: the weight across, the average return \\(\\bar{G}_1\\) up.",
     "Across: the weight moved by " + HOPS + ".",
     "Up: the average return " + (R1.change >= 0 ? "rose" : "fell") + " by " + K.n2(Math.abs(R1.change)) + " CHF.",
     "The slope of the triangle, \\(\\nabla\\): up divided by across. Guess it, then press Compute.",
@@ -4398,19 +4830,165 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   function nablaTex(r, done) {
     return OB.tex("\\nabla = \\frac{" + K.n2(r.change) + "}{" + HOPS + "} =\\;") + "<span class=\"ob-texn cw-nres" + (done ? " done" : "") + "\">" + (done ? OB.texText(nab(r.nabla)) : "?") + "</span>";
   }
+
+  /* The strip glides from the diagram to the close-up: a copy in the body; the source stays hidden (the diagram goes
+     after it), the target shows on landing. */
+  function glide(api, from, to, o) {
+    to.style.visibility = "hidden";
+    if (api.instant) { to.style.visibility = ""; return; }
+    api.at(o.delay || 0, function () {
+      var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+      if (!a.width || !b.width) { to.style.visibility = ""; return; }
+      var g = from.cloneNode(true);
+      g.classList.add("cw-glide");
+      g.style.left = a.left + "px"; g.style.top = a.top + "px"; g.style.width = a.width + "px"; g.style.height = a.height + "px";
+      document.body.appendChild(g);
+      from.style.visibility = "hidden";
+      var dx = b.left - a.left, dy = b.top - a.top;
+      api.animate(o.dur || 1100, function (p) { g.style.transform = "translate(" + (dx * p) + "px," + (dy * p) + "px)"; },
+        function () { if (g.parentNode) g.parentNode.removeChild(g); to.style.visibility = ""; });
+    });
+  }
+  /* A number moves: a copy flies from its place, which empties, to the target, which shows it on landing. */
+  function move(api, from, to, delay, dur) {
+    to.style.visibility = "hidden";
+    K.flyKeep(api, from, to, { delay: delay, dur: dur, arc: 40 });
+    api.at(delay, function () { from.style.visibility = "hidden"; });
+  }
+  /* The same, the source keeping its number. */
+  function copyTo(api, from, to, delay, dur) {
+    to.style.visibility = "hidden";
+    K.flyKeep(api, from, to, { delay: delay, dur: dur, arc: 30 });
+  }
+  function axisNums(C) { return [C.tk.xb, C.tk.xa, C.tk.yb, C.tk.ya]; }
+  function boxes(d) { return [d.wb, d.wa, d.ab, d.aa]; }
+
+  /* Beat 5 reached with Next: the households, the histogram and the arrows fade; the strip glides to the close-up;
+     the four numbers fly out of their boxes into the table (0.70 and 0.90 in the row of the weight, 52.48 and 52.58 in
+     the row of the average return), each box fading once its number has left; the chart's axes come, the numbers fly
+     on from the table to the axes, and the two points appear. About 4.3 s. */
+  function flow(P, api) {
+    var d = P.d, C = P.C, sec = P.lead.closest("section.scene");
+    d.grid.classList.add("cw-going");
+    if (sec) sec.querySelectorAll("svg.ob-arrow, .ob-arrow-label").forEach(function (a) { a.style.transition = "opacity 0.5s"; a.style.opacity = "0"; });
+    api.at(550, function () { arrows(api, []); });
+    P.row.classList.remove("ob-gone");
+    [P.t, C.svg].concat(C.pts).forEach(function (e) { e.classList.add("ob-hide"); });
+    glide(api, d.S.el, P.S.el, { delay: 150, dur: 1100 });
+    api.show(P.t, true, { delay: 450, dur: 600 });
+    boxes(d).forEach(function (b, i) {
+      var t0 = 650 + 180 * i;
+      move(api, b.num, P.tn[i], t0, 1200);
+      api.fade(b.el, false, { delay: t0 + 150, dur: 500 });
+    });
+    api.at(2450, function () { d.el.classList.add(K.phone() ? "ob-gone" : "ob-hide"); d.grid.classList.remove("cw-going"); });
+    api.show(C.svg, true, { delay: 2000, dur: 600 });
+    axisNums(C).forEach(function (e, i) { copyTo(api, P.tn[i], e, 2550 + 150 * i, 1100); });
+    C.pts.forEach(function (e) { api.show(e, true, { delay: 3750, dur: 600 }); });
+  }
+
+  /* Beats 0 to 4: the diagram. */
+  function backBeat(P, k, api, go) {
+    var d = P.d, m = mem();
+    P.row.classList.add("ob-gone");
+    d.el.classList.remove("ob-hide", "ob-gone");
+    d.grid.classList.remove("cw-going");
+    d.S.el.style.visibility = "";
+    boxes(d).forEach(function (b) { b.num.style.visibility = ""; b.el.style.opacity = ""; });
+    d.ab.el.classList.remove("ob-hide");
+    d.M.showG(true);
+    d.H.showMark(true);
+    // 0: the pick.
+    d.S.dim(true);
+    if (go && k === 0) {
+      d.S.mark(P.seq[0]);
+      api.animate(2400, function (p) { d.S.mark(P.seq[Math.min(P.seq.length - 1, Math.floor(p * P.seq.length))]); }, function () { d.S.mark(R1.k); });
+    } else d.S.mark(R1.k);
+    // 1: Before. 2: the hop, After.
+    api.show(d.wb.el, k >= 1, K.opt(go && k === 1, 300));
+    api.show(d.wa.el, k >= 2, K.opt(go && k === 2, 1000));
+    // 3: the households again, the histogram, the mark, and the average After flies into its box.
+    var after = k >= 3;
+    if (go && k === 3) {
+      api.at(400, function () { d.M.set(m.PH); });
+      d.H.morph(m.PH.G, api, { delay: 600, dur: 1500 });
+      api.at(600, function () {
+        api.animate(1500, function (p) { d.H.markAt(R1.before + (R1.after - R1.before) * p); }, function () { d.H.markAt(R1.after); });
+      });
+      api.fly(d.H.lab, d.aa.num, { delay: 2300, arc: 60 });
+    } else {
+      d.M.set(after ? m.PH : m.P0);
+      d.H.draw(d.H.heights(after ? m.PH.G : m.P0.G));
+      d.H.markAt(after ? R1.after : R1.before);
+    }
+    api.show(d.aa.el, k >= 3, K.opt(go && k === 3, 2100));
+    // 4: the four boxes.
+    boxes(d).forEach(function (b) { b.el.classList.toggle("cw-lit", k >= 4); });
+    var A = [
+      ["pol", d.S.el, d.M.el, { from: "bottom", to: "top", gap: 4, dur: 1 }],
+      ["m2h", d.M.el, d.H.el, { dur: 1 }],
+      ["h2a", d.H.el, d.ab.el, { dur: 1 }]
+    ];
+    if (k >= 2) A.push(["hop", d.wb.el, d.wa.el, { label: "+" + HOPS, labelDy: K.wide() ? -24 : 0, delay: go && k === 2 ? 300 : 0, dur: go && k === 2 ? undefined : 1 }]);
+    if (k >= 3) A.push(["w2a", d.wa.el, d.aa.el, { delay: go && k === 3 ? 200 : 0, dur: go && k === 3 ? undefined : 1 }]);
+    arrows(api, A);
+    d.loopOn(false);
+  }
+
+  /* Beats 5 to 9 (k from 0): the triangle. */
+  function triBeat(P, k, api, go) {
+    var d = P.d, C = P.C;
+    d.loopOn(false);
+    if (go && k === 0) flow(P, api);
+    else {
+      arrows(api, []);
+      P.row.classList.remove("ob-gone");
+      d.grid.classList.remove("cw-going");
+      d.el.classList.remove("ob-hide", "ob-gone");
+      d.el.classList.add(K.phone() ? "ob-gone" : "ob-hide");
+      d.S.el.style.visibility = "hidden";
+      boxes(d).forEach(function (b) { b.num.style.visibility = "hidden"; b.el.style.opacity = ""; b.el.classList.add("ob-hide"); });
+      [P.S.el, P.t, C.svg].concat(P.tn, axisNums(C), C.pts).forEach(function (e) { e.style.visibility = ""; e.style.opacity = ""; e.classList.remove("ob-hide"); });
+    }
+    P.t.querySelectorAll(".r1").forEach(function (e) { e.classList.toggle("lit", k === 1); });
+    P.t.querySelectorAll(".r2").forEach(function (e) { e.classList.toggle("lit", k === 2); });
+    [C.across, C.lacross].forEach(function (e) { api.show(e, k >= 1, K.opt(go && k === 1, 200)); });
+    [C.upl, C.lup].forEach(function (e) { api.show(e, k >= 2, K.opt(go && k === 2, 200)); });
+    C.across.classList.toggle("lit", k === 1);
+    C.upl.classList.toggle("lit", k === 2);
+    api.show(C.tri, k >= 3, K.opt(go && k === 3, 200));
+    api.show(P.f, k >= 3, K.opt(go && k === 3, 700));
+    P.f.innerHTML = nablaTex(R1, k >= 4);
+    if (k === 3) api.nextLabel("Compute");
+    if (go && k === 4 && OB.fx && OB.fx.bump) OB.fx.bump(P.f.querySelector(".cw-nres"), 0.3, 500);
+  }
+
   OB.scene({
-    key: "closeup-slope", order: 360, title: "The triangle of the hop", beats: L360.length,
+    key: "proto-backward", order: 320, title: TITLES[0], beats: L320.length,
     build: function (root) {
       root.classList.add("cw-root");
       var P = this.parts = {}, m = mem();
       P.lead = K.lead(root);
-      var row = el("div", "cw-crow"), left = el("div", "cw-ccol"), right = el("div", "cw-ccol");
+      var st = el("div", "cw-bt");
+      root.appendChild(st);
+      P.d = dia(st);
+      P.d.el.classList.add("cw-bt1");
+      P.d.ab.head.classList.remove("ob-gone");
+      P.d.ab.head.textContent = "BEFORE";
+      // The pick: fifteen weights light in turn, the last one the weight of round 1.
+      var seq = [], r = CW.rng(3201);
+      for (var i = 0; i < 14; i++) seq.push(Math.floor(r() * 96));
+      seq.push(R1.k);
+      P.seq = seq;
+      // The close-up: the strip and the table on the left, the chart and nabla on the right.
+      var row = el("div", "cw-crow cw-bt2 ob-gone"), left = el("div", "cw-ccol"), right = el("div", "cw-ccol");
       P.S = K.Strip();
       P.S.set(m.S0.W, m.S0.E);
       P.S.mark(R1.k);
       P.S.dim(true);
       left.appendChild(P.S.el);
       P.t = closeTable(R1);
+      P.tn = [].slice.call(P.t.querySelectorAll(".cw-ctn"));
       left.appendChild(P.t);
       P.C = chart(R1);
       right.appendChild(P.C.svg);
@@ -4418,22 +4996,14 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       right.appendChild(P.f);
       row.appendChild(left);
       row.appendChild(right);
-      root.appendChild(row);
+      st.appendChild(row);
+      P.row = row;
     },
     beat: function (k, api) {
-      var P = this.parts, C = P.C, go = K.live(api, k);
-      K.say(P.lead, L360[k], api);
-      P.t.querySelectorAll(".r1").forEach(function (e) { e.classList.toggle("lit", k === 1); });
-      P.t.querySelectorAll(".r2").forEach(function (e) { e.classList.toggle("lit", k === 2); });
-      [C.across, C.lacross].forEach(function (e) { api.show(e, k >= 1, K.opt(go && k === 1, 200)); });
-      [C.upl, C.lup].forEach(function (e) { api.show(e, k >= 2, K.opt(go && k === 2, 200)); });
-      C.across.classList.toggle("lit", k === 1);
-      C.upl.classList.toggle("lit", k === 2);
-      api.show(C.tri, k >= 3, K.opt(go && k === 3, 200));
-      api.show(P.f, k >= 3, K.opt(go && k === 3, 700));
-      P.f.innerHTML = nablaTex(R1, k >= 4);
-      if (k === 3) api.nextLabel("Compute");
-      if (go && k === 4 && OB.fx && OB.fx.bump) OB.fx.bump(P.f.querySelector(".cw-nres"), 0.3, 500);
+      var P = this.parts, go = K.live(api, k);
+      K.say(P.lead, L320[k], api);
+      K.title(P.lead, TITLES[k < TRI ? 0 : 1], api);
+      if (k < TRI) backBeat(P, k, api, go); else triBeat(P, k - TRI, api, go);
     }
   });
 
@@ -4583,10 +5153,11 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
    Old Bessie page 3's scenes 410 and 420 (02_old_bessie/source/game/sec3c2.js) and 430 (sec3e.js).
 
    410 The learning curve (3 beats): the whole diagram after update 2 (the 96 weights, update 2's weight marked; the
-       panel of update 2: its weight and the average return Before and After the hop, nabla, the update; the 1,000
-       households under the weights after it, their histogram and average) and the learning curve beside it: across
-       the updates, up the average return after them. Its first three points: 52.48 (the weights at random), 52.63
-       (flies from the panel's Before) and 52.62 (flies from the average)
+       panel of update 2: its weight and the average return Before and After the hop, and the triangle of the hop
+       (since 2026-11-19 without nabla and the update); the 1,000 households under the weights after it, their
+       histogram and average) and the learning curve beside it: across the updates, up the average return after them.
+       Its first three points: 52.48 (the weights at random), 52.63 (flies from the panel's Before) and 52.62 (flies
+       from the average)
    420 Many updates (2 beats): the movie of updates 3 to 2,000 on the same view, every part set at once at each update,
        faster and faster, with Pause and Again; the end, 69.59
    430 What the app learned (5 beats): the products' two numbers e_a as points on a map, at the start and after 2,000
@@ -4607,50 +5178,68 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   /* The average return after update r (r = 0: the weights at random): the points of the learning curve. */
   var avgAt = function (r) { return r === 0 ? D.rounds[0][1] : D.rounds[r - 1][4]; };
   var START = avgAt(0), LAST = avgAt(N);
-  /* nabla as the scenes of cw-3proto.js write it: two decimals without trailing zeros. */
-  var nab = function (x) { return K.n2(x).replace(/\.?0+$/, ""); };
 
-  /* The panel of an update: its weight and the average return, Before and After the hop, and their change; nabla; the
-     update of the weight. */
+  /* The panel of an update. Since 2026-11-19 (Carlos: "Only show this quadrant, don't show the other numbers. Plot also
+     the triangle of the hop, but don't show the formulas outside of it"): its number; the weight and the average
+     return, Before and After the hop; beside them the triangle of the hop (tri() below), without nabla or the update. */
   function Panel() {
     var P = { el: el("div", "ob-box cw-up") };
     P.count = el("div", "cw-hpc", "");
     P.el.appendChild(P.count);
-    var g = el("div", "cw-hpg");
+    var row = el("div", "cw-upr"), g = el("div", "cw-hpg");
     function cell(cls, html) { var e = OB.html("div", cls, html || ""); g.appendChild(e); return e; }
-    cell("cw-hph"); cell("cw-hph", "BEFORE"); cell("cw-hph", "AFTER"); cell("cw-hph", "CHANGE");
+    cell("cw-hph"); cell("cw-hph", "BEFORE"); cell("cw-hph", "AFTER");
     P.sym = cell("cw-hpl");
-    P.v = cell("cw-hpn"); P.vh = cell("cw-hpn"); P.dv = cell("cw-hpn cw-hpd");
+    P.v = cell("cw-hpn"); P.vh = cell("cw-hpn");
     cell("cw-hpl", "<span class=\"cw-bachip\">AVERAGE " + OB.tex("\\bar{G}_1") + "</span>");
-    P.b = cell("cw-hpn r2"); P.a = cell("cw-hpn r2"); P.dg = cell("cw-hpn");
-    P.el.appendChild(g);
-    function line(parts) { var l = el("div", "cw-hpf"); parts.forEach(function (p) { l.appendChild(p); }); P.el.appendChild(l); return l; }
-    P.ch = OB.texNumEl("", "");
-    P.nab = OB.texNumEl("", "");
-    line([OB.texEl("\\nabla =\\;"), P.ch, OB.texEl("\\;/\\;" + OB.num(D.HOP, 1) + " =\\;"), P.nab]);
-    P.sym2 = OB.html("span", "", "");
-    P.uw = OB.texNumEl("", "");
-    P.un = OB.texNumEl("", "");
-    P.res = OB.texNumEl("", "cw-hpnew");
-    line([P.sym2, OB.texEl("\\;=\\;"), P.uw, OB.texEl("\\;+\\;" + OB.num(D.ALPHA, 1) + "\\;\\times\\;"), P.un, OB.texEl("\\;=\\;"), P.res]);
+    P.b = cell("cw-hpn r2"); P.a = cell("cw-hpn r2");
+    row.appendChild(g);
+    P.T = tri();
+    row.appendChild(P.T.svg);
+    P.el.appendChild(row);
     P.set = function (r) {
       P.count.textContent = "UPDATE " + OB.num(r.i, 0) + " OF " + OB.num(N, 0);
-      if (P.k !== r.k) { P.k = r.k; P.sym.innerHTML = P.sym2.innerHTML = K.wsym(r.k); }
+      if (P.k !== r.k) { P.k = r.k; P.sym.innerHTML = K.wsym(r.k); }
       P.v.textContent = K.wf(r.v);
       P.vh.textContent = K.wf(r.vh);
-      P.dv.textContent = "+" + OB.num(D.HOP, 1);
       P.b.textContent = K.n2(r.before);
       P.a.textContent = K.n2(r.after);
-      P.dg.textContent = (r.change > 0 ? "+" : "") + K.n2(r.change);
-      P.dg.classList.toggle("gain", r.change > 0);
-      P.dg.classList.toggle("loss", r.change < 0);
-      P.ch.textContent = OB.texText(K.n2(r.change));
-      P.nab.textContent = OB.texText(nab(r.nabla));
-      P.uw.textContent = OB.texText(K.wf(r.v));
-      P.un.textContent = OB.texText(nab(r.nabla));
-      P.res.textContent = OB.texText(K.wf(r.vNew));
+      P.T.set(r.change);
     };
     return P;
+  }
+
+  /* The triangle of the hop, small: across the weight, up the average return, as in scene 320; Before and After as two
+     points, across always the hop, 0.2, 92 px; up the change of the average return, 400 px per CHF, drawn at most 42
+     px each way (187 of the 2,000 updates change it by more than CHF 0.105; its label keeps the exact number). The
+     legs carry the two numbers; no other number and no formula. */
+  var UW = 168, UH = 122, UX = 20, UY = 104, BX = 34, BY = 58, ACROSS = 92, PER_CHF = 400, UPMAX = 42;
+  function tri() {
+    var T = {}, svg = T.svg = OB.svgEl("svg", { viewBox: "0 0 " + UW + " " + UH, width: UW, height: UH, "class": "cw-ut", "aria-hidden": "true" });
+    function add(tag, a, txt) { var e = OB.svgEl(tag, a); if (txt !== undefined) e.textContent = txt; svg.appendChild(e); return e; }
+    add("polyline", { points: UX + ",10 " + UX + "," + UY + " " + (UW - 4) + "," + UY, "class": "cw-utax" });
+    add("text", { x: UX, y: 4, "class": "cw-utt" }, "AVERAGE RETURN");
+    add("text", { x: UW - 4, y: UY + 15, "class": "cw-utt e" }, "THE WEIGHT");
+    T.area = add("polygon", { "class": "cw-utri" });
+    T.across = add("line", { x1: BX, y1: BY, x2: BX + ACROSS, y2: BY, "class": "cw-utleg" });
+    T.up = add("line", { x1: BX + ACROSS, y1: BY, x2: BX + ACROSS, y2: BY, "class": "cw-utleg" });
+    T.la = add("text", { x: BX + ACROSS / 2, y: BY + 16, "class": "cw-utl" }, OB.num(D.HOP, 1));
+    T.lu = add("text", { x: BX + ACROSS + 8, y: BY, "class": "cw-utl s" }, "");
+    add("circle", { cx: BX, cy: BY, r: 5.5, "class": "cw-utpt b" });
+    T.pa = add("circle", { cx: BX + ACROSS, cy: BY, r: 5.5, "class": "cw-utpt a" });
+    T.set = function (change) {
+      var h = Math.max(-UPMAX, Math.min(UPMAX, change * PER_CHF)), xa = BX + ACROSS, ya = BY - h;
+      var cls = change > 0 ? " gain" : change < 0 ? " loss" : "";
+      T.area.setAttribute("points", BX + "," + BY + " " + xa + "," + BY + " " + xa + "," + ya.toFixed(1));
+      T.up.setAttribute("y2", ya.toFixed(1));
+      T.up.setAttribute("class", "cw-utleg" + cls);
+      T.pa.setAttribute("cy", ya.toFixed(1));
+      T.la.setAttribute("y", String(h >= 0 ? BY + 17 : BY - 8));
+      T.lu.setAttribute("y", (BY - h / 2 + 5).toFixed(1));
+      T.lu.setAttribute("class", "cw-utl s" + cls);
+      T.lu.textContent = (change > 0 ? "+" : "") + K.n2(change);
+    };
+    return T;
   }
 
   /* The learning curve: the average return after each update, point by point. Across, the updates from 0 to the larger
