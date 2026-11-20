@@ -300,9 +300,19 @@ sup { top: -0.55em; }
 .cw-cap { font-family: var(--sign); font-size: calc(calc(8px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.05em; color: var(--ink2);
   text-align: center; white-space: nowrap; margin-top: 7px; line-height: 1.3; }
 .cw-cap .katex { font-size: 1.15em; letter-spacing: 0; }
-.cw-key { display: inline-block; width: 11px; height: 11px; border-radius: 3px; border: 1.5px solid var(--ink); vertical-align: -1px; }
-.cw-key.pos { background: rgba(47, 107, 255, 0.85); }
-.cw-key.neg { background: rgba(242, 56, 111, 0.85); }
+/* One colour per matrix (K.MX, K.tint in cw-0kit.js; source/PLAN.md, Round 10): a matrix's name is a sticker of its
+   hue (K.tag), white letters on W, Z and theta, navy on S and E. A lit cell of a matrix keeps its colour and gets a
+   navy outline (cw-mlit). */
+.cw-mtag { display: inline-flex; align-items: center; justify-content: center; min-width: 1.55em; height: 1.45em; padding: 0 0.3em;
+  border: 2px solid var(--ink); border-radius: 0.45em; line-height: 1; vertical-align: middle; box-sizing: border-box; }
+.cw-mtag .katex { font-size: 1em; }
+.cw-mtag.mS { background: var(--mS, #2EC4B6); color: var(--ink); }
+.cw-mtag.mW { background: var(--mW, #D81B60); color: #FFFFFF; }
+.cw-mtag.mZ { background: var(--mZ, #5B2DB0); color: #FFFFFF; }
+.cw-mtag.mE { background: var(--mE, #FF8A2A); color: var(--ink); }
+.cw-mtag.mT { background: var(--mT, #2F6BFF); color: #FFFFFF; }
+.cw-mtag.sm { font-size: 11px; border-width: 1.5px; }
+.cw-mlit { box-shadow: inset 0 0 0 2.5px var(--ink) !important; }
 
 /* The symbol of a weight: e or w with the product's icon. */
 .cw-wsym { white-space: nowrap; }
@@ -359,7 +369,8 @@ sup { top: -0.55em; }
 .cw-sic { font-size: 12.5px; text-align: center; line-height: 18px; height: 18px; }
 .cw-scell { height: 14px; border-radius: 2px; box-shadow: inset 0 0 0 1px rgba(30, 20, 66, 0.18); background: #FFFFFF; }
 .cw-scell.r2, .cw-sl.r2 { margin-top: 5px; }
-.cw-scell.cw-pick { outline: 3px solid var(--pink); outline-offset: 1px; z-index: 2; position: relative; }
+/* The weight of a hop: a pink ring with a navy line inside, so that it shows on W's raspberry too. */
+.cw-scell.cw-pick { outline: 3px solid var(--pink); outline-offset: 1px; box-shadow: 0 0 0 1.5px var(--ink); z-index: 2; position: relative; }
 .cw-strip.cw-dimmed .cw-scell:not(.cw-pick) { opacity: 0.45; }
 .cw-strip .cw-cap { margin-top: 8px; }
 
@@ -495,6 +506,8 @@ sup { top: -0.55em; }
   .cw-sgrid { grid-template-columns: 18px repeat(24, 13px); }
   .cw-sic { font-size: 10px; }
   .cw-sl { font-size: 11px; padding-right: 3px; }
+  /* The strip's caption is wider than the strip on a phone: two lines within it. */
+  .cw-strip .cw-cap { white-space: normal; }
   .ob-card .cw-sgrid { grid-template-columns: 14px repeat(24, 10.5px); }
   .ob-card .cw-sic { font-size: 8.5px; line-height: 14px; height: 14px; }
   .ob-card .cw-scell { height: 11px; }
@@ -775,11 +788,10 @@ sup { top: -0.55em; }
 .cw-ap-s, .cw-ap-p { display: flex; align-items: center; justify-content: center; background: #FFFFFF; border-right: 1px solid var(--line, #DCD5EC);
   border-bottom: 1px solid var(--line, #DCD5EC); font-family: var(--px); font-weight: 700; font-variant-numeric: tabular-nums lining-nums;
   line-height: 1; color: var(--ink); white-space: nowrap; }
-.cw-ap-s { font-size: 9px; color: var(--ink2); }
-.cw-ap-s.lit { background: var(--yellow); color: var(--ink); }
+.cw-ap-s { font-size: 9px; }
 .cw-ap-p { font-size: 10.5px; }
 .cw-ap-p.blank { background: repeating-linear-gradient(45deg, #F3EFFA 0 4px, #FFFFFF 4px 8px); }
-.cw-ap-p.ring { outline: 3px solid var(--pink); outline-offset: -3px; position: relative; z-index: 2; background: #FFF3C4; }
+.cw-ap-p.ring { outline: 3px solid var(--pink); outline-offset: -3px; position: relative; z-index: 2; }
 .cw-ap-fr { position: absolute; top: 0; height: 138px; box-sizing: border-box; border: 3px solid var(--ink); pointer-events: none; z-index: 3; }
 .cw-ap-fr.s { left: 0; width: 270px; }
 .cw-ap-fr.p { left: 278px; width: 822px; }
@@ -828,9 +840,11 @@ sup { top: -0.55em; }
    of 11 px, a column of 14 px for E's row icons, E's and theta's 24 columns of 34 px, so the coupons' icons stand where
    the table's stood. Rows: the coupons' icons (26 px), E's 24 rows (13 px; the first and the last 16 px, for the ink
    frame), a gap, the state's icons, s and theta (22 px), the captions. Each row of E, the row of icons, s and theta is
-   one element whose grid repeats the columns (cw-ex-sub), so a row grows as one. */
-.cw-ex-stage { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
-.cw-exw { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 6px 6px 4px; }
+   one element whose grid repeats the columns (cw-ex-sub), so a row grows as one. Every cell carries its matrix's colour
+   (K.paint in cw-0kit.js: s turquoise, E orange, theta blue, the stronger the larger the number). Scene 220
+   (cw-2policy.js) builds the same cross and uses these classes too. */
+.cw-ex-stage { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+.cw-exw { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 4px 6px 2px; }
 .cw-ex { position: relative; display: grid; grid-template-columns: repeat(24, 11px) 14px repeat(24, 34px);
   grid-template-rows: 26px 16px repeat(22, 13px) 16px 8px 14px 22px auto; }
 .cw-ex-sub { display: grid; grid-template-columns: repeat(24, 34px); }
@@ -842,7 +856,8 @@ sup { top: -0.55em; }
 .cw-ex-ric { display: flex; align-items: center; justify-content: center; font-size: 10px; line-height: 1; border-radius: 3px; margin-right: 2px; }
 .cw-ex-ric.lit { background: var(--yellow); }
 
-/* E: heat colours inline (K.heat), light lines inside, 3 px ink around. */
+/* E: its colour inline (K.paint), light lines inside, 3 px ink around. A lit number gets a navy line inside
+   (cw-mlit, cw-0kit.css), which shows on every tint of the hue. */
 .cw-ex-e { display: flex; align-items: center; justify-content: center; background: #FFFFFF; border-right: 1px solid var(--line, #DCD5EC);
   border-bottom: 1px solid var(--line, #DCD5EC); }
 .cw-ex-e .cw-tn { font-size: 9px; }
@@ -850,42 +865,165 @@ sup { top: -0.55em; }
 .cw-ex-e:last-child { border-right: 3px solid var(--ink); }
 .cw-ex-row.top .cw-ex-e { border-top: 3px solid var(--ink); }
 .cw-ex-row.bot .cw-ex-e { border-bottom: 3px solid var(--ink); }
-.cw-ex-e.lit { background: var(--yellow) !important; }
 .cw-ex-ring { border: 3px solid var(--pink); border-radius: 6px; margin: -2px; pointer-events: none; z-index: 3; }
 
 /* The state s and its icons, theta beside it under E. */
 .cw-ex-sic { font-size: 8.5px; line-height: 1; text-align: center; align-self: end; padding-bottom: 2px; }
 .cw-ex-s { display: flex; align-items: center; justify-content: center; background: #FFFFFF; border-top: 3px solid var(--ink);
   border-bottom: 3px solid var(--ink); border-right: 1px solid var(--line, #DCD5EC); font-family: var(--px); font-weight: 700;
-  font-size: 9px; line-height: 1; font-variant-numeric: tabular-nums lining-nums; color: var(--ink2); }
+  font-size: 9px; line-height: 1; font-variant-numeric: tabular-nums lining-nums; color: var(--ink); }
 .cw-ex-s.first { border-left: 3px solid var(--ink); }
 .cw-ex-s.last { border-right: 3px solid var(--ink); }
-.cw-ex-s.lit { background: var(--yellow); color: var(--ink); }
 .cw-ex-th { position: relative; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border-top: 3px solid var(--ink);
   border-bottom: 3px solid var(--ink); border-right: 1px solid var(--line, #DCD5EC); }
 .cw-ex-th .cw-tn { font-size: 10.5px; }
 .cw-ex-th.first, .cw-ex-th.solo { border-left: 3px solid var(--ink); }
 .cw-ex-th.last, .cw-ex-th.solo { border-right: 3px solid var(--ink); }
-.cw-ex-th.lit { background: var(--yellow); }
 .cw-ex-th.blank { background: repeating-linear-gradient(45deg, #F3EFFA 0 4px, #FFFFFF 4px 8px); }
+.cw-ex-th.ring { outline: 3px solid var(--pink); outline-offset: -3px; z-index: 2; }
 .cw-ex-cap { margin-top: 6px; }
 
-/* The corner: E's name and colours at the top, near E; the numbers to learn at the bottom. */
-.cw-ex-corner { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding: 0 8px 6px 0; min-height: 0; }
-.cw-ex-ctop { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 36px; }
-.cw-ex-name { font-size: calc(calc(22px * var(--tx)) * var(--fz, 1)); line-height: 1; }
-.cw-ex-key { display: flex; flex-direction: column; align-items: stretch; gap: 3px; width: 132px; }
-.cw-ex-bar { height: 12px; border: 1.5px solid var(--ink); border-radius: 3px; }
-.cw-ex-ticks { display: flex; justify-content: space-between; font-family: var(--px); font-weight: 700; font-size: 10px; line-height: 1; color: var(--ink2); }
-.cw-ex-cnt { font-size: calc(calc(11.5px * var(--tx)) * var(--fz, 1)); margin-top: 4px; }
-.cw-ex-sb { align-self: flex-end; }
+/* Beat 1: the places of the two representations. The state dims inside a dashed frame; tiramisu's column is a dashed
+   frame, solid while the column stands alone (beats 3 to 5). Their labels (beats 1 to 5): the household's in the
+   corner under the numbers to learn, right above the state; the coupon's right of the column. */
+.cw-ex-sub.s { transition: opacity 0.5s ease; }
+.cw-ex-sub.s.cw-ex-dim { opacity: 0.3; }
+.cw-ex-slot { border: 2.5px dashed var(--ink); border-radius: 6px; margin: -4px -5px; pointer-events: none; z-index: 3; }
+.cw-ex-slot.col { margin: 0; border-width: 3px; border-radius: 0; }
+.cw-ex-slot.col.solid { border-style: solid; }
+.cw-ex-elab { display: flex; align-items: center; padding-left: 12px; font-family: var(--sign); font-size: calc(calc(8.5px * var(--tx)) * var(--fz, 1));
+  letter-spacing: 0.05em; line-height: 1.45; color: var(--ink2); white-space: nowrap; pointer-events: none; }
+.cw-ex-hlab { align-self: flex-end; margin-top: 10px; font-family: var(--sign); font-size: calc(calc(8.5px * var(--tx)) * var(--fz, 1));
+  letter-spacing: 0.05em; line-height: 1.45; color: var(--ink2); text-align: right; white-space: nowrap; }
 
-/* The box under the cross: the inner product in general, then tiramisu's, on one line where it fits. */
+/* The corner: E's name at the top, near E, and from beat 7 the count of its numbers; the numbers to learn at the
+   bottom, whose second row reads TRICK ? until beat 7, then E 576. */
+.cw-ex-corner { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding: 0 8px 4px 0; min-height: 0; }
+.cw-ex-ctop { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 36px; }
+.cw-ex-name { font-size: calc(calc(20px * var(--tx)) * var(--fz, 1)); }
+.cw-ex-cnt { font-size: calc(calc(11.5px * var(--tx)) * var(--fz, 1)); margin-top: 4px; }
+.cw-ex-sb { align-self: flex-end; margin-top: auto; }
+.cw-sb-sw { display: flex; align-items: center; }
+.cw-sb-n.cw-sb-sw { justify-content: flex-end; }
+
+/* Under the cross, in one place: the box of the inner product (beats 1 to 5) and the comparison (beat 7). Scene 220
+   puts its box of z = s W there; the same minimum height keeps the cross of the two scenes in the same place for the
+   hand-off (70 px, the height of the comparison with the large words; 86 px on a phone). */
+.cw-ex-under { display: grid; justify-items: center; align-items: start; width: 100%; min-height: 70px; }
+.cw-ex-under > * { grid-area: 1 / 1; }
 .cw-fbox.cw-ex-f { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 34px; row-gap: 6px; padding: 8px 22px; }
+.cw-wow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 30px; row-gap: 6px; padding: 7px 24px; }
+.cw-wow-row { display: flex; align-items: center; gap: 16px; }
+.cw-wow-n { display: flex; align-items: center; gap: 9px; }
+.cw-wow-l { font-family: var(--sign); font-size: calc(calc(9px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.06em; color: var(--ink2); line-height: 1; }
+.cw-wow-l .cw-mtag { font-size: 15px; }
+.cw-wow-v { font-family: var(--px); font-weight: 700; font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums lining-nums; color: var(--ink); }
+.cw-wow-arr { width: 56px; }
+.cw-wow-t { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+.cw-wow-x { font-family: var(--sign); font-size: calc(calc(13px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.04em; line-height: 1.05; color: var(--pink); }
+.cw-wow-f { font-size: calc(calc(10px * var(--tx)) * var(--fz, 1)); color: var(--ink2); line-height: 1.1; }
 
 @media (max-width: 560px) {
+  .cw-ex-under { min-height: 86px; }
   .cw-fbox.cw-ex-f { padding: 8px 12px; }
+  .cw-wow { padding: 8px 12px; }
+  .cw-wow-row { gap: 10px; }
+  .cw-wow-n { gap: 6px; }
+  .cw-wow-v { font-size: 20px; }
+  .cw-wow-arr { width: 28px; }
+  .cw-wow-x { font-size: 15px; }
 }
+</style>
+<style>/* cw-2c-stair.css */
+/* cw-2c-stair.css: scene 230 of "Coupon of the Week", W and E give the whole table (main session, 2026-11-20;
+   cw-2c-stair.js). One grid, the staircase of two textbook crosses: S and Theta in the table's rows, W above Z, E above
+   Theta. Columns: S's 24 (11 px, 7 px from beat 2: class narrow), W's row icons (14 px), Z's two and a gap (0 px, then
+   34, 34 and 28 px: cols() in the script, set inline), Theta's 24 (34 px), so Theta starts 278 px from the left in every
+   beat. Rows: the heads (26 px), W's 24 rows (14, 22 x 11, 14), a gap (8), S's icons (14), the table's 6 rows (25,
+   4 x 22, 25), the captions. Each matrix is one element framed by its own border of 3 px (cw-st-m), light lines between
+   its cells; the rows of icons keep 3 px on each side so their icons stand over the cells. The panel above E holds the
+   small maps, the worked line, the count and the numbers to learn. Words scale with --tx; the matrices are plain px. */
+.cw-st-stage { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.cw-stw { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 4px 6px 2px; }
+.cw-stg { position: relative; display: grid; grid-template-columns: repeat(24, 11px) 14px 0px 0px 0px repeat(24, 34px);
+  grid-template-rows: 26px 14px repeat(22, 11px) 14px 8px 14px 25px repeat(4, 22px) 25px auto; }
+
+/* A matrix: its frame, its rows (one element each, a grid of its cells), its cells in its colour (K.paint). */
+.cw-st-m { display: grid; min-width: 0; min-height: 0; overflow: hidden; border: 3px solid var(--ink); background: #FFFFFF; }
+.cw-st-r { display: grid; min-width: 0; min-height: 0; }
+.cw-st-c { display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; overflow: hidden; background: #FFFFFF;
+  border-right: 1px solid var(--line, #DCD5EC); border-bottom: 1px solid var(--line, #DCD5EC); }
+.cw-st-c.last { border-right: none; }
+.cw-st-r.bot .cw-st-c { border-bottom: none; }
+.cw-st-c .cw-tn { line-height: 1; white-space: nowrap; }
+.cw-st-m.s .cw-tn { font-size: 9px; }
+.cw-stg.narrow .cw-st-m.s .cw-tn { font-size: 7.5px; }
+.cw-st-m.z .cw-tn { font-size: 11px; }
+.cw-st-m.t .cw-tn { font-size: 10.5px; }
+.cw-st-m.w .cw-tn { font-size: 8.5px; }
+.cw-st-m.e .cw-tn { font-size: 10px; }
+.cw-st-c.blank { background: repeating-linear-gradient(45deg, #F3EFFA 0 4px, #FFFFFF 4px 8px); }
+.cw-st-c.ring { position: relative; z-index: 2; outline: 3px solid var(--pink); outline-offset: -3px; }
+
+/* The coupons' icons (under the room for E until beat 2, above E after), the products' small icons above S, W's row
+   icons, lit (yellow) for the habits of the household whose row of Z is being computed. */
+.cw-st-icr { display: grid; min-width: 0; padding: 0 3px; }
+.cw-st-ic { font-size: 17px; line-height: 1; text-align: center; align-self: end; padding-bottom: 4px; border-radius: 6px 6px 0 0; }
+.cw-st-ic.lit { background: #FFF3C4; }
+.cw-st-sic { font-size: 8.5px; line-height: 1; text-align: center; align-self: end; padding-bottom: 2px; overflow: hidden; }
+.cw-stg.narrow .cw-st-sic { font-size: 6px; }
+.cw-st-ric { display: flex; align-items: center; justify-content: center; margin-right: 2px; font-size: 8.5px; line-height: 1; border-radius: 3px; }
+.cw-st-ric.f { padding-top: 3px; }
+.cw-st-ric.l { padding-bottom: 3px; }
+.cw-st-ric.lit { background: var(--yellow); }
+
+/* The names of W and E beside them, 1 and 2 over W's columns and left of E's rows. */
+.cw-mtag.cw-st-wname, .cw-mtag.cw-st-ename { font-size: 13px; }
+.cw-st-wname { justify-self: end; align-self: end; margin: 0 6px 4px 0; }
+.cw-st-ename { justify-self: center; align-self: end; margin-bottom: 3px; }
+.cw-st-eh { display: grid; grid-template-rows: 1fr 1fr; padding: 3px 0; }
+.cw-st-eh .cw-cxh { align-items: center; padding-bottom: 0; }
+.cw-cap.cw-st-cap { justify-self: center; margin-top: 6px; }
+
+/* The panel: the small maps on the left (beats 0 to 2), the worked line or the count in the middle, at the foot, and the
+   numbers to learn on the right. */
+.cw-st-pan { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr); min-width: 0; min-height: 0;
+  padding-bottom: 6px; }
+.cw-st-thumbs { grid-column: 1; grid-row: 1; align-self: start; display: flex; align-items: flex-start; gap: 22px; margin-right: 16px; padding-left: 3px; }
+.cw-st-mid { grid-column: 2; grid-row: 1; display: grid; align-items: end; justify-items: center; min-width: 0; }
+.cw-st-mid > * { grid-area: 1 / 1; }
+.cw-st-sb { grid-column: 3; grid-row: 1; align-self: start; justify-self: end; margin-left: 16px; }
+.cw-sb-l.cw-st-we { gap: 4px; }
+
+/* A small map: the matrix's name, its colours in cells of 7 px, its size. E's map holds two layers in one place. */
+.cw-st-th { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cw-mtag.cw-st-name { font-size: calc(calc(13px * var(--tx)) * var(--fz, 1)); }
+.cw-st-thm { display: grid; border: 2px solid var(--ink); background: #FFFFFF; }
+.cw-st-thm > * { grid-area: 1 / 1; }
+.cw-st-lay { display: grid; align-content: start; overflow: hidden; }
+.cw-st-lay i { display: block; min-height: 0; }
+.cw-st-lay.fade i { background: #FFFFFF !important; transition: background-color 0.45s ease; }
+.cw-st-thc { display: flex; align-items: baseline; gap: 0.3em; font-size: calc(calc(11px * var(--tx)) * var(--fz, 1)); white-space: nowrap; }
+.cw-st-thn { border-radius: 4px; padding: 0 0.2em; }
+.cw-st-thn.lit { background: var(--yellow); }
+
+/* A matrix's block in flight (blockFly in the script): a copy in the body that takes the target's size on the way. */
+.cw-blk { position: fixed; z-index: 42; display: grid; margin: 0; box-sizing: border-box; border: 3px solid var(--ink); background: #FFFFFF;
+  pointer-events: none; overflow: hidden; }
+.cw-blk-c { display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; overflow: hidden; }
+.cw-blk-c .cw-tn { font-size: 9px; line-height: 1; white-space: nowrap; }
+.cw-blk.bW .cw-tn { font-size: 8.5px; }
+.cw-blk.bE .cw-tn { font-size: 10px; }
+.cw-blk.bZ .cw-tn { font-size: 11px; }
+.cw-blk.bT .cw-tn { font-size: 10.5px; }
+.cw-blk.cw-blkc { border: none; background: none; overflow: visible; }
+.cw-blk-c.blank { background: repeating-linear-gradient(45deg, #F3EFFA 0 4px, #FFFFFF 4px 8px); }
+
+/* The worked line of beats 3 and 4, the count of beat 5. */
+.cw-fbox.cw-st-f { padding: 8px 18px; font-size: calc(calc(12.5px * var(--tx)) * var(--fz, 1)); }
+.cw-st-cnt { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 18px; }
+.cw-st-cl { font-size: calc(calc(12.5px * var(--tx)) * var(--fz, 1)); }
+.cw-st-ct { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 </style>
 <style>/* cw-2policy.css */
 /* cw-2policy.css: scenes 200 to 299 of "Coupon of the Week" (main session, 2026-11-18). */
@@ -914,52 +1052,55 @@ sup { top: -0.55em; }
   .cw-fbox { padding: 8px 10px; font-size: 12px; }
 }
 
-/* Scene 220 (cw-2policy.js): two layers in one cell of a grid, so the slide keeps its size while z glides from the
-   first to the second. Layer 1 (cw-pol1, beats 0 to 5) is scene 210's cross (cw-2b-e24.css, 1106 x 424 px with its
-   padding) with W, z and the map of the households; layer 2 (cw-pol2, beats 6 to 10) is cross 2, theta = z E (1110 x
-   176 px), with the box of a preference or the count of the numbers to learn, and the numbers to learn under it. At
-   beat 6 all of layer 1 but z fades (cw-going) while z glides. Narrower than the crosses, they scroll sideways
-   (ob-hscroll). */
+/* Scene 220 (cw-2policy.js): scene 210's cross (cw-2b-e24.css, 1106 x 424 px with its padding) with W, z, the box of
+   the numbers per household and the map of the households. Cross 2 (240) is narrower than a phone too: the crosses
+   scroll sideways (ob-hscroll). */
 .cw-cxw { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 6px 6px 4px; }
-.cw-pol { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; }
-.cw-pol > .cw-pol1, .cw-pol > .cw-pol2 { grid-area: 1 / 1; align-self: center; justify-self: center; min-width: 0; max-width: 100%; }
-.cw-pol2 { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-.cw-pol1.cw-going .cw-ex > :not(.cw-ex-zr), .cw-pol1.cw-going > .cw-ex-f { opacity: 0 !important; transition: opacity 0.6s ease; }
-/* The copies of z's cells that fly at beat 6 (api.fly, class ob-ghost of core.css) stay fixed: the cells' own position
-   and margin come later in the page and would put the copies in the flow, below the slide. */
+/* Copies of cells that fly (api.fly, class ob-ghost of core.css) stay fixed: the cells' own position and margin come
+   later in the page and would put the copies in the flow, below the slide (2026-11-20). */
 .cw-ex-th.ob-ghost, .cw-cxz.ob-ghost { position: fixed; margin: 0; }
 
-/* Layer 1: W in E's first two columns, z under W, W's name over E's in the corner. */
+/* W in E's first columns, z under W, W's name over E's in the corner. W and z have 23 columns, those beyond k hidden
+   (setK()); the last one shown carries the right edge of the frame (edge), the one opening while they widen is
+   cut to its track (min-width 0). */
 .cw-ex-sub.w { grid-template-columns: repeat(2, 34px); }
+.cw-ex-sub.w .cw-ex-e { min-width: 0; overflow: hidden; }
+.cw-ex-sub.w .cw-ex-e.edge, .cw-ex-zr .cw-ex-th.edge { border-right: 3px solid var(--ink); }
+.cw-ex-zr .cw-ex-th { min-width: 0; }
 .cw-ex-sub.w .cw-ex-e .cw-tn { font-size: 10px; }
 .cw-ex-zr .cw-tn { font-size: 11px; }
-.cw-ex-zcap { justify-self: center; }
+.cw-ex-zcap { justify-self: center; white-space: nowrap; }
 .cw-ex-names { display: grid; justify-items: end; }
 .cw-ex-names > * { grid-area: 1 / 1; }
-/* Beat 1: E's numbers and colours fade while its columns close into W's two (morph()). */
+/* Beat 0: E dimmed. Beat 1: E's numbers and colours fade while its columns close into W's two (morph()). */
+.cw-ex-row.cw-ex-dimE, .cw-ex-icr.cw-ex-dimE { opacity: 0.3; transition: opacity 0.6s ease; }
 .cw-ex-row.cw-ex-fade .cw-ex-e { background: #FFFFFF !important; min-width: 0; overflow: hidden; transition: background-color 0.45s ease; }
 .cw-ex-row.cw-ex-fade .cw-tn { opacity: 0; transition: opacity 0.35s ease; }
 
-/* The map of the households (beats 4 and 5): z1 across, z2 up; the example household's point and its two numbers. */
+/* The box NUMBERS PER HOUSEHOLD in the corner, under W's name: s 24 -> z ?, 2 or k. */
+.cw-chip { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 7px 14px 8px; margin-top: 6px; }
+.cw-chip-h { font-family: var(--sign); font-size: calc(calc(8.5px * var(--tx)) * var(--fz, 1)); letter-spacing: 0.06em; color: var(--pink); }
+.cw-chip-r { display: flex; align-items: center; gap: 12px; }
+.cw-chip-n { display: flex; align-items: center; gap: 6px; }
+.cw-chip-n .cw-mtag { font-size: 13px; }
+.cw-chip-v { font-family: var(--px); font-weight: 700; font-size: 22px; line-height: 1; min-width: 1.3em; text-align: center;
+  font-variant-numeric: tabular-nums lining-nums; color: var(--ink); }
+.cw-chip-arr { width: 34px; height: 5px; }
+.cw-chip-arr::after { right: -5px; top: -6px; border-left-width: 11px; border-top-width: 8px; border-bottom-width: 8px; }
+
+/* The map of the households (beat 6): z1 across, z2 up; the households' points in z's violet, the example household's
+   point and its two numbers. */
 .cw-hmw { display: flex; flex-direction: column; align-items: center; justify-self: center; align-self: center; }
 .cw-hm { position: relative; width: 340px; height: 340px; }
 .cw-hmap { display: block; }
-.cw-hdot { fill: var(--ink2); fill-opacity: 0.25; transition: opacity 0.3s ease; }
+.cw-hdot { fill: var(--mZ, #5B2DB0); fill-opacity: 0.22; transition: opacity 0.3s ease; }
 .cw-hguide { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 4; }
-.cw-hpt { fill: var(--yellow); stroke: var(--ink); stroke-width: 2.5; }
+.cw-hpt { fill: var(--mZ, #5B2DB0); stroke: var(--ink); stroke-width: 2.5; }
 .cw-hax { position: absolute; line-height: 1; color: var(--ink); font-size: calc(calc(14px * var(--tx)) * var(--fz, 1)); }
 .cw-hax.x { transform: translate(-100%, 0); }
-.cw-hl { position: absolute; font-size: 11px; padding: 2px 4px; border-radius: 4px; background: var(--yellow); white-space: nowrap; }
+.cw-hl { position: absolute; font-size: 11px; padding: 2px 4px; border-radius: 4px; border: 1.5px solid var(--ink); white-space: nowrap; }
 .cw-hl.x { transform: translate(-50%, 0); }
 .cw-hl.y { transform: translate(-100%, -50%); }
-
-/* Layer 2: cross 2, then a row with the box of tiramisu's preference or the count (the two in one cell, on the
-   left) and the numbers to learn (on the right). */
-.cw-pol2b { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 28px; width: 100%; align-items: start; }
-.cw-pol2s { display: grid; justify-items: end; align-items: center; }
-.cw-pol2s > * { grid-area: 1 / 1; }
-.cw-pol-sb { justify-self: start; align-self: start; }
-.cw-pol-cnt { font-size: calc(calc(14px * var(--tx)) * var(--fz, 1)); }
 
 .cw-cx2 { display: grid; grid-template-columns: 26px 54px 54px 22px repeat(24, 38px) 30px; grid-template-rows: 32px 28px 28px 18px 30px 34px; }
 .cw-cxh { display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; font-family: var(--sign); font-size: 10px; color: var(--ink2); }
@@ -998,9 +1139,6 @@ sup { top: -0.55em; }
 @media (max-width: 560px) {
   /* z's caption ends under z, where the window of the sideways scroll ends at beats 2 and 3. */
   .cw-ex-zcap { justify-self: end; }
-  .cw-pol2b { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
-  .cw-pol2s { justify-items: center; }
-  .cw-pol-sb { justify-self: center; }
 }
 </style>
 <style>/* cw-3proto.css */
@@ -1164,6 +1302,9 @@ sup { top: -0.55em; }
 .cw-mgrid { stroke: var(--ink2); stroke-opacity: 0.16; stroke-width: 1; }
 .cw-max { stroke: var(--ink2); stroke-opacity: 0.55; stroke-width: 1.5; }
 .cw-mdisc { fill: #FFFFFF; stroke: var(--ink); stroke-width: 2; }
+/* The points of the map of E in E's orange (cw-0kit.css, one colour per matrix), until the colours of the circle of
+   tastes replace them; the household's arrow z in z's violet. */
+.cw-map .cw-mdisc { fill: #FFE2C7; }
 .cw-mic { font-size: 17px; text-anchor: middle; }
 .cw-mic.s { font-size: 15px; }
 .cw-mp { font-family: var(--px); font-weight: 700; font-size: 15px; fill: var(--ink); text-anchor: middle; paint-order: stroke; stroke: #FFFFFF;
@@ -1171,9 +1312,9 @@ sup { top: -0.55em; }
 .cw-mitem.habit .cw-mdisc { stroke: var(--wear0); stroke-width: 4.5; }
 .cw-mitem.top .cw-mdisc { stroke-width: 4.5; }
 .cw-mitem.dim { opacity: 0.28; }
-.cw-mz line { stroke: var(--pink); stroke-width: 4; stroke-linecap: round; }
-.cw-mz polygon { fill: var(--pink); }
-.cw-mzl { font-family: KaTeX_Math, "Times New Roman", serif; font-style: italic; font-size: 24px; fill: var(--pink); }
+.cw-mz line { stroke: var(--mZ, #5B2DB0); stroke-width: 4; stroke-linecap: round; }
+.cw-mz polygon { fill: var(--mZ, #5B2DB0); }
+.cw-mzl { font-family: KaTeX_Math, "Times New Roman", serif; font-style: italic; font-size: 24px; fill: var(--mZ, #5B2DB0); }
 .cw-tcirc { display: block; overflow: visible; max-width: 100%; height: auto; }
 .cw-tring { fill: none; stroke: var(--ink2); stroke-width: 2; stroke-dasharray: 5 5; }
 .cw-tlab { font-family: var(--sign); font-size: 11px; letter-spacing: 0.06em; fill: var(--ink); }
@@ -3261,13 +3402,54 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return T;
   };
 
-  /* The strip of the 96 weights: under each product's icon, the two numbers of W and the two of E as cells whose
-     colour gives the sign (blue above 0, pink below) and the size (full colour from 2.5). */
-  function heat(v) {
-    var a = Math.min(1, Math.abs(v) / 2.5);
-    return v >= 0 ? "rgba(47, 107, 255, " + a.toFixed(3) + ")" : "rgba(242, 56, 111, " + a.toFixed(3) + ")";
-  }
-  K.heat = heat;
+  /* One colour per matrix (Carlos, 2026-11-20: "use now colors for each of these matrices throughout the whole
+     visualization so we can distinguish them and identify them and the entries become intensities of that color";
+     source/PLAN.md, Round 10; ../../COLOR.md). S the states, W, Z the representations z = s W, E, T the preferences
+     theta. A cell is white mixed with its matrix's hue: F0 at the low end of the range (lo, hi), the hue's cap at the
+     high end, a value beyond the range at its end. The cap is the strongest mix on which the navy numbers keep 4.5:1
+     (WCAG 1.4.3), computed here; o.full (a cell with no number, the strip) goes up to the hue itself. Until 2026-11-20
+     the weights had heat colours (blue above 0, pink below). The hues are also CSS variables --mS to --mT. */
+  var MX = {
+    S: { hue: "#2EC4B6", lo: 0, hi: 1, fg: "#1E1442" },
+    W: { hue: "#D81B60", lo: -2, hi: 2, fg: "#FFFFFF" },
+    Z: { hue: "#5B2DB0", lo: -3, hi: 3, fg: "#FFFFFF" },
+    E: { hue: "#FF8A2A", lo: -2, hi: 2, fg: "#1E1442" },
+    T: { hue: "#2F6BFF", lo: -5, hi: 5, fg: "#FFFFFF" },
+  };
+  var F0 = 0.08;
+  function rgbOf(h) { return [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16) / 255; }); }
+  function linc(c) { return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+  function lum(c) { return 0.2126 * linc(c[0]) + 0.7152 * linc(c[1]) + 0.0722 * linc(c[2]); }
+  function mixW(c, f) { return c.map(function (x) { return 1 + (x - 1) * f; }); }
+  (function caps() {
+    var navy = lum(rgbOf("#1E1442")), root = document.documentElement;
+    Object.keys(MX).forEach(function (k) {
+      var m = MX[k], c = rgbOf(m.hue), f = 1;
+      while (f > 0 && (lum(mixW(c, f)) + 0.05) / (navy + 0.05) < 4.5) f = Math.round((f - 0.005) * 1000) / 1000;
+      m.rgb = c;
+      m.cap = f;
+      if (root && root.style) root.style.setProperty("--m" + k, m.hue);
+    });
+  })();
+  K.MX = MX;
+  K.tint = function (m, v, o) {
+    var M = MX[m];
+    o = o || {};
+    var lo = o.lo === undefined ? M.lo : o.lo, hi = o.hi === undefined ? M.hi : o.hi;
+    var t = Math.max(0, Math.min(1, (v - lo) / (hi - lo))), f = F0 + ((o.full ? 1 : M.cap) - F0) * t;
+    return "rgb(" + mixW(M.rgb, f).map(function (x) { return Math.round(255 * x); }).join(", ") + ")";
+  };
+  /* A cell of matrix m painted for the value v (or cleared, v null); data-m names its matrix. */
+  K.paint = function (cell, m, v, o) {
+    cell.dataset.m = m;
+    cell.style.background = v === null || v === undefined ? "" : K.tint(m, v, o);
+    return cell;
+  };
+  /* A matrix's name as a sticker of its hue: tex its letter (default the matrix's own). */
+  K.tag = function (m, tex, cls) {
+    var LET = { S: "S", W: "W", Z: "Z", E: "E", T: "\\Theta" };
+    return OB.html("span", "cw-mtag m" + m + (cls ? " " + cls : ""), OB.tex(tex || LET[m]));
+  };
   K.Strip = function () {
     var S = { cells: new Array(96) }, wrap = el("div", "cw-strip"), g = el("div", "cw-sgrid");
     wrap.appendChild(g);
@@ -3276,7 +3458,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     g.appendChild(el("div", "cw-sl"));
     for (var j = 0; j < N; j++) { var ic = el("div", "cw-sic", CW.ICONS[j]); ic.title = CW.NAMES[j]; g.appendChild(ic); }
     [["W", 0], ["W", 1], ["E", 0], ["E", 1]].forEach(function (rc, ri) {
-      var lab = OB.html("div", "cw-sl r" + ri, rc[1] === 0 ? OB.tex(rc[0]) : "");
+      var lab = el("div", "cw-sl r" + ri);
+      if (rc[1] === 0) lab.appendChild(K.tag(rc[0], null, "sm"));
       g.appendChild(lab);
       for (var j2 = 0; j2 < N; j2++) {
         var k = rc[0] === "W" ? N * rc[1] + j2 : 48 + 2 * j2 + rc[1];
@@ -3286,12 +3469,14 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
         g.appendChild(c);
       }
     });
-    S.cap = OB.html("div", "cw-cap", "THE 96 WEIGHTS " + OB.tex("W") + " AND " + OB.tex("E") + ": <span class=\"cw-key pos\"></span> ABOVE 0, <span class=\"cw-key neg\"></span> BELOW 0");
+    /* Two lines: on one line the caption was wider than the update view of scene 320 allows at 1180 px. */
+    S.cap = OB.html("div", "cw-cap", "THE 96 WEIGHTS " + OB.tex("W") + " AND " + OB.tex("E") + "<br>THE LARGER THE NUMBER, THE STRONGER THE COLOUR");
     wrap.appendChild(S.cap);
+    function mOf(k) { return k < 48 ? "W" : "E"; }
     S.set = function (W, E) {
-      for (var k = 0; k < 96; k++) S.cells[k].style.background = heat(CW.getW(W, E, CW.weightOf(k)));
+      for (var k = 0; k < 96; k++) K.paint(S.cells[k], mOf(k), CW.getW(W, E, CW.weightOf(k)), { full: true });
     };
-    S.setOne = function (k, v) { S.cells[k].style.background = heat(v); };
+    S.setOne = function (k, v) { K.paint(S.cells[k], mOf(k), v, { full: true }); };
     S.mark = function (k) { S.cells.forEach(function (c, i) { c.classList.toggle("cw-pick", i === k); }); };
     S.dim = function (on) { wrap.classList.toggle("cw-dimmed", !!on); };
     return S;
@@ -4508,6 +4693,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     });
     return out;
   })();
+  /* For scene 210 (cw-2b-e24.js): the households' rows, the example household's first. */
+  K.tab = { HH: HH, SHOW: SHOW, rowOf: rowOf, prefsOf: prefsOf };
   (function check() {
     var s = stateOf(RING_ROW), habits = s.reduce(function (a, b) { return a + b; }, 0);
     if (s[RING_COL] || habits <= CW.START_HABITS + CW.WEEKS - 1) console.error("cw-2a-table: the ringed preference is not in a state that no household reaches");
@@ -4531,11 +4718,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       g.appendChild(v);
       for (var b = 0; b < 3; b++) {
         var c = el("div", "cw-vt-c" + (b === 0 ? " fc" : "") + (b === 2 ? " lc" : "") + (s === 0 ? " fr" : "") + (s === 3 ? " lr" : ""));
+        K.paint(c, "T", BESSIE[s][b]);
         c.appendChild(el("span", "cw-vt-n", K.n2(BESSIE[s][b])));
         g.appendChild(c);
       }
     }
-    t.appendChild(OB.html("div", "cw-cap", big ? "PREFERENCES " + OB.tex("\\theta") : "OLD BESSIE<br>12 PREFERENCES"));
+    t.appendChild(OB.html("div", "cw-cap", big ? "PREFERENCES " + K.tag("T", "\\theta", "sm").outerHTML : "OLD BESSIE<br>12 PREFERENCES"));
     return t;
   }
 
@@ -4569,8 +4757,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     win.appendChild(V.frP);
     inn.appendChild(win);
     var caps = el("div", "cw-ap-grid cw-ap-caps");
-    V.capS = OB.html("div", "cw-cap cw-ap-cs", "STATE " + OB.tex("s"));
-    V.capP = OB.html("div", "cw-cap cw-ap-cp", "PREFERENCES " + OB.tex("\\theta"));
+    V.capS = OB.html("div", "cw-cap cw-ap-cs", "STATE " + K.tag("S", "s", "sm").outerHTML);
+    V.capP = OB.html("div", "cw-cap cw-ap-cp", "PREFERENCES " + K.tag("T", "\\theta", "sm").outerHTML);
     caps.appendChild(V.capS);
     caps.appendChild(V.capP);
     inn.appendChild(caps);
@@ -4578,9 +4766,12 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     function paint(row, s, p) {
       for (var j = 0; j < N; j++) {
         var ts = s ? String(s[j]) : "", tp = p && p[j] !== null ? K.n2(p[j]) : "";
-        if (row.ts[j] !== ts) { row.ts[j] = ts; row.s[j].textContent = ts; row.s[j].classList.toggle("lit", ts === "1"); }
+        if (row.ts[j] !== ts) { row.ts[j] = ts; row.s[j].textContent = ts; K.paint(row.s[j], "S", s ? s[j] : null); }
         var bl = !!(s && p && p[j] === null);
-        if (row.tp[j] !== tp || row.p[j].classList.contains("blank") !== bl) { row.tp[j] = tp; row.p[j].textContent = tp; row.p[j].classList.toggle("blank", bl); }
+        if (row.tp[j] !== tp || row.p[j].classList.contains("blank") !== bl) {
+          row.tp[j] = tp; row.p[j].textContent = tp; row.p[j].classList.toggle("blank", bl);
+          K.paint(row.p[j], "T", p && p[j] !== null ? p[j] : null);
+        }
       }
     }
     function fill(row, v) {
@@ -4817,36 +5008,44 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 })();
 </script>
 <script>/* cw-2b-e24.js */
-/* cw-2b-e24.js: scene 210 of "Coupon of the Week" (main session, 2026-11-20), stage 2 of the three stages of the
-   policy that Carlos asked for that day (source/PLAN.md): "we first introduce only E and say that we will abstract the
-   table of bets away by using inner products between households and E. Then explain how this would work and show how
-   E has fewer parameters than the entire table of bets."
+/* cw-2b-e24.js: scene 210 of "Coupon of the Week" (main session, 2026-11-20). Stage 2 of the three stages of the
+   policy that Carlos asked for that day, rebuilt the same evening as items 1 to 5 of his twelve slides (source/PLAN.md,
+   Round 10): "1. we will do the following trick to reduce the numbers of parameters to learn 2. We will treat every
+   entry of the table of preferences as an inner product between a household representation and a coupon
+   representation. 3. The household representation is clear: the binary vector of habits. 4. For the coupon we don't
+   have a representation, so we are going to guess it. Note that such a representation must have 24 entries so the
+   inner prod between that and the household representation can be multiplied. 5. If we do this for every possible
+   coupon, we get then 24 coupon representations that must be guessed. 24 * 24 = ... much smaller than guessing the
+   entire table of preferences (emphasize this)."
 
-   210 Preferences as inner products (7 beats), in weekend 2's textbook cross, theta = s E:
-       0 Reached with Next from the last beat of scene 202, its view hands over (K.handIn): the table's rows and the
-         rest fade, the coupons' icons and the numbers to learn glide to their places, and the weights E grow under the
-         icons, row by row: one row per product of the state, one column per coupon, 24 x 24 numbers picked at random,
-         in the heat colours of the forward pass (K.heat: blue above 0, pink below), explained here for the first time.
-       1 The state s of the example household's week 1 on the left, its icons above it.
-       2 Tiramisu's column (ringed), the rows of the 4 habits (their icons lit) and the 4 numbers where they cross (lit);
-         tiramisu's preference shows "?", the box under the cross the inner product with the 4 numbers. Guess, Compute.
-       3 Compute: the 4 numbers fly down into tiramisu's preference, which adds them up.
-       4 The preferences of the 20 coupons; the habits' cells blank.
-       5 Week 2: tiramisu is a habit. Its 1 comes into s, its row of E is ringed, the preferences roll to their new
-         values (each adds tiramisu's number of its column), tiramisu's own preference goes blank.
-       6 The numbers to learn: E, 24 x 24 = 576, under the table's 201,326,592. Left with Next, the view hands over to
-         scene 220 (leave()), which builds the same cross (K.ex.cross) and closes E's columns into W (stage 3).
+   210 Preferences as inner products (8 beats), in weekend 2's textbook cross, theta = s E:
+       0 Item 1. Reached with Next from the last beat of scene 202, its view hands over (K.handIn): its lead line, rows
+         and counts fade, the coupons' icons glide to the top of the cross, the numbers to learn to its corner, where
+         they get a row TRICK ?. At the bottom, the example household's row of scene 202's table: its state s on the
+         left, its preferences (the table's values) on the right.
+       1 Item 2. Tiramisu's preference ringed. The state dims in a dashed frame, the household's representation; an
+         empty dashed column above the preference, the coupon's representation; arrows into the preference.
+       2 Item 3. The household's representation is its state s: the frame turns solid, s lights up again.
+       3 Item 4. The column fills with 24 numbers picked at random, e_a; the products' icons on E's left, one row per
+         number of s.
+       4 Item 4. Guess: the rows of the 4 habits lit, their 4 numbers outlined, tiramisu's preference "?".
+       5 Item 4. Compute: the 4 numbers fly into the preference, which adds them up to 0.80.
+       6 Item 5. The other 23 columns grow: E, 24 x 24; theta = s E, the preferences roll from the table's values.
+       7 Item 5. 24 x 24 = 576 flies into the numbers to learn; under the cross, large, 576 against 201,326,592:
+         about 350,000 times fewer. Left with Next, the view hands over to scene 220 (leave()), which builds the same
+         cross (K.ex.cross) and closes E's columns into W.
 
+   Colours (K.tint, source/PLAN.md): s turquoise, E orange, theta blue; the larger the number, the stronger the colour.
    The cross keeps the columns of scene 202's table, so the coupons' icons stand where the table's stood. These weights
-   E24 belong to this scene only (the policy of the page has E with 2 rows, scene 220): picked as CW.randomWeights picks
-   weights, one decimal, uniform in [-1, 1], from CW.rng(SEED), row by row. SEED = 25 is the first seed from 1 on (check()
-   below asserts it) for which the 4 numbers of tiramisu's column in the rows of week 1's habits are not 0, all differ,
-   carry both signs and add up to at least 0.4, a sum that none of them equals, and tiramisu's row has at most one 0
-   among week 2's coupons: 0.90 + (-0.30) + 0.70 + (-0.50) = 0.80. */
+   E24 belong to this scene only (the policy of the page has E with 2 rows, scenes 220 and 230): picked as
+   CW.randomWeights picks weights, one decimal, uniform in [-1, 1], from CW.rng(SEED), row by row. SEED = 25 is the
+   first seed from 1 on (check() below asserts it) for which the 4 numbers of tiramisu's column in the rows of week 1's
+   habits are not 0, all differ, carry both signs and add up to at least 0.4, a sum that none of them equals, and
+   tiramisu's row has at most one 0 among week 2's coupons: 0.90 + (-0.30) + 0.70 + (-0.50) = 0.80. */
 (function () {
   "use strict";
   var OB = window.OB, CW = window.CW, K = OB.cw, el = OB.el;
-  if (!K || !K.EP) { console.error("cw-2b-e24: cw-0kit.js or cw-1game.js is missing"); return; }
+  if (!K || !K.EP || !K.tab) { console.error("cw-2b-e24: cw-0kit.js, cw-1game.js or cw-2a-table.js is missing"); return; }
 
   var N = CW.N, EP = K.EP, S1 = EP.weeks[0].s, S2 = EP.weeks[1].s, A1 = EP.weeks[0].a;
   var SEED = 25, NE = N * N, PREFS = Math.pow(2, N) * N / 2;
@@ -4855,7 +5054,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   /* A number in a sum of a worked line: in parentheses when negative. */
   var par = function (s) { return s.charAt(0) === "-" ? "(" + s + ")" : s; };
   function habitsOf(s) { var h = []; s.forEach(function (b, j) { if (b) h.push(j); }); return h; }
-  var H1 = habitsOf(S1), H2 = habitsOf(S2), NC = N - H1.length;
+  var H1 = habitsOf(S1);
 
   /* The weights E, 24 x 24: row j for product j of the state, column a for coupon a. */
   function pick(seed) {
@@ -4881,13 +5080,16 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return col.every(function (v, i) { return v !== 0 && col.indexOf(v) === i; }) && col.some(function (v) { return v < 0; }) &&
       col.some(function (v) { return v > 0; }) && sum >= 0.4 && col.indexOf(sum) < 0 && zeros <= 1;
   }
-  var E24 = pick(SEED), TH1 = thetaOf(E24, S1), TH2 = thetaOf(E24, S2);
+  var E24 = pick(SEED), TH1 = thetaOf(E24, S1);
   var COL = H1.map(function (j) { return E24[j][A1]; });
+  /* The table's preferences of the example household's row (scene 202). */
+  var TAB = K.tab.HH[0].p;
   (function check() {
     if (!fits(E24)) console.error("cw-2b-e24: the weights of seed " + SEED + " no longer meet their criteria");
     for (var sd = 1; sd < SEED; sd++) if (fits(pick(sd))) { console.error("cw-2b-e24: seed " + sd + " meets the criteria before seed " + SEED); break; }
-    if (S2[A1] !== 1 || H2.length !== H1.length + 1) console.error("cw-2b-e24: week 2's state is not week 1's with " + K.name(A1));
+    if (K.tab.HH[0].s.join("") !== S1.join("")) console.error("cw-2b-e24: scene 202's first row is not the example household's week 1");
   })();
+  K.ex24 = { E: E24, theta: TH1 };
 
   function placer(g) {
     return function (e, row, col, rows, cols) {
@@ -4898,25 +5100,40 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     };
   }
 
-  /* The numbers to learn, as in scene 202 (cw-2a-table.js, scoreboard()), with a row for E that shows from beat 6. */
+  /* The numbers to learn, as in scene 202 (cw-2a-table.js, scoreboard()), with a second row: TRICK ? until beat 7,
+     then E 576. */
   function scoreboard() {
     var S = { el: el("div", "ob-box cw-sb cw-ex-sb") };
     S.el.appendChild(el("div", "cw-sb-h", "NUMBERS TO LEARN"));
     var g = el("div", "cw-sb-g");
     g.appendChild(el("div", "cw-sb-l", "TABLE"));
     g.appendChild(el("div", "cw-sb-n", fmt0(PREFS)));
-    S.eL = OB.html("div", "cw-sb-l", OB.tex("E"));
-    S.eN = el("div", "cw-sb-n", fmt0(NE));
+    S.eL = el("div", "cw-sb-l cw-sb-sw");
+    S.eT = el("span", "cw-sb-v", "TRICK");
+    S.eE = K.tag("E", null, "sm cw-sb-v");
+    S.eL.appendChild(S.eT);
+    S.eL.appendChild(S.eE);
+    S.eN = el("div", "cw-sb-n cw-sb-sw");
+    S.eQ = el("span", "cw-sb-v", "?");
+    S.eV = el("span", "cw-sb-v", fmt0(NE));
+    S.eN.appendChild(S.eQ);
+    S.eN.appendChild(S.eV);
     g.appendChild(S.eL);
     g.appendChild(S.eN);
     S.el.appendChild(g);
+    S.g = g;
+    /* The second row: "TRICK ?" (on false) or "E 576" (on true). */
+    S.known = function (on) {
+      S.eT.classList.toggle("ob-gone", on); S.eQ.classList.toggle("ob-gone", on);
+      S.eE.classList.toggle("ob-gone", !on); S.eV.classList.toggle("ob-gone", !on);
+    };
     return S;
   }
 
   /* The cross theta = s E. Columns: the state's 24 (11 px), E's row icons (14 px), E's and theta's 24 (34 px), as in the
      table of scene 202. Rows: 1 the coupons' icons; 2 to 25 E; 26 a gap; 27 the state's icons; 28 s and theta; 29 the
-     captions. The corner left of E (rows 1 to 25, columns 1 to 24) holds E's name and its colours, the count of its
-     numbers (beat 6) and the numbers to learn. */
+     captions. The corner left of E (rows 1 to 25, columns 1 to 24) holds E's name, the count of its numbers (beat 7)
+     and the numbers to learn. Every cell carries its matrix's colour (K.paint). */
   var R_E = 2, R_SIC = 27, R_S = 28, R_CAP = 29, C_RIC = 25, C_E = 26;
   function cross() {
     var X = { ic: [], ric: [], rows: [], e: [], en: [], sic: [], s: [], sn: [], th: [], thn: [] };
@@ -4934,8 +5151,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var row = put(el("div", "cw-ex-sub cw-ex-row" + (j === 0 ? " top" : "") + (j === N - 1 ? " bot" : "")), R_E + j, C_E, 1, N);
       var cells = [], nums = [];
       for (var b = 0; b < N; b++) {
-        var c = el("div", "cw-ex-e"), n = el("span", "cw-tn", K.wf(E24[j][b]));
-        c.style.background = K.heat(E24[j][b]);
+        var c = el("div", "cw-ex-e" + (b === 0 ? " first" : "") + (b === N - 1 ? " last" : "")), n = el("span", "cw-tn", K.wf(E24[j][b]));
+        K.paint(c, "E", E24[j][b]);
         c.appendChild(n);
         row.appendChild(c);
         cells.push(c);
@@ -4954,7 +5171,8 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       X.sicr.appendChild(si);
       X.sic.push(si);
       var ends = (i === 0 ? " first" : "") + (i === N - 1 ? " last" : "");
-      var sc = el("div", "cw-ex-s" + ends), sn = el("span", "", "0");
+      var sc = el("div", "cw-ex-s" + ends), sn = el("span", "", String(S1[i]));
+      K.paint(sc, "S", S1[i]);
       sc.appendChild(sn);
       X.sr.appendChild(sc);
       X.s.push(sc);
@@ -4967,24 +5185,15 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     }
     X.pad = el("span", "cw-pad");
     X.th[A1].appendChild(X.pad);
-    X.capS = put(OB.html("div", "cw-cap cw-ex-cap", "STATE " + OB.tex("s")), R_CAP, 1, 1, N);
-    X.capT = put(OB.html("div", "cw-cap cw-ex-cap", "PREFERENCES " + OB.tex("\\theta = s E")), R_CAP, C_E, 1, N);
-    // The rings: tiramisu's column with its icon (beats 2 and 3), tiramisu's row with its icon (beat 5).
+    X.capS = put(OB.html("div", "cw-cap cw-ex-cap", "STATE " + K.tag("S", "s", "sm").outerHTML), R_CAP, 1, 1, N);
+    X.capT = put(el("div", "cw-cap cw-ex-cap"), R_CAP, C_E, 1, N);
+    // The rings: tiramisu's column with its icon (beats 4 and 5).
     X.colRing = put(el("div", "cw-ex-ring"), 1, C_E + A1, R_E + N - 1, 1);
-    X.rowRing = put(el("div", "cw-ex-ring"), R_E + A1, C_RIC, 1, N + 1);
-    // The corner: E's name, its colours from -1 to 1, the count of its numbers; at the bottom the numbers to learn.
+    // The corner: E's name and the count of its numbers; at the bottom the numbers to learn.
     var corner = put(el("div", "cw-ex-corner"), 1, 1, R_E + N - 1, N), top = el("div", "cw-ex-ctop");
     X.top = top;
-    X.name = OB.html("div", "cw-ex-name", OB.tex("E"));
+    X.name = K.tag("E", null, "cw-ex-name");
     top.appendChild(X.name);
-    X.key = el("div", "cw-ex-key");
-    var bar = el("div", "cw-ex-bar");
-    bar.style.background = "linear-gradient(to right, " + K.heat(-1) + ", " + K.heat(0) + ", " + K.heat(1) + "), #FFFFFF";
-    X.key.appendChild(bar);
-    var ticks = el("div", "cw-ex-ticks");
-    [-1, 0, 1].forEach(function (v) { ticks.appendChild(el("span", "", OB.num(v, 0))); });
-    X.key.appendChild(ticks);
-    top.appendChild(X.key);
     X.cnt = el("div", "cw-at-fl cw-ex-cnt");
     X.cnt.appendChild(OB.html("span", "cw-at-fo", OB.tex("24 \\times 24 =")));
     X.cntR = OB.texNumEl(fmt0(NE), "cw-at-fr");
@@ -4992,43 +5201,102 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     X.cnt.appendChild(el("span", "cw-at-fw", "NUMBERS"));
     top.appendChild(X.cnt);
     corner.appendChild(top);
+    X.corner = corner;
     X.S = scoreboard();
     corner.appendChild(X.S.el);
     X.scrolls = function () { return wrap.scrollWidth > wrap.clientWidth + 1; };
     /* On a phone: the column of coupon a in view, near the right edge (as cross2 of cw-2policy.js). */
-    X.focus = function (a) {
+    X.focus = function (a) { X.focusEl(X.th[a]); };
+    X.focusEl = function (e) {
       if (!X.scrolls()) return;
-      var wr = wrap.getBoundingClientRect(), cr = X.th[a].getBoundingClientRect();
+      var wr = wrap.getBoundingClientRect(), cr = e.getBoundingClientRect();
       wrap.scrollLeft = Math.max(0, wrap.scrollLeft + cr.right - wr.right + 24);
+    };
+    /* theta's cell a showing the value v (null: a habit's, blank; "?": asked). */
+    X.setTh = function (a, v) {
+      var c = X.th[a];
+      c.classList.toggle("blank", v === null);
+      X.thn[a].textContent = v === null ? "" : v === "?" ? "?" : K.n2(v);
+      K.paint(c, "T", v === null || v === "?" ? null : v);
     };
     return X;
   }
-  /* For scene 220 (cw-2policy.js, stage 3): the same cross, so that this scene's last frame is 220's first. */
+  /* For scene 220 (cw-2policy.js): the same cross, so that this scene's last frame is 220's first. */
   K.ex = { cross: cross, R_E: R_E, R_SIC: R_SIC, R_S: R_S, R_CAP: R_CAP, C_RIC: C_RIC, C_E: C_E };
 
-  /* The box under the cross: the inner product in general, then tiramisu's with its 4 numbers. */
+  /* The labels of the two representations (beats 1 to 5): the household's in the corner, right above its state; the
+     coupon's right of tiramisu's column. A question at beats 1 and 2 (the coupon's) or 1 (the household's), then the
+     answer. */
+  function labH(k) { return "<span>THE HOUSEHOLD'S<br>REPRESENTATION" + (k <= 1 ? "?" : ": " + K.tag("S", "s", "sm").outerHTML) + "</span>"; }
+  function labE(k) { return "<span>THE COUPON'S<br>REPRESENTATION" + (k <= 2 ? "?" : ": " + K.tag("E", "e_a", "sm").outerHTML + "<br>24 NUMBERS PICKED AT RANDOM") + "</span>"; }
+  function capT(k) { return "PREFERENCES " + K.tag("T", "\\theta", "sm").outerHTML + (k >= 6 ? " " + OB.tex("= s E") : ""); }
+
+  /* The box under the cross: the inner product, in words at beat 1, then in symbols; tiramisu's worked line at beats
+     4 and 5. */
+  var GEN = [
+    "",
+    "\\theta_{s,a} = (\\text{the household's representation}) \\cdot (\\text{the coupon's representation})",
+    "\\theta_{s,a} = s \\cdot (\\text{the coupon's representation})",
+    "\\theta_{s,a} = s \\cdot e_a = s_1\\, e_{1,a} + s_2\\, e_{2,a} + \\dots + s_{24}\\, e_{24,a}",
+  ];
   function box(P) {
     var f = el("div", "ob-box cw-fbox cw-ex-f");
-    f.appendChild(OB.html("div", "cw-fgen", OB.tex("\\theta_{s,a} = s_1\\, e_{1,a} + s_2\\, e_{2,a} + \\dots + s_{24}\\, e_{24,a}")));
+    P.gen = el("div", "cw-fgen");
+    f.appendChild(P.gen);
     var terms = COL.map(function (v, i) { return (i ? "+ " : "") + par(K.wf(v)); }).join(" ");
-    var line = OB.html("div", "cw-fnum", K.thsym(A1) + " " + OB.tex("= " + terms + " =\\;"));
+    P.work = OB.html("div", "cw-fnum", K.thsym(A1) + " " + OB.tex("= " + terms + " =\\;"));
     P.res = el("span", "ob-texn cw-fres", "?");
-    line.appendChild(P.res);
-    f.appendChild(line);
+    P.work.appendChild(P.res);
+    f.appendChild(P.work);
     return f;
+  }
+  /* Beat 7, under the cross: 576 against 201,326,592, about 350,000 times fewer. */
+  var RATIO = PREFS / NE;
+  function wow() {
+    var w = el("div", "ob-box cw-wow");
+    var row = el("div", "cw-wow-row");
+    var a = el("div", "cw-wow-n big"), b = el("div", "cw-wow-n small");
+    a.innerHTML = "<span class=\"cw-wow-l\">TABLE</span><span class=\"cw-wow-v\">" + fmt0(PREFS) + "</span>";
+    b.innerHTML = "<span class=\"cw-wow-l\">" + K.tag("E", null, "sm").outerHTML + "</span><span class=\"cw-wow-v\">" + fmt0(NE) + "</span>";
+    row.appendChild(a);
+    row.appendChild(el("span", "cw-czarr cw-wow-arr"));
+    row.appendChild(b);
+    w.appendChild(row);
+    var t = el("div", "cw-wow-t");
+    var x = el("div", "cw-wow-x", "ABOUT " + fmt0(Math.round(RATIO / 10000) * 10000) + " TIMES FEWER");
+    t.appendChild(x);
+    t.appendChild(OB.html("div", "cw-wow-f", OB.tex(fmt0(PREFS).replace(/,/g, "{,}") + " \\div " + NE + " = " + OB.num(RATIO, 1).replace(/,/g, "{,}"))));
+    w.appendChild(t);
+    return { el: w, small: b, x: x };
   }
 
   function grow(api, e, d, dur) { e.classList.add("ob-hide"); api.show(e, true, { delay: d, dur: dur || 700 }); }
   function bare(list, on) { list.forEach(function (e) { e.classList.toggle("ob-hide", !on); e.style.opacity = ""; }); }
   function bump(e) { if (OB.fx && OB.fx.bump) OB.fx.bump(e, 0.3, 360); }
+  /* A caption or line that changes: with motion it fades out and in. */
+  function swap(api, e, html, go) {
+    if (e.innerHTML === html) return;
+    if (!go) { e.innerHTML = html; return; }
+    api.animate(180, function (p) { e.style.opacity = String(1 - p); }, function () {
+      e.innerHTML = html;
+      api.animate(260, function (p) { e.style.opacity = String(p); }, function () { e.style.opacity = ""; });
+    });
+  }
+  /* A preference rolls from one value to another, its colour with it. */
+  function rollT(api, X, a, from, to, d, dur) {
+    api.at(d, function () {
+      api.animate(dur, function (p) { var q = 1 - Math.pow(1 - p, 3); X.setTh(a, r2(from + (to - from) * q)); }, function () { X.setTh(a, to); });
+    });
+  }
 
   /* 210 reached with Next from the last beat of scene 202: 202's view, laid over this one by K.handIn, hands over. Its
-     lead line fades first (as in scene 410), its coupons' icons glide to E's columns and its numbers to learn to the
-     corner; the rest of it fades while the new lead line comes; then E grows row by row (beat(), from 700 ms). */
+     lead line fades first, its coupons' icons glide to E's columns, its products' icons to the state's, its numbers to
+     learn to the corner; the rest of it fades while the new lead line comes and the example household's row rises. */
   function handIn210(X, P, H, api) {
     api.fade(H.part("lead"), false, { dur: 250 });
-    var icons = H.el.querySelectorAll(".cw-ap-head .cw-ap-hp");
+    var icons = H.el.querySelectorAll(".cw-ap-head .cw-ap-hp"), small = H.el.querySelectorAll(".cw-ap-head .cw-ap-hs");
     for (var a = 0; a < icons.length && a < N; a++) K.glide(api, icons[a], X.ic[a], { dur: 1100 });
+    for (var b = 0; b < small.length && b < N; b++) K.glide(api, small[b], X.sic[b], { dur: 1100 });
     var sb = H.part("score");
     if (sb) K.glide(api, sb, X.S.el, { dur: 1100 });
     api.fade(H.el, false, { delay: 80, dur: 650 });
@@ -5038,15 +5306,15 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
   var NM = K.name(A1);
   var L210 = [
-    "The weights \\(E\\) replace the table: a row per product, a column per coupon, \\(24 \\times 24\\) numbers picked at random. Blue above 0, pink below 0.",
-    "The state \\(s\\) of week 1 comes on the left of \\(E\\), as in weekend 2's cross. Its preferences come out under \\(E\\): \\(\\theta = s E\\).",
-    "The preference for " + NM + ": the inner product of \\(s\\) and " + NM + "'s column. Only the " + H1.length + " habits count, where \\(s\\) has a 1. Guess, then press Compute.",
-    "The " + H1.length + " lit numbers add up to the preference for " + NM + ": " + K.n2(TH1[A1]) + ".",
-    "\\(\\theta = s E\\): the preferences of the " + NC + " coupons, each the sum of its column's numbers in the habits' rows. A habit gets no coupon.",
-    "Week 2: " + NM + " is a habit now, so its row of \\(E\\) counts too. The same \\(E\\) gives every state its preferences, also states no household visits.",
-    "The numbers to learn: \\(24 \\times 24 = 576\\) in \\(E\\), in place of the table's 201,326,592 preferences.",
+    "A trick cuts the numbers to learn. Take one row of the table: the example household's state, and its preferences.",
+    "The trick: each preference becomes an inner product, of a representation of the household and a representation of the coupon.",
+    "The household's representation is clear: its state \\(s\\), a 1 for each of its " + H1.length + " habits and a 0 for every other product.",
+    "A coupon has no representation, so we guess one: 24 numbers picked at random, as many as \\(s\\) has, so that the inner product can be computed.",
+    "The preference for " + NM + ": the inner product of \\(s\\) and \\(e_a\\). Only the " + H1.length + " habits count, where \\(s\\) has a 1. Guess, then press Compute.",
+    "The " + H1.length + " outlined numbers add up to the preference for " + NM + ": " + K.n2(TH1[A1]) + ". It replaces the table's value.",
+    "The same for every coupon: one guessed column each, 24 in all, the matrix \\(E\\). \\(\\theta = s E\\) gives the household's preferences, and those of every other state.",
+    "To learn: \\(24 \\times 24 = 576\\) numbers in \\(E\\), in place of the table's 201,326,592 preferences.",
   ];
-  var ARROWS = ["ex-s", "ex-e"];
 
   OB.scene({
     key: "e-alone", order: 210, title: "Preferences as inner products", beats: L210.length,
@@ -5055,73 +5323,106 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var P = this.parts = {};
       P.lead = K.lead(root);
       var st = el("div", "cw-ex-stage");
-      P.X = cross();
-      st.appendChild(P.X.el);
+      var X = P.X = cross();
+      // The slots of beat 1: a dashed frame over the state, a dashed empty column above tiramisu's preference, and its
+      // label in the room right of it.
+      X.sSlot = X.put(el("div", "cw-ex-slot"), R_S, 1, 1, N);
+      X.eSlot = X.put(el("div", "cw-ex-slot col"), R_E, C_E + A1, N, 1);
+      X.eLab = X.put(el("div", "cw-ex-elab"), R_E + 9, C_E + A1 + 1, 6, 9);
+      X.hLab = el("div", "cw-ex-hlab");
+      X.corner.appendChild(X.hLab);
+      st.appendChild(X.el);
+      var under = el("div", "cw-ex-under");
       P.f = box(P);
-      st.appendChild(P.f);
+      under.appendChild(P.f);
+      P.W = wow();
+      under.appendChild(P.W.el);
+      st.appendChild(under);
       root.appendChild(st);
     },
     beat: function (k, api) {
       var P = this.parts, X = P.X, go = K.live(api, k);
       var H = k === 0 ? K.handIn(api, "pref-table", 2600) : null;
       K.say(P.lead, L210[k], H ? null : api);
-      var wk2 = k >= 5, st = wk2 ? S2 : S1, th = wk2 ? TH2 : TH1, hab = wk2 ? H2 : H1, tir = k === 2 || k === 3;
 
-      // E, its icons, its corner and the numbers to learn, from beat 0.
-      X.ic.concat([X.S.el]).forEach(function (e) { e.style.visibility = ""; });
-      bare([X.icr, X.name, X.key, X.S.el].concat(X.ric, X.rows), true);
+      // The coupons' icons, the state's icons, the numbers to learn: from beat 0.
+      X.ic.concat(X.sic, [X.S.el]).forEach(function (e) { e.style.visibility = ""; });
+      bare([X.icr, X.sicr, X.S.el], true);
+      X.S.known(k >= 7);
+      X.S.eN.style.visibility = "";
+
+      // The example household's row: s and theta, from beat 0 (rising after the hand-off).
+      bare([X.sr, X.thr, X.capS, X.capT], true);
       if (go && k === 0) {
-        var d = H ? 700 : 300;
-        if (!H) { grow(api, X.icr, 150); grow(api, X.S.el, 200); }
-        grow(api, X.name, d);
-        grow(api, X.key, d + 200);
-        for (var j = 0; j < N; j++) { grow(api, X.ric[j], d + 60 * j, 600); grow(api, X.rows[j], d + 60 * j, 600); }
+        var d0 = H ? 700 : 200;
+        grow(api, X.sr, d0, 800);
+        grow(api, X.thr, d0 + 150, 800);
+        grow(api, X.capS, d0 + 300, 600);
+        grow(api, X.capT, d0 + 300, 600);
+        if (!H) { grow(api, X.icr, 100); grow(api, X.sicr, 100); grow(api, X.S.el, 150); }
         if (H) handIn210(X, P, H, api);
       }
+      bare([X.hLab, X.eLab], k >= 1 && k <= 5);
+      swap(api, X.hLab, labH(k), go && k === 2);
+      swap(api, X.eLab, labE(k), go && k === 3);
+      if (go && k === 1) { grow(api, X.hLab, 300, 500); grow(api, X.eLab, 700, 500); }
+      swap(api, X.capT, capT(k), go && k === 6);
+      // Beat 1: the state dims in its dashed frame; beat 2 lights it again.
+      X.sr.classList.toggle("cw-ex-dim", k === 1);
+      bare([X.sSlot], k === 1);
+      if (go && k === 1) grow(api, X.sSlot, 200, 500);
+      if (go && k === 2) X.s.forEach(function (c, i) { if (S1[i]) api.at(150 + 60 * i, function () { bump(c); }); });
 
-      // The state s and its icons from beat 1; the caption of theta with them, where the preferences will come.
-      bare(X.sic.concat(X.s, [X.capS, X.capT]), k >= 1);
-      for (var i = 0; i < N; i++) { X.sn[i].textContent = String(st[i]); X.s[i].classList.toggle("lit", !!st[i]); }
-      if (go && k === 1) {
-        grow(api, X.capS, 200);
-        grow(api, X.capT, 1300);
-        for (var i2 = 0; i2 < N; i2++) { grow(api, X.sic[i2], 200 + 40 * i2); grow(api, X.s[i2], 260 + 40 * i2); }
+      // theta: the table's values at beats 0 to 4 (tiramisu's "?" at 4), tiramisu's inner product from 5, every
+      // coupon's from 6.
+      for (var a = 0; a < N; a++) {
+        var v = TAB[a];
+        if (k >= 6) v = TH1[a];
+        else if (a === A1 && k === 4) v = "?";
+        else if (a === A1 && k === 5) v = TH1[a];
+        X.setTh(a, v);
+      }
+      X.th[A1].classList.toggle("ring", k >= 1 && k <= 5);
+      X.ic[A1].classList.toggle("lit", k >= 1 && k <= 5);
+
+      // E: tiramisu's column, empty and dashed at beats 1 and 2, its numbers from beat 3; every column from beat 6. The
+      // products' icons on its left from beat 3, E's name from beat 6.
+      bare([X.eSlot], k >= 1 && k <= 5);
+      X.eSlot.classList.toggle("solid", k >= 3);
+      if (go && k === 1) grow(api, X.eSlot, 400, 600);
+      bare(X.rows, k >= 3);
+      X.e.forEach(function (row) { row.forEach(function (c, b) { c.classList.toggle("ob-hide", !(b === A1 || k >= 6)); c.style.opacity = ""; }); });
+      bare(X.ric, k >= 3);
+      bare([X.name], k >= 6);
+      if (go && k === 3) {
+        X.e.forEach(function (row, j) { grow(api, row[A1], 200 + 45 * j, 500); grow(api, X.ric[j], 200 + 45 * j, 500); });
+      }
+      if (go && k === 6) {
+        grow(api, X.name, 200, 600);
+        X.e.forEach(function (row, j) { row.forEach(function (c, b) { if (b !== A1) grow(api, c, 200 + 30 * j + 18 * Math.abs(b - A1), 500); }); });
       }
 
-      // theta: tiramisu's alone at beats 2 and 3 ("?" at 2), every coupon's from beat 4; week 2's from beat 5.
-      X.th.forEach(function (c, a) {
-        c.classList.toggle("ob-hide", !(k >= 4 || (tir && a === A1)));
-        c.style.opacity = "";
-        c.classList.toggle("blank", th[a] === null);
-        X.thn[a].textContent = th[a] === null ? "" : k === 2 && a === A1 ? "?" : K.n2(th[a]);
-      });
-      X.th[A1].classList.toggle("solo", tir);
-      X.th[A1].classList.toggle("lit", tir);
-      if (go && k === 2) grow(api, X.th[A1], 300);
-      if (go && k === 4) X.th.forEach(function (c, a) { if (a !== A1) grow(api, c, 200 + 50 * a); });
-
-      // The lights: tiramisu's column and the habits' rows from beat 2, their crossings at beats 2 and 3.
+      // The lights of tiramisu's inner product: the habits' rows (their icons), the 4 numbers outlined, the column's ring.
+      var tir = k === 4 || k === 5;
+      X.ric.forEach(function (e, j) { e.classList.toggle("lit", tir && H1.indexOf(j) >= 0); });
+      X.s.forEach(function (c, i) { c.classList.toggle("cw-mlit", tir && !!S1[i]); });
+      X.e.forEach(function (row, j) { row[A1].classList.toggle("cw-mlit", tir && H1.indexOf(j) >= 0); });
       bare([X.colRing], tir);
-      if (go && k === 2) grow(api, X.colRing, 200);
-      X.ic.forEach(function (e, a) { e.classList.toggle("lit", tir && a === A1); });
-      X.ric.forEach(function (e, j2) { e.classList.toggle("lit", k >= 2 && hab.indexOf(j2) >= 0); });
-      X.e.forEach(function (row, j3) { row[A1].classList.toggle("lit", tir && H1.indexOf(j3) >= 0); });
-      if (tir && !X.scrolls()) {
-        var o = function (dl, from, to) { var a = { from: from, to: to, gap: 3, head: 11 }; if (go && k === 2) a.delay = dl; else a.dur = 1; return a; };
-        api.arrow("ex-s", X.s[N - 1], X.th[A1], o(500, "right", "left"));
-        api.arrow("ex-e", X.e[N - 1][A1], X.th[A1], o(700, "bottom", "top"));
-      } else ARROWS.forEach(function (id) { api.unarrow(id); });
-      if (X.scrolls()) { if (tir) X.focus(A1); else X.el.scrollLeft = 0; }
+      if (go && k === 4) grow(api, X.colRing, 200);
+      // On a phone: the coupon's label in view at beats 1 to 3, tiramisu's column at 4 and 5.
+      if (X.scrolls()) { X.el.scrollLeft = 0; if (k >= 1 && k <= 3) X.focusEl(X.eLab.firstChild || X.eLab); else if (k >= 4 && k <= 5) X.focus(A1); }
 
-      // The box: tiramisu's inner product, beats 2 to 4.
-      api.show(P.f, k >= 2 && k <= 4, K.opt(go && k === 2, 900));
-      P.res.textContent = k >= 3 ? K.n2(TH1[A1]) : "?";
-      P.res.classList.toggle("done", k >= 3);
-      if (k === 2) api.nextLabel("Compute");
+      // The box: the inner product at beats 1 to 5, tiramisu's worked line at 4 and 5.
+      api.show(P.f, k >= 1 && k <= 5, K.opt(go && k === 1, 1200));
+      swap(api, P.gen, OB.tex(GEN[Math.min(3, Math.max(1, k))]), go && (k === 2 || k === 3));
+      P.work.classList.toggle("ob-gone", !tir);
+      P.res.textContent = k >= 5 ? K.n2(TH1[A1]) : "?";
+      P.res.classList.toggle("done", k >= 5);
+      if (k === 4) api.nextLabel("Compute");
 
-      // 3, Compute: the lit numbers fly down one after the other into tiramisu's preference, which adds them up.
-      if (go && k === 3) {
-        X.thn[A1].textContent = "0.00";
+      // 5, Compute: the outlined numbers fly one after the other into tiramisu's preference, which adds them up.
+      if (go && k === 5) {
+        X.setTh(A1, 0);
         P.res.textContent = "?";
         P.res.classList.remove("done");
         var sum = 0;
@@ -5130,45 +5431,657 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
           sum = r2(sum + E24[j4][A1]);
           var part = sum;
           api.fly(X.en[j4][A1], X.pad, { delay: dl, arc: 30 });
-          api.at(dl + OB.DUR.fly, function () { X.thn[A1].textContent = K.n2(part); bump(X.thn[A1]); });
+          api.at(dl + OB.DUR.fly, function () { X.setTh(A1, part); bump(X.thn[A1]); });
         });
         api.at(250 + 520 * (H1.length - 1) + OB.DUR.fly + 250, function () { P.res.textContent = K.n2(TH1[A1]); P.res.classList.add("done"); bump(P.res); });
       }
-
-      // 5, week 2: tiramisu's 1 comes into s, its row is ringed, the preferences roll; tiramisu's goes blank.
-      bare([X.rowRing], k === 5);
-      if (go && k === 5) {
-        X.sn[A1].textContent = "0";
-        X.s[A1].classList.remove("lit");
-        X.ric[A1].classList.remove("lit");
-        api.at(300, function () { X.sn[A1].textContent = "1"; X.s[A1].classList.add("lit"); bump(X.s[A1]); });
-        api.at(700, function () { X.ric[A1].classList.add("lit"); bump(X.ric[A1]); });
-        grow(api, X.rowRing, 700, 600);
-        X.th[A1].classList.remove("blank");
-        X.thn[A1].textContent = K.n2(TH1[A1]);
-        api.at(1300, function () { X.th[A1].classList.add("blank"); X.thn[A1].textContent = ""; });
-        X.th.forEach(function (c, a) {
-          if (TH2[a] !== null) api.roll(X.thn[a], TH2[a], { from: TH1[a], fmt: K.n2, delay: 1400, dur: 1500 });
-        });
-        P.f.classList.remove("ob-hide");
-        api.fade(P.f, false, { dur: 600 });
+      // 6: the other preferences roll from the table's values to the inner products.
+      if (go && k === 6) {
+        for (var a2 = 0; a2 < N; a2++) if (a2 !== A1 && TH1[a2] !== null) { X.setTh(a2, TAB[a2]); rollT(api, X, a2, TAB[a2], TH1[a2], 900 + 40 * a2, 1300); }
       }
 
-      // 6: the count of E's numbers, which flies into the numbers to learn.
-      bare([X.cnt], k >= 6);
-      [X.S.eL, X.S.eN].forEach(function (e) { e.classList.toggle("ob-gone", k < 6); });
-      if (go && k === 6) {
+      // 7: the count of E's numbers flies into the numbers to learn; the comparison under the cross.
+      bare([X.cnt], k >= 7);
+      api.show(P.W.el, k >= 7, K.opt(go && k === 7, 1700, { dur: 700 }));
+      if (go && k === 7) {
         grow(api, X.cnt, 200, 700);
-        grow(api, X.S.eL, 1300, 600);
-        K.copyTo(api, X.cntR, X.S.eN, 1300, 1300);
+        X.S.known(false);
+        api.at(1250, function () { X.S.known(true); });
+        K.copyTo(api, X.cntR, X.S.eN, 1100, 1300);
+        api.at(2600, function () { if (OB.fx && OB.fx.burst) OB.fx.burst(P.W.small, "sparkle"); bump(P.W.x); });
       }
     },
     /* Left with Next from the last beat: the view hands over to scene 220, which shows the same cross (handIn220() in
-       cw-2policy.js); its lead line is named, to fade first. */
+       cw-2policy.js); its lead line and the comparison are named, to fade first. */
     leave: function (api) {
       var P = this.parts;
       if (!P || api.beat !== L210.length - 1) { K.hand = null; return; }
-      K.handOut("e-alone", api.root, { lead: P.lead });
+      K.handOut("e-alone", api.root, { lead: P.lead, wow: P.W.el, score: P.X.S.el });
+    },
+  });
+})();
+</script>
+<script>/* cw-2c-stair.js */
+/* cw-2c-stair.js: scene 230 of "Coupon of the Week" (main session, 2026-11-20), items 10 to 12 of Carlos's twelve
+   slides of that day (source/PLAN.md, Round 10): "10. So we now have two matrices W and E that help us encode the
+   entire table of preferences (show the original table of preferences with the original households representation
+   next to it) 11. Note that E must then have 2 rows instead of 24 ! 12. Now show the original table of preferences
+   with the original matrix of households at the left, shrink and shift the matrix of all household representations
+   to the left, have W appear showing the matrix of household reps becoming a matrix of two dim reps and then have E
+   appear showing how the matrix of reps becomes then the table of preferences."
+
+   230 W and E give the whole table (6 beats): scene 202's table of six households (K.tab.HH, the example household
+       first), then the staircase of two textbook crosses, Z = S W and Theta = Z E.
+         0 Item 10. Reached with Next from 220's last beat, its view hands over (K.handIn, handIn230()): its lead line
+           and its map fade, its numbers to learn glide to the top right, its state s becomes the first row of the
+           states S, its W shrinks into a small map of its colours; beside it, E of scene 210 (24 x 24) as a small
+           map. The table: S on the left, the preferences Theta (scene 202's values) on the right.
+         1 Item 11. W has 2 columns, so E's 24 rows close into 2 (E of the data, D.init.E): 24 x 24 becomes 2 x 24.
+         2 Item 12. S shrinks to the left (its columns 11 px to 7 px) and opens room between it and Theta, which stays
+           in place; W's small map grows into its place above the room, and Z = S W fills it row by row, each
+           household's habits and their rows of W outlined.
+         3 Item 12. The coupons' icons rise, E's small map grows into its place above Theta; the example household's
+           preference for tiramisu, z . e_a: Guess, then Compute.
+         4 Compute: 1.10 x 0.90 + 1.80 x 0.40 = 1.71 flies into Theta; then every row of Theta rolls from the table's
+           values to Z E, row by row.
+         5 The numbers to learn: 24 x 2 + 2 x 24 = 96 flies into the row W, E under TABLE and E; 201,326,592 / 96 =
+           2,097,152.
+       Left with Next from beat 5, the view hands over to scene 240 (handIn240() in cw-2policy.js).
+
+   The grid keeps the columns of scene 202's table: Theta's 24 columns of 34 px start 278 px from the left in every
+   beat. Before beat 2, S's 24 columns are 11 px and a column of 14 px follows them; from beat 2, S's are 7 px, the
+   14 px column holds W's row icons, and Z's two columns of 34 px and a gap of 28 px take the 96 px that S gives up.
+   Rows: the heads (26 px), W's 24 rows (14, 22 x 11, 14), a gap, S's icons, the table's 6 rows (25, 4 x 22, 25), the
+   captions. E's two rows stand in W's last three tracks with the coupons' icons above them; the panel above E holds
+   the small maps (beats 0 to 2), the worked line (3, 4), the count (5) and the numbers to learn. Each matrix is one
+   element framed by its own border of 3 px (cw-2c-stair.css), its rows inside 22 px for S, Z and Theta, 11 px for W,
+   15 px for E, so the grid's tracks are its rows plus the frame; a row of icons keeps 3 px on each side, so its icons
+   stand over the cells. Every cell carries its matrix's colour (K.paint): S turquoise, W raspberry, Z violet, E orange,
+   Theta blue. */
+(function () {
+  "use strict";
+  var OB = window.OB, CW = window.CW, D = window.CWD, K = OB.cw, el = OB.el;
+  if (!K || !K.EP || !K.tab || !K.ex24) { console.error("cw-2c-stair: cw-0kit.js, cw-1game.js, cw-2a-table.js or cw-2b-e24.js is missing"); return; }
+
+  var N = CW.N, A1 = K.EP.weeks[0].a, HH = K.tab.HH, NH = HH.length;
+  var IW = D.init.W, IE = D.init.E, E24 = K.ex24.E;
+  var PREFS = Math.pow(2, N) * N / 2, NWE = N * 2 + 2 * N;
+  var fmt0 = function (x) { return OB.num(x, 0); };
+  var r2 = function (x) { return Math.round(x * 100) / 100; };
+  /* A number in a product of a worked line: in parentheses when negative. */
+  var par = function (s) { return s.charAt(0) === "-" ? "(" + s + ")" : s; };
+  var rowEl = function (r) { return r.el; };
+
+  /* The six households of scene 202's table: z = s W and theta = z E under the starting weights of the data
+     (CW.policy); a habit's preference is blank (null), as in the table. */
+  var POL = HH.map(function (h) { return CW.policy(IW, IE, h.s); });
+  var ZZ = POL.map(function (p) { return p.z; });
+  var TH = POL.map(function (p) { return p.theta.map(function (v) { return v === null ? null : r2(v); }); });
+  (function check() {
+    var z = CW.policy(IW, IE, K.EP.weeks[0].s).z;
+    if (Math.abs(z[0] - ZZ[0][0]) > 1e-9 || Math.abs(z[1] - ZZ[0][1]) > 1e-9) console.error("cw-2c-stair: the first row is not the example household's week 1");
+    HH.forEach(function (h, i) { h.p.forEach(function (v, a) { if ((v === null) !== (TH[i][a] === null)) console.error("cw-2c-stair: the blank cells of row " + i + " differ"); }); });
+  })();
+  var MW = { m: "W", rows: N, cols: 2, v: function (r, c) { return IW[c][r]; } };
+  var ME = { m: "E", rows: 2, cols: N, v: function (r, c) { return IE[c][r]; } };
+
+  function placer(g) {
+    return function (e, row, col, rows, cols) {
+      e.style.gridRow = row + (rows ? " / span " + rows : "");
+      e.style.gridColumn = col + (cols ? " / span " + cols : "");
+      g.appendChild(e);
+      return e;
+    };
+  }
+  function grow(api, e, d, dur) { e.classList.add("ob-hide"); api.show(e, true, { delay: d, dur: dur || 700 }); }
+  function bare(list, on) { list.forEach(function (e) { e.classList.toggle("ob-hide", !on); e.style.opacity = ""; }); }
+  function vis(list) { list.forEach(function (e) { e.style.visibility = ""; }); }
+  function bump(e) { if (OB.fx && OB.fx.bump) OB.fx.bump(e, 0.3, 360); }
+  /* A caption that changes: with motion it fades out and in. */
+  function swap(api, e, html, go) {
+    if (e.innerHTML === html) return;
+    if (!go) { e.innerHTML = html; return; }
+    api.animate(180, function (p) { e.style.opacity = String(1 - p); }, function () {
+      e.innerHTML = html;
+      api.animate(260, function (p) { e.style.opacity = String(p); }, function () { e.style.opacity = ""; });
+    });
+  }
+
+  /* The grid's columns: q = 0 before beat 2 (S's columns 11 px, no room for Z), q = 1 from beat 2 (S's 7 px, Z's two
+     columns of 34 px, a gap of 28 px). Theta starts at 278 px for every q. */
+  var C_S = 1, C_IC = 25, C_Z = 26, C_G = 28, C_T = 29;
+  var R_H = 1, R_W = 2, R_ICB = 26, R_SIC = 27, R_T = 28, R_CAP = 34, R_IC = R_W + 19, R_E = R_W + 21;
+  function cols(q) {
+    var z = (34 * q).toFixed(3) + "px ";
+    return "repeat(24, " + (11 - 4 * q).toFixed(3) + "px) 14px " + z + z + (28 * q).toFixed(3) + "px repeat(24, 34px)";
+  }
+  var TROWS = "repeat(6, 22px)";
+
+  /* A matrix of rows x n cells (m its colour): a block whose rows are elements of their own (cw-st-r), framed in ink by
+     the borders of its outer cells; tpl the heights of its rows. Mx.set(r, c, v) shows v in cell (r, c): a number in
+     its colour, "?" asked, "" empty, null blank (a habit's preference). */
+  function matrix(m, rows, n, tpl, cls, f) {
+    var Mx = { el: el("div", "cw-st-m " + cls), r: [] };
+    Mx.el.style.gridTemplateRows = tpl;
+    for (var r = 0; r < rows; r++) {
+      var row = { el: el("div", "cw-st-r" + (r === 0 ? " top" : "") + (r === rows - 1 ? " bot" : "")), c: [], n: [] };
+      row.el.style.gridTemplateColumns = "repeat(" + n + ", minmax(0, 1fr))";
+      for (var c = 0; c < n; c++) {
+        var cell = el("div", "cw-st-c" + (c === 0 ? " first" : "") + (c === n - 1 ? " last" : "")), t = el("span", "cw-tn", "");
+        cell.dataset.m = m;
+        cell.appendChild(t);
+        row.el.appendChild(cell);
+        row.c.push(cell);
+        row.n.push(t);
+      }
+      Mx.el.appendChild(row.el);
+      Mx.r.push(row);
+    }
+    Mx.set = function (r, c, v) {
+      var cell = Mx.r[r].c[c], t = Mx.r[r].n[c], txt = v === null || v === "" ? "" : v === "?" ? "?" : (f || K.n2)(v);
+      if (t.textContent !== txt) t.textContent = txt;
+      cell.classList.toggle("blank", v === null);
+      K.paint(cell, m, typeof v === "number" ? v : null);
+    };
+    return Mx;
+  }
+  function icons(cls, small) {
+    var I = { el: el("div", "cw-st-icr " + cls), i: [] };
+    I.el.style.gridTemplateColumns = "repeat(24, minmax(0, 1fr))";
+    for (var a = 0; a < N; a++) {
+      var e = el("div", small ? "cw-st-sic" : "cw-st-ic", CW.ICONS[a]);
+      e.title = CW.NAMES[a];
+      I.el.appendChild(e);
+      I.i.push(e);
+    }
+    return I;
+  }
+
+  /* The small maps of beats 0 to 2: a matrix's name, its colours in cells of 7 px without numbers, its size. E's map
+     holds two layers in one place: E of scene 210 (24 x 24, layer A) and E of the data (2 x 24, layer B). */
+  function layer(m, rows, n, v) {
+    var L = el("div", "cw-st-lay");
+    L.style.gridTemplateColumns = "repeat(" + n + ", 7px)";
+    L.style.gridTemplateRows = L.dataset.rows = "repeat(" + rows + ", 7px)";
+    for (var r = 0; r < rows; r++) for (var c = 0; c < n; c++) { var x = el("i", ""); x.style.background = K.tint(m, v(r, c)); L.appendChild(x); }
+    return L;
+  }
+  function thumbW() {
+    var T = { el: el("div", "cw-st-th") };
+    T.tag = K.tag("W", null, "cw-st-name");
+    T.map = el("div", "cw-st-thm");
+    T.map.appendChild(layer("W", N, 2, MW.v));
+    T.cap = el("div", "cw-st-thc");
+    T.cap.appendChild(OB.texNumEl("24", "cw-st-thn"));
+    T.cap.appendChild(OB.html("span", "", OB.tex("\\times")));
+    T.cols = OB.texNumEl("2", "cw-st-thn");
+    T.cap.appendChild(T.cols);
+    [T.tag, T.map, T.cap].forEach(function (e) { T.el.appendChild(e); });
+    return T;
+  }
+  function thumbE() {
+    var T = { el: el("div", "cw-st-th") };
+    T.tag = K.tag("E", null, "cw-st-name");
+    T.map = el("div", "cw-st-thm");
+    T.A = layer("E", N, N, function (r, c) { return E24[r][c]; });
+    T.B = layer("E", 2, N, ME.v);
+    T.map.appendChild(T.A);
+    T.map.appendChild(T.B);
+    T.cap = el("div", "cw-st-thc");
+    T.rows = OB.texNumEl("24", "cw-st-thn");
+    T.cap.appendChild(T.rows);
+    T.cap.appendChild(OB.html("span", "", OB.tex("\\times")));
+    T.cap.appendChild(OB.texNumEl("24", "cw-st-thn"));
+    [T.tag, T.map, T.cap].forEach(function (e) { T.el.appendChild(e); });
+    return T;
+  }
+
+  /* The numbers to learn, as in scenes 210 and 220, with a third row from beat 5: W and E, 96. */
+  function scoreboard() {
+    var S = { el: el("div", "ob-box cw-sb cw-st-sb") };
+    S.el.appendChild(el("div", "cw-sb-h", "NUMBERS TO LEARN"));
+    var g = el("div", "cw-sb-g");
+    g.appendChild(el("div", "cw-sb-l", "TABLE"));
+    g.appendChild(el("div", "cw-sb-n", fmt0(PREFS)));
+    var eL = el("div", "cw-sb-l cw-sb-sw"), eN = el("div", "cw-sb-n cw-sb-sw");
+    eL.appendChild(K.tag("E", null, "sm cw-sb-v"));
+    eN.appendChild(el("span", "cw-sb-v", fmt0(N * N)));
+    g.appendChild(eL);
+    g.appendChild(eN);
+    S.weL = el("div", "cw-sb-l cw-sb-sw cw-st-we");
+    S.weL.appendChild(K.tag("W", null, "sm"));
+    S.weL.appendChild(K.tag("E", null, "sm"));
+    S.weN = el("div", "cw-sb-n cw-sb-sw");
+    S.weV = el("span", "cw-sb-v", fmt0(NWE));
+    S.weN.appendChild(S.weV);
+    g.appendChild(S.weL);
+    g.appendChild(S.weN);
+    S.el.appendChild(g);
+    return S;
+  }
+  /* Beats 3 and 4: the example household's preference for tiramisu, its row of Z times tiramisu's column of E. */
+  function box() {
+    var B = { el: el("div", "ob-box cw-fbox cw-st-f") };
+    B.el.appendChild(OB.html("div", "cw-fgen", OB.tex("\\theta_{s,a} = z \\cdot e_a = z_1\\, e_{1,a} + z_2\\, e_{2,a}")));
+    var z = ZZ[0], e = IE[A1];
+    var terms = par(K.n2(z[0])) + " \\times " + par(K.wf(e[0])) + " + " + par(K.n2(z[1])) + " \\times " + par(K.wf(e[1]));
+    B.work = OB.html("div", "cw-fnum", K.thsym(A1) + " " + OB.tex("= " + terms + " =\\;"));
+    B.res = el("span", "ob-texn cw-fres", "?");
+    B.work.appendChild(B.res);
+    B.el.appendChild(B.work);
+    return B;
+  }
+  /* Beat 5: the count of W's and E's numbers, and how many times fewer they are than the table's preferences. */
+  function count() {
+    var C = { el: el("div", "ob-box cw-st-cnt") }, l = el("div", "cw-at-fl cw-st-cl");
+    l.appendChild(OB.html("span", "cw-at-fo", OB.tex("24 \\times 2 + 2 \\times 24 =")));
+    C.n = OB.texNumEl(fmt0(NWE), "cw-at-fr");
+    l.appendChild(C.n);
+    l.appendChild(el("span", "cw-at-fw", "NUMBERS"));
+    C.el.appendChild(l);
+    var t = el("div", "cw-st-ct");
+    C.x = el("div", "cw-wow-x", fmt0(PREFS / NWE) + " TIMES FEWER");
+    t.appendChild(C.x);
+    t.appendChild(OB.html("div", "cw-wow-f", OB.tex(fmt0(PREFS).replace(/,/g, "{,}") + " \\div " + NWE + " = " + fmt0(PREFS / NWE).replace(/,/g, "{,}"))));
+    C.el.appendChild(t);
+    return C;
+  }
+
+  /* A matrix's block flies from one place to another and takes the other's size on the way: a copy in the body, a grid
+     of the matrix's coloured cells (M.v(r, c); null blank), whose numbers fade out at the start (o.nums "out") or in at
+     the end ("in") or keep them and take the target's size ("keep"), its frame from o.bw[0] to o.bw[1] px. from is an
+     element or a function that returns a rectangle; to is an element or a list of cells, hidden until the copy lands
+     on the rectangle around them; o.hide is hidden as the copy leaves; o.clone flies a copy of from itself (a row of
+     icons). Scene 230: the cross of 220 gives W to its small map, the small maps grow into their places in the
+     staircase; scene 240 (handIn240() in cw-2policy.js) takes E, z, theta and the icons from 230. */
+  function blockFly(api, from, to, M, o) {
+    o = o || {};
+    var tos = Array.isArray(to) ? to : [to];
+    function show() { tos.forEach(function (t) { t.style.visibility = ""; }); }
+    tos.forEach(function (t) { t.style.visibility = "hidden"; });
+    if (api.instant) { show(); return; }
+    api.at(o.delay || 0, function () {
+      var a = typeof from === "function" ? from() : from.getBoundingClientRect(), b = union(tos);
+      if (!a || !a.width || !b.width) { show(); return; }
+      var g, nums = [], bw = o.clone ? [0, 0] : o.bw || [3, 3], fa = 0, fb = 0;
+      if (o.clone) {
+        // A row of icons: a copy of the row itself, its grid of 24 columns stretched with it.
+        g = from.cloneNode(true);
+        g.removeAttribute("id");
+        g.classList.remove("ob-hide");
+        g.classList.add("cw-blk", "cw-blkc");
+        g.style.visibility = "visible";
+        g.style.opacity = "";
+      } else {
+        g = el("div", "cw-blk b" + M.m);
+        g.style.gridTemplateColumns = "repeat(" + M.cols + ", minmax(0, 1fr))";
+        g.style.gridTemplateRows = "repeat(" + M.rows + ", minmax(0, 1fr))";
+        for (var r = 0; r < M.rows; r++) for (var c = 0; c < M.cols; c++) {
+          var v = M.v(r, c), cell = el("div", "cw-blk-c");
+          if (v === null || v === undefined) cell.classList.add("blank");
+          else {
+            cell.style.background = K.tint(M.m, v);
+            if (o.nums) { var t = el("span", "cw-tn", (M.f || K.wf)(v)); cell.appendChild(t); nums.push(t); }
+          }
+          g.appendChild(cell);
+        }
+        // Numbers that stay on the way take the target's size from the source's.
+        if (o.nums === "keep" && typeof from !== "function") {
+          var na = from.querySelector(".cw-tn"), nb = tos[0].querySelector(".cw-tn");
+          if (na && nb) { fa = parseFloat(window.getComputedStyle(na).fontSize); fb = parseFloat(window.getComputedStyle(nb).fontSize); }
+        }
+      }
+      function at(p) {
+        g.style.left = (a.left + (b.left - a.left) * p).toFixed(2) + "px";
+        g.style.top = (a.top + (b.top - a.top) * p).toFixed(2) + "px";
+        g.style.width = (a.width + (b.width - a.width) * p).toFixed(2) + "px";
+        g.style.height = (a.height + (b.height - a.height) * p).toFixed(2) + "px";
+        g.style.borderWidth = (bw[0] + (bw[1] - bw[0]) * p).toFixed(2) + "px";
+        var op = o.nums === "out" ? Math.max(0, 1 - p / 0.35) : o.nums === "in" ? Math.max(0, (p - 0.65) / 0.35) : 1;
+        nums.forEach(function (t) {
+          t.style.opacity = op.toFixed(3);
+          if (fa && fb) t.style.fontSize = (fa + (fb - fa) * p).toFixed(2) + "px";
+        });
+      }
+      at(0);
+      document.body.appendChild(g);
+      (o.hide || []).forEach(function (e) { e.style.visibility = "hidden"; });
+      api.animate(o.dur || 1100, at, function () { if (g.parentNode) g.parentNode.removeChild(g); show(); });
+    });
+  }
+  /* The rectangle around a list of elements. */
+  function union(list) {
+    var l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+    list.forEach(function (e) {
+      var q = e.getBoundingClientRect();
+      if (!q.width) return;
+      l = Math.min(l, q.left); t = Math.min(t, q.top); r = Math.max(r, q.right); b = Math.max(b, q.bottom);
+    });
+    return r > l ? { left: l, top: t, width: r - l, height: b - t } : { width: 0 };
+  }
+  K.stair = { blockFly: blockFly, ME: ME };
+
+  /* The rectangle of W's cells in scene 220's copy (each of its rows spans 23 columns there, two of them shown). */
+  function wRect(rows) {
+    var a = rows[0].children[0].getBoundingClientRect(), b = rows[rows.length - 1].children[1].getBoundingClientRect();
+    return { left: a.left, top: a.top, width: b.right - a.left, height: b.bottom - a.top };
+  }
+
+  /* The outlines of Z = S W for household i: its habits in S, their rows of W and their icons, its row of Z (i -1:
+     none). */
+  function light(X, i) {
+    X.S.r.forEach(function (row, h) { row.c.forEach(function (c, j) { c.classList.toggle("cw-mlit", h === i && !!HH[h].s[j]); }); });
+    X.W.r.forEach(function (row, j) { var on = i >= 0 && !!HH[i].s[j]; row.c.forEach(function (c) { c.classList.toggle("cw-mlit", on); }); });
+    X.ric.forEach(function (e, j) { e.classList.toggle("lit", i >= 0 && !!HH[i].s[j]); });
+    X.Z.r.forEach(function (row, h) { row.c.forEach(function (c) { c.classList.toggle("cw-mlit", h === i); }); });
+  }
+  /* The outlines of beats 3 and 4: the example household's row of Z and tiramisu's column of E. */
+  function lightT(X, on) {
+    X.Z.r[0].c.forEach(function (c) { c.classList.toggle("cw-mlit", on); });
+    X.E.r.forEach(function (row) { row.c[A1].classList.toggle("cw-mlit", on); });
+    X.icT.i[A1].classList.toggle("lit", on);
+  }
+  /* A preference rolls from one value to another, its colour with it. */
+  function rollT(api, X, h, a, from, to, d, dur) {
+    api.at(d, function () {
+      api.animate(dur, function (p) { X.T.set(h, a, r2(from + (to - from) * p)); }, function () { X.T.set(h, a, to); });
+    });
+  }
+
+  /* 230 reached with Next from the last beat of scene 220: 220's view, laid over this one by K.handIn, hands over. Its
+     lead line and its map fade, its numbers to learn glide to the top right, its state s and the icons above it glide
+     to the first row of S, its W shrinks into the small map of W and its name follows; the rest of it fades. */
+  function handIn230(P, H, api) {
+    var X = P.X, T = P.TW;
+    api.fade(H.part("lead"), false, { dur: 250 });
+    var map = H.part("map"), sb = H.part("score"), sr = H.part("srow"), sic = H.el.querySelector(".cw-ex-sicr");
+    if (map) api.fade(map, false, { dur: 400 });
+    if (sb) K.glide(api, sb, P.sb.el, { dur: 1000 });
+    if (sr) K.glide(api, sr, X.S.r[0].el, { dur: 900 });
+    if (sic) K.glide(api, sic, X.sic.el, { dur: 900 });
+    var wr = H.el.querySelectorAll(".cw-ex-sub.w.cw-ex-row");
+    if (wr.length === N) {
+      var hide = [];
+      for (var i = 0; i < wr.length; i++) hide.push(wr[i]);
+      blockFly(api, function () { return wRect(wr); }, T.map, MW, { delay: 60, dur: 1200, nums: "out", bw: [3, 2], hide: hide });
+    }
+    var nm = H.el.querySelector(".cw-ex-name.mW");
+    if (nm) K.move(api, nm, T.tag, 60, 1200);
+    api.fade(H.el, false, { delay: 150, dur: 700 });
+    P.lead.classList.add("ob-hide");
+    api.show(P.lead, true, { delay: 350, dur: 450 });
+  }
+
+  var NM = K.name(A1);
+  var L230 = [
+    "Now two matrices, \\(W\\) and \\(E\\), encode the whole table of preferences. The table again, with the states \\(S\\) of six households on its left.",
+    "\\(W\\) has 2 columns, so \\(z = s W\\) has 2 numbers. So \\(E\\) must have 2 rows instead of 24: one row per number of \\(z\\).",
+    "\\(S\\) shrinks to the left. \\(W\\) turns each household's state into its two numbers: \\(Z = S W\\), one row per household.",
+    "\\(E\\) turns the two numbers into preferences: \\(\\Theta = Z E\\). The preference of the example household for " + NM + ": guess, then press Compute.",
+    "\\(" + par(K.n2(ZZ[0][0])) + " \\times " + par(K.wf(IE[A1][0])) + " + " + par(K.n2(ZZ[0][1])) + " \\times " + par(K.wf(IE[A1][1])) + " = " +
+      K.n2(TH[0][A1]) + "\\). Every preference comes from \\(Z\\) and \\(E\\) this way, in place of the table's values.",
+    "To learn: \\(24 \\times 2 + 2 \\times 24 = " + NWE + "\\) numbers in \\(W\\) and \\(E\\), in place of the table's " + fmt0(PREFS) + " preferences.",
+  ];
+  function capT(k) { return "PREFERENCES " + K.tag("T", null, "sm").outerHTML + (k >= 4 ? " " + OB.tex("= Z E") : ""); }
+  /* Beat 2 with motion: Z's rows fill from ZF ms, one every ZS ms. */
+  var ZF = 2700, ZS = 620;
+
+  OB.scene({
+    key: "stair", order: 230, title: "W and E give the whole table", beats: L230.length,
+    build: function (root) {
+      root.classList.add("cw-root");
+      var P = this.parts = {};
+      P.lead = K.lead(root);
+      var st = el("div", "cw-st-stage"), wrap = el("div", "cw-stw ob-hscroll"), g = el("div", "cw-stg"), put = placer(g);
+      wrap.appendChild(g);
+      st.appendChild(wrap);
+      root.appendChild(st);
+      var X = P.X = { el: wrap, g: g };
+      g.style.gridTemplateColumns = cols(0);
+
+      // The matrices: S, Z and Theta in the table's rows; W above Z; E above Theta, in W's last three tracks.
+      X.S = matrix("S", NH, N, TROWS, "s", String);
+      X.Z = matrix("Z", NH, 2, TROWS, "z");
+      X.T = matrix("T", NH, N, TROWS, "t");
+      X.W = matrix("W", N, 2, "repeat(24, 11px)", "w", K.wf);
+      X.E = matrix("E", 2, N, "15px 15px", "e", K.wf);
+      put(X.S.el, R_T, C_S, NH, N);
+      put(X.Z.el, R_T, C_Z, NH, 2);
+      put(X.T.el, R_T, C_T, NH, N);
+      put(X.W.el, R_W, C_Z, N, 2);
+      put(X.E.el, R_E, C_T, 3, N);
+      HH.forEach(function (h, i) {
+        h.s.forEach(function (b, j) { X.S.set(i, j, b); });
+        X.Z.set(i, 0, ZZ[i][0]);
+        X.Z.set(i, 1, ZZ[i][1]);
+      });
+      for (var j = 0; j < N; j++) { X.W.set(j, 0, IW[0][j]); X.W.set(j, 1, IW[1][j]); X.E.set(0, j, IE[j][0]); X.E.set(1, j, IE[j][1]); }
+
+      // Icons: the coupons' under the room for E (beats 0 to 2) and above E (3 to 5); the products' above S; W's rows'.
+      X.icB = icons("b");
+      X.icT = icons("t");
+      X.sic = icons("s", true);
+      put(X.icB.el, R_ICB, C_T, 2, N);
+      put(X.icT.el, R_IC, C_T, 2, N);
+      put(X.sic.el, R_SIC, C_S, 1, N);
+      X.ric = [];
+      for (var jj = 0; jj < N; jj++) { var ri = put(el("div", "cw-st-ric" + (jj === 0 ? " f" : jj === N - 1 ? " l" : ""), CW.ICONS[jj]), R_W + jj, C_IC); ri.title = CW.NAMES[jj]; X.ric.push(ri); }
+      // Heads and names: 1 and 2 over W's columns, W's name left of them; 1 and 2 left of E's rows, E's name above.
+      X.wh = [put(el("div", "cw-cxh", "1"), R_H, C_Z), put(el("div", "cw-cxh", "2"), R_H, C_Z + 1)];
+      X.nameW = put(K.tag("W", null, "cw-st-wname"), R_H, 1, 1, C_IC);
+      X.eh = put(el("div", "cw-st-eh"), R_E, C_G, 3, 1);
+      X.eh.appendChild(el("div", "cw-cxh", "1"));
+      X.eh.appendChild(el("div", "cw-cxh", "2"));
+      X.nameE = put(K.tag("E", null, "cw-st-ename"), R_IC, C_G, 2, 1);
+      // Captions.
+      X.capS = put(OB.html("div", "cw-cap cw-st-cap", "STATES " + K.tag("S", null, "sm").outerHTML), R_CAP, C_S, 1, N);
+      X.capZ = put(OB.html("div", "cw-cap cw-st-cap", "REPRESENTATIONS " + K.tag("Z", null, "sm").outerHTML), R_CAP, C_Z, 1, 5);
+      X.capT = put(OB.html("div", "cw-cap cw-st-cap", capT(0)), R_CAP, C_T, 1, N);
+
+      // The panel above E: the small maps, the worked line or the count, the numbers to learn.
+      var pan = put(el("div", "cw-st-pan"), R_H, C_T, R_IC - R_H, N);
+      P.thumbs = el("div", "cw-st-thumbs");
+      P.TW = thumbW();
+      P.TE = thumbE();
+      P.thumbs.appendChild(P.TW.el);
+      P.thumbs.appendChild(P.TE.el);
+      pan.appendChild(P.thumbs);
+      var mid = el("div", "cw-st-mid");
+      P.B = box();
+      P.C = count();
+      mid.appendChild(P.B.el);
+      mid.appendChild(P.C.el);
+      pan.appendChild(mid);
+      P.sb = scoreboard();
+      pan.appendChild(P.sb.el);
+
+      X.scrolls = function () { return wrap.scrollWidth > wrap.clientWidth + 1; };
+      /* On a phone: element e in view near the right edge, or (left) near the left edge. */
+      X.focusEl = function (e, left) {
+        if (!X.scrolls()) return;
+        var wr = wrap.getBoundingClientRect(), cr = e.getBoundingClientRect();
+        wrap.scrollLeft = Math.max(0, wrap.scrollLeft + (left ? cr.left - wr.left - 8 : cr.right - wr.right + 24));
+      };
+    },
+    beat: function (k, api) {
+      var P = this.parts, X = P.X, TW = P.TW, TE = P.TE, go = K.live(api, k);
+      var H = k === 0 ? K.handIn(api, "household", 2600) : null;
+      K.say(P.lead, L230[k], H ? null : api);
+
+      // What the motions touch, back in place.
+      vis([X.S.r[0].el, X.sic.el, X.icB.el, X.icT.el, X.W.el, X.E.el, X.nameW, X.nameE, X.T.r[0].n[A1], TW.tag, TW.map, TE.tag, TE.map,
+        P.sb.el, P.sb.weV]);
+
+      // The columns: S wide and no room for Z until beat 2.
+      X.g.style.gridTemplateColumns = cols(k >= 2 ? 1 : 0);
+      X.g.classList.toggle("narrow", k >= 2);
+
+      // The table: S, its icons and Theta in every beat; the coupons' icons under the room for E until beat 2, above E
+      // after. Theta: the table's values until beat 3 (tiramisu's "?" at 3), Z E from beat 4.
+      bare(X.S.r.map(rowEl).concat(X.T.r.map(rowEl), [X.S.el, X.T.el, X.sic.el, X.capS, X.capT]), true);
+      bare([X.icB.el], k <= 2);
+      bare([X.icT.el], k >= 3);
+      swap(api, X.capT, capT(k), go && k === 4);
+      for (var h = 0; h < NH; h++) for (var a = 0; a < N; a++) {
+        var v = k >= 4 ? TH[h][a] : HH[h].p[a];
+        if (k === 3 && h === 0 && a === A1) v = "?";
+        X.T.set(h, a, v);
+      }
+      X.T.r[0].c[A1].classList.toggle("ring", k === 3 || k === 4);
+      // Z and W from beat 2, E from beat 3.
+      bare([X.Z.el, X.capZ, X.W.el, X.nameW].concat(X.Z.r.map(rowEl), X.ric, X.wh), k >= 2);
+      for (var hz = 0; hz < NH; hz++) { X.Z.set(hz, 0, ZZ[hz][0]); X.Z.set(hz, 1, ZZ[hz][1]); }
+      bare([X.E.el, X.eh, X.nameE], k >= 3);
+      light(X, -1);
+      lightT(X, k === 3 || k === 4);
+
+      // The small maps: W's until beat 1, E's until beat 2 (24 x 24 at beat 0, 2 x 24 after); gone from beat 3.
+      P.thumbs.classList.toggle("ob-gone", k >= 3);
+      bare([TW.el], k <= 1);
+      bare([TE.el], k <= 2);
+      bare([TW.tag, TW.map, TW.cap, TE.tag, TE.map, TE.cap], true);
+      TE.A.classList.toggle("ob-gone", k >= 1);
+      TE.A.classList.remove("fade");
+      TE.A.style.gridTemplateRows = TE.A.dataset.rows;
+      bare([TE.B], k >= 1);
+      TE.rows.textContent = OB.texText(k >= 1 ? "2" : "24");
+      TE.rows.classList.toggle("lit", k === 1);
+      TW.cols.classList.toggle("lit", k === 1);
+
+      // The panel: the worked line at beats 3 and 4, the count at 5; the numbers to learn, W and E's row from beat 5.
+      bare([P.B.el], k === 3 || k === 4);
+      P.B.res.textContent = k >= 4 ? K.n2(TH[0][A1]) : "?";
+      P.B.res.classList.toggle("done", k >= 4);
+      bare([P.C.el, P.sb.el], true);
+      bare([P.C.el], k === 5);
+      [P.sb.weL, P.sb.weN].forEach(function (e) { e.classList.toggle("ob-gone", k < 5); e.classList.remove("ob-hide"); e.style.opacity = ""; });
+      if (k === 3) api.nextLabel("Compute");
+
+      // On a phone: the small maps at beats 0 and 1, S, W and Z at 2, the worked line's result (above tiramisu's column)
+      // at 3 and 4, the numbers to learn at 5.
+      if (X.scrolls()) {
+        X.el.scrollLeft = 0;
+        if (k <= 1) X.focusEl(P.thumbs, true);
+        else if (k === 3 || k === 4) X.focusEl(P.B.res);
+        else if (k === 5) X.el.scrollLeft = X.el.scrollWidth;
+      }
+
+      // 0: the hand-off from 220, or the table and the small maps coming in.
+      if (go && k === 0) {
+        var d0 = H ? 450 : 100;
+        if (H) handIn230(P, H, api);
+        else [X.S.r[0].el, X.sic.el, P.sb.el, TW.tag, TW.map].forEach(function (e) { grow(api, e, d0, 600); });
+        grow(api, X.S.el, d0, 500);
+        grow(api, X.T.el, d0 + 100, 500);
+        grow(api, TW.cap, d0 + 850, 500);
+        [TE.tag, TE.map, TE.cap].forEach(function (e, i) { grow(api, e, d0 + 350 + 150 * i, 700); });
+        grow(api, X.icB.el, d0 + 250, 700);
+        for (var h1 = 1; h1 < NH; h1++) grow(api, X.S.r[h1].el, d0 + 450 + 120 * h1, 500);
+        for (var h2 = 0; h2 < NH; h2++) grow(api, X.T.r[h2].el, d0 + 550 + 120 * h2, 500);
+        grow(api, X.capS, d0 + 1200, 500);
+        grow(api, X.capT, d0 + 1200, 500);
+      }
+      // 1: E's 24 rows lose their colours and close into 2; E of the data fills them; its size reads 2 x 24.
+      if (go && k === 1) {
+        var A = TE.A;
+        A.classList.remove("ob-gone");
+        TE.B.classList.add("ob-hide");
+        TE.rows.textContent = OB.texText("24");
+        TE.rows.classList.remove("lit");
+        api.at(100, function () { A.classList.add("fade"); });
+        api.at(550, function () {
+          api.animate(1000, function (p) { A.style.gridTemplateRows = "7px 7px repeat(22, " + (7 * (1 - p)).toFixed(3) + "px)"; },
+            function () { A.style.gridTemplateRows = "7px 7px repeat(22, 0px)"; });
+        });
+        api.show(TE.B, true, { delay: 1500, dur: 500 });
+        api.at(1550, function () { TE.rows.textContent = OB.texText("2"); TE.rows.classList.add("lit"); bump(TE.rows); });
+        api.at(2000, function () { A.classList.add("ob-gone"); A.classList.remove("fade"); A.style.gridTemplateRows = A.dataset.rows; });
+      }
+      // 2: S shrinks and opens the room; W's small map grows into its place above it; Z = S W fills row by row.
+      if (go && k === 2) {
+        X.g.style.gridTemplateColumns = cols(0);
+        X.g.classList.remove("narrow");
+        api.at(150, function () { X.g.classList.add("narrow"); });
+        api.at(100, function () {
+          api.animate(1200, function (p) { X.g.style.gridTemplateColumns = cols(p); }, function () { X.g.style.gridTemplateColumns = cols(1); });
+        });
+        for (var hh = 0; hh < NH; hh++) { X.Z.set(hh, 0, ""); X.Z.set(hh, 1, ""); }
+        grow(api, X.Z.el, 500, 600);
+        grow(api, X.capZ, 1300, 500);
+        TW.el.classList.remove("ob-hide");
+        blockFly(api, TW.map, X.W.el, MW, { delay: 1400, dur: 1100, nums: "in", bw: [2, 3], hide: [TW.map] });
+        K.move(api, TW.tag, X.nameW, 1400, 1100);
+        api.fade(TW.cap, false, { delay: 1400, dur: 300 });
+        X.wh.forEach(function (e) { grow(api, e, 2450, 400); });
+        X.ric.forEach(function (e, j) { grow(api, e, 2450 + 15 * j, 400); });
+        // The small map's parts back at rest inside its hidden box, as a direct entry leaves them.
+        api.at(2600, function () {
+          TW.el.classList.add("ob-hide");
+          bare([TW.cap], true);
+          vis([TW.tag, TW.map]);
+        });
+        HH.forEach(function (_, i) {
+          api.at(ZF + ZS * i, function () {
+            light(X, i);
+            X.Z.set(i, 0, ZZ[i][0]);
+            X.Z.set(i, 1, ZZ[i][1]);
+            bump(X.Z.r[i].n[0]);
+            bump(X.Z.r[i].n[1]);
+          });
+        });
+        api.at(ZF + ZS * NH, function () { light(X, -1); });
+      }
+      // 3: the coupons' icons rise; E's small map grows into its place above Theta; tiramisu's preference asked.
+      if (go && k === 3) {
+        lightT(X, false);
+        X.T.r[0].c[A1].classList.remove("ring");
+        X.T.set(0, A1, HH[0].p[A1]);
+        X.icB.el.classList.remove("ob-hide");
+        K.glide(api, X.icB.el, X.icT.el, { delay: 100, dur: 800 });
+        api.at(950, function () { X.icB.el.classList.add("ob-hide"); X.icB.el.style.visibility = ""; });
+        P.thumbs.classList.remove("ob-gone");
+        TE.el.classList.remove("ob-hide");
+        blockFly(api, TE.map, X.E.el, ME, { delay: 500, dur: 1100, nums: "in", bw: [2, 3], hide: [TE.map] });
+        K.move(api, TE.tag, X.nameE, 500, 1100);
+        api.fade(TE.cap, false, { delay: 500, dur: 300 });
+        api.at(1650, function () {
+          P.thumbs.classList.add("ob-gone");
+          TE.el.classList.add("ob-hide");
+          bare([TE.cap], true);
+          vis([TE.tag, TE.map]);
+        });
+        grow(api, X.eh, 1550, 500);
+        api.at(1800, function () { lightT(X, true); X.T.r[0].c[A1].classList.add("ring"); X.T.set(0, A1, "?"); });
+        grow(api, P.B.el, 1900, 600);
+      }
+      // 4, Compute: the worked line's result flies into Theta; then every other preference rolls to z . e_a, row by row.
+      if (go && k === 4) {
+        P.B.res.textContent = "?";
+        P.B.res.classList.remove("done");
+        for (var h4 = 0; h4 < NH; h4++) for (var a4 = 0; a4 < N; a4++) X.T.set(h4, a4, h4 === 0 && a4 === A1 ? "?" : HH[h4].p[a4]);
+        api.at(300, function () { P.B.res.textContent = K.n2(TH[0][A1]); P.B.res.classList.add("done"); bump(P.B.res); });
+        K.flyKeep(api, P.B.res, X.T.r[0].n[A1], { delay: 700, dur: 1100, arc: 30, land: function () { X.T.set(0, A1, TH[0][A1]); } });
+        for (var h5 = 0; h5 < NH; h5++) for (var a5 = 0; a5 < N; a5++) {
+          if (TH[h5][a5] === null || (h5 === 0 && a5 === A1)) continue;
+          rollT(api, X, h5, a5, HH[h5].p[a5], TH[h5][a5], 2000 + 420 * h5 + 14 * a5, 900);
+        }
+      }
+      // 5: the count; 96 flies into the numbers to learn.
+      if (go && k === 5) {
+        P.B.el.classList.remove("ob-hide");
+        api.fade(P.B.el, false, { dur: 350 });
+        grow(api, P.C.el, 400, 700);
+        [P.sb.weL, P.sb.weN].forEach(function (e) { grow(api, e, 900, 500); });
+        K.copyTo(api, P.C.n, P.sb.weV, 1300, 1300);
+        api.at(2700, function () { if (OB.fx && OB.fx.burst) OB.fx.burst(P.sb.weN, "sparkle"); bump(P.C.x); });
+      }
+    },
+    /* Left with Next from the last beat: the view hands over to scene 240 (handIn240() in cw-2policy.js), which keeps E,
+       the example household's z and its preferences. */
+    leave: function (api) {
+      var P = this.parts;
+      if (!P || api.beat !== L230.length - 1) { K.hand = null; return; }
+      K.handOut("stair", api.root, { lead: P.lead, z0: P.X.Z.r[0].el, e: P.X.E.el, th0: P.X.T.r[0].el, ic: P.X.icT.el, score: P.sb.el });
     },
   });
 })();
@@ -5185,41 +6098,40 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
    200 card "The policy"
    (202 and 210, stages 1 and 2 of source/PLAN.md, are cw-2a-table.js and cw-2b-e24.js.)
-   220 Two numbers per household, then per product (11 beats), stage 3 of source/PLAN.md (Carlos, 2026-11-20: "observe
-       that the main issue is the high dimensionality of the household, so we compress things further by introducing W
-       and showing how W compresses households into 2-dim representations"); one slide since 2026-11-19 ("don't change
-       slides. Transition smoothly"), its head "Two numbers per household" in beats 0 to 5 and "Two numbers per
-       product" from beat 6 (K.title). Two layers share one cell of a grid (cw-pol):
-       Layer 1, beats 0 to 5: scene 210's cross (K.ex.cross() of cw-2b-e24.js), so that 210's last frame is this
+   220 Two numbers per household (7 beats), items 6 to 9 of Carlos's twelve slides of 2026-11-20 (source/PLAN.md, Round
+       10): "6. We can go a step further by compressing the household to a smaller representation using matrix
+       multiplication. 7. Note that if I take a houshold and multiply it by a matrix of say 24 * 2 then I would obtain a
+       two-dimensional representation. 8. We can choose any number for this compression smaller than 24. 9. For
+       illustration, we choose 2." Scene 210's cross (K.ex.cross() of cw-2b-e24.js), so that 210's last frame is this
        scene's first.
-         0 Reached with Next from 210's last beat, its view hands over (K.handIn, handIn220()): its lead line fades, then
-           the rest, with the preferences and their caption; tiramisu's 1 in s goes back to 0 (week 1 again); rings on
-           s and on E's row icons: E has a row for each of the 24 numbers of s.
-         1 E's numbers and colours fade, its coupons' icons and its count go, its 24 columns close into 2 (morph()), and
-           the weights W fill them row by row (D.init.W, 24 x 2, heat colours); 1 and 2 head them; the corner's name
-           becomes W.
-         2 z = s W: the habits' rows of W light, z's two cells under W show "?", the box under the cross the two inner
-           products. Compute.
-         3 W's lit numbers fly down column by column into z: 1.10 and 1.80.
-         4 The map: z1 and z2 fly onto its axes, the guides and the household's point come.
-         5 The 1,000 households of update 1 (the guided luck), each at z = s W of its week-1 state under the starting
-           W, as points.
-       Layer 2, beats 6 to 10: cross 2 (cross2()), the box of tiramisu's preference, the numbers to learn.
-         6 s, W, the map and the corner fade (cw-going); the numbers to learn glide under cross 2; z glides to the left
-           of cross 2, and E (2 x 24) builds around it.
-         7 to 9 tiramisu's preference as the inner product of z and e_a, guessed, computed; the 20 preferences.
-         10 24 x 2 + 2 x 24 = 96 flies into the numbers to learn as "W, E", under the table's 201,326,592 and E's 576.
-   240 From preferences to probabilities (2 beats): cross 2 with the probabilities under theta; the sum 1
+         0 Reached with Next from 210's last beat, its view hands over (K.handIn, handIn220()): its lead line and its
+           comparison fade, then the rest, with the preferences; E stays, dimmed; a ring on the state; in the corner the
+           box NUMBERS PER HOUSEHOLD, 24 -> ?.
+         1 E's numbers and colours fade, its coupons' icons go, its 24 columns close into 2 (morph()), and the weights W
+           fill them row by row (D.init.W, 24 x 2); 1 and 2 head them; the corner's name becomes W; z's two cells "?"
+           come under W; the box 24 -> 2.
+         2 z = s W: the habits and their rows of W outlined, the box under the cross the two inner products. Compute.
+         3 W's outlined numbers fly down column by column into z: 1.10 and 1.80.
+         4 W and z widen through 3, 4, 6, 8, 12, 16 and 23 columns (setK()), the box 24 -> k with them.
+         5 Back to 2 columns, the box counting down to 2.
+         6 The map (houseMap(), z1 across, z2 up, scene 430's scale): z1 and z2 fly onto its axes, the guides and the
+           household's point come, then the 1,000 households of update 1 (the guided luck), each at z = s W of its
+           week-1 state under the starting W.
+       Left with Next from beat 6, the view hands over to scene 230 (cw-2c-stair.js). Until the evening of 2026-11-20
+       the scene had 11 beats: after the map, a cross 2 (z, E 2 x 24, theta) with tiramisu's preference z . e_a and the
+       count of the 96 numbers; those moved to scene 230.
+   240 From preferences to probabilities (2 beats): reached with Next from 230's last beat, 230's E, the example
+       household's z and theta and the coupons' icons fly into cross 2 (handIn240()); the probabilities under theta; the
+       sum 1
    250 The roulette (3 beats): the wheel; the spin samples tiramisu; week 2 starts from a new state
 
    The crosses are wider than a phone: there they scroll sideways (class ob-hscroll; the walk does not count their
-   hidden part as text that leaves the window), and draw no arrows; scene 220's layer 1 opens at its left end (s, W
-   and z) and moves to the map at beats 4 and 5, cross 2 opens at the column of the coupon in focus. Every number is
-   computed from CWD.init (the starting weights) and the example household's week 1 and week 2 (cw-1game.js keeps its
-   episode in OB.cw.EP). The cells of W and E carry the colours of the weights in the forward pass from their first
-   appearance (K.heat: blue above 0, pink below, full colour from 2.5; Carlos, 2026-11-19: "When showing W and E at
-   first, show them with the heatmap colors you use in the forward pass so that the user gets used to the heatmap
-   colors"). */
+   hidden part as text that leaves the window), and draw no arrows; scene 220's cross opens at its left end (s, W and
+   z) and moves to the map at beat 6, cross 2 opens at the column of the coupon in focus. Every number is computed from
+   CWD.init (the starting weights) and the example household's week 1 and week 2 (cw-1game.js keeps its episode in
+   OB.cw.EP). Every cell carries its matrix's colour from its first appearance (K.paint, cw-0kit.js; Carlos,
+   2026-11-20: "use now colors for each of these matrices throughout the whole visualization"): s turquoise, W
+   raspberry, z violet, E orange, theta blue, the stronger the larger the number. */
 (function () {
   "use strict";
   var OB = window.OB, CW = window.CW, D = window.CWD, K = OB.cw, el = OB.el;
@@ -5273,6 +6185,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       Y.eh.push(put(el("div", "cw-cxh", String(c + 1)), 2 + c, 4));
       Y.zh.push(put(el("div", "cw-cxh b", String(c + 1)), 4, 2 + c));
       var x = put(el("div", "cw-cxz"), 5, 2 + c), zn = el("span", "cw-zn", K.n2(pol.z[c]));
+      K.paint(x, "Z", pol.z[c]);
       x.appendChild(zn);
       Y.z.push({ x: x, n: zn });
     }
@@ -5283,12 +6196,13 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       Y.ic.push(ic);
       for (var r = 0; r < 2; r++) {
         var ec = put(el("div", "cw-c2-e r" + r + ends), 2 + r, 5 + a), en = el("span", "cw-tn", K.wf(IE[a][r]));
-        ec.style.background = K.heat(IE[a][r]);
+        K.paint(ec, "E", IE[a][r]);
         ec.appendChild(en);
         Y.e[r].push(ec);
         Y.en[r].push(en);
       }
       var tc = put(el("div", "cw-c2-th" + ends + (hab ? " blank" : "")), 5, 5 + a), tn = el("span", "cw-tn", hab ? "" : K.n2(pol.theta[a]));
+      if (!hab) K.paint(tc, "T", pol.theta[a]);
       tc.appendChild(tn);
       Y.th.push(tc);
       Y.thn.push(tn);
@@ -5300,9 +6214,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       Y.p.push(pc);
       Y.bars.push(bar);
     }
-    Y.zlab = put(OB.html("div", "cw-cxl l", OB.tex("z")), 5, 1);
-    Y.elab = put(OB.html("div", "cw-cxl l", OB.tex("E")), 2, 1, 2, 3);
-    Y.thlab = put(OB.html("div", "cw-cxl r", OB.tex("\\theta")), 5, 29);
+    Y.zlab = put(OB.html("div", "cw-cxl l", K.tag("Z", "z", "sm").outerHTML), 5, 1);
+    Y.elab = put(OB.html("div", "cw-cxl l", K.tag("E", null, "sm").outerHTML), 2, 1, 2, 3);
+    Y.thlab = put(OB.html("div", "cw-cxl r", K.tag("T", "\\theta", "sm").outerHTML), 5, 29);
     Y.plab = put(OB.html("div", "cw-cxl r", OB.tex("\\pi")), 6, 29);
     Y.eEls = [Y.elab].concat(Y.eh, Y.ic, Y.e[0], Y.e[1]);
     Y.zEls = [Y.zlab].concat(Y.zh, Y.z.map(function (z) { return z.x; }));
@@ -5321,10 +6235,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
 
   /* 220, the numbers. H1: the habits of week 1. The households of update 1 (the guided luck of scenes 310 and 320) at
      z = s W of their week-1 states, under the starting weights; the example household is one of them. */
-  var N24 = CW.N, EX = K.ex, S1 = W1.s, NM = K.name(A1), e1 = IE[A1], th1 = POL1.theta[A1];
+  var N24 = CW.N, EX = K.ex, S1 = W1.s;
   var H1 = [];
   S1.forEach(function (b, j) { if (b) H1.push(j); });
-  var PREFS = Math.pow(2, N24) * N24 / 2, NW = N24 * 2, NE2 = 2 * N24;
   var GL = K.guided(), ZS = [];
   for (var hh = 0; hh < D.NHH; hh++) ZS.push(CW.policy(IW, IE, CW.household(GL, hh).basket).z);
   if (Math.abs(ZS[D.EXAMPLE][0] - Z[0]) > 1e-9 || Math.abs(ZS[D.EXAMPLE][1] - Z[1]) > 1e-9) console.error("cw-2policy: the example household is not at its z on the map");
@@ -5335,8 +6248,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return o;
   })();
 
-  /* The map of the households (beats 4 and 5): z1 across, z2 up, on the scale of scene 430's map (3.7 from the centre
-     to an edge), 340 px. Over it: the names of the axes, and the household's two numbers where it stands on them. */
+  /* The map of the households (beat 6): z1 across, z2 up, on the scale of scene 430's map (3.7 from the centre to an
+     edge), 340 px. Over it: the names of the axes, and the household's two numbers where it stands on them, in z's
+     violet. */
   var HMS = 340, HMC = HMS / 2, HMK = (HMC - 16) / 3.7;
   function hxy(z) { return [HMC + z[0] * HMK, HMC - z[1] * HMK]; }
   function pin(e, x, y) { e.style.left = x.toFixed(1) + "px"; e.style.top = y.toFixed(1) + "px"; return e; }
@@ -5365,57 +6279,103 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     box.appendChild(svg);
     box.appendChild(pin(OB.html("div", "cw-hax x", OB.tex("z_1")), HMS - 6, HMC + 5));
     box.appendChild(pin(OB.html("div", "cw-hax y", OB.tex("z_2")), HMC + 9, 2));
-    M.lx = pin(el("span", "cw-tn cw-hl x", K.n2(Z[0])), p0[0], HMC + 6);
-    M.ly = pin(el("span", "cw-tn cw-hl y", K.n2(Z[1])), HMC - 7, p0[1]);
+    M.lx = pin(K.paint(el("span", "cw-tn cw-hl x", K.n2(Z[0])), "Z", Z[0]), p0[0], HMC + 6);
+    M.ly = pin(K.paint(el("span", "cw-tn cw-hl y", K.n2(Z[1])), "Z", Z[1]), HMC - 7, p0[1]);
     box.appendChild(M.lx);
     box.appendChild(M.ly);
     M.el.appendChild(box);
-    M.el.appendChild(OB.html("div", "cw-cap", "HOUSEHOLDS AT THEIR TWO NUMBERS " + OB.tex("z")));
+    M.el.appendChild(OB.html("div", "cw-cap", "HOUSEHOLDS AT THEIR TWO NUMBERS " + K.tag("Z", "z", "sm").outerHTML));
     return M;
   }
 
-  /* Layer 1: scene 210's cross, and over it W in E's first two columns (the rows of W stand on E's rows: one per product
-     of the state), 1 and 2 above them where the coupons' icons stood, z under W where theta's first two cells stood,
-     W's name over E's in the corner, the rings of beat 0 and the map in the room that E's other columns leave. */
+  /* The sizes W runs through at beat 4 (Carlos: "We can choose any number for this compression smaller than 24"): k
+     columns, k below 24. KMAX columns of W and z are built; setK(k) shows the first k (k may be fractional while they
+     widen or narrow: the column after the whole ones is part open). The columns beyond W's two are empty. */
+  var KS = [3, 4, 6, 8, 12, 16, 23], KMAX = 23;
+
+  /* The box in the corner (beats 0 to 6): the numbers per household, 24 in the state s, then ?, 2 or k in z. */
+  function chip() {
+    var C = { el: el("div", "ob-box cw-chip") }, r = el("div", "cw-chip-r");
+    C.el.appendChild(el("div", "cw-chip-h", "NUMBERS PER HOUSEHOLD"));
+    var a = el("div", "cw-chip-n"), b = el("div", "cw-chip-n");
+    a.appendChild(K.tag("S", "s", "sm"));
+    a.appendChild(el("span", "cw-chip-v", "24"));
+    b.appendChild(K.tag("Z", "z", "sm"));
+    C.v = el("span", "cw-chip-v", "?");
+    b.appendChild(C.v);
+    r.appendChild(a);
+    r.appendChild(el("span", "cw-czarr cw-chip-arr"));
+    r.appendChild(b);
+    C.el.appendChild(r);
+    C.set = function (t) { if (C.v.textContent !== t) C.v.textContent = t; };
+    return C;
+  }
+
+  /* Scene 210's cross, and over it W in E's first columns (the rows of W stand on E's rows: one per product of the
+     state), the numbers of W's columns above them where the coupons' icons stood, z under W where theta's first cells
+     stood, W's name over E's in the corner with the box of the numbers per household under it, the ring of beat 0 and
+     the map in the room that E's other columns leave. */
   function crossW() {
     var X = EX.cross(), put = X.put, N = N24, R_E = EX.R_E, C_E = EX.C_E;
     X.wrows = [];
     X.w = [];
     X.wn = [];
     for (var j = 0; j < N; j++) {
-      var row = put(el("div", "cw-ex-sub w cw-ex-row" + (j === 0 ? " top" : "") + (j === N - 1 ? " bot" : "")), R_E + j, C_E, 1, 2);
+      var row = put(el("div", "cw-ex-sub w cw-ex-row" + (j === 0 ? " top" : "") + (j === N - 1 ? " bot" : "")), R_E + j, C_E, 1, KMAX);
       var cells = [], nums = [];
-      for (var c = 0; c < 2; c++) {
-        var cell = el("div", "cw-ex-e"), n = el("span", "cw-tn", K.wf(IW[c][j]));
-        cell.style.background = K.heat(IW[c][j]);
-        cell.appendChild(n);
+      for (var c = 0; c < KMAX; c++) {
+        var cell = el("div", "cw-ex-e");
+        if (c < 2) {
+          var n = el("span", "cw-tn", K.wf(IW[c][j]));
+          K.paint(cell, "W", IW[c][j]);
+          cell.appendChild(n);
+          nums.push(n);
+        } else cell.dataset.m = "W";
         row.appendChild(cell);
         cells.push(cell);
-        nums.push(n);
       }
       X.wrows.push(row);
       X.w.push(cells);
       X.wn.push(nums);
     }
-    X.wh = [0, 1].map(function (c) { return put(el("div", "cw-cxh", String(c + 1)), 1, C_E + c); });
-    X.zr = put(el("div", "cw-ex-sub w cw-ex-zr"), EX.R_S, C_E, 1, 2);
-    X.z = [0, 1].map(function (c) {
-      var x = el("div", "cw-ex-th " + (c ? "last" : "first")), n = el("span", "cw-tn", "?"), pad = el("span", "cw-pad");
-      x.appendChild(n);
+    X.wh = [];
+    for (var h = 0; h < KMAX; h++) X.wh.push(put(el("div", "cw-cxh", String(h + 1)), 1, C_E + h));
+    X.zr = put(el("div", "cw-ex-sub w cw-ex-zr"), EX.R_S, C_E, 1, KMAX);
+    X.z = [];
+    for (var c2 = 0; c2 < KMAX; c2++) {
+      var x = el("div", "cw-ex-th" + (c2 === 0 ? " first" : "")), zn = el("span", "cw-tn", c2 < 2 ? "?" : ""), pad = el("span", "cw-pad");
+      x.dataset.m = "Z";
+      x.appendChild(zn);
       x.appendChild(pad);
       X.zr.appendChild(x);
-      return { x: x, n: n, pad: pad };
-    });
-    X.capZ = put(OB.html("div", "cw-cap cw-ex-cap cw-ex-zcap", "REPRESENTATION " + OB.tex("z = s W")), EX.R_CAP, C_E, 1, 2);
+      X.z.push({ x: x, n: zn, pad: pad });
+    }
+    X.capZ = put(OB.html("div", "cw-cap cw-ex-cap cw-ex-zcap", "REPRESENTATION " + K.tag("Z", "z", "sm").outerHTML), EX.R_CAP, C_E, 1, 2);
     X.sRing = put(el("div", "cw-ex-ring"), EX.R_S, 1, 1, N);
-    X.icRing = put(el("div", "cw-ex-ring"), R_E, EX.C_RIC, N, 1);
     var nm = el("div", "cw-ex-names");
     X.top.insertBefore(nm, X.name);
     nm.appendChild(X.name);
-    X.nameW = OB.html("div", "cw-ex-name", OB.tex("W"));
+    X.nameW = K.tag("W", null, "cw-ex-name");
     nm.appendChild(X.nameW);
+    X.cnt.classList.add("ob-gone");
+    X.chip = chip();
+    X.top.appendChild(X.chip.el);
     X.M = houseMap();
     put(X.M.el, 1, C_E + 3, EX.R_CAP - 1, N - 3);
+    X.setK = function (k) {
+      var whole = Math.floor(k + 1e-6), part = k - whole;
+      if (part < 0.01) part = 0;
+      var last = part > 0 ? whole : whole - 1, tpl = [];
+      for (var c = 0; c < KMAX; c++) tpl.push(c < whole ? "34px" : c === whole && part > 0 ? (34 * part).toFixed(2) + "px" : "0px");
+      var t = tpl.join(" ");
+      X.wrows.forEach(function (r, j) {
+        r.style.gridTemplateColumns = t;
+        X.w[j].forEach(function (cell, cc) { cell.classList.toggle("ob-gone", cc > last); cell.classList.toggle("edge", cc === last); });
+      });
+      X.zr.style.gridTemplateColumns = t;
+      X.z.forEach(function (z, cc) { z.x.classList.toggle("ob-gone", cc > last); z.x.classList.toggle("edge", cc === last); });
+      X.wh.forEach(function (e, cc) { if (cc >= 2) { e.classList.toggle("ob-gone", cc > last); e.style.opacity = cc === whole && part > 0 ? part.toFixed(2) : ""; } });
+    };
     /* On a phone: the map in view, its left edge near the left of the window (in 600 ms when api is given). */
     X.focusMap = function (api) {
       if (!X.scrolls()) return;
@@ -5427,7 +6387,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return X;
   }
 
-  /* The box under layer 1's cross: the two inner products of z = s W, one per column of W, with their numbers. */
+  /* The box under the cross (beats 2 and 3): the two inner products of z = s W, one per column of W. */
   function boxZ(P) {
     var f = el("div", "ob-box cw-fbox cw-ex-f");
     P.zres = [0, 1].map(function (c) {
@@ -5441,79 +6401,28 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     return f;
   }
 
-  /* The numbers to learn under cross 2, as in scenes 202 and 210, with a row for W and E that shows at beat 10. */
-  function board() {
-    var S = { el: el("div", "ob-box cw-sb cw-pol-sb") }, g = el("div", "cw-sb-g");
-    S.el.appendChild(el("div", "cw-sb-h", "NUMBERS TO LEARN"));
-    g.appendChild(el("div", "cw-sb-l", "TABLE"));
-    g.appendChild(el("div", "cw-sb-n", OB.num(PREFS, 0)));
-    g.appendChild(OB.html("div", "cw-sb-l", OB.tex("E")));
-    g.appendChild(el("div", "cw-sb-n", OB.num(N24 * N24, 0)));
-    S.wL = OB.html("div", "cw-sb-l", OB.tex("W, E"));
-    S.wN = el("div", "cw-sb-n", OB.num(NW + NE2, 0));
-    g.appendChild(S.wL);
-    g.appendChild(S.wN);
-    S.el.appendChild(g);
-    return S;
-  }
-
-  /* Layer 2: cross 2; under it the box of tiramisu's preference (beats 7 to 9) or the count of beat 10, and the numbers
-     to learn. */
-  function layer2(P) {
-    var two = el("div", "cw-pol2");
-    P.Y = cross2(S1, POL1);
-    two.appendChild(P.Y.el);
-    var row = P.row = el("div", "cw-pol2b"), slot = el("div", "cw-pol2s");
-    var f = el("div", "ob-box cw-fbox");
-    f.appendChild(OB.html("div", "cw-fgen", OB.tex("\\theta_{s,a} = z_1\\, e_{1,a} + z_2\\, e_{2,a}")));
-    P.res = el("span", "ob-texn cw-fres", "?");
-    var line = OB.html("div", "cw-fnum", K.thsym(A1) + " " + OB.tex("= " + K.n2(Z[0]) + " \\times " + par(K.wf(e1[0])) + " + " + par(K.n2(Z[1])) + " \\times " + par(K.wf(e1[1])) + " =\\;"));
-    line.appendChild(P.res);
-    f.appendChild(line);
-    P.f = f;
-    slot.appendChild(f);
-    P.cnt = el("div", "cw-at-fl cw-pol-cnt");
-    P.cnt.appendChild(OB.html("span", "cw-at-fo", OB.tex("24 \\times 2 + 2 \\times 24 =")));
-    P.cntR = OB.texNumEl(OB.num(NW + NE2, 0), "cw-at-fr");
-    P.cnt.appendChild(P.cntR);
-    P.cnt.appendChild(el("span", "cw-at-fw", "NUMBERS"));
-    slot.appendChild(P.cnt);
-    row.appendChild(slot);
-    P.S2 = board();
-    row.appendChild(P.S2.el);
-    two.appendChild(row);
-    return two;
-  }
-  /* The row under cross 2 keeps the room of the numbers to learn with their third row, so that row comes without moving
-     the cross (layer 2 stands in the middle of the cell). */
-  function room(P) {
-    var S = P.S2, g = [S.wL, S.wN], gone = S.wL.classList.contains("ob-gone");
-    P.row.style.minHeight = "";
-    g.forEach(function (e) { e.classList.remove("ob-gone"); });
-    var h = P.row.getBoundingClientRect().height;
-    if (gone) g.forEach(function (e) { e.classList.add("ob-gone"); });
-    P.row.style.minHeight = h > 0 ? Math.ceil(h) + "px" : "";
-  }
-
   /* 220 reached with Next from the last beat of scene 210: 210's view, laid over this one by K.handIn, hands over. The
-     two are the same cross, so its lead line fades first and the rest of it after, taking the preferences and their
-     caption with it. */
+     two are the same cross, so its lead line and its comparison fade first, the rest of it after, taking the
+     preferences, their caption and the count of E's numbers with it; E stays, dimmed; the numbers to learn glide down
+     to their place under the box of the numbers per household. */
   function handIn220(P, H, api) {
     api.fade(H.part("lead"), false, { dur: 250 });
-    api.fade(H.el, false, { delay: 80, dur: 650 });
+    var w = H.part("wow"), sb = H.part("score");
+    if (w) api.fade(w, false, { dur: 350 });
+    if (sb) K.glide(api, sb, P.X.S.el, { dur: 900 });
+    api.fade(H.el, false, { delay: 120, dur: 700 });
     P.lead.classList.add("ob-hide");
     api.show(P.lead, true, { delay: 350, dur: 450 });
   }
 
-  /* Beat 1 with motion: E's numbers and colours fade with its coupons' icons and its count, its 24 columns close into 2
-     (CLOSE ms from CLOSE0), and W fills them row by row from FILL; E's rows leave once W covers them. The second column
-     closes to 31 px, so the right edge of E's frame (3 px) ends on W's and hides under it. */
-  var CLOSE0 = 500, CLOSE = 1000, FILL = CLOSE0 + CLOSE - 50, SHUT = "34px 31px repeat(22, 0px)";
+  /* Beat 1 with motion: E's numbers and colours fade and its coupons' icons go, its 24 columns close into 2 (CLOSE ms
+     from CLOSE0), and W fills them row by row from FILL; E's rows leave once W covers them; then z's two cells come
+     under W. The second column closes to 31 px, so the right edge of E's frame (3 px) ends on W's and hides under it. */
+  var CLOSE0 = 500, CLOSE = 1000, FILL = CLOSE0 + CLOSE - 50, SHUT = "34px 31px repeat(22, 0px)", ZIN = FILL + 50 * N24 + 250;
   function morph(X, api) {
     var rows = X.rows;
     rows.forEach(function (r) { r.classList.add("cw-ex-fade"); });
-    api.fade(X.icr, false, { dur: 400 });
-    api.fade(X.cnt, false, { dur: 400 });
+    api.animate(400, function (p) { X.icr.style.opacity = String(0.3 * (1 - p)); }, function () { X.icr.classList.add("ob-hide"); X.icr.style.opacity = ""; });
     api.at(CLOSE0, function () {
       api.animate(CLOSE, function (p) {
         var q = p < 0.5 ? 2 * p * p : 1 - Math.pow(2 - 2 * p, 2) / 2, w = (34 * (1 - q)).toFixed(2) + "px", w2 = (34 - 3 * q).toFixed(2) + "px";
@@ -5522,177 +6431,28 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     });
     api.fade(X.name, false, { delay: FILL - 250, dur: 400 });
     grow(api, X.nameW, FILL, 600);
-    X.wh.forEach(function (h, c) { grow(api, h, FILL + 150 * c, 500); });
+    [X.wh[0], X.wh[1]].forEach(function (h, c) { grow(api, h, FILL + 150 * c, 500); });
     X.wrows.forEach(function (r, j) { grow(api, r, FILL + 50 * j, 450); });
     api.at(FILL + 50 * (N24 - 1) + 450, function () {
       rows.forEach(function (r) { r.classList.add("ob-hide"); r.classList.remove("cw-ex-fade"); r.style.gridTemplateColumns = ""; });
     });
+    grow(api, X.zr, ZIN, 600);
+    grow(api, X.capZ, ZIN + 150, 600);
+    X.chip.set("?");
+    api.at(ZIN + 300, function () { X.chip.set("2"); bump(X.chip.v); });
   }
 
   var L220 = [
-    "Back to week 1. Each of the 24 numbers of the state \\(s\\) has its own row of \\(E\\): a long state, a large \\(E\\).",
-    "The weights \\(W\\) squeeze the state into 2 numbers: one row per product, as in \\(E\\), but only 2 columns. Picked at random to start.",
-    "\\(z = s W\\): add up the rows of \\(W\\) of the " + H1.length + " habits, one column at a time. Guess, then press Compute.",
-    "The household's two numbers: \\(z_1 = " + K.n2(Z[0]) + "\\) and \\(z_2 = " + K.n2(Z[1]) + "\\). Its 24 numbers became two: its representation.",
-    "The household as a point on a map: \\(z_1\\) across, \\(z_2\\) up.",
-    "The " + OB.num(D.NHH, 0) + " households of an update, each a point: the two numbers of its week 1, under the starting weights \\(W\\).",
-    "\\(E\\) needs only 2 rows now, one per number of \\(z\\): each coupon \\(a\\) has two numbers, its column \\(e_a\\), picked at random to start.",
-    "The preference for " + NM + ": the inner product of \\(z\\) and \\(e_a\\), as in weekend 2. Guess, then press Compute.",
-    "The preference for " + NM + ": " + K.n2(th1) + ".",
-    "\\(\\theta = z E\\): the preferences of the " + NC + " coupons. The habits get none: they get no coupon.",
-    "The numbers to learn: " + NW + " in \\(W\\) and " + NE2 + " in \\(E\\), " + (NW + NE2) + " in all, in place of the " + OB.num(N24 * N24, 0) + " of \\(E\\) alone.",
+    "We can go a step further: compress the household's state, 24 numbers, into a smaller representation, by a matrix multiplication.",
+    "Multiply the state \\(s\\) by a matrix \\(W\\) of 24 rows and 2 columns, picked at random: \\(z = s W\\) has 2 numbers, a two-dimensional representation.",
+    "\\(z = s W\\): in each column of \\(W\\), add up the rows of the " + H1.length + " habits, where \\(s\\) has a 1. Guess, then press Compute.",
+    "The household's representation: \\(z_1 = " + K.n2(Z[0]) + "\\) and \\(z_2 = " + K.n2(Z[1]) + "\\). Its 24 numbers became 2.",
+    "Any number below 24 works: \\(W\\) with 24 rows and \\(k\\) columns gives each household \\(k\\) numbers.",
+    "For the illustration we choose 2: \\(W\\) has \\(24 \\times 2\\) numbers, and each household two numbers, \\(z_1\\) and \\(z_2\\).",
+    "Two numbers make a point on a map, \\(z_1\\) across and \\(z_2\\) up: the household, then the " + OB.num(D.NHH, 0) + " households of an update.",
   ];
-  var L2 = 6, C2_ARROWS = ["c2-z", "c2-e"];
-  /* Beat 6 with motion: layer 1 fades (FADE ms), z glides (GLIDE ms), then E builds from BUILD ms. */
-  var FADE = 700, GLIDE = 1600, BUILD = FADE + GLIDE + 200;
-
-  /* Layer 1 at beats 0 to 5. */
-  function beat1(P, k, api, go, H) {
-    var X = P.X, M = X.M, N = N24, m1 = go && k === 1;
-    // Scene 210's cross: E, its coupons' icons, its name and its count at beat 0 (beat 1 closes them into W); the
-    // preferences, their caption and 210's rings never (they leave with 210's copy); the rings of beat 0.
-    X.rows.forEach(function (r) { r.style.gridTemplateColumns = ""; r.classList.remove("cw-ex-fade"); });
-    bare(X.rows.concat([X.icr, X.name, X.cnt]), k === 0 || m1);
-    bare([X.thr, X.capT, X.colRing, X.rowRing], false);
-    bare([X.sRing, X.icRing], k === 0 || m1);
-    bare([X.key, X.S.el], true);
-    X.S.el.style.visibility = "";
-    // The state of week 1; at beat 0 with motion, tiramisu's 1 of week 2 (210's last frame) goes back to 0.
-    var flip = go && k === 0;
-    for (var i = 0; i < N; i++) {
-      var on = S1[i] || (flip && i === A1) ? 1 : 0;
-      X.sn[i].textContent = String(on);
-      X.s[i].classList.toggle("lit", !!on);
-      X.ric[i].classList.toggle("lit", !!on);
-    }
-    // W from beat 1, its habits' rows lit from beat 2.
-    bare(X.wrows.concat(X.wh, [X.nameW]), k >= 1);
-    X.w.forEach(function (row, j) { row.forEach(function (c) { c.classList.toggle("lit", k >= 2 && H1.indexOf(j) >= 0); }); });
-    // z and the box of its two inner products from beat 2, z's numbers from beat 3.
-    bare([X.zr, X.capZ], k >= 2);
-    X.z.forEach(function (z, c) { z.n.textContent = k >= 3 ? K.n2(Z[c]) : "?"; z.x.classList.toggle("lit", k >= 3); z.x.style.visibility = ""; });
-    api.show(P.fz, k === 2 || k === 3, K.opt(go && k === 2, 900));
-    P.zres.forEach(function (r, c) { r.textContent = k >= 3 ? K.n2(Z[c]) : "?"; r.classList.toggle("done", k >= 3); });
-    if (k === 2) api.nextLabel("Compute");
-    // The map from beat 4, the households from beat 5.
-    bare([M.el, M.lx, M.ly, M.gx, M.gy, M.pt], k >= 4);
-    M.lx.style.visibility = "";
-    M.ly.style.visibility = "";
-    bare([M.dots], k >= 5);
-    M.dot.forEach(function (c) { c.style.opacity = ""; });
-    if (X.scrolls()) { if (k >= 4) X.focusMap(go && k === 4 ? api : null); else X.el.scrollLeft = 0; }
-
-    if (go && k === 0) {
-      if (H) handIn220(P, H, api);
-      api.at(900, function () { X.sn[A1].textContent = "0"; X.s[A1].classList.remove("lit"); X.ric[A1].classList.remove("lit"); bump(X.s[A1]); });
-      grow(api, X.sRing, 1500, 600);
-      grow(api, X.icRing, 1700, 600);
-    }
-    if (m1) {
-      api.fade(X.sRing, false, { dur: 300 });
-      api.fade(X.icRing, false, { dur: 300 });
-      morph(X, api);
-    }
-    if (go && k === 2) { grow(api, X.zr, 300); grow(api, X.capZ, 450); }
-    // 3, Compute: the lit numbers of each column of W fly down into its number of z, which adds them up.
-    if (go && k === 3) {
-      X.z.forEach(function (z, c) {
-        z.x.classList.remove("lit");
-        z.n.textContent = "0.00";
-        P.zres[c].textContent = "?";
-        P.zres[c].classList.remove("done");
-        var sum = 0;
-        H1.forEach(function (j, h) {
-          var d = 250 + 520 * h + 260 * c;
-          sum += IW[c][j];
-          var part = sum;
-          api.fly(X.wn[j][c], z.pad, { delay: d, arc: 30 });
-          api.at(d + OB.DUR.fly, function () { z.n.textContent = K.n2(part); bump(z.n); });
-        });
-        api.at(250 + 520 * (H1.length - 1) + 260 * c + OB.DUR.fly + 250, function () {
-          z.x.classList.add("lit");
-          P.zres[c].textContent = K.n2(Z[c]);
-          P.zres[c].classList.add("done");
-          bump(P.zres[c]);
-        });
-      });
-    }
-    // 4: the box goes; the map comes; z1 and z2 fly onto its axes; the guides, then the household's point.
-    if (go && k === 4) {
-      P.fz.classList.remove("ob-hide");
-      api.fade(P.fz, false, { dur: 500 });
-      grow(api, M.el, 300, 700);
-      K.copyTo(api, X.z[0].n, M.lx, 1000, 1200);
-      K.copyTo(api, X.z[1].n, M.ly, 1450, 1200);
-      grow(api, M.gx, 2750, 500);
-      grow(api, M.gy, 2750, 500);
-      grow(api, M.pt, 3000, 500);
-    }
-    // 5: the 1,000 households come in, slowly, then faster.
-    if (go && k === 5) {
-      var n = M.dot.length, shown = 0;
-      M.dot.forEach(function (c) { c.style.opacity = "0"; });
-      api.at(300, function () {
-        api.animate(2600, function (p) { var m = Math.round(p * p * n); for (; shown < m; shown++) M.dot[shown].style.opacity = ""; },
-          function () { for (; shown < n; shown++) M.dot[shown].style.opacity = ""; });
-      });
-    }
-  }
-
-  /* Layer 2 at beats 6 to 10 (k here 0 to 4). With motion at k = 0, z's label and heads come as z glides, and E builds
-     after the glide (from BUILD ms). */
-  function beat2(P, k, api, go) {
-    var Y = P.Y, N = N24, d = go && k === 0 ? BUILD : 200;
-    bare(Y.zEls, true);
-    bare(Y.eEls, true);
-    bare(Y.p.concat([Y.plab]), false);
-    if (go && k === 0) {
-      grow(api, Y.zlab, FADE);
-      Y.zh.forEach(function (h, c) { grow(api, h, FADE + 150 * c); });
-      grow(api, Y.elab, d);
-      Y.eh.forEach(function (h, c) { grow(api, h, d + 150 * c); });
-      for (var a = 0; a < N; a++) { grow(api, Y.ic[a], d + 100 + 45 * a); grow(api, Y.e[0][a], d + 140 + 45 * a); grow(api, Y.e[1][a], d + 180 + 45 * a); }
-    }
-    if (k === 0) Y.el.scrollLeft = 0;
-    // theta: tiramisu alone at k 1 and 2 (its value from k 2), all of them from k 3.
-    Y.th.forEach(function (c, a) { c.classList.toggle("ob-hide", !(k >= 3 || (k >= 1 && a === A1))); c.style.opacity = ""; });
-    Y.thlab.classList.toggle("ob-hide", k < 1);
-    Y.thn[A1].textContent = k >= 2 ? K.n2(th1) : "?";
-    var lit = k >= 1 && k <= 2;
-    // z stays lit from layer 1 until the preferences of all coupons.
-    Y.z.forEach(function (z) { z.x.classList.toggle("lit", k <= 2); });
-    Y.e[0][A1].classList.toggle("lit", lit);
-    Y.e[1][A1].classList.toggle("lit", lit);
-    Y.ic[A1].classList.toggle("lit", lit);
-    Y.th[A1].classList.toggle("lit", k >= 1);
-    if (go && k === 1) grow(api, Y.th[A1], 300);
-    if (k === 1 || k === 2) Y.focus(A1);
-    // The arrows of tiramisu's preference: z straight right into it, its column of E straight down into it.
-    if (lit && !Y.scrolls()) {
-      var o = function (dl, from, to) { var a = { from: from, to: to, gap: 3, head: 11 }; if (go && k === 1) a.delay = dl; else a.dur = 1; return a; };
-      api.arrow("c2-z", Y.z[1].x, Y.th[A1], o(500, "right", "left"));
-      api.arrow("c2-e", Y.e[1][A1], Y.th[A1], o(700, "bottom", "top"));
-    } else C2_ARROWS.forEach(function (id) { api.unarrow(id); });
-    // The box of tiramisu's preference at k 1 to 3; the count of the numbers to learn at k 4, in its place.
-    api.show(P.f, k >= 1 && k <= 3, K.opt(go && k === 1, 900));
-    if (k === 1) api.nextLabel("Compute");
-    P.res.textContent = k >= 2 ? K.n2(th1) : "?";
-    P.res.classList.toggle("done", k >= 2);
-    if (go && k === 2) api.fly(P.res, Y.thn[A1], { delay: 300 });
-    if (go && k === 3) Y.th.forEach(function (c, a) { if (a !== A1) grow(api, c, 200 + 50 * a); });
-    var S = P.S2;
-    S.el.style.visibility = "";
-    [S.wL, S.wN].forEach(function (e) { e.classList.toggle("ob-gone", k < 4); e.style.visibility = ""; });
-    bare([P.cnt], k >= 4);
-    room(P);
-    if (go && k === 4) {
-      P.f.classList.remove("ob-hide");
-      api.fade(P.f, false, { dur: 400 });
-      grow(api, P.cnt, 450, 700);
-      grow(api, S.wL, 1400, 600);
-      K.copyTo(api, P.cntR, S.wN, 1400, 1300);
-    }
-  }
+  /* Beat 4 with motion: W widens through KS, WIDE ms per size and a pause of HOLD ms at each. */
+  var WIDE = 520, HOLD = 380;
 
   OB.scene({
     key: "household", order: 220, title: "Two numbers per household", beats: L220.length,
@@ -5700,47 +6460,164 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       root.classList.add("cw-root");
       var P = this.parts = {};
       P.lead = K.lead(root);
-      var pol = el("div", "cw-pol");
-      P.L1 = el("div", "cw-ex-stage cw-pol1");
+      var st = el("div", "cw-ex-stage");
       P.X = crossW();
-      P.L1.appendChild(P.X.el);
+      st.appendChild(P.X.el);
+      var under = el("div", "cw-ex-under");
       P.fz = boxZ(P);
-      P.L1.appendChild(P.fz);
-      pol.appendChild(P.L1);
-      P.two = layer2(P);
-      pol.appendChild(P.two);
-      root.appendChild(pol);
+      under.appendChild(P.fz);
+      st.appendChild(under);
+      root.appendChild(st);
     },
     beat: function (k, api) {
-      var P = this.parts, X = P.X, Y = P.Y, go = K.live(api, k);
+      var P = this.parts, X = P.X, M = X.M, go = K.live(api, k);
       var H = k === 0 ? K.handIn(api, "e-alone", 2600) : null;
       K.say(P.lead, L220[k], H ? null : api);
-      K.title(P.lead, k < L2 ? "Two numbers per household" : "Two numbers per product", api);
-      P.L1.classList.remove("cw-going");
-      P.L1.classList.toggle("ob-hide", k >= L2);
-      P.two.classList.toggle("ob-hide", k < L2);
-      if (k < L2) {
-        C2_ARROWS.forEach(function (id) { api.unarrow(id); });
-        beat1(P, k, api, go, H);
-        return;
-      }
-      beat2(P, k - L2, api, go);
-      if (!(go && k === L2)) return;
-      /* The change of view: layer 1 stays while all of it but z fades (CSS, cw-going); the numbers to learn glide under
-         cross 2; z glides to its place on the left of cross 2, still lit; layer 1 goes once z leaves. */
-      P.L1.classList.remove("ob-hide");
-      P.L1.classList.add("cw-going");
-      K.glide(api, X.S.el, P.S2.el, { dur: 1400 });
-      X.z.forEach(function (z, c) { api.fly(z.x, Y.z[c].x, { delay: FADE, dur: GLIDE, arc: 40 }); });
-      api.at(FADE + 40, function () {
-        P.L1.classList.add("ob-hide");
-        P.L1.classList.remove("cw-going");
+
+      // Scene 210's cross: E, dimmed, and its coupons' icons at beat 0 (beat 1 closes them into W); its name until
+      // beat 1; never the preferences, their caption and 210's rings (they leave with 210's copy).
+      X.rows.forEach(function (r) { r.style.gridTemplateColumns = ""; r.classList.remove("cw-ex-fade"); r.classList.add("cw-ex-dimE"); });
+      X.icr.classList.add("cw-ex-dimE");
+      bare(X.rows.concat([X.icr, X.name]), k === 0 || (go && k === 1));
+      bare([X.thr, X.capT, X.colRing], false);
+      X.S.known(true);
+      bare([X.S.el, X.chip.el], true);
+      X.S.el.style.visibility = "";
+      // The state of week 1; the ring at beat 0; the habits outlined, with their rows of W, at beats 2 and 3.
+      var lit = k === 2 || k === 3;
+      X.s.forEach(function (c, i) { c.classList.toggle("cw-mlit", lit && !!S1[i]); });
+      X.ric.forEach(function (e, j) { e.classList.toggle("lit", lit && !!S1[j]); });
+      bare([X.sRing], k === 0 || (go && k === 1));
+      // W from beat 1: 2 columns, 23 at beat 4 (the end of its widening).
+      bare(X.wrows.concat([X.wh[0], X.wh[1], X.nameW]), k >= 1);
+      X.setK(k === 4 ? KMAX : 2);
+      X.w.forEach(function (row, j) { row.forEach(function (c, cc) { c.classList.toggle("cw-mlit", lit && cc < 2 && !!S1[j]); }); });
+      // z under W from beat 1: "?" at beats 1 and 2, its two numbers from beat 3.
+      bare([X.zr, X.capZ], k >= 1);
+      X.z.forEach(function (z, c) {
+        if (c >= 2) return;
+        z.n.textContent = k >= 3 ? K.n2(Z[c]) : "?";
+        K.paint(z.x, "Z", k >= 3 ? Z[c] : null);
+        z.x.style.visibility = "";
       });
+      X.chip.set(k === 0 ? "?" : k === 4 ? String(KMAX) : "2");
+      // The box of the two inner products at beats 2 and 3.
+      api.show(P.fz, k === 2 || k === 3, K.opt(go && k === 2, 700));
+      P.zres.forEach(function (r, c) { r.textContent = k >= 3 ? K.n2(Z[c]) : "?"; r.classList.toggle("done", k >= 3); });
+      if (k === 2) api.nextLabel("Compute");
+      // The map at beat 6.
+      bare([M.el, M.lx, M.ly, M.gx, M.gy, M.pt, M.dots], k >= 6);
+      M.lx.style.visibility = "";
+      M.ly.style.visibility = "";
+      M.dot.forEach(function (c) { c.style.opacity = ""; });
+      if (X.scrolls()) { if (k >= 6) X.focusMap(go && k === 6 ? api : null); else X.el.scrollLeft = 0; }
+
+      // 0: the ring on the state, the box of the numbers per household.
+      if (go && k === 0) {
+        if (H) handIn220(P, H, api);
+        grow(api, X.chip.el, 900, 600);
+        grow(api, X.sRing, 1300, 600);
+      }
+      // 1: E closes into W; z comes under W.
+      if (go && k === 1) {
+        api.fade(X.sRing, false, { dur: 300 });
+        morph(X, api);
+      }
+      // 3, Compute: the outlined numbers of each column of W fly down into its number of z, which adds them up.
+      if (go && k === 3) {
+        X.z.forEach(function (z, c) {
+          if (c >= 2) return;
+          z.n.textContent = "0.00";
+          K.paint(z.x, "Z", 0);
+          P.zres[c].textContent = "?";
+          P.zres[c].classList.remove("done");
+          var sum = 0;
+          H1.forEach(function (j, h) {
+            var d = 250 + 520 * h + 260 * c;
+            sum += IW[c][j];
+            var part = sum;
+            api.fly(X.wn[j][c], z.pad, { delay: d, arc: 30 });
+            api.at(d + OB.DUR.fly, function () { z.n.textContent = K.n2(part); K.paint(z.x, "Z", part); bump(z.n); });
+          });
+          api.at(250 + 520 * (H1.length - 1) + 260 * c + OB.DUR.fly + 250, function () {
+            P.zres[c].textContent = K.n2(Z[c]);
+            P.zres[c].classList.add("done");
+            bump(P.zres[c]);
+          });
+        });
+      }
+      // 4: W and z widen through the sizes of KS, the box with them.
+      if (go && k === 4) {
+        X.setK(2);
+        X.chip.set("2");
+        var t = 300, from = 2;
+        KS.forEach(function (to) {
+          var f0 = from;
+          api.at(t, function () {
+            api.animate(WIDE, function (p) { X.setK(f0 + (to - f0) * (1 - Math.pow(1 - p, 3))); },
+              function () { X.setK(to); X.chip.set(String(to)); bump(X.chip.v); });
+          });
+          t += WIDE + HOLD;
+          from = to;
+        });
+      }
+      // 5: back to 2 columns, the box counting down.
+      if (go && k === 5) {
+        X.setK(KMAX);
+        X.chip.set(String(KMAX));
+        api.at(250, function () {
+          api.animate(1500, function (p) {
+            var q = p < 0.5 ? 2 * p * p : 1 - Math.pow(2 - 2 * p, 2) / 2, kk = KMAX + (2 - KMAX) * q;
+            X.setK(kk);
+            X.chip.set(String(Math.max(2, Math.ceil(kk - 0.01))));
+          }, function () { X.setK(2); X.chip.set("2"); bump(X.chip.v); });
+        });
+      }
+      // 6: the map; z1 and z2 fly onto its axes; the guides, the household's point; then the 1,000 households.
+      if (go && k === 6) {
+        grow(api, M.el, 300, 700);
+        K.copyTo(api, X.z[0].n, M.lx, 1000, 1200);
+        K.copyTo(api, X.z[1].n, M.ly, 1450, 1200);
+        grow(api, M.gx, 2750, 500);
+        grow(api, M.gy, 2750, 500);
+        grow(api, M.pt, 3000, 500);
+        var n = M.dot.length, shown = 0;
+        M.dot.forEach(function (c) { c.style.opacity = "0"; });
+        api.at(3800, function () {
+          api.animate(2600, function (p) { var m = Math.round(p * p * n); for (; shown < m; shown++) M.dot[shown].style.opacity = ""; },
+            function () { for (; shown < n; shown++) M.dot[shown].style.opacity = ""; });
+        });
+      }
+    },
+    /* Left with Next from the last beat: the view hands over to scene 230 (handIn230() in cw-2c-stair.js). */
+    leave: function (api) {
+      var P = this.parts;
+      if (!P || api.beat !== L220.length - 1) { K.hand = null; return; }
+      K.handOut("household", api.root, { lead: P.lead, map: P.X.M.el, srow: P.X.sr, score: P.X.S.el });
     },
   });
 
   /* 240. From preferences to probabilities: cross 2 with the probabilities under theta. */
   var best = 0;
+  /* 240 reached with Next from the last beat of scene 230 (cw-2c-stair.js): 230's view, laid over this one by K.handIn,
+     hands over. Its lead line and its numbers to learn fade; E, the example household's row of Z and its row of Theta
+     fly into cross 2 as blocks and take its sizes (K.stair.blockFly), the coupons' icons with them; the rest fades;
+     the labels and the heads come; then the probabilities, as when the scene is entered otherwise. */
+  var MZ1 = { m: "Z", rows: 1, cols: 2, v: function (r, c) { return POL1.z[c]; }, f: K.n2 };
+  var MT1 = { m: "T", rows: 1, cols: CW.N, v: function (r, a) { return W1.s[a] ? null : Math.round(POL1.theta[a] * 100) / 100; }, f: K.n2 };
+  function handIn240(P, H, api) {
+    var Y = P.Y, F = K.stair, e = H.part("e"), z0 = H.part("z0"), th0 = H.part("th0"), ic = H.part("ic"), sb = H.part("score");
+    api.fade(H.part("lead"), false, { dur: 250 });
+    if (sb) api.fade(sb, false, { dur: 400 });
+    if (F && e) F.blockFly(api, e, Y.e[0].concat(Y.e[1]), F.ME, { delay: 60, dur: 1100, nums: "keep", hide: [e] });
+    if (F && z0) F.blockFly(api, z0, Y.z.map(function (z) { return z.x; }), MZ1, { delay: 60, dur: 1100, nums: "keep", hide: [z0] });
+    if (F && th0) F.blockFly(api, th0, Y.th, MT1, { delay: 60, dur: 1100, nums: "keep", hide: [th0] });
+    if (F && ic) F.blockFly(api, ic, Y.ic, null, { delay: 60, dur: 1100, clone: true, hide: [ic] });
+    api.fade(H.el, false, { delay: 150, dur: 700 });
+    [Y.zlab, Y.elab, Y.thlab].concat(Y.eh, Y.zh).forEach(function (x) { grow(api, x, 1000, 500); });
+    P.lead.classList.add("ob-hide");
+    api.show(P.lead, true, { delay: 350, dur: 450 });
+  }
   POL1.p.forEach(function (q, a) { if (q > POL1.p[best]) best = a; });
   var L240 = [
     "Softmax turns the preferences of the " + NC + " coupons into probabilities \\(\\pi(a \\mid s)\\), as for Old Bessie.",
@@ -5759,18 +6636,21 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     },
     beat: function (k, api) {
       var P = this.parts, Y = P.Y, go = K.live(api, k);
-      K.say(P.lead, L240[k], api);
+      var H = k === 0 ? K.handIn(api, "stair", 2600) : null, d0 = H ? 1200 : 0;
+      K.say(P.lead, L240[k], H ? null : api);
       bare(Y.zEls.concat(Y.eEls, Y.th, [Y.thlab], Y.p, [Y.plab]), true);
-      Y.e.forEach(function (row) { row.forEach(function (c) { c.classList.add("mute"); }); });
       Y.th.forEach(function (c) { c.classList.remove("lit"); });
+      /* On a phone beat 0 shows the cross from its left end, whichever beat came before (beat 1 scrolls it). */
+      if (k === 0 && Y.scrolls()) Y.el.scrollLeft = 0;
       if (go && k === 0) {
-        grow(api, Y.plab, 300);
+        if (H) handIn240(P, H, api);
+        grow(api, Y.plab, d0 + 300);
         Y.p.forEach(function (c, a) {
-          grow(api, c, 300 + 50 * a, 800);
+          grow(api, c, d0 + 300 + 50 * a, 800);
           if (Y.hab.indexOf(a) >= 0) return;
           var bar = Y.bars[a], w = bar.style.width;
           bar.style.width = "0";
-          api.at(300 + 50 * (a + 1), function () { api.animate(1200, function (p) { bar.style.width = (parseFloat(w) * p).toFixed(1) + "%"; }, function () { bar.style.width = w; }); });
+          api.at(d0 + 300 + 50 * (a + 1), function () { api.animate(1200, function (p) { bar.style.width = (parseFloat(w) * p).toFixed(1) + "%"; }, function () { bar.style.width = w; }); });
         });
       }
       api.show(P.sum, k >= 1, K.opt(go && k === 1, 300));
@@ -6919,7 +7799,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     "The farther along the arrow, the higher the preference \\(z \\cdot e_a\\): " + K.name(TOP2[0]) + ", " + K.n2(POL.p[TOP2[0]]) + ", and " + K.name(TOP2[1]) + ", " + K.n2(POL.p[TOP2[1]]) + ". Its return: " + K.n2(G1END) + ", up from " + K.n2(K.EP.G1) + ".",
     (TURN.flip ? "Flipped left to right, then turned " : "Turned ") + TURN.deg + " degrees " + (TURN.cw ? "clockwise" : "anticlockwise") + ", together with \\(z\\): every preference \\(z \\cdot e_a\\) stays the same, and the map faces the circle of tastes."
   ];
-  var CAP430 = ["EACH PRODUCT AT ITS TWO NUMBERS " + OB.tex("e_a") + ", ITS COLUMN OF " + OB.tex("E"), TURN.flip ? "THE SAME MAP, FLIPPED AND TURNED" : "THE SAME MAP, TURNED"];
+  var CAP430 = ["EACH PRODUCT AT ITS TWO NUMBERS " + K.tag("E", "e_a", "sm").outerHTML + ", ITS COLUMN OF " + K.tag("E", null, "sm").outerHTML, TURN.flip ? "THE SAME MAP, FLIPPED AND TURNED" : "THE SAME MAP, TURNED"];
   function MapView() {
     var V = {}, svg = OB.svgEl("svg", { viewBox: "0 0 " + MS + " " + MS, width: MS, height: MS, "class": "cw-map" });
     [-3, -2, -1, 1, 2, 3].forEach(function (g) {
