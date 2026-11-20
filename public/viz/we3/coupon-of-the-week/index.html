@@ -1299,6 +1299,8 @@ sup { top: -0.55em; }
 .cw-maprow { display: flex; align-items: center; justify-content: center; gap: 36px; margin-top: 2px; }
 .cw-mapw, .cw-tcw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .cw-map { display: block; overflow: visible; max-width: 100%; height: auto; }
+.cw-capst { display: grid; justify-items: center; }
+.cw-capst > .cw-cap { grid-area: 1 / 1; }
 .cw-mgrid { stroke: var(--ink2); stroke-opacity: 0.16; stroke-width: 1; }
 .cw-max { stroke: var(--ink2); stroke-opacity: 0.55; stroke-width: 1.5; }
 .cw-mdisc { fill: #FFFFFF; stroke: var(--ink); stroke-width: 2; }
@@ -1318,6 +1320,9 @@ sup { top: -0.55em; }
 .cw-tcirc { display: block; overflow: visible; max-width: 100%; height: auto; }
 .cw-tring { fill: none; stroke: var(--ink2); stroke-width: 2; stroke-dasharray: 5 5; }
 .cw-tlab { font-family: var(--sign); font-size: 11px; letter-spacing: 0.06em; fill: var(--ink); }
+/* The circle's two axes, on the circle and on the map (scene 430, beat 5, 2026-11-20); the names on the map with a halo. */
+.cw-nax line { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; }
+.cw-naxt { font-weight: 700; paint-order: stroke; stroke: #FFFFFF; stroke-width: 4px; stroke-linejoin: round; }
 
 /* What we learned: the cards of Old Bessie's scene 430 (sec3e.css), without pictures. */
 .cw-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 360px)); justify-content: center;
@@ -7347,10 +7352,11 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
        from the average)
    420 Many updates (2 beats): the movie of updates 3 to 2,000 on the same view, every part set at once at each update,
        faster and faster, with Pause and Again; the end, 69.59
-   430 What the app learned (5 beats): the products' two numbers e_a as points on a map, at the start and after 2,000
+   430 What the app learned (6 beats): the products' two numbers e_a as points on a map, at the start and after 2,000
        updates (the points glide through the updates); coloured by the circle of tastes of coupon.js, which the app
-       never sees, beside that circle; the household of the first scenes: its z after learning, an arrow, and its two
-       likeliest coupons, the products farthest along the arrow
+       never sees, beside that circle, drawn mirrored (healthy on the left); the household of the first scenes: its z
+       after learning, an arrow, and its two likeliest coupons, the products farthest along the arrow; the circle's
+       two axes on the map, turned to fit the points (the points do not move)
    440 What we learned (6 beats): one card per Next, the newest lit
 
    From update 3 on, each update meets 1,000 new households (OB.cw.luckOf), so the curve goes up and down with their
@@ -7750,31 +7756,20 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
   var POL = CW.policy(D.end.W, D.end.E, HAB0);
   var G1END = CW.playEpisode(D.end.W, D.end.E, K.guided(), D.EXAMPLE, false);
   var TOP2 = POL.p.map(function (p, a) { return [p, a]; }).sort(function (x, y) { return y[0] - x[0]; }).slice(0, 2).map(function (x) { return x[1]; });
-  /* The turn of beat 5 (2026-11-20; Carlos: "Yes, rotate"): the flip and the turn about the centre that bring the
-     learned points closest to the circle of tastes, the best orthogonal map of a 2 x 2 problem in closed form. With
-     M the sum over the products of e_a^T trait_a: a turn by atan2(M01 - M10, M00 + M11), or a flip of the first
-     number followed by a turn by atan2(M01 + M10, M00 - M11) + 180 degrees, whichever fits better. z turns with the
-     points, so every preference z . e_a, every probability and every return stay the same (checked below). */
-  var TURN = (function () {
-    var E = D.end.E, T = CW.TRAIT, m00 = 0, m01 = 0, m10 = 0, m11 = 0;
-    for (var a = 0; a < CW.N; a++) { m00 += E[a][0] * T[a][0]; m01 += E[a][0] * T[a][1]; m10 += E[a][1] * T[a][0]; m11 += E[a][1] * T[a][1]; }
-    var flip = Math.hypot(m00 - m11, m01 + m10) > Math.hypot(m00 + m11, m01 - m10);
-    var ang = flip ? Math.atan2(m01 + m10, m00 - m11) + Math.PI : Math.atan2(m01 - m10, m00 + m11);
-    ang = Math.atan2(Math.sin(ang), Math.cos(ang));
-    return { flip: flip, ang: ang, deg: Math.round(Math.abs(ang) * 180 / Math.PI), cw: ang < 0 };
-  })();
-  /* A point at flip progress f (0 to 1: the first number shrinks to 0, then grows mirrored) and turn progress r. */
-  function turned(p, f, r) {
-    var x = TURN.flip ? p[0] * Math.cos(Math.PI * f) : p[0], y = p[1], a = TURN.ang * r, c = Math.cos(a), s = Math.sin(a);
-    return [x * c - y * s, x * s + y * c];
-  }
-  (function () {
-    var z1 = turned(POL.z, 1, 1), worst = 0;
-    D.end.E.forEach(function (e) {
-      var e1 = turned(e, 1, 1);
-      worst = Math.max(worst, Math.abs(z1[0] * e1[0] + z1[1] * e1[1] - (POL.z[0] * e[0] + POL.z[1] * e[1])));
-    });
-    if (worst > 1e-9) console.error("cw-4learn: the turn of scene 430 changes a preference by " + worst);
+  /* The axes of beat 5 (2026-11-20; Carlos: "Rather than doing this flipping and then rotating, just show a new axis
+     of coordinates that aligns with the circle of tastes. And flip the circle of taste so we don't have to do the
+     flipping"; until then the points flipped and turned). The circle of tastes is drawn mirrored, healthy on the left
+     and indulgent on the right (MIR), so the learned points need no flip to match it: with M the sum over the products
+     of e_a^T q_a (q_a the product's place on the mirrored circle), the best turn of the points onto the circle is
+     atan2(M01 - M10, M00 + M11), and a flip followed by a turn fits worse (a console error otherwise). The points stay;
+     the map gets the circle's two axes, turned the other way: across, healthy to indulgent; up, budget to premium. */
+  var MIR = CW.TRAIT.map(function (t) { return [-t[0], t[1]]; });
+  var AX = (function () {
+    var E = D.end.E, m00 = 0, m01 = 0, m10 = 0, m11 = 0;
+    for (var a = 0; a < CW.N; a++) { m00 += E[a][0] * MIR[a][0]; m01 += E[a][0] * MIR[a][1]; m10 += E[a][1] * MIR[a][0]; m11 += E[a][1] * MIR[a][1]; }
+    if (Math.hypot(m00 - m11, m01 + m10) > Math.hypot(m00 + m11, m01 - m10)) console.error("cw-4learn: the learned map needs a flip to face the mirrored circle of tastes");
+    var turn = -Math.atan2(m01 - m10, m00 + m11);
+    return { turn: turn, deg: Math.round(Math.abs(turn) * 180 / Math.PI), cw: turn < 0 };
   })();
   /* For each product, its nearest product on a map of E: how many of them are at most two steps away on the circle. */
   function nearCount(E) {
@@ -7797,9 +7792,9 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     "Coloured by the circle of tastes, which the app never sees: for " + NEAR1 + " of the 24 products, the nearest point is a neighbour on the circle (" + NEAR0 + " at the start).",
     "The household of the first scenes: its two numbers \\(z\\) after learning, as an arrow. Its habits get no coupon.",
     "The farther along the arrow, the higher the preference \\(z \\cdot e_a\\): " + K.name(TOP2[0]) + ", " + K.n2(POL.p[TOP2[0]]) + ", and " + K.name(TOP2[1]) + ", " + K.n2(POL.p[TOP2[1]]) + ". Its return: " + K.n2(G1END) + ", up from " + K.n2(K.EP.G1) + ".",
-    (TURN.flip ? "Flipped left to right, then turned " : "Turned ") + TURN.deg + " degrees " + (TURN.cw ? "clockwise" : "anticlockwise") + ", together with \\(z\\): every preference \\(z \\cdot e_a\\) stays the same, and the map faces the circle of tastes."
+    "New axes, turned " + AX.deg + " degrees " + (AX.cw ? "clockwise" : "anticlockwise") + ", line up with the circle of tastes: healthy to indulgent, budget to premium. The points do not move."
   ];
-  var CAP430 = ["EACH PRODUCT AT ITS TWO NUMBERS " + K.tag("E", "e_a", "sm").outerHTML + ", ITS COLUMN OF " + K.tag("E", null, "sm").outerHTML, TURN.flip ? "THE SAME MAP, FLIPPED AND TURNED" : "THE SAME MAP, TURNED"];
+  var CAP430 = ["EACH PRODUCT AT ITS TWO NUMBERS " + K.tag("E", "e_a", "sm").outerHTML + ", ITS COLUMN OF " + K.tag("E", null, "sm").outerHTML, "THE SAME MAP, ON NEW AXES"];
   function MapView() {
     var V = {}, svg = OB.svgEl("svg", { viewBox: "0 0 " + MS + " " + MS, width: MS, height: MS, "class": "cw-map" });
     [-3, -2, -1, 1, 2, 3].forEach(function (g) {
@@ -7809,6 +7804,10 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     });
     svg.appendChild(OB.svgEl("line", { x1: 6, y1: MC, x2: MS - 6, y2: MC, "class": "cw-max" }));
     svg.appendChild(OB.svgEl("line", { x1: MC, y1: 6, x2: MC, y2: MS - 6, "class": "cw-max" }));
+    /* The circle's axes (beat 5): two lines through the origin under the points, the names of their ends over them. */
+    V.ax = OB.svgEl("g", { "class": "cw-nax ob-hide" });
+    V.axLines = [0, 1].map(function () { var l = OB.svgEl("line", {}); V.ax.appendChild(l); return l; });
+    svg.appendChild(V.ax);
     V.z = OB.svgEl("g", { "class": "cw-mz ob-hide" });
     V.zline = OB.svgEl("line", { x1: MC, y1: MC, x2: MC, y2: MC });
     V.zhead = OB.svgEl("polygon", {});
@@ -7829,6 +7828,30 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       svg.appendChild(g);
       return { g: g, disc: disc, lab: lab, j: j };
     });
+    V.axLab = OB.svgEl("g", { "class": "cw-naxn ob-hide" });
+    V.axNames = ["INDULGENT", "HEALTHY", "PREMIUM", "BUDGET"].map(function (n) {
+      var t = OB.svgEl("text", { "class": "cw-tlab cw-naxt", "text-anchor": "middle" });
+      t.textContent = n;
+      V.axLab.appendChild(t);
+      return t;
+    });
+    svg.appendChild(V.axLab);
+    /* The axes turned by the angle a (radians, anticlockwise): across, healthy to indulgent; up, budget to premium. */
+    V.axTo = function (a) {
+      var c = Math.cos(a), sn = Math.sin(a), L = MC - 34, T = MC - 14;
+      [[c, sn], [-sn, c]].forEach(function (u, i) {
+        var l = V.axLines[i];
+        l.setAttribute("x1", (MC - u[0] * L).toFixed(1));
+        l.setAttribute("y1", (MC + u[1] * L).toFixed(1));
+        l.setAttribute("x2", (MC + u[0] * L).toFixed(1));
+        l.setAttribute("y2", (MC - u[1] * L).toFixed(1));
+        [1, -1].forEach(function (sg, h) {
+          var t = V.axNames[2 * i + h];
+          t.setAttribute("x", (MC + sg * u[0] * T).toFixed(1));
+          t.setAttribute("y", (MC - sg * u[1] * T + 4).toFixed(1));
+        });
+      });
+    };
     V.svg = svg;
     V.place = function (E) {
       V.items.forEach(function (it) { var p = mapXY(E[it.j]); it.g.setAttribute("transform", "translate(" + p[0].toFixed(1) + "," + p[1].toFixed(1) + ")"); });
@@ -7850,12 +7873,18 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var S = 400, H = 300, C = S / 2, CY = H / 2, R = 96;
     var svg = OB.svgEl("svg", { viewBox: "0 0 " + S + " " + H, width: S, height: H, "class": "cw-tcirc" });
     svg.appendChild(OB.svgEl("circle", { cx: C, cy: CY, r: R, "class": "cw-tring" }));
-    [["HEALTHY", C + R + 22, CY + 4, "start"], ["INDULGENT", C - R - 22, CY + 4, "end"], ["PREMIUM", C, CY - R - 22, "middle"], ["BUDGET", C, CY + R + 32, "middle"]].forEach(function (a) {
+    /* Its axes (beat 5), under the products. */
+    var ax = OB.svgEl("g", { "class": "cw-nax ob-hide" });
+    ax.appendChild(OB.svgEl("line", { x1: C - R - 12, y1: CY, x2: C + R + 12, y2: CY }));
+    ax.appendChild(OB.svgEl("line", { x1: C, y1: CY - R - 12, x2: C, y2: CY + R + 12 }));
+    svg.appendChild(ax);
+    /* Mirrored since 2026-11-20 (MIR): healthy on the left, indulgent on the right. */
+    [["INDULGENT", C + R + 22, CY + 4, "start"], ["HEALTHY", C - R - 22, CY + 4, "end"], ["PREMIUM", C, CY - R - 22, "middle"], ["BUDGET", C, CY + R + 32, "middle"]].forEach(function (a) {
       var t = OB.svgEl("text", { x: a[1], y: a[2], "class": "cw-tlab", "text-anchor": a[3] });
       t.textContent = a[0];
       svg.appendChild(t);
     });
-    CW.TRAIT.forEach(function (tr, j) {
+    MIR.forEach(function (tr, j) {
       var g = OB.svgEl("g", { transform: "translate(" + (C + tr[0] * R).toFixed(1) + "," + (CY - tr[1] * R).toFixed(1) + ")" });
       var disc = OB.svgEl("circle", { r: 13, "class": "cw-mdisc" });
       disc.style.fill = HUE(j);
@@ -7868,7 +7897,7 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
     var w = el("div", "cw-tcw ob-hide");
     w.appendChild(svg);
     w.appendChild(el("div", "cw-cap", "THE CIRCLE OF TASTES, WHICH THE APP NEVER SEES"));
-    return w;
+    return { el: w, ax: ax };
   }
   OB.scene({
     key: "learn-map", order: 430, title: "What the app learned", beats: L430.length,
@@ -7879,16 +7908,19 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
       var row = el("div", "cw-maprow"), left = el("div", "cw-mapw");
       P.map = MapView();
       left.appendChild(P.map.svg);
-      P.cap = OB.html("div", "cw-cap", CAP430[0]);
-      left.appendChild(P.cap);
+      /* Both captions in one cell, the other one hidden: the column keeps its width, so the circle stays put at beat 5. */
+      var caps = el("div", "cw-capst");
+      P.caps = CAP430.map(function (c) { var d = OB.html("div", "cw-cap", c); caps.appendChild(d); return d; });
+      left.appendChild(caps);
       row.appendChild(left);
       P.circ = TasteCircle();
-      row.appendChild(P.circ);
+      row.appendChild(P.circ.el);
       root.appendChild(row);
       /* E every 20 updates, for the glide. */
       P.F = [];
       for (var r = 0; r <= N; r += 20) P.F.push(CW.copyW(K.weightsAt(r).E));
       P.map.zTo(POL.z);
+      P.map.axTo(AX.turn);
     },
     beat: function (k, api) {
       var P = this.parts, V = P.map, go = K.live(api, k), F = P.F;
@@ -7900,27 +7932,22 @@ html.fx-still .fx-bulbs i:nth-child(odd)::after { opacity: 1; }
           for (var j = 0; j < CW.N; j++) E.push([F[i0][j][0] + (F[i0 + 1][j][0] - F[i0][j][0]) * u, F[i0][j][1] + (F[i0 + 1][j][1] - F[i0][j][1]) * u]);
           V.place(E);
         }, function () { V.place(D.end.E); });
-      } else if (k < 5) V.place(k >= 1 ? D.end.E : D.init.E);
-      // 5: the map and z flip (when a flip is needed), then turn; at rest at once by any other way in.
-      var place = function (f, r) {
-        V.place(D.end.E.map(function (e) { return turned(e, f, r); }));
-        V.zTo(turned(POL.z, f, r));
-      };
-      if (k < 5) V.zTo(POL.z);
-      else if (go && k === 5) {
-        place(0, 0);
-        var t0 = TURN.flip ? 1400 : 0;
-        if (TURN.flip) api.animate(t0, function (p) { place(p, 0); }, function () { place(1, 0); });
-        api.at(t0 ? t0 + 250 : 0, function () { api.animate(1600, function (p) { place(1, p); }, function () { place(1, 1); }); });
-      } else place(1, 1);
-      var cap = CAP430[k >= 5 ? 1 : 0];
-      if (P.cap.dataset.k !== String(k >= 5 ? 1 : 0)) {
-        P.cap.dataset.k = k >= 5 ? "1" : "0";
-        P.cap.innerHTML = cap;
-        if (go && k === 5) api.fade(P.cap, true, { delay: 300 });
-      }
+      } else V.place(k >= 1 ? D.end.E : D.init.E);
+      // 5: the circle's axes come on the circle, the map's come on its own axes and turn into place, then their names;
+      // at rest at once by any other way in. The points and z stay.
+      api.show(P.circ.ax, k >= 5, K.opt(go && k === 5, 0));
+      api.show(V.ax, k >= 5, K.opt(go && k === 5, 300));
+      api.show(V.axLab, k >= 5, K.opt(go && k === 5, 2100));
+      if (go && k === 5) {
+        V.axTo(0);
+        api.at(700, function () {
+          api.animate(1400, function (p) { V.axTo(AX.turn * (p < 0.5 ? 2 * p * p : 1 - 2 * (1 - p) * (1 - p))); }, function () { V.axTo(AX.turn); });
+        });
+      } else V.axTo(AX.turn);
+      api.show(P.caps[0], k < 5);
+      api.show(P.caps[1], k >= 5, K.opt(go && k === 5, 300));
       V.colour(k >= 2);
-      api.show(P.circ, k >= 2, K.opt(go && k === 2, 300));
+      api.show(P.circ.el, k >= 2, K.opt(go && k === 2, 300));
       // 3: the household's z and its habits; 4: its two likeliest coupons, the others dimmed.
       api.show(V.z, k >= 3, K.opt(go && k === 3, 300));
       V.items.forEach(function (it) {
